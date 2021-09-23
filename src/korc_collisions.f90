@@ -941,19 +941,18 @@ contains
             params%dt,ip) + 1_ip
        params%coll_cadence=cparams_ss%subcycling_iterations
 
-       if (params%LargeCollisions.and.F%ReInterp_2x1t) then
+       if (params%LargeCollisions) then
           params%coll_per_dump=params%t_skip/params%coll_cadence + 1_ip
 
-          cparams_ss%coll_per_dump_dt=params%dt*float(params%t_skip/ &
-               params%coll_per_dump)
+          cparams_ss%coll_per_dump_dt=params%dt*FLOAT(params%t_skip)/FLOAT(params%coll_per_dump)
 
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
           params%orbits_per_coll=floor(cparams_ss%coll_per_dump_dt/ &
                params%dt)+1_ip
 
-          params%dt=cparams_ss%coll_per_dump_dt/float(params%orbits_per_coll)
-
+          params%dt=cparams_ss%coll_per_dump_dt/float(params%orbits_per_coll)         
+          
        end if
        
        if (init) num_collisions_in_simulation = params%simulation_time/Tau
@@ -980,7 +979,7 @@ contains
                   num_collisions_in_simulation
           end if
 
-          if (params%LargeCollisions.and.F%ReInterp_2x1t) then
+          if (params%LargeCollisions) then
 
              write(output_unit_write,'("Number of collision steps per dump step: ",I16)') params%coll_per_dump
 
@@ -1278,7 +1277,7 @@ contains
                   CLogee(v,cparams_ss%ne,cparams_ss%Te)* &
                   (log(1+h_j(i,v)**k)/k-v**2)
           else
-             CF_temp=CF_temp+CF*cparams_ms%nz(i)/cparams_ms%ne* &
+             CF_temp=CF_temp+CF*cparams_ms%nz(i)/cparams_ss%P%n_ne* &
                   (cparams_ms%Zo(i)-cparams_ms%Zj(i))/ &
                   CLogee(v,cparams_ss%P%n_ne,cparams_ss%Te)* &
                   (log(1+h_j(i,v)**k)/k-v**2)
@@ -2546,14 +2545,10 @@ contains
     REAL(rp), DIMENSION(achunk,params%num_impurity_species) 	:: nimp
   
 
-    if (.not.F%ReInterp_2x1t) then
-       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt     
-       time=params%init_time+(params%it-1+tt)*params%dt
-    else
-       dt=cparams_ss%coll_per_dump_dt
-       time=params%init_time+(params%it-1)*params%dt+ &
-            tt*cparams_ss%coll_per_dump_dt
-    end if
+    dt=cparams_ss%coll_per_dump_dt
+    time=params%init_time+(params%it-1)*params%dt+ &
+         tt*cparams_ss%coll_per_dump_dt
+
 
        
 
@@ -2818,29 +2813,35 @@ contains
 # endif
     
     if (cparams_ss%avalanche) then 
-       
-       ntot=ne
-       if (params%bound_electron_model.eq.'HESSLOW') then          
-          
-          if ((cparams_ms%Zj(1).eq.0.0).and. &
-               (neut_prof.eq.'UNIFORM')) then
-             ntot=ntot+cparams_ms%nz(1)* &
-                  (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-          else if ((cparams_ms%Zj(1).eq.0.0).and. &
-               (neut_prof.eq.'HOLLOW')) then
-             ntot=ntot+max(cparams_ms%nz(1)-ne,0._rp)* &
-                  (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-          else
-             ntot=ntot+ne*cparams_ms%nz(1)/cparams_ms%ne* &
-                  (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-          endif
 
-          do ii=2,cparams_ms%num_impurity_species
-             ntot=ntot+ne*cparams_ms%nz(ii)/cparams_ms%ne* &
-                  (cparams_ms%Zo(ii)-cparams_ms%Zj(ii))
-          end do
-          
-       end if
+       !$OMP SIMD
+       do cc=1_idef,achunk
+          ntot(cc)=ne(cc)
+          if (params%bound_electron_model.eq.'HESSLOW') then          
+
+             if ((cparams_ms%Zj(1).eq.0.0).and. &
+                  (neut_prof.eq.'UNIFORM')) then
+                ntot(cc)=ntot(cc)+cparams_ms%nz(1)* &
+                     (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+             else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                  (neut_prof.eq.'HOLLOW')) then
+                ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
+                     (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+             else
+                ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
+                     (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+             endif
+
+             do ii=2,cparams_ms%num_impurity_species
+                ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(ii)/cparams_ms%ne* &
+                     (cparams_ms%Zo(ii)-cparams_ms%Zj(ii))
+             end do
+
+          end if
+       end do
+       !$OMP END SIMD
+
+       !write(6,*) 'ntot',ntot*params%cpp%density
 
        call large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
             pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon)
@@ -3180,11 +3181,9 @@ contains
     REAL(rp), DIMENSION(ngam1,neta1) :: cosgam,sinsq,cossq,tmpcossq1,pitchprob,dsigdgam,secthreshgam,pm11,gam11,eta11,S_LA,pitchrad
     LOGICAL :: accepted
 
-    if (.not.F%ReInterp_2x1t) then
-       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt*params%cpp%time
-    else
-       dt=cparams_ss%coll_per_dump_dt*params%cpp%time
-    end if
+
+    dt=cparams_ss%coll_per_dump_dt*params%cpp%time
+
     
     !$OMP SIMD
     do cc=1_idef,achunk

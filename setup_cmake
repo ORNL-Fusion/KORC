@@ -133,9 +133,10 @@ then
 #    module swap PrgEnv-intel PrgEnv-gnu
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE                                          \
           -DCMAKE_PREFIX_PATH=$MPICH_DIR                                                 \
-          -DEZSpline_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/PSPLINES/LINUX_INTEL/mod \
-          -DEZSpline_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/PSPLINES/LINUX_INTEL/lib -lpspline" \
-          -DEZSpline_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/PSPLINES/LINUX_INTEL/lib/libpspline.a   \
+	  -DUSE_PSPLINE=ON          \
+          -DEZSpline_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/include \
+          -DEZSpline_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib -lpspline" \
+          -DEZSpline_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib/libpspline.a   \
 	  -DCMAKE_Fortran_FLAGS="-convert big_endian -O3 -axMIC-AVX512,AVX -DHDF5_DOUBLE_PRESICION -vec-threshold0 -simd -qopenmp -align array64byte -assume contiguous_assumed_shape -vecabi=cmdtarget"  \
           -DCMAKE_C_FLAGS="-O3 -axMIC-AVX512,AVX -vec-threshold0 -simd -qopenmp"   \
           -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -axMIC-AVX512,AVX -vec-threshold0 -simd -qopenmp" \
