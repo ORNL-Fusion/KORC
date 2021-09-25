@@ -642,9 +642,11 @@ CONTAINS
              bfield_2d%A%x1 = F%X%R
              bfield_2d%A%x2 = F%X%Z
 
-             !write(output_unit_write,'("R",E17.10)') F%X%R
-             !write(output_unit_write,'("Z",E17.10)') F%X%Z
-
+#if DBG_CHECK    
+             write(6,*) 'R',F%X%R
+             write(6,*) 'Z',F%X%Z
+#endif
+             
              call EZspline_setup(bfield_2d%A, F%PSIp, ezerr, .TRUE.)
              call EZspline_error(ezerr)
 
@@ -1942,12 +1944,16 @@ CONTAINS
     INTEGER(ip)                                            :: ss
     !! Species iterator.
     REAL(rp) :: Rwall
-    
-    if (Y(2,1).eq.0) then
-       ss=1_idef
-    else
+
+    if (size(Y,1).eq.1) then
        ss = size(Y,1)
-    end if
+    else
+       if (Y(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(Y,1)
+       end if
+    endif
 
 !    write(output_unit_write,'("R: ",E15.10)') Y(1,1)
 !    write(output_unit_write,'("PHI: ",E15.10)') Y(2,1)
@@ -2024,14 +2030,16 @@ CONTAINS
           IZ = INT(FLOOR((Y(pp,3)  + ABS(fields_domain%Zo) + 0.5_rp* &
                fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
 
+#if DBG_CHECK    
           if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
                bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
-             !write(6,'("YR:",E17.10)') Y(1,1)
-             !write(6,'("YZ:",E17.10)') Y(1,3)
-             !write(6,'("IR: ",I16)') IR
-             !write(6,'("IZ: ",I16)') IZ
+             write(6,'("YR:",E17.10)') Y(1,1)
+             write(6,'("YZ:",E17.10)') Y(1,3)
+             write(6,'("IR: ",I16)') IR
+             write(6,'("IZ: ",I16)') IZ
              !call KORC_ABORT(23)
           end if
+#endif
 
           !write(output_unit_write,'("IR: ",I16)') IR
           !write(output_unit_write,'("IZ: ",I16)') IZ
@@ -2218,6 +2226,17 @@ CONTAINS
 !             write(output_unit_write,'("IR: ",I16)') IR
 !             write(output_unit_write,'("IZ: ",I16)') IZ
 !          end if
+
+#if DBG_CHECK    
+          if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
+               bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
+             write(6,'("YR:",E17.10)') Y_R(pp)
+             write(6,'("YZ:",E17.10)') Y_Z(pp)
+             write(6,'("IR: ",I16)') IR
+             write(6,'("IZ: ",I16)') IZ
+             !call KORC_ABORT(23)
+          end if
+#endif
           
           if ((IR.lt.0).or.(IZ.lt.0).or. &
                ((IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)).or. &
@@ -2535,11 +2554,15 @@ CONTAINS
     INTEGER(ip)                                            :: ss
     !! @param ss Species iterator.
     
-    if (Y(2,1).eq.0) then
-       ss=1_idef
-    else
+    if (size(Y,1).eq.1) then
        ss = size(Y,1)
-    end if
+    else
+       if (Y(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(Y,1)
+       end if
+    endif
 
     if (ALLOCATED(profiles_domain%FLAG3D)) then
        !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,IR,IPHI,IZ) &
@@ -3014,11 +3037,17 @@ subroutine interp_FOfields_mars(prtcls, F, params)
   REAL(rp) :: psip_conv
   REAL(rp) :: amp
 
-  if (prtcls%Y(2,1).eq.0) then
-       ss=1_idef
-    else
-       ss = size(prtcls%Y,1)
-    end if
+
+    
+  if (size(prtcls%Y,1).eq.1) then
+     ss = size(prtcls%Y,1)
+  else
+     if (prtcls%Y(2,1).eq.0) then
+        ss=1_idef
+     else
+        ss = size(prtcls%Y,1)
+     end if
+  endif
 
   psip_conv=F%psip_conv
   amp=F%AMP
@@ -3170,11 +3199,15 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
   REAL(rp) :: psip_conv
   REAL(rp) :: amp,nmode
 
-  if (prtcls%Y(2,1).eq.0) then
-     ss=1_idef
-  else
+  if (size(prtcls%Y,1).eq.1) then
      ss = size(prtcls%Y,1)
-  end if
+  else
+     if (prtcls%Y(2,1).eq.0) then
+        ss=1_idef
+     else
+        ss = size(prtcls%Y,1)
+     end if
+  endif
 
   psip_conv=F%psip_conv
   amp=F%AMP
@@ -3285,10 +3318,12 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
        b1Refield_2dx%Z,b1Imfield_2dx%X,b1Imfield_2dx%Y,b1Imfield_2dx%Z, &
        e1Refield_2dx%X,e1Refield_2dx%Y,e1Refield_2dx%Z, &
        e1Imfield_2dx%X,e1Imfield_2dx%Y,e1Imfield_2dx%Z, &
-       1,Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
+       pchunk,Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr)
   call EZspline_error(ezerr)
 
+  write(6,*) 'A',A
+  
   !$OMP SIMD
   do cc=1_idef,pchunk
      PSIp(cc)=A(cc,1)
@@ -3544,11 +3579,15 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
 
   psip_conv=F%psip_conv
   
-  if (Y(2,1).eq.0) then
-     ss=1_idef
-  else
+  if (size(Y,1).eq.1) then
      ss = size(Y,1)
-  end if
+  else
+     if (Y(2,1).eq.0) then
+        ss=1_idef
+     else
+        ss = size(Y,1)
+     end if
+  endif
 
   ALLOCATE(A(ss,3))
   A=0._rp
@@ -4428,11 +4467,15 @@ subroutine interp_2D_efields(params,Y,E,flag)
 
 !  write(output_unit_write,*) 'interp E fields'
   
-  if (Y(2,1).eq.0) then
-     ss=1_idef
-  else
+  if (size(Y,1).eq.1) then
      ss = size(Y,1)
-  end if
+  else
+     if (Y(2,1).eq.0) then
+        ss=1_idef
+     else
+        ss = size(Y,1)
+     end if
+  endif
 
   ALLOCATE(F(ss,3))
   !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
@@ -4772,11 +4815,15 @@ subroutine interp_2D_profiles(Y,ne,Te,Zeff,flag)
   INTEGER                                                :: ss
   !! Species iterator.
 
-  if (Y(2,1).eq.0) then
-     ss=1_idef
-  else
+  if (size(Y,1).eq.1) then
      ss = size(Y,1)
-  end if
+  else
+     if (Y(2,1).eq.0) then
+        ss=1_idef
+     else
+        ss = size(Y,1)
+     end if
+  endif
 
 !  write(output_unit_write,'("Also R_buffer: ",E17.10)') Y(1,ss)
   
@@ -5237,11 +5284,15 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     REAL(rp), DIMENSION(3)         :: Atmp
     integer(ip)  ::  ss
 
-    if (prtcls%Y(2,1).eq.0) then
-       ss=1_idef
-    else
+    if (size(prtcls%Y,1).eq.1) then
        ss = size(prtcls%Y,1)
-    end if
+    else
+       if (prtcls%Y(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(prtcls%Y,1)
+       end if
+    endif
 
     Atmp=0._rp
     
@@ -5491,11 +5542,15 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     integer(ip)  ::  ss
     REAL(rp)        :: netmp=-1._rp,Tetmp=-1._rp
 
-    if (prtcls%Y(2,1).eq.0) then
-       ss=1_idef
+    if (size(prtcls%Y,1).eq.1) then
+       ss = size(prtcls%Y,1)
     else
-       ss = SIZE(prtcls%hint)
-    end if
+       if (prtcls%Y(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(prtcls%Y,1)
+       end if
+    endif
 
     if (prtcls%cart) then
        !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(pp,status,x)
