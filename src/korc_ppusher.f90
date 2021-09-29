@@ -2987,7 +2987,7 @@ contains
 
           else
 
-             do tt=1_ip,params%t_skip
+             do tt=1_ip,params%coll_per_dump
 
                 !$OMP PARALLEL DO default(none) &
                 !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
