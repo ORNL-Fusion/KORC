@@ -3322,7 +3322,6 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr)
   call EZspline_error(ezerr)
 
-  write(6,*) 'A',A
   
   !$OMP SIMD
   do cc=1_idef,pchunk
