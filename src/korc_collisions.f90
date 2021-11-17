@@ -2472,7 +2472,8 @@ contains
 !       write(output_unit_write,'("E_PHI_COL: ",E17.10)') E_PHI
        
        do cc=1_idef,pchunk
-          if ((pm(cc).lt.cparams_ss%p_min).and.flagCol(cc).eq.1_ip) then
+          if ((pm(cc).lt.min(cparams_ss%p_min,p_therm)).and.&
+               flagCol(cc).eq.1_ip) then
 !             write(output_unit_write,'("Momentum less than zero")')
              !             stop
 !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
@@ -2757,7 +2758,8 @@ contains
           !                  time*params%cpp%time, dxi(cc)
        endif
 
-       if ((pm(cc).lt.cparams_ss%p_min).and.flagCol(cc).eq.1_ip) then
+       if ((pm(cc).lt.min(cparams_ss%p_min,p_therm))).and.&
+            flagCol(cc).eq.1_ip) then
           !             write(output_unit_write,'("Momentum less than zero")')
           !             stop
           !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
@@ -3124,7 +3126,8 @@ contains
 !       write(output_unit_write,'("E_PHI_COL: ",E17.10)') E_PHI
        
        do cc=1_idef,pchunk
-          if ((pm(cc).lt.cparams_ss%p_min).and.flagCol(cc).eq.1_ip) then
+          if ((pm(cc).lt.min(cparams_ss%p_min,p_therm))).and.&
+               flagCol(cc).eq.1_ip) then
 !             write(output_unit_write,'("Momentum less than zero")')
              !             stop
 !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
