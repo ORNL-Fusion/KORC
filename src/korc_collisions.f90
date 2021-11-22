@@ -120,7 +120,7 @@ module korc_collisions
      ! Subcycling time step in collisional time units (Tau)
      INTEGER(ip)		:: subcycling_iterations
      REAL(rp) :: coll_per_dump_dt
-     REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm
+     REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
      LOGICAL :: ConserveLA,sample_test,avalanche
      CHARACTER(30) :: Clog_model,min_secRE
      
@@ -407,6 +407,7 @@ contains
     cparams_ss%sample_test = sample_test
     cparams_ss%Clog_model = Clog_model
     cparams_ss%min_secRE = min_secRE
+    cparams_ss%pmin_scale = pmin_scale
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
@@ -909,7 +910,10 @@ contains
 
     if (params%collisions) then
        E = C_ME*C_C**2 + params%minimum_particle_energy*params%cpp%energy
-       E_min=sqrt((cparams_ss%p_min*params%cpp%mass*params%cpp%velocity* &
+
+       
+       E_min=sqrt((cparams_ss%p_min*cparams_ss%pmin_scale* &
+            params%cpp%mass*params%cpp%velocity* &
             C_C)**2+(C_ME*C_C**2)**2)
 
        !write(6,'("E_min (MeV)",E17.10)') E/(10**6*C_E)
@@ -2472,8 +2476,8 @@ contains
 !       write(output_unit_write,'("E_PHI_COL: ",E17.10)') E_PHI
        
        do cc=1_idef,pchunk
-          if ((pm(cc).lt.min(cparams_ss%p_min,p_therm)).and.&
-               flagCol(cc).eq.1_ip) then
+          if ((pm(cc).lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
+               p_therm)).and.flagCol(cc).eq.1_ip) then
 !             write(output_unit_write,'("Momentum less than zero")')
              !             stop
 !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
@@ -2758,8 +2762,8 @@ contains
           !                  time*params%cpp%time, dxi(cc)
        endif
 
-       if ((pm(cc).lt.min(cparams_ss%p_min,p_therm))).and.&
-            flagCol(cc).eq.1_ip) then
+       if ((pm(cc).lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
+            p_therm)).and.flagCol(cc).eq.1_ip) then
           !             write(output_unit_write,'("Momentum less than zero")')
           !             stop
           !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
@@ -3126,8 +3130,8 @@ contains
 !       write(output_unit_write,'("E_PHI_COL: ",E17.10)') E_PHI
        
        do cc=1_idef,pchunk
-          if ((pm(cc).lt.min(cparams_ss%p_min,p_therm))).and.&
-               flagCol(cc).eq.1_ip) then
+          if ((pm(cc).lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
+               p_therm))).and.flagCol(cc).eq.1_ip) then
 !             write(output_unit_write,'("Momentum less than zero")')
              !             stop
 !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
@@ -3201,7 +3205,7 @@ contains
     end do
     !$OMP END SIMD
 
-    vmin=sqrt(1-1/cparams_ss%gam_min**2)
+    vmin=1/sqrt(1+1/(cparams_ss%p_min*cparams_ss%pmin_scale)**2)
     
     !! For each primary RE, calculating probability to generate a secondary RE
     
@@ -3219,7 +3223,7 @@ contains
 
        if (E_C.gt.abs(E_PHI(cc))) cycle
        
-       p_c=1/sqrt(abs(E_PHI(cc))/E_C-1)
+       p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI(cc))/E_C-1)
        gam_c=sqrt(1+p_c**2)
 
        if(cparams_ss%min_secRE.eq.'THERM') then
