@@ -296,6 +296,7 @@ module korc_types
      !! number of particles per vectorized chunk
      INTEGER  :: num_impurity_species
      REAL(rp), DIMENSION(:), ALLOCATABLE        :: Zj
+     REAL(rp) :: gam_min
   END TYPE KORC_PARAMS
 
 

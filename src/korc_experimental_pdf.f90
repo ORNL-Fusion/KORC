@@ -70,6 +70,9 @@ MODULE korc_experimental_pdf
      REAL(rp) :: lambda
 
      REAL(rp) :: A_fact ! Multiplication factor for A in distributon.
+
+     LOGICAL :: gam_min_from_col
+     
   END TYPE HOLLMANN_PARAMS
 
   TYPE(PARAMS), PRIVATE :: pdf_params
@@ -716,13 +719,22 @@ CONTAINS
     h_params%max_pitch_angle = max_pitch_angle_Hollmann
     h_params%min_pitch_angle = min_pitch_angle_Hollmann
 
-    h_params%min_sampling_energy = min_energy_Hollmann*C_E ! In Joules
-    h_params%min_sampling_g = 1.0_rp + h_params%min_sampling_energy/ &
-         (C_ME*C_C**2)
+    h_params%gam_min_from_col = gam_min_from_col
+
+    if(.not.h_params%gam_min_from_col) then
+       h_params%min_sampling_energy = min_energy_Hollmann*C_E ! In Joules
+       h_params%min_sampling_g = 1.0_rp + h_params%min_sampling_energy/ &
+            (C_ME*C_C**2)
+    else
+       h_params%min_sampling_g = params%gam_min
+    endif
+    
     h_params%max_sampling_energy = max_energy_Hollmann*C_E ! In Joules.
     h_params%max_sampling_g = 1.0_rp + h_params%max_sampling_energy/ &
          (C_ME*C_C**2)
 
+    !write(6,*) 'init:sampling',h_params%min_sampling_g,h_params%max_sampling_g
+    
     call load_data_from_hdf5(params)
     ! loads h_params%E_axis 1D energy range, h_params%fRE_E
     ! energy distribution as a function of h_params%E_axis,
@@ -749,6 +761,8 @@ CONTAINS
     h_params%max_g = MAXVAL(h_params%g)
     h_params%min_g = MINVAL(h_params%g)
 
+    !write(6,*) 'init:range',h_params%min_g,h_params%max_g
+    
     h_params%current_direction = TRIM(current_direction_Hollmann)
 
     h_params%Bo = Bo_Hollmann
@@ -918,6 +932,8 @@ CONTAINS
     INTEGER 				:: index
     
     index = MINLOC(ABS(h_params%g - g),1)
+    !write(6,*) index
+    
     ! index of gamma supplied to function in Hollmann input gamma range
     D = h_params%g(index) - g
 
@@ -1000,6 +1016,17 @@ CONTAINS
     !	feta = 0.5_rp*A*EXP(A*COS(deg2rad(eta)))/SINH(A)                            ! MRC
 
     fRE_H_3D = fRE_H_3D*feta
+
+    !if (fRE_H_3D.eq.0._rp) then
+    !   write(6,*) 'f_RE_H',f0 + m*(g - g0)
+    !   write(6,*) 'feta',feta
+    !   write(6,*) 'A',A
+    !   write(6,*) 'g',g
+    !   write(6,*) 'E_G',E_G
+    !   write(6,*) 'E_CH',E_CH
+    !   write(6,*) 'Z_G',Z_G
+    !end if
+    
   END FUNCTION fRE_H_3D
   
   FUNCTION fRE_H_pitch(params,eta,g,EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nD,nD1)
@@ -1142,7 +1169,7 @@ CONTAINS
           max_g = minmax
        end if
     end do
-
+    
     ! buffer at minimum pitch angle boundary  
     if (h_params%min_pitch_angle.GE.korc_zero) then
        do jj=1_idef,INT(minmax_buffer_size,idef)
@@ -1946,14 +1973,14 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 
   sigma=spp%sigmaR*params%cpp%length
   
-  !write(output_unit_write,*) min_R,max_R
-  !write(output_unit_write,*) min_Z,max_Z
+  write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
+  write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
   
   deta = (h_params%max_pitch_angle - h_params%min_pitch_angle)/100.0_rp
   dg = (h_params%max_sampling_g - h_params%min_sampling_g)/100.0_rp
   
   ! buffer at minimum gamma boundary  
-  do ii=1_idef,INT(minmax_buffer_size,idef)
+  do ii=0_idef,INT(minmax_buffer_size,idef)
      minmax = h_params%min_sampling_g - REAL(ii,rp)*dg
      if (minmax.GT.h_params%min_g) then
         min_g = minmax
@@ -1965,6 +1992,8 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      end if
   end do
 
+  write(6,*) 'gam bounds',min_g,max_g
+  
   ! buffer at minimum pitch angle boundary  
   if (h_params%min_pitch_angle.GE.korc_zero) then
      do ii=1_idef,INT(minmax_buffer_size,idef)
@@ -1985,6 +2014,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      end if
   end do
 
+  write(6,*) 'eta bounds',min_pitch_angle,max_pitch_angle
   
   if (params%mpi_params%rank.EQ.0_idef) then
      ALLOCATE(R_samples(nsamples))
@@ -2039,6 +2069,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
         if (modulo(ii,100).eq.0) then
            write(output_unit_write,'("Burn: ",I10)') ii
         end if
+        !write(6,*) ii
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
@@ -2102,7 +2133,26 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
            
            f0=fRE_H_3D(params,F,eta_buffer,G_buffer,R_buffer,Z_buffer, &
                 spp%Ro,spp%Zo,spp%vars%E(1,2)*params%cpp%Eo)
-!           f0=fRE_H(eta_buffer,G_buffer)
+           !           f0=fRE_H(eta_buffer,G_buffer)
+
+           if (f0.eq.0._rp) then
+              !write(6,*) 'f0',f0
+              !write(6,*) 'gam_buffer',G_buffer
+              !write(6,*) 'eta_buffer',eta_buffer
+              !write(6,*) 'R_buffer',R_buffer*params%cpp%length
+              !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+              !write(6,*) 'EPHI_buffer',spp%vars%E(1,2)*params%cpp%Eo
+
+              !R_buffer = R_test
+              !Z_buffer = Z_test
+              eta_buffer = eta_test
+              G_buffer = G_test
+
+              cycle
+              
+           endif
+        
+           
         end if
 
         if (accepted) then
@@ -2128,6 +2178,8 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
         !write(output_unit_write,*) 'EZ',spp%vars%E(1,3)*params%cpp%Eo
         !write(output_unit_write,*) 'PSI',psi1
         !write(output_unit_write,*) 'PSIN',PSIN
+
+
                 
         f1=fRE_H_3D(params,F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo, &
              spp%vars%E(1,2)*params%cpp%Eo)    
@@ -2139,6 +2191,24 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 !        write(output_unit_write,'("f0: ",E17.10)') f0
 !        write(output_unit_write,'("f1: ",E17.10)') f1
 
+        !if (ii.eq.1_idef) then
+        !   write(6,*) 'f0',f0
+        !   write(6,*) 'gam_buffer',G_buffer
+        !   write(6,*) 'eta_buffer',eta_buffer
+        !   write(6,*) 'R_buffer',R_buffer*params%cpp%length
+        !   write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+        !   write(6,*) 'EPHI_buffer',spp%vars%E(1,2)*params%cpp%Eo
+        !   write(6,*) 'f1',f1
+        !   write(6,*) 'gam_test',G_test
+        !   write(6,*) 'eta_test',eta_test
+        !   write(6,*) 'R_test',R_test*params%cpp%length
+        !   write(6,*) 'Z_test',Z_test*params%cpp%length
+        !   write(6,*) 'EPHI_test',spp%vars%E(1,2)*params%cpp%Eo
+        !end if
+           !else
+        if (f0.eq.0._rp) call korc_abort(12)
+        !endif        
+        
         
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian

@@ -645,7 +645,7 @@ contains
                 cparams_ss%gam_min=gam_crit
              end if
              
-             !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm
+             !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm,cparams_ss%p_min,cparams_ss%gam_min
 
 
 
@@ -744,6 +744,12 @@ contains
 
        end if
 
+       ! for passing minimum gamma to Hollmann sampling routines
+       params%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min* &
+            cparams_ss%pmin_scale*cparams_ss%pmin_scale)
+
+       !write(6,*) params%gam_min
+       
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if

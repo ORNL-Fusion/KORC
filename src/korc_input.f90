@@ -361,6 +361,7 @@ module korc_input
   REAL(rp) :: lambda_Hollmann = 4.0E-6 
     ! Characteristic wavelengt
   REAL(rp) :: A_fact_Hollmann=1.
+  LOGICAL :: gam_min_from_col=.FALSE.
 
   !! -----------------------------------------------
   !! EnergyGammaPDF
@@ -449,7 +450,7 @@ CONTAINS
          min_pitch_angle_Hollmann,max_energy_Hollmann, &
          min_energy_Hollmann,filename_Hollmann,Bo_Hollmann,lambda_Hollmann, &
          current_direction_Hollmann,A_fact_Hollmann,sigma_E_Hollmann, &
-         sigma_Z_Hollmann,Eo_Hollmann,rho_ind
+         sigma_Z_Hollmann,Eo_Hollmann,rho_ind,gam_min_from_col
     NAMELIST /SimpleEquilibriumPDF/ max_pitch_angle_simple, &
          min_pitch_angle_simple,Zeff_simple,E_simple, &
          Bo_simple,lambda_simple

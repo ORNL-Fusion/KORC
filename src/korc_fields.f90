@@ -413,6 +413,9 @@ CONTAINS
 
        Bmag=sqrt(B(pp,1)*B(pp,1)+B(pp,2)*B(pp,2)+B(pp,3)*B(pp,3))
 
+!       write(6,*) pp,B(pp,:),Bmag,dRBR,dRBPHI,dRBZ
+!       write(6,*) gradB(pp,:)
+       
        gradB(pp,1)=(B(pp,1)*dRBR+B(pp,2)*dRBPHI+B(pp,3)*dRBZ)/Bmag
        gradB(pp,2)=0._rp
        gradB(pp,3)=(B(pp,1)*dZBR+B(pp,2)*dZBPHI+B(pp,3)*dZBZ)/Bmag
