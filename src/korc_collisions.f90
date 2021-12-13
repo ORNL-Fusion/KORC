@@ -3137,7 +3137,7 @@ contains
        
        do cc=1_idef,pchunk
           if ((pm(cc).lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
-               p_therm))).and.flagCol(cc).eq.1_ip) then
+               p_therm)).and.flagCol(cc).eq.1_ip) then
 !             write(output_unit_write,'("Momentum less than zero")')
              !             stop
 !             write(output_unit_write,'("Particle not tracked at: ",E17.10," &
