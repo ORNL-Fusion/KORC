@@ -3184,7 +3184,7 @@ CONTAINS
           !write(6,*) 'recieve_num',recieve_num
 
 #if DBG_CHECK
-          write(6,*) 'X_send_buffer',X_send_buffer
+          write(6,*) 'X_send_buffer',X_send_buffer*params%cpp%length
 #endif
           
           if (params%LargeCollisions) then
@@ -3231,24 +3231,24 @@ CONTAINS
 
                 X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+1))= &
-                     X_send_buffer(jj*spp(ss)%ppp*3+recieve_num*ii+1: &
+                     X_send_buffer_tmp1(jj*spp(ss)%ppp*3+recieve_num*ii+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(ii+1))
 
                 X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+1)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+2))=&
-                     X_send_buffer(spp(ss)%ppp*(3*jj+1)+recieve_num*ii+1: &
+                     X_send_buffer_tmp1(spp(ss)%ppp*(3*jj+1)+recieve_num*ii+1: &
                      spp(ss)%ppp*(3*jj+1)+recieve_num*(ii+1))
 
                 X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+2)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+3))=&
-                     X_send_buffer(spp(ss)%ppp*(3*jj+2)+recieve_num*ii+1: &
+                     X_send_buffer_tmp1(spp(ss)%ppp*(3*jj+2)+recieve_num*ii+1: &
                      spp(ss)%ppp*(3*jj+2)+recieve_num*(ii+1))
              end do
           end do
 
 #if DBG_CHECK
-          write(6,*) 'X_send_buffer_tmp1',X_send_buffer_tmp1
-          write(6,*) 'X_send_buffer_tmp',X_send_buffer_tmp
+          write(6,*) 'X_send_buffer_tmp1',X_send_buffer_tmp1*params%cpp%length
+          write(6,*) 'X_send_buffer_tmp',X_send_buffer_tmp*params%cpp%length
 #endif
 
           
@@ -3603,11 +3603,11 @@ CONTAINS
     
     if (params%mpi_params%rank.eq.0_idef) then
        write(6,*) 'mpi',params%mpi_params%rank
-       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)
-       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)
-       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)
-       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)
-       write(6,*) 'V_MU',spp(1)%vars%V(:,2)
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
        write(6,*) 'flagCon',spp(1)%vars%flagCon
        write(6,*) 'flagCol',spp(1)%vars%flagCol
        write(6,*) 'flagRE',spp(1)%vars%flagRE
@@ -3617,11 +3617,11 @@ CONTAINS
     
     if (params%mpi_params%rank.eq.1_idef) then
        write(6,*) 'mpi',params%mpi_params%rank
-       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)
-       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)
-       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)
-       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)
-       write(6,*) 'V_MU',spp(1)%vars%V(:,2)
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
        write(6,*) 'flagCon',spp(1)%vars%flagCon
        write(6,*) 'flagCol',spp(1)%vars%flagCol
        write(6,*) 'flagRE',spp(1)%vars%flagRE
@@ -3631,11 +3631,11 @@ CONTAINS
     
     if (params%mpi_params%rank.eq.2_idef) then
        write(6,*) 'mpi',params%mpi_params%rank
-       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)
-       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)
-       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)
-       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)
-       write(6,*) 'V_MU',spp(1)%vars%V(:,2)
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
        write(6,*) 'flagCon',spp(1)%vars%flagCon
        write(6,*) 'flagCol',spp(1)%vars%flagCol
        write(6,*) 'flagRE',spp(1)%vars%flagRE
@@ -3645,11 +3645,11 @@ CONTAINS
     
     if (params%mpi_params%rank.eq.3_idef) then
        write(6,*) 'mpi',params%mpi_params%rank
-       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)
-       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)
-       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)
-       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)
-       write(6,*) 'V_MU',spp(1)%vars%V(:,2)
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
        write(6,*) 'flagCon',spp(1)%vars%flagCon
        write(6,*) 'flagCol',spp(1)%vars%flagCol
        write(6,*) 'flagRE',spp(1)%vars%flagRE
