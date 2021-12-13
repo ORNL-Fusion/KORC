@@ -3084,19 +3084,22 @@ CONTAINS
     !! An instance of KORC's derived type SPECIES containing all the
     !! information of different electron species. See korc_types.f90.
     TYPE(FIELDS), INTENT(INOUT) 			:: F
-    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: X_send_buffer,X_send_buffer_tmp
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: X_send_buffer,X_send_buffer_tmp,X_send_buffer_tmp1
     !! Temporary buffer used by MPI for scattering the electrons' position
     !! to different MPI processes.
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: X_receive_buffer
     !! Temporary buffer used by MPI for scattering the electrons' position
     !! among MPI processes.
-    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V_send_buffer,V_send_buffer_tmp
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V_send_buffer,V_send_buffer_tmp,V_send_buffer_tmp1
     !! Temporary buffer used by MPI for scattering the electrons' velocity
     !! among MPI processes.
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V1_send_buffer_tmp,V2_send_buffer_tmp,V3_send_buffer_tmp
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V1_send_buffer_tmp1,V2_send_buffer_tmp1,V3_send_buffer_tmp1
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V_receive_buffer
     !! Temporary buffer used by MPI for scattering the electrons' velocity
     !! among MPI processes.
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: AUX_send_buffer
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: AUX_send_buffer_tmp
     !!  Temporary buffer used by MPI to scatter various electrons' variables
     !! among MPI processes.
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: AUX_receive_buffer
@@ -3123,7 +3126,7 @@ CONTAINS
     !! Electron species iterator.
     INTEGER 						:: ss,ii,jj
     !! MPI error status.
-    INTEGER  :: recieve_num,send_num
+    INTEGER  :: recieve_num,send_num,nmpi_ratio
     
     do ss=1_idef,params%num_species
        
@@ -3133,19 +3136,30 @@ CONTAINS
           call KORC_ABORT(14)
        endif
 
+       nmpi_ratio=params%mpi_params%nmpi/params%mpi_params%nmpi_prev
+       
        send_num=spp(ss)%ppp*params%mpi_params%nmpi_prev
-       recieve_num=spp(ss)%ppp*params%mpi_params%nmpi_prev/ &
-            params%mpi_params%nmpi
+       recieve_num=spp(ss)%ppp/nmpi_ratio
        
        ALLOCATE(X_send_buffer(3*send_num))
        ALLOCATE(X_send_buffer_tmp(3*send_num))
+       ALLOCATE(X_send_buffer_tmp1(3*send_num))
        ALLOCATE(X_receive_buffer(3*recieve_num))
 
        ALLOCATE(V_send_buffer(3*send_num))
        ALLOCATE(V_send_buffer_tmp(3*send_num))
+       ALLOCATE(V_send_buffer_tmp1(3*send_num))
        ALLOCATE(V_receive_buffer(3*recieve_num))
 
+       ALLOCATE(V1_send_buffer_tmp(send_num))
+       ALLOCATE(V2_send_buffer_tmp(send_num))
+       ALLOCATE(V3_send_buffer_tmp(send_num))
+       ALLOCATE(V1_send_buffer_tmp1(send_num))
+       ALLOCATE(V2_send_buffer_tmp1(send_num))
+       ALLOCATE(V3_send_buffer_tmp1(send_num))
+       
        ALLOCATE(AUX_send_buffer(send_num))
+       ALLOCATE(AUX_send_buffer_tmp(send_num))
        ALLOCATE(AUX_receive_buffer(recieve_num))
        
        if (params%mpi_params%rank.EQ.0_idef) then
@@ -3169,10 +3183,51 @@ CONTAINS
           !write(6,*) 'X_send_buffer',X_send_buffer
           !write(6,*) 'recieve_num',recieve_num
 
+#if DBG_CHECK
+          write(6,*) 'X_send_buffer',X_send_buffer
+#endif
+          
+          if (params%LargeCollisions) then
+             do ii=0,params%mpi_params%nmpi_prev-1
 
+                V1_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     X_send_buffer(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)
+                V2_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     X_send_buffer((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)
+                V3_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     X_send_buffer((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)
+                
+             end do
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                V1_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V1_send_buffer_tmp(ii)
+                V2_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V2_send_buffer_tmp(ii)
+                V3_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V3_send_buffer_tmp(ii)
+                                                
+             end do
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                X_send_buffer_tmp1(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)= &
+                     V1_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                X_send_buffer_tmp1((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)= &
+                     V2_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                X_send_buffer_tmp1((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)= &
+                     V3_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+
+
+             end do
+          else
+             X_send_buffer_tmp1=X_send_buffer
+          end if
+          
           do jj=0_idef,params%mpi_params%nmpi_prev-1_idef
-             do ii=0_idef,params%mpi_params%nmpi/ &
-                  params%mpi_params%nmpi_prev-1_idef
+             do ii=0_idef,nmpi_ratio-1_idef
 
                 X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+1))= &
@@ -3192,7 +3247,7 @@ CONTAINS
           end do
 
 #if DBG_CHECK
-          write(6,*) 'X_send_buffer',X_send_buffer
+          write(6,*) 'X_send_buffer_tmp1',X_send_buffer_tmp1
           write(6,*) 'X_send_buffer_tmp',X_send_buffer_tmp
 #endif
 
@@ -3238,30 +3293,73 @@ CONTAINS
 
           call h5fclose_f(h5file_id, h5error)
 
+#if DBG_CHECK
+          write(6,*) 'V_send_buffer',V_send_buffer
+#endif
+          
+          if (params%LargeCollisions) then
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                V1_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     V_send_buffer(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)
+                V2_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     V_send_buffer((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)
+                V3_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     V_send_buffer((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)
+                
+             end do
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                V1_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V1_send_buffer_tmp(ii)
+                V2_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V2_send_buffer_tmp(ii)
+                V3_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V3_send_buffer_tmp(ii)
+                                                
+             end do
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                V_send_buffer_tmp1(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)= &
+                     V1_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                V_send_buffer_tmp1((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)= &
+                     V2_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                V_send_buffer_tmp1((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)= &
+                     V3_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+
+
+             end do
+          else
+             V_send_buffer_tmp1=V_send_buffer
+          end if
+          
+          
           do jj=0_idef,params%mpi_params%nmpi_prev-1_idef
-             do ii=0_idef,params%mpi_params%nmpi/ &
-                  params%mpi_params%nmpi_prev-1_idef
+             do ii=0_idef,nmpi_ratio-1_idef
 
                 V_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+1))= &
-                     V_send_buffer(jj*spp(ss)%ppp*3+recieve_num*ii+1: &
+                     V_send_buffer_tmp1(jj*spp(ss)%ppp*3+recieve_num*ii+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(ii+1))
 
                 V_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+1)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+2))=&
-                     V_send_buffer(spp(ss)%ppp*(3*jj+1)+recieve_num*ii+1: &
+                     V_send_buffer_tmp1(spp(ss)%ppp*(3*jj+1)+recieve_num*ii+1: &
                      spp(ss)%ppp*(3*jj+1)+recieve_num*(ii+1))
 
                 V_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+2)+1: &
                      jj*spp(ss)%ppp*3+recieve_num*(3*ii+3))=&
-                     V_send_buffer(spp(ss)%ppp*(3*jj+2)+recieve_num*ii+1: &
+                     V_send_buffer_tmp1(spp(ss)%ppp*(3*jj+2)+recieve_num*ii+1: &
                      spp(ss)%ppp*(3*jj+2)+recieve_num*(ii+1))
              end do
           end do
 
 
 #if DBG_CHECK
-          write(6,*) 'V_send_buffer',V_send_buffer
+          write(6,*) 'V_send_buffer_tmp1',V_send_buffer_tmp1
           write(6,*) 'V_send_buffer_tmp',V_send_buffer_tmp
 #endif
           
@@ -3272,7 +3370,8 @@ CONTAINS
        V_receive_buffer = 0.0_rp
        CALL MPI_SCATTER(V_send_buffer_tmp,3*recieve_num,MPI_REAL8, &
             V_receive_buffer,3*recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-       spp(ss)%vars%V(1:recieve_num,:) = RESHAPE(V_receive_buffer,(/recieve_num,3/))
+       spp(ss)%vars%V(1:recieve_num,:) = &
+            RESHAPE(V_receive_buffer,(/recieve_num,3/))
 
        if (params%mpi_params%rank.EQ.0_idef) then
           filename = TRIM(params%path_to_outputs) // "restart_file.h5"
@@ -3289,10 +3388,26 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
-       end if
 
+          if (params%LargeCollisions) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+          
+       end if
+       
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,recieve_num,MPI_REAL8, &
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
             AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%flagCon(1:recieve_num) = INT(AUX_receive_buffer,is)
 
@@ -3311,10 +3426,26 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
-       end if
 
+          if (params%LargeCollisions) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+          
+       end if
+       
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,recieve_num,MPI_REAL8, &
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
             AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%flagCol(1:recieve_num) = INT(AUX_receive_buffer,is)
 
@@ -3333,10 +3464,36 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
-       end if
 
+          !write(6,*) 'ppp',spp(ss)%ppp
+          !write(6,*) 'nmpi_prev',params%mpi_params%nmpi_prev
+          !write(6,*) 'nmpi',params%mpi_params%nmpi
+          !write(6,*) 'nmpi_ratio',nmpi_ratio
+          
+          if (params%LargeCollisions) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+
+#if DBG_CHECK
+          write(6,*) 'flagRE_send_buffer',AUX_send_buffer
+          write(6,*) 'flagRE_send_buffer_tmp',AUX_send_buffer_tmp
+#endif
+          
+       end if             
+       
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,recieve_num,MPI_REAL8, &
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
             AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%flagRE(1:recieve_num) = INT(AUX_receive_buffer,is)
        
@@ -3355,10 +3512,26 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
+
+          if (params%LargeCollisions) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+          
        end if
 
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,recieve_num,MPI_REAL8, &
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
             AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%g(1:recieve_num) = AUX_receive_buffer
 
