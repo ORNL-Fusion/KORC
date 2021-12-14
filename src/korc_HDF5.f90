@@ -404,20 +404,20 @@ CONTAINS
   !! @param h5error HDF5 error status.
   !! @todo Implement the reading of the attributes of rdata.
   subroutine rload_3d_array_from_hdf5(h5file_id,dset,rdata,attr)
-    INTEGER(HID_T), INTENT(IN) 														:: h5file_id
-    CHARACTER(MAX_STRING_LENGTH), INTENT(IN) 										:: dset
-    REAL(rp), DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) 							:: rdata
-    REAL, DIMENSION(:,:,:), ALLOCATABLE 											:: raw_data
+    INTEGER(HID_T), INTENT(IN) 					:: h5file_id
+    CHARACTER(MAX_STRING_LENGTH), INTENT(IN) 			:: dset
+    REAL(rp), DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) 	:: rdata
+    REAL, DIMENSION(:,:,:), ALLOCATABLE 				:: raw_data
     CHARACTER(MAX_STRING_LENGTH), OPTIONAL, DIMENSION(:), ALLOCATABLE, INTENT(IN) 	:: attr
-    CHARACTER(MAX_STRING_LENGTH) 													:: aname
-    INTEGER(HID_T) 																	:: dset_id
-    INTEGER(HID_T) 																	:: dspace_id
-    INTEGER(HID_T) 																	:: aspace_id
-    INTEGER(HID_T) 																	:: attr_id
-    INTEGER(HID_T) 																	:: atype_id
-    INTEGER(HSIZE_T), DIMENSION(3) 													:: dims
-    INTEGER(HSIZE_T), DIMENSION(3) 													:: adims
-    INTEGER 																		:: h5error
+    CHARACTER(MAX_STRING_LENGTH) 							:: aname
+    INTEGER(HID_T) 									:: dset_id
+    INTEGER(HID_T) 									:: dspace_id
+    INTEGER(HID_T) 									:: aspace_id
+    INTEGER(HID_T) 									:: attr_id
+    INTEGER(HID_T) 									:: atype_id
+    INTEGER(HSIZE_T), DIMENSION(3) 				:: dims
+    INTEGER(HSIZE_T), DIMENSION(3) 				:: adims
+    INTEGER 							:: h5error
 
     dims = shape(rdata)
 
@@ -2889,6 +2889,8 @@ CONTAINS
        call h5fclose_f(h5file_id, h5error)
     end if
 
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    
 !    end if
   end subroutine save_restart_variables
 

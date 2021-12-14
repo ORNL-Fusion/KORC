@@ -1973,8 +1973,8 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 
   sigma=spp%sigmaR*params%cpp%length
   
-  write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
-  write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
+  !write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
+  !write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
   
   deta = (h_params%max_pitch_angle - h_params%min_pitch_angle)/100.0_rp
   dg = (h_params%max_sampling_g - h_params%min_sampling_g)/100.0_rp
@@ -1992,7 +1992,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      end if
   end do
 
-  write(6,*) 'gam bounds',min_g,max_g
+  !write(6,*) 'gam bounds',min_g,max_g
   
   ! buffer at minimum pitch angle boundary  
   if (h_params%min_pitch_angle.GE.korc_zero) then
@@ -2014,7 +2014,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      end if
   end do
 
-  write(6,*) 'eta bounds',min_pitch_angle,max_pitch_angle
+  !write(6,*) 'eta bounds',min_pitch_angle,max_pitch_angle
   
   if (params%mpi_params%rank.EQ.0_idef) then
      ALLOCATE(R_samples(nsamples))
