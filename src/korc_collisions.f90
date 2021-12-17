@@ -3445,11 +3445,16 @@ contains
           end do
 
           !! Write secondary RE degrees of freedom to particle derived type
+
           
           !$OMP ATOMIC UPDATE
           spp%pRE=spp%pRE+1
           !$OMP ATOMIC WRITE
           spp%vars%flagRE(spp%pRE)=1
+          !$OMP ATOMIC WRITE
+          spp%vars%flagCon(spp%pRE)=1
+          !$OMP ATOMIC WRITE
+          spp%vars%flagCol(spp%pRE)=1
           !$OMP ATOMIC WRITE
           spp%vars%V(spp%pRE,1)=ptrial*xitrial
           !$OMP ATOMIC WRITE

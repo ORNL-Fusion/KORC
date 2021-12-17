@@ -544,10 +544,12 @@ CONTAINS
        spp(ii)%vars%mu = 0.0_rp
        spp(ii)%vars%Prad = 0.0_rp
        spp(ii)%vars%Pin = 0.0_rp
-       spp(ii)%vars%flagCon = 1_is
-       spp(ii)%vars%flagCol = 1_is
+       spp(ii)%vars%flagCon(1:spp(ii)%pinit) = 1_is
+       spp(ii)%vars%flagCol(1:spp(ii)%pinit) = 1_is
        spp(ii)%vars%flagRE(1:spp(ii)%pinit) = 1_is
        if (spp(ii)%pinit.lt.spp(ii)%ppp) then
+          spp(ii)%vars%flagCon(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
+          spp(ii)%vars%flagCol(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
           spp(ii)%vars%flagRE(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
        endif
        spp(ii)%vars%wt = 0.0_rp
@@ -658,11 +660,11 @@ CONTAINS
     if (params%restart.OR.params%proceed.or.params%reinit) then
        call load_particles_ic(params,spp,F)
 
-       if(params%LargeCollisions) then
-          do ii=1_idef,params%num_species
-             spp(ii)%pRE=int(sum(float(spp(ii)%vars%flagRE)))
-          end do
-       end if
+       !if(params%LargeCollisions) then
+       !   do ii=1_idef,params%num_species
+       !      spp(ii)%pRE=int(sum(float(spp(ii)%vars%flagRE)))
+       !   end do
+       !end if
 
        !write(6,*) 'flagRE',spp(1)%vars%flagRE
        !write(6,*) 'pRE',spp(1)%pRE

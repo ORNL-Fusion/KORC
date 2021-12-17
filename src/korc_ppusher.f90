@@ -4230,10 +4230,10 @@ contains
           do tt=1_ip,params%coll_per_dump
 
 #if DBG_CHECK    
-             if(params%mpi_params%rank.eq.6) then
-                write(6,*) 'before loop load:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
-                write(6,*) 'before loop load:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
-             end if
+    !         if(params%mpi_params%rank.eq.6) then
+    !            write(6,*) 'before loop load:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
+    !            write(6,*) 'before loop load:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
+    !         end if
 # endif
              
              !if (modulo(tt,params%coll_per_dump/10).eq.0) &
@@ -4248,7 +4248,7 @@ contains
              !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,thread_num)
 
              do pp=1_idef,spp(ii)%pRE,pchunk
-
+                
                 thread_num = OMP_GET_THREAD_NUM()
 
                 if ((spp(ii)%pRE-pp).lt.pchunk) then
@@ -4256,6 +4256,7 @@ contains
                 else
                    achunk=pchunk
                 end if
+
                 
                 !          write(output_unit_write,'("pp: ",I16)') pp
                 
@@ -4277,7 +4278,7 @@ contains
 
 #if DBG_CHECK    
                 do cc=1_idef,achunk
-                   if (V_MU(cc).lt.0._rp) then
+                   if (V_MU(cc).le.0._rp) then
                       write(6,*) 'mu is negative before orbit loop'
                       write(6,*) 'coll_it',tt
                       write(6,*) 'V_PLL,V_MU',V_PLL(cc),V_MU(cc)
@@ -4304,7 +4305,7 @@ contains
 
 #if DBG_CHECK    
                    do cc=1_idef,achunk
-                      if (V_MU(cc).lt.0._rp) then
+                      if (V_MU(cc).le.0._rp) then
                          write(6,*) 'mu is negative in orbit loop'
                          write(6,*) 'coll_it,orb_it',tt,ttt
                          write(6,*) 'V_PLL,V_MU',V_PLL(cc),V_MU(cc)
@@ -4325,7 +4326,7 @@ contains
 
 #if DBG_CHECK    
                 do cc=1_idef,achunk
-                   if (V_MU(cc).lt.0._rp) then
+                   if (V_MU(cc).le.0._rp) then
                       write(6,*) 'mu is negative after orbit loop'
                       write(6,*) 'coll_it,orb_it',tt,ttt
                       write(6,*) 'V_PLL,V_MU',V_PLL(cc),V_MU(cc)
@@ -4342,7 +4343,7 @@ contains
 
 #if DBG_CHECK    
                 do cc=1_idef,achunk
-                   if (V_MU(cc).lt.0._rp) then
+                   if (V_MU(cc).le.0._rp) then
                       write(6,*) 'mu is negative after coll'
                       write(6,*) 'coll_it,orb_it',tt,ttt
                       write(6,*) 'V_PLL,V_MU',V_PLL(cc),V_MU(cc)
@@ -4388,20 +4389,20 @@ contains
                 !$OMP END SIMD
 
 #if DBG_CHECK    
-                if(params%mpi_params%rank.eq.6.and.(pp.eq.1)) then
-                   write(6,*) 'after loop save 1:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
-                   write(6,*) 'after loop save 1:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
-                end if
+          !      if(params%mpi_params%rank.eq.6.and.(pp.eq.1)) then
+          !         write(6,*) 'after loop save 1:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
+          !         write(6,*) 'after loop save 1:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
+          !      end if
 #endif
                 
              end do !particle chunk iterator
              !$OMP END PARALLEL DO
 
 #if DBG_CHECK    
-             if(params%mpi_params%rank.eq.6) then
-                write(6,*) 'after loop save 2:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
-                write(6,*) 'after loop save 2:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
-             end if
+          !   if(params%mpi_params%rank.eq.6) then
+          !      write(6,*) 'after loop save 2:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
+          !      write(6,*) 'after loop save 2:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
+          !   end if
 #endif
              
           end do !timestep iterator
@@ -9148,6 +9149,12 @@ contains
           stop 'RHS_Z1 is a NaN'
        endif
        if(isnan(RHS_PLL(cc)).and. flag_cache(cc)==1) then
+
+          write(6,*) params%mpi_params%rank,thread_num,'flags',flag_cache(cc)
+          write(6,*) params%mpi_params%rank,thread_num,'Y',Y_R(cc)*params%cpp%length,Y_PHI(cc),Y_Z(cc)*params%cpp%length
+          write(6,*) params%mpi_params%rank,thread_num,'V',V_PLL(cc),V_MU(cc)
+          write(6,*) params%mpi_params%rank,thread_num,'gamma',gamgc(cc)
+          write(6,*) params%mpi_params%rank,thread_num,'xi',xi(cc)
           stop 'RHS_PLL1 is a NaN'
        endif
        if(isnan(RHS_MU(cc)).and. flag_cache(cc)==1) then

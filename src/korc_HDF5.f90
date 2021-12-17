@@ -3375,6 +3375,10 @@ CONTAINS
        spp(ss)%vars%V(1:recieve_num,:) = &
             RESHAPE(V_receive_buffer,(/recieve_num,3/))
 
+       do ii=1_idef,spp(ss)%ppp-recieve_num
+          spp(ss)%vars%V(recieve_num+ii,:)=spp(ss)%vars%V(1,:)
+       end do
+       
        if (params%mpi_params%rank.EQ.0_idef) then
           filename = TRIM(params%path_to_outputs) // "restart_file.h5"
           call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
