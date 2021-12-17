@@ -121,6 +121,8 @@ CONTAINS
     params%proceed = proceed
     params%reinit  = reinit
 
+    params%load_balance = load_balance
+    
     params%simulation_time = simulation_time
     params%snapshot_frequency = snapshot_frequency
     params%restart_overwrite_frequency=restart_overwrite_frequency

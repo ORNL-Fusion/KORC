@@ -3189,7 +3189,7 @@ CONTAINS
           write(6,*) 'X_send_buffer',X_send_buffer*params%cpp%length
 #endif
           
-          if (params%LargeCollisions) then
+          if (params%load_balance) then
              do ii=0,params%mpi_params%nmpi_prev-1
 
                 V1_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
@@ -3299,7 +3299,7 @@ CONTAINS
           write(6,*) 'V_send_buffer',V_send_buffer
 #endif
           
-          if (params%LargeCollisions) then
+          if (params%load_balance) then
              do ii=0,params%mpi_params%nmpi_prev-1
 
                 V1_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
@@ -3395,7 +3395,7 @@ CONTAINS
 
           call h5fclose_f(h5file_id, h5error)
 
-          if (params%LargeCollisions) then
+          if (params%load_balance) then
              do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
 
                 !write(6,*) 'send index',ii
@@ -3433,7 +3433,7 @@ CONTAINS
 
           call h5fclose_f(h5file_id, h5error)
 
-          if (params%LargeCollisions) then
+          if (params%load_balance) then
              do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
 
                 !write(6,*) 'send index',ii
@@ -3476,7 +3476,7 @@ CONTAINS
           !write(6,*) 'nmpi',params%mpi_params%nmpi
           !write(6,*) 'nmpi_ratio',nmpi_ratio
           
-          if (params%LargeCollisions) then
+          if (params%load_balance) then
              do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
 
                 !write(6,*) 'send index',ii
@@ -3519,7 +3519,7 @@ CONTAINS
 
           call h5fclose_f(h5file_id, h5error)
 
-          if (params%LargeCollisions) then
+          if (params%load_balance) then
              do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
 
                 !write(6,*) 'send index',ii

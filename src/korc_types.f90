@@ -196,6 +196,7 @@ module korc_types
      !! Flag to indicate if the simulations continues (proceed=T) or not
      !! (proceed=F). Append simulation results after previous simulation_time
      !! reached.
+     LOGICAL 			:: load_balance
      LOGICAL  :: reinit
      !! Flag to begin a new simulation, reinitializing from restart file state
      REAL(rp) 			:: simulation_time 
