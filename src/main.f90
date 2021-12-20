@@ -356,9 +356,10 @@ program main
   !! subroutines to save simulation and collision parameters.
   
   
-  if (.NOT.(params%restart.OR.params%proceed)) then
+  if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
      
      call save_simulation_outputs(params,spp,F) ! Save initial condition
+     call save_restart_variables(params,spp,F)
 
   end if
   

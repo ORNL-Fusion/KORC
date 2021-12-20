@@ -3131,6 +3131,8 @@ CONTAINS
     INTEGER  :: recieve_num,send_num,nmpi_ratio
     
     do ss=1_idef,params%num_species
+
+       !write(6,*) params%mpi_params%nmpi,params%mpi_params%nmpi_prev
        
        if (mod(spp(ss)%ppp,params%mpi_params%nmpi/ &
             params%mpi_params%nmpi_prev).ne.0) then

@@ -258,7 +258,7 @@ CONTAINS
     if (params%restart) then
        call load_time_stepping_params(params)
        
-    else if (params%proceed) then
+    else if (params%proceed.or.params%reinit) then
        
        call load_prev_time(params)
        
