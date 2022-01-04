@@ -822,7 +822,7 @@ CONTAINS
 #ifdef FIO
     vars%hint = hint
 #endif
-    vars%flagCon = 1_idef
+    vars%flagCon = flag
     vars%B=0._rp
     vars%PSI_P=0._rp
     vars%cart=.false.

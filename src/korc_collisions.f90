@@ -3247,7 +3247,7 @@ contains
 
        do ii=1,ngam1
           tmpgam1(ii)=log10(log10(gam_min))+ &
-               (log10(log10(gammax))-log10(log10(gam_min)))* &
+               (log10(log10(1.01*gam(cc)))-log10(log10(gam_min)))* &
                REAL(ii-1)/REAL(ngam1-1)
        end do
        gam1=10**(10**(tmpgam1))
