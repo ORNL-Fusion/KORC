@@ -121,7 +121,7 @@ module korc_collisions
      INTEGER(ip)		:: subcycling_iterations
      REAL(rp) :: coll_per_dump_dt
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
-     LOGICAL :: ConserveLA,sample_test,avalanche
+     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion
      CHARACTER(30) :: Clog_model,min_secRE
      
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
@@ -408,6 +408,7 @@ contains
     cparams_ss%Clog_model = Clog_model
     cparams_ss%min_secRE = min_secRE
     cparams_ss%pmin_scale = pmin_scale
+    cparams_ss%energy_diffusion = energy_diffusion
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
@@ -2696,6 +2697,11 @@ contains
           CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc))
           CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
                CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc)))
+       endif
+
+       if (.not.energy_diffusion) then
+          CAL(cc)=0._rp
+          dCAL(cc)=0._rp
        endif
 
        if(.not.cparams_ss%sample_test) then
