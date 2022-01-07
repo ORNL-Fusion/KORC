@@ -264,6 +264,7 @@ module korc_input
   LOGICAL :: sample_test  = .FALSE.
   REAL(rp)  :: pmin_scale = 1._rp
   LOGICAL :: energy_diffusion = .TRUE.
+  CHARACTER(30) :: LAC_gam_resolution = '2EXP'
 
   !! -----------------------------------------------
   !! CollisionParamsMultipleSpecies
@@ -439,7 +440,7 @@ CONTAINS
          n_lamshelf,n_shelfdelay,n_tauin,n_tauout,n_shelf,psiN_0
     NAMELIST /CollisionParamsSingleSpecies/ Te_sing,Ti_sing,ne_sing, &
          Zeff_sing,dTau_sing,p_therm,ConserveLA,Clog_model,sample_test,&
-         min_secRE,pmin_scale,energy_diffusion
+         min_secRE,pmin_scale,energy_diffusion,LAC_gam_resolution
     NAMELIST /CollisionParamsMultipleSpecies/ num_impurity_species,Te_mult, &
          ne_mult,Zo_mult,Zj_mult,nz_mult,IZj_mult,neut_prof
     NAMELIST /AvalancheGenerationPDF/ max_pitch_angle_aval, &

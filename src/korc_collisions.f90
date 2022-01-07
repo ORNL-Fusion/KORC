@@ -122,7 +122,7 @@ module korc_collisions
      REAL(rp) :: coll_per_dump_dt
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
      LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion
-     CHARACTER(30) :: Clog_model,min_secRE
+     CHARACTER(30) :: Clog_model,min_secRE,LAC_gam_resolution
      
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
      REAL(rp), DIMENSION(3) 	:: y = (/0.0_rp,1.0_rp,0.0_rp/)
@@ -409,6 +409,7 @@ contains
     cparams_ss%min_secRE = min_secRE
     cparams_ss%pmin_scale = pmin_scale
     cparams_ss%energy_diffusion = energy_diffusion
+    cparams_ss%LAC_gam_resolution = LAC_gam_resolution
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
@@ -955,7 +956,7 @@ contains
        if (params%LargeCollisions) then
           params%coll_per_dump=params%t_skip/params%coll_cadence + 1_ip
 
-          cparams_ss%coll_per_dump_dt=params%dt*FLOAT(params%t_skip)/FLOAT(params%coll_per_dump)
+          cparams_ss%coll_per_dump_dt=params%snapshot_frequency/params%coll_per_dump
 
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
@@ -2550,7 +2551,7 @@ contains
     REAL(rp) , DIMENSION(achunk)					:: dCAL
     REAL(rp), DIMENSION(achunk) 					:: CFL
     REAL(rp), DIMENSION(achunk) 					:: CBL
-    REAL(rp), DIMENSION(achunk) 	:: SC_p,SC_mu,BREM_p
+    REAL(rp), DIMENSION(achunk) 	:: SC_p,SC_xi,BREM_p
     REAL(rp) 					:: kappa
     integer :: cc,ii
     integer(ip),INTENT(IN) :: tt
@@ -2722,6 +2723,15 @@ contains
        !          write(output_unit_write,'("dp: ",E17.10)') dp(cc)
        !          write(output_unit_write,'("dxi: ",E17.10)') dxi(cc)
 
+       !write(6,*) 'gam,xi',gam(cc),xi(cc)
+       
+       !write(6,*) 'dpE',E_PHI(cc)*xi(cc)*dt
+       !write(6,*) 'dpCF',CFL(cc)*dt
+       !write(6,*) 'dpCA',sqrt(2*CAL(cc)*dt)
+
+       !write(6,*) 'dxiE',E_PHI(cc)*(1-xi(cc)*xi(cc))/pm(cc)*dt
+       !write(6,*) 'dxiCB',2*xi(cc)*CBL(cc)/(pm(cc)*pm(cc))*dt
+       
     end do
     !$OMP END SIMD
 
@@ -2733,17 +2743,22 @@ contains
 
              SC_p(cc)=-gam(cc)*pm(cc)*(1-xi(cc)*xi(cc))/ &
                   (cparams_ss%taur/Bmag(cc)**2)
-             SC_mu(cc)=xi(cc)*(1-xi(cc)*xi(cc))/ &
+             SC_xi(cc)=xi(cc)*(1-xi(cc)*xi(cc))/ &
                   ((cparams_ss%taur/Bmag(cc)**2)*gam(cc))
 
-             kappa=2._rp*C_PI*C_RE**2._rp*C_ME*C_C**2._rp
+             kappa=2._rp*C_PI*C_RE**2._rp*C_ME*C_C**2._rp/ &
+                  (params%cpp%length**2._rp*params%cpp%energy)
              BREM_p(cc)=-2._rp*ne(cc)*kappa*Zeff(cc)*(Zeff(cc)+1._rp)* &
                   C_a/C_PI*(gam(cc)-1._rp)*(log(2._rp*gam(cc))-1._rp/3._rp)
 
+             !write(6,*) 'dpR',SC_p(cc)*dt
+             !write(6,*) 'dpB',BREM_p(cc)*dt
+
+             !write(6,*) 'dxiR',SC_xi(cc)*dt
 
              dp(cc)=dp(cc)+(SC_p(cc)+BREM_p(cc))*dt* &
                   REAL(flagCol(cc))*REAL(flagCon(cc))
-             dxi(cc)=dxi(cc)+(SC_mu(cc))*dt* &
+             dxi(cc)=dxi(cc)+(SC_xi(cc))*dt* &
                   REAL(flagCol(cc))*REAL(flagCon(cc))
 
           end do
@@ -3188,7 +3203,7 @@ contains
     INTEGER(is), INTENT(IN), DIMENSION(achunk)  :: flagCol,flagCon
     REAL(rp), INTENT(IN)  :: me
     REAL(rp), DIMENSION(achunk)  :: gam,prob0,prob1
-    REAL(rp) :: gam_min,p_min,gammax=200._rp,dt,gamsecmax,psecmax,ptrial
+    REAL(rp) :: gam_min,p_min,gammax,dt,gamsecmax,psecmax,ptrial
     REAL(rp) :: gamtrial,cosgam1,xirad,xip,xim,xitrial,sinsq1,cossq1,pitchprob1
     REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c,pRE
     INTEGER, parameter :: ngam1=100, neta1=100
@@ -3245,18 +3260,35 @@ contains
           gam_min=gam_c
           p_min=p_c
        end if
+
+       gammax=(gam(cc)+1._rp)/2._rp
        
        !write(6,*) 'p_c',p_c
        !write(6,*) 'p_min',p_min
+       !write(6,*) 'LAC_gam_resolution: ',TRIM(cparams_ss%LAC_gam_resolution)
        
        !! Generating 1D and 2D ranges for secondary RE distribution
 
-       do ii=1,ngam1
-          tmpgam1(ii)=log10(log10(gam_min))+ &
-               (log10(log10(1.01*gam(cc)))-log10(log10(gam_min)))* &
-               REAL(ii-1)/REAL(ngam1-1)
-       end do
-       gam1=10**(10**(tmpgam1))
+       if (TRIM(cparams_ss%LAC_gam_resolution).eq.'LIN') then
+          do ii=1,ngam1
+             gam1(ii)=gam_min+(gammax-gam_min)* &
+                  REAL(ii-1)/REAL(ngam1-1)
+          end do
+       elseif (TRIM(cparams_ss%LAC_gam_resolution).eq.'EXP') then
+          do ii=1,ngam1
+             tmpgam1(ii)=log10(gam_min)+ &
+                  (log10(gammax)-log10(gam_min))* &
+                  REAL(ii-1)/REAL(ngam1-1)
+          end do
+          gam1=10**(tmpgam1)
+       elseif (TRIM(cparams_ss%LAC_gam_resolution).eq.'2EXP') then
+          do ii=1,ngam1
+             tmpgam1(ii)=log10(log10(gam_min))+ &
+                  (log10(log10(gammax))-log10(log10(gam_min)))* &
+                  REAL(ii-1)/REAL(ngam1-1)
+          end do
+          gam1=10**(10**(tmpgam1))
+       end if
 
        !write(6,*) 'gam_min,gammax',gam_min,gammax
        !write(6,*) 'tmpgam1',tmpgam1
@@ -3381,6 +3413,7 @@ contains
           write(6,*) 'E',E_PHI(cc)*params%cpp%Eo
           write(6,*) 'E_C',E_C*params%cpp%Eo
           !write(6,*) 'pitchprob',pitchprob
+          !write(6,*) 'S_LA',S_LA
           call korc_abort(24)
        end if
 
