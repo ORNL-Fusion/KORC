@@ -121,7 +121,7 @@ module korc_collisions
      INTEGER(ip)		:: subcycling_iterations
      REAL(rp) :: coll_per_dump_dt
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
-     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion
+     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung
      CHARACTER(30) :: Clog_model,min_secRE,LAC_gam_resolution
      
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
@@ -410,6 +410,7 @@ contains
     cparams_ss%pmin_scale = pmin_scale
     cparams_ss%energy_diffusion = energy_diffusion
     cparams_ss%LAC_gam_resolution = LAC_gam_resolution
+    cparams_ss%FP_bremsstrahlung = FP_bremsstrahlung
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
@@ -2756,6 +2757,8 @@ contains
 
              !write(6,*) 'dxiR',SC_xi(cc)*dt
 
+             if (.not.FP_bremsstrahlung) BREM_p(cc)=0._rp
+             
              dp(cc)=dp(cc)+(SC_p(cc)+BREM_p(cc))*dt* &
                   REAL(flagCol(cc))*REAL(flagCon(cc))
              dxi(cc)=dxi(cc)+(SC_xi(cc))*dt* &
