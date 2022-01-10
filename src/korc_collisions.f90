@@ -2691,9 +2691,11 @@ contains
        if (params%profile_model(10:10).eq.'H') then
           CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
-          CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc),nimp(cc,:))
+          CFL(cc) = CF_SD_FIO(params,v(cc),ne(cc),Te(cc),nimp(cc,:))
           CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
-               CB_ei_SD(params,v(cc),ne(cc),Te(cc),nimp(cc,:),Zeff(cc)))
+               CB_ei_SD_FIO(params,v(cc),ne(cc),Te(cc),nimp(cc,:),Zeff(cc)))
+          ! using *_FIO routine to include additions due to Hollmann species
+          ! profile
        else
           CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
@@ -2707,7 +2709,7 @@ contains
           dCAL(cc)=0._rp
        endif
 
-       if (.not.energy_diffusion) then
+       if (.not.pitch_diffusion) then
           CBL(cc)=0._rp
        endif
 
