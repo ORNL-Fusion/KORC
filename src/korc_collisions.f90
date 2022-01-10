@@ -121,7 +121,7 @@ module korc_collisions
      INTEGER(ip)		:: subcycling_iterations
      REAL(rp) :: coll_per_dump_dt
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
-     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung
+     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion
      CHARACTER(30) :: Clog_model,min_secRE,LAC_gam_resolution
      
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
@@ -409,6 +409,7 @@ contains
     cparams_ss%min_secRE = min_secRE
     cparams_ss%pmin_scale = pmin_scale
     cparams_ss%energy_diffusion = energy_diffusion
+    cparams_ss%pitch_diffusion = pitch_diffusion
     cparams_ss%LAC_gam_resolution = LAC_gam_resolution
     cparams_ss%FP_bremsstrahlung = FP_bremsstrahlung
 
@@ -2151,9 +2152,9 @@ contains
 
           CAL(cc) = CA_SD(vm(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(vm(cc),me,ne(cc),Te(cc))
-          CFL(cc) = CF_SD_FIO(params,vm(cc),ne(cc),Te(cc),nimp(cc,:))
+          CFL(cc) = CF_SD(params,vm(cc),ne(cc),Te(cc))
           CBL(cc) = (CB_ee_SD(vm(cc),ne(cc),Te(cc),Zeff(cc))+ &
-               CB_ei_SD_FIO(params,vm(cc),ne(cc),Te(cc),nimp(cc,:),Zeff(cc)))
+               CB_ei_SD(params,vm(cc),ne(cc),Te(cc),Zeff(cc)))
 
 
           dpm(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
@@ -2690,9 +2691,9 @@ contains
        if (params%profile_model(10:10).eq.'H') then
           CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
-          CFL(cc) = CF_SD_FIO(params,v(cc),ne(cc),Te(cc),nimp(cc,:))
+          CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc),nimp(cc,:))
           CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
-               CB_ei_SD_FIO(params,v(cc),ne(cc),Te(cc),nimp(cc,:),Zeff(cc)))
+               CB_ei_SD(params,v(cc),ne(cc),Te(cc),nimp(cc,:),Zeff(cc)))
        else
           CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
@@ -2706,17 +2707,22 @@ contains
           dCAL(cc)=0._rp
        endif
 
-       if(.not.cparams_ss%sample_test) then
-          dp(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
-               ((-CFL(cc)+dCAL(cc)+E_PHI(cc)*xi(cc))*dt+ &
-               sqrt(2.0_rp*CAL(cc))*dW(cc,1))
+       if (.not.energy_diffusion) then
+          CBL(cc)=0._rp
+       endif
 
-          dxi(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
-               ((-2*xi(cc)*CBL(cc)/(pm(cc)*pm(cc))+ &
-               E_PHI(cc)*(1-xi(cc)*xi(cc))/pm(cc))*dt- &
-               sqrt(2.0_rp*CBL(cc)*(1-xi(cc)*xi(cc)))/pm(cc)*dW(cc,2))
 
-       else
+       dp(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
+            ((-CFL(cc)+dCAL(cc)+E_PHI(cc)*xi(cc))*dt+ &
+            sqrt(2.0_rp*CAL(cc))*dW(cc,1))
+
+       dxi(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
+            ((-2*xi(cc)*CBL(cc)/(pm(cc)*pm(cc))+ &
+            E_PHI(cc)*(1-xi(cc)*xi(cc))/pm(cc))*dt- &
+            sqrt(2.0_rp*CBL(cc)*(1-xi(cc)*xi(cc)))/pm(cc)*dW(cc,2))
+
+
+       if(cparams_ss%sample_test) then
           dp(cc)=0._rp
           dxi(cc)=0._rp
        end if
