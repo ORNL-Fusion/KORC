@@ -118,7 +118,7 @@ module korc_collisions
      ! Dreicer electric field
      REAL(rp) 			:: dTau
      ! Subcycling time step in collisional time units (Tau)
-     INTEGER(ip)		:: subcycling_iterations
+     INTEGER(ip)		:: subcycling_iterations,ngrid1
      REAL(rp) :: coll_per_dump_dt
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
      LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion
@@ -412,6 +412,7 @@ contains
     cparams_ss%pitch_diffusion = pitch_diffusion
     cparams_ss%LAC_gam_resolution = LAC_gam_resolution
     cparams_ss%FP_bremsstrahlung = FP_bremsstrahlung
+    cparams_ss%ngrid1 = ngrid1
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
@@ -3217,7 +3218,7 @@ contains
     REAL(rp) :: gam_min,p_min,gammax,dt,gamsecmax,psecmax,ptrial
     REAL(rp) :: gamtrial,cosgam1,xirad,xip,xim,xitrial,sinsq1,cossq1,pitchprob1
     REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c,pRE
-    INTEGER, parameter :: ngam1=100, neta1=100
+    INTEGER :: ngam1,neta1
     INTEGER :: ii,jj,cc,seciter
     REAL(rp), DIMENSION(ngam1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp,intpitchprob
     REAL(rp), DIMENSION(ngam1-1) :: dpm1
@@ -3228,6 +3229,8 @@ contains
 
 
     dt=cparams_ss%coll_per_dump_dt*params%cpp%time
+    ngam1=cparams_ss%ngrid1
+    neta1=cparams_ss%ngrid1
 
     
     !$OMP SIMD
