@@ -3220,11 +3220,12 @@ contains
     REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c,pRE
     INTEGER :: ngam1,neta1
     INTEGER :: ii,jj,cc,seciter
-    REAL(rp), DIMENSION(ngam1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp,intpitchprob
-    REAL(rp), DIMENSION(ngam1-1) :: dpm1
-    REAL(rp), DIMENSION(neta1) :: eta1,tmpsinsq,tmpcossq
-    REAL(rp), DIMENSION(neta1-1) :: deta1
-    REAL(rp), DIMENSION(ngam1,neta1) :: cosgam,sinsq,cossq,tmpcossq1,pitchprob,dsigdgam,secthreshgam,pm11,gam11,eta11,S_LA,pitchrad
+    REAL(rp), DIMENSION(cparams_ss%ngrid1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp,intpitchprob
+    REAL(rp), DIMENSION(cparams_ss%ngrid1-1) :: dpm1
+    REAL(rp), DIMENSION(cparams_ss%ngrid1) :: eta1,tmpsinsq,tmpcossq
+    REAL(rp), DIMENSION(cparams_ss%ngrid1-1) :: deta1
+    REAL(rp), DIMENSION(cparams_ss%ngrid1,cparams_ss%ngrid1) :: cosgam,sinsq,cossq,tmpcossq1,pitchprob,dsigdgam
+    REAL(rp), DIMENSION(cparams_ss%ngrid1,cparams_ss%ngrid1) :: secthreshgam,pm11,gam11,eta11,S_LA,pitchrad
     LOGICAL :: accepted
 
 
