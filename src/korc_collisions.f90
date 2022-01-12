@@ -3459,18 +3459,19 @@ contains
              gamtrial=sqrt(1+ptrial*ptrial)
 
              cosgam1=sqrt(((gam(cc)+1)*(gamtrial-1))/((gam(cc)-1)*(gamtrial+1)))
+             
+             !xirad=sqrt((cosgam1*xi(cc))**2-(xi(cc)**2+cosgam1**2-1))
 
-             xirad=sqrt((cosgam1*xi(cc))**2-(xi(cc)**2+cosgam1**2-1))
+             !if (isnan(xirad)) then
+             !   write(6,*) 'Sample not in allowable region of phase space'
+             !   call korc_abort(24)
+             !end if
 
-             if (isnan(xirad)) then
-                write(6,*) 'Sample not in allowable region of phase space'
-                call korc_abort(24)
-             end if
+             !xip=cosgam1*xi(cc)+xirad
+             !xim=cosgam1*xi(cc)-xirad
 
-             xip=cosgam1*xi(cc)+xirad
-             xim=cosgam1*xi(cc)-xirad
-
-             xitrial=xim+(xip-xim)*get_random()
+             !xitrial=xim+(xip-xim)*get_random()
+             xitrial=-1+2*get_random()
 
              sinsq1=(1-xi(cc)*xi(cc))*(1-xitrial*xitrial)
              cossq1=(cosgam1-xi(cc)*xitrial)**2
