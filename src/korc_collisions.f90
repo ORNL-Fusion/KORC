@@ -958,7 +958,8 @@ contains
        params%coll_cadence=cparams_ss%subcycling_iterations
 
        if (params%LargeCollisions) then
-          params%coll_per_dump=params%t_skip/params%coll_cadence + 1_ip
+          params%coll_per_dump=FLOOR(params%snapshot_frequency/ &
+               cparams_ss%dTau*Tau) + 1_ip
 
           cparams_ss%coll_per_dump_dt=params%snapshot_frequency/params%coll_per_dump
 
@@ -3435,6 +3436,10 @@ contains
 
        if (prob1(cc).gt.1._rp) then
           write(6,*) 'Multiple secondary REs generated in a collisional time step'
+          write(6,*) 'p,xi',pm(cc),xi(cc)
+          write(6,*) 'gam_min,gammax',gam_min,gammax
+          write(6,*) 'E',E_PHI(cc)*params%cpp%Eo
+          write(6,*) 'E_C',E_C*params%cpp%Eo
           call korc_abort(24)
        end if
 
