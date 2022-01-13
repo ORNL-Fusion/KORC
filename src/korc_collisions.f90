@@ -119,7 +119,7 @@ module korc_collisions
      REAL(rp) 			:: dTau
      ! Subcycling time step in collisional time units (Tau)
      INTEGER(ip)		:: subcycling_iterations,ngrid1
-     REAL(rp) :: coll_per_dump_dt
+     REAL(rp) :: coll_per_dump_dt,Clog_const
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
      LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion
      CHARACTER(30) :: Clog_model,min_secRE,LAC_gam_resolution
@@ -413,6 +413,7 @@ contains
     cparams_ss%LAC_gam_resolution = LAC_gam_resolution
     cparams_ss%FP_bremsstrahlung = FP_bremsstrahlung
     cparams_ss%ngrid1 = ngrid1
+    cparams_ss%Clog_const = Clog_const
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
@@ -1097,7 +1098,7 @@ contains
             (VTe_wu(Te)/C_C)**2)**(k/2._rp))/k
 
     else if (cparams_ss%Clog_model.eq.'CONSTANT') then
-       CLogee_wu = 20._rp
+       CLogee_wu = cparams_ss%Clog_const
 
     else if (cparams_ss%Clog_model.eq.'MCDEVITT') then
        CLogee_wu = CLog0_wu(ne,Te)+ &
@@ -1121,7 +1122,7 @@ contains
     p=sqrt(params%minimum_particle_g**2-1)
 
     if (cparams_ss%Clog_model.eq.'CONSTANT') then
-       CLogei_wu = 20._rp
+       CLogei_wu = cparams_ss%Clog_const
     else
        CLogei_wu = CLog0_wu(ne,Te)+ &
             log(1+(2*p/(VTe_wu(Te)/C_C))**k)/k
@@ -1165,7 +1166,7 @@ contains
             log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k
        
     else if (cparams_ss%Clog_model.eq.'CONSTANT') then
-       CLogee = 20._rp
+       CLogee = cparams_ss%Clog_const
        
     else if (cparams_ss%Clog_model.eq.'MCDEVITT') then
        CLogee = CLog0(ne,Te)+ &
@@ -1190,7 +1191,7 @@ contains
     p=gam*v
 
     if (cparams_ss%Clog_model.eq.'CONSTANT') then
-       CLogei = 20._rp
+       CLogei = cparams_ss%Clog_const
     else       
        CLogei = CLog0(ne,Te)+log(1+(2*p/VTe(Te))**k)/k
     end if
