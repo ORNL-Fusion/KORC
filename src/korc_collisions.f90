@@ -958,8 +958,15 @@ contains
        params%coll_cadence=cparams_ss%subcycling_iterations
 
        if (params%LargeCollisions) then
+
+          !write(6,*) 'params%snapshot_frequency',params%snapshot_frequency
+          !write(6,*) 'cparams_ss%dTau*Tau',cparams_ss%dTau*Tau
+          !write(6,*) 'FLOOR(params%snapshot_frequency/cparams_ss%dTau*Tau)', &
+          !     FLOOR(params%snapshot_frequency/ &
+          !     (cparams_ss%dTau*Tau),ip)
+          
           params%coll_per_dump=FLOOR(params%snapshot_frequency/ &
-               cparams_ss%dTau*Tau) + 1_ip
+               (cparams_ss%dTau*Tau)) + 1_ip
 
           cparams_ss%coll_per_dump_dt=params%snapshot_frequency/params%coll_per_dump
 
