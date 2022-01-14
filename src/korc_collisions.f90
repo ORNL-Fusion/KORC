@@ -972,7 +972,7 @@ contains
 
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
-          if (params%coll_per_dump.lt.params%t_skip) then
+          if (params%coll_per_dump.gt.params%t_skip) then
              write(6,*) 'more collisional iterations than orbit iterations, decrease orbit timestep!'
              call korc_abort(26)
           endif
