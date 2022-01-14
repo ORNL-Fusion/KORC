@@ -1,0 +1,69 @@
+name: main
+
+on: [ workflow_dispatch ]
+
+jobs:
+
+  job_machine:
+    strategy:
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+
+        build_type:
+          - Debug
+          - Release
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+        with:
+          path: ./${{ github.event.repository.name }}
+
+      - name: grab cmkfit
+        uses: actions/checkout@v2
+        with:
+          repository: idigs/cmfkit
+          path: ./cmfkit
+
+      - name: diag output - env vars
+        run: env | sort
+
+      - name: diag output - dir structure
+        run: pwd && ls -la
+
+
+  job_container:
+    strategy:
+      matrix:
+        base_image:
+          - 'alpine:3.14.2'
+          - 'rikorose/gcc-cmake:gcc-10'
+
+        build_type:
+          - Debug
+          - Release
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+        with:
+          path: ./${{ github.event.repository.name }}
+
+      - name: grab cmfkit
+        uses: actions/checkout@v2
+        with:
+          repository: idigs/cmfkit
+          path: ./cmfkit
+
+      - name: diag output - env vars
+        run: env | sort
+
+      - name: diag output - dir structure
+        run: pwd && ls -la
+
