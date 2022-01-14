@@ -275,6 +275,10 @@ CONTAINS
 
        params%num_snapshots = params%t_steps/params%output_cadence
 
+       if (params%t_steps.gt.params%output_cadence) then
+          params%dt=params%snapshot_frequency/float(params%output_cadence)
+       endif
+       
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
             params%dt,ip)
 
@@ -295,6 +299,10 @@ CONTAINS
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
        params%num_snapshots = params%t_steps/params%output_cadence
+
+       if (params%t_steps.gt.params%output_cadence) then
+          params%dt=params%snapshot_frequency/float(params%output_cadence)
+       endif
 
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
             params%dt,ip)

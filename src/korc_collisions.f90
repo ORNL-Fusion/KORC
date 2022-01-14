@@ -953,8 +953,8 @@ contains
 !       write(output_unit_write,'("collision freqencies ",F25.12)') nu(3)
        !write(6,*) nu/params%cpp%time
        
-       cparams_ss%subcycling_iterations = FLOOR(cparams_ss%dTau*Tau/ &
-            params%dt,ip) + 1_ip
+       cparams_ss%subcycling_iterations = ceiling(cparams_ss%dTau*Tau/ &
+            params%dt,ip)
        params%coll_cadence=cparams_ss%subcycling_iterations
 
        if (params%LargeCollisions) then
@@ -965,15 +965,20 @@ contains
           !     FLOOR(params%snapshot_frequency/ &
           !     (cparams_ss%dTau*Tau),ip)
           
-          params%coll_per_dump=FLOOR(params%snapshot_frequency/ &
-               (cparams_ss%dTau*Tau)) + 1_ip
+          params%coll_per_dump=ceiling(params%snapshot_frequency/ &
+               (cparams_ss%dTau*Tau))
 
           cparams_ss%coll_per_dump_dt=params%snapshot_frequency/params%coll_per_dump
 
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
-          params%orbits_per_coll=floor(cparams_ss%coll_per_dump_dt/ &
-               params%dt)+1_ip
+          if (params%coll_per_dump.lt.params%t_skip) then
+             write(6,*) 'more collisional iterations than orbit iterations, decrease orbit timestep!'
+             call korc_abort(26)
+          endif
+          
+          params%orbits_per_coll=ceiling(cparams_ss%coll_per_dump_dt/ &
+               params%dt)
 
           params%dt=cparams_ss%coll_per_dump_dt/float(params%orbits_per_coll)         
           
