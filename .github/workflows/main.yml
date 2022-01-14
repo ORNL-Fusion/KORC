@@ -23,7 +23,7 @@ jobs:
         with:
           path: ./${{ github.event.repository.name }}
 
-      - name: grab cmkfit
+      - name: grab cmfkit
         uses: actions/checkout@v2
         with:
           repository: idigs/cmfkit
