@@ -14,6 +14,9 @@ jobs:
         build_type:
           - Debug
           - Release
+        test_cases:
+          - graceful_exit
+          - 
 
     runs-on: ${{ matrix.os }}
 
