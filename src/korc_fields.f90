@@ -138,6 +138,8 @@ CONTAINS
     REAL(rp),DIMENSION(pchunk)     :: T_R,T_T,T_Z
     REAL(rp),DIMENSION(pchunk)                               :: Ezeta
     !! Toroidal electric field \(E_\zeta\).
+    REAL(rp),DIMENSION(pchunk)                               :: Er
+    !! changed YG Radial electric field \(E_\r\).
     REAL(rp),DIMENSION(pchunk)                               :: Bzeta
     !! Toroidal magnetic field \(B_\zeta\).
     REAL(rp),DIMENSION(pchunk)                              :: Bp
@@ -164,7 +166,8 @@ CONTAINS
 
        eta(cc) = T_R(cc)/R0
        q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
-       Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+       Bp(cc) = eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+       !changed kappa  YG
        Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
 
@@ -173,10 +176,17 @@ CONTAINS
        B_Z(cc) = Bp(cc)*cT(cc)
 
        Ezeta(cc) = -E0/( 1.0_rp + eta(cc)*cT(cc))
+       Er(cc) =Ero*(1/cosh((T_R(cc)-rmn)/sigmamn))
 
-       E_X(cc) = Ezeta(cc)*cZ(cc)
-       E_Y(cc) = -Ezeta(cc)*sZ(cc)
-       E_Z(cc) = 0.0_rp
+       E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
+       E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
+       E_Z(cc) = Er(cc)*sT(cc)
+
+
+       write(6,*) 'Ero ',Ero
+       write(6,*) 'rmn ',rmn
+       write(6,*) 'sigmamn ',sigmamn
+       write(6,*) 'Er ',Er(cc)
     end do
     !$OMP END SIMD
 
@@ -2043,6 +2053,10 @@ CONTAINS
        F%E_width = E_width
 
        F%PSIp_lim=PSIp_lim
+
+       F%AB%Ero=Ero
+       F%AB%rmn=rmn
+       F%AB%sigmamn=sigmamn
        
        !write(output_unit_write,*) E_dyn,E_pulse,E_width
 
