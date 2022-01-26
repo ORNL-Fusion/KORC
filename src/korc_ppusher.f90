@@ -2606,6 +2606,7 @@ contains
 
           if ((spp(ii)%spatial_distribution.eq.'TRACER').or. &
                (spp(ii)%spatial_distribution.eq.'TORUS').or. &
+               (spp(ii)%spatial_distribution.eq.'DISK').or. &
                (spp(ii)%spatial_distribution.eq. &
                '2D-GAUSSIAN-ELLIPTIC-TORUS-MH')) &
                call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)

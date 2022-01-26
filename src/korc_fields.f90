@@ -381,10 +381,10 @@ CONTAINS
        theta=atan2(Y(pp,3),(Y(pp,1)-F%AB%Ro))
        qprof = 1.0_rp + (rm/F%AB%lambda)**2
 
-!       write(output_unit_write,*) 'rm: ',rm
-!       write(output_unit_write,*) 'R0: ',F%AB%Ro
-!       write(output_unit_write,*) 'Y_R: ',Y(pp,1)
-!       write(output_unit_write,*) 'theta: ',theta
+       !write(6,*) 'rm: ',rm*params%cpp%length
+       !write(6,*) 'R0: ',F%AB%Ro*params%cpp%length
+       !write(6,*) 'Y_R: ',Y(pp,1)*params%cpp%length
+       !write(6,*) 'theta: ',theta
        
        PSIp(pp)=Y(pp,1)*F%AB%lambda**2*F%Bo/ &
             (2*F%AB%qo*(F%AB%Ro+rm*cos(theta)))* &

@@ -950,17 +950,18 @@ contains
        Tau = MINVAL( 1.0_rp/nu )
 
        
-!       write(output_unit_write,'("collision freqencies ",F25.12)') nu(3)
-       !write(6,*) nu/params%cpp%time
+       !write(output_unit_write,'("collision freqencies ",F25.12)') nu(3)
+       !write(6,*) 'collision times',1/nu*params%cpp%time
+       !write(6,*) 'p_min',cparams_ss%p_min
        
        cparams_ss%subcycling_iterations = ceiling(cparams_ss%dTau*Tau/ &
             params%dt,ip)
        params%coll_cadence=cparams_ss%subcycling_iterations
 
-       if (params%LargeCollisions) then
+       if (params%LargeCollisions.and.params%snapshot_frequency.gt.0._rp) then
 
-          !write(6,*) 'params%snapshot_frequency',params%snapshot_frequency
-          !write(6,*) 'cparams_ss%dTau*Tau',cparams_ss%dTau*Tau
+          !write(6,*) 'params%snapshot_frequency',params%snapshot_frequency*params%cpp%time
+          !write(6,*) 'cparams_ss%dTau*Tau',cparams_ss%dTau*Tau*params%cpp%time
           !write(6,*) 'FLOOR(params%snapshot_frequency/cparams_ss%dTau*Tau)', &
           !     FLOOR(params%snapshot_frequency/ &
           !     (cparams_ss%dTau*Tau),ip)
