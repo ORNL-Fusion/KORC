@@ -684,6 +684,7 @@ CONTAINS
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING SPATIAL DISTRIBUTION * * * *")')
+          flush(output_unit_write)
        end if
        call intitial_spatial_distribution(params,spp,P,F)
        if (params%mpi_params%rank .EQ. 0) then

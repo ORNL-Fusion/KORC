@@ -113,9 +113,9 @@ subroutine disk(params,spp)
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
   !$OMP PARALLEL WORKSHARE
-  spp%vars%X(1,:) = ( spp%Ro + r*COS(theta) )*COS(spp%PHIo)
-  spp%vars%X(2,:) = ( spp%Ro + r*COS(theta) )*SIN(spp%PHIo)
-  spp%vars%X(3,:) = spp%Zo + r*SIN(theta)
+  spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*COS(spp%PHIo)
+  spp%vars%X(:,2) = ( spp%Ro + r*COS(theta) )*SIN(spp%PHIo)
+  spp%vars%X(:,3) = spp%Zo + r*SIN(theta)
   !$OMP END PARALLEL WORKSHARE
 
   !write(6,*) spp%r_outter*params%cpp%length

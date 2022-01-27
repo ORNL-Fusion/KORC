@@ -2739,7 +2739,7 @@ contains
     INTEGER           :: cc,pchunk,achunk
     !! Chunk iterator.
     INTEGER(ip)                                                    :: tt
-    INTEGER(ip)                                                    :: ttt
+    INTEGER(ip)                                                    :: ttt,tttt
     !! time iterator.
     real(rp),dimension(F%dim_1D) :: Vden,Vdenave,VdenOMP
     INTEGER :: newREs
@@ -2798,6 +2798,14 @@ contains
 
                       !                   write(output_unit_write,*) params%mpi_params%rank,'Y_R',Y_R
 
+                      if (params%collisions) then
+
+                         call include_CoulombCollisions_GC_p(tt+params%t_skip*(ttt-1),params, &
+                              Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
+                              F,P,E_PHI,ne,PSIp)
+
+                      end if
+                      
                       if (params%SC_E) then                  
                          call calculate_SC_p(params,F,B_R,B_PHI,B_Z,Y_R,Y_Z, &
                               V_PLL,V_MU,m_cache,flagCon,flagCol,Vden)
@@ -2987,15 +2995,15 @@ contains
              !$OMP END PARALLEL DO
 
           else
-
+             
              do tt=1_ip,params%coll_per_dump
 
                 !$OMP PARALLEL DO default(none) &
-                !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
+                !$OMP& FIRSTPRIVATE(m_cache,pchunk,q_cache) &
                 !$OMP& shared(F,P,params,ii,spp,tt) &
                 !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                 !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
-                !$OMP& achunk)
+                !$OMP& achunk,tttt)
                 do pp=1_idef,spp(ii)%pRE,pchunk
 
                    if ((spp(ii)%pRE-pp).lt.pchunk) then
@@ -3020,29 +3028,47 @@ contains
                       flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
                    end do
                    !$OMP END SIMD
-
-                   if (params%FokPlan) then
-
+                   
                       !if (mod(tt,50).eq.0) then
                       !write(6,*) 'particle',pp,'iteration',tt, &
                       !     ' of',params%t_skip
                       !flush(6)
                       !endif
-                      
-                      call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
-                           tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
-                           flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
-                   end if
+                   if (.not.params%FokPlan) then
+                      do tttt=1_ip,params%orbits_per_coll
+                         call advance_GCeqn_vars(spp(ii)%vars,pp, &
+                              tttt,params, &
+                              Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
+                              B_R,B_PHI,B_Z,F,P,PSIp,E_PHI)
+                      end do
+                   endif
+                   
+                   call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
+                        tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+                        flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+
 
                    !$OMP SIMD
                    do cc=1_idef,achunk
+                      spp(ii)%vars%ne(pp-1+cc)=ne(cc)
+
+                      spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
+                      spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
+                      spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
+
                       spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
                       spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
 
-                      spp(ii)%vars%ne(pp-1+cc)=ne(cc)
-
+                      spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
                       spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
+
+                      spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
+                      spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
+                      spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+
+                      spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+                      spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
                    end do
                    !$OMP END SIMD
                    
@@ -3435,14 +3461,6 @@ contains
 #ifdef PSPLINE
        call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
 #endif
-    end if
-
-    if (params%collisions) then
-       
-       call include_CoulombCollisions_GC_p(tt,params, &
-            Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
-            F,P,E_PHI,ne,PSIp)
-
     end if
 
   end subroutine advance_GCeqn_vars
