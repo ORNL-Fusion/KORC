@@ -7,18 +7,19 @@ jobs:
   job_machine:
     strategy:
       matrix:
-        os:
+        os_env:
           - macos-latest
-          - ubuntu-latest
+          - windows-latest
 
         build_type:
           - Debug
           - Release
-        test_cases:
-          - graceful_exit
-          - 
 
-    runs-on: ${{ matrix.os }}
+        scenario:
+          - ppush_regression
+          - nersc_knl_xcompile
+
+    runs-on: ${{ matrix.os_env }}
 
     steps:
       - name: grab main project
@@ -32,41 +33,58 @@ jobs:
           repository: idigs/cmfkit
           path: ./cmfkit
 
-      - name: diag output - env vars
-        run: env | sort
-
-      - name: diag output - dir structure
-        run: pwd && ls -la
-
-
-  job_container:
-    strategy:
-      matrix:
-        base_image:
-          - 'alpine:3.14.2'
-          - 'rikorose/gcc-cmake:gcc-10'
-
-        build_type:
-          - Debug
-          - Release
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: grab main project
-        uses: actions/checkout@v2
-        with:
-          path: ./${{ github.event.repository.name }}
-
-      - name: grab cmfkit
-        uses: actions/checkout@v2
-        with:
-          repository: idigs/cmfkit
-          path: ./cmfkit
+      - name: merge project .cmfkit overlay
+        run: |
+          cp -r ./cmfkit/* ./${{ github.event.repository.name }}/.cmfkit
 
       - name: diag output - env vars
         run: env | sort
 
       - name: diag output - dir structure
         run: pwd && ls -la
+
+
+#  job_container:
+#    strategy:
+#      matrix:
+#        base_image:
+#          - 'alpine:3.14.2'
+#          - 'rikorose/gcc-cmake:gcc-10'
+#
+#        build_type:
+#          - Debug
+#          - Release
+#
+#        scenario:
+#          - ppush_regression
+#          - nersc_knl_xcompile
+#
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: grab main project
+#        uses: actions/checkout@v2
+#        with:
+#          path: ./${{ github.event.repository.name }}
+#
+#      - name: grab cmfkit
+#        uses: actions/checkout@v2
+#        with:
+#          repository: idigs/cmfkit
+#          path: ./cmfkit
+#
+#      - name: merge project .cmfkit overlay
+#        run: |
+#          cp -r ./cmfkit/* ./${{ github.event.repository.name }}/.cmfkit
+#
+#      - name: scenario
+#        run: |
+#          ./cmfkit/launch ${{ matrix.base_image }} scenario/nersc_knl_xcompile build
+#          ./cmfkit/launch ${{ matrix.base_image }} scenario/nersc_knl_xcompile test
+#
+#      - name: diag output - env vars
+#        run: env | sort
+#
+#      - name: diag output - dir structure
+#        run: pwd && ls -la
 
