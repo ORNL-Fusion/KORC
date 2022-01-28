@@ -1,0 +1,42 @@
+
+#!/bin/bash
+
+foo () { ... }
+bar () { ... }
+
+main() {
+    code
+}
+
+[[ "${#BASH_SOURCE[@]}" -eq 1 ]] && _deflist
+    main "$@"
+fi
+
+. ${CMFKIT_HOME:-/usr/local/lib/cmfkit}/deflist
+
+__build() {
+
+  # establish list of variables defined in a pre-scope context
+  _deflist_denote_outset
+
+  # list of CMake definition variables to import from existing environment
+  _deflist_uptake_outset \
+    CMAKE_BUILD_TYPE \
+    CMAKE_Fortran_COMPILER
+
+  # commit outstanding CMake def variables to the final roster
+  _deflist_accrue_vars
+
+  # set default CMake defs
+  _declare_defaults
+
+  # convert the CMake def final roster to CMake cmdline form
+  _deflist_render_cmdline
+}
+
+
+__test() {
+
+  echo
+}
+

@@ -24,24 +24,22 @@ jobs:
     steps:
       - name: grab main project
         uses: actions/checkout@v2
-        with:
-          path: ./${{ github.event.repository.name }}
 
       - name: grab cmfkit
         uses: actions/checkout@v2
         with:
           repository: idigs/cmfkit
-          path: ./cmfkit
+          path: ./.cmfkit_base
 
       - name: merge project .cmfkit overlay
         run: |
-          cp -r ./cmfkit/* ./${{ github.event.repository.name }}/.cmfkit
+          mv ./.cmfkit_base/* ./.cmfkit
 
       - name: diag output - env vars
         run: env | sort
 
       - name: diag output - dir structure
-        run: pwd && ls -la
+        run: pwd && ls -la && ls -la .cmfkit/
 
 
 #  job_container:
