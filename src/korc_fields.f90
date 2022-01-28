@@ -127,10 +127,13 @@ CONTAINS
     !$OMP END PARALLEL DO
   end subroutine analytical_fields
 
-  subroutine analytical_fields_p(pchunk,B0,E0,R0,q0,lam,ar,X_X,X_Y,X_Z, &
+  subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
        B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache)
+    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+    !! Core KORC simulation parameters.
+    TYPE(FIELDS), INTENT(IN)                                   :: F
     INTEGER, INTENT(IN)  :: pchunk
-    REAL(rp),  INTENT(IN)      :: R0,B0,lam,q0,E0,ar
+    REAL(rp)      :: R0,B0,lam,q0,E0,ar
     REAL(rp),  INTENT(IN),DIMENSION(pchunk)      :: X_X,X_Y,X_Z
     REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: B_X,B_Y,B_Z
     REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: E_X,E_Y,E_Z
@@ -151,7 +154,19 @@ CONTAINS
     REAL(rp),DIMENSION(pchunk)                             :: cT,sT,cZ,sZ
     INTEGER                                      :: cc
     !! Particle chunk iterator.
+    REAL(rp) :: Er0,rrmn,sigmaamn
+    
+    B0=F%Bo
+    E0=F%Eo
+    lam=F%AB%lambda
+    R0=F%AB%Ro
+    q0=F%AB%qo
+    ar=F%AB%a
 
+    Er0=F%AB%Ero
+    rrmn=F%AB%rmn
+    sigmaamn=F%AB%sigmamn
+    
     call cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
          T_R,T_T,T_Z,flag_cache)
 
@@ -175,18 +190,19 @@ CONTAINS
        B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc)
        B_Z(cc) = Bp(cc)*cT(cc)
 
+       !write(6,*) 'Ero ',Ero,'Er0 ',Er0
+       !write(6,*) 'rmn ',rmn,'rrmn ',rrmn
+       !write(6,*) 'sigmamn ',sigmamn,'sigmaamn ',sigmaamn
+       !write(6,*) 'T_R ',T_R(cc)*params%cpp%length
+       
        Ezeta(cc) = -E0/( 1.0_rp + eta(cc)*cT(cc))
-       Er(cc) =Ero*(1/cosh((T_R(cc)-rmn)/sigmamn))
+       Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
 
        E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
        E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
        E_Z(cc) = Er(cc)*sT(cc)
 
-
-       write(6,*) 'Ero ',Ero
-       write(6,*) 'rmn ',rmn
-       write(6,*) 'sigmamn ',sigmamn
-       write(6,*) 'Er ',Er(cc)
+       !write(6,*) 'Er ',Er(cc)
     end do
     !$OMP END SIMD
 

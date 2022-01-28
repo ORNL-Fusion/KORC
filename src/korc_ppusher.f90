@@ -286,7 +286,7 @@ contains
              call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)             
 
              if (params%field_model(1:3).eq.'ANA') then
-                call analytical_fields_p(pchunk,B0,EF0,R0,q0,lam,ar, &
+                call analytical_fields_p(params,pchunk,F, &
                      X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
 #ifdef PSPLINE
              else if (F%axisymmetric_fields.and. &
@@ -543,7 +543,7 @@ contains
           if (.not.params%FokPlan) then
              do tt=1_ip,params%t_skip
 
-                call analytical_fields_p(pchunk,B0,EF0,R0,q0,lam,ar, &
+                call analytical_fields_p(params,pchunk,F, &
                      X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
 
                 call advance_FOeqn_vars(tt,a,q_cache,m_cache,params, &
