@@ -813,6 +813,7 @@ CONTAINS
     ALLOCATE( vars%PSI_P(ppp) )
     ALLOCATE( vars%E(ppp,3) )
     ALLOCATE( vars%flagCon(ppp) )
+    ALLOCATE( vars%initLCFS(ppp) )
 
 #ifdef FIO
     ALLOCATE( vars%hint(ppp) )
@@ -823,6 +824,7 @@ CONTAINS
     vars%hint = hint
 #endif
     vars%flagCon = flag
+    vars%initLCFS = 0_is
     vars%B=0._rp
     vars%PSI_P=0._rp
     vars%cart=.false.
@@ -2250,6 +2252,7 @@ CONTAINS
        F%AORSA_AMP_Scale=AORSA_AMP_Scale
        F%AORSA_freq=AORSA_freq
        F%AORSA_nmode=AORSA_nmode
+       F%useLCFS = useLCFS
 
        if (params%proceed.and.F%ReInterp_2x1t) then
           call load_prev_iter(params)
@@ -3172,13 +3175,27 @@ CONTAINS
 
           dset = "/FLAG"
           call load_array_from_hdf5(h5file_id,dset,F%FLAG2D)
-          
+
+          if (F%useLCFS) then
+             dset = "/LCFS"
+             call load_array_from_hdf5(h5file_id,dset,F%LCFS2D)
+          else
+             F%LCFS2D = 0._rp
+          end if
+             
        end if
 
        
     else
        dset = "/FLAG"
        call load_array_from_hdf5(h5file_id,dset,F%FLAG3D)
+
+       if (F%useLCFS) then
+          dset = "/LCFS"       
+          call load_array_from_hdf5(h5file_id,dset,F%LCFS3D)
+       else
+          F%LCFS3D = 0._rp
+       end if
     end if
     
     if (F%Bflux) then
@@ -3545,6 +3562,7 @@ CONTAINS
     end if
 
     if (.NOT.ALLOCATED(F%FLAG2D)) ALLOCATE(F%FLAG2D(F%dims(1),F%dims(3)))
+    if (.NOT.ALLOCATED(F%LCFS2D)) ALLOCATE(F%LCFS2D(F%dims(1),F%dims(3)))
 
     if (.NOT.ALLOCATED(F%X%R)) ALLOCATE(F%X%R(F%dims(1)))
     if (.NOT.ALLOCATED(F%X%Z)) ALLOCATE(F%X%Z(F%dims(3)))
@@ -3588,6 +3606,7 @@ CONTAINS
     end if
 
     if (.NOT.ALLOCATED(F%FLAG3D)) ALLOCATE(F%FLAG3D(F%dims(1),F%dims(2),F%dims(3)))
+    if (.NOT.ALLOCATED(F%LCFS3D)) ALLOCATE(F%LCFS3D(F%dims(1),F%dims(2),F%dims(3)))
 
     if (.NOT.ALLOCATED(F%X%R)) ALLOCATE(F%X%R(F%dims(1)))
     if (.NOT.ALLOCATED(F%X%PHI)) ALLOCATE(F%X%PHI(F%dims(2)))
@@ -3681,5 +3700,8 @@ CONTAINS
 
     if (ALLOCATED(F%FLAG2D)) DEALLOCATE(F%FLAG2D)
     if (ALLOCATED(F%FLAG3D)) DEALLOCATE(F%FLAG3D)
+
+    if (ALLOCATED(F%LCFS2D)) DEALLOCATE(F%LCFS2D)
+    if (ALLOCATED(F%LCFS3D)) DEALLOCATE(F%LCFS3D)
   end subroutine DEALLOCATE_FIELDS_ARRAYS
 end module korc_fields

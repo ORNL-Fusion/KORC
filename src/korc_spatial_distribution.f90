@@ -94,39 +94,22 @@ subroutine disk(params,spp)
 
   ! Initial condition of uniformly distributed particles on a disk in the xz-plane
   ! A unique velocity direction
-  !    call init_u_random(10986546_8)
-  
+  call init_u_random(10986546_8)
+
   call init_random_seed()
-  !    call RANDOM_NUMBER(theta)
-  !    theta = 2.0_rp*C_PI*theta
+  call RANDOM_NUMBER(theta)
   
-  call set_random_dist(0.0_rp, 2.0_rp*C_PI)
-  call get_randoms(theta)
+  theta = 2.0_rp*C_PI*theta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  !    call init_random_seed()
-  !    call RANDOM_NUMBER(r)
-
-  call set_random_dist(0.0_rp, 1.0_rp)
-  call get_randoms(r)
+  call init_random_seed()
+  call RANDOM_NUMBER(r)
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
-
-  !$OMP PARALLEL WORKSHARE
   spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*COS(spp%PHIo)
   spp%vars%X(:,2) = ( spp%Ro + r*COS(theta) )*SIN(spp%PHIo)
   spp%vars%X(:,3) = spp%Zo + r*SIN(theta)
-  !$OMP END PARALLEL WORKSHARE
 
-  !write(6,*) spp%r_outter*params%cpp%length
-  !write(6,*) spp%r_inner*params%cpp%length
-  !write(6,*) spp%Ro*params%cpp%length
-  !write(6,*) spp%PHIo
-  !write(6,*) spp%Zo
-  !write(6,*) r*params%cpp%length
-  !write(6,*) theta
-  !write(6,*) spp%vars%X*params%cpp%length
-  
   DEALLOCATE(theta)
   DEALLOCATE(r)
 end subroutine disk
@@ -1410,6 +1393,7 @@ subroutine MH_psi(params,spp,F)
         if (modulo(ii,100).eq.0) then
            write(output_unit_write,'("Burn: ",I10)') ii
         end if
+        !write(6,'("Burn: ",I10)') ii
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
@@ -1449,6 +1433,7 @@ subroutine MH_psi(params,spp,F)
            !write(6,*) 'Z',Z_buffer
 
            spp%vars%flagCon(1)=1_is
+           spp%vars%initLCFS(1)=1_is
            if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
 #ifdef FIO
               call get_fio_vector_potential(spp%vars,F,params)
@@ -1484,6 +1469,7 @@ subroutine MH_psi(params,spp,F)
         spp%vars%Y(1,3)=Z_test
 
         spp%vars%flagCon(1)=1_is
+        spp%vars%initLCFS(1)=1_is
         if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
 #ifdef FIO
            call get_fio_vector_potential(spp%vars,F,params)
@@ -1515,7 +1501,9 @@ subroutine MH_psi(params,spp,F)
         ! phase space and cylindrical coordinate Jacobian R for spatial
         ! phase space incorporated here.
 
-        ratio = real(spp%vars%flagCon(1))*indicator(PSIN1,psi_max)* &
+        if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
+        ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
+             indicator(PSIN1,psi_max)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 
@@ -1593,6 +1581,7 @@ subroutine MH_psi(params,spp,F)
         spp%vars%Y(1,3)=Z_test
 
         spp%vars%flagCon(1)=1_is
+        spp%vars%initLCFS(1)=1_is
         if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
 #ifdef FIO
            call get_fio_vector_potential(spp%vars,F,params)
@@ -1620,8 +1609,10 @@ subroutine MH_psi(params,spp,F)
         !write(output_unit_write,*) 'PSIN',PSIN1
         !write(output_unit_write,*) 'PSIN0',PSIN0
 
-        
-        ratio = real(spp%vars%flagCon(1))*indicator(PSIN1,psi_max_buff)* &
+
+        if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
+        ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
+             indicator(PSIN1,psi_max)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 

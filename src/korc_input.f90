@@ -204,6 +204,7 @@ module korc_input
   CHARACTER(30) :: Analytic_IWL='NONE'
   INTEGER :: ntiles=42
   REAL(rp) :: circumradius=1.016
+  LOGICAL :: useLCFS = .FALSE.
   
   !! -----------------------------------------------
   !! plasmaProfiles
@@ -437,7 +438,8 @@ CONTAINS
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
          ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_IWL, &
-         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field
+         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field, &
+         useLCFS
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &
@@ -546,7 +548,7 @@ CONTAINS
              if (num_species.eq.1) then
                 runaway = .FALSE.
                 ppp = 1E0
-                pinit = ppp
+                pinit = 0
                 q = -1.0 
                 m = 1.0 
                 spatial_distribution = 'TRACER'
@@ -582,7 +584,10 @@ CONTAINS
              end if
              
              READ(UNIT=default_unit_open,NML=plasma_species,IOSTAT=read_stat)
-                
+
+             if (pinit(1).eq.0) pinit(:)=ppp(:)
+             ! set pinit equal to ppp if no pinit input
+             
           CASE('analytical_fields_params')
              READ(UNIT=default_unit_open,NML=analytical_fields_params,IOSTAT=read_stat)
           CASE('externalPlasmaModel')

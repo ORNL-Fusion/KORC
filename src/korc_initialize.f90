@@ -528,8 +528,9 @@ CONTAINS
        ALLOCATE( spp(ii)%vars%mu(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%Prad(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%Pin(spp(ii)%ppp) )
-       ALLOCATE( spp(ii)%vars%flagCon(spp(ii)%ppp) )
+       ALLOCATE( spp(ii)%vars%flagCon(spp(ii)%ppp) )       
        ALLOCATE( spp(ii)%vars%flagCol(spp(ii)%ppp) )
+       ALLOCATE( spp(ii)%vars%initLCFS(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%flagRE(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%wt(spp(ii)%ppp) )
 #ifdef FIO
@@ -557,10 +558,12 @@ CONTAINS
        spp(ii)%vars%flagCon(1:spp(ii)%pinit) = 1_is
        spp(ii)%vars%flagCol(1:spp(ii)%pinit) = 1_is
        spp(ii)%vars%flagRE(1:spp(ii)%pinit) = 1_is
+       spp(ii)%vars%initLCFS(1:spp(ii)%pinit) = 1_is
        if (spp(ii)%pinit.lt.spp(ii)%ppp) then
           spp(ii)%vars%flagCon(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
-          spp(ii)%vars%flagCol(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
+          spp(ii)%vars%flagCol(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is          
           spp(ii)%vars%flagRE(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
+          spp(ii)%vars%initLCFS(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
        endif
        spp(ii)%vars%wt = 0.0_rp
 
