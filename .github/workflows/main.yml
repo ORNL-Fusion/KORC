@@ -39,7 +39,7 @@ jobs:
           CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
 
         run: |
-          cd ./.cmfkit_base && launch build
+          cd ./.cmfkit_base && ./launch build
 
       - name: diag output - env vars
         run: env | sort
