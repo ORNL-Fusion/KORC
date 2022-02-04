@@ -280,6 +280,7 @@ program main
      flush(output_unit_write)
   end if
 
+  !write(6,*) 'V',spp(1)%vars%V
   
 !  write(output_unit_write,'("post ic eta: ",E17.10)') spp(1)%vars%eta
   
@@ -295,6 +296,7 @@ program main
 !  if (minval(spp(1)%vars%Y(:,1)).lt.1._rp/params%cpp%length) stop 'error with init'
   
   ! * * * INITIALIZATION STAGE * * *
+
   
   if (params%mpi_params%rank .EQ. 0) then
      flush(output_unit_write)
@@ -342,6 +344,9 @@ program main
      
   end if
 
+  !write(6,*) 'V',spp(1)%vars%V
+  !write(6,*) 'eta',spp(1)%vars%eta
+  
 !  write(6,*) '1Y_R',spp(1)%vars%Y(1:4,1)*params%cpp%length
   
   ! * * * SAVING INITIAL CONDITION AND VARIOUS SIMULATION PARAMETERS * * * !
@@ -373,7 +378,8 @@ program main
      flush(output_unit_write)
   end if
 
-  if (params%orbit_model(1:2).eq.'FO'.and.params%field_model(1:3).eq.'ANA') then
+  if (params%orbit_model(1:2).eq.'FO'.and.((params%field_model(1:3).eq.'ANA') &
+       .or.(params%field_model(1:3).eq.'UNI'))) then
      call FO_init(params,F,spp,.false.,.true.)
      ! Initial half-time particle push
      

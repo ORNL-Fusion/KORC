@@ -31,7 +31,8 @@ module korc_fields
        calculate_SC_p_FS,&
        init_SC_E1D_FS,&
        reinit_SC_E1D_FS,&
-       define_SC_time_step
+       define_SC_time_step,&
+       uniform_fields_p
   PRIVATE :: get_analytical_fields,&
        analytical_fields,&
        analytical_fields_GC_init,&
@@ -107,7 +108,7 @@ CONTAINS
        if ( flag(pp) .EQ. 1_is ) then
           eta = Y(pp,1)/F%Ro
           q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
-          Bp = F%AB%Bp_sign*eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
+          Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
           Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
 
 
@@ -181,7 +182,7 @@ CONTAINS
 
        eta(cc) = T_R(cc)/R0
        q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
-       Bp(cc) = eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+       Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
        !changed kappa  YG
        Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
@@ -633,6 +634,35 @@ CONTAINS
     B(:,2:3) = 0.0_rp
   end subroutine uniform_magnetic_field
 
+  subroutine uniform_fields_p(pchunk,F,B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+    INTEGER, INTENT(IN) :: pchunk
+    !! @note Subroutine that returns the value of a uniform magnetic
+    !! field. @endnote
+    !! This subroutine is used only when the simulation is ran for a
+    !! 'UNIFORM' plasma. As a convention, in a uniform plasma we
+    !! set \(\mathbf{B} = B_0 \hat{x}\).
+    TYPE(FIELDS), INTENT(IN)                               :: F
+    !! An instance of the KORC derived type FIELDS.
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: B_X,B_Y,B_Z
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: E_X,E_Y,E_Z
+    !! Magnetic field components in Cartesian coordinates; 
+    !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
+    integer(ip) :: cc
+
+    !$OMP SIMD
+    do cc=1_idef,pchunk
+       B_X(cc) = F%Bo
+       B_Y(cc) = 0._rp
+       B_Z(cc) = 0._rp
+       
+       E_X(cc) = F%Eo
+       E_Y(cc) = 0._rp
+       E_Z(cc) = 0._rp
+    end do
+    !$OMP END SIMD
+    
+  end subroutine uniform_fields_p
+
 
   subroutine uniform_electric_field(F,E)
     !! @note Subroutine that returns the value of a uniform electric
@@ -863,9 +893,9 @@ CONTAINS
     call get_fields(params,vars,F)
     !write(6,*) 'before second get fields'
 
-    !write(output_unit_write,'("Bx: ",E17.10)') vars%B(:,1)
-    !write(output_unit_write,'("By: ",E17.10)') vars%B(:,2)
-    !write(output_unit_write,'("Bz: ",E17.10)') vars%B(:,3)
+    !write(6,'("Bx: ",E17.10)') vars%B(:,1)*params%cpp%Bo
+    !write(6,'("By: ",E17.10)') vars%B(:,2)*params%cpp%Bo
+    !write(6,'("Bz: ",E17.10)') vars%B(:,3)*params%cpp%Bo
 
         !write(output_unit_write,*) 'before b1,b2,b3 calculation'
 
@@ -2616,6 +2646,9 @@ CONTAINS
        !       write(output_unit_write,'("gradBPHI",E17.10)') F%gradB_2D%PHI(F%dims(1)/2,F%dims(3)/2)
        !       write(output_unit_write,'("gradBZ",E17.10)') F%gradB_2D%Z(F%dims(1)/2,F%dims(3)/2)
 
+    else
+       F%Bo=Bo
+       F%Eo=Eo
     end if
 
     if (params%mpi_params%rank.eq.0) then
