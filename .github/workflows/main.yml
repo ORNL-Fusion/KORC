@@ -4,12 +4,56 @@ on: [ push ]
 
 jobs:
 
-  job_machine:
+#  job_machine:
+#    strategy:
+#      matrix:
+#        os_env:
+#          - macos-latest
+#          - windows-latest
+#
+#        build_type:
+#          - Debug
+#          - Release
+#
+#        scenario:
+#          - ppush_regression
+#          - nersc_knl_xcompile
+#
+#    runs-on: ${{ matrix.os_env }}
+#
+#    steps:
+#      - name: grab main project
+#        uses: actions/checkout@v2
+#
+#      - name: grab cmfkit base
+#        uses: actions/checkout@v2
+#        with:
+#          repository: idigs/cmfkit
+#          path: ./.cmfkit_base
+#
+#      - name: launch build
+#        env:
+#          CMFKIT_SCENARIO:    default
+#          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
+#
+#          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
+#
+#        run: |
+#          cd ./.cmfkit_base && ./launch build
+#
+#      - name: diag output - env vars
+#        run: env | sort
+#
+#      - name: diag output - dir structure
+#        run: pwd && ls -la && ls -la .cmfkit/
+
+
+  job_container:
     strategy:
       matrix:
-        os_env:
-          - macos-latest
-          - windows-latest
+        base_image:
+          - 'alpine:3.14.2'
+          - 'rikorose/gcc-cmake:gcc-10'
 
         build_type:
           - Debug
@@ -19,13 +63,15 @@ jobs:
           - ppush_regression
           - nersc_knl_xcompile
 
-    runs-on: ${{ matrix.os_env }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: grab main project
         uses: actions/checkout@v2
+#        with:
+#          path: ./${{ github.event.repository.name }}
 
-      - name: grab cmfkit base
+      - name: grab cmfkit
         uses: actions/checkout@v2
         with:
           repository: idigs/cmfkit
@@ -33,8 +79,9 @@ jobs:
 
       - name: launch build
         env:
-          CMFKIT_SCENARIO:    default
-          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
+          CMFKIT_SCENARIO:  default
+          CMFKIT_PLATFORM:  readybake
+          CMFKIT_READYBAKE_BASE_IMAGE:  ${{ matrix.base_image }}
 
           CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
 
@@ -45,50 +92,5 @@ jobs:
         run: env | sort
 
       - name: diag output - dir structure
-        run: pwd && ls -la && ls -la .cmfkit/
-
-
-#  job_container:
-#    strategy:
-#      matrix:
-#        base_image:
-#          - 'alpine:3.14.2'
-#          - 'rikorose/gcc-cmake:gcc-10'
-#
-#        build_type:
-#          - Debug
-#          - Release
-#
-#        scenario:
-#          - ppush_regression
-#          - nersc_knl_xcompile
-#
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: grab main project
-#        uses: actions/checkout@v2
-#        with:
-#          path: ./${{ github.event.repository.name }}
-#
-#      - name: grab cmfkit
-#        uses: actions/checkout@v2
-#        with:
-#          repository: idigs/cmfkit
-#          path: ./cmfkit
-#
-#      - name: merge project .cmfkit overlay
-#        run: |
-#          cp -r ./cmfkit/* ./${{ github.event.repository.name }}/.cmfkit
-#
-#      - name: scenario
-#        run: |
-#          ./cmfkit/launch ${{ matrix.base_image }} scenario/nersc_knl_xcompile build
-#          ./cmfkit/launch ${{ matrix.base_image }} scenario/nersc_knl_xcompile test
-#
-#      - name: diag output - env vars
-#        run: env | sort
-#
-#      - name: diag output - dir structure
-#        run: pwd && ls -la
+        run: pwd && ls -la
 
