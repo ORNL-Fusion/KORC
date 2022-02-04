@@ -33,7 +33,7 @@ jobs:
 #
 #      - name: launch build
 #        env:
-#          CMFKIT_SCENARIO:    default
+#          CMFKIT_SCENARIO:    ${{ matrix.scenario }}
 #          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
 #
 #          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
@@ -79,11 +79,11 @@ jobs:
 
       - name: launch build
         env:
-          CMFKIT_SCENARIO:  default
-          CMFKIT_PLATFORM:  readybake
+          CMFKIT_PLATFORM: readybake
           CMFKIT_READYBAKE_BASE_IMAGE:  ${{ matrix.base_image }}
+          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
 
-          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
+          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
         run: |
           cd ./.cmfkit_base && ./launch build
