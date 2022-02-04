@@ -4,48 +4,48 @@ on: [ push ]
 
 jobs:
 
-#  job_machine:
-#    strategy:
-#      matrix:
-#        os_env:
-#          - macos-latest
-#          - windows-latest
-#
-#        build_type:
-#          - Debug
-#          - Release
-#
-#        scenario:
-#          - ppush_regression
-#          - nersc_knl_xcompile
-#
-#    runs-on: ${{ matrix.os_env }}
-#
-#    steps:
-#      - name: grab main project
-#        uses: actions/checkout@v2
-#
-#      - name: grab cmfkit base
-#        uses: actions/checkout@v2
-#        with:
-#          repository: idigs/cmfkit
-#          path: ./.cmfkit_base
-#
-#      - name: launch build
-#        env:
-#          CMFKIT_SCENARIO:    ${{ matrix.scenario }}
-#          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
-#
-#          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
-#
-#        run: |
-#          cd ./.cmfkit_base && ./launch build
-#
-#      - name: diag output - env vars
-#        run: env | sort
-#
-#      - name: diag output - dir structure
-#        run: pwd && ls -la && ls -la .cmfkit/
+  job_machine:
+    strategy:
+      matrix:
+        os_env:
+          - macos-latest
+          - windows-latest
+
+        build_type:
+          - Debug
+          - Release
+
+        scenario:
+          - ppush_regression
+          - nersc_knl_xcompile
+
+    runs-on: ${{ matrix.os_env }}
+
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+
+      - name: grab cmfkit base
+        uses: actions/checkout@v2
+        with:
+          repository: idigs/cmfkit
+          path: ./.cmfkit_base
+
+      - name: launch build
+        env:
+          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
+          CMFKIT_SCENARIO:    ${{ matrix.scenario }}
+
+          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
+
+        run: |
+          cd ./.cmfkit_base && ./launch build
+
+      - name: diag output - env vars
+        run: env | sort
+
+      - name: diag output - dir structure
+        run: pwd && ls -la && ls -la .cmfkit/
 
 
   job_container:
@@ -53,6 +53,7 @@ jobs:
       matrix:
         base_image:
           - 'alpine:3.14.2'
+          - 'ubuntu:20.04'
           - 'rikorose/gcc-cmake:gcc-10'
 
         build_type:
