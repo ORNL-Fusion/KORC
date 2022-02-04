@@ -25,15 +25,21 @@ jobs:
       - name: grab main project
         uses: actions/checkout@v2
 
-      - name: grab cmfkit
+      - name: grab cmfkit base
         uses: actions/checkout@v2
         with:
           repository: idigs/cmfkit
           path: ./.cmfkit_base
 
-      - name: merge project .cmfkit overlay
+      - name: launch build
+        env:
+          CMFKIT_SCENARIO:    default
+          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
+
+          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
+
         run: |
-          mv ./.cmfkit_base/* ./.cmfkit
+          cd ./.cmfkit_base && launch build
 
       - name: diag output - env vars
         run: env | sort
