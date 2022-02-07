@@ -27,16 +27,16 @@ jobs:
 
       - name: grab cmfkit base
         uses: actions/checkout@v2
-        with:
+        with: 
           repository: idigs/cmfkit
           path: ./.cmfkit_base
 
       - name: launch build
         env:
-          CMFKIT_PLATFORM:    github-vm-${{ matrix.os_env }}
-          CMFKIT_SCENARIO:    ${{ matrix.scenario }}
+          CMFKIT_PLATFORM:   github-vm-${{ matrix.os_env }}
+          CMFKIT_SCENARIO:             ${{ matrix.scenario }}
 
-          CMAKE_BUILD_TYPE:   ${{ matrix.build_type }}
+          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
         run: |
           cd ./.cmfkit_base && ./launch build
@@ -80,9 +80,9 @@ jobs:
 
       - name: launch build
         env:
-          CMFKIT_PLATFORM: readybake
-          CMFKIT_READYBAKE_BASE_IMAGE:  ${{ matrix.base_image }}
-          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
+          CMFKIT_PLATFORM:   readybake
+          CMFKIT_SCENARIO:         ${{ matrix.scenario }}
+          CMFKIT_READYBAKE_IMAGE:  ${{ matrix.base_image }}
 
           CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
