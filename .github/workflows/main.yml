@@ -81,8 +81,8 @@ jobs:
       - name: launch build
         env:
           CMFKIT_PLATFORM:   readybake
-          CMFKIT_SCENARIO:         ${{ matrix.scenario }}
-          CMFKIT_READYBAKE_IMAGE:  ${{ matrix.base_image }}
+          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
+          CMFKIT_READYBAKE_BASE_IMAGE:  ${{ matrix.base_image }}
 
           CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
