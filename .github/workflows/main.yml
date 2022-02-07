@@ -69,8 +69,8 @@ jobs:
     steps:
       - name: grab main project
         uses: actions/checkout@v2
-#        with:
-#          path: ./${{ github.event.repository.name }}
+#       with:
+#         path: ./${{ github.event.repository.name }}
 
       - name: grab cmfkit
         uses: actions/checkout@v2
