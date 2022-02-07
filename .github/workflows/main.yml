@@ -28,7 +28,7 @@ jobs:
       - name: grab cmfkit base
         uses: actions/checkout@v2
         with: 
-          repository: idigs/cmfkit
+          repository: ornl-fusion/cmfkit
           path: ./.cmfkit_base
 
       - name: launch build
@@ -75,7 +75,7 @@ jobs:
       - name: grab cmfkit
         uses: actions/checkout@v2
         with:
-          repository: idigs/cmfkit
+          repository: ornl-fusion/cmfkit
           path: ./.cmfkit_base
 
       - name: launch build
