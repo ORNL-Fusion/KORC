@@ -15,8 +15,7 @@ jobs:
           - Release
 
         scenario:
-          - ppush_regression
-          - nersc_knl_xcompile
+          - basic
 
     runs-on: ${{ matrix.os_env }}
 
