@@ -600,6 +600,7 @@ module korc_types
      REAL(rp)  :: E_dyn
      REAL(rp)  :: E_pulse
      REAL(rp)  :: E_width
+     CHARACTER(30) :: E_profile
      REAL(rp)  :: PSIP_min
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp)  :: AMP

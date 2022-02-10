@@ -2247,18 +2247,22 @@ CONTAINS
 !          end if
 
 #if DBG_CHECK    
-          if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
+          if ((IR.lt.1).or.(IZ.lt.1).or.(IR.GT. &
                bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
-             write(6,'("YR:",E17.10)') Y_R(pp)
-             write(6,'("YZ:",E17.10)') Y_Z(pp)
-             write(6,'("IR: ",I16)') IR
-             write(6,'("IZ: ",I16)') IZ
+          
+             !write(6,'("YR:",E17.10)') Y_R(pp)
+             !write(6,'("YZ:",E17.10)') Y_Z(pp)
+             !write(6,'("IR: ",I16)') IR
+             !write(6,'("IZ: ",I16)') IZ
+             !write(6,*) 'NR',bfield_2d%NR
+             !write(6,*) 'NZ',bfield_2d%NZ
+             !write(6,*) 'FLAG',fields_domain%FLAG2D(IR,IZ)
              !call KORC_ABORT(23)
           end if
 #endif
           
-          if ((IR.lt.0).or.(IZ.lt.0).or. &
-               ((IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)).or. &
+          if ((IR.lt.1).or.(IZ.lt.1).or. &
+               (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
                (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
              if (F%Analytic_IWL.eq.'NONE') then
                 flag(pp) = 0_is

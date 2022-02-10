@@ -452,6 +452,7 @@ CONTAINS
     REAL(rp),DIMENSION(pchunk),INTENT(OUT) :: Bmag,E_PHI
     integer(ip) :: cc
 
+    
     B0=F%Bo
     EF0=F%Eo
     lam=F%AB%lambda
@@ -476,38 +477,66 @@ CONTAINS
 
   end subroutine analytical_fields_Bmag_p
   
-  subroutine add_analytical_E_p(params,tt,F,E_PHI,Y_R)
+  subroutine add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     TYPE(FIELDS), INTENT(IN)                                   :: F
     INTEGER(ip),INTENT(IN)  :: tt
-    REAL(rp)  :: E_dyn,E_pulse,E_width,time,arg,arg1,R0
+    REAL(rp)  :: E_dyn,E_pulse,E_width,time,arg,arg1,R0,Z0,a
     REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: E_PHI
-    REAL(rp),DIMENSION(params%pchunk),INTENT(IN) :: Y_R
+    REAL(rp),DIMENSION(params%pchunk),INTENT(IN) :: Y_R,Y_Z
+    REAL(rp),DIMENSION(params%pchunk) :: rm,r_a
     integer(ip) :: cc,pchunk
 
     pchunk=params%pchunk
-    
-    time=params%init_time+(params%it-1+tt)*params%dt
-    
-    E_dyn=F%E_dyn
-    E_pulse=F%E_pulse
-    E_width=F%E_width
-    R0=F%Ro
 
-    !write(output_unit_write,*) E_dyn,E_pulse,E_width,R0
-    
-    !$OMP SIMD
-    !    !$OMP& aligned(E_PHI)
-    do cc=1_idef,pchunk
+    SELECT CASE (TRIM(F%E_profile))
+    CASE('D3D_LOOP')
 
-       arg=(time-E_pulse)**2/(2._rp*E_width**2)
-       arg1=10._rp*(time-E_pulse)/(sqrt(2._rp)*E_width)
+       time=params%init_time+(params%it-1+tt)*params%dt
+
+       E_dyn=F%E_dyn
+       E_pulse=F%E_pulse
+       E_width=F%E_width
+       R0=F%Ro
+
+       !write(output_unit_write,*) E_dyn,E_pulse,E_width,R0
+
+       !$OMP SIMD
+       !    !$OMP& aligned(E_PHI)
+       do cc=1_idef,pchunk
+
+          arg=(time-E_pulse)**2/(2._rp*E_width**2)
+          arg1=10._rp*(time-E_pulse)/(sqrt(2._rp)*E_width)
+
+          E_PHI(cc)=E_PHI(cc)+R0*E_dyn/Y_R(cc)*exp(-arg)*(1._rp+erf(-arg1))/2._rp
+       end do
+       !$OMP END SIMD
+    CASE('MST_FSA')
+
+       R0=F%AB%Ro
+       Z0=F%Zo
+       a=F%AB%a
+       E_dyn=F%E_dyn
        
-       E_PHI(cc)=E_PHI(cc)+R0*E_dyn/Y_R(cc)*exp(-arg)*(1._rp+erf(-arg1))/2._rp
-    end do
-    !$OMP END SIMD
+       !$OMP SIMD
+       do cc=1_idef,pchunk
 
+          !write(6,*) 'E_dyn',E_dyn,'E_PHI_in',E_PHI(cc)
+          
+          rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
+          r_a(cc)=rm(cc)/a
+          E_PHI(cc) = E_PHI(cc)+E_dyn-(2._rp*r_a(cc)**3._rp- &
+               3._rp*r_a(cc)**2._rp+1._rp)*0.05/params%cpp%Eo
+
+          !write(6,*) 'r/a',r_a,'E_PHI_out',E_PHI(cc)
+          
+       end do
+       !$OMP END SIMD
+    CASE DEFAULT
+       E_PHI(cc)=E_PHI(cc)
+    END SELECT
+    
     !write(output_unit_write,*) arg,arg1
 
   end subroutine add_analytical_E_p
@@ -2263,10 +2292,13 @@ CONTAINS
           
 
        F%E_2x1t = E_2x1t
-       
+
+       F%E_profile = E_profile
        F%E_dyn = E_dyn
        F%E_pulse = E_pulse
        F%E_width = E_width
+       F%AB%a = minor_radius
+       F%AB%Ro = major_radius
 
        F%PSIp_lim=PSIp_lim
        

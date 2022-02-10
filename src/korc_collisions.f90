@@ -585,14 +585,16 @@ contains
                 end if
              end if
              
-          else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
-               .AND.(F%ReInterp_2x1t)) then
+          else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI')) then
+             if (F%ReInterp_2x1t) then
+                maxEinterp=maxval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
+                     F%FLAG3D(:,F%ind_2x1t,:))
 
-             maxEinterp=maxval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
-                  F%FLAG3D(:,F%ind_2x1t,:))
-
-             minEinterp=minval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
-                  F%FLAG3D(:,F%ind_2x1t,:))
+                minEinterp=minval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
+                     F%FLAG3D(:,F%ind_2x1t,:))
+             else if (F%E_profile.eq.'MST_FSA') then
+                maxEinterp=F%E_dyn
+             end if
 
              cparams_ss%avalanche=.TRUE.
              if (TRIM(params%collisions_model).eq.'NO_BOUND') then
@@ -2328,7 +2330,7 @@ contains
                      gradB_R,gradB_PHI,gradB_Z,flagCon)
              end if
           endif
-          call add_analytical_E_p(params,tt,F,E_PHI,Y_R)
+          call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
 #endif
        end if
 
@@ -2534,7 +2536,7 @@ contains
   end subroutine include_CoulombCollisions_GC_p
 
   subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
-       Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+       Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
 
     TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -2548,12 +2550,12 @@ contains
     REAL(rp), DIMENSION(achunk) :: curlb_R,curlb_PHI,curlb_Z
     REAL(rp), DIMENSION(achunk) :: gradB_R,gradB_PHI,gradB_Z,ntot
     REAL(rp), DIMENSION(achunk) 	:: E_R,E_Z,E_PHI_LAC
-    REAL(rp), DIMENSION(achunk), INTENT(OUT) 	:: E_PHI,ne,PSIp
+    REAL(rp), DIMENSION(achunk), INTENT(OUT) 	:: E_PHI,ne,Te,PSIp
     REAL(rp), DIMENSION(achunk), INTENT(IN) 			:: Y_R,Y_PHI,Y_Z
     INTEGER(is), DIMENSION(achunk), INTENT(INOUT) 	:: flagCol
     INTEGER(is), DIMENSION(achunk), INTENT(INOUT) 	:: flagCon
     REAL(rp), INTENT(IN) 			:: me
-    REAL(rp), DIMENSION(achunk) 			:: Te,Zeff
+    REAL(rp), DIMENSION(achunk) 			:: Zeff
     REAL(rp), DIMENSION(achunk) 			:: nAr0,nAr1,nAr2,nAr3
     REAL(rp), DIMENSION(achunk) 			:: nD,nD1
     REAL(rp), DIMENSION(achunk,2) 			:: dW
@@ -2630,7 +2632,7 @@ contains
           end if
        endif
 #endif
-       if(.not.F%ReInterp_2x1t) call add_analytical_E_p(params,tt,F,E_PHI,Y_R)
+       if(.not.F%ReInterp_2x1t) call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
     end if
 
 
@@ -2941,7 +2943,8 @@ contains
     end do
 #endif
 
-
+    E_PHI=E_PHI_LAC
+    
   end subroutine include_CoulombCollisionsLA_GC_p
 
 #ifdef FIO
@@ -3292,10 +3295,16 @@ contains
        end if
 
        gammax=(gam(cc)+1._rp)/2._rp
-       
-       !write(6,*) 'p_c',p_c
-       !write(6,*) 'p_min',p_min
-       !write(6,*) 'LAC_gam_resolution: ',TRIM(cparams_ss%LAC_gam_resolution)
+
+       if (gam_min.eq.1._rp) then
+          write(6,*) 'R',Y_R(cc)*params%cpp%length,'Z',Y_Z(cc)*params%cpp%length
+          write(6,*) 'vmin',vmin,'netot',netot(cc)*params%cpp%density,'Te',Te(cc)*params%cpp%temperature/C_E
+          write(6,*) 'E',E_PHI*params%cpp%Eo,'E_c',E_C*params%cpp%Eo          
+          write(6,*) 'p_c',p_c,'gam_c',gam_c
+          write(6,*) 'p_min',p_min,'gam_min',gam_min
+          !write(6,*) 'LAC_gam_resolution: ',TRIM(cparams_ss%LAC_gam_resolution)
+          !write(6,*) 'gam_min,gammax',gam_min,gammax
+       end if
        
        !! Generating 1D and 2D ranges for secondary RE distribution
 
@@ -3320,7 +3329,6 @@ contains
           gam1=10**(10**(tmpgam1))
        end if
 
-       !write(6,*) 'gam_min,gammax',gam_min,gammax
        !write(6,*) 'tmpgam1',tmpgam1
        !write(6,*) 'gam1',gam1
 
@@ -3432,6 +3440,8 @@ contains
           prob1(cc)=prob1(cc)+probtmp(jj)*(dpm1(jj)+dpm1(jj-1))/2
        end do
 
+       !write(6,*) 'prob1pre',prob1(cc),'flagCol',flagCol(cc),'flagCon',flagCon(cc),'dt',dt
+       
        !write(6,*) 'intpitchprob',intpitchprob
        
        prob1(cc)=prob1(cc)*dt*2*C_PI*REAL(flagCol(cc))*REAL(flagCon(cc))
@@ -3457,7 +3467,7 @@ contains
        end if
 
        !write(6,*) 'gam',gam(cc),'xi',xi(cc)
-       !write(6,*) 'prob1',prob1(cc),'prob0',prob0(cc),'dt',dt
+       !write(6,*) 'prob1',prob1(cc),'prob0',prob0(cc)
        
        if (prob1(cc).gt.prob0(cc)) then
 

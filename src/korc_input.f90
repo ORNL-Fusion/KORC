@@ -170,6 +170,7 @@ module korc_input
   ! Mesh points in Z for analytical interpolation mesh
   REAL(rp) :: nPHI= 50
   ! Mesh points in PHI for analytical interpolation mesh
+  CHARACTER(30) :: E_profile
   REAL(rp) :: E_dyn = 0.	
   REAL(rp) :: E_pulse = 5.E-2
   REAL(rp) :: E_width = 2.5E-2
@@ -313,7 +314,7 @@ module korc_input
   REAL(rp) :: Epar_aval = 0.7427 
     ! Parallel electric field in V/m
   REAL(rp) :: Te_aval = 1.0 
-    ! Background electron temperature in eV
+  ! Background electron temperature in eV
 
   !! -----------------------------------------------
   !! ExperimentalPDF
@@ -339,6 +340,7 @@ module korc_input
   REAL(rp) :: lambda_expt = 4.0E-6 
     ! Characteristic wavelength
   REAL(rp) :: A_fact_expt=1.
+  CHARACTER(30) :: filename_exp = 'Exp_PDF.h5' !
   
   !! -----------------------------------------------
   !! HollmannPDF
@@ -433,7 +435,7 @@ CONTAINS
          pinit
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
-         E_dyn,E_pulse,E_width
+         E_dyn,E_pulse,E_width,E_profile
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
@@ -455,7 +457,7 @@ CONTAINS
          Zeff_aval,Epar_aval,Te_aval,dth_aval,dp_aval,dR_aval,dZ_aval
     NAMELIST /ExperimentalPDF/ max_pitch_angle_expt,min_pitch_angle_expt, &
          max_energy_expt,min_energy_expt,Zeff_expt,E_expt,k_expt,t_expt, &
-         Bo_expt,lambda_expt,A_fact_expt
+         Bo_expt,lambda_expt,A_fact_expt,filename_exp
     NAMELIST /HollmannPDF/ E_Hollmann,Zeff_Hollmann,max_pitch_angle_Hollmann, &
          min_pitch_angle_Hollmann,max_energy_Hollmann, &
          min_energy_Hollmann,filename_Hollmann,Bo_Hollmann,lambda_Hollmann, &
