@@ -7,10 +7,15 @@
 [[ -d ./build ]] && rm -f ./build/CMakeCache.txt
 [[ -d ./build ]] && rm -rf ./build/CMakeFiles
 
+
 #export CC=/opt/local/bin/gcc-mp-8
 #export CXX=/opt/local/bin/g++-mp-8
 #export FC=/opt/local/bin/gfortran-mp-8
 
+CMFKIT_SCENARIO=basic
+CMAKE_BUILD_TYPE=Release
+CMAKE_C_COMPILER=/opt/local/bin/gcc-mp-8
+CMAKE_CXX_COMPILER=/opt/local/bin/g++-mp-8
 CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran-mp-8
 
 echo 'ran setup'
