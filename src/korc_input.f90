@@ -174,6 +174,12 @@ module korc_input
   REAL(rp) :: E_dyn = 0.	
   REAL(rp) :: E_pulse = 5.E-2
   REAL(rp) :: E_width = 2.5E-2
+  REAL(rp) ::Ero=0
+  ! amplitude of radial electric field in V/m
+  REAL(rp) :: rmn =0.6
+  !location of Er 
+  REAL(rp) :: sigmamn=1.E-2
+  ! half width of Er perturbation
 
   !! -----------------------------------------------
   !! externalPlasmaModel
@@ -435,7 +441,7 @@ CONTAINS
          pinit
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
-         E_dyn,E_pulse,E_width,E_profile
+         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &

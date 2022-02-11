@@ -150,6 +150,9 @@ subroutine normalize_variables(params,spp,F,P)
   !	Normalize electromagnetic fields and profiles
   F%Bo = F%Bo/params%cpp%Bo
   F%Eo = F%Eo/params%cpp%Eo
+  F%AB%Ero = F%AB%Ero/params%cpp%Eo
+  F%AB%rmn=F%AB%rmn/params%cpp%length
+  F%AB%sigmamn=F%AB%sigmamn/params%cpp%length
   F%Ro = F%Ro/params%cpp%length
   F%Zo = F%Zo/params%cpp%length
   F%E_dyn = F%E_dyn/params%cpp%Eo

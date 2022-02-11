@@ -531,6 +531,12 @@ module korc_types
      CHARACTER(MAX_STRING_LENGTH) :: current_direction 
      !! Direction of plasma current: PARALLEL or ANTI-PARALLEL to the
      !! toroidal magnetic field.
+     REAL(rp) 			:: Ero 
+     !! radial electric field amplitude.
+     REAL(rp) 			:: rmn
+     !! mode location rmn
+     REAL(rp)			:: sigmamn
+     !! mode width sigmamn
   END TYPE A_FIELD
 
   TYPE, PRIVATE :: MESH

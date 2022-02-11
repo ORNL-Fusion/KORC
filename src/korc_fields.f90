@@ -31,7 +31,8 @@ module korc_fields
        calculate_SC_p_FS,&
        init_SC_E1D_FS,&
        reinit_SC_E1D_FS,&
-       define_SC_time_step
+       define_SC_time_step,&
+       uniform_fields_p
   PRIVATE :: get_analytical_fields,&
        analytical_fields,&
        analytical_fields_GC_init,&
@@ -107,7 +108,7 @@ CONTAINS
        if ( flag(pp) .EQ. 1_is ) then
           eta = Y(pp,1)/F%Ro
           q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
-          Bp = F%AB%Bp_sign*eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
+          Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
           Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
 
 
@@ -127,10 +128,13 @@ CONTAINS
     !$OMP END PARALLEL DO
   end subroutine analytical_fields
 
-  subroutine analytical_fields_p(pchunk,B0,E0,R0,q0,lam,ar,X_X,X_Y,X_Z, &
+  subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
        B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache)
+    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+    !! Core KORC simulation parameters.
+    TYPE(FIELDS), INTENT(IN)                                   :: F
     INTEGER, INTENT(IN)  :: pchunk
-    REAL(rp),  INTENT(IN)      :: R0,B0,lam,q0,E0,ar
+    REAL(rp)      :: R0,B0,lam,q0,E0,ar
     REAL(rp),  INTENT(IN),DIMENSION(pchunk)      :: X_X,X_Y,X_Z
     REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: B_X,B_Y,B_Z
     REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: E_X,E_Y,E_Z
@@ -138,6 +142,8 @@ CONTAINS
     REAL(rp),DIMENSION(pchunk)     :: T_R,T_T,T_Z
     REAL(rp),DIMENSION(pchunk)                               :: Ezeta
     !! Toroidal electric field \(E_\zeta\).
+    REAL(rp),DIMENSION(pchunk)                               :: Er
+    !! changed YG Radial electric field \(E_\r\).
     REAL(rp),DIMENSION(pchunk)                               :: Bzeta
     !! Toroidal magnetic field \(B_\zeta\).
     REAL(rp),DIMENSION(pchunk)                              :: Bp
@@ -149,7 +155,19 @@ CONTAINS
     REAL(rp),DIMENSION(pchunk)                             :: cT,sT,cZ,sZ
     INTEGER                                      :: cc
     !! Particle chunk iterator.
+    REAL(rp) :: Er0,rrmn,sigmaamn
+    
+    B0=F%Bo
+    E0=F%Eo
+    lam=F%AB%lambda
+    R0=F%AB%Ro
+    q0=F%AB%qo
+    ar=F%AB%a
 
+    Er0=F%AB%Ero
+    rrmn=F%AB%rmn
+    sigmaamn=F%AB%sigmamn
+    
     call cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
          T_R,T_T,T_Z,flag_cache)
 
@@ -165,6 +183,7 @@ CONTAINS
        eta(cc) = T_R(cc)/R0
        q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+       !changed kappa  YG
        Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
 
@@ -172,11 +191,19 @@ CONTAINS
        B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc)
        B_Z(cc) = Bp(cc)*cT(cc)
 
+       !write(6,*) 'Ero ',Ero,'Er0 ',Er0
+       !write(6,*) 'rmn ',rmn,'rrmn ',rrmn
+       !write(6,*) 'sigmamn ',sigmamn,'sigmaamn ',sigmaamn
+       !write(6,*) 'T_R ',T_R(cc)*params%cpp%length
+       
        Ezeta(cc) = -E0/( 1.0_rp + eta(cc)*cT(cc))
+       Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
 
-       E_X(cc) = Ezeta(cc)*cZ(cc)
-       E_Y(cc) = -Ezeta(cc)*sZ(cc)
-       E_Z(cc) = 0.0_rp
+       E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
+       E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
+       E_Z(cc) = Er(cc)*sT(cc)
+
+       !write(6,*) 'Er ',Er(cc)
     end do
     !$OMP END SIMD
 
@@ -636,6 +663,35 @@ CONTAINS
     B(:,2:3) = 0.0_rp
   end subroutine uniform_magnetic_field
 
+  subroutine uniform_fields_p(pchunk,F,B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+    INTEGER, INTENT(IN) :: pchunk
+    !! @note Subroutine that returns the value of a uniform magnetic
+    !! field. @endnote
+    !! This subroutine is used only when the simulation is ran for a
+    !! 'UNIFORM' plasma. As a convention, in a uniform plasma we
+    !! set \(\mathbf{B} = B_0 \hat{x}\).
+    TYPE(FIELDS), INTENT(IN)                               :: F
+    !! An instance of the KORC derived type FIELDS.
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: B_X,B_Y,B_Z
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: E_X,E_Y,E_Z
+    !! Magnetic field components in Cartesian coordinates; 
+    !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
+    integer(ip) :: cc
+
+    !$OMP SIMD
+    do cc=1_idef,pchunk
+       B_X(cc) = F%Bo
+       B_Y(cc) = 0._rp
+       B_Z(cc) = 0._rp
+       
+       E_X(cc) = F%Eo
+       E_Y(cc) = 0._rp
+       E_Z(cc) = 0._rp
+    end do
+    !$OMP END SIMD
+    
+  end subroutine uniform_fields_p
+
 
   subroutine uniform_electric_field(F,E)
     !! @note Subroutine that returns the value of a uniform electric
@@ -868,9 +924,9 @@ CONTAINS
     call get_fields(params,vars,F)
     !write(6,*) 'before second get fields'
 
-    !write(output_unit_write,'("Bx: ",E17.10)') vars%B(:,1)
-    !write(output_unit_write,'("By: ",E17.10)') vars%B(:,2)
-    !write(output_unit_write,'("Bz: ",E17.10)') vars%B(:,3)
+    !write(6,'("Bx: ",E17.10)') vars%B(:,1)*params%cpp%Bo
+    !write(6,'("By: ",E17.10)') vars%B(:,2)*params%cpp%Bo
+    !write(6,'("Bz: ",E17.10)') vars%B(:,3)*params%cpp%Bo
 
         !write(output_unit_write,*) 'before b1,b2,b3 calculation'
 
@@ -2074,6 +2130,10 @@ CONTAINS
        F%E_width = E_width
 
        F%PSIp_lim=PSIp_lim
+
+       F%AB%Ero=Ero
+       F%AB%rmn=rmn
+       F%AB%sigmamn=sigmamn
        
        !write(output_unit_write,*) E_dyn,E_pulse,E_width
 
@@ -2621,6 +2681,9 @@ CONTAINS
        !       write(output_unit_write,'("gradBPHI",E17.10)') F%gradB_2D%PHI(F%dims(1)/2,F%dims(3)/2)
        !       write(output_unit_write,'("gradBZ",E17.10)') F%gradB_2D%Z(F%dims(1)/2,F%dims(3)/2)
 
+    else
+       F%Bo=Bo
+       F%Eo=Eo
     end if
 
     if (params%mpi_params%rank.eq.0) then

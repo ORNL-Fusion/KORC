@@ -286,8 +286,11 @@ contains
              call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)             
 
              if (params%field_model(1:3).eq.'ANA') then
-                call analytical_fields_p(pchunk,B0,EF0,R0,q0,lam,ar, &
+                call analytical_fields_p(params,pchunk,F, &
                      X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+             else if (params%field_model(1:3).eq.'UNI') then
+                call uniform_fields_p(pchunk,F, &
+                    B_X,B_Y,B_Z,E_X,E_Y,E_Z)
 #ifdef PSPLINE
              else if (F%axisymmetric_fields.and. &
                   (params%orbit_model(3:3).eq.'B')) then
@@ -371,6 +374,9 @@ contains
                 b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
                 b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
 
+                !write(6,*) 'X',X_X,X_Y,X_Z
+                !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
+                
                 v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
                 if (v(cc).GT.korc_zero) then
                    ! Parallel and perpendicular components of velocity
@@ -384,6 +390,8 @@ contains
                       vperp(cc) = 0.0_rp
                    end if
 
+                   !write(6,*) 'v,vpar,vperp',v(cc),vpar(cc),vperp(cc)
+                   
                    ! Pitch angle
                    spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
                         MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
@@ -503,8 +511,10 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = q_cache*params%dt/m_cache
+       a = params%dt
 
+       !write(6,*) 'q,m,dt,a',q_cache,m_cache,params%dt,a
+       
        B0=F%Bo
        EF0=F%Eo
        lam=F%AB%lambda
@@ -543,8 +553,15 @@ contains
           if (.not.params%FokPlan) then
              do tt=1_ip,params%t_skip
 
-                call analytical_fields_p(pchunk,B0,EF0,R0,q0,lam,ar, &
-                     X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+                !write(6,*) 'tt',tt
+
+                if (params%field_model(1:3).eq.'ANA') then
+                   call analytical_fields_p(params,pchunk,F, &
+                        X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+                else if (params%field_model(1:3).eq.'UNI') then
+                   call uniform_fields_p(pchunk,F, &
+                        B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+                end if
 
                 call advance_FOeqn_vars(tt,a,q_cache,m_cache,params, &
                      X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
@@ -757,6 +774,10 @@ contains
 
     pchunk=params%pchunk
 
+    !write(6,*) 'X',X_X,X_Y,X_Z
+    !write(6,*) 'V',V_X,V_Y,V_Z
+    !write(6,*) 'B',B_X,B_Y,B_Z
+    
     !$OMP SIMD
     !    !$OMP& aligned(g0,g,U_X,U_Y,U_Z,V_X,V_Y,V_Z,Bmag,B_X,B_Y,B_Z, &
     !    !$OMP& U_L_X,U_L_Y,U_L_Z,U_RC_X,U_RC_Y,U_RC_Z, &
@@ -789,13 +810,14 @@ contains
        cross_Y(cc)=V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
        cross_Z(cc)=V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
 
-
+       !write(6,*) 'vcrossB',cross_X,cross_Y,cross_Z
 
        U_hs_X(cc) = U_L_X(cc) + 0.5_rp*a*(E_X(cc) +cross_X(cc))
        U_hs_Y(cc) = U_L_Y(cc) + 0.5_rp*a*(E_Y(cc) +cross_Y(cc))
        U_hs_Z(cc) = U_L_Z(cc) + 0.5_rp*a*(E_Z(cc) +cross_Z(cc))
 
 
+       !write(6,*) 'half step',0.5_rp*a*cross_X(cc),0.5_rp*a*cross_Y(cc),0.5_rp*a*cross_Z(cc)
 
        tau_X(cc) = 0.5_rp*a*B_X(cc)
        tau_Y(cc) = 0.5_rp*a*B_Y(cc)
@@ -1000,7 +1022,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = q_cache*params%dt/m_cache
+       a = params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -1263,7 +1285,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = q_cache*params%dt/m_cache
+       a = params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -1510,7 +1532,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = q_cache*params%dt/m_cache
+       a =params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -1717,7 +1739,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = q_cache*params%dt/m_cache
+       a = params%dt
 
 
        !$OMP PARALLEL DO default(none) &
