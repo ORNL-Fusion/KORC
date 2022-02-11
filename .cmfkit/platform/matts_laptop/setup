@@ -1,0 +1,11 @@
+rm -f ./build/CMakeCache.txt
+rm -rf ./build/CMakeFiles
+
+#export CC=/opt/local/bin/gcc-mp-8
+#export CXX=/opt/local/bin/g++-mp-8
+#export FC=/opt/local/bin/gfortran-mp-8
+
+CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran-mp-8
+
+echo 'ran setup'
+_debug "$(pwd)"
