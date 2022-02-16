@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         seed_image:
-          - 'rikorose/gcc-cmake:gcc-10'
+          - 'rikorose/gcc-cmake:gcc-11'
 
         build_type:
           - Debug
