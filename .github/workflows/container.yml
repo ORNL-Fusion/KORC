@@ -1,0 +1,44 @@
+name: container
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+
+  job_one:
+    strategy:
+      matrix:
+        seed_image:
+          - 'rikorose/gcc-cmake:gcc-10'
+
+        build_type:
+          - Debug
+          - Release
+
+        scenario:
+          - basic
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+       with:
+         path: ./${{ github.event.repository.name }}
+
+      - name: grab cmfkit
+        uses: actions/checkout@v2
+        with:
+          repository: ornl-fusion/cmfkit
+          path: ./.cmfkit_base
+
+      - name: launch build
+        env:
+          CMFKIT_PLATFORM:  readybake
+          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
+          CMFKIT_READYBAKE_IMAGE_SEED:  ${{ matrix.seed_image }}
+
+          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
+
+        run: |
+          cd ./.cmfkit_base && ./launch build
+
