@@ -2684,6 +2684,12 @@ CONTAINS
     else
        F%Bo=Bo
        F%Eo=Eo
+
+       if (params%mpi_params%rank.EQ.0) then
+          write(output_unit_write,'("UNIFORM")')
+          write(output_unit_write,'("BPHI(r=0)",E17.10)') F%Bo
+          write(output_unit_write,'("EPHI(r=0)",E17.10)') F%Eo
+       end if
     end if
 
     if (params%mpi_params%rank.eq.0) then

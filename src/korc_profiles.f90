@@ -423,7 +423,7 @@ CONTAINS
        do cc=1_idef,pchunk
           rm(cc)=sqrt((Y_R(cc)-R0a)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
-          ne(cc) = ne0*(1._rp-r_a(cc)**4._rp)**4._rp
+          ne(cc) = (ne0-n_ne)*(1._rp-r_a(cc)**4._rp)**4._rp+n_ne
 
           !write(6,*) 'R',Y_R*params%cpp%length,'R0',R0*params%cpp%length, &
           !     'Z',Y_Z*params%cpp%length,'Z0',Z0*params%cpp%length, &
@@ -560,7 +560,7 @@ CONTAINS
        do cc=1_idef,pchunk
           rm(cc)=sqrt((Y_R(cc)-R0a)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
-          Te(cc) = Te0*(1._rp-r_a(cc)**8._rp)**4._rp
+          Te(cc) = (Te0-n_Te)*(1._rp-r_a(cc)**8._rp)**4._rp+n_Te
 
           !write(6,*) 'T_e',Te(cc)*params%cpp%temperature/C_E         
           
