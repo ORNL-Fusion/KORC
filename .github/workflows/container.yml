@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: grab main project
         uses: actions/checkout@v2
-        #with:
-          #fetch-depth: 0
 
       - name: grab cmfkit
         uses: actions/checkout@v2
