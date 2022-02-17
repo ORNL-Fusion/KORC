@@ -8,13 +8,15 @@ jobs:
     strategy:
       matrix:
         seed_image:
+          - 'rikorose/gcc-cmake:gcc-11'
           - 'ubuntu:22.04'
 
         build_type:
+          - Debug
           - Release
 
         scenario:
-          - ci_debug
+          - basic
 
     runs-on: ubuntu-latest
 
