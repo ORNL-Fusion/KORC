@@ -2410,7 +2410,7 @@ subroutine BMC_radial(params,spp,F,P)
         if (modulo(ii,100).eq.0) then
            write(output_unit_write,'("Burn: ",I10)') ii        
         end if
-        write(6,'("Burn: ",I10)') ii
+        !write(6,'("Burn: ",I10)') ii
 
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
@@ -2490,7 +2490,7 @@ subroutine BMC_radial(params,spp,F,P)
            ii = ii + 1_idef
 
            !write(output_unit_write,*) 'PSIN',PSIN1
-           write(6,*) 'accepted'
+           !write(6,*) 'accepted'
         else
 !           call RANDOM_NUMBER(rand_unif)
 !           if (rand_unif .LT. ratio) then
@@ -2503,7 +2503,7 @@ subroutine BMC_radial(params,spp,F,P)
               ii = ii + 1_idef
 
               !write(output_unit_write,*) 'PSIN',PSIN1
-              write(6,*) 'accepted'
+              !write(6,*) 'accepted'
            end if
         end if
      end do
