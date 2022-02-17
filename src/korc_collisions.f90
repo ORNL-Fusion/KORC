@@ -614,16 +614,16 @@ contains
 
                 if (abs(maxEinterp).gt.abs(minEinterp)) then
                    if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      p_crit=1/sqrt(maxEinterp/cparams_ss%Ec-1._rp)
+                      p_crit=1/sqrt(abs(maxEinterp)/cparams_ss%Ec-1._rp)
                    else
 
-                      p_crit=1/sqrt(maxEinterp/cparams_ms%Ec_min-1._rp)
+                      p_crit=1/sqrt(abs(maxEinterp)/cparams_ms%Ec_min-1._rp)
                    end if
                 else
                    if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      p_crit=1/sqrt(-minEinterp/cparams_ss%Ec-1._rp)
+                      p_crit=1/sqrt(abs(minEinterp)/cparams_ss%Ec-1._rp)
                    else
-                      p_crit=1/sqrt(-minEinterp/cparams_ms%Ec_min-1._rp)
+                      p_crit=1/sqrt(abs(minEinterp)/cparams_ms%Ec_min-1._rp)
                    end if
                 end if
 
