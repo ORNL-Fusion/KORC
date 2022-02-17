@@ -132,21 +132,21 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.2% of total for procedures.">36 statements</a>
+    title=" 0.2% of total for procedures.">44 statements</a>
      </li> 
      
      
      
-    <li><i class="fa fa-code"></i><a href="../src/korc_m3d_c1_interface.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/korc_fio_interface.f90"> Source File</a></li>
      
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
     
-     <li><a href='../sourcefile/korc_m3d_c1_interface.f90.html'>korc_m3d_c1_interface.f90</a></li>
+     <li><a href='../sourcefile/korc_fio_interface.f90.html'>korc_fio_interface.f90</a></li>
     
-     <li><a href='../module/korc_m3d_c1.html'>korc_m3d_c1</a></li>
+     <li><a href='../module/korc_fio.html'>korc_fio</a></li>
     
   
      <li class="active">initialize_m3d_c1_imp</li>
@@ -234,7 +234,7 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~186"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~46"></span>type(KORC_PARAMS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -249,7 +249,7 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
   
 <tr>
   
-  <td><span class="anchor" id="variable-f~134"></span>type(FIELDS),</td>
+  <td><span class="anchor" id="variable-f~15"></span>type(FIELDS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -264,7 +264,7 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
   
 <tr>
   
-  <td><span class="anchor" id="variable-p~66"></span>type(PROFILES),</td>
+  <td><span class="anchor" id="variable-p~12"></span>type(PROFILES),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -294,7 +294,7 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
   
 <tr>
   
-  <td><span class="anchor" id="variable-init~4"></span>logical,</td>
+  <td><span class="anchor" id="variable-init~5"></span>logical,</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -334,65 +334,65 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
 <polygon fill="none" stroke="#000000" points="116,-108 0,-108 0,-84 116,-84 116,-108"/>
 <text text-anchor="middle" x="58" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_m3d_c1_imp</text>
 </g>
-<!-- proc~fio_make_species -->
+<!-- interface~fio_close_field -->
 <g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node2" class="node">
+<title>interface~fio_close_field</title>
+<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node2"><a xlink:href=".././interface/fio_close_field.html" xlink:title="fio_close_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="250,-192 171,-192 171,-168 250,-168 250,-192"/>
+<text text-anchor="middle" x="210.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_close_field</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_close_field -->
+<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge1" class="edge">
+<title>proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_close_field</title>
+<path fill="none" stroke="#000000" d="M73.5649,-108.1874C91.6344,-121.9088 122.7128,-144.2133 152,-159 155.5295,-160.782 159.247,-162.4841 163.0265,-164.0926"/>
+<polygon fill="#000000" stroke="#000000" points="161.8931,-167.4091 172.477,-167.8906 164.5034,-160.914 161.8931,-167.4091"/>
+</g>
+<!-- proc~fio_make_species -->
+<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node3" class="node">
 <title>proc~fio_make_species</title>
-<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node2"><a xlink:href=".././proc/fio_make_species.html" xlink:title="FIO_MAKE_SPECIES">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="269,-192 152,-192 152,-168 269,-168 269,-192"/>
-<text text-anchor="middle" x="210.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">FIO_MAKE_SPECIES</text>
+<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node3"><a xlink:href=".././proc/fio_make_species.html" xlink:title="FIO_MAKE_SPECIES">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="269,-150 152,-150 152,-126 269,-126 269,-150"/>
+<text text-anchor="middle" x="210.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">FIO_MAKE_SPECIES</text>
 </a>
 </g>
 </g>
 <!-- proc~initialize_m3d_c1_imp&#45;&gt;proc~fio_make_species -->
-<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge1" class="edge">
-<title>proc~initialize_m3d_c1_imp&#45;&gt;proc~fio_make_species</title>
-<path fill="none" stroke="#000000" d="M73.5649,-108.1874C91.6344,-121.9088 122.7128,-144.2133 152,-159 155.5295,-160.782 159.247,-162.4841 163.0265,-164.0926"/>
-<polygon fill="#000000" stroke="#000000" points="161.8931,-167.4091 172.477,-167.8906 164.5034,-160.914 161.8931,-167.4091"/>
-</g>
-<!-- interface~fio_get_field -->
-<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node3" class="node">
-<title>interface~fio_get_field</title>
-<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node3"><a xlink:href=".././interface/fio_get_field.html" xlink:title="fio_get_field">
-<polygon fill="#a7506f" stroke="#a7506f" points="245,-150 176,-150 176,-126 245,-126 245,-150"/>
-<text text-anchor="middle" x="210.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_get_field</text>
-</a>
-</g>
-</g>
-<!-- proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_get_field -->
 <g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge2" class="edge">
-<title>proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_get_field</title>
-<path fill="none" stroke="#000000" d="M101.7004,-108.0355C121.9712,-113.6183 146.0204,-120.2417 166.347,-125.8398"/>
-<polygon fill="#000000" stroke="#000000" points="165.4232,-129.2157 175.9937,-128.4966 167.282,-122.4669 165.4232,-129.2157"/>
-</g>
-<!-- interface~fio_open_source -->
-<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node4" class="node">
-<title>interface~fio_open_source</title>
-<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node4"><a xlink:href=".././interface/fio_open_source.html" xlink:title="fio_open_source">
-<polygon fill="#a7506f" stroke="#a7506f" points="255.5,-108 165.5,-108 165.5,-84 255.5,-84 255.5,-108"/>
-<text text-anchor="middle" x="210.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_open_source</text>
-</a>
-</g>
-</g>
-<!-- proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_open_source -->
-<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge3" class="edge">
-<title>proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_open_source</title>
-<path fill="none" stroke="#000000" d="M116.0887,-96C128.9737,-96 142.5934,-96 155.3566,-96"/>
-<polygon fill="#000000" stroke="#000000" points="155.3785,-99.5001 165.3784,-96 155.3784,-92.5001 155.3785,-99.5001"/>
+<title>proc~initialize_m3d_c1_imp&#45;&gt;proc~fio_make_species</title>
+<path fill="none" stroke="#000000" d="M101.7004,-108.0355C118.9292,-112.7805 138.8875,-118.2772 156.9698,-123.2573"/>
+<polygon fill="#000000" stroke="#000000" points="156.2228,-126.6818 166.7932,-125.9627 158.0816,-119.9331 156.2228,-126.6818"/>
 </g>
 <!-- interface~fio_set_int_option -->
-<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node5" class="node">
+<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node4" class="node">
 <title>interface~fio_set_int_option</title>
-<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node5"><a xlink:href=".././interface/fio_set_int_option.html" xlink:title="fio_set_int_option">
-<polygon fill="#a7506f" stroke="#a7506f" points="258,-66 163,-66 163,-42 258,-42 258,-66"/>
-<text text-anchor="middle" x="210.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_set_int_option</text>
+<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node4"><a xlink:href=".././interface/fio_set_int_option.html" xlink:title="fio_set_int_option">
+<polygon fill="#a7506f" stroke="#a7506f" points="258,-108 163,-108 163,-84 258,-84 258,-108"/>
+<text text-anchor="middle" x="210.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_set_int_option</text>
 </a>
 </g>
 </g>
 <!-- proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_set_int_option -->
-<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge4" class="edge">
+<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge3" class="edge">
 <title>proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_set_int_option</title>
-<path fill="none" stroke="#000000" d="M101.7004,-83.9645C118.9292,-79.2195 138.8875,-73.7228 156.9698,-68.7427"/>
-<polygon fill="#000000" stroke="#000000" points="158.0816,-72.0669 166.7932,-66.0373 156.2228,-65.3182 158.0816,-72.0669"/>
+<path fill="none" stroke="#000000" d="M116.0887,-96C128.0676,-96 140.6813,-96 152.6516,-96"/>
+<polygon fill="#000000" stroke="#000000" points="152.9732,-99.5001 162.9732,-96 152.9731,-92.5001 152.9732,-99.5001"/>
+</g>
+<!-- interface~fio_get_field -->
+<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node5" class="node">
+<title>interface~fio_get_field</title>
+<g id="a_proc~~initialize_m3d_c1_imp~~CallsGraph_node5"><a xlink:href=".././interface/fio_get_field.html" xlink:title="fio_get_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="245,-66 176,-66 176,-42 245,-42 245,-66"/>
+<text text-anchor="middle" x="210.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_get_field</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_get_field -->
+<g id="proc~~initialize_m3d_c1_imp~~CallsGraph_edge4" class="edge">
+<title>proc~initialize_m3d_c1_imp&#45;&gt;interface~fio_get_field</title>
+<path fill="none" stroke="#000000" d="M101.7004,-83.9645C121.9712,-78.3817 146.0204,-71.7583 166.347,-66.1602"/>
+<polygon fill="#000000" stroke="#000000" points="167.282,-69.5331 175.9937,-63.5034 165.4232,-62.7843 167.282,-69.5331"/>
 </g>
 <!-- interface~fio_get_options -->
 <g id="proc~~initialize_m3d_c1_imp~~CallsGraph_node6" class="node">
@@ -669,10 +669,12 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
     <span class="kt">INTEGER</span><span class="p">,</span><span class="k">ALLOCATABLE</span><span class="p">,</span><span class="k">DIMENSION</span><span class="p">(:)</span>          <span class="kd">::</span> <span class="n">Zo</span>
     <span class="kt">INTEGER</span>  <span class="kd">::</span> <span class="n">A</span><span class="p">,</span><span class="n">Zo1</span>
 
-    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_M3DC1_SOURCE</span><span class="p">,</span>           <span class="p">&amp;</span>
-         <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>            <span class="p">&amp;</span>
-         <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">isrc</span><span class="p">)</span>
+    <span class="c">!status = fio_open_source(FIO_M3DC1_SOURCE,           &amp;</span>
+    <span class="c">!     TRIM(params%magnetic_field_filename)            &amp;</span>
+    <span class="c">!     // C_NULL_CHAR, isrc)</span>
 
+    <span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+    
     <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
        
     
@@ -682,8 +684,14 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
 <span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">)</span>
     <span class="k">end if</span>
 
-<span class="k">    if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">M3D_C1_nimp</span><span class="p">(</span><span class="n">num_imp</span><span class="p">))</span>
-
+<span class="k">    if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">num_imp</span><span class="p">))</span>
+    <span class="k">else</span>
+<span class="k">       do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_imp</span>
+          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+       <span class="k">end do          </span>
+<span class="k">    </span><span class="n">endif</span>
+       
     <span class="c">!write(6,*) size(params%Zj)</span>
     <span class="c">!write(6,*) size(params%Zj(ubound(params%Zj)))</span>
     <span class="n">Zo</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">Zj</span><span class="p">(</span><span class="nb">ubound</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">Zj</span><span class="p">)))</span>
@@ -691,6 +699,8 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
 
     <span class="k">if</span> <span class="p">(</span><span class="n">Zo1</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">18</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       </span><span class="n">A</span><span class="o">=</span><span class="mi">40</span>
+    <span class="k">else if</span> <span class="p">(</span><span class="n">Zo1</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">10</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">A</span><span class="o">=</span><span class="mi">20</span>
     <span class="k">else if</span> <span class="p">(</span><span class="n">Zo1</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">6</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       </span><span class="n">A</span><span class="o">=</span><span class="mi">12</span>
     <span class="k">end if</span>
@@ -698,12 +708,12 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
 <span class="k">    do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_imp</span>
        <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_SPECIES</span><span class="p">,</span> <span class="p">&amp;</span>
             <span class="n">FIO_MAKE_SPECIES</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Zo1</span><span class="p">,</span> <span class="n">Zo1</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">ii</span><span class="p">));</span>
-       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">M3D_C1_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">));</span>
+       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">));</span>
     <span class="k">end do</span>
 
 <span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_imp</span>
-          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate nimp_&#39;</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">M3D_C1_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate nimp_&#39;</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
        <span class="k">end do</span>
 <span class="k">    end if</span>
 <span class="k">       </span>
@@ -723,7 +733,7 @@ public subroutine initialize_m3d_c1_imp(params, F, P, num_imp, init)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

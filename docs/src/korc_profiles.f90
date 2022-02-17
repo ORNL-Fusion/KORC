@@ -112,8 +112,7 @@ CONTAINS
        write(output_unit_write,'("* * * * * * * * INITIALIZING PROFILES * * * * * * * *")')
     end if
     
-    SELECT CASE (TRIM(params%profile_model))
-    CASE('ANALYTICAL')
+    if (params%profile_model(1:10).eq.'ANALYTICAL') then
        !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
        !     status='OLD',form='formatted')
        !read(default_unit_open,nml=plasmaProfiles)
@@ -165,7 +164,7 @@ CONTAINS
           P%dims(1) = F%dims(1)
           P%dims(3) = F%dims(3)
 
-          call ALLOCATE_2D_PROFILES_ARRAYS(P)
+          call ALLOCATE_2D_PROFILES_ARRAYS(params,P)
 
           P%X%R=F%X%R
           P%X%Z=F%X%Z
@@ -196,6 +195,11 @@ CONTAINS
                 CASE('RE-EVO-PSIP-G')                   
                    !flat profile placeholder, updates every timestep
                    P%ne_2D(ii,kk) = P%neo
+                CASE('RE-EVO-PSIP-G1')                   
+                   !flat profile placeholder, updates every timestep
+                   P%ne_2D(ii,kk) = P%neo
+                CASE('MST_FSA')
+                   P%ne_2D(ii,kk) = P%neo*(1._rp-r_a**4._rp)**4._rp
                 CASE DEFAULT
                    P%ne_2D(ii,kk) = P%neo
                 END SELECT
@@ -205,6 +209,8 @@ CONTAINS
                    P%Te_2D(ii,kk) = P%Teo
                 CASE('SPONG')
                    P%Te_2D(ii,kk) = (P%Teo-P%n_Te)*(1._rp-0.6*r_a**2)**2+P%n_Te
+                CASE('MST_FSA')
+                   P%Te_2D(ii,kk) = P%Teo*(1._rp-r_a**8._rp)**4._rp
                 CASE DEFAULT
                    P%Te_2D(ii,kk) = P%Teo
                 END SELECT
@@ -225,8 +231,8 @@ CONTAINS
 
           
        end if
-       
-    CASE('EXTERNAL')
+
+    else if (params%profile_model(1:8).eq.'EXTERNAL') then
        !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
        !     status='OLD',form='formatted')
        !read(default_unit_open,nml=plasmaProfiles)
@@ -245,16 +251,13 @@ CONTAINS
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("EXTERNAL")')
-          write(output_unit_write,'("ne profile:",A20)') P%ne_profile
-          write(output_unit_write,'("Te profile: ",A20)') P%Te_profile
-          write(output_unit_write,'("Zeff profile: ",A20)') P%Zeff_profile
        end if
        
        P%filename = TRIM(filename)
        P%axisymmetric = axisymmetric
 
        call load_profiles_data_from_hdf5(params,P)
-    CASE('UNIFORM')
+    else if (params%profile_model.eq.'UNIFORM') then
        !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
        !     status='OLD',form='formatted')
        !read(default_unit_open,nml=plasmaProfiles)
@@ -281,13 +284,9 @@ CONTAINS
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("UNIFORM")')
-          write(output_unit_write,'("ne profile: ",A20)') P%ne_profile
-          write(output_unit_write,'("Te profile: ",A20)') P%Te_profile
-          write(output_unit_write,'("Zeff profile: ",A20)') P%Zeff_profile
        end if
        
-    CASE DEFAULT
-    END SELECT
+    endif
 
     if (params%mpi_params%rank .EQ. 0) then
        write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * *")')
@@ -314,10 +313,11 @@ CONTAINS
     vars%Zeff = P%Zeffo
   end subroutine uniform_profiles
 
-  subroutine analytical_profiles_p(time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
+  subroutine analytical_profiles_p(pchunk,time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
     !! @note Subroutine that calculates the analytical plasma profiles at
     !! the particles' position. @endnote
     TYPE(KORC_PARAMS), INTENT(IN)                           :: params
+    INTEGER, INTENT(IN)                             :: pchunk
     REAL(rp), DIMENSION(params%pchunk), INTENT(IN)  :: Y_R,Y_Z,PSIp
     REAL(rp), INTENT(IN)  :: time
     TYPE(PROFILES), INTENT(IN)                         :: P
@@ -331,9 +331,9 @@ CONTAINS
     !! Backgroun temperature density seen by simulated particles.
     REAL(rp), DIMENSION(params%pchunk),INTENT(OUT) :: Zeff
     !! Effective atomic charge seen by simulated particles.
-    INTEGER(ip)                                        :: cc,pchunk
+    INTEGER(ip)                                        :: cc
     !! Particle iterator.
-    REAL(rp) :: R0,Z0,a,ne0,n_ne,Te0,n_Te,Zeff0
+    REAL(rp) :: R0,Z0,a,ne0,n_ne,Te0,n_Te,Zeff0,R0a
     REAL(rp) :: R0_RE,Z0_RE,sigmaR_RE,sigmaZ_RE,psimax_RE
     REAL(rp) :: n_REr0,n_tauion,n_lamfront,n_lamback,n_lamshelf
     REAL(rp) :: n_psifront,n_psiback,n_psishelf
@@ -341,12 +341,11 @@ CONTAINS
     REAL(rp) :: n0t,n_taut
     REAL(rp) :: PSIp0,PSIp_lim,psiN_0
     REAL(rp), DIMENSION(params%pchunk) :: r_a,rm,rm_RE,PSIpN,PSIp_temp
-
-    pchunk=params%pchunk
     
     R0=P%R0
     Z0=P%Z0
     a=P%a
+    R0a=F%AB%Ro
     
     ne0=P%neo
     n_ne=P%n_ne
@@ -392,13 +391,45 @@ CONTAINS
           ne(cc) = ne0
        end do
        !$OMP END SIMD
+    CASE('FLAT-RAMP')
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          ne(cc) = n_ne+(ne0-n_ne)*time/n_tauion
+       end do
+       !$OMP END SIMD
 
+    CASE('TANH-RAMP')
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          ne(cc) = n_ne+(ne0-n_ne)/2*(tanh((time-n_shelfdelay)/n_tauion)+1._rp)
+       end do
+       !$OMP END SIMD
+    CASE('SINE')
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          ne(cc) = n_ne+(ne0-n_ne)*sin(time/n_tauion)
+       end do
+       !$OMP END SIMD
     CASE('SPONG')
        !$OMP SIMD
        do cc=1_idef,pchunk
           rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
           ne(cc) = ne0*(1._rp-0.2*r_a(cc)**8)+n_ne
+       end do
+       !$OMP END SIMD
+    CASE('MST_FSA')       
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          rm(cc)=sqrt((Y_R(cc)-R0a)**2+(Y_Z(cc)-Z0)**2)
+          r_a(cc)=rm(cc)/a
+          ne(cc) = (ne0-n_ne)*(1._rp-r_a(cc)**4._rp)**4._rp+n_ne
+
+          !write(6,*) 'R',Y_R*params%cpp%length,'R0',R0*params%cpp%length, &
+          !     'Z',Y_Z*params%cpp%length,'Z0',Z0*params%cpp%length, &
+          !     'a',a*params%cpp%length
+          !write(6,*) 'r_a',r_a,'ne',ne(cc)*params%cpp%density
+          
        end do
        !$OMP END SIMD
     CASE('RE-EVO')
@@ -484,6 +515,22 @@ CONTAINS
                (2._rp*n_taut**2._rp))+n_ne
        end do
        !$OMP END SIMD
+
+    CASE('RE-EVO-PSIP-G1')
+
+!       write(output_unit_write,*) 'time: ',time*params%cpp%time
+       
+       n0t=(ne0-n_ne)/2._rp*(tanh((time-1.75*n_tauin)/n_tauin)- &
+            tanh((time-n_shelfdelay)/n_tauout))
+       n_taut=n_psishelf*erf((time+params%dt/100._rp)/n_tauion)
+       
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          PSIp_temp(cc)=PSIp(cc)*(params%cpp%Bo*params%cpp%length**2)
+          ne(cc) = n0t*exp(-(sqrt(abs(PSIp_temp(cc)))-sqrt(abs(psiN_0)))**2._rp/ &
+               (2._rp*n_taut**2._rp))+n_ne
+       end do
+       !$OMP END SIMD
        
     CASE DEFAULT
        !$OMP SIMD
@@ -506,6 +553,17 @@ CONTAINS
           rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
           Te(cc) = Te0*(1._rp-0.6*r_a(cc)**2)**2+Te0*n_Te
+       end do
+       !$OMP END SIMD
+    CASE('MST_FSA')
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          rm(cc)=sqrt((Y_R(cc)-R0a)**2+(Y_Z(cc)-Z0)**2)
+          r_a(cc)=rm(cc)/a
+          Te(cc) = (Te0-n_Te)*(1._rp-r_a(cc)**8._rp)**4._rp+n_Te
+
+          !write(6,*) 'T_e',Te(cc)*params%cpp%temperature/C_E         
+          
        end do
        !$OMP END SIMD
     CASE DEFAULT
@@ -745,7 +803,7 @@ CONTAINS
     P%dims(3) = INT(rdatum)
 
     if (P%axisymmetric) then
-       call ALLOCATE_2D_PROFILES_ARRAYS(P)
+       call ALLOCATE_2D_PROFILES_ARRAYS(params,P)
     else
        call ALLOCATE_3D_PROFILES_ARRAYS(P)
     end if
@@ -793,6 +851,27 @@ CONTAINS
        call load_array_from_hdf5(h5file_id,dset,P%Zeff_3D)
     end if
 
+    if (params%profile_model(10:10).eq.'H') then
+
+       dset = "/RHON"
+       call load_array_from_hdf5(h5file_id,dset,P%RHON)
+       dset = "/nRE"
+       call load_array_from_hdf5(h5file_id,dset,P%nRE_2D)
+       dset = "/nAr0"
+       call load_array_from_hdf5(h5file_id,dset,P%nAr0_2D)
+       dset = "/nAr1"
+       call load_array_from_hdf5(h5file_id,dset,P%nAr1_2D)
+       dset = "/nAr2"
+       call load_array_from_hdf5(h5file_id,dset,P%nAr2_2D)
+       dset = "/nAr3"
+       call load_array_from_hdf5(h5file_id,dset,P%nAr3_2D)
+       dset = "/nD"
+       call load_array_from_hdf5(h5file_id,dset,P%nD_2D)
+       dset = "/nD1"
+       call load_array_from_hdf5(h5file_id,dset,P%nD1_2D)
+       
+    end if
+   
     call h5fclose_f(h5file_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: load_profiles_data_from_hdf5 --> h5fclose_f")')
@@ -804,7 +883,8 @@ CONTAINS
   !!
   !! @param[out] P An instance of KORC's derived type PROFILES containing all the information about the plasma profiles used in the
   !! simulation. See korc_types.f90 and korc_profiles.f90.
-  subroutine ALLOCATE_2D_PROFILES_ARRAYS(P)
+  subroutine ALLOCATE_2D_PROFILES_ARRAYS(params,P)
+    TYPE(KORC_PARAMS), INTENT(IN)  :: params
     TYPE(PROFILES), INTENT(INOUT) :: P
 
     ALLOCATE(P%X%R(P%dims(1)))
@@ -813,6 +893,18 @@ CONTAINS
     ALLOCATE(P%ne_2D(P%dims(1),P%dims(3)))
     ALLOCATE(P%Te_2D(P%dims(1),P%dims(3)))
     ALLOCATE(P%Zeff_2D(P%dims(1),P%dims(3)))
+
+    if (params%profile_model(10:10).eq.'H') then
+       ALLOCATE(P%RHON(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nRE_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nAr0_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nAr1_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nAr2_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nAr3_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nD_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nD1_2D(P%dims(1),P%dims(3)))
+    end if
+    
   end subroutine ALLOCATE_2D_PROFILES_ARRAYS
 
   subroutine ALLOCATE_3D_PROFILES_ARRAYS(P)
@@ -834,8 +926,33 @@ CONTAINS
   subroutine DEALLOCATE_PROFILES_ARRAYS(P)
     TYPE(PROFILES), INTENT(INOUT)              :: P
 
-    if (ALLOCATED(P%M3D_C1_nimp)) DEALLOCATE(P%M3D_C1_nimp)
+    if (ALLOCATED(P%X%R)) DEALLOCATE(P%X%R)
+    if (ALLOCATED(P%X%PHI)) DEALLOCATE(P%X%PHI)
+    if (ALLOCATED(P%X%Z)) DEALLOCATE(P%X%Z)
 
+    if (ALLOCATED(P%FLAG2D)) DEALLOCATE(P%FLAG2D)
+    if (ALLOCATED(P%FLAG3D)) DEALLOCATE(P%FLAG3D)
+
+    if (ALLOCATED(P%ne_2D)) DEALLOCATE(P%ne_2D)
+    if (ALLOCATED(P%Te_2D)) DEALLOCATE(P%Te_2D)
+    if (ALLOCATED(P%Zeff_2D)) DEALLOCATE(P%Zeff_2D)
+    if (ALLOCATED(P%ne_3D)) DEALLOCATE(P%ne_3D)
+    if (ALLOCATED(P%Te_3D)) DEALLOCATE(P%Te_3D)
+    if (ALLOCATED(P%Zeff_3D)) DEALLOCATE(P%Zeff_3D)
+
+    if (ALLOCATED(P%RHON)) DEALLOCATE(P%RHON)
+    if (ALLOCATED(P%nRE_2D)) DEALLOCATE(P%nRE_2D)
+    if (ALLOCATED(P%nAr0_2D)) DEALLOCATE(P%nAr0_2D)
+    if (ALLOCATED(P%nAr1_2D)) DEALLOCATE(P%nAr1_2D)
+    if (ALLOCATED(P%nAr2_2D)) DEALLOCATE(P%nAr2_2D)
+    if (ALLOCATED(P%nAr3_2D)) DEALLOCATE(P%nAr3_2D)
+    if (ALLOCATED(P%nD_2D)) DEALLOCATE(P%nD_2D)
+    if (ALLOCATED(P%nD1_2D)) DEALLOCATE(P%nD1_2D)
+    
+#ifdef FIO
+    if (ALLOCATED(P%FIO_nimp)) DEALLOCATE(P%FIO_nimp)
+#endif
+    
   end subroutine DEALLOCATE_PROFILES_ARRAYS
   
 end module korc_profiles

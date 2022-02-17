@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_fio_interface.f90 &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_fio_interface.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.8% of total for source files.">475 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_fio_interface.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">korc_fio_interface.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html">korc_fio</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_fio_interface.f90.html#src">korc_fio_interface.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      <hr>
+<p>@file korc_fio_interface.f90
+  @brief Interface for the fio interpolation library.</p>
+<hr>
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_fio_interface.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_fio_interfacef90EfferentGraph" width="494pt" height="143pt"
+ viewBox="0.00 0.00 494.00 143.24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 139.2365)">
+<title>sourcefile~~korc_fio_interface.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-139.2365 490,-139.2365 490,4 -4,4"/>
+<!-- sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~korc_fio_interface.f90</title>
+<polygon fill="none" stroke="#000000" points="486,-55.2365 373,-55.2365 373,-31.2365 486,-31.2365 486,-55.2365"/>
+<text text-anchor="middle" x="429.5" y="-40.8365" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_fio_interface.f90</text>
+</g>
+<!-- sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~korc_hdf5.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/korc_hdf5.f90.html" xlink:title="korc_HDF5.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="337,-97.2365 254,-97.2365 254,-73.2365 337,-73.2365 337,-97.2365"/>
+<text text-anchor="middle" x="295.5" y="-82.8365" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M391.101,-55.272C376.3827,-59.8852 359.3975,-65.2089 343.8642,-70.0775"/>
+<polygon fill="#000000" stroke="#000000" points="342.4001,-66.8685 333.9046,-73.1992 344.4937,-73.548 342.4001,-66.8685"/>
+</g>
+<!-- sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~korc_types.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/korc_types.f90.html" xlink:title="korc_types.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="81,-75.2365 0,-75.2365 0,-51.2365 81,-51.2365 81,-75.2365"/>
+<text text-anchor="middle" x="40.5" y="-60.8365" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M167.5,-3.2365C129.667,-8.6907 90.5502,-29.9607 65.906,-45.6334"/>
+<polygon fill="#000000" stroke="#000000" points="63.9705,-42.717 57.5105,-51.1146 67.7973,-48.5784 63.9705,-42.717"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M394.354,-31.236C344.0994,-15.5877 248.793,8.4833 167.5,-3.2365"/>
+</g>
+<!-- sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~korc_input.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/korc_input.f90.html" xlink:title="korc_input.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="334.5,-55.2365 256.5,-55.2365 256.5,-31.2365 334.5,-31.2365 334.5,-55.2365"/>
+<text text-anchor="middle" x="295.5" y="-40.8365" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_input.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M372.6719,-43.2365C363.3431,-43.2365 353.7449,-43.2365 344.6237,-43.2365"/>
+<polygon fill="#000000" stroke="#000000" points="344.5679,-39.7366 334.5679,-43.2365 344.5678,-46.7366 344.5679,-39.7366"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.9623,-81.6528C209.522,-77.8187 139.0016,-71.7346 91.291,-67.6184"/>
+<polygon fill="#000000" stroke="#000000" points="91.4403,-64.1184 81.1764,-66.7458 90.8386,-71.0925 91.4403,-64.1184"/>
+</g>
+<!-- sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~korc_hpc.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/korc_hpc.f90.html" xlink:title="korc_hpc.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="204,-55.2365 131,-55.2365 131,-31.2365 204,-31.2365 204,-55.2365"/>
+<text text-anchor="middle" x="167.5" y="-40.8365" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hpc.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M258.8203,-73.2009C244.7611,-68.5877 228.5364,-63.264 213.6986,-58.3954"/>
+<polygon fill="#000000" stroke="#000000" points="214.7778,-55.0659 204.185,-55.2737 212.5954,-61.717 214.7778,-55.0659"/>
+</g>
+<!-- sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~korc_constants.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/korc_constants.f90.html" xlink:title="korc_constants.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="218,-135.2365 117,-135.2365 117,-111.2365 218,-111.2365 218,-135.2365"/>
+<text text-anchor="middle" x="167.5" y="-120.8365" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_constants.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M255,-97.2599C243.2103,-100.76 230.1851,-104.6268 217.8665,-108.2839"/>
+<polygon fill="#000000" stroke="#000000" points="216.7662,-104.9595 208.1759,-111.1608 218.7585,-111.67 216.7662,-104.9595"/>
+</g>
+<!-- sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M275.5694,-31.0566C250.7786,-17.3113 206.9049,2.4444 167.5,-3.2365"/>
+</g>
+<!-- sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M256.4003,-43.2365C243.1597,-43.2365 228.2346,-43.2365 214.4481,-43.2365"/>
+<polygon fill="#000000" stroke="#000000" points="214.1743,-39.7365 204.1743,-43.2365 214.1743,-46.7365 214.1743,-39.7365"/>
+</g>
+<!-- sourcefile~korc_hpc.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~korc_hpc.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M130.7663,-49.0213C118.3904,-50.9703 104.3541,-53.1807 91.1005,-55.2679"/>
+<polygon fill="#000000" stroke="#000000" points="90.4922,-51.8204 81.1584,-56.8335 91.5812,-58.7352 90.4922,-51.8204"/>
+</g>
+<!-- sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M141.7997,-111.0946C122.6921,-102.0674 96.4052,-89.6484 75.3979,-79.7236"/>
+<polygon fill="#000000" stroke="#000000" points="76.699,-76.4674 66.1621,-75.3603 73.7087,-82.7966 76.699,-76.4674"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_fio_interface.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_fio_interfacef90AfferentGraph" width="641pt" height="292pt"
+ viewBox="0.00 0.00 641.00 292.06" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph" class="graph" transform="scale(.6826 .6826) rotate(0) translate(4 423.8332)">
+<title>sourcefile~~korc_fio_interface.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-423.8332 935,-423.8332 935,4 -4,4"/>
+<!-- sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~korc_fio_interface.f90</title>
+<polygon fill="none" stroke="#000000" points="113,-326.156 0,-326.156 0,-302.156 113,-302.156 113,-326.156"/>
+<text text-anchor="middle" x="56.5" y="-311.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_fio_interface.f90</text>
+</g>
+<!-- sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~korc_collisions.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/korc_collisions.f90.html" xlink:title="korc_collisions.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="510,-384.156 412,-384.156 412,-360.156 510,-360.156 510,-384.156"/>
+<text text-anchor="middle" x="461" y="-369.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M430.2095,-384.2177C400.4923,-394.9433 353.9573,-409.3527 312,-412.156"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M312,-412.156C222.4176,-418.1414 125.8617,-361.8852 81.4457,-332.0197"/>
+<polygon fill="#000000" stroke="#000000" points="83.2552,-329.0168 73.0275,-326.2519 79.2986,-334.7914 83.2552,-329.0168"/>
+</g>
+<!-- sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~korc_interp.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/korc_interp.f90.html" xlink:title="korc_interp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="231,-229.156 149,-229.156 149,-205.156 231,-205.156 231,-229.156"/>
+<text text-anchor="middle" x="190" y="-214.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M411.9547,-382.6078C381.6645,-386.5995 342.8333,-387.1258 312,-372.156"/>
+</g>
+<!-- sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~korc_profiles.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/korc_profiles.f90.html" xlink:title="korc_profiles.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="357,-229.156 267,-229.156 267,-205.156 357,-205.156 357,-229.156"/>
+<text text-anchor="middle" x="312" y="-214.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417.0093,-360.1209C408.4874,-356.5158 400.032,-351.9321 393,-346.156 357.1464,-316.7058 332.3907,-267.0295 320.362,-238.685"/>
+<polygon fill="#000000" stroke="#000000" points="323.5401,-237.2101 316.5092,-229.2844 317.063,-239.8648 323.5401,-237.2101"/>
+</g>
+<!-- sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~korc_fields.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/korc_fields.f90.html" xlink:title="korc_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="352,-187.156 272,-187.156 272,-163.156 352,-163.156 352,-187.156"/>
+<text text-anchor="middle" x="312" y="-172.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M411.9415,-360.1371C404.825,-356.6056 398.1704,-352.0444 393,-346.156 347.7634,-294.6382 400.3683,-249.2562 357,-196.156 356.291,-195.288 355.538,-194.4539 354.7473,-193.6527"/>
+<polygon fill="#000000" stroke="#000000" points="356.7807,-190.7975 346.7819,-187.294 352.4135,-196.2682 356.7807,-190.7975"/>
+</g>
+<!-- sourcefile~main.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~main.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/main.f90.html" xlink:title="main.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="931,-68.156 877,-68.156 877,-44.156 931,-44.156 931,-68.156"/>
+<text text-anchor="middle" x="904" y="-53.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M461,-412.156C394.9251,-407.7413 378.1737,-414.6898 312,-412.156"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M638.5,-412.156C613.9219,-416.52 552.0379,-400.2497 508.279,-387.1598"/>
+<polygon fill="#000000" stroke="#000000" points="509.2707,-383.8033 498.6855,-384.2548 507.2419,-390.5028 509.2707,-383.8033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M794.5,-334.156C732.2451,-380.3428 714.8233,-398.6045 638.5,-412.156"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M638.5,-412.156C560.826,-425.9473 539.7134,-417.4152 461,-412.156"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M461,-412.156C392.5855,-407.5849 373.6816,-402.1029 312,-372.156"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M638.5,-294.156C529.53,-268.2224 501.932,-263.2489 393,-237.156 384.6979,-235.1674 375.9252,-233.0343 367.3386,-230.9288"/>
+<polygon fill="#000000" stroke="#000000" points="367.9302,-227.47 357.3836,-228.48 366.2581,-234.2674 367.9302,-227.47"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~korc_ppusher.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/korc_ppusher.f90.html" xlink:title="korc_ppusher.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="685.5,-346.156 591.5,-346.156 591.5,-322.156 685.5,-322.156 685.5,-346.156"/>
+<text text-anchor="middle" x="638.5" y="-331.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M794.5,-334.156C764.4395,-356.4579 721.3703,-354.6801 688.0991,-348.3221"/>
+<polygon fill="#000000" stroke="#000000" points="688.6194,-344.8551 678.1133,-346.2235 687.1797,-351.7054 688.6194,-344.8551"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M876.7756,-45.5706C865.8149,-41.709 852.9584,-37.6755 841,-35.156 752.5466,-16.5199 728.7116,-21.9153 638.5,-16.156"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M638.5,-16.156C529.4497,-6.9596 485.6189,23.1388 393,-35.156 349.8702,-62.3022 327.1835,-121.3194 317.6305,-153.3764"/>
+<polygon fill="#000000" stroke="#000000" points="314.2258,-152.5551 314.8838,-163.1294 320.9637,-154.4527 314.2258,-152.5551"/>
+</g>
+<!-- sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~korc_initialize.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/korc_initialize.f90.html" xlink:title="korc_initialize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="841,-68.156 748,-68.156 748,-44.156 841,-44.156 841,-68.156"/>
+<text text-anchor="middle" x="794.5" y="-53.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M876.9326,-56.156C869.1101,-56.156 860.2644,-56.156 851.3445,-56.156"/>
+<polygon fill="#000000" stroke="#000000" points="851.2927,-52.6561 841.2927,-56.156 851.2927,-59.6561 851.2927,-52.6561"/>
+</g>
+<!-- sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~korc_finalize.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node12"><a xlink:href=".././sourcefile/korc_finalize.f90.html" xlink:title="korc_finalize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="505,-228.156 417,-228.156 417,-204.156 505,-204.156 505,-228.156"/>
+<text text-anchor="middle" x="461" y="-213.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M794.5,-334.156C794.0509,-334.4892 639.044,-294.2855 638.5,-294.156"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M638.5,-294.156C584.3049,-281.2582 580.8042,-253.6445 529,-233.156 524.4984,-231.3756 519.7537,-229.7381 514.9503,-228.2419"/>
+<polygon fill="#000000" stroke="#000000" points="515.6468,-224.7995 505.0673,-225.369 513.6928,-231.5213 515.6468,-224.7995"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M903.4814,-68.2599C900.8666,-112.5591 885.3183,-266.7781 794.5,-334.156"/>
+</g>
+<!-- sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M173.3621,-229.245C150.2782,-246.0176 108.3513,-276.4813 81.4948,-295.995"/>
+<polygon fill="#000000" stroke="#000000" points="79.3803,-293.205 73.3476,-301.9147 83.495,-298.868 79.3803,-293.205"/>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M266.9183,-217.156C258.6182,-217.156 249.8953,-217.156 241.425,-217.156"/>
+<polygon fill="#000000" stroke="#000000" points="241.2638,-213.6561 231.2638,-217.156 241.2637,-220.6561 241.2638,-213.6561"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M591.3993,-344.2396C569.5695,-348.913 543.392,-354.5172 520.2385,-359.474"/>
+<polygon fill="#000000" stroke="#000000" points="519.2279,-356.1109 510.1822,-361.6269 520.6933,-362.9559 519.2279,-356.1109"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M461,-332.156C452.5002,-331.0542 319.7102,-375.8994 312,-372.156"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M312,-372.156C254.5205,-344.2493 216.0206,-274.6851 199.3675,-239.0105"/>
+<polygon fill="#000000" stroke="#000000" points="202.3826,-237.1828 195.0773,-229.5093 196.0028,-240.0636 202.3826,-237.1828"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M591.2005,-336.6305C555.3188,-337.7812 504.8568,-337.8412 461,-332.156"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M461,-332.156C429.2166,-328.0359 419.6064,-326.0238 393,-308.156 364.7038,-289.1535 339.9346,-258.0144 325.4648,-237.549"/>
+<polygon fill="#000000" stroke="#000000" points="328.2951,-235.4879 319.7396,-229.2385 322.5306,-239.4591 328.2951,-235.4879"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M603.2223,-322.0907C591.0616,-317.8221 577.3872,-312.9 565,-308.156 487.7687,-278.5784 460.2673,-285.2665 393,-237.156 373.2758,-223.0491 376.4008,-210.7046 357,-196.156 355.2067,-194.8112 353.3134,-193.523 351.3591,-192.2936"/>
+<polygon fill="#000000" stroke="#000000" points="352.946,-189.1701 342.5196,-187.2887 349.497,-195.2615 352.946,-189.1701"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M277.0397,-187.1915C263.7671,-191.7608 248.4697,-197.0271 234.4375,-201.8579"/>
+<polygon fill="#000000" stroke="#000000" points="233.2815,-198.5542 224.9654,-205.1188 235.5601,-205.1729 233.2815,-198.5542"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~korc_experimental_pdf.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/korc_experimental_pdf.f90.html" xlink:title="korc_experimental_pdf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="529,-68.156 393,-68.156 393,-44.156 529,-44.156 529,-68.156"/>
+<text text-anchor="middle" x="461" y="-53.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M420.5396,-68.2783C411.3413,-71.4623 401.7165,-75.1423 393,-79.156 333.8046,-106.4142 320.367,-116.7518 267,-154.156 247.3087,-167.9574 226.2623,-185.3796 211.1582,-198.4028"/>
+<polygon fill="#000000" stroke="#000000" points="208.6696,-195.9288 203.4248,-205.1344 213.2655,-201.2087 208.6696,-195.9288"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M419.8134,-68.1978C410.5518,-71.8917 401.082,-76.5106 393,-82.156 364.7129,-101.915 339.9413,-133.6506 325.4686,-154.4544"/>
+<polygon fill="#000000" stroke="#000000" points="322.4585,-152.657 319.742,-162.8977 328.2518,-156.5862 322.4585,-152.657"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~korc_velocity_distribution.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/korc_velocity_distribution.f90.html" xlink:title="korc_velocity_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="712,-87.156 565,-87.156 565,-63.156 712,-63.156 712,-87.156"/>
+<text text-anchor="middle" x="638.5" y="-72.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M564.8255,-78.0642C514.7074,-82.1981 447.8005,-92.017 393,-115.156 370.011,-124.8629 347.5012,-142.3716 332.0694,-155.9791"/>
+<polygon fill="#000000" stroke="#000000" points="329.3176,-153.7501 324.2662,-163.0632 334.0228,-158.9329 329.3176,-153.7501"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M564.7661,-67.2634C556.2769,-66.3547 547.599,-65.4258 539.0552,-64.5112"/>
+<polygon fill="#000000" stroke="#000000" points="539.4224,-61.0306 529.1066,-63.4463 538.6773,-67.9909 539.4224,-61.0306"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~korc_avalanche.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node13"><a xlink:href=".././sourcefile/korc_avalanche.f90.html" xlink:title="korc_avalanche.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="513,-148.156 409,-148.156 409,-124.156 513,-124.156 513,-148.156"/>
+<text text-anchor="middle" x="461" y="-133.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M603.4317,-87.2077C575.3524,-96.8575 535.7895,-110.4537 505.4835,-120.8687"/>
+<polygon fill="#000000" stroke="#000000" points="504.315,-117.5693 495.9954,-124.1294 506.5901,-124.1893 504.315,-117.5693"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M762.2085,-44.0914C731.0559,-33.3637 682.3072,-18.9527 638.5,-16.156"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M747.6949,-61.8567C739.544,-62.8494 730.8489,-63.9084 722.0593,-64.9789"/>
+<polygon fill="#000000" stroke="#000000" points="721.6227,-61.5062 712.1192,-66.1896 722.469,-68.4548 721.6227,-61.5062"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~korc_spatial_distribution.f90</title>
+<g id="a_sourcefile~~korc_fio_interface.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/korc_spatial_distribution.f90.html" xlink:title="korc_spatial_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="710,-138.156 567,-138.156 567,-114.156 710,-114.156 710,-138.156"/>
+<text text-anchor="middle" x="638.5" y="-123.756" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M770.504,-68.2925C754.1434,-76.4429 731.9164,-87.2741 712,-96.156 701.2908,-100.9319 689.5819,-105.8468 678.7205,-110.2808"/>
+<polygon fill="#000000" stroke="#000000" points="677.3959,-107.0411 669.4402,-114.038 680.0228,-113.5295 677.3959,-107.0411"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M461,-176.156C427.0394,-183.1818 389.3868,-193.5654 360.4286,-202.1248"/>
+<polygon fill="#000000" stroke="#000000" points="359.1499,-198.8538 350.5687,-205.0678 361.152,-205.5614 359.1499,-198.8538"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M461,-176.156C428.7371,-182.8306 391.6975,-182.6165 362.6193,-180.716"/>
+<polygon fill="#000000" stroke="#000000" points="362.5217,-177.1992 352.29,-179.9491 362.0034,-184.18 362.5217,-177.1992"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M601.4786,-138.2366C565.8301,-149.4744 510.2216,-165.973 461,-176.156"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M607.9867,-114.1226C578.523,-102.5031 533.7276,-84.8373 501.3336,-72.0622"/>
+<polygon fill="#000000" stroke="#000000" points="502.296,-68.6795 491.7092,-68.2667 499.7279,-75.1914 502.296,-68.6795"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M566.8156,-130.1946C552.3373,-131.0103 537.2293,-131.8614 523.1123,-132.6567"/>
+<polygon fill="#000000" stroke="#000000" points="522.8186,-129.1676 513.0313,-133.2247 523.2124,-136.1566 522.8186,-129.1676"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M416.6985,-216.4534C401.2876,-216.5568 383.8015,-216.6741 367.5938,-216.7829"/>
+<polygon fill="#000000" stroke="#000000" points="367.1385,-213.2858 357.1622,-216.8529 367.1855,-220.2856 367.1385,-213.2858"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417.101,-204.0764C399.7179,-199.2932 379.6445,-193.7696 361.7281,-188.8396"/>
+<polygon fill="#000000" stroke="#000000" points="362.5975,-185.4488 352.0272,-186.1702 360.7403,-192.1979 362.5975,-185.4488"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M421.6229,-148.2199C411.9058,-151.9926 401.7754,-156.6419 393,-162.156 374.3656,-173.8653 375.2044,-183.7889 357,-196.156 354.8784,-197.5973 352.6422,-198.9872 350.3467,-200.3182"/>
+<polygon fill="#000000" stroke="#000000" points="348.486,-197.3441 341.3158,-205.144 351.7851,-203.5179 348.486,-197.3441"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_fio_interface.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M415.0793,-148.1755C398.3533,-152.5535 379.3619,-157.5244 362.2776,-161.9961"/>
+<polygon fill="#000000" stroke="#000000" points="361.2583,-158.6449 352.4705,-164.5631 363.0308,-165.4168 361.2583,-158.6449"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilekorc_fio_interfacef90AfferentGraph = svgPanZoom('#sourcefilekorc_fio_interfacef90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html">korc_fio</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_fio_interface.f90.html#src">korc_fio_interface.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="cp">#ifdef FIO</span>
+<a name="ln-2"></a><span class="c">!*******************************************************************************</span>
+<a name="ln-3"></a><span class="c">!  @file korc_fio_interface.f90</span>
+<a name="ln-4"></a><span class="c">!  @brief Interface for the fio interpolation library.</span>
+<a name="ln-5"></a><span class="c">!*******************************************************************************</span>
+<a name="ln-6"></a>
+<a name="ln-7"></a><span class="k">MODULE </span><span class="n">korc_fio</span>
+<a name="ln-8"></a>  <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-9"></a><span class="nb">  </span><span class="k">USE </span><span class="n">korc_types</span>
+<a name="ln-10"></a>  <span class="k">USE </span><span class="n">korc_input</span>
+<a name="ln-11"></a>  <span class="k">USE </span><span class="n">korc_HDF5</span>
+<a name="ln-12"></a>  <span class="k">USE </span><span class="n">mpi</span>
+<a name="ln-13"></a>
+<a name="ln-14"></a>  <span class="k">IMPLICIT NONE</span>
+<a name="ln-15"></a>
+<a name="ln-16"></a><span class="k">  </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_SUCCESS</span>        <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-17"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_OUT_OF_BOUNDS</span>  <span class="o">=</span> <span class="mi">10002</span>
+<a name="ln-18"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_NO_DATA</span>        <span class="o">=</span> <span class="mi">10006</span>
+<a name="ln-19"></a>
+<a name="ln-20"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_M3DC1_SOURCE</span>   <span class="o">=</span> <span class="mi">3</span>
+<a name="ln-21"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_NIMROD_SOURCE</span>   <span class="o">=</span> <span class="mi">5</span>
+<a name="ln-22"></a>
+<a name="ln-23"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_TIMESLICE</span>      <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-24"></a>
+<a name="ln-25"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_SPECIES</span>        <span class="o">=</span> <span class="mi">3</span>
+<a name="ln-26"></a>
+<a name="ln-27"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_ELECTRON</span>       <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-28"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_MAIN_ION</span>       <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<a name="ln-29"></a>
+<a name="ln-30"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_DENSITY</span>        <span class="o">=</span> <span class="mi">102</span>
+<a name="ln-31"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_TEMPERATURE</span>    <span class="o">=</span> <span class="mi">103</span>
+<a name="ln-32"></a>
+<a name="ln-33"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_ELECTRIC_FIELD</span> <span class="o">=</span> <span class="mi">1001</span>
+<a name="ln-34"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_MAGNETIC_FIELD</span> <span class="o">=</span> <span class="mi">1003</span>
+<a name="ln-35"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_VECTOR_POTENTIAL</span> <span class="o">=</span> <span class="mi">1002</span>
+<a name="ln-36"></a>
+<a name="ln-37"></a>  <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">FIO_TIME</span> <span class="o">=</span> <span class="mi">7001</span>
+<a name="ln-38"></a>
+<a name="ln-39"></a>  <span class="k">INTERFACE</span>
+<a name="ln-40"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_add_field</span><span class="p">(</span><span class="n">icfield</span><span class="p">,</span> <span class="n">ifield</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">fac</span><span class="p">)</span>      <span class="p">&amp;</span>
+<a name="ln-41"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_add_field&#39;</span><span class="p">)</span>
+<a name="ln-42"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-43"></a>
+<a name="ln-44"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-45"></a>
+<a name="ln-46"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">icfield</span>
+<a name="ln-47"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ifield</span>
+<a name="ln-48"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">op</span>
+<a name="ln-49"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fac</span>
+<a name="ln-50"></a>     <span class="k">END FUNCTION </span><span class="n">fio_add_field</span>
+<a name="ln-51"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-52"></a>
+<a name="ln-53"></a><span class="k">  INTERFACE</span>
+<a name="ln-54"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_allocate_search_hint</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">hint</span><span class="p">)</span>         <span class="p">&amp;</span>
+<a name="ln-55"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_allocate_search_hint&#39;</span><span class="p">)</span>
+<a name="ln-56"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-57"></a>
+<a name="ln-58"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-59"></a>
+<a name="ln-60"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-61"></a>       <span class="k">TYPE</span> <span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">hint</span>
+<a name="ln-62"></a>     <span class="k">END FUNCTION </span><span class="n">fio_allocate_search_hint</span>
+<a name="ln-63"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-64"></a>
+<a name="ln-65"></a><span class="k">  INTERFACE</span>
+<a name="ln-66"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_close_field</span><span class="p">(</span><span class="n">ifield</span><span class="p">)</span>                      <span class="p">&amp;</span>
+<a name="ln-67"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_close_field&#39;</span><span class="p">)</span>
+<a name="ln-68"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-69"></a>
+<a name="ln-70"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-71"></a>
+<a name="ln-72"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ifield</span>
+<a name="ln-73"></a>     <span class="k">END FUNCTION </span><span class="n">fio_close_field</span>
+<a name="ln-74"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-75"></a>
+<a name="ln-76"></a><span class="k">  INTERFACE</span>
+<a name="ln-77"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_close_series</span><span class="p">(</span><span class="n">iseries</span><span class="p">)</span>                    <span class="p">&amp;</span>
+<a name="ln-78"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_close_series&#39;</span><span class="p">)</span>
+<a name="ln-79"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-80"></a>
+<a name="ln-81"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-82"></a>
+<a name="ln-83"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">iseries</span>
+<a name="ln-84"></a>     <span class="k">END FUNCTION </span><span class="n">fio_close_series</span>
+<a name="ln-85"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-86"></a>
+<a name="ln-87"></a><span class="k">  INTERFACE</span>
+<a name="ln-88"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_close_source</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>                       <span class="p">&amp;</span>
+<a name="ln-89"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_close_source&#39;</span><span class="p">)</span>
+<a name="ln-90"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-91"></a>
+<a name="ln-92"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-93"></a>
+<a name="ln-94"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-95"></a>     <span class="k">END FUNCTION </span><span class="n">fio_close_source</span>
+<a name="ln-96"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-97"></a>
+<a name="ln-98"></a><span class="k">  INTERFACE</span>
+<a name="ln-99"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_create_compound_field</span><span class="p">(</span><span class="n">ifield</span><span class="p">)</span>            <span class="p">&amp;</span>
+<a name="ln-100"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_create_compound_field&#39;</span><span class="p">)</span>
+<a name="ln-101"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-102"></a>
+<a name="ln-103"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-104"></a>
+<a name="ln-105"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ifield</span>
+<a name="ln-106"></a>     <span class="k">END FUNCTION </span><span class="n">fio_create_compound_field</span>
+<a name="ln-107"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-108"></a>
+<a name="ln-109"></a><span class="k">  INTERFACE</span>
+<a name="ln-110"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_deallocate_search_hint</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">hint</span><span class="p">)</span>       <span class="p">&amp;</span>
+<a name="ln-111"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_deallocate_search_hint&#39;</span><span class="p">)</span>
+<a name="ln-112"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-113"></a>
+<a name="ln-114"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-115"></a>
+<a name="ln-116"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-117"></a>       <span class="k">TYPE</span> <span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">hint</span>
+<a name="ln-118"></a>     <span class="k">END FUNCTION </span><span class="n">fio_deallocate_search_hint</span>
+<a name="ln-119"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-120"></a>
+<a name="ln-121"></a><span class="k">  INTERFACE</span>
+<a name="ln-122"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_eval_field</span><span class="p">(</span><span class="n">ifield</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">hint</span><span class="p">)</span>         <span class="p">&amp;</span>
+<a name="ln-123"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_eval_field&#39;</span><span class="p">)</span>
+<a name="ln-124"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-125"></a>
+<a name="ln-126"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-127"></a>
+<a name="ln-128"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ifield</span>
+<a name="ln-129"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-130"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>       <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-131"></a>       <span class="k">TYPE</span> <span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">hint</span>
+<a name="ln-132"></a>     <span class="k">END FUNCTION </span><span class="n">fio_eval_field</span>
+<a name="ln-133"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-134"></a>
+<a name="ln-135"></a><span class="k">  INTERFACE</span>
+<a name="ln-136"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_eval_field_deriv</span><span class="p">(</span><span class="n">ifield</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">hint</span><span class="p">)</span>   <span class="p">&amp;</span>
+<a name="ln-137"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_eval_field_deriv&#39;</span><span class="p">)</span>
+<a name="ln-138"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-139"></a>
+<a name="ln-140"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-141"></a>
+<a name="ln-142"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ifield</span>
+<a name="ln-143"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-144"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>       <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-145"></a>       <span class="k">TYPE</span> <span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">hint</span>
+<a name="ln-146"></a>     <span class="k">END FUNCTION </span><span class="n">fio_eval_field_deriv</span>
+<a name="ln-147"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-148"></a>
+<a name="ln-149"></a><span class="k">  INTERFACE</span>
+<a name="ln-150"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_eval_series</span><span class="p">(</span><span class="n">iseries</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>             <span class="p">&amp;</span>
+<a name="ln-151"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_eval_series&#39;</span><span class="p">)</span>
+<a name="ln-152"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-153"></a>
+<a name="ln-154"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-155"></a>
+<a name="ln-156"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">iseries</span>
+<a name="ln-157"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-158"></a>       <span class="kt">REAL</span> <span class="p">(</span><span class="kt">C_DOUBLE</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>       <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-159"></a>     <span class="k">END FUNCTION </span><span class="n">fio_eval_series</span>
+<a name="ln-160"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-161"></a>
+<a name="ln-162"></a><span class="k">  INTERFACE</span>
+<a name="ln-163"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>                        <span class="p">&amp;</span>
+<a name="ln-164"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_get_options&#39;</span><span class="p">)</span>
+<a name="ln-165"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-166"></a>
+<a name="ln-167"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-168"></a>
+<a name="ln-169"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-170"></a>     <span class="k">END FUNCTION </span><span class="n">fio_get_options</span>
+<a name="ln-171"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-172"></a>
+<a name="ln-173"></a><span class="k">  INTERFACE</span>
+<a name="ln-174"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_get_available_fields</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>         <span class="p">&amp;</span>
+<a name="ln-175"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_get_available_fields&#39;</span><span class="p">)</span>
+<a name="ln-176"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-177"></a>
+<a name="ln-178"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-179"></a>
+<a name="ln-180"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-181"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">n</span>
+<a name="ln-182"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">f</span>
+<a name="ln-183"></a>     <span class="k">END FUNCTION </span><span class="n">fio_get_available_fields</span>
+<a name="ln-184"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-185"></a>
+<a name="ln-186"></a><span class="k">  INTERFACE</span>
+<a name="ln-187"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_open_source</span><span class="p">(</span><span class="n">itype</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>     <span class="p">&amp;</span>
+<a name="ln-188"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_open_source&#39;</span><span class="p">)</span>
+<a name="ln-189"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-190"></a>
+<a name="ln-191"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-192"></a>
+<a name="ln-193"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">itype</span>
+<a name="ln-194"></a>       <span class="kt">CHARACTER</span> <span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="kt">C_CHAR</span><span class="p">,</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span>
+<a name="ln-195"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">handle</span>
+<a name="ln-196"></a>     <span class="k">END FUNCTION </span><span class="n">fio_open_source</span>
+<a name="ln-197"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-198"></a>
+<a name="ln-199"></a><span class="k">  INTERFACE</span>
+<a name="ln-200"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="k">type</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>            <span class="p">&amp;</span>
+<a name="ln-201"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_get_field&#39;</span><span class="p">)</span>
+<a name="ln-202"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-203"></a>
+<a name="ln-204"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-205"></a>
+<a name="ln-206"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-207"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="k">type</span>
+<a name="ln-208"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">handle</span>
+<a name="ln-209"></a>     <span class="k">END FUNCTION </span><span class="n">fio_get_field</span>
+<a name="ln-210"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-211"></a>
+<a name="ln-212"></a><span class="k">  INTERFACE</span>
+<a name="ln-213"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">iopt</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>                  <span class="p">&amp;</span>
+<a name="ln-214"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_set_int_option&#39;</span><span class="p">)</span>
+<a name="ln-215"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-216"></a>
+<a name="ln-217"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-218"></a>
+<a name="ln-219"></a><span class="k">       </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">iopt</span>
+<a name="ln-220"></a>       <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-221"></a>     <span class="k">END FUNCTION </span><span class="n">fio_set_int_option</span>
+<a name="ln-222"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-223"></a>
+<a name="ln-224"></a><span class="k">  INTERFACE</span>
+<a name="ln-225"></a><span class="k">     </span><span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="k">FUNCTION </span><span class="n">fio_get_real_field_parameter</span><span class="p">(</span><span class="n">ifield</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-226"></a>          <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">NAME</span><span class="o">=</span><span class="s1">&#39;fio_get_real_field_parameter&#39;</span><span class="p">)</span>
+<a name="ln-227"></a>       <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+<a name="ln-228"></a>
+<a name="ln-229"></a><span class="nb">       </span><span class="k">IMPLICIT NONE</span>
+<a name="ln-230"></a>
+<a name="ln-231"></a><span class="k">       </span><span class="kt">integer</span><span class="p">(</span><span class="kt">c_int</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">value</span> <span class="kd">::</span> <span class="n">ifield</span><span class="p">,</span> <span class="n">t</span>
+<a name="ln-232"></a>       <span class="kt">real</span><span class="p">(</span><span class="kt">c_double</span><span class="p">)</span> <span class="kd">::</span> <span class="n">p</span>
+<a name="ln-233"></a>     <span class="k">END FUNCTION </span><span class="n">fio_get_real_field_parameter</span>
+<a name="ln-234"></a>  <span class="k">END INTERFACE</span>
+<a name="ln-235"></a>
+<a name="ln-236"></a><span class="k">CONTAINS</span>
+<a name="ln-237"></a>
+<a name="ln-238"></a><span class="k">  SUBROUTINE </span><span class="n">initialize_m3d_c1</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">spp</span><span class="p">,</span><span class="n">init</span><span class="p">)</span>
+<a name="ln-239"></a>
+<a name="ln-240"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-241"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">F</span>
+<a name="ln-242"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">P</span>
+<a name="ln-243"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">SPECIES</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">spp</span>
+<a name="ln-244"></a>    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">init</span>
+<a name="ln-245"></a>    
+<a name="ln-246"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">ii</span>
+<a name="ln-247"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-248"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">status</span>
+<a name="ln-249"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-250"></a>    <span class="kt">real</span><span class="p">(</span><span class="kt">c_double</span><span class="p">)</span>  <span class="kd">::</span>  <span class="n">time0</span><span class="p">,</span><span class="n">time1</span>
+<a name="ln-251"></a>    <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">FIO_tmp</span>
+<a name="ln-252"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">)</span> <span class="kd">::</span> <span class="n">hint_tmp</span>
+<a name="ln-253"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-254"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">Btmp</span>
+<a name="ln-255"></a>    
+<a name="ln-256"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-257"></a>
+<a name="ln-258"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_M3DC1_SOURCE</span><span class="p">,</span>           <span class="p">&amp;</span>
+<a name="ln-259"></a>            <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>            <span class="p">&amp;</span>
+<a name="ln-260"></a>            <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-261"></a>       
+<a name="ln-262"></a>       <span class="n">F</span><span class="p">%</span><span class="n">Efield</span> <span class="o">=</span> <span class="n">Efield</span>
+<a name="ln-263"></a>       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_lim</span><span class="o">=</span><span class="n">PSIp_lim</span>
+<a name="ln-264"></a>       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_0</span><span class="o">=</span><span class="n">PSIp_0</span>
+<a name="ln-265"></a>       <span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="o">=</span><span class="n">ReInterp_2x1t</span>
+<a name="ln-266"></a>
+<a name="ln-267"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">restart</span><span class="p">.</span><span class="nb">OR</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-268"></a>
+<a name="ln-269"></a><span class="k">          </span><span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+<a name="ln-270"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-271"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">ind0_2x1t</span><span class="p">)</span>
+<a name="ln-272"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-273"></a>          
+<a name="ln-274"></a>          <span class="n">hint_tmp</span><span class="o">=</span><span class="nb">c_null_ptr</span>
+<a name="ln-275"></a><span class="nb">          </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Ro</span>
+<a name="ln-276"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">PHIo</span>
+<a name="ln-277"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Zo</span>
+<a name="ln-278"></a>
+<a name="ln-279"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_eval_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>                      <span class="p">&amp;</span>
+<a name="ln-280"></a>               <span class="n">Btmp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">hint_tmp</span><span class="p">)</span>
+<a name="ln-281"></a>
+<a name="ln-282"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Btmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-283"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-284"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-285"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-286"></a>
+<a name="ln-287"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-288"></a>          
+<a name="ln-289"></a>          <span class="k">call </span><span class="n">load_prev_iter</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-290"></a>          <span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">prev_iter_2x1t</span><span class="o">+</span><span class="mi">1</span>
+<a name="ln-291"></a>          
+<a name="ln-292"></a>       <span class="k">else</span>
+<a name="ln-293"></a><span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span><span class="o">=</span><span class="n">ind0_2x1t</span>
+<a name="ln-294"></a>       <span class="k">end if</span>
+<a name="ln-295"></a>
+<a name="ln-296"></a><span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span>
+<a name="ln-297"></a>
+<a name="ln-298"></a>
+<a name="ln-299"></a>
+<a name="ln-300"></a>    <span class="k">else</span>
+<a name="ln-301"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-302"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-303"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span><span class="p">)</span>
+<a name="ln-304"></a>
+<a name="ln-305"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">)</span>
+<a name="ln-306"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_te</span><span class="p">)</span>
+<a name="ln-307"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ni</span><span class="p">)</span>
+<a name="ln-308"></a>       
+<a name="ln-309"></a>    <span class="k">end if</span>
+<a name="ln-310"></a>
+<a name="ln-311"></a><span class="k">    </span><span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+<a name="ln-312"></a>    
+<a name="ln-313"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-314"></a>       
+<a name="ln-315"></a>
+<a name="ln-316"></a>    <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-317"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">time_slice</span><span class="p">)</span>
+<a name="ln-318"></a>    <span class="k">else</span>
+<a name="ln-319"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">)</span>
+<a name="ln-320"></a>    <span class="k">end if</span>
+<a name="ln-321"></a>
+<a name="ln-322"></a><span class="k">    </span>
+<a name="ln-323"></a><span class="k">    </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-324"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_ELECTRIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span><span class="p">)</span>
+<a name="ln-325"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_VECTOR_POTENTIAL</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span><span class="p">)</span>
+<a name="ln-326"></a>
+<a name="ln-327"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_real_field_parameter</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">FIO_TIME</span><span class="p">,</span> <span class="n">time0</span><span class="p">)</span>
+<a name="ln-328"></a>
+<a name="ln-329"></a>    <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO present time index&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span>
+<a name="ln-330"></a>    <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO present time&#39;</span><span class="p">,</span><span class="n">time0</span>
+<a name="ln-331"></a>
+<a name="ln-332"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-333"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-334"></a>
+<a name="ln-335"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">FIO_tmp</span><span class="p">)</span>
+<a name="ln-336"></a>       
+<a name="ln-337"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_real_field_parameter</span><span class="p">(</span><span class="n">FIO_tmp</span><span class="p">,</span> <span class="n">FIO_TIME</span><span class="p">,</span> <span class="n">time1</span><span class="p">)</span>
+<a name="ln-338"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO next time index&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">+</span><span class="mi">1</span>
+<a name="ln-339"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO next time&#39;</span><span class="p">,</span><span class="n">time1</span>
+<a name="ln-340"></a>
+<a name="ln-341"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">)</span>
+<a name="ln-342"></a>
+<a name="ln-343"></a>       <span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span><span class="o">=</span><span class="n">time1</span><span class="o">-</span><span class="n">time0</span>
+<a name="ln-344"></a>
+<a name="ln-345"></a>       <span class="c">!write(6,*) &#39;snapshot_frequency&#39;,params%snapshot_frequency</span>
+<a name="ln-346"></a>       <span class="c">!write(6,*) &#39;dt&#39;,params%dt</span>
+<a name="ln-347"></a>       
+<a name="ln-348"></a>       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-349"></a><span class="k">          </span>
+<a name="ln-350"></a><span class="k">          </span><span class="n">params</span><span class="p">%</span><span class="n">t_skip</span> <span class="o">=</span> <span class="nb">FLOOR</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="nb">time</span><span class="o">/</span> <span class="p">&amp;</span>
+<a name="ln-351"></a>               <span class="n">params</span><span class="p">%</span><span class="n">dt</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
+<a name="ln-352"></a>          
+<a name="ln-353"></a>       <span class="k">end if</span>
+<a name="ln-354"></a><span class="k">              </span>
+<a name="ln-355"></a><span class="k">    end if    </span>
+<a name="ln-356"></a><span class="k">    </span>
+<a name="ln-357"></a><span class="k">    if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span><span class="o">=-</span><span class="mi">1</span>
+<a name="ln-358"></a>
+<a name="ln-359"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_SPECIES</span><span class="p">,</span> <span class="n">FIO_ELECTRON</span><span class="p">);</span>
+<a name="ln-360"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">);</span>
+<a name="ln-361"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_TEMPERATURE</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_te</span><span class="p">);</span>
+<a name="ln-362"></a>
+<a name="ln-363"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_SPECIES</span><span class="p">,</span> <span class="n">FIO_MAIN_ION</span><span class="p">);</span>
+<a name="ln-364"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_ni</span><span class="p">);</span>
+<a name="ln-365"></a>
+<a name="ln-366"></a>
+<a name="ln-367"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-368"></a><span class="k">       if</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">restart</span><span class="p">.</span><span class="nb">OR</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-369"></a><span class="k">          </span><span class="n">hint_tmp</span><span class="o">=</span><span class="nb">c_null_ptr</span>
+<a name="ln-370"></a><span class="nb">          </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Ro</span>
+<a name="ln-371"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">PHIo</span>
+<a name="ln-372"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Zo</span>
+<a name="ln-373"></a>
+<a name="ln-374"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_eval_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>                      <span class="p">&amp;</span>
+<a name="ln-375"></a>               <span class="n">Btmp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">hint_tmp</span><span class="p">)</span>
+<a name="ln-376"></a>
+<a name="ln-377"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Btmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-378"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-379"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-380"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-381"></a>       <span class="k">end if</span>
+<a name="ln-382"></a>
+<a name="ln-383"></a><span class="k">       do </span><span class="n">ii</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">num_species</span>
+<a name="ln-384"></a>
+<a name="ln-385"></a>          <span class="k">do </span><span class="n">pp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">ppp</span>
+<a name="ln-386"></a>             <span class="n">status</span> <span class="o">=</span> <span class="n">fio_allocate_search_hint</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">hint</span><span class="p">(</span><span class="n">pp</span><span class="p">))</span>
+<a name="ln-387"></a>             <span class="c">!spp(ii)%vars%hint(pp)=c_null_ptr</span>
+<a name="ln-388"></a>          <span class="k">end do</span>
+<a name="ln-389"></a>
+<a name="ln-390"></a><span class="k">          </span><span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">cart</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-391"></a>       <span class="k">end do</span>
+<a name="ln-392"></a><span class="k">    end if</span>
+<a name="ln-393"></a>
+<a name="ln-394"></a><span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-395"></a><span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate B&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span>
+<a name="ln-396"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Magnetic field: &quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Bo</span>
+<a name="ln-397"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate E&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span>
+<a name="ln-398"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Electric field: &quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+<a name="ln-399"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate A&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span>
+<a name="ln-400"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate ne&#39;</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span>
+<a name="ln-401"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate Te&#39;</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_te</span>
+<a name="ln-402"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate ni&#39;</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ni</span>
+<a name="ln-403"></a>    <span class="k">end if</span>
+<a name="ln-404"></a><span class="k">       </span>
+<a name="ln-405"></a><span class="k">  END SUBROUTINE </span><span class="n">initialize_m3d_c1</span>
+<a name="ln-406"></a>  
+<a name="ln-407"></a>  <span class="k">SUBROUTINE </span><span class="n">initialize_nimrod</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">spp</span><span class="p">,</span><span class="n">init</span><span class="p">)</span>
+<a name="ln-408"></a>
+<a name="ln-409"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-410"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">F</span>
+<a name="ln-411"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">P</span>
+<a name="ln-412"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">SPECIES</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">spp</span>
+<a name="ln-413"></a>    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">init</span>
+<a name="ln-414"></a>    
+<a name="ln-415"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">ii</span>
+<a name="ln-416"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-417"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">status</span>
+<a name="ln-418"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-419"></a>    <span class="kt">real</span><span class="p">(</span><span class="kt">c_double</span><span class="p">)</span>  <span class="kd">::</span>  <span class="n">time0</span><span class="p">,</span><span class="n">time1</span>
+<a name="ln-420"></a>    <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">FIO_tmp</span>
+<a name="ln-421"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">)</span> <span class="kd">::</span> <span class="n">hint_tmp</span>
+<a name="ln-422"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-423"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">Btmp</span>
+<a name="ln-424"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span>
+<a name="ln-425"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">list_file</span> <span class="o">=</span> <span class="mi">102</span>
+<a name="ln-426"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">num_files</span><span class="p">,</span><span class="n">ios</span>
+<a name="ln-427"></a>
+<a name="ln-428"></a>
+<a name="ln-429"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-430"></a><span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span> <span class="o">=</span> <span class="n">Efield</span>
+<a name="ln-431"></a>       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_lim</span><span class="o">=</span><span class="n">PSIp_lim</span>
+<a name="ln-432"></a>       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_0</span><span class="o">=</span><span class="n">PSIp_0</span>
+<a name="ln-433"></a>       <span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="o">=</span><span class="n">ReInterp_2x1t</span>
+<a name="ln-434"></a>       
+<a name="ln-435"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-436"></a><span class="k">          </span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="o">=</span><span class="n">magnetic_field_directory</span>
+<a name="ln-437"></a>          <span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_list</span><span class="o">=</span><span class="n">magnetic_field_list</span>
+<a name="ln-438"></a>
+<a name="ln-439"></a>          <span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_list</span><span class="p">)</span>
+<a name="ln-440"></a>          
+<a name="ln-441"></a>          <span class="k">OPEN</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">,</span><span class="k">FILE</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span><span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;OLD&#39;</span><span class="p">)</span>
+<a name="ln-442"></a>
+<a name="ln-443"></a>          <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(I4)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span> <span class="n">num_files</span>
+<a name="ln-444"></a>          <span class="k">if</span> <span class="p">(</span><span class="n">ios</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-445"></a><span class="k">             write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Error reading in magnetic_file_list for initialize_nimrod&#39;</span>
+<a name="ln-446"></a>             <span class="k">call </span><span class="n">KORC_abort</span><span class="p">(</span><span class="mi">22</span><span class="p">)</span>
+<a name="ln-447"></a>          <span class="n">endif</span>
+<a name="ln-448"></a>
+<a name="ln-449"></a>          <span class="c">!write(6,*) &#39;num_files&#39;,num_files</span>
+<a name="ln-450"></a>          
+<a name="ln-451"></a>          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">num_files</span><span class="p">))</span>
+<a name="ln-452"></a>          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">num_files</span><span class="p">))</span>
+<a name="ln-453"></a>
+<a name="ln-454"></a>          <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_files</span>
+<a name="ln-455"></a>             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(A15,F12.10)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span> <span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">),</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+<a name="ln-456"></a>
+<a name="ln-457"></a>             <span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+<a name="ln-458"></a>             
+<a name="ln-459"></a>             <span class="c">!write(6,*) &#39;ii&#39;,ii,&#39;filename &#39;,TRIM(params%magnetic_field_filenames(ii)), &amp;</span>
+<a name="ln-460"></a>             <span class="c">!     &#39; time&#39;,params%time_of_filenames(ii)</span>
+<a name="ln-461"></a>             
+<a name="ln-462"></a>          <span class="n">enddo</span>
+<a name="ln-463"></a>
+<a name="ln-464"></a>          <span class="k">CLOSE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">)</span>
+<a name="ln-465"></a>          
+<a name="ln-466"></a>
+<a name="ln-467"></a>          
+<a name="ln-468"></a>       <span class="n">endif</span>       
+<a name="ln-469"></a>       
+<a name="ln-470"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">restart</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-471"></a>
+<a name="ln-472"></a><span class="k">          if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-473"></a><span class="k">             </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>  
+<a name="ln-474"></a>          <span class="k">else</span>
+<a name="ln-475"></a><span class="k">             </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ind0_2x1t</span><span class="p">))</span>  
+<a name="ln-476"></a>          <span class="k">end if           </span>
+<a name="ln-477"></a><span class="k">       </span>
+<a name="ln-478"></a><span class="k">          </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_NIMROD_SOURCE</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-479"></a>               <span class="n">filename</span> <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-480"></a>          
+<a name="ln-481"></a>          <span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+<a name="ln-482"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-483"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-484"></a>          
+<a name="ln-485"></a>          <span class="n">hint_tmp</span><span class="o">=</span><span class="nb">c_null_ptr</span>
+<a name="ln-486"></a><span class="nb">          </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Ro</span>
+<a name="ln-487"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">PHIo</span>
+<a name="ln-488"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Zo</span>
+<a name="ln-489"></a>
+<a name="ln-490"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_eval_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>                      <span class="p">&amp;</span>
+<a name="ln-491"></a>               <span class="n">Btmp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">hint_tmp</span><span class="p">)</span>
+<a name="ln-492"></a>
+<a name="ln-493"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Btmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-494"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-495"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-496"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-497"></a>
+<a name="ln-498"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-499"></a>          <span class="n">status</span><span class="o">=</span><span class="n">fio_close_source</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-500"></a>          
+<a name="ln-501"></a>          <span class="k">call </span><span class="n">load_prev_iter</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-502"></a>          <span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">prev_iter_2x1t</span><span class="o">+</span><span class="mi">1</span>
+<a name="ln-503"></a>       <span class="k">else</span>
+<a name="ln-504"></a><span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span><span class="o">=</span><span class="n">ind0_2x1t</span>
+<a name="ln-505"></a>       <span class="k">end if</span>
+<a name="ln-506"></a>
+<a name="ln-507"></a><span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span>
+<a name="ln-508"></a>
+<a name="ln-509"></a>       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-510"></a><span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>  
+<a name="ln-511"></a>       <span class="k">else</span>
+<a name="ln-512"></a><span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">))</span>  
+<a name="ln-513"></a>       <span class="k">end if</span>
+<a name="ln-514"></a><span class="k">       </span>
+<a name="ln-515"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_NIMROD_SOURCE</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-516"></a>            <span class="n">filename</span> <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-517"></a>
+<a name="ln-518"></a>    <span class="k">else</span>
+<a name="ln-519"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-520"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! actually for E, to account for F%Efield=-1</span>
+<a name="ln-521"></a><span class="c">!       status = fio_close_field(F%FIO_A)</span>
+<a name="ln-522"></a>
+<a name="ln-523"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">)</span>
+<a name="ln-524"></a><span class="c">!       status = fio_close_field(P%FIO_te)</span>
+<a name="ln-525"></a><span class="c">!       status = fio_close_field(P%FIO_ni)</span>
+<a name="ln-526"></a>
+<a name="ln-527"></a>       <span class="n">status</span><span class="o">=</span><span class="n">fio_close_source</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-528"></a>
+<a name="ln-529"></a>       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-530"></a><span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>  
+<a name="ln-531"></a>       <span class="k">else</span>
+<a name="ln-532"></a><span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">))</span>  
+<a name="ln-533"></a>       <span class="k">end if</span>
+<a name="ln-534"></a><span class="k">       </span>
+<a name="ln-535"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_NIMROD_SOURCE</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-536"></a>            <span class="n">filename</span> <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>       
+<a name="ln-537"></a>             
+<a name="ln-538"></a>    <span class="k">end if</span>
+<a name="ln-539"></a>
+<a name="ln-540"></a><span class="k">    </span><span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+<a name="ln-541"></a>    
+<a name="ln-542"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-543"></a>
+<a name="ln-544"></a>
+<a name="ln-545"></a>    <span class="c">!if (.not.F%ReInterp_2x1t) then</span>
+<a name="ln-546"></a>    <span class="c">!   status = fio_set_int_option(FIO_TIMESLICE, params%time_slice)</span>
+<a name="ln-547"></a>    <span class="c">!else</span>
+<a name="ln-548"></a>    <span class="c">!   status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t)</span>
+<a name="ln-549"></a>    <span class="c">!end if</span>
+<a name="ln-550"></a>    <span class="c">! For NIMROD dump*, status=fio_get_options(isrc)=0, can&#39;t set FIO_TIMESLICE</span>
+<a name="ln-551"></a>    <span class="c">! as was the case for C1.h5 having information on multiple timeslices </span>
+<a name="ln-552"></a>
+<a name="ln-553"></a>    
+<a name="ln-554"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-555"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_ELECTRIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span><span class="p">)</span>
+<a name="ln-556"></a>    <span class="c">!status = fio_get_field(isrc, FIO_VECTOR_POTENTIAL, F%FIO_A)</span>
+<a name="ln-557"></a>    <span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span><span class="o">=-</span><span class="mi">1</span>
+<a name="ln-558"></a>
+<a name="ln-559"></a>    <span class="c">!write(6,*) &#39;time_of_filenames&#39;,time_of_filenames</span>
+<a name="ln-560"></a>    <span class="c">!write(6,*) &#39;ind_2x1t&#39;,F%ind_2x1t</span>
+<a name="ln-561"></a>    
+<a name="ln-562"></a>
+<a name="ln-563"></a>
+<a name="ln-564"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-565"></a>
+<a name="ln-566"></a>       <span class="c">!status = fio_get_real_field_parameter(F%FIO_B, FIO_TIME, time0)</span>
+<a name="ln-567"></a>       <span class="n">time0</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">)</span>
+<a name="ln-568"></a>
+<a name="ln-569"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO present time index&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span>
+<a name="ln-570"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO present time&#39;</span><span class="p">,</span><span class="n">time0</span>
+<a name="ln-571"></a>       
+<a name="ln-572"></a>       <span class="c">!status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t+1)</span>
+<a name="ln-573"></a>
+<a name="ln-574"></a>       <span class="c">!status = fio_get_field(isrc, FIO_MAGNETIC_FIELD, FIO_tmp)</span>
+<a name="ln-575"></a>       
+<a name="ln-576"></a>       <span class="c">!status = fio_get_real_field_parameter(FIO_tmp, FIO_TIME, time1)</span>
+<a name="ln-577"></a>       <span class="n">time1</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-578"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO next time index&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">+</span><span class="mi">1</span>
+<a name="ln-579"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO next time&#39;</span><span class="p">,</span><span class="n">time1</span>
+<a name="ln-580"></a>
+<a name="ln-581"></a>       <span class="c">!status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t)</span>
+<a name="ln-582"></a>
+<a name="ln-583"></a>       <span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span><span class="o">=</span><span class="n">time1</span><span class="o">-</span><span class="n">time0</span>
+<a name="ln-584"></a>
+<a name="ln-585"></a>       <span class="c">!write(6,*) &#39;snapshot_frequency&#39;,params%snapshot_frequency</span>
+<a name="ln-586"></a>       <span class="c">!write(6,*) &#39;dt&#39;,params%dt</span>
+<a name="ln-587"></a>       
+<a name="ln-588"></a>       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-589"></a><span class="k">          </span>
+<a name="ln-590"></a><span class="k">          </span><span class="n">params</span><span class="p">%</span><span class="n">t_skip</span> <span class="o">=</span> <span class="nb">FLOOR</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="nb">time</span><span class="o">/</span> <span class="p">&amp;</span>
+<a name="ln-591"></a>               <span class="n">params</span><span class="p">%</span><span class="n">dt</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
+<a name="ln-592"></a>          
+<a name="ln-593"></a>       <span class="k">end if</span>
+<a name="ln-594"></a><span class="k">              </span>
+<a name="ln-595"></a><span class="k">    end if    </span>
+<a name="ln-596"></a><span class="k">    </span>
+<a name="ln-597"></a><span class="k">    if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span><span class="o">=-</span><span class="mi">1</span>
+<a name="ln-598"></a>
+<a name="ln-599"></a>    
+<a name="ln-600"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_SPECIES</span><span class="p">,</span> <span class="n">FIO_ELECTRON</span><span class="p">);</span>
+<a name="ln-601"></a>       
+<a name="ln-602"></a>    
+<a name="ln-603"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">);</span>
+<a name="ln-604"></a>    <span class="c">!status = fio_get_field(isrc, FIO_TEMPERATURE, P%FIO_te);</span>
+<a name="ln-605"></a>
+<a name="ln-606"></a>    <span class="c">!status = fio_set_int_option(FIO_SPECIES, FIO_MAIN_ION);</span>
+<a name="ln-607"></a>    <span class="c">!status = fio_get_field(isrc, FIO_DENSITY, P%FIO_ni);</span>
+<a name="ln-608"></a>
+<a name="ln-609"></a>
+<a name="ln-610"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-611"></a><span class="k">       if</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">restart</span><span class="p">.</span><span class="nb">OR</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-612"></a><span class="k">          </span><span class="n">hint_tmp</span><span class="o">=</span><span class="nb">c_null_ptr</span>
+<a name="ln-613"></a><span class="nb">          </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Ro</span>
+<a name="ln-614"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">PHIo</span>
+<a name="ln-615"></a>          <span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Zo</span>
+<a name="ln-616"></a>
+<a name="ln-617"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_eval_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>                      <span class="p">&amp;</span>
+<a name="ln-618"></a>               <span class="n">Btmp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">hint_tmp</span><span class="p">)</span>
+<a name="ln-619"></a>
+<a name="ln-620"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Btmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-621"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-622"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-623"></a>          <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a name="ln-624"></a>       <span class="k">end if    </span>
+<a name="ln-625"></a>
+<a name="ln-626"></a><span class="k">       do </span><span class="n">ii</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">num_species</span>
+<a name="ln-627"></a>
+<a name="ln-628"></a>          <span class="k">do </span><span class="n">pp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">ppp</span>
+<a name="ln-629"></a>             <span class="n">status</span> <span class="o">=</span> <span class="n">fio_allocate_search_hint</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">hint</span><span class="p">(</span><span class="n">pp</span><span class="p">))</span>
+<a name="ln-630"></a>             <span class="c">!spp(ii)%vars%hint(pp)=c_null_ptr</span>
+<a name="ln-631"></a>          <span class="k">end do</span>
+<a name="ln-632"></a>
+<a name="ln-633"></a><span class="k">          </span><span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">cart</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-634"></a>       <span class="k">end do</span>
+<a name="ln-635"></a><span class="k">    end if</span>
+<a name="ln-636"></a>
+<a name="ln-637"></a><span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-638"></a><span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate B&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span>
+<a name="ln-639"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate E&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span>
+<a name="ln-640"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate ne&#39;</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span>
+<a name="ln-641"></a>    <span class="k">end if</span>
+<a name="ln-642"></a><span class="k">       </span>
+<a name="ln-643"></a><span class="k">  END SUBROUTINE </span><span class="n">initialize_nimrod</span>
+<a name="ln-644"></a>  
+<a name="ln-645"></a>  <span class="k">SUBROUTINE </span><span class="n">initialize_m3d_c1_imp</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">num_imp</span><span class="p">,</span><span class="n">init</span><span class="p">)</span>
+<a name="ln-646"></a>
+<a name="ln-647"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-648"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">F</span>
+<a name="ln-649"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">P</span>
+<a name="ln-650"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>				<span class="kd">::</span> <span class="n">num_imp</span>
+<a name="ln-651"></a>    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">init</span>
+<a name="ln-652"></a>
+<a name="ln-653"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">ii</span>
+<a name="ln-654"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">status</span>
+<a name="ln-655"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">isrc</span>
+<a name="ln-656"></a>    <span class="kt">INTEGER</span><span class="p">,</span><span class="k">ALLOCATABLE</span><span class="p">,</span><span class="k">DIMENSION</span><span class="p">(:)</span>          <span class="kd">::</span> <span class="n">Zo</span>
+<a name="ln-657"></a>    <span class="kt">INTEGER</span>  <span class="kd">::</span> <span class="n">A</span><span class="p">,</span><span class="n">Zo1</span>
+<a name="ln-658"></a>
+<a name="ln-659"></a>    <span class="c">!status = fio_open_source(FIO_M3DC1_SOURCE,           &amp;</span>
+<a name="ln-660"></a>    <span class="c">!     TRIM(params%magnetic_field_filename)            &amp;</span>
+<a name="ln-661"></a>    <span class="c">!     // C_NULL_CHAR, isrc)</span>
+<a name="ln-662"></a>
+<a name="ln-663"></a>    <span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+<a name="ln-664"></a>    
+<a name="ln-665"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-666"></a>       
+<a name="ln-667"></a>    
+<a name="ln-668"></a>    <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-669"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">time_slice</span><span class="p">)</span>
+<a name="ln-670"></a>    <span class="k">else</span>
+<a name="ln-671"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_TIMESLICE</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">)</span>
+<a name="ln-672"></a>    <span class="k">end if</span>
+<a name="ln-673"></a>
+<a name="ln-674"></a><span class="k">    if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-675"></a><span class="k">       ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">num_imp</span><span class="p">))</span>
+<a name="ln-676"></a>    <span class="k">else</span>
+<a name="ln-677"></a><span class="k">       do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_imp</span>
+<a name="ln-678"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+<a name="ln-679"></a>       <span class="k">end do          </span>
+<a name="ln-680"></a><span class="k">    </span><span class="n">endif</span>
+<a name="ln-681"></a>       
+<a name="ln-682"></a>    <span class="c">!write(6,*) size(params%Zj)</span>
+<a name="ln-683"></a>    <span class="c">!write(6,*) size(params%Zj(ubound(params%Zj)))</span>
+<a name="ln-684"></a>    <span class="n">Zo</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">Zj</span><span class="p">(</span><span class="nb">ubound</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">Zj</span><span class="p">)))</span>
+<a name="ln-685"></a>    <span class="n">Zo1</span><span class="o">=</span><span class="n">Zo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-686"></a>
+<a name="ln-687"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">Zo1</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">18</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-688"></a><span class="k">       </span><span class="n">A</span><span class="o">=</span><span class="mi">40</span>
+<a name="ln-689"></a>    <span class="k">else if</span> <span class="p">(</span><span class="n">Zo1</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">10</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-690"></a><span class="k">       </span><span class="n">A</span><span class="o">=</span><span class="mi">20</span>
+<a name="ln-691"></a>    <span class="k">else if</span> <span class="p">(</span><span class="n">Zo1</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">6</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-692"></a><span class="k">       </span><span class="n">A</span><span class="o">=</span><span class="mi">12</span>
+<a name="ln-693"></a>    <span class="k">end if</span>
+<a name="ln-694"></a><span class="k">    </span>
+<a name="ln-695"></a><span class="k">    do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_imp</span>
+<a name="ln-696"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_SPECIES</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-697"></a>            <span class="n">FIO_MAKE_SPECIES</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">Zo1</span><span class="p">,</span> <span class="n">Zo1</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="n">ii</span><span class="p">));</span>
+<a name="ln-698"></a>       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">));</span>
+<a name="ln-699"></a>    <span class="k">end do</span>
+<a name="ln-700"></a>
+<a name="ln-701"></a><span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-702"></a><span class="k">       do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_imp</span>
+<a name="ln-703"></a>          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate nimp_&#39;</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+<a name="ln-704"></a>       <span class="k">end do</span>
+<a name="ln-705"></a><span class="k">    end if</span>
+<a name="ln-706"></a><span class="k">       </span>
+<a name="ln-707"></a><span class="k">  END SUBROUTINE </span><span class="n">initialize_m3d_c1_imp</span>
+<a name="ln-708"></a>
+<a name="ln-709"></a>  <span class="k">SUBROUTINE </span><span class="n">finalize_fio</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+<a name="ln-710"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-711"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">F</span>
+<a name="ln-712"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">P</span>
+<a name="ln-713"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">status</span>
+<a name="ln-714"></a>    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">ii</span>
+<a name="ln-715"></a>
+<a name="ln-716"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+<a name="ln-717"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-718"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-719"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span><span class="p">)</span>
+<a name="ln-720"></a>    <span class="n">endif</span>
+<a name="ln-721"></a>       
+<a name="ln-722"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">)</span>
+<a name="ln-723"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_te</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-724"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_te</span><span class="p">)</span>
+<a name="ln-725"></a>    <span class="n">endif</span>
+<a name="ln-726"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ni</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-727"></a><span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ni</span><span class="p">)</span>
+<a name="ln-728"></a>    <span class="n">endif</span>
+<a name="ln-729"></a>       
+<a name="ln-730"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">collisions</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-731"></a><span class="k">       do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">num_impurity_species</span>
+<a name="ln-732"></a>          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+<a name="ln-733"></a>       <span class="k">end do</span>
+<a name="ln-734"></a><span class="k">    end if</span>
+<a name="ln-735"></a>
+<a name="ln-736"></a><span class="k">    </span><span class="n">status</span><span class="o">=</span><span class="n">fio_close_source</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+<a name="ln-737"></a>    
+<a name="ln-738"></a>  <span class="k">end SUBROUTINE </span><span class="n">FINALIZE_FIO</span>
+<a name="ln-739"></a>
+<a name="ln-740"></a>  
+<a name="ln-741"></a>  <span class="k">FUNCTION </span><span class="n">FIO_MAKE_SPECIES</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a name="ln-742"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">m</span>
+<a name="ln-743"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">p</span>
+<a name="ln-744"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">e</span>
+<a name="ln-745"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">FIO_MAKE_SPECIES</span>
+<a name="ln-746"></a>    
+<a name="ln-747"></a>    <span class="n">FIO_MAKE_SPECIES</span> <span class="o">=</span> <span class="n">e</span> <span class="o">+</span> <span class="n">p</span><span class="o">*</span><span class="mi">256</span> <span class="o">+</span> <span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="mi">65536</span>
+<a name="ln-748"></a>  <span class="k">END FUNCTION </span><span class="n">FIO_MAKE_SPECIES</span>
+<a name="ln-749"></a>
+<a name="ln-750"></a>
+<a name="ln-751"></a><span class="k">END MODULE </span><span class="n">korc_fio</span>
+<a name="ln-752"></a><span class="cp">#endif</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

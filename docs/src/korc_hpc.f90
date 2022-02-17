@@ -22,14 +22,34 @@ module korc_hpc
 
 CONTAINS
 
-  subroutine korc_abort()
+  subroutine korc_abort(errorcode)
     !! @note Subroutine that terminates the simulation. @endnote
+    INTEGER,INTENT(IN) :: errorcode
     INTEGER :: mpierr 
     !! MPI error status
 
-    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    !! 11: korc_hpc:set_paths
+    !! 12: korc_experimental:get_Hollmann_distribution
+    !! 13: korc_input:read_namelist
+    !! 14: korc_hpc:load_particle_ic
+    !! 15: korc_interp:interp_fields
+    !! 16: korc_interp:interp_profiles
+    !! 17: korc_fields:mean_F_field
+    !! 18: korc_fields:initialize_fields
+    !! 19: korc_spatial_distribution:initial_spatial_distribution
+    !! 20: korc_experimental_pdf:load_data_from_hdf5
+    !! 21: korc_interp:get_fio_ion_p
+    !! 22: korc_fio_interface:initialize_nimrod
+    !! 23: korc_interp:check_if_in_fields_domain
+    !! 24: korc_collisions:large_angle_source
+    !! 25: korc_ppusher:adv_GCinterp_psiwE_top
+    !! 26: korc_collisions:define_collisions_time_step
 
-    call MPI_ABORT(MPI_COMM_WORLD, -2000, mpierr)
+    flush(output_unit_write)
+    
+    !call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+    call MPI_ABORT(MPI_COMM_WORLD, errorcode, mpierr)
   end subroutine korc_abort
 
   subroutine set_paths(params)
@@ -49,7 +69,7 @@ CONTAINS
     else if (params%path_to_inputs.eq.'TEST') then
        call get_command_argument(1,params%path_to_outputs)
     else
-       call korc_abort()
+       call korc_abort(11)
     end if
 
     !write(6,*) TRIM(params%path_to_outputs)
@@ -72,16 +92,18 @@ CONTAINS
        write(output_unit_write,'(/,"* * * * * * * GIT INFO * * * * * * *")')
 
 #ifdef MAC
+       !write(6,*) 'MAC'
        call execute_command_line("/Users/21b/Desktop/KORC/src/get_git_details.sh", &
             exitstat=exei)
 #elif CORI
-       call execute_command_line("/global/u1/m/mbeidler/KORC/src/get_git_details.sh", &
+       !write(6,*) 'CORI'
+       call execute_command_line("/global/cfs/cdirs/m3236/build_unstable/KORC/src/get_git_details.sh", &
             exitstat=exei)
 #endif
 
        IF (exei/=0) then
           write(6,*) 'Error executing get_git_details.sh'
-          call korc_abort
+          call korc_abort(11)
        end if
        
        OPEN(UNIT=default_unit_open,FILE='git_hash.txt', &
@@ -90,7 +112,7 @@ CONTAINS
        
        IF (read_stat/=0) then
           write(6,*) 'Error reading git_hash.txt'
-          call korc_abort
+          call korc_abort(11)
        end if
        write(output_unit_write,*) 'Git hash of most recent commit is: ', &
             TRIM(ctmp)
@@ -106,7 +128,7 @@ CONTAINS
           
           IF (read_stat.gt.0) then
              write(6,*) 'Error reading git_diff.txt'
-             call korc_abort
+             call korc_abort(11)
           else if (read_stat.lt.0) then
              CLOSE(default_unit_open,STATUS='DELETE')
        
@@ -147,8 +169,19 @@ CONTAINS
     !! topology params::mpi_params::mpi_topo are periodic (T) or not (F).
     INTEGER :: ii
     !! Variable to iterate over different MPI processes.
+    LOGICAL :: mpiinit = .FALSE.
 
+    !call MPI_INITIALIZED(mpiinit,mpierr)
+    !write(6,*) 'initialized after',mpiinit
+    
+    
     call MPI_INIT(mpierr)
+
+    !write(6,*) 'mpi_init error code',mpierr
+    
+    !call MPI_INITIALIZED(mpiinit,mpierr)
+    !write(6,*) 'initialized after',mpiinit
+    
 
     if (mpierr .NE. MPI_SUCCESS) then
        write(6,'(/,"* * * * * * * COMMUNICATIONS * * * * * * *")')
@@ -156,12 +189,16 @@ CONTAINS
        write(6,'(/,"* * * * * * * * * ** * * * * * * * * * * *")')
        call MPI_ABORT(MPI_COMM_WORLD, -10, mpierr)
     end if
-
+    
     call MPI_INITIALIZED(mpi_process_initialized,mpierr)
 
+    !write(6,*) 'initialized after',mpi_process_initialized
+    
     call MPI_REDUCE(mpi_process_initialized,all_mpis_initialized,1, &
          MPI_LOGICAL,MPI_LAND,0,MPI_COMM_WORLD,mpierr)
 
+    !write(6,*) 'made it here 2'
+    
     call MPI_BCAST(all_mpis_initialized,1, &
          MPI_LOGICAL,0,MPI_COMM_WORLD,mpierr)
 
@@ -227,6 +264,7 @@ CONTAINS
           write(output_unit_write,'(/,"  Number of MPI processes: ",I5)') params%mpi_params%nmpi
           write(output_unit_write,'(/,"* * * * * * * * * * * * * * * * * *")')
        end if
+
     else
        if (params%mpi_params%rank.EQ.0) then
           write(6,'(/,"* * * * * * * COMMUNICATIONS * * * * * * *")')

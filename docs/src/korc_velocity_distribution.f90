@@ -294,6 +294,13 @@ CONTAINS
           spp(ii)%go = (spp(ii)%Eo + spp(ii)%m*C_C**2)/(spp(ii)%m*C_C**2)
           spp(ii)%vars%g = spp(ii)%go
           ! Monoenergy from input file until sampled in Hollmann_3D
+       CASE ('HOLLMANN-1DTRANSPORT')
+          spp(ii)%go = (spp(ii)%Eo + spp(ii)%m*C_C**2)/(spp(ii)%m*C_C**2)
+          spp(ii)%vars%g = spp(ii)%go
+          ! Monoenergy from input file until sampled in Hollmann_3D
+       CASE ('FIO_therm')
+          spp(ii)%go = (spp(ii)%Eo + spp(ii)%m*C_C**2)/(spp(ii)%m*C_C**2)
+          spp(ii)%vars%g = spp(ii)%go
        CASE DEFAULT
           ! Something to be done
        END SELECT
@@ -341,9 +348,14 @@ CONTAINS
        CASE ('HOLLMANN-3D-PSI')
           spp(ii)%vars%eta = spp(ii)%etao
           !Monopitch from input file until sampled in Hollmann_3D
+       CASE ('HOLLMANN-1DTRANSPORT')
+          spp(ii)%vars%eta = spp(ii)%etao
+          !Monopitch from input file until sampled in Hollmann_3D
        CASE ('SPONG-3D')
           spp(ii)%vars%eta = spp(ii)%etao
           !Monopitch from input file until sampled in Spong_3D
+       CASE ('FIO_therm')
+          spp(ii)%vars%eta = spp(ii)%etao
        CASE DEFAULT
           ! Something to be done
        END SELECT
@@ -356,6 +368,9 @@ CONTAINS
 
 
   subroutine gyro_distribution(params,F,spp)
+
+    USE, INTRINSIC :: iso_c_binding
+    
     !! @Note Subroutine that initializes the gyro-angle distribution 
     !! of the particles. @endnote
     !! When evolving the particles in the 6-D phase space, in addition to 
@@ -395,7 +410,8 @@ CONTAINS
     !! representing the gyro-angle.
     INTEGER 				:: jj
     !! Particle iterator.
-
+    TYPE(C_PTR), DIMENSION(:), ALLOCATABLE    :: hint
+    
     ALLOCATE(Vo(spp%ppp))
     ALLOCATE(V1(spp%ppp))
     ALLOCATE(V2(spp%ppp))
@@ -403,7 +419,13 @@ CONTAINS
     ALLOCATE(b1(spp%ppp,3))
     ALLOCATE(b2(spp%ppp,3))
     ALLOCATE(b3(spp%ppp,3))
+    ALLOCATE(hint(spp%ppp))
 
+    hint=C_NULL_PTR
+#ifdef FIO
+    hint=spp%vars%hint
+#endif
+    
     ALLOCATE( theta(spp%ppp) )
 
     ! * * * * INITIALIZE VELOCITY * * * *
@@ -419,13 +441,22 @@ CONTAINS
     V1 = Vo*COS(C_PI*spp%vars%eta/180.0_rp)
     V2 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*COS(theta)
     V3 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*SIN(theta)
+
+    !write(6,*) 'V123',V1,V2,V3
     
+    !do jj=1_idef,spp%ppp
+    !   write(6,*) 'MPI',params%mpi_params%rank,'X', &
+    !        spp%vars%X(jj,:)*params%cpp%length
+    !end do
     call unitVectors(params,spp%vars%X,F,b1,b2,b3,spp%vars%flagCon, &
-         spp%vars%cart,spp%vars%hint)
+         spp%vars%cart,hint)
     !! Call to subroutine [[unitVectors]] in [[korc_fields]].
 
-    !write(output_unit_write,*) 'X',spp%vars%X
-    !write(output_unit_write,*) 'b-hat',b1
+    !
+    !write(6,*) 'X',spp%vars%X
+    !write(6,*) 'b-hat',b1
+    !write(6,*) 'b-1',b2
+    !write(6,*) 'b-2',b3
 
     
     do jj=1_idef,spp%ppp
@@ -436,9 +467,9 @@ CONTAINS
        end if
     end do
     
-!    write(output_unit_write,'("Vx: ",E17.10)') spp%vars%V(:,1)
-!    write(output_unit_write,'("Vy: ",E17.10)') spp%vars%V(:,2)
-!    write(output_unit_write,'("Vz: ",E17.10)') spp%vars%V(:,3)
+    !write(6,'("Vx: ",E17.10)') spp%vars%V(:,1)
+    !write(6,'("Vy: ",E17.10)') spp%vars%V(:,2)
+    !write(6,'("Vz: ",E17.10)') spp%vars%V(:,3)
     
     DEALLOCATE(theta)
     DEALLOCATE(Vo)
@@ -448,6 +479,7 @@ CONTAINS
     DEALLOCATE(b1)
     DEALLOCATE(b2)
     DEALLOCATE(b3)
+    DEALLOCATE(hint)
   end subroutine gyro_distribution
 
 

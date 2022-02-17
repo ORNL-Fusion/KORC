@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.7% of total for procedures.">153 statements</a>
+    title=" 0.6% of total for procedures.">153 statements</a>
      </li> 
      
      
@@ -234,7 +234,7 @@ private subroutine sample_distribution(params, g, eta, go, etao)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~130"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~149"></span>type(KORC_PARAMS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -334,84 +334,84 @@ private subroutine sample_distribution(params, g, eta, go, etao)
 <polygon fill="none" stroke="#000000" points="103,-129 0,-129 0,-105 103,-105 103,-129"/>
 <text text-anchor="middle" x="51.5" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">sample_distribution</text>
 </g>
-<!-- mpi_barrier -->
+<!-- mpi_bcast -->
 <g id="proc~~sample_distribution~3~~CallsGraph_node2" class="node">
+<title>mpi_bcast</title>
+<polygon fill="#777777" stroke="#777777" points="208,-234 148,-234 148,-210 208,-210 208,-234"/>
+<text text-anchor="middle" x="178" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_bcast</text>
+</g>
+<!-- proc~sample_distribution~3&#45;&gt;mpi_bcast -->
+<g id="proc~~sample_distribution~3~~CallsGraph_edge1" class="edge">
+<title>proc~sample_distribution~3&#45;&gt;mpi_bcast</title>
+<path fill="none" stroke="#000000" d="M62.2165,-129.204C77.8914,-146.5826 108.5305,-178.8091 139,-201 140.6317,-202.1884 142.3389,-203.3539 144.0889,-204.4886"/>
+<polygon fill="#000000" stroke="#000000" points="142.6701,-207.7194 153.0443,-209.8705 146.2758,-201.7195 142.6701,-207.7194"/>
+</g>
+<!-- mpi_barrier -->
+<g id="proc~~sample_distribution~3~~CallsGraph_node3" class="node">
 <title>mpi_barrier</title>
-<polygon fill="#777777" stroke="#777777" points="211,-234 145,-234 145,-210 211,-210 211,-234"/>
-<text text-anchor="middle" x="178" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
+<polygon fill="#777777" stroke="#777777" points="211,-192 145,-192 145,-168 211,-168 211,-192"/>
+<text text-anchor="middle" x="178" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
 </g>
 <!-- proc~sample_distribution~3&#45;&gt;mpi_barrier -->
 <g id="proc~~sample_distribution~3~~CallsGraph_edge2" class="edge">
 <title>proc~sample_distribution~3&#45;&gt;mpi_barrier</title>
-<path fill="none" stroke="#000000" d="M62.2165,-129.204C77.8914,-146.5826 108.5305,-178.8091 139,-201 140.6317,-202.1884 142.3389,-203.3539 144.0889,-204.4886"/>
-<polygon fill="#000000" stroke="#000000" points="142.6701,-207.7194 153.0443,-209.8705 146.2758,-201.7195 142.6701,-207.7194"/>
+<path fill="none" stroke="#000000" d="M75.8905,-129.147C95.4032,-138.8648 122.972,-152.5948 144.5461,-163.3391"/>
+<polygon fill="#000000" stroke="#000000" points="143.1727,-166.5652 153.6844,-167.8903 146.2934,-160.2993 143.1727,-166.5652"/>
 </g>
 <!-- proc~fre~3 -->
-<g id="proc~~sample_distribution~3~~CallsGraph_node3" class="node">
+<g id="proc~~sample_distribution~3~~CallsGraph_node4" class="node">
 <title>proc~fre~3</title>
-<g id="a_proc~~sample_distribution~3~~CallsGraph_node3"><a xlink:href=".././proc/fre~3.html" xlink:title="fRE">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="205,-192 151,-192 151,-168 205,-168 205,-192"/>
-<text text-anchor="middle" x="178" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fRE</text>
+<g id="a_proc~~sample_distribution~3~~CallsGraph_node4"><a xlink:href=".././proc/fre~3.html" xlink:title="fRE">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="205,-150 151,-150 151,-126 205,-126 205,-150"/>
+<text text-anchor="middle" x="178" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fRE</text>
 </a>
 </g>
 </g>
 <!-- proc~sample_distribution~3&#45;&gt;proc~fre~3 -->
-<g id="proc~~sample_distribution~3~~CallsGraph_edge1" class="edge">
-<title>proc~sample_distribution~3&#45;&gt;proc~fre~3</title>
-<path fill="none" stroke="#000000" d="M75.8905,-129.147C95.4032,-138.8648 122.972,-152.5948 144.5461,-163.3391"/>
-<polygon fill="#000000" stroke="#000000" points="143.1727,-166.5652 153.6844,-167.8903 146.2934,-160.2993 143.1727,-166.5652"/>
-</g>
-<!-- proc~deg2rad~3 -->
-<g id="proc~~sample_distribution~3~~CallsGraph_node4" class="node">
-<title>proc~deg2rad~3</title>
-<g id="a_proc~~sample_distribution~3~~CallsGraph_node4"><a xlink:href=".././proc/deg2rad~3.html" xlink:title="deg2rad">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="205,-150 151,-150 151,-126 205,-126 205,-150"/>
-<text text-anchor="middle" x="178" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">deg2rad</text>
-</a>
-</g>
-</g>
-<!-- proc~sample_distribution~3&#45;&gt;proc~deg2rad~3 -->
 <g id="proc~~sample_distribution~3~~CallsGraph_edge3" class="edge">
-<title>proc~sample_distribution~3&#45;&gt;proc~deg2rad~3</title>
+<title>proc~sample_distribution~3&#45;&gt;proc~fre~3</title>
 <path fill="none" stroke="#000000" d="M103.3174,-125.6021C115.8774,-127.6872 129.0595,-129.8755 140.7929,-131.8233"/>
 <polygon fill="#000000" stroke="#000000" points="140.241,-135.2795 150.6792,-133.4645 141.3874,-128.374 140.241,-135.2795"/>
 </g>
-<!-- proc~random_norm~5 -->
+<!-- mpi_scatter -->
 <g id="proc~~sample_distribution~3~~CallsGraph_node5" class="node">
+<title>mpi_scatter</title>
+<polygon fill="#777777" stroke="#777777" points="211.5,-108 144.5,-108 144.5,-84 211.5,-84 211.5,-108"/>
+<text text-anchor="middle" x="178" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
+</g>
+<!-- proc~sample_distribution~3&#45;&gt;mpi_scatter -->
+<g id="proc~~sample_distribution~3~~CallsGraph_edge4" class="edge">
+<title>proc~sample_distribution~3&#45;&gt;mpi_scatter</title>
+<path fill="none" stroke="#000000" d="M103.3174,-108.3979C113.5468,-106.6997 124.189,-104.9331 134.125,-103.2836"/>
+<polygon fill="#000000" stroke="#000000" points="134.8852,-106.7054 144.1769,-101.6149 133.7387,-99.7999 134.8852,-106.7054"/>
+</g>
+<!-- proc~random_norm~5 -->
+<g id="proc~~sample_distribution~3~~CallsGraph_node6" class="node">
 <title>proc~random_norm~5</title>
-<g id="a_proc~~sample_distribution~3~~CallsGraph_node5"><a xlink:href=".././proc/random_norm~5.html" xlink:title="random_norm">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="217,-108 139,-108 139,-84 217,-84 217,-108"/>
-<text text-anchor="middle" x="178" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_norm</text>
+<g id="a_proc~~sample_distribution~3~~CallsGraph_node6"><a xlink:href=".././proc/random_norm~5.html" xlink:title="random_norm">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="217,-66 139,-66 139,-42 217,-42 217,-66"/>
+<text text-anchor="middle" x="178" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_norm</text>
 </a>
 </g>
 </g>
 <!-- proc~sample_distribution~3&#45;&gt;proc~random_norm~5 -->
-<g id="proc~~sample_distribution~3~~CallsGraph_edge4" class="edge">
-<title>proc~sample_distribution~3&#45;&gt;proc~random_norm~5</title>
-<path fill="none" stroke="#000000" d="M103.3174,-108.3979C111.7579,-106.9967 120.4793,-105.5489 128.8533,-104.1587"/>
-<polygon fill="#000000" stroke="#000000" points="129.5613,-107.5892 138.8531,-102.4987 128.4149,-100.6837 129.5613,-107.5892"/>
-</g>
-<!-- mpi_scatter -->
-<g id="proc~~sample_distribution~3~~CallsGraph_node6" class="node">
-<title>mpi_scatter</title>
-<polygon fill="#777777" stroke="#777777" points="211.5,-66 144.5,-66 144.5,-42 211.5,-42 211.5,-66"/>
-<text text-anchor="middle" x="178" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
-</g>
-<!-- proc~sample_distribution~3&#45;&gt;mpi_scatter -->
 <g id="proc~~sample_distribution~3~~CallsGraph_edge5" class="edge">
-<title>proc~sample_distribution~3&#45;&gt;mpi_scatter</title>
+<title>proc~sample_distribution~3&#45;&gt;proc~random_norm~5</title>
 <path fill="none" stroke="#000000" d="M75.8905,-104.853C95.4032,-95.1352 122.972,-81.4052 144.5461,-70.6609"/>
 <polygon fill="#000000" stroke="#000000" points="146.2934,-73.7007 153.6844,-66.1097 143.1727,-67.4348 146.2934,-73.7007"/>
 </g>
-<!-- mpi_bcast -->
+<!-- proc~deg2rad~3 -->
 <g id="proc~~sample_distribution~3~~CallsGraph_node7" class="node">
-<title>mpi_bcast</title>
-<polygon fill="#777777" stroke="#777777" points="208,-24 148,-24 148,0 208,0 208,-24"/>
-<text text-anchor="middle" x="178" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_bcast</text>
+<title>proc~deg2rad~3</title>
+<g id="a_proc~~sample_distribution~3~~CallsGraph_node7"><a xlink:href=".././proc/deg2rad~3.html" xlink:title="deg2rad">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="205,-24 151,-24 151,0 205,0 205,-24"/>
+<text text-anchor="middle" x="178" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">deg2rad</text>
+</a>
 </g>
-<!-- proc~sample_distribution~3&#45;&gt;mpi_bcast -->
+</g>
+<!-- proc~sample_distribution~3&#45;&gt;proc~deg2rad~3 -->
 <g id="proc~~sample_distribution~3~~CallsGraph_edge6" class="edge">
-<title>proc~sample_distribution~3&#45;&gt;mpi_bcast</title>
+<title>proc~sample_distribution~3&#45;&gt;proc~deg2rad~3</title>
 <path fill="none" stroke="#000000" d="M62.2165,-104.796C77.8914,-87.4174 108.5305,-55.1909 139,-33 140.6317,-31.8116 142.3389,-30.6461 144.0889,-29.5114"/>
 <polygon fill="#000000" stroke="#000000" points="146.2758,-32.2805 153.0443,-24.1295 142.6701,-26.2806 146.2758,-32.2805"/>
 </g>
@@ -856,7 +856,7 @@ private subroutine sample_distribution(params, g, eta, go, etao)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

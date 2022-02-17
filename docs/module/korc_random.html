@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.4% of total for modules and submodules.">94 statements</a>
+    title=" 0.5% of total for modules and submodules.">126 statements</a>
      </li> 
      
      
@@ -204,9 +204,13 @@
       
       <a class="list-group-item" href="../module/korc_random.html#interface-random_get_number_n">random_get_number_N</a>
       
+      <a class="list-group-item" href="../module/korc_random.html#interface-random_get_number">random_get_number</a>
+      
       <a class="list-group-item" href="../module/korc_random.html#interface-random_destroy_u">random_destroy_U</a>
       
       <a class="list-group-item" href="../module/korc_random.html#interface-random_destroy_n">random_destroy_N</a>
+      
+      <a class="list-group-item" href="../module/korc_random.html#interface-random_set_dist">random_set_dist</a>
       
     </div>
   </div>
@@ -243,6 +247,10 @@
       <a class="list-group-item" href="../module/korc_random.html#proc-initialize_random_u">initialize_random_U</a>
       
       <a class="list-group-item" href="../module/korc_random.html#proc-initialize_random_n">initialize_random_N</a>
+      
+      <a class="list-group-item" href="../module/korc_random.html#proc-get_randoms">get_randoms</a>
+      
+      <a class="list-group-item" href="../module/korc_random.html#proc-set_random_dist">set_random_dist</a>
       
     </div>
   </div>
@@ -432,40 +440,26 @@
 <polygon fill="none" stroke="#000000" points="74,-66 0,-66 0,-42 74,-42 74,-66"/>
 <text text-anchor="middle" x="37" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_random</text>
 </g>
-<!-- module~korc_collisions -->
-<g id="module~~korc_random~~UsedByGraph_node2" class="node">
-<title>module~korc_collisions</title>
-<g id="a_module~~korc_random~~UsedByGraph_node2"><a xlink:href=".././module/korc_collisions.html" xlink:title="korc_collisions">
-<polygon fill="#337ab7" stroke="#337ab7" points="370.5,-108 289.5,-108 289.5,-84 370.5,-84 370.5,-108"/>
-<text text-anchor="middle" x="330" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions</text>
-</a>
-</g>
-</g>
-<!-- module~korc_collisions&#45;&gt;module~korc_random -->
-<g id="module~~korc_random~~UsedByGraph_edge1" class="edge">
-<title>module~korc_collisions&#45;&gt;module~korc_random</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M289.3462,-97.5782C256.8488,-98.3987 210.1642,-98.5901 169.5,-95"/>
-</g>
 <!-- module~korc_spatial_distribution -->
-<g id="module~~korc_random~~UsedByGraph_node3" class="node">
+<g id="module~~korc_random~~UsedByGraph_node2" class="node">
 <title>module~korc_spatial_distribution</title>
-<g id="a_module~~korc_random~~UsedByGraph_node3"><a xlink:href=".././module/korc_spatial_distribution.html" xlink:title="korc_spatial_distribution">
+<g id="a_module~~korc_random~~UsedByGraph_node2"><a xlink:href=".././module/korc_spatial_distribution.html" xlink:title="korc_spatial_distribution">
 <polygon fill="#337ab7" stroke="#337ab7" points="392.5,-66 267.5,-66 267.5,-42 392.5,-42 392.5,-66"/>
 <text text-anchor="middle" x="330" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution</text>
 </a>
 </g>
 </g>
 <!-- module~korc_spatial_distribution&#45;&gt;module~korc_random -->
-<g id="module~~korc_random~~UsedByGraph_edge3" class="edge">
+<g id="module~~korc_random~~UsedByGraph_edge1" class="edge">
 <title>module~korc_spatial_distribution&#45;&gt;module~korc_random</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M169.5,-95C136.0012,-92.0425 99.6184,-80.1097 73.468,-69.8746"/>
 <polygon fill="#000000" stroke="#000000" points="74.5578,-66.5405 63.974,-66.0572 71.9464,-73.0351 74.5578,-66.5405"/>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M288.8447,-66.0285C245.345,-78.4987 181.3889,-96.0496 169.5,-95"/>
 </g>
 <!-- module~korc_experimental_pdf -->
-<g id="module~~korc_random~~UsedByGraph_node4" class="node">
+<g id="module~~korc_random~~UsedByGraph_node5" class="node">
 <title>module~korc_experimental_pdf</title>
-<g id="a_module~~korc_random~~UsedByGraph_node4"><a xlink:href=".././module/korc_experimental_pdf.html" xlink:title="korc_experimental_pdf">
+<g id="a_module~~korc_random~~UsedByGraph_node5"><a xlink:href=".././module/korc_experimental_pdf.html" xlink:title="korc_experimental_pdf">
 <polygon fill="#337ab7" stroke="#337ab7" points="229,-66 110,-66 110,-42 229,-42 229,-66"/>
 <text text-anchor="middle" x="169.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf</text>
 </a>
@@ -477,16 +471,10 @@
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.4869,-54C258.2436,-54 248.6697,-54 239.2898,-54"/>
 <polygon fill="#000000" stroke="#000000" points="239.2126,-50.5001 229.2126,-54 239.2126,-57.5001 239.2126,-50.5001"/>
 </g>
-<!-- module~korc_experimental_pdf&#45;&gt;module~korc_random -->
-<g id="module~~korc_random~~UsedByGraph_edge2" class="edge">
-<title>module~korc_experimental_pdf&#45;&gt;module~korc_random</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M109.8394,-54C101.3391,-54 92.6927,-54 84.4673,-54"/>
-<polygon fill="#000000" stroke="#000000" points="84.3165,-50.5001 74.3164,-54 84.3164,-57.5001 84.3165,-50.5001"/>
-</g>
 <!-- proc~init_random_seed -->
-<g id="module~~korc_random~~UsedByGraph_node5" class="node">
+<g id="module~~korc_random~~UsedByGraph_node3" class="node">
 <title>proc~init_random_seed</title>
-<g id="a_module~~korc_random~~UsedByGraph_node5"><a xlink:href=".././proc/init_random_seed.html" xlink:title="init_random_seed">
+<g id="a_module~~korc_random~~UsedByGraph_node3"><a xlink:href=".././proc/init_random_seed.html" xlink:title="init_random_seed">
 <polygon fill="#d9534f" stroke="#d9534f" points="217.5,-24 121.5,-24 121.5,0 217.5,0 217.5,-24"/>
 <text text-anchor="middle" x="169.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
 </a>
@@ -498,59 +486,37 @@
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M131.5308,-24.0355C116.7264,-28.7282 99.6024,-34.1562 84.0296,-39.0925"/>
 <polygon fill="#000000" stroke="#000000" points="82.535,-35.8946 74.06,-42.2527 84.6502,-42.5674 82.535,-35.8946"/>
 </g>
-<!-- module~korc_ppusher -->
-<g id="module~~korc_random~~UsedByGraph_node6" class="node">
-<title>module~korc_ppusher</title>
-<g id="a_module~~korc_random~~UsedByGraph_node6"><a xlink:href=".././module/korc_ppusher.html" xlink:title="korc_ppusher">
-<polygon fill="#337ab7" stroke="#337ab7" points="507,-88 431,-88 431,-64 507,-64 507,-88"/>
-<text text-anchor="middle" x="469" y="-73.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher</text>
+<!-- module~korc_collisions -->
+<g id="module~~korc_random~~UsedByGraph_node4" class="node">
+<title>module~korc_collisions</title>
+<g id="a_module~~korc_random~~UsedByGraph_node4"><a xlink:href=".././module/korc_collisions.html" xlink:title="korc_collisions">
+<polygon fill="#337ab7" stroke="#337ab7" points="370.5,-108 289.5,-108 289.5,-84 370.5,-84 370.5,-108"/>
+<text text-anchor="middle" x="330" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions</text>
 </a>
 </g>
 </g>
-<!-- module~korc_ppusher&#45;&gt;module~korc_collisions -->
-<g id="module~~korc_random~~UsedByGraph_edge5" class="edge">
-<title>module~korc_ppusher&#45;&gt;module~korc_collisions</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M430.6497,-81.518C415.211,-83.7394 397.1865,-86.3329 380.6908,-88.7064"/>
-<polygon fill="#000000" stroke="#000000" points="380.0538,-85.2619 370.6542,-90.1505 381.0508,-92.1905 380.0538,-85.2619"/>
+<!-- module~korc_collisions&#45;&gt;module~korc_random -->
+<g id="module~~korc_random~~UsedByGraph_edge3" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_random</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M289.3462,-97.5782C256.8488,-98.3987 210.1642,-98.5901 169.5,-95"/>
 </g>
-<!-- program~main -->
-<g id="module~~korc_random~~UsedByGraph_node7" class="node">
-<title>program~main</title>
-<g id="a_module~~korc_random~~UsedByGraph_node7"><a xlink:href=".././program/main.html" xlink:title="main">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="597,-88 543,-88 543,-64 597,-64 597,-88"/>
-<text text-anchor="middle" x="570" y="-73.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
-</a>
-</g>
-</g>
-<!-- program~main&#45;&gt;module~korc_collisions -->
-<g id="module~~korc_random~~UsedByGraph_edge6" class="edge">
-<title>program~main&#45;&gt;module~korc_collisions</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.8835,-87.1641C531.9376,-91.1056 519.0631,-95.0424 507,-97 464.8983,-103.8322 416.419,-102.9618 380.8539,-100.7329"/>
-<polygon fill="#000000" stroke="#000000" points="380.9335,-97.2302 370.7179,-100.0392 380.4555,-104.2139 380.9335,-97.2302"/>
-</g>
-<!-- program~main&#45;&gt;module~korc_ppusher -->
-<g id="module~~korc_random~~UsedByGraph_edge10" class="edge">
-<title>program~main&#45;&gt;module~korc_ppusher</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.9339,-76C535.0382,-76 526.1605,-76 517.369,-76"/>
-<polygon fill="#000000" stroke="#000000" points="517.1523,-72.5001 507.1523,-76 517.1522,-79.5001 517.1523,-72.5001"/>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_random -->
+<g id="module~~korc_random~~UsedByGraph_edge2" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_random</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M109.8394,-54C101.3391,-54 92.6927,-54 84.4673,-54"/>
+<polygon fill="#000000" stroke="#000000" points="84.3165,-50.5001 74.3164,-54 84.3164,-57.5001 84.3165,-50.5001"/>
 </g>
 <!-- module~korc_initialize -->
-<g id="module~~korc_random~~UsedByGraph_node8" class="node">
+<g id="module~~korc_random~~UsedByGraph_node6" class="node">
 <title>module~korc_initialize</title>
-<g id="a_module~~korc_random~~UsedByGraph_node8"><a xlink:href=".././module/korc_initialize.html" xlink:title="korc_initialize">
+<g id="a_module~~korc_random~~UsedByGraph_node6"><a xlink:href=".././module/korc_initialize.html" xlink:title="korc_initialize">
 <polygon fill="#337ab7" stroke="#337ab7" points="507,-46 431,-46 431,-22 507,-22 507,-46"/>
 <text text-anchor="middle" x="469" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize</text>
 </a>
 </g>
 </g>
-<!-- program~main&#45;&gt;module~korc_initialize -->
-<g id="module~~korc_random~~UsedByGraph_edge11" class="edge">
-<title>program~main&#45;&gt;module~korc_initialize</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.9339,-64.7448C531.9604,-60.1816 519.0902,-54.8296 507.1909,-49.8814"/>
-<polygon fill="#000000" stroke="#000000" points="508.4882,-46.6303 497.9109,-46.0223 505.8004,-53.0938 508.4882,-46.6303"/>
-</g>
 <!-- module~korc_initialize&#45;&gt;module~korc_spatial_distribution -->
-<g id="module~~korc_random~~UsedByGraph_edge7" class="edge">
+<g id="module~~korc_random~~UsedByGraph_edge5" class="edge">
 <title>module~korc_initialize&#45;&gt;module~korc_spatial_distribution</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M430.6497,-39.518C421.8825,-40.7795 412.2815,-42.1609 402.6002,-43.5539"/>
 <polygon fill="#000000" stroke="#000000" points="401.9133,-40.1166 392.5137,-45.0052 402.9102,-47.0453 401.9133,-40.1166"/>
@@ -569,6 +535,48 @@
 <title>module~korc_initialize&#45;&gt;module~korc_velocity_distribution</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M430.6497,-27.9302C422.6509,-26.6642 413.9582,-25.2883 405.1435,-23.8932"/>
 <polygon fill="#000000" stroke="#000000" points="405.5944,-20.4211 395.1701,-22.3147 404.5,-27.335 405.5944,-20.4211"/>
+</g>
+<!-- program~main -->
+<g id="module~~korc_random~~UsedByGraph_node7" class="node">
+<title>program~main</title>
+<g id="a_module~~korc_random~~UsedByGraph_node7"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="597,-88 543,-88 543,-64 597,-64 597,-88"/>
+<text text-anchor="middle" x="570" y="-73.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_random~~UsedByGraph_edge6" class="edge">
+<title>program~main&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.8835,-87.1641C531.9376,-91.1056 519.0631,-95.0424 507,-97 464.8983,-103.8322 416.419,-102.9618 380.8539,-100.7329"/>
+<polygon fill="#000000" stroke="#000000" points="380.9335,-97.2302 370.7179,-100.0392 380.4555,-104.2139 380.9335,-97.2302"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_initialize -->
+<g id="module~~korc_random~~UsedByGraph_edge10" class="edge">
+<title>program~main&#45;&gt;module~korc_initialize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.9339,-64.7448C531.9604,-60.1816 519.0902,-54.8296 507.1909,-49.8814"/>
+<polygon fill="#000000" stroke="#000000" points="508.4882,-46.6303 497.9109,-46.0223 505.8004,-53.0938 508.4882,-46.6303"/>
+</g>
+<!-- module~korc_ppusher -->
+<g id="module~~korc_random~~UsedByGraph_node8" class="node">
+<title>module~korc_ppusher</title>
+<g id="a_module~~korc_random~~UsedByGraph_node8"><a xlink:href=".././module/korc_ppusher.html" xlink:title="korc_ppusher">
+<polygon fill="#337ab7" stroke="#337ab7" points="507,-88 431,-88 431,-64 507,-64 507,-88"/>
+<text text-anchor="middle" x="469" y="-73.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_ppusher -->
+<g id="module~~korc_random~~UsedByGraph_edge11" class="edge">
+<title>program~main&#45;&gt;module~korc_ppusher</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.9339,-76C535.0382,-76 526.1605,-76 517.369,-76"/>
+<polygon fill="#000000" stroke="#000000" points="517.1523,-72.5001 507.1523,-76 517.1522,-79.5001 517.1523,-72.5001"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_random~~UsedByGraph_edge7" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M430.6497,-81.518C415.211,-83.7394 397.1865,-86.3329 380.6908,-88.7064"/>
+<polygon fill="#000000" stroke="#000000" points="380.0538,-85.2619 370.6542,-90.1505 381.0508,-92.1905 380.0538,-85.2619"/>
 </g>
 <!-- module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf -->
 <g id="module~~korc_random~~UsedByGraph_edge9" class="edge">
@@ -685,9 +693,13 @@
       
       <a class="list-group-item" href="../module/korc_random.html#interface-random_get_number_n">random_get_number_N</a>
       
+      <a class="list-group-item" href="../module/korc_random.html#interface-random_get_number">random_get_number</a>
+      
       <a class="list-group-item" href="../module/korc_random.html#interface-random_destroy_u">random_destroy_U</a>
       
       <a class="list-group-item" href="../module/korc_random.html#interface-random_destroy_n">random_destroy_N</a>
+      
+      <a class="list-group-item" href="../module/korc_random.html#interface-random_set_dist">random_set_dist</a>
       
     </div>
   </div>
@@ -724,6 +736,10 @@
       <a class="list-group-item" href="../module/korc_random.html#proc-initialize_random_u">initialize_random_U</a>
       
       <a class="list-group-item" href="../module/korc_random.html#proc-initialize_random_n">initialize_random_N</a>
+      
+      <a class="list-group-item" href="../module/korc_random.html#proc-get_randoms">get_randoms</a>
+      
+      <a class="list-group-item" href="../module/korc_random.html#proc-set_random_dist">set_random_dist</a>
       
     </div>
   </div>
@@ -1075,6 +1091,75 @@ public function random_get_number_N(r) bind(C, NAME='random_get_number_N')
     
      
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-random_get_number"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function random_get_number(r) bind(C, NAME='random_get_number')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td></td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>r</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=C_DOUBLE)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="interface-random_destroy_u"></span><h3>interface 
     
   </h3></div>
@@ -1177,6 +1262,96 @@ public subroutine random_destroy_N(r) bind(C, NAME="0")
   
   <td>VALUE</td><td>::</td>
   <td><strong>r</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-random_set_dist"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public subroutine random_set_dist(r, low, high) bind(C, NAME="0")
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td></td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>r</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td></td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>low</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td></td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>high</strong></td><td></td>
   
 </tr>
 
@@ -1459,6 +1634,123 @@ public subroutine <a href='../proc/initialize_random_n.html'>initialize_random_N
   </div>
 
     
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-get_randoms"></span><h3>
+public subroutine <a href='../proc/get_randoms.html'>get_randoms</a>(nums)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>nums</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-set_random_dist"></span><h3>
+public subroutine <a href='../proc/set_random_dist.html'>set_random_dist</a>(low, high)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>low</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>high</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
     </section>    
     <br>
     
@@ -1473,7 +1765,7 @@ public subroutine <a href='../proc/initialize_random_n.html'>initialize_random_N
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

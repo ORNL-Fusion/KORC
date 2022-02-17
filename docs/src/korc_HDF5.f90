@@ -153,6 +153,7 @@ CONTAINS
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: iload_from_hdf5 &
             --> h5dopen_f")')
+       call KORC_ABORT(14)
     end if
 
     call h5dread_f(dset_id, H5T_NATIVE_INTEGER, idatum, dims, h5error)
@@ -160,12 +161,14 @@ CONTAINS
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: iload_from_hdf5 &
             --> h5dread_f")')
+       call KORC_ABORT(14)
     end if
 
     call h5dclose_f(dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: iload_from_hdf5 &
             --> h5dclose_f")')
+       call KORC_ABORT(14)
     end if
 
     if (PRESENT(attr)) then
@@ -217,12 +220,14 @@ CONTAINS
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 &
             --> h5dopen_f")')
+       call KORC_ABORT(14)
     end if
 
     call h5dread_f(dset_id, H5T_NATIVE_REAL, raw_datum, dims, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 &
             --> h5dread_f")')
+       call KORC_ABORT(14)
     end if
     rdatum = REAL(raw_datum,rp)
 
@@ -230,6 +235,7 @@ CONTAINS
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 &
             --> h5dclose_f")')
+       call KORC_ABORT(14)
     end if
 
     if (PRESENT(attr)) then
@@ -286,17 +292,20 @@ CONTAINS
     call h5dopen_f(h5file_id, TRIM(dset), dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dopen_f")')
+       call KORC_ABORT(14)
     end if
 
     call h5dread_f(dset_id, H5T_NATIVE_REAL, raw_data, dims, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dread_f")')
+       call KORC_ABORT(14)
     end if
     rdata = REAL(raw_data,rp)
 
     call h5dclose_f(dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dclose_f")')
+       call KORC_ABORT(14)
     end if
 
     DEALLOCATE( raw_data )
@@ -351,17 +360,20 @@ CONTAINS
     call h5dopen_f(h5file_id, TRIM(dset), dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dopen_f")')
+       call KORC_ABORT(14)
     end if
 
     call h5dread_f(dset_id, H5T_NATIVE_REAL, raw_data, dims, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dread_f")')
+       call KORC_ABORT(14)
     end if
     rdata = REAL(raw_data,rp)
 
     call h5dclose_f(dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dclose_f")')
+       call KORC_ABORT(14)
     end if
 
     DEALLOCATE( raw_data )
@@ -392,20 +404,20 @@ CONTAINS
   !! @param h5error HDF5 error status.
   !! @todo Implement the reading of the attributes of rdata.
   subroutine rload_3d_array_from_hdf5(h5file_id,dset,rdata,attr)
-    INTEGER(HID_T), INTENT(IN) 														:: h5file_id
-    CHARACTER(MAX_STRING_LENGTH), INTENT(IN) 										:: dset
-    REAL(rp), DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) 							:: rdata
-    REAL, DIMENSION(:,:,:), ALLOCATABLE 											:: raw_data
+    INTEGER(HID_T), INTENT(IN) 					:: h5file_id
+    CHARACTER(MAX_STRING_LENGTH), INTENT(IN) 			:: dset
+    REAL(rp), DIMENSION(:,:,:), ALLOCATABLE, INTENT(INOUT) 	:: rdata
+    REAL, DIMENSION(:,:,:), ALLOCATABLE 				:: raw_data
     CHARACTER(MAX_STRING_LENGTH), OPTIONAL, DIMENSION(:), ALLOCATABLE, INTENT(IN) 	:: attr
-    CHARACTER(MAX_STRING_LENGTH) 													:: aname
-    INTEGER(HID_T) 																	:: dset_id
-    INTEGER(HID_T) 																	:: dspace_id
-    INTEGER(HID_T) 																	:: aspace_id
-    INTEGER(HID_T) 																	:: attr_id
-    INTEGER(HID_T) 																	:: atype_id
-    INTEGER(HSIZE_T), DIMENSION(3) 													:: dims
-    INTEGER(HSIZE_T), DIMENSION(3) 													:: adims
-    INTEGER 																		:: h5error
+    CHARACTER(MAX_STRING_LENGTH) 							:: aname
+    INTEGER(HID_T) 									:: dset_id
+    INTEGER(HID_T) 									:: dspace_id
+    INTEGER(HID_T) 									:: aspace_id
+    INTEGER(HID_T) 									:: attr_id
+    INTEGER(HID_T) 									:: atype_id
+    INTEGER(HSIZE_T), DIMENSION(3) 				:: dims
+    INTEGER(HSIZE_T), DIMENSION(3) 				:: adims
+    INTEGER 							:: h5error
 
     dims = shape(rdata)
 
@@ -416,17 +428,20 @@ CONTAINS
     call h5dopen_f(h5file_id, TRIM(dset), dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dopen_f")')
+       call KORC_ABORT(14)
     end if
 
     call h5dread_f(dset_id, H5T_NATIVE_REAL, raw_data, dims, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dread_f")')
+       call KORC_ABORT(14)
     end if
     rdata = REAL(raw_data,rp)
 
     call h5dclose_f(dset_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: rload_from_hdf5 --> h5dclose_f")')
+       call KORC_ABORT(14)
     end if
 
     DEALLOCATE( raw_data )
@@ -1546,6 +1561,49 @@ CONTAINS
                 call rsave_2d_array_to_hdf5(h5file_id, dset, &
                      P%Zeff_2D)
 
+                if (params%profile_model(10:10).eq.'H') then
+
+                   dset = TRIM(gname) // "/RHON"
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        P%RHON)
+                   
+                   dset = TRIM(gname) // "/nRE"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nRE_2D)
+
+                   dset = TRIM(gname) // "/nAr0"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr0_2D)
+
+                   dset = TRIM(gname) // "/nAr1"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr1_2D)
+
+                   dset = TRIM(gname) // "/nAr2"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr2_2D)
+
+                   dset = TRIM(gname) // "/nAr3"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr3_2D)
+
+                   dset = TRIM(gname) // "/nD"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nD_2D)
+
+                   dset = TRIM(gname) // "/nD1"
+                   units = params%cpp%density
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nD1_2D)
+                   
+                endif
+
                 DEALLOCATE(attr_array)
              else if (params%profile_model .EQ. 'UNIFORM') then
                 ! Something
@@ -1834,6 +1892,21 @@ CONTAINS
              attr = "Radial position of magnetic axis"
              call save_to_hdf5(h5file_id,dset,F%Zo*params%cpp%length,attr)
 
+             dset = TRIM(gname) // "/PSIP0"
+             attr = "Poloidal flux at magnetic axis"
+             call save_to_hdf5(h5file_id,dset, &
+                  F%PSIP_min*(params%cpp%Bo*params%cpp%length**2),attr)
+
+             dset = TRIM(gname) // "/PSIPlim"
+             attr = "Poloidal flux at LCFS"
+             call save_to_hdf5(h5file_id,dset, &
+                  F%PSIp_lim*(params%cpp%Bo*params%cpp%length**2),attr)
+
+             dset = TRIM(gname) // "/PSIP_conv"
+             attr = "Scaling factor fof poloidal flux function"
+             call save_to_hdf5(h5file_id,dset, &
+                  F%psip_conv,attr)
+             
              dset = TRIM(gname) // "/Axisymmetric"
              attr = "Radial position of magnetic axis"
              if(F%axisymmetric_fields) then
@@ -1850,17 +1923,24 @@ CONTAINS
              end if
 
              if (ALLOCATED(F%E_3D%R)) then
-                dset = TRIM(gname) // "/ER3D"
+                dset = TRIM(gname) // "/ER"
                 units = params%cpp%Eo
                 call rsave_3d_array_to_hdf5(h5file_id, dset, &
                      units*F%E_3D%R)
              end if
              
              if (ALLOCATED(F%E_3D%PHI)) then
-                dset = TRIM(gname) // "/EPHI3D"
+                dset = TRIM(gname) // "/EPHI"
                 units = params%cpp%Eo
                 call rsave_3d_array_to_hdf5(h5file_id, dset, &
                      units*F%E_3D%PHI)
+             end if
+
+             if (ALLOCATED(F%E_3D%Z)) then
+                dset = TRIM(gname) // "/EZ"
+                units = params%cpp%Eo
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E_3D%Z)
              end if
              
              if (ALLOCATED(F%PSIp3D)) then
@@ -1883,6 +1963,132 @@ CONTAINS
              end if
 
 
+             if (ALLOCATED(F%B1Re_2D%R)) then
+                dset = TRIM(gname) // "/BR1_Re"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_2D%R)
+             end if
+
+             if (ALLOCATED(F%B1Re_2D%PHI)) then
+                dset = TRIM(gname) // "/BPHI1_Re"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_2D%PHI)
+             end if
+
+             if (ALLOCATED(F%B1Re_2D%Z)) then
+                dset = TRIM(gname) // "/BZ1_Re"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_2D%Z)
+             end if
+
+             if (ALLOCATED(F%B1Im_2D%R)) then
+                dset = TRIM(gname) // "/BR1_Im"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_2D%R)
+             end if
+
+             if (ALLOCATED(F%B1Im_2D%PHI)) then
+                dset = TRIM(gname) // "/BPHI1_Im"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_2D%PHI)
+             end if
+
+             if (ALLOCATED(F%B1Im_2D%Z)) then
+                dset = TRIM(gname) // "/BZ1_Im"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_2D%Z)
+             end if
+
+             if (ALLOCATED(F%B1Re_2DX%X)) then
+                dset = TRIM(gname) // "/BX1_Re"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_2DX%X)
+             end if
+
+             if (ALLOCATED(F%B1Re_2DX%Y)) then
+                dset = TRIM(gname) // "/BY1_Re"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_2DX%Y)
+             end if
+
+             if (ALLOCATED(F%B1Re_2DX%Z)) then
+                dset = TRIM(gname) // "/BZ1_Re"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_2DX%Z)
+             endif
+
+             if (ALLOCATED(F%B1Im_2DX%X)) then
+                dset = TRIM(gname) // "/BX1_Im"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_2DX%X)
+             end if
+
+             if (ALLOCATED(F%B1Im_2DX%Y)) then
+                dset = TRIM(gname) // "/BY1_Im"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_2DX%Y)
+             end if
+
+             if (ALLOCATED(F%B1Im_2DX%Z)) then
+                dset = TRIM(gname) // "/BZ1_Im"
+                units = params%cpp%Bo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_2DX%Z)
+             endif
+             
+             if (ALLOCATED(F%E1Re_2DX%X)) then
+                dset = TRIM(gname) // "/EX1_Re"
+                units = params%cpp%Eo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E1Re_2DX%X)
+             end if
+
+             if (ALLOCATED(F%E1Re_2DX%Y)) then
+                dset = TRIM(gname) // "/EY1_Re"
+                units = params%cpp%Eo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E1Re_2DX%Y)
+             end if
+
+             if (ALLOCATED(F%E1Re_2DX%Z)) then
+                dset = TRIM(gname) // "/EZ1_Re"
+                units = params%cpp%Eo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E1Re_2DX%Z)
+             endif
+
+             if (ALLOCATED(F%E1Im_2DX%X)) then
+                dset = TRIM(gname) // "/EX1_Im"
+                units = params%cpp%Eo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E1Im_2DX%X)
+             end if
+
+             if (ALLOCATED(F%E1Im_2DX%Y)) then
+                dset = TRIM(gname) // "/EY1_Im"
+                units = params%cpp%Eo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E1Im_2DX%Y)
+             end if
+
+             if (ALLOCATED(F%E1Im_2DX%Z)) then
+                dset = TRIM(gname) // "/EZ1_Im"
+                units = params%cpp%Eo
+                call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                     units*F%E1Im_2DX%Z)
+             endif
+             
              if (params%SC_E) then
                 dset = TRIM(gname) // "/dt_E_SC"
                 attr = "Time step for self-consistent E calculation"
@@ -1905,20 +2111,43 @@ CONTAINS
              if  (F%axisymmetric_fields.and. &
                   .not.(params%field_model(10:12).eq.'PSI')) then
 
-                dset = TRIM(gname) // "/BR"
-                units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B_2D%R)
+                if (ALLOCATED(F%B_2D%R)) then
+                   dset = TRIM(gname) // "/BR"
+                   units = params%cpp%Bo
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*F%B_2D%R)
+                end if
 
-                dset = TRIM(gname) // "/BPHI"
-                units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B_2D%PHI)
+                if (ALLOCATED(F%B_2D%PHI)) then
+                   dset = TRIM(gname) // "/BPHI"
+                   units = params%cpp%Bo
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*F%B_2D%PHI)
+                end if
 
-                dset = TRIM(gname) // "/BZ"
-                units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B_2D%Z)
+                if (ALLOCATED(F%B_2D%Z)) then
+                   dset = TRIM(gname) // "/BZ"
+                   units = params%cpp%Bo
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*F%B_2D%Z)
+                end if
+                
+                if (ALLOCATED(F%E_2D%R)) then
+                   dset = TRIM(gname) // "/ER"
+                   units = params%cpp%Eo
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*F%E_2D%R)
+
+                   dset = TRIM(gname) // "/EPHI"
+                   units = params%cpp%Eo
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*F%E_2D%PHI)
+
+                   dset = TRIM(gname) // "/EZ"
+                   units = params%cpp%Eo
+                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                        units*F%E_2D%Z)
+                endif
 
                 if  (params%orbit_model(3:5).EQ.'pre') then
 
@@ -1955,7 +2184,9 @@ CONTAINS
                 end if
                 
              else if ((.not.F%axisymmetric_fields).and. &
-                  .not.(params%field_model(10:12).eq.'PSI')) then
+                  .not.((params%field_model(10:12).eq.'PSI').or. &
+                  (params%field_model(10:13).eq.'MARS').or. &
+                  (params%field_model(10:14).eq.'AORSA'))) then
 
                 dset = TRIM(gname) // "/BR"
                 units = params%cpp%Bo
@@ -2256,6 +2487,10 @@ CONTAINS
                    dset = "flagCol"
                    call save_1d_array_to_hdf5(subgroup_id,dset, &
                         INT(spp(ss)%vars%flagCol,idef))
+                CASE('flagRE')
+                   dset = "flagRE"
+                   call save_1d_array_to_hdf5(subgroup_id,dset, &
+                        INT(spp(ss)%vars%flagRE,idef))
                 CASE('B')
                    dset = "B"
                    units = params%cpp%Bo
@@ -2389,7 +2624,7 @@ CONTAINS
     REAL(rp), DIMENSION(:), ALLOCATABLE 			:: J2_SC
     REAL(rp), DIMENSION(:), ALLOCATABLE 			:: J3_SC
     REAL(rp), DIMENSION(:), ALLOCATABLE 			:: E_SC
-    INTEGER(is), DIMENSION(:), ALLOCATABLE 			:: flagCon,flagCol
+    INTEGER(is), DIMENSION(:), ALLOCATABLE :: flagCon,flagCol,flagRE
     CHARACTER(MAX_STRING_LENGTH) 				:: filename
     !! String containing the name of the HDF5 file.
     CHARACTER(MAX_STRING_LENGTH) 				:: gname
@@ -2486,6 +2721,10 @@ CONTAINS
           attr = "ReInterp_2x1t iteration"
           call save_to_hdf5(h5file_id,dset,F%ind_2x1t,attr)
        end if
+
+       dset = "num_mpi"
+       attr = "Number of mpi nodes used in simulation"
+       call save_to_hdf5(h5file_id,dset,params%mpi_params%nmpi,attr)
        
     end if
 
@@ -2499,6 +2738,7 @@ CONTAINS
           ALLOCATE(g(spp(ss)%ppp*params%mpi_params%nmpi))
           ALLOCATE(flagCon(spp(ss)%ppp*params%mpi_params%nmpi))
           ALLOCATE(flagCol(spp(ss)%ppp*params%mpi_params%nmpi))
+          ALLOCATE(flagRE(spp(ss)%ppp*params%mpi_params%nmpi))
        end if
 
        ALLOCATE(send_buffer_rp(numel_send))
@@ -2536,6 +2776,15 @@ CONTAINS
        ALLOCATE(send_buffer_is(numel_send))
        ALLOCATE(receive_buffer_is(numel_receive))
 
+       send_buffer_is = spp(ss)%vars%flagRE
+       receive_buffer_is = 0_is
+       CALL MPI_GATHER(send_buffer_is,numel_send,MPI_INTEGER1, &
+            receive_buffer_is,numel_send,&
+            MPI_INTEGER1,0,MPI_COMM_WORLD,mpierr)
+       if (params%mpi_params%rank.EQ.0_idef) then
+          flagRE = receive_buffer_is
+       end if
+       
        send_buffer_is = spp(ss)%vars%flagCon
        receive_buffer_is = 0_is
        CALL MPI_GATHER(send_buffer_is,numel_send,MPI_INTEGER1, &
@@ -2589,6 +2838,10 @@ CONTAINS
           dset = "flagCol"
           call save_1d_array_to_hdf5(group_id,dset, INT(flagCol,idef))
 
+          dset = "flagRE"
+          call save_1d_array_to_hdf5(group_id,dset, INT(flagRE,idef))
+
+
           dset = "g"
           call save_1d_array_to_hdf5(group_id,dset, g)
 
@@ -2632,6 +2885,7 @@ CONTAINS
           DEALLOCATE(g)
           DEALLOCATE(flagCon)
           DEALLOCATE(flagCol)
+          DEALLOCATE(flagRE)
        end if
     end do
 
@@ -2640,6 +2894,8 @@ CONTAINS
        call h5fclose_f(h5file_id, h5error)
     end if
 
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    
 !    end if
   end subroutine save_restart_variables
 
@@ -2675,6 +2931,7 @@ CONTAINS
        if (h5error .EQ. -1) then
           write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                &load_particles_ic --> h5fopen_f")')
+          call KORC_ABORT(14)
        end if
 
        dset = "/it"
@@ -2755,16 +3012,30 @@ CONTAINS
        call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
        if (h5error .EQ. -1) then
           write(output_unit_write,'("KORC ERROR: Something went wrong in: &
-               &load_particles_ic --> h5fopen_f")')
+               &load_prev_time --> h5fopen_f")')
+          call KORC_ABORT(14)
        end if
 
        dset = "/time"
        call load_from_hdf5(h5file_id,dset,params%init_time)      
 
+       dset = "/num_mpi"
+       call load_from_hdf5(h5file_id,dset,real_number)
+       params%mpi_params%nmpi_prev = INT(real_number,ip)
+       
        call h5fclose_f(h5file_id, h5error)
     end if
-
+    
     CALL MPI_BCAST(params%init_time,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    
+    CALL MPI_BCAST(params%mpi_params%nmpi_prev,1,MPI_INTEGER8,0, &
+         MPI_COMM_WORLD,mpierr)
+
+    ! Not sure why, but params%mpi_params%rank is reset to zero in the above
+    ! call to MPI_BCAST (but not other mpi_params values). Added the following
+    ! MPI_COMM_RANK to reintialize
+    call MPI_COMM_RANK(MPI_COMM_WORLD, params%mpi_params%rank, mpierr)
+    
 
   end subroutine load_prev_time
 
@@ -2795,7 +3066,8 @@ CONTAINS
        call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
        if (h5error .EQ. -1) then
           write(output_unit_write,'("KORC ERROR: Something went wrong in: &
-               &load_particles_ic --> h5fopen_f")')
+               &load_prev_iter --> h5fopen_f")')
+          call KORC_ABORT(14)
        end if
 
        dset = "/ind_2x1t"
@@ -2819,19 +3091,22 @@ CONTAINS
     !! An instance of KORC's derived type SPECIES containing all the
     !! information of different electron species. See korc_types.f90.
     TYPE(FIELDS), INTENT(INOUT) 			:: F
-    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: X_send_buffer
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: X_send_buffer,X_send_buffer_tmp,X_send_buffer_tmp1
     !! Temporary buffer used by MPI for scattering the electrons' position
     !! to different MPI processes.
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: X_receive_buffer
     !! Temporary buffer used by MPI for scattering the electrons' position
     !! among MPI processes.
-    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V_send_buffer
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V_send_buffer,V_send_buffer_tmp,V_send_buffer_tmp1
     !! Temporary buffer used by MPI for scattering the electrons' velocity
     !! among MPI processes.
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V1_send_buffer_tmp,V2_send_buffer_tmp,V3_send_buffer_tmp
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V1_send_buffer_tmp1,V2_send_buffer_tmp1,V3_send_buffer_tmp1
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: V_receive_buffer
     !! Temporary buffer used by MPI for scattering the electrons' velocity
     !! among MPI processes.
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: AUX_send_buffer
+    REAL(rp), DIMENSION(:), ALLOCATABLE 		:: AUX_send_buffer_tmp
     !!  Temporary buffer used by MPI to scatter various electrons' variables
     !! among MPI processes.
     REAL(rp), DIMENSION(:), ALLOCATABLE 		:: AUX_receive_buffer
@@ -2856,26 +3131,54 @@ CONTAINS
     !! HDF5 error status.
     INTEGER 						:: mpierr
     !! Electron species iterator.
-    INTEGER 						:: ss
+    INTEGER 						:: ss,ii,jj
     !! MPI error status.
-
+    INTEGER  :: recieve_num,send_num,nmpi_ratio
+    
     do ss=1_idef,params%num_species
-       ALLOCATE(X_send_buffer(3*spp(ss)%ppp*params%mpi_params%nmpi))
-       ALLOCATE(X_receive_buffer(3*spp(ss)%ppp))
 
-       ALLOCATE(V_send_buffer(3*spp(ss)%ppp*params%mpi_params%nmpi))
-       ALLOCATE(V_receive_buffer(3*spp(ss)%ppp))
+       !write(6,*) params%mpi_params%nmpi,params%mpi_params%nmpi_prev
+       
+       if (mod(spp(ss)%ppp,params%mpi_params%nmpi/ &
+            params%mpi_params%nmpi_prev).ne.0) then
+          write(output_unit_write,'("ppp must be divisible by factor increase in MPI nodes")')
+          call KORC_ABORT(14)
+       endif
 
-       ALLOCATE(AUX_send_buffer(spp(ss)%ppp*params%mpi_params%nmpi))
-       ALLOCATE(AUX_receive_buffer(spp(ss)%ppp))
+       nmpi_ratio=params%mpi_params%nmpi/params%mpi_params%nmpi_prev
+       
+       send_num=spp(ss)%ppp*params%mpi_params%nmpi_prev
+       recieve_num=spp(ss)%ppp/nmpi_ratio
+       
+       ALLOCATE(X_send_buffer(3*send_num))
+       ALLOCATE(X_send_buffer_tmp(3*send_num))
+       ALLOCATE(X_send_buffer_tmp1(3*send_num))
+       ALLOCATE(X_receive_buffer(3*recieve_num))
+
+       ALLOCATE(V_send_buffer(3*send_num))
+       ALLOCATE(V_send_buffer_tmp(3*send_num))
+       ALLOCATE(V_send_buffer_tmp1(3*send_num))
+       ALLOCATE(V_receive_buffer(3*recieve_num))
+
+       ALLOCATE(V1_send_buffer_tmp(send_num))
+       ALLOCATE(V2_send_buffer_tmp(send_num))
+       ALLOCATE(V3_send_buffer_tmp(send_num))
+       ALLOCATE(V1_send_buffer_tmp1(send_num))
+       ALLOCATE(V2_send_buffer_tmp1(send_num))
+       ALLOCATE(V3_send_buffer_tmp1(send_num))
+       
+       ALLOCATE(AUX_send_buffer(send_num))
+       ALLOCATE(AUX_send_buffer_tmp(send_num))
+       ALLOCATE(AUX_receive_buffer(recieve_num))
        
        if (params%mpi_params%rank.EQ.0_idef) then
+          
           filename = TRIM(params%path_to_outputs) // "restart_file.h5"
           call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
           if (h5error .EQ. -1) then
              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                   &load_particles_ic --> h5fopen_f")')
-             call KORC_ABORT()
+             call KORC_ABORT(14)
           end if
 
           write(tmp_str,'(I18)') ss
@@ -2884,17 +3187,103 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,X_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
+
+          !write(6,*) 'shape of X_send_buffer',shape(X_send_buffer)
+          !write(6,*) 'X_send_buffer',X_send_buffer
+          !write(6,*) 'recieve_num',recieve_num
+
+#if DBG_CHECK
+          write(6,*) 'X_send_buffer',X_send_buffer*params%cpp%length
+#endif
+          
+          if (params%load_balance) then
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                V1_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     X_send_buffer(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)
+                V2_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     X_send_buffer((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)
+                V3_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     X_send_buffer((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)
+                
+             end do
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                V1_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V1_send_buffer_tmp(ii)
+                V2_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V2_send_buffer_tmp(ii)
+                V3_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V3_send_buffer_tmp(ii)
+                                                
+             end do
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                X_send_buffer_tmp1(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)= &
+                     V1_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                X_send_buffer_tmp1((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)= &
+                     V2_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                X_send_buffer_tmp1((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)= &
+                     V3_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+
+
+             end do
+          else
+             X_send_buffer_tmp1=X_send_buffer
+          end if
+          
+          do jj=0_idef,params%mpi_params%nmpi_prev-1_idef
+             do ii=0_idef,nmpi_ratio-1_idef
+
+                X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii)+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(3*ii+1))= &
+                     X_send_buffer_tmp1(jj*spp(ss)%ppp*3+recieve_num*ii+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(ii+1))
+
+                X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+1)+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(3*ii+2))=&
+                     X_send_buffer_tmp1(spp(ss)%ppp*(3*jj+1)+recieve_num*ii+1: &
+                     spp(ss)%ppp*(3*jj+1)+recieve_num*(ii+1))
+
+                X_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+2)+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(3*ii+3))=&
+                     X_send_buffer_tmp1(spp(ss)%ppp*(3*jj+2)+recieve_num*ii+1: &
+                     spp(ss)%ppp*(3*jj+2)+recieve_num*(ii+1))
+             end do
+          end do
+
+#if DBG_CHECK
+          write(6,*) 'X_send_buffer_tmp1',X_send_buffer_tmp1*params%cpp%length
+          write(6,*) 'X_send_buffer_tmp',X_send_buffer_tmp*params%cpp%length
+#endif
+
+          
        end if
 
        X_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(X_send_buffer,3*spp(ss)%ppp,MPI_REAL8, &
-            X_receive_buffer,3*spp(ss)%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(X_send_buffer_tmp,3*recieve_num,MPI_REAL8, &
+            X_receive_buffer,3*recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
        if (params%orbit_model(1:2).EQ.'FO') then  
-          spp(ss)%vars%X = RESHAPE(X_receive_buffer,(/spp(ss)%ppp,3/))
-       else if (params%orbit_model(1:2).EQ.'GC') then
-          spp(ss)%vars%Y = RESHAPE(X_receive_buffer,(/spp(ss)%ppp,3/))
+          spp(ss)%vars%X(1:recieve_num,:) = &
+               RESHAPE(X_receive_buffer,(/recieve_num,3/))
+          !set dummy values for new particles, so EZspline doesn't throw errors
 
-          spp(ss)%vars%Y(:,2)=modulo(spp(ss)%vars%Y(:,2),2*C_PI)          
+          do ii=1_idef,spp(ss)%ppp-recieve_num
+             spp(ss)%vars%X(recieve_num+ii,:)=spp(ss)%vars%X(1,:)
+          end do
+          
+       else if (params%orbit_model(1:2).EQ.'GC') then
+          spp(ss)%vars%Y(1:recieve_num,:) = &
+               RESHAPE(X_receive_buffer,(/recieve_num,3/))
+
+          do ii=1_idef,spp(ss)%ppp-recieve_num
+             spp(ss)%vars%Y(recieve_num+ii,:)=spp(ss)%vars%Y(1,:)
+          end do
+          
+          spp(ss)%vars%Y(:,2)=modulo(spp(ss)%vars%Y(:,2),2*C_PI)
        end if
 
        if (params%mpi_params%rank.EQ.0_idef) then
@@ -2903,7 +3292,7 @@ CONTAINS
           if (h5error .EQ. -1) then
              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                   &load_particles_ic --> h5fopen_f")')
-             call KORC_ABORT()
+             call KORC_ABORT(14)
           end if
 
           write(tmp_str,'(I18)') ss
@@ -2912,22 +3301,98 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,V_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
+
+#if DBG_CHECK
+          write(6,*) 'V_send_buffer',V_send_buffer
+#endif
+          
+          if (params%load_balance) then
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                V1_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     V_send_buffer(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)
+                V2_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     V_send_buffer((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)
+                V3_send_buffer_tmp(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)= &
+                     V_send_buffer((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)
+                
+             end do
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                V1_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V1_send_buffer_tmp(ii)
+                V2_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V2_send_buffer_tmp(ii)
+                V3_send_buffer_tmp1((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     V3_send_buffer_tmp(ii)
+                                                
+             end do
+             do ii=0,params%mpi_params%nmpi_prev-1
+
+                V_send_buffer_tmp1(3*ii*spp(ss)%ppp+1:(3*ii+1)*spp(ss)%ppp)= &
+                     V1_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                V_send_buffer_tmp1((3*ii+1)*spp(ss)%ppp+1:(3*ii+2)*spp(ss)%ppp)= &
+                     V2_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+                V_send_buffer_tmp1((3*ii+2)*spp(ss)%ppp+1:(3*ii+3)*spp(ss)%ppp)= &
+                     V3_send_buffer_tmp1(ii*spp(ss)%ppp+1:(ii+1)*spp(ss)%ppp)
+
+
+             end do
+          else
+             V_send_buffer_tmp1=V_send_buffer
+          end if
+          
+          
+          do jj=0_idef,params%mpi_params%nmpi_prev-1_idef
+             do ii=0_idef,nmpi_ratio-1_idef
+
+                V_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii)+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(3*ii+1))= &
+                     V_send_buffer_tmp1(jj*spp(ss)%ppp*3+recieve_num*ii+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(ii+1))
+
+                V_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+1)+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(3*ii+2))=&
+                     V_send_buffer_tmp1(spp(ss)%ppp*(3*jj+1)+recieve_num*ii+1: &
+                     spp(ss)%ppp*(3*jj+1)+recieve_num*(ii+1))
+
+                V_send_buffer_tmp(jj*spp(ss)%ppp*3+recieve_num*(3*ii+2)+1: &
+                     jj*spp(ss)%ppp*3+recieve_num*(3*ii+3))=&
+                     V_send_buffer_tmp1(spp(ss)%ppp*(3*jj+2)+recieve_num*ii+1: &
+                     spp(ss)%ppp*(3*jj+2)+recieve_num*(ii+1))
+             end do
+          end do
+
+
+#if DBG_CHECK
+          write(6,*) 'V_send_buffer_tmp1',V_send_buffer_tmp1
+          write(6,*) 'V_send_buffer_tmp',V_send_buffer_tmp
+#endif
+          
        end if
 
        
 
        V_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(V_send_buffer,3*spp(ss)%ppp,MPI_REAL8, &
-            V_receive_buffer,3*spp(ss)%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-       spp(ss)%vars%V = RESHAPE(V_receive_buffer,(/spp(ss)%ppp,3/))
+       CALL MPI_SCATTER(V_send_buffer_tmp,3*recieve_num,MPI_REAL8, &
+            V_receive_buffer,3*recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       spp(ss)%vars%V(1:recieve_num,:) = &
+            RESHAPE(V_receive_buffer,(/recieve_num,3/))
 
+       do ii=1_idef,spp(ss)%ppp-recieve_num
+          spp(ss)%vars%V(recieve_num+ii,:)=spp(ss)%vars%V(1,:)
+       end do
+       
        if (params%mpi_params%rank.EQ.0_idef) then
           filename = TRIM(params%path_to_outputs) // "restart_file.h5"
           call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
           if (h5error .EQ. -1) then
              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                   &load_particles_ic --> h5fopen_f")')
-             call KORC_ABORT()
+             call KORC_ABORT(14)
           end if
 
           write(tmp_str,'(I18)') ss
@@ -2936,12 +3401,28 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
-       end if
 
+          if (params%load_balance) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+          
+       end if
+       
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,spp(ss)%ppp,MPI_REAL8, &
-            AUX_receive_buffer,spp(ss)%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-       spp(ss)%vars%flagCon = INT(AUX_receive_buffer,is)
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
+            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       spp(ss)%vars%flagCon(1:recieve_num) = INT(AUX_receive_buffer,is)
 
        if (params%mpi_params%rank.EQ.0_idef) then
           filename = TRIM(params%path_to_outputs) // "restart_file.h5"
@@ -2949,7 +3430,7 @@ CONTAINS
           if (h5error .EQ. -1) then
              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                   &load_particles_ic --> h5fopen_f")')
-             call KORC_ABORT()
+             call KORC_ABORT(14)
           end if
 
           write(tmp_str,'(I18)') ss
@@ -2958,12 +3439,76 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
-       end if
 
+          if (params%load_balance) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+          
+       end if
+       
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,spp(ss)%ppp,MPI_REAL8, &
-            AUX_receive_buffer,spp(ss)%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-       spp(ss)%vars%flagCol = INT(AUX_receive_buffer,is)
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
+            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       spp(ss)%vars%flagCol(1:recieve_num) = INT(AUX_receive_buffer,is)
+
+       if (params%mpi_params%rank.EQ.0_idef) then
+          filename = TRIM(params%path_to_outputs) // "restart_file.h5"
+          call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
+          if (h5error .EQ. -1) then
+             write(output_unit_write,'("KORC ERROR: Something went wrong in: &
+                  &load_particles_ic --> h5fopen_f")')
+             call KORC_ABORT(14)
+          end if
+
+          write(tmp_str,'(I18)') ss
+
+          dset = "/spp_" // TRIM(ADJUSTL(tmp_str)) // "/flagRE"
+          call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
+
+          call h5fclose_f(h5file_id, h5error)
+
+          !write(6,*) 'ppp',spp(ss)%ppp
+          !write(6,*) 'nmpi_prev',params%mpi_params%nmpi_prev
+          !write(6,*) 'nmpi',params%mpi_params%nmpi
+          !write(6,*) 'nmpi_ratio',nmpi_ratio
+          
+          if (params%load_balance) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+
+#if DBG_CHECK
+          write(6,*) 'flagRE_send_buffer',AUX_send_buffer
+          write(6,*) 'flagRE_send_buffer_tmp',AUX_send_buffer_tmp
+#endif
+          
+       end if             
+       
+       AUX_receive_buffer = 0.0_rp
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
+            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       spp(ss)%vars%flagRE(1:recieve_num) = INT(AUX_receive_buffer,is)
        
        if (params%mpi_params%rank.EQ.0_idef) then
           filename = TRIM(params%path_to_outputs) // "restart_file.h5"
@@ -2971,7 +3516,7 @@ CONTAINS
           if (h5error .EQ. -1) then
              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                   &load_particles_ic --> h5fopen_f")')
-             call KORC_ABORT()
+             call KORC_ABORT(14)
           end if
 
           write(tmp_str,'(I18)') ss
@@ -2980,12 +3525,28 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
 
           call h5fclose_f(h5file_id, h5error)
+
+          if (params%load_balance) then
+             do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                !write(6,*) 'send index',ii
+                !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                     AUX_send_buffer(ii)
+             end do
+          else
+             AUX_send_buffer_tmp=AUX_send_buffer
+          end if
+          
        end if
 
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer,spp(ss)%ppp,MPI_REAL8, &
-            AUX_receive_buffer,spp(ss)%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-       spp(ss)%vars%g = AUX_receive_buffer
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
+            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       spp(ss)%vars%g(1:recieve_num) = AUX_receive_buffer
 
        if (params%SC_E) then
           
@@ -3000,7 +3561,7 @@ CONTAINS
           if (h5error .EQ. -1) then
              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
                   &load_particles_ic --> h5fopen_f")')
-             call KORC_ABORT()
+             call KORC_ABORT(14)
           end if
 
           write(tmp_str,'(I18)') ss
@@ -3050,6 +3611,67 @@ CONTAINS
        params%GC_coords=.TRUE.
     end if
 
+#if DBG_CHECK    
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    
+    if (params%mpi_params%rank.eq.0_idef) then
+       write(6,*) 'mpi',params%mpi_params%rank
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
+       write(6,*) 'flagCon',spp(1)%vars%flagCon
+       write(6,*) 'flagCol',spp(1)%vars%flagCol
+       write(6,*) 'flagRE',spp(1)%vars%flagRE
+    end if
+
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    
+    if (params%mpi_params%rank.eq.1_idef) then
+       write(6,*) 'mpi',params%mpi_params%rank
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
+       write(6,*) 'flagCon',spp(1)%vars%flagCon
+       write(6,*) 'flagCol',spp(1)%vars%flagCol
+       write(6,*) 'flagRE',spp(1)%vars%flagRE
+    end if
+
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    
+    if (params%mpi_params%rank.eq.2_idef) then
+       write(6,*) 'mpi',params%mpi_params%rank
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
+       write(6,*) 'flagCon',spp(1)%vars%flagCon
+       write(6,*) 'flagCol',spp(1)%vars%flagCol
+       write(6,*) 'flagRE',spp(1)%vars%flagRE
+    end if
+
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+    
+    if (params%mpi_params%rank.eq.3_idef) then
+       write(6,*) 'mpi',params%mpi_params%rank
+       write(6,*) 'Y_R',spp(1)%vars%Y(:,1)*params%cpp%length
+       write(6,*) 'Y_PHI',spp(1)%vars%Y(:,2)*params%cpp%length
+       write(6,*) 'Y_Z',spp(1)%vars%Y(:,3)*params%cpp%length
+       write(6,*) 'V_PLL',spp(1)%vars%V(:,1)*params%cpp%velocity*params%cpp%mass
+       write(6,*) 'V_MU',spp(1)%vars%V(:,2)*params%cpp%energy/params%cpp%Bo
+       write(6,*) 'flagCon',spp(1)%vars%flagCon
+       write(6,*) 'flagCol',spp(1)%vars%flagCol
+       write(6,*) 'flagRE',spp(1)%vars%flagRE
+    end if
+
+    call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+#endif
+
+    
   end subroutine load_particles_ic
 
 end module korc_HDF5

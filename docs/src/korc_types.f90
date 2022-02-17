@@ -1,7 +1,7 @@
 module korc_types
   !! @note Module containing the definition of KORC derived types and
   !! KORC variables, the building blocks of the code. @endnote
-#ifdef M3D_C1
+#ifdef FIO
   USE, INTRINSIC :: iso_c_binding
 #endif
   implicit none
@@ -70,6 +70,25 @@ module korc_types
      !! \(Z\) component of the vector field variable.
   END TYPE V_FIELD_3D
 
+  TYPE, PUBLIC :: V_FIELD_2DX
+     !! @note KORC 2-D vector field type @endnote
+     !! This KORC type represents a 2-D vector field varible in
+     !! cartesian coordinates. For example, this could be the magnetic
+     !! field in an axisymmetirc plasma, which can be written as
+     !! $$\mathbf{B}(R,Z) = B_X(R,Z)
+     !! \hat{X} + B_Y(R,Z) \hat{Y} + B_Z(R,Z) \hat{Z}.$$
+     !! All the members (components) of the V_FIELD_3D type follow the
+     !! following index convention:
+     !! (\(X\) index,\(Y\) index, \(Z\) index)
+
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: X 
+     !! \(R\) component of the vector field variable.
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Y 
+     !! \(\phi\) component of the vector field variable.
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Z 
+     !! \(Z\) component of the vector field variable.
+  END TYPE V_FIELD_2DX
+
   TYPE, PUBLIC :: V_FIELD_2D
      !! @note KORC 2-D vector field type @endnote
      !! This KORC type represents a 2-D vector field varible in cylindrical
@@ -114,6 +133,7 @@ module korc_types
      !! @note KORC derived type to keep relevant MPI parameters. @endnote
      INTEGER :: nmpi 
      !! Number of MPI processes.
+     INTEGER :: nmpi_prev 
      INTEGER :: rank 
      !! Rank in WORLD COMMON communicator.
      INTEGER :: rank_topo 
@@ -176,6 +196,7 @@ module korc_types
      !! Flag to indicate if the simulations continues (proceed=T) or not
      !! (proceed=F). Append simulation results after previous simulation_time
      !! reached.
+     LOGICAL 			:: load_balance
      LOGICAL  :: reinit
      !! Flag to begin a new simulation, reinitializing from restart file state
      REAL(rp) 			:: simulation_time 
@@ -203,11 +224,15 @@ module korc_types
      !! "simulation_time".
      INTEGER(ip) 			:: t_skip
      INTEGER(ip) 			:: t_it_SC=1_ip 
-     INTEGER(ip) 			:: output_cadence 
+     INTEGER(ip) 			:: output_cadence
+     INTEGER(ip) 			:: coll_per_dump
+     INTEGER(ip) 			:: orbits_per_coll
+     REAL(rp) 			:: coll_per_dump_dt
      !! Time iteration offset used to decide when the outputs are generated.
      INTEGER(ip) 			:: restart_output_cadence 
      !! Time iteration offset used to decide when the restart files are
      !! generated.
+     INTEGER(ip) 			:: coll_cadence 
      INTEGER(ip) 			:: num_snapshots 
      !! Number of snapshots in time for generating the output files.
      INTEGER 			:: num_species 
@@ -225,6 +250,7 @@ module korc_types
      LOGICAL 			:: collisions 
      !! Flag to indicate if collisionsare included (collisions=T) or not
      !! (collisions=F).
+     LOGICAL 			:: LargeCollisions 
      CHARACTER(MAX_STRING_LENGTH) :: GC_rad_model
      CHARACTER(MAX_STRING_LENGTH) :: collisions_model 
      !! String with the name of the collisions model to be used in the
@@ -233,7 +259,11 @@ module korc_types
      CHARACTER(MAX_STRING_LENGTH) :: field_model
      CHARACTER(MAX_STRING_LENGTH) :: profile_model 
      !! String with the name of the model for the fields and plasma profiles.
-     CHARACTER(MAX_STRING_LENGTH) :: magnetic_field_filename 
+     CHARACTER(MAX_STRING_LENGTH) :: magnetic_field_filename
+     CHARACTER(MAX_STRING_LENGTH) :: magnetic_field_directory
+     CHARACTER(MAX_STRING_LENGTH) :: magnetic_field_list
+     CHARACTER(MAX_STRING_LENGTH), DIMENSION(:), ALLOCATABLE :: magnetic_field_filenames
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: time_of_filenames
      !! String with the name of the model for the fields and plasma profiles.
      CHARACTER(MAX_STRING_LENGTH), DIMENSION(:), ALLOCATABLE :: outputs_list 
      !! List of electron variables to include in the outputs.
@@ -267,6 +297,7 @@ module korc_types
      !! number of particles per vectorized chunk
      INTEGER  :: num_impurity_species
      REAL(rp), DIMENSION(:), ALLOCATABLE        :: Zj
+     REAL(rp) :: gam_min
   END TYPE KORC_PARAMS
 
 
@@ -347,16 +378,22 @@ module korc_types
      !! Instantaneous input power of each electron due to the electric
      !! field acceleration.
      INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagCon
-     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagCol 
-     !! Flag for each particle to decide whether it is being followed
-     !! (flag=T) or not (flag=F).
+     !! Flag for each particle to decide whether it is contained
+     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagCol
+     !! Flag for each particle to decide whether it is part of the high
+     !! energy population
+     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagRE 
+     !! Flag for each particle to decide whether it is initialized
      REAL(rp), DIMENSION(:), ALLOCATABLE 	:: AUX 
      !! An auxiliary scalar variable for each electron.
      REAL(rp), DIMENSION(:), ALLOCATABLE 	:: wt 
      !! Weight of each electron. This is used when sampling weighted
      !! PDFs and in the synthetic camera diagnostic.
+     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: initLCFS
+#ifdef FIO
      TYPE(C_PTR), DIMENSION(:), ALLOCATABLE :: hint
      !! Hint for M3D_C1 interpolation.
+#endif
      LOGICAL                                :: cart
   END TYPE PARTICLES
 
@@ -408,6 +445,10 @@ module korc_types
      INTEGER 				:: ppp 
      !! Number of computational particles used to simulate each electron
      !! species.
+     INTEGER 				:: pinit 
+     !! Number of computational particles initialized for each electron species
+     !! to give room for sources of additional electrons
+     INTEGER 				:: pRE 
      REAL(rp) 				:: Ro 
      !! Radial position of the center of the electrons' initial spatial
      !! distribution.
@@ -490,6 +531,12 @@ module korc_types
      CHARACTER(MAX_STRING_LENGTH) :: current_direction 
      !! Direction of plasma current: PARALLEL or ANTI-PARALLEL to the
      !! toroidal magnetic field.
+     REAL(rp) 			:: Ero 
+     !! radial electric field amplitude.
+     REAL(rp) 			:: rmn
+     !! mode location rmn
+     REAL(rp)			:: sigmamn
+     !! mode width sigmamn
   END TYPE A_FIELD
 
   TYPE, PRIVATE :: MESH
@@ -521,6 +568,12 @@ module korc_types
      TYPE(V_FIELD_2D) 				:: E_2D 
      !! KORC 2-D vector field of the pre-computed electric field.
      TYPE(V_FIELD_2D) 				:: B_2D
+     TYPE(V_FIELD_2D) 				:: B1Re_2D
+     TYPE(V_FIELD_2D) 				:: B1Im_2D
+     TYPE(V_FIELD_2DX) 				:: B1Re_2DX
+     TYPE(V_FIELD_2DX) 				:: E1Im_2DX
+     TYPE(V_FIELD_2DX) 				:: E1Re_2DX
+     TYPE(V_FIELD_2DX) 				:: B1Im_2DX
      TYPE(V_FIELD_2D) 				:: dBdR_2D
      TYPE(V_FIELD_2D) 				:: dBdPHI_2D
      TYPE(V_FIELD_2D) 				:: dBdZ_2D 
@@ -553,9 +606,18 @@ module korc_types
      REAL(rp)  :: E_dyn
      REAL(rp)  :: E_pulse
      REAL(rp)  :: E_width
+     CHARACTER(30) :: E_profile
      REAL(rp)  :: PSIP_min
      REAL(rp)  :: PSIp_lim,PSIp_0
+     REAL(rp)  :: AMP
+     REAL(rp)  :: MARS_AMP_Scale
+     REAL(rp)  :: AORSA_AMP_Scale
+     REAL(rp)  :: AORSA_freq
+     REAL(rp)  :: AORSA_nmode
      !! interpolated E field
+     CHARACTER(30) :: Analytic_IWL
+     INTEGER :: ntiles
+     REAL(rp) :: circumradius
      INTEGER 			:: res_double
      INTEGER, DIMENSION(3) 			:: dims 
      !! Dimensions of the KORC vector field. dims=(number of grid 
@@ -572,6 +634,8 @@ module korc_types
      !! 2-D array defining the simulation domain where pre-computed data exist.
      REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: FLAG3D 
      !! 3-D array defining the simulation domain where pre-computed data exist.
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: LCFS2D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE    :: LCFS3D 
      REAL(rp) 					:: Eo 
      !! Characteristic electric field.
      REAL(rp) 					:: Bo 
@@ -587,7 +651,9 @@ module korc_types
      !! Flag to indicate whether a pre-computed magnetic field will be
      !! used (Bfield=T) or not (Bfield=F).
      LOGICAL 					:: Bflux
-     LOGICAL 					:: Bflux3D 
+     LOGICAL 					:: Bflux3D
+     LOGICAL 					:: B1field
+     LOGICAL 					:: E1field
      !! Flag to indicate whether a pre-computed poloidal magnetic flux will
      !! be used (Bflux=T) or not (Bflux=F).
      LOGICAL 					:: Efield 
@@ -595,7 +661,9 @@ module korc_types
      !! (Efield=T) or not (Efield=F).
      LOGICAL 					:: Bfield_in_file 
      !! Flag to indicate if a pre-computed magnetic field is in the input file.
-     LOGICAL 					:: dBfield_in_file 
+     LOGICAL 					:: dBfield_in_file
+     LOGICAL 					:: B1field_in_file
+     LOGICAL 					:: E1field_in_file 
      !! Flag to indicate if a pre-computed magnetic field is in the input file.
      LOGICAL 					:: Bflux_in_file 
      !! Flag to indicate if a pre-computed poloidal magnetic flux is in the
@@ -608,15 +676,19 @@ module korc_types
      LOGICAL 					:: E_2x1t,ReInterp_2x1t
      REAL(rp)  :: t0_2x1t
      INTEGER  :: ind0_2x1t,ind_2x1t
-#ifdef M3D_C1
-     INTEGER (C_INT)                         :: M3D_C1_B
+#ifdef FIO
+     INTEGER  :: isrc
+     INTEGER (C_INT)                         :: FIO_B
      !! An M3D-C1 magnetic field.
-     INTEGER (C_INT)                         :: M3D_C1_E
+     INTEGER (C_INT)                         :: FIO_E
      !! An M3D-C1 Electric field.
-     INTEGER (C_INT)                         :: M3D_C1_A
+     INTEGER (C_INT)                         :: FIO_A
      !! An M3D-C1 vector potential.
      real(c_double)  ::  time0,time1
 #endif
+     REAL(rp)  :: psip_conv
+     LOGICAL :: useLCFS
+     
   END TYPE FIELDS
 
 
@@ -723,12 +795,21 @@ module korc_types
      !! Full path to the HDF5 file containing the pre-computed plasma profiles.
      LOGICAL 					:: axisymmetric 
      !! Flag to indicate if the plasma profiles are axisymmetric.
-#ifdef M3D_C1
-     INTEGER (C_INT)                         :: M3D_C1_ne
-     INTEGER (C_INT)                         :: M3D_C1_ni
-     INTEGER (C_INT)                         :: M3D_C1_te
-     INTEGER (C_INT), DIMENSION(:), ALLOCATABLE  :: M3D_C1_nimp
-     INTEGER (C_INT)                         :: M3D_C1_zeff
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: RHON
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nRE_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr0_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr1_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr2_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr3_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD1_2D 
+     
+#ifdef FIO
+     INTEGER (C_INT)                         :: FIO_ne
+     INTEGER (C_INT)                         :: FIO_ni
+     INTEGER (C_INT)                         :: FIO_te
+     INTEGER (C_INT), DIMENSION(:), ALLOCATABLE  :: FIO_nimp
+     INTEGER (C_INT)                         :: FIO_zeff
 #endif
   END TYPE PROFILES
 

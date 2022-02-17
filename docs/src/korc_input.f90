@@ -14,7 +14,8 @@ module korc_input
   LOGICAL :: restart = .FALSE.
     ! Restart simulation that exited before simulation_time reached
   LOGICAL :: proceed = .FALSE.
-    ! Append simulation results after previous simulation_time reached
+  ! Append simulation results after previous simulation_time reached
+  LOGICAL :: load_balance = .FALSE.
   LOGICAL :: reinit = .FALSE.
     ! Begin a new simulation, reinitializing from restart file state
   REAL(rp) :: simulation_time = 1.E-3
@@ -32,6 +33,7 @@ module korc_input
   LOGICAL :: radiation = .FALSE.
   CHARACTER(30) :: GC_rad_model='SDE'
   LOGICAL :: collisions = .FALSE.
+  LOGICAL :: LargeCollisions = .FALSE.
   CHARACTER(30) :: collisions_model = 'SINGLE_SPECIES' 
     ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
   CHARACTER(30) :: bound_electron_model = 'HESSLOW' 
@@ -45,8 +47,10 @@ module korc_input
     ! specified in "filename".
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
-  CHARACTER(75) :: magnetic_field_filename = 'C1.h5'
-!  magnetic_field_filename = 'JFIT_D3D_164409_1405ms.h5'
+  CHARACTER(150) :: magnetic_field_filename = 'C1.h5'
+  !  magnetic_field_filename = 'JFIT_D3D_164409_1405ms.h5'
+  CHARACTER(150) ::  magnetic_field_directory
+  CHARACTER(150) ::  magnetic_field_list
   INTEGER :: time_slice = 000
   REAL(rp) :: rmax =  1.60
   REAL(rp) :: rmin =  0.15
@@ -80,8 +84,8 @@ module korc_input
   LOGICAL, DIMENSION(:), ALLOCATABLE :: runaway 
     !! Flag to decide whether a given electron is a runaway (runaway=T)
     !! or not (runaway=F).
-  INTEGER, DIMENSION(:), ALLOCATABLE :: ppp 
-    ! Number of particles per process (mpi)
+  INTEGER, DIMENSION(:), ALLOCATABLE :: ppp
+  INTEGER, DIMENSION(:), ALLOCATABLE :: pinit    ! Number of particles per process (mpi)
   REAL(rp), DIMENSION(:), ALLOCATABLE :: q 
     ! Electric charge
   REAL(rp), DIMENSION(:), ALLOCATABLE :: m 
@@ -166,14 +170,23 @@ module korc_input
   ! Mesh points in Z for analytical interpolation mesh
   REAL(rp) :: nPHI= 50
   ! Mesh points in PHI for analytical interpolation mesh
+  CHARACTER(30) :: E_profile = 'none'
   REAL(rp) :: E_dyn = 0.	
   REAL(rp) :: E_pulse = 5.E-2
   REAL(rp) :: E_width = 2.5E-2
+  REAL(rp) ::Ero=0
+  ! amplitude of radial electric field in V/m
+  REAL(rp) :: rmn =0.6
+  !location of Er 
+  REAL(rp) :: sigmamn=1.E-2
+  ! half width of Er perturbation
 
   !! -----------------------------------------------
   !! externalPlasmaModel
   !! -----------------------------------------------
   LOGICAL :: Bfield = .FALSE.
+  LOGICAL :: B1field = .FALSE.
+  LOGICAL :: E1field = .FALSE.
   LOGICAL :: dBfield = .FALSE.
   LOGICAL :: axisymmetric_fields = .FALSE.
   LOGICAL :: Bflux = .FALSE.
@@ -190,7 +203,16 @@ module korc_input
   REAL(rp) :: Ip_exp=2E5
   REAL(rp) :: PSIp_lim=0.8446
   REAL(rp) :: PSIp_0=0.6
-
+  REAL(rp) :: psip_conv=1.0
+  REAL(rp)  :: MARS_AMP_Scale=1.0
+  REAL(rp)  :: AORSA_AMP_Scale=1.0
+  REAL(rp)  :: AORSA_freq=0.0
+  REAL(rp)  :: AORSA_nmode=0.0
+  CHARACTER(30) :: Analytic_IWL='NONE'
+  INTEGER :: ntiles=42
+  REAL(rp) :: circumradius=1.016
+  LOGICAL :: useLCFS = .FALSE.
+  
   !! -----------------------------------------------
   !! plasmaProfiles
   !! -----------------------------------------------
@@ -242,8 +264,20 @@ module korc_input
   REAL(rp) :: Zeff_sing = 1. 
     ! Effective atomic number
   REAL(rp) :: dTau_sing = 5.E-2
-    ! Subcycling time step in collisional time units (Tau)
-
+  ! Subcycling time step in collisional time units (Tau)
+  REAL(rp) :: p_therm = 1._rp
+  LOGICAL :: ConserveLA = .TRUE.
+  CHARACTER(30) :: Clog_model = 'HESSLOW'
+  CHARACTER(30) :: min_secRE = 'CRIT'
+  LOGICAL :: sample_test  = .FALSE.
+  REAL(rp)  :: pmin_scale = 1._rp
+  LOGICAL :: energy_diffusion = .TRUE.
+  CHARACTER(30) :: LAC_gam_resolution = '2EXP'
+  LOGICAL :: FP_bremsstrahlung = .TRUE.
+  LOGICAL :: pitch_diffusion = .TRUE.
+  INTEGER :: ngrid1 = 100
+  REAL(rp)  :: Clog_const = 20._rp
+  
   !! -----------------------------------------------
   !! CollisionParamsMultipleSpecies
   !! -----------------------------------------------
@@ -260,6 +294,7 @@ module korc_input
     ! Impurity densities
   REAL(rp), DIMENSION(10)  :: IZj_mult = 15.7596
     ! Ionization energy of impurity in eV
+  CHARACTER(20) :: neut_prof = 'UNIFORM'
 
   !! -----------------------------------------------
   !! AvalancheGenerationPDF
@@ -285,7 +320,7 @@ module korc_input
   REAL(rp) :: Epar_aval = 0.7427 
     ! Parallel electric field in V/m
   REAL(rp) :: Te_aval = 1.0 
-    ! Background electron temperature in eV
+  ! Background electron temperature in eV
 
   !! -----------------------------------------------
   !! ExperimentalPDF
@@ -311,11 +346,13 @@ module korc_input
   REAL(rp) :: lambda_expt = 4.0E-6 
     ! Characteristic wavelength
   REAL(rp) :: A_fact_expt=1.
+  CHARACTER(30) :: filename_exp = 'Exp_PDF.h5' !
   
   !! -----------------------------------------------
   !! HollmannPDF
   !! -----------------------------------------------
   CHARACTER(30) :: filename_Hollmann = 'Hollmann_PDF_HR.h5' !
+  INTEGER :: rho_ind = 7
   REAL(rp) :: Eo_Hollmann = 24.56
   ! Toroidal electric field from experimental diagnostics before SPI in
   ! physical units
@@ -340,6 +377,7 @@ module korc_input
   REAL(rp) :: lambda_Hollmann = 4.0E-6 
     ! Characteristic wavelengt
   REAL(rp) :: A_fact_Hollmann=1.
+  LOGICAL :: gam_min_from_col=.FALSE.
 
   !! -----------------------------------------------
   !! EnergyGammaPDF
@@ -394,37 +432,43 @@ CONTAINS
          HDF5_error_handling,orbit_model,field_eval,proceed,profile_model, &
          restart_overwrite_frequency,FokPlan,GC_rad_model,bound_electron_model,&
          FO_GC_compare,SameRandSeed,SC_E,reinit,SC_E_add,time_slice,rmax, &
-         rmin,zmax,zmin,pchunk
+         rmin,zmax,zmin,pchunk,magnetic_field_directory,magnetic_field_list,&
+         LargeCollisions,load_balance
     NAMELIST /plasma_species/ ppp,q,m,Eno,etao,Eo_lims,etao_lims,runaway, &
          spatial_distribution,energy_distribution,pitch_distribution,Ro, &
          PHIo,Zo,r_inner,r_outter,falloff_rate,shear_factor,sigmaR,sigmaZ, &
-         theta_gauss,psi_max,Xtrace,Spong_b,Spong_w,Spong_dlam,dth,dR,dZ,dgam
+         theta_gauss,psi_max,Xtrace,Spong_b,Spong_w,Spong_dlam,dth,dR,dZ,dgam,&
+         pinit
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
-         E_dyn,E_pulse,E_width
+         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
-         ind0_2x1t,PSIp_0
+         ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_IWL, &
+         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field, &
+         useLCFS
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &
          n_lamshelf,n_shelfdelay,n_tauin,n_tauout,n_shelf,psiN_0
     NAMELIST /CollisionParamsSingleSpecies/ Te_sing,Ti_sing,ne_sing, &
-         Zeff_sing,dTau_sing
+         Zeff_sing,dTau_sing,p_therm,ConserveLA,Clog_model,sample_test,&
+         min_secRE,pmin_scale,energy_diffusion,LAC_gam_resolution, &
+         FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const
     NAMELIST /CollisionParamsMultipleSpecies/ num_impurity_species,Te_mult, &
-         ne_mult,Zo_mult,Zj_mult,nz_mult,IZj_mult
+         ne_mult,Zo_mult,Zj_mult,nz_mult,IZj_mult,neut_prof
     NAMELIST /AvalancheGenerationPDF/ max_pitch_angle_aval, &
          min_pitch_angle_aval,max_energy_aval,min_energy_aval,ne_aval, &
          Zeff_aval,Epar_aval,Te_aval,dth_aval,dp_aval,dR_aval,dZ_aval
     NAMELIST /ExperimentalPDF/ max_pitch_angle_expt,min_pitch_angle_expt, &
          max_energy_expt,min_energy_expt,Zeff_expt,E_expt,k_expt,t_expt, &
-         Bo_expt,lambda_expt,A_fact_expt
+         Bo_expt,lambda_expt,A_fact_expt,filename_exp
     NAMELIST /HollmannPDF/ E_Hollmann,Zeff_Hollmann,max_pitch_angle_Hollmann, &
          min_pitch_angle_Hollmann,max_energy_Hollmann, &
          min_energy_Hollmann,filename_Hollmann,Bo_Hollmann,lambda_Hollmann, &
          current_direction_Hollmann,A_fact_Hollmann,sigma_E_Hollmann, &
-         sigma_Z_Hollmann,Eo_Hollmann
+         sigma_Z_Hollmann,Eo_Hollmann,rho_ind,gam_min_from_col
     NAMELIST /SimpleEquilibriumPDF/ max_pitch_angle_simple, &
          min_pitch_angle_simple,Zeff_simple,E_simple, &
          Bo_simple,lambda_simple
@@ -472,15 +516,14 @@ CONTAINS
 !!-----------------------------------------------------------------------
           SELECT CASE(TRIM(ctmp))
           CASE('input_parameters')
-
-             !write(6,*) 'reading input_parameters namelist'
-
              READ(UNIT=default_unit_open,NML=input_parameters,IOSTAT=read_stat)
+             
           CASE('plasma_species')
 
              !write(6,*) 'reading plasma_species namelist'
              ALLOCATE(runaway(num_species))
              ALLOCATE(ppp(num_species))
+             ALLOCATE(pinit(num_species))
              ALLOCATE(q(num_species))
              ALLOCATE(m(num_species))
              ALLOCATE(spatial_distribution(num_species))
@@ -512,7 +555,8 @@ CONTAINS
 
              if (num_species.eq.1) then
                 runaway = .FALSE.
-                ppp =1E0
+                ppp = 1E0
+                pinit = 0
                 q = -1.0 
                 m = 1.0 
                 spatial_distribution = 'TRACER'
@@ -548,7 +592,10 @@ CONTAINS
              end if
              
              READ(UNIT=default_unit_open,NML=plasma_species,IOSTAT=read_stat)
-                
+
+             if (pinit(1).eq.0) pinit(:)=ppp(:)
+             ! set pinit equal to ppp if no pinit input
+             
           CASE('analytical_fields_params')
              READ(UNIT=default_unit_open,NML=analytical_fields_params,IOSTAT=read_stat)
           CASE('externalPlasmaModel')
@@ -570,12 +617,13 @@ CONTAINS
           CASE('SimpleEquilibriumPDF')
              READ(UNIT=default_unit_open,NML=SimpleEquilibriumPDF,IOSTAT=read_stat)
           CASE DEFAULT
-             write(output_unit_write,*) (TRIM(ctmp)//' is an unrecognized namelist.')
-             call korc_abort
+             write(output_unit_write,*) (TRIM(ctmp)//' is an unrecognized &
+                  &namelist.')
+             call korc_abort(13)
           END SELECT
           IF (read_stat/=0) then
-             write(output_unit_write,*) ('Error reading namelist '//TRIM(ctmp)//'.')
-             call korc_abort
+             write(output_unit_write,*) ('Error reading namelist '//TRIM(ctmp)//'.')             
+             call korc_abort(13)
           end if
        ENDIF
     ENDDO
@@ -641,17 +689,20 @@ CONTAINS
                'Check that enough characters are allocated for&
                & outputs list!'
        end if
-       call korc_abort
+       call korc_abort(13)
     end if
 
+    !write(6,*) TRIM(magnetic_field_filename),len(TRIM(magnetic_field_filename))
+
     tmp=len(TRIM(magnetic_field_filename))
-    if (magnetic_field_filename(tmp-2:tmp).ne.'.h5') then
+    if (magnetic_field_filename(tmp-2:tmp).ne.'.h5'.and. &
+         magnetic_field_filename(tmp-5:tmp-5).ne.'.') then
        if(params%mpi_params%rank.eq.0) then
           write(6,*) &
                'Check that enough characters are allocated for&
                & magnetic field filename!'
        end if
-       call korc_abort
+       call korc_abort(13)
     end if 
       
     end subroutine read_namelist

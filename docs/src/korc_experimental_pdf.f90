@@ -9,6 +9,8 @@ MODULE korc_experimental_pdf
   use korc_random
   use korc_fields
   use korc_input
+  use korc_interp
+
 
   IMPLICIT NONE
 
@@ -32,8 +34,9 @@ MODULE korc_experimental_pdf
      REAL(rp) :: A_fact ! Multiplication factor for A in distributon.
   END TYPE PARAMS
 
-  TYPE, PRIVATE :: HOLLMANN_PARAMS
+  TYPE, PUBLIC :: HOLLMANN_PARAMS
      CHARACTER(MAX_STRING_LENGTH) :: filename
+     INTEGER :: rho_ind
      REAL(rp) :: E
      REAL(rp) :: Eo
      REAL(rp) :: sigma_E
@@ -53,22 +56,27 @@ MODULE korc_experimental_pdf
      REAL(rp) :: min_pitch ! Minimum energy of sampled PDF in MeV
      REAL(rp) :: max_pitch ! Maximum energy of sampled PDF in MeV
 
-     INTEGER :: N
+     INTEGER :: N,NE,Nrho
 
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: E_axis
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: E_axis,rho_axis
      REAL(rp), DIMENSION(:), ALLOCATABLE :: g
      REAL(rp), DIMENSION(:), ALLOCATABLE :: fRE_E
      REAL(rp), DIMENSION(:), ALLOCATABLE :: fRE_pitch
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: fRE_E_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: fRE_pitch_2D
 
      CHARACTER(MAX_STRING_LENGTH) :: current_direction
      REAL(rp) :: Bo
      REAL(rp) :: lambda
 
      REAL(rp) :: A_fact ! Multiplication factor for A in distributon.
+
+     LOGICAL :: gam_min_from_col
+     
   END TYPE HOLLMANN_PARAMS
 
   TYPE(PARAMS), PRIVATE :: pdf_params
-  TYPE(HOLLMANN_PARAMS), PRIVATE :: h_params
+  TYPE(HOLLMANN_PARAMS), PUBLIC :: h_params
   REAL(rp), PRIVATE, PARAMETER :: xo = (C_ME*C_C**2/C_E)/1.0E6
   REAL(rp), PRIVATE, PARAMETER :: Tol = 1.0E-5_rp
   REAL(rp), PRIVATE, PARAMETER :: minmax_buffer_size = 10.0_rp
@@ -77,6 +85,7 @@ MODULE korc_experimental_pdf
        get_Hollmann_distribution,&
        get_Hollmann_distribution_3D,&
        get_Hollmann_distribution_3D_psi,&
+       get_Hollmann_distribution_1Dtransport,&
        initialize_Hollmann_params,&
        sample_Hollmann_distribution
   PRIVATE :: initialize_params,&
@@ -596,7 +605,7 @@ CONTAINS
           write(6,*) 'num_samples need to be atleast 10 but is only: ', &
                spp%ppp*params%mpi_params%nmpi
        end if
-       call korc_abort
+       call korc_abort(12)
     end if
     
     call initialize_Hollmann_params(params)
@@ -619,7 +628,7 @@ CONTAINS
           write(6,*) 'num_samples need to be atleast 10 but is only: ', &
                spp%ppp*params%mpi_params%nmpi
        end if
-       call korc_abort
+       call korc_abort(12)
     end if
     
     call initialize_Hollmann_params(params)
@@ -643,7 +652,7 @@ CONTAINS
           write(6,*) 'num_samples need to be atleast 10 but is only: ', &
                spp%ppp*params%mpi_params%nmpi
        end if
-       call korc_abort
+       call korc_abort(12)
     end if
     
     call initialize_Hollmann_params(params)
@@ -656,6 +665,34 @@ CONTAINS
 
   END SUBROUTINE get_Hollmann_distribution_3D_psi
 
+  SUBROUTINE get_Hollmann_distribution_1Dtransport(params,spp,F)
+    TYPE(FIELDS), INTENT(IN)                                   :: F
+    TYPE(KORC_PARAMS), INTENT(INOUT) :: params
+    TYPE(SPECIES),  INTENT(INOUT) :: spp
+    INTEGER 				:: mpierr
+
+    if (spp%ppp*params%mpi_params%nmpi.lt.10) then
+       if(params%mpi_params%rank.eq.0) then
+          write(6,*) 'num_samples need to be atleast 10 but is only: ', &
+               spp%ppp*params%mpi_params%nmpi
+       end if
+       call korc_abort(12)
+    end if
+    
+    call initialize_Hollmann_params(params)
+
+    call save_Hollmann_params(params)
+
+    call normalize_Hollmann_params(params)
+
+#ifdef PSPLINE
+    call sample_Hollmann_distribution_1Dtransport(params,spp,F)
+#endif
+
+  END SUBROUTINE get_Hollmann_distribution_1Dtransport
+
+
+  
   SUBROUTINE initialize_Hollmann_params(params)
     TYPE(KORC_PARAMS), INTENT(IN) :: params
     CHARACTER(MAX_STRING_LENGTH) :: filename
@@ -670,17 +707,9 @@ CONTAINS
     REAL(rp) :: lambda
     REAL(rp) :: A_fact
 
-    !NAMELIST /HollmannPDF/ E,Zeff,max_pitch_angle,min_pitch_angle,max_energy, &
-    !     min_energy,filename,Bo,lambda,current_direction,A_fact,sigma_E, &
-    !     sigma_Z,Eo
-
-
-    !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
-    !     status='OLD',form='formatted')
-    !read(default_unit_open,nml=HollmannPDF)
-    !close(default_unit_open)
 
     h_params%filename = TRIM(filename_Hollmann)
+    h_params%rho_ind = rho_ind
 
     h_params%E = E_Hollmann
     h_params%Eo = Eo_Hollmann
@@ -690,26 +719,50 @@ CONTAINS
     h_params%max_pitch_angle = max_pitch_angle_Hollmann
     h_params%min_pitch_angle = min_pitch_angle_Hollmann
 
-    h_params%min_sampling_energy = min_energy_Hollmann*C_E ! In Joules
-    h_params%min_sampling_g = 1.0_rp + h_params%min_sampling_energy/ &
-         (C_ME*C_C**2)
+    h_params%gam_min_from_col = gam_min_from_col
+
+    if(.not.h_params%gam_min_from_col) then
+       h_params%min_sampling_energy = min_energy_Hollmann*C_E ! In Joules
+       h_params%min_sampling_g = 1.0_rp + h_params%min_sampling_energy/ &
+            (C_ME*C_C**2)
+    else
+       h_params%min_sampling_g = params%gam_min
+    endif
+    
     h_params%max_sampling_energy = max_energy_Hollmann*C_E ! In Joules.
     h_params%max_sampling_g = 1.0_rp + h_params%max_sampling_energy/ &
          (C_ME*C_C**2)
 
-    call load_data_from_hdf5()
+    !write(6,*) 'init:sampling',h_params%min_sampling_g,h_params%max_sampling_g
+    
+    call load_data_from_hdf5(params)
     ! loads h_params%E_axis 1D energy range, h_params%fRE_E
     ! energy distribution as a function of h_params%E_axis,
     ! and h_params%fRE_pitch pitch angle distribution as a
     ! function of h_params%E_axis
 
-    ALLOCATE(h_params%g(h_params%N))
+    if (ALLOCATED(h_params%rho_axis)) then
+       ALLOCATE(h_params%g(h_params%NE))
+    else
+       ALLOCATE(h_params%g(h_params%N))
+    endif
 
     h_params%g = 1.0_rp + h_params%E_axis/(C_ME*C_C**2)
     ! 1D range of gamma based on energy range from Hollmann input file
+
+    if (ALLOCATED(h_params%rho_axis)) then
+#ifdef PSPLINE
+       call initialize_Hollmann_interpolant(params,h_params%Nrho, &
+            h_params%NE,h_params%rho_axis,h_params%g,h_params%fRE_E_2D, &
+            h_params%fRE_pitch_2D)
+#endif
+    endif
+    
     h_params%max_g = MAXVAL(h_params%g)
     h_params%min_g = MINVAL(h_params%g)
 
+    !write(6,*) 'init:range',h_params%min_g,h_params%max_g
+    
     h_params%current_direction = TRIM(current_direction_Hollmann)
 
     h_params%Bo = Bo_Hollmann
@@ -726,7 +779,8 @@ CONTAINS
     
   end subroutine normalize_Hollmann_params
 
-  SUBROUTINE load_data_from_hdf5()
+  SUBROUTINE load_data_from_hdf5(params)
+    TYPE(KORC_PARAMS), INTENT(IN) :: params
     CHARACTER(MAX_STRING_LENGTH) :: filename
     CHARACTER(MAX_STRING_LENGTH) :: gname
     CHARACTER(MAX_STRING_LENGTH) :: subgname
@@ -736,30 +790,69 @@ CONTAINS
     INTEGER(HID_T) :: subgroup_id
     REAL(rp) :: rdatum
     INTEGER :: h5error
+    LOGICAL :: lookhere
 
     filename = TRIM(h_params%filename)
     call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: load_data_from_hdf5 (korc_experimental) --> h5fopen_f")')
+       call korc_abort(20)
     end if
 
-    dset = "/N"
-    call load_from_hdf5(h5file_id,dset,rdatum)
-    h_params%N = INT(rdatum)
+    gname='N'
+    call h5lexists_f(h5file_id,TRIM(gname),lookhere,h5error)
 
-    ALLOCATE(h_params%E_axis(h_params%N))
-    ALLOCATE(h_params%fRE_E(h_params%N))
-    ALLOCATE(h_params%fRE_pitch(h_params%N))
+    if (lookhere) then
 
-    dset = "/E"
-    call load_array_from_hdf5(h5file_id,dset,h_params%E_axis)
-    h_params%E_axis = h_params%E_axis*C_E
+       dset = "/N"
+       call load_from_hdf5(h5file_id,dset,rdatum)
+       h_params%N = INT(rdatum)
 
-    dset = "/fRE_E"
-    call load_array_from_hdf5(h5file_id,dset,h_params%fRE_E)
+       ALLOCATE(h_params%fRE_E(h_params%N))
+       ALLOCATE(h_params%fRE_pitch(h_params%N))
+       ALLOCATE(h_params%E_axis(h_params%N))
 
-    dset = "/fRE_pitch"
-    call load_array_from_hdf5(h5file_id,dset,h_params%fRE_pitch)
+       dset = "/E"
+       call load_array_from_hdf5(h5file_id,dset,h_params%E_axis)
+       h_params%E_axis = h_params%E_axis*C_E
+
+
+       dset = "/fRE_E"
+       call load_array_from_hdf5(h5file_id,dset,h_params%fRE_E)
+
+       dset = "/fRE_pitch"
+       call load_array_from_hdf5(h5file_id,dset,h_params%fRE_pitch)
+
+    else
+
+       dset = "/NE"
+       call load_from_hdf5(h5file_id,dset,rdatum)
+       h_params%NE = INT(rdatum)
+
+       dset = "/Nrho"
+       call load_from_hdf5(h5file_id,dset,rdatum)
+       h_params%Nrho = INT(rdatum)
+
+       ALLOCATE(h_params%E_axis(h_params%NE))
+       ALLOCATE(h_params%rho_axis(h_params%Nrho))
+       ALLOCATE(h_params%fRE_E_2D(h_params%Nrho,h_params%NE))
+       ALLOCATE(h_params%fRE_pitch_2D(h_params%Nrho,h_params%NE))
+
+
+       dset = "/E"
+       call load_array_from_hdf5(h5file_id,dset,h_params%E_axis)
+       h_params%E_axis = h_params%E_axis*C_E
+
+       dset = "/rho"
+       call load_array_from_hdf5(h5file_id,dset,h_params%rho_axis)
+
+       dset = "/fRE_E"
+       call load_array_from_hdf5(h5file_id,dset,h_params%fRE_E_2D)
+
+       dset = "/fRE_pitch"
+       call load_array_from_hdf5(h5file_id,dset,h_params%fRE_pitch_2D)
+       
+    endif
 
     call h5fclose_f(h5file_id, h5error)
     if (h5error .EQ. -1) then
@@ -817,11 +910,14 @@ CONTAINS
     fRE_H = fRE_H*feta
   END FUNCTION fRE_H
 
-  FUNCTION fRE_H_3D(F,eta,g,R,Z,R0,Z0)
+  FUNCTION fRE_H_3D(params,F,eta,g,R,Z,R0,Z0,EPHI,rho_ind)
+    TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     TYPE(FIELDS), INTENT(IN)    :: F
     REAL(rp), INTENT(IN) 	:: eta ! pitch angle in degrees
     REAL(rp), INTENT(IN) 	:: g ! Relativistic gamma factor
     REAL(rp), INTENT(IN)  :: R,Z,R0,Z0
+    REAL(rp), INTENT(IN),optional  :: EPHI
+    INTEGER, INTENT(IN),optional  :: rho_ind
     REAL(rp) 				:: fRE_H_3D
     REAL(rp) 				:: D
     REAL(rp) 				:: g0
@@ -832,27 +928,46 @@ CONTAINS
     REAL(rp) 				:: feta
     REAL(rp) 				:: A
     REAL(rp) 				:: rm,E_G,Z_G
+    REAL(rp) 				:: CLog0,CLogee,E_CH,k=5._rp,VTe
     INTEGER 				:: index
-
+    
     index = MINLOC(ABS(h_params%g - g),1)
+    !write(6,*) index
+    
     ! index of gamma supplied to function in Hollmann input gamma range
     D = h_params%g(index) - g
 
     ! linear interpolation of Hollmann input gamma range to gamma supplied
     ! to function
-    if (D.GT.0) then
-       f0 = h_params%fRE_E(index-1)
-       g0 = h_params%g(index-1)
+    if(present(rho_ind)) then
+       if (D.GT.0) then
+          f0 = h_params%fRE_E_2D(rho_ind,index-1)
+          g0 = h_params%g(index-1)
 
-       f1 = h_params%fRE_E(index)
-       g1 = h_params%g(index)
+          f1 = h_params%fRE_E_2D(rho_ind,index)
+          g1 = h_params%g(index)
+       else
+          f0 = h_params%fRE_E_2D(rho_ind,index)
+          g0 = h_params%g(index)
+
+          f1 = h_params%fRE_E_2D(rho_ind,index+1)
+          g1 = h_params%g(index+1)
+       end if
     else
-       f0 = h_params%fRE_E(index)
-       g0 = h_params%g(index)
+       if (D.GT.0) then
+          f0 = h_params%fRE_E(index-1)
+          g0 = h_params%g(index-1)
 
-       f1 = h_params%fRE_E(index+1)
-       g1 = h_params%g(index+1)
-    end if
+          f1 = h_params%fRE_E(index)
+          g1 = h_params%g(index)
+       else
+          f0 = h_params%fRE_E(index)
+          g0 = h_params%g(index)
+
+          f1 = h_params%fRE_E(index+1)
+          g1 = h_params%g(index+1)
+       end if
+    endif
 
     m = (f1-f0)/(g1-g0)
 
@@ -862,8 +977,30 @@ CONTAINS
 
     rm=sqrt((R-R0)**2+(Z-Z0)**2)
 
-    E_G=F%Ro*h_params%Eo/R
+    if(present(EPHI)) then
 
+       CLog0=14.9_rp - LOG(1E-20_rp*n_ne)/2._rp + &
+            LOG(1E-3_rp*Teo)
+       VTe=sqrt(2._rp*Teo*C_E/C_ME)
+       CLogee=CLog0+log(1+(2*(g-1)/(VTe/C_C)**2)**(k/2._rp))/k
+
+       E_CH=n_ne*C_E**3*CLogee/(4*C_PI*C_E0**2*C_ME*C_C**2)
+
+       !write(output_unit_write,*) 'gamma',g
+       !write(output_unit_write,*) 'ne',n_ne, &
+       !     'Te',Teo,'VTe',VTe
+       !write(output_unit_write,*) 'EPHI',EPHI,'CLog',CLogee,'E_CH',E_CH
+       !flush(output_unit_write)
+       
+       E_G=abs(EPHI)/E_CH
+
+       !write(output_unit_write,*) 'E_G',E_G
+       !flush(output_unit_write)
+       
+    else
+       E_G=F%Ro*h_params%Eo/R
+    endif
+       
 !    E_G=h_params%E*exp(-(rm/h_params%sigma_E)**2/2)
     Z_G=h_params%Zeff*exp(-(rm/h_params%sigma_Z)**2/2)
 
@@ -872,11 +1009,67 @@ CONTAINS
     A = (2.0_rp*E_G/(Z_G + 1.0_rp))*(g**2 - 1.0_rp)/g
     A = A*h_params%A_fact
 
+    !write(output_unit_write,*) 'A',A
+    !flush(output_unit_write)    
+
     feta = A*EXP(-A*(1.0_rp - COS(deg2rad(eta))))/(1.0_rp - EXP(-2.0_rp*A))     ! MRC
     !	feta = 0.5_rp*A*EXP(A*COS(deg2rad(eta)))/SINH(A)                            ! MRC
 
     fRE_H_3D = fRE_H_3D*feta
+
+    !if (fRE_H_3D.eq.0._rp) then
+    !   write(6,*) 'f_RE_H',f0 + m*(g - g0)
+    !   write(6,*) 'feta',feta
+    !   write(6,*) 'A',A
+    !   write(6,*) 'g',g
+    !   write(6,*) 'E_G',E_G
+    !   write(6,*) 'E_CH',E_CH
+    !   write(6,*) 'Z_G',Z_G
+    !end if
+    
   END FUNCTION fRE_H_3D
+  
+  FUNCTION fRE_H_pitch(params,eta,g,EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nD,nD1)
+    TYPE(KORC_PARAMS), INTENT(IN) 	:: params
+    REAL(rp), INTENT(IN) 	:: eta ! pitch angle in degrees
+    REAL(rp), INTENT(IN) 	:: g ! Relativistic gamma factor
+    REAL(rp), INTENT(IN)  :: EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nD,nD1
+    REAL(rp) 				:: fRE_H_pitch
+    REAL(rp) 				:: A
+    REAL(rp) 				:: E_G,nf,pdm,Z_brac
+    REAL(rp) 				:: CLog0,CLogee,CLogei,E_CH,k=5._rp,VTe
+
+    CLog0=14.9_rp - LOG(1E-20_rp*ne*params%cpp%density)/2._rp + &
+         LOG(1E-3_rp*Te*params%cpp%temperature/C_E)
+    VTe=sqrt(2._rp*Te*params%cpp%temperature/C_ME)
+    CLogee=CLog0+log(1+(2*(g-1)/(VTe/C_C)**2)**(k/2._rp))/k
+    pdm=C_C*sqrt(g**2-1)
+    CLogei=CLog0+log(1+(2*pdm/VTe)**k)/k
+
+    !write(6,*) 'ne',ne*params%cpp%density,'Te',Te*params%cpp%temperature/C_E
+    !write(6,*) 'VTe',VTe,'pdm',pdm
+    !write(6,*) 'CLog0',CLog0,'CLogee',CLogee,'CLogei',CLogei
+    
+    nf=nAr0*18+nAr1*17+nAr2*16+nAr3*15+nD
+    
+    Z_brac=((nAr0+nAr1+nAr2+nAr3)*18**2+(nD+nD1))/nf &
+         *(CLogei/CLogee)
+    
+    E_CH=nf*C_E**3*CLogee/(4*C_PI*C_E0**2*C_ME*C_C**2)
+
+    E_G=abs(EPHI)/E_CH
+
+    A = (2.0_rp*E_G/(Z_brac + 1.0_rp))*(g**2 - 1.0_rp)/g
+    A = A*h_params%A_fact   
+
+    !write(6,*) 'EPHI',EPHI*params%cpp%Eo,'E_CH',E_CH*params%cpp%Eo,'Z_brac',Z_brac,'nf',nf*params%cpp%density
+    
+    fRE_H_pitch = A*EXP(-A*(1.0_rp - COS(deg2rad(eta))))/ &
+         (1.0_rp - EXP(-2.0_rp*A))
+
+    !write(6,*) 'fRE_H_pitch',fRE_H_pitch
+
+  END FUNCTION fRE_H_pitch
 
   FUNCTION fRE_HxPR(eta,g)
     REAL(rp), INTENT(IN) :: eta ! pitch angle in degrees
@@ -976,7 +1169,7 @@ CONTAINS
           max_g = minmax
        end if
     end do
-
+    
     ! buffer at minimum pitch angle boundary  
     if (h_params%min_pitch_angle.GE.korc_zero) then
        do jj=1_idef,INT(minmax_buffer_size,idef)
@@ -1429,7 +1622,8 @@ subroutine sample_Hollmann_distribution_3D(params,spp,F)
            psi0=PSI_ROT_exp(R_buffer,spp%Ro,spp%sigmaR,Z_buffer,spp%Zo, &
                 spp%sigmaZ,theta_rad)
            
-           f0=fRE_H_3D(F,eta_buffer,G_buffer,R_buffer,Z_buffer,spp%Ro,spp%Zo)
+           f0=fRE_H_3D(params,F,eta_buffer,G_buffer,R_buffer,Z_buffer, &
+                spp%Ro,spp%Zo)
 !           f0=fRE_H(eta_buffer,G_buffer)
         end if
 
@@ -1442,7 +1636,7 @@ subroutine sample_Hollmann_distribution_3D(params,spp,F)
              spp%sigmaZ,theta_rad)       
         
                 
-        f1=fRE_H_3D(F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo)    
+        f1=fRE_H_3D(params,F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo)    
 !        f1=fRE_H(eta_test,G_test)
         
 !        write(output_unit_write,'("psi0: ",E17.10)') psi0
@@ -1549,7 +1743,7 @@ subroutine sample_Hollmann_distribution_3D(params,spp,F)
 !        write(output_unit_write,'("dZ: ",E17.10)') spp%dZ
 !        write(output_unit_write,'("N_dR: ",Z17.10)') random_norm(0.0_rp,spp%dZ)
         
-        f1=fRE_H_3D(F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo)            
+        f1=fRE_H_3D(params,F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo)            
 !        f1=fRE_H(eta_test,G_test)
         
         ratio = indicator_exp(psi1,psi_max_buff)* &
@@ -1764,7 +1958,8 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
   PSIp_lim=F%PSIp_lim
   PSIp0=F%PSIP_min
 
-  if (params%field_model.eq.'M3D_C1') then
+  if (params%field_model.eq.'M3D_C1'.or. &
+       params%field_model.eq.'NIMROD') then
      min_R=params%rmin/params%cpp%length
      max_R=params%rmax/params%cpp%length
      min_Z=params%zmin/params%cpp%length
@@ -1778,14 +1973,14 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 
   sigma=spp%sigmaR*params%cpp%length
   
-  !write(output_unit_write,*) min_R,max_R
-  !write(output_unit_write,*) min_Z,max_Z
+  !write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
+  !write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
   
   deta = (h_params%max_pitch_angle - h_params%min_pitch_angle)/100.0_rp
   dg = (h_params%max_sampling_g - h_params%min_sampling_g)/100.0_rp
   
   ! buffer at minimum gamma boundary  
-  do ii=1_idef,INT(minmax_buffer_size,idef)
+  do ii=0_idef,INT(minmax_buffer_size,idef)
      minmax = h_params%min_sampling_g - REAL(ii,rp)*dg
      if (minmax.GT.h_params%min_g) then
         min_g = minmax
@@ -1797,6 +1992,8 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      end if
   end do
 
+  !write(6,*) 'gam bounds',min_g,max_g
+  
   ! buffer at minimum pitch angle boundary  
   if (h_params%min_pitch_angle.GE.korc_zero) then
      do ii=1_idef,INT(minmax_buffer_size,idef)
@@ -1817,6 +2014,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      end if
   end do
 
+  !write(6,*) 'eta bounds',min_pitch_angle,max_pitch_angle
   
   if (params%mpi_params%rank.EQ.0_idef) then
      ALLOCATE(R_samples(nsamples))
@@ -1871,6 +2069,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
         if (modulo(ii,100).eq.0) then
            write(output_unit_write,'("Burn: ",I10)') ii
         end if
+        !write(6,*) ii
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
@@ -1925,15 +2124,35 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
            spp%vars%Y(1,2)=0
            spp%vars%Y(1,3)=Z_buffer
 
-           write(output_unit_write,*) 'R',R_buffer
-           write(output_unit_write,*) 'Z',Z_buffer
+           !write(output_unit_write,*) 'R',R_buffer
+           !write(output_unit_write,*) 'Z',Z_buffer
            
            call get_fields(params,spp%vars,F)
            psi0=spp%vars%PSI_P(1)
            PSIN0=(psi0-PSIP0)/(PSIp_lim-PSIP0)
            
-           f0=fRE_H_3D(F,eta_buffer,G_buffer,R_buffer,Z_buffer,spp%Ro,spp%Zo)
-!           f0=fRE_H(eta_buffer,G_buffer)
+           f0=fRE_H_3D(params,F,eta_buffer,G_buffer,R_buffer,Z_buffer, &
+                spp%Ro,spp%Zo,spp%vars%E(1,2)*params%cpp%Eo)
+           !           f0=fRE_H(eta_buffer,G_buffer)
+
+           if (f0.eq.0._rp) then
+              !write(6,*) 'f0',f0
+              !write(6,*) 'gam_buffer',G_buffer
+              !write(6,*) 'eta_buffer',eta_buffer
+              !write(6,*) 'R_buffer',R_buffer*params%cpp%length
+              !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+              !write(6,*) 'EPHI_buffer',spp%vars%E(1,2)*params%cpp%Eo
+
+              !R_buffer = R_test
+              !Z_buffer = Z_test
+              eta_buffer = eta_test
+              G_buffer = G_test
+
+              cycle
+              
+           endif
+        
+           
         end if
 
         if (accepted) then
@@ -1952,12 +2171,18 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
         psi1=spp%vars%PSI_P(1)
         PSIN1=(psi1-PSIP0)/(PSIp_lim-PSIP0)
 
-        write(output_unit_write,*) 'R',R_test
-        write(output_unit_write,*) 'Z',Z_test
-        write(output_unit_write,*) 'PSI',psi1
-        write(output_unit_write,*) 'PSIN',PSIN
+        !write(output_unit_write,*) 'R',R_test*params%cpp%length
+        !write(output_unit_write,*) 'Z',Z_test*params%cpp%length
+        !write(output_unit_write,*) 'ER',spp%vars%E(1,1)*params%cpp%Eo
+        !write(output_unit_write,*) 'EPHI',spp%vars%E(1,2)*params%cpp%Eo
+        !write(output_unit_write,*) 'EZ',spp%vars%E(1,3)*params%cpp%Eo
+        !write(output_unit_write,*) 'PSI',psi1
+        !write(output_unit_write,*) 'PSIN',PSIN
+
+
                 
-        f1=fRE_H_3D(F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo)    
+        f1=fRE_H_3D(params,F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo, &
+             spp%vars%E(1,2)*params%cpp%Eo)    
 !        f1=fRE_H(eta_test,G_test)
         
 !        write(output_unit_write,'("psi0: ",E17.10)') psi0
@@ -1966,6 +2191,24 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 !        write(output_unit_write,'("f0: ",E17.10)') f0
 !        write(output_unit_write,'("f1: ",E17.10)') f1
 
+        !if (ii.eq.1_idef) then
+        !   write(6,*) 'f0',f0
+        !   write(6,*) 'gam_buffer',G_buffer
+        !   write(6,*) 'eta_buffer',eta_buffer
+        !   write(6,*) 'R_buffer',R_buffer*params%cpp%length
+        !   write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+        !   write(6,*) 'EPHI_buffer',spp%vars%E(1,2)*params%cpp%Eo
+        !   write(6,*) 'f1',f1
+        !   write(6,*) 'gam_test',G_test
+        !   write(6,*) 'eta_test',eta_test
+        !   write(6,*) 'R_test',R_test*params%cpp%length
+        !   write(6,*) 'Z_test',Z_test*params%cpp%length
+        !   write(6,*) 'EPHI_test',spp%vars%E(1,2)*params%cpp%Eo
+        !end if
+           !else
+        if (f0.eq.0._rp) call korc_abort(12)
+        !endif        
+        
         
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian
@@ -2083,7 +2326,8 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 !        write(output_unit_write,'("dZ: ",E17.10)') spp%dZ
 !        write(output_unit_write,'("N_dR: ",Z17.10)') random_norm(0.0_rp,spp%dZ)
         
-        f1=fRE_H_3D(F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo)            
+        f1=fRE_H_3D(params,F,eta_test,G_test,R_test,Z_test,spp%Ro,spp%Zo, &
+             spp%vars%E(1,2)*params%cpp%Eo)            
 !        f1=fRE_H(eta_test,G_test)
         
 !        ratio = indicator_exp(PSIN,psi_max_buff)* &
@@ -2155,6 +2399,10 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
+
+     if (TRIM(h_params%current_direction) .EQ. 'PARALLEL') then
+        eta_samples = 180.0_rp - eta_samples
+     end if
      
   end if
 
@@ -2207,6 +2455,542 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
   end if
   
 end subroutine sample_Hollmann_distribution_3D_psi
+
+#ifdef PSPLINE
+subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
+  !! @note Subroutine that generates a 2D Gaussian distribution in an 
+  !! elliptic torus as the initial spatial condition of a given particle 
+  !! species in the simulation. @endnote
+  TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
+  !! Core KORC simulation parameters.
+  TYPE(SPECIES), INTENT(INOUT) 		:: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: R_samples,X_samples,Y_samples
+  !! Major radial location of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: PHI_samples
+  !! Azimuithal angle of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Z_samples
+  !! Vertical location of all samples
+
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: G_samples
+  !! Gamma of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: eta_samples
+  !! Pitch angle of all samples
+
+  REAL(rp) 				:: psi_max_buff
+  !! Value of buffer above desired maximum argument of 2D Gaussian spatial
+  !! profile
+  REAL(rp) 				:: minmax
+  !! Temporary variable used for setting buffers
+
+  !! Minimum domain for momentum sampling including buffer
+  REAL(rp) 				:: max_pitch_angle
+  !! Maximum domain for pitch angle sampling including buffer
+  REAL(rp) 				:: min_pitch_angle
+  !! Minimum domain for pitch angle sampling including buffer
+  REAL(rp) 				:: min_g,max_g
+  REAL(rp) 				:: min_R,max_R
+  REAL(rp) 				:: min_Z,max_Z
+  REAL(rp) 				:: theta_rad
+  !! Angle of rotation of 2D Gaussian spatial distribution in radians
+  REAL(rp)		:: R_buffer
+  !! Previous sample of R location
+  REAL(rp) 				:: Z_buffer
+  !! Previous sample of Z location
+ 
+  REAL(rp)				:: eta_buffer
+  !! Previous sample of pitch
+  REAL(rp) 				:: G_buffer
+  REAL(rp) 				:: R_test
+  !! Present sample of R location
+  REAL(rp) 				:: Z_test
+  !! Present sample of Z location
+
+  REAL(rp)  				:: eta_test
+  !! Present sample of pitch angle
+  REAL(rp) 				:: G_test
+  REAL(rp) 				:: psi0
+  !! Previous value of 2D Gaussian argument based on R_buffer, Z_buffer
+  REAL(rp) 				:: psi1
+  !! Present value of 2D Gaussian argument based on R_test, Z_test
+  REAL(rp)  :: PSIp_lim,PSIP0,PSIN,PSIN0,PSIN1,sigma
+  REAL(rp) 				:: f0
+  !! Evaluation of Avalanche distribution with previous sample
+  REAL(rp) 				:: f1
+  !! Evaluation of Avalanche distribution with present sample
+  REAL(rp) 				:: rand_unif
+  !! Uniform random variable [0,1]
+  REAL(rp) 				:: ratio
+  !! MH selection criteria
+  INTEGER				:: nsamples
+  !! Total number of samples to be distributed over all mpi processes
+  INTEGER 				:: ii,rr
+  !! Sample iterator.
+  INTEGER 				:: mpierr
+  !! mpi error indicator
+  REAL(rp) 						:: dgmin,dgmax,deta
+  LOGICAL :: accepted
+  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
+  REAL(rp) 	:: EPHI,fRE_out,nAr0,nAr1,nAr2,nAr3,nD,nD1,ne,Te,Zeff,nRE
+  
+  
+  nsamples = spp%ppp*params%mpi_params%nmpi
+
+  psi_max_buff = spp%psi_max*1.25_rp
+
+  theta_rad=C_PI*spp%theta_gauss/180.0_rp
+
+  params%GC_coords=.TRUE.
+  PSIp_lim=F%PSIp_lim
+  PSIp0=F%PSIP_min
+
+  min_R=minval(F%X%R)
+  max_R=maxval(F%X%R)
+  min_Z=minval(F%X%Z)
+  max_Z=maxval(F%X%Z)
+
+
+  sigma=spp%sigmaR*params%cpp%length
+  
+  !write(output_unit_write,*) min_R,max_R
+  !write(output_unit_write,*) min_Z,max_Z
+  
+  deta = (h_params%max_pitch_angle - h_params%min_pitch_angle)/100.0_rp
+  dgmin = (h_params%min_sampling_g - h_params%min_g)/100.0_rp
+  dgmax = (h_params%max_g - h_params%max_sampling_g)/100.0_rp
+
+  if (h_params%min_sampling_g.gt.h_params%min_g) then
+     min_g=h_params%min_sampling_g
+  else
+     min_g=h_params%min_g
+  endif
+  max_g=h_params%max_sampling_g
+  ! buffer at minimum gamma boundary  
+  do ii=1_idef,INT(minmax_buffer_size,idef)
+     minmax = h_params%min_sampling_g - REAL(ii,rp)*dgmin
+     if (minmax.GT.h_params%min_g) then
+        min_g = minmax
+     end if
+     ! buffer at maximum gamma boundary  
+     minmax = h_params%max_sampling_g + REAL(ii,rp)*dgmax
+     if (minmax.LT.h_params%max_g) then
+        max_g = minmax
+     end if
+  end do
+
+  !write(6,*) 'h_params%min_sampling_g',h_params%min_sampling_g,'h_params%min_g',h_params%min_g,'min_g',min_g
+  
+  ! buffer at minimum pitch angle boundary  
+  if (h_params%min_pitch_angle.GE.korc_zero) then
+     do ii=1_idef,INT(minmax_buffer_size,idef)
+        minmax = h_params%min_pitch_angle -  REAL(ii,rp)*deta
+        if (minmax.GT.0.0_rp) then
+           min_pitch_angle = minmax
+        end if
+     end do
+  else
+     min_pitch_angle = h_params%min_pitch_angle 
+  end if
+
+  ! buffer at maximum pitch angle boundary  
+  do ii=1_idef,INT(minmax_buffer_size,idef)
+     minmax = h_params%max_pitch_angle + REAL(ii,rp)*deta
+     if (minmax.LE.180.0_rp) then
+        max_pitch_angle = minmax
+     end if
+  end do
+  
+  if (params%mpi_params%rank.EQ.0_idef) then
+     ALLOCATE(R_samples(nsamples))
+     ALLOCATE(X_samples(nsamples))
+     ALLOCATE(Y_samples(nsamples))
+     ! Number of samples to distribute among all MPI processes
+     ALLOCATE(PHI_samples(nsamples))
+     ! Number of samples to distribute among all MPI processes
+     ALLOCATE(Z_samples(nsamples))
+     ! Number of samples to distribute among all MPI processes
+     ALLOCATE(eta_samples(nsamples))
+     ! Number of samples to distribute among all MPI processes
+     ALLOCATE(G_samples(nsamples))
+     ! Number of samples to distribute among all MPI processes
+     
+     ! Transient !
+
+     R_buffer = spp%Ro
+     Z_buffer = spp%Zo
+
+
+     if (.not.params%SameRandSeed) then
+        call init_random_seed()
+     else
+        call random_seed(put=seed)
+     end if
+     
+     ! initialize 2D gaussian argument and distribution function, or
+     ! copy from previous sample
+     fRE_out=0._rp
+     do while (fRE_out.eq.0._rp)
+
+        eta_buffer = min_pitch_angle + (max_pitch_angle &
+             - min_pitch_angle)*get_random_U()
+        G_buffer = min_g + (max_g - min_g)*get_random_U()
+
+        !write(6,*) 'R_buffer',R_buffer*params%cpp%length
+        !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+        !write(6,*) 'eta_buffer',eta_buffer
+        !write(6,*) 'G_buffer',G_buffer
+
+        call interp_nRE(params,R_buffer,0._rp,Z_buffer,psi0,EPHI,ne,Te,nRE, &
+             nAr0,nAr1,nAr2,nAr3,nD,nD1,G_buffer,fRE_out, &
+             rho1D=h_params%rho_axis(h_params%rho_ind))
+        
+        !write(6,*) 'after first interp_nRE'
+
+        !call get_fields(params,spp%vars,F)
+        !psi0=spp%vars%PSI_P(1)
+        PSIN0=(psi0-PSIP0)/(PSIp_lim-PSIP0)
+
+        f0=nRE*fRE_out* &
+             fRE_H_pitch(params,eta_buffer,G_buffer,EPHI,ne,Te, &
+             nAr0,nAr1,nAr2,nAr3,nD,nD1)
+
+        !write(6,*) 'nRE',nRE*params%cpp%density
+        !write(6,*) 'fRE_out',fRE_out
+
+     end do
+
+     accepted=.false.
+     ii=1_idef
+     rr=1_idef
+     do while (ii .LE. 1000_idef)
+
+        if (modulo(ii,100).eq.0) then
+           write(output_unit_write,'("Burn: ",I10)') ii
+           write(6,'("Burn: ",I10)') ii
+        end if
+        
+        R_test = R_buffer + get_random_N()*spp%dR
+        Z_test = Z_buffer + get_random_N()*spp%dZ
+        eta_test = eta_buffer + get_random_N()*spp%dth
+        G_test = G_buffer + get_random_N()*spp%dgam
+
+
+        ! Test that pitch angle and momentum are within chosen boundary
+        do while ((eta_test .GT. max_pitch_angle).OR. &
+             (eta_test .LT. min_pitch_angle))
+           eta_test = eta_buffer + get_random_N()*spp%dth
+        end do
+
+        do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
+           R_test = R_buffer + get_random_N()*spp%dR
+        end do
+
+        do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
+           Z_test = Z_buffer + get_random_N()*spp%dZ
+        end do
+        
+        do while ((G_test.LT.min_g).OR.(G_test.GT.max_g))
+           G_test = G_buffer + get_random_N()*spp%dgam
+        end do       
+
+        if (accepted) then
+           !psi0=psi1
+           PSIN0=PSIN1
+           f0=f1
+        end if
+        
+!        psi1=PSI_ROT_exp(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
+        !             spp%sigmaZ,theta_rad)
+        
+        !write(6,*) 'R_test',R_test*params%cpp%length
+        !write(6,*) 'Z_test',Z_test*params%cpp%length
+        !write(6,*) 'eta_test',eta_test
+        !write(6,*) 'G_test',G_test
+        
+        call interp_nRE(params,R_test,0._rp,Z_test,psi1,EPHI,ne,Te,nRE, &
+             nAr0,nAr1,nAr2,nAr3,nD,nD1,G_test,fRE_out, &
+             rho1D=h_params%rho_axis(h_params%rho_ind))
+           
+        PSIN1=(psi1-PSIP0)/(PSIp_lim-PSIP0)
+
+        !write(6,*) 'R_test',R_test*params%cpp%length
+        !write(6,*) 'Z_test',Z_test*params%cpp%length
+        !write(output_unit_write,*) 'ER',spp%vars%E(1,1)*params%cpp%Eo
+        !write(output_unit_write,*) 'EPHI',spp%vars%E(1,2)*params%cpp%Eo
+        !write(output_unit_write,*) 'EZ',spp%vars%E(1,3)*params%cpp%Eo
+        !write(output_unit_write,*) 'PSI',psi1
+        !write(output_unit_write,*) 'PSIN',PSIN
+                
+        f1=nRE*fRE_out* &
+             fRE_H_pitch(params,eta_test,G_test,EPHI,ne,Te, &
+             nAr0,nAr1,nAr2,nAr3,nD,nD1)        
+        !        f1=fRE_H(eta_test,G_test)
+
+        !write(6,*) 'nRE',nRE*params%cpp%density
+        !write(6,*) 'fRE_out',fRE_out
+        
+!        write(output_unit_write,'("psi0: ",E17.10)') psi0
+!        write(output_unit_write,'("psi1: ",E17.10)') psi1
+
+        !write(6,'("f0: ",E17.10)') f0
+        !write(6,'("f1: ",E17.10)') f1
+
+        
+        ! Calculate acceptance ratio for MH algorithm. fRE function
+        ! incorporates p^2 factor of spherical coordinate Jacobian
+        ! for velocity phase space, factors of sin(pitch angle) for velocity
+        ! phase space and cylindrical coordinate Jacobian R for spatial
+        ! phase space incorporated here.
+!        ratio = indicator_exp(PSIN,spp%psi_max)* &
+!             R_test*f1*sin(deg2rad(eta_test))/ &
+!             (R_buffer*f0*sin(deg2rad(eta_buffer)))
+        ratio = indicator_exp(PSIN1,spp%psi_max)* &
+             R_test*f1*sin(deg2rad(eta_test))/ &
+             (R_buffer*f0*sin(deg2rad(eta_buffer)))
+
+!        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
+
+        if (rr.gt.100) then
+           write(6,*) 'f0,f1,R,Z,gam,eta',f0,f1,R_test*params%cpp%length,Z_test*params%cpp%length,G_test,eta_test
+           if (rr.gt.500) stop
+        endif
+        
+        accepted=.false.
+        if (ratio .GE. 1.0_rp) then
+           accepted=.true.
+           R_buffer = R_test
+           Z_buffer = Z_test
+           eta_buffer = eta_test
+           G_buffer = G_test
+           ii = ii + 1_idef
+           rr=1_idef
+        else
+!           call RANDOM_NUMBER(rand_unif)
+!           if (rand_unif .LT. ratio) then
+           !if (get_random_mkl_U() .LT. ratio) then
+           if (get_random_U() .LT. ratio) then
+              accepted=.true.
+              R_buffer = R_test
+              Z_buffer = Z_test
+              eta_buffer = eta_test
+              G_buffer = G_test
+              ii = ii + 1_idef
+              rr=1_idef
+           else
+              rr=rr+1
+           end if
+        end if
+
+
+        
+     end do
+     ! Transient !
+     
+     ii=1_idef
+     rr=1_idef
+     do while (ii .LE. nsamples)
+
+!        write(output_unit_write,'("sample:",I15)') ii
+        
+       if (modulo(ii,nsamples/100).eq.0) then
+          write(output_unit_write,'("Sample: ",I10)') ii
+          write(6,'("Sample: ",I10)') ii
+        end if
+        
+        R_test = R_buffer + get_random_N()*spp%dR
+        Z_test = Z_buffer + get_random_N()*spp%dZ
+        eta_test = eta_buffer + get_random_N()*spp%dth
+        G_test = G_buffer + get_random_N()*spp%dgam
+
+
+        ! Test that pitch angle and momentum are within chosen boundary
+        do while ((eta_test .GT. max_pitch_angle).OR. &
+             (eta_test .LT. min_pitch_angle))
+           eta_test = eta_buffer + get_random_N()*spp%dth
+        end do
+
+        do while ((G_test.LT.min_g).OR.(G_test.GT.max_g))
+           G_test = G_buffer + get_random_N()*spp%dgam
+        end do
+
+        do while ((R_test.GT.max_R).OR.(R_test.LT. min_R))
+           R_test = R_buffer + get_random_N()*spp%dR
+        end do
+
+        do while ((Z_test.GT.max_Z).OR.(Z_test.LT. min_Z))
+           Z_test = Z_buffer + get_random_N()*spp%dZ
+        end do
+        
+        if (accepted) then
+           PSIN0=PSIN1
+           f0=f1
+        end if
+        
+!        psi1=PSI_ROT_exp(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
+!             spp%sigmaZ,theta_rad)
+
+        call interp_nRE(params,R_test,0._rp,Z_test,psi1,EPHI,ne,Te,nRE, &
+             nAr0,nAr1,nAr2,nAr3,nD,nD1,g_test,fRE_out, &
+             rho1D=h_params%rho_axis(h_params%rho_ind))
+           
+        PSIN1=(psi1-PSIP0)/(PSIp_lim-PSIP0)
+
+!        write(output_unit_write,'("R: ",E17.10)') R_test
+!        write(output_unit_write,'("R0: ",E17.10)') spp%Ro
+!        write(output_unit_write,'("sigma_R: ",E17.10)') spp%sigmaR
+!        write(output_unit_write,'("dR: ",E17.10)') spp%dR
+!        write(output_unit_write,'("N_dR: ",E17.10)') random_norm(0.0_rp,spp%dR)
+!        write(output_unit_write,'("Z: ",E17.10)') Z_test
+!        write(output_unit_write,'("Z0: ",E17.10)') spp%Zo
+!        write(output_unit_write,'("sigma_Z: ",E17.10)') spp%sigmaZ
+!        write(output_unit_write,'("dZ: ",E17.10)') spp%dZ
+!        write(output_unit_write,'("N_dR: ",Z17.10)') random_norm(0.0_rp,spp%dZ)
+        
+        f1=nRE*fRE_out* &
+             fRE_H_pitch(params,eta_test,G_test,EPHI,ne,Te, &
+             nAr0,nAr1,nAr2,nAr3,nD,nD1)        
+!        f1=fRE_H(eta_test,G_test)
+        
+!        ratio = indicator_exp(PSIN,psi_max_buff)* &
+!             R_test*f1*sin(deg2rad(eta_test))/ &
+!             (R_buffer*f0*sin(deg2rad(eta_buffer)))
+        ratio = indicator_exp(PSIN1,spp%psi_max)* &
+             R_test*f1*sin(deg2rad(eta_test))/ &
+             (R_buffer*f0*sin(deg2rad(eta_buffer)))
+
+!        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
+
+        if (rr.gt.100) then
+           write(6,*) 'f0,f1,R,Z,gam,eta',f0,f1,R_test*params%cpp%length,Z_test*params%cpp%length,G_test,eta_test
+           if (rr.gt.500) stop
+        endif
+        
+        accepted=.false.
+        if (ratio .GE. 1.0_rp) then
+           accepted=.true.
+           R_buffer = R_test
+           Z_buffer = Z_test
+           eta_buffer = eta_test
+           G_buffer = G_test
+           rr=1_idef
+        else
+           !call RANDOM_NUMBER(rand_unif)
+           !if (rand_unif .LT. ratio) then
+           !if (get_random_mkl_U() .LT. ratio) then
+           if (get_random_U() .LT. ratio) then
+              accepted=.true.
+              R_buffer = R_test
+              Z_buffer = Z_test
+              eta_buffer = eta_test
+              G_buffer = G_test
+              rr=1_idef
+           else
+              rr=rr+1              
+           end if
+        end if
+
+!        write(output_unit_write,'("R: ",E17.10)') R_buffer
+!        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
+        
+        ! Only accept sample if it is within desired boundary, but
+        ! add to MC above if within buffer. This helps make the boundary
+        ! more defined.
+        IF ((INT(indicator_exp(PSIN1,spp%psi_max)).EQ.1).AND. &
+             (G_buffer.LE.h_params%max_sampling_g).AND. &
+             (G_buffer.GE.h_params%min_sampling_g).AND. &
+             (eta_buffer.LE.h_params%max_pitch_angle).AND. &
+             (eta_buffer.GE.h_params%min_pitch_angle).AND. &
+             ACCEPTED) THEN
+           R_samples(ii) = R_buffer
+           Z_samples(ii) = Z_buffer
+           eta_samples(ii) = eta_buffer
+           G_samples(ii) = G_buffer
+
+!           write(output_unit_write,*) 'RS',R_buffer
+           
+           ! Sample phi location uniformly
+           !call RANDOM_NUMBER(rand_unif)
+           !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
+           !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
+           PHI_samples(ii) = 2.0_rp*C_PI*get_random_U()
+           ii = ii + 1_idef 
+        END IF
+
+
+        
+     end do
+
+!  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
+!  write(output_unit_write,'("R_sample: ",E17.10)') R_samples(:)*params%cpp%length
+
+     X_samples=R_samples*cos(PHI_samples)
+     Y_samples=R_samples*sin(PHI_samples)
+
+!     write(output_unit_write,*) 'R_samples',R_samples
+!     write(output_unit_write,*) 'PHI_samples',PHI_samples
+!     write(output_unit_write,*) 'Z_samples',Z_samples
+!     write(output_unit_write,*) 'G_samples',G_samples
+!     write(output_unit_write,*) 'eta_samples',eta_samples
+
+     if (TRIM(h_params%current_direction) .EQ. 'PARALLEL') then
+        eta_samples = 180.0_rp - eta_samples
+     end if
+     
+  end if
+
+  params%GC_coords=.FALSE.
+  
+  call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+
+  CALL MPI_SCATTER(X_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(eta_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(G_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%g,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+
+  
+  call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+!  write(output_unit_write,*) params%mpi_params%rank,'varX',spp%vars%X(:,1)
+!  write(output_unit_write,*) params%mpi_params%rank,'varY',spp%vars%X(:,2)
+  
+!  write(output_unit_write,'("X_X: ",E17.10)') spp%vars%X(:,1)*params%cpp%length
+  
+  ! gamma is kept for each particle, not the momentum
+
+  if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
+
+!  write(output_unit_write,*) params%mpi_params%rank,'varX',spp%vars%X(:,1)
+!  write(output_unit_write,*) params%mpi_params%rank,'varR',spp%vars%Y(:,1)
+  
+
+!  write(output_unit_write,'("Y_R: ",E17.10)') spp%vars%Y(:,1)*params%cpp%length
+!  write(output_unit_write,'("Y_PHI: ",E17.10)') spp%vars%Y(:,1)*params%cpp%length
+!  write(output_unit_write,'("Y_Z: ",E17.10)') spp%vars%Y(:,3)*params%cpp%length
+  
+!  if (minval(spp%vars%Y(:,1)).lt.1._rp/params%cpp%length) stop 'error with avalanche'
+  
+  if (params%mpi_params%rank.EQ.0_idef) then
+     DEALLOCATE(R_samples)
+     DEALLOCATE(X_samples)
+     DEALLOCATE(Y_samples)
+     DEALLOCATE(Z_samples)
+     DEALLOCATE(PHI_samples)
+     DEALLOCATE(eta_samples)
+     DEALLOCATE(G_samples)
+  end if
+  
+end subroutine sample_Hollmann_distribution_1Dtransport
+#endif
 
   SUBROUTINE save_params(params)
     TYPE(KORC_PARAMS), INTENT(IN) :: params

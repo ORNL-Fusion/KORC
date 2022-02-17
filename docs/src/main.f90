@@ -16,8 +16,10 @@ program main
   use korc_finalize
   use korc_profiles
   use korc_input
-  use korc_m3d_c1
-
+#ifdef FIO
+  use korc_fio
+#endif
+  
   implicit none
 
   TYPE(KORC_PARAMS) :: params
@@ -39,8 +41,8 @@ program main
   !! See [[korc_profiles(module)]] for details.
   INTEGER(ip) :: it 
   !! Time iteration
-    INTEGER 				:: mpierr
-
+  INTEGER 				:: mpierr
+    
   call initialize_communications(params)
   !!<h2>Order of KORC operations</h2>
   !!
@@ -49,6 +51,10 @@ program main
   !!
   !! Subroutine [[initialize_communications]] in [[korc_hpc]] that 
   !! initializes MPI and OpenMP communications.
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
   
   call timing_KORC(params)
   !! <h4>2\. Timers</h4>
@@ -58,6 +64,10 @@ program main
   
   ! * * * INITIALIZATION STAGE * * *!
 
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
+  
   call initialize_HDF5()
   !!<h3>Initialization</h3>
   !!
@@ -65,6 +75,10 @@ program main
   !!
   !! Subroutine [[initialize_HDF5]] in [[korc_HDF5]] that initializes
   !! HDF5 library. 
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
   
   call initialize_korc_parameters(params)
   !! <h4>2\. Initialize korc parameters</h4>
@@ -72,6 +86,10 @@ program main
   !! Subroutine [[initialize_korc_parameters]] in [[korc_initialize]] that 
   !! initializes paths and KORC parameters through [[load_korc_params]]
   !! on MPI processes.
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
   
   call initialize_fields(params,F)
   !! <h4>3\. Initialize fields</h4>
@@ -80,7 +98,10 @@ program main
   !! parameters of the EM fields, either analytically or from an external HDF5
   !! file. Reads in &amp;analytical_fields_params and 
   !! &amp;externalPlasmaModel namelists from input file.
-  
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
 
   call initialize_profiles(params,P,F)
   !! <h4>4\. Initialize Profiles</h4>
@@ -89,7 +110,12 @@ program main
   !! parameters of the plasma profiles, either analytically or from an
   !! external HDF5
   !! file. Reads in &amp;plasmaProfiles namelist from input file.
-  !! Only initialized if collisions (params%collisions==T) are 
+  !! Only initialized if collisions (params%collisions==T) are
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
+  
   call initialize_particles(params,F,P,spp) ! Initialize particles
   !! <h4>5\. Initialize Particle Velocity Phase Space</h4>
   !! 
@@ -102,7 +128,8 @@ program main
 
 !  write(output_unit_write,'("init eta: ",E17.10)') spp(1)%vars%eta
 
-#ifdef M3D_C1
+  
+#ifdef FIO
   if (TRIM(params%field_model) .eq. 'M3D_C1') then
 
      if (params%mpi_params%rank .EQ. 0) then
@@ -114,10 +141,26 @@ program main
      if (params%mpi_params%rank .EQ. 0) then
         write(output_unit_write,*) "* * * * * * * * * * * * * * * * * * * * * * *"
      endif
-        
+
+  elseif (TRIM(params%field_model) .eq. 'NIMROD') THEN
+
+     if (params%mpi_params%rank .EQ. 0) then
+        write(output_unit_write,*) "* * * * INITIALIZING NIMROD INTERFACE * * * *"
+     endif
+     
+     call initialize_nimrod(params, F, P, spp,.true.)
+
+     if (params%mpi_params%rank .EQ. 0) then
+        write(output_unit_write,*) "* * * * * * * * * * * * * * * * * * * * * * *"
+     endif
+     
   endif
 #endif  
 
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
+  
   call compute_charcs_plasma_params(params,spp,F)
   !! <h4>9\. Compute Characteristic Plasma Parameters</h4>
   !!
@@ -126,7 +169,7 @@ program main
   !! Also finds the maximum non-relativistic and relativistic cyclotron frequencies
   !! to be used for setting the timstep for the time-evolution algorithms.
 
-  call initialize_collision_params(params,spp,P,F)
+  call initialize_collision_params(params,spp,P,F,.true.)
   !! <h4>6\. Initialize Collision Parameters</h4>
   !!
   !! Subroutine [[initialize_collision_params]] in [[korc_collisions]] that
@@ -142,6 +185,11 @@ program main
   !! time-stepping parameters for a restart, or defines new parameters based
   !! on a maximum timestep
   !! set by the inverse of the relativistic cyclotron frequency.
+
+  
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
   
   call initialize_particle_pusher(params)
   !! <h4>11\. Initialize Particle Pusher</h4>    
@@ -167,7 +215,7 @@ program main
   !! (multiple-species) data types.
 
   
-  call define_collisions_time_step(params)
+  call define_collisions_time_step(params,F,.true.)
   !! <h4>14\. Define Collision Time Step</h4>
   !!
   !! Subroutine [[define_collisions_time_step]] in [[korc_collisions]] that
@@ -178,8 +226,11 @@ program main
   ! *** BEYOND THIS POINT VARIABLES ARE DIMENSIONLESS ***
   ! *** *** *** *** *** ***   *** *** *** *** *** *** ***
 
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
 
-  
+#ifdef PSPLINE
   call initialize_fields_interpolant(params,F)
   !! <h4>15\. Initialize Fields Interpolant</h4>
   !!
@@ -194,8 +245,13 @@ program main
   !! scalar flux function, axisymmetric field, or 3D field, while the
   !! electric field
   !! can be defined as an axisymmetric or 3D field.
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
   
   call initialize_profiles_interpolant(params,P)
+#endif
   !! <h4>16\. Initialize Profiles Interpolant</h4>
   !!
   !! Subroutine [[initialize_profiles_interpolant]] in [[korc_interp]]
@@ -208,16 +264,23 @@ program main
   !! field interpolations. 
   !! Only initialized if collisions (params%collisions==T) are present for
   !! ne, Te, Zeff
+
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
   
   if (params%mpi_params%rank .EQ. 0) then
      write(output_unit_write,'("* * * * INITIALIZING INITIAL CONDITIONS * * * *",/)')
+     flush(output_unit_write)
   end if
   call set_up_particles_ic(params,F,spp,P)
   
   if (params%mpi_params%rank .EQ. 0) then
      write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
+     flush(output_unit_write)
   end if
 
+  !write(6,*) 'V',spp(1)%vars%V
   
 !  write(output_unit_write,'("post ic eta: ",E17.10)') spp(1)%vars%eta
   
@@ -234,7 +297,10 @@ program main
   
   ! * * * INITIALIZATION STAGE * * *
 
-  flush(output_unit_write)
+  
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
 
 !  write(output_unit_write,'("GC init eta: ",E17.10)') spp(1)%vars%eta
 
@@ -278,6 +344,11 @@ program main
      
   end if
 
+  !write(6,*) 'V',spp(1)%vars%V
+  !write(6,*) 'eta',spp(1)%vars%eta
+  
+!  write(6,*) '1Y_R',spp(1)%vars%Y(1:4,1)*params%cpp%length
+  
   ! * * * SAVING INITIAL CONDITION AND VARIOUS SIMULATION PARAMETERS * * * !
   
   call save_simulation_parameters(params,spp,F,P)
@@ -290,23 +361,25 @@ program main
   !! subroutines to save simulation and collision parameters.
   
   
-  if (.NOT.(params%restart.OR.params%proceed)) then
+  if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
      
      call save_simulation_outputs(params,spp,F) ! Save initial condition
+     call save_restart_variables(params,spp,F)
 
   end if
   
-
   
   ! * * * SAVING INITIAL CONDITION AND VARIOUS SIMULATION PARAMETERS * * * !
 
 !  write(output_unit_write,'("pre ppusher loop eta: ",E17.10)') spp(1)%vars%eta
 
-  flush(output_unit_write)
   call timing_KORC(params)
-  
+  if (params%mpi_params%rank .EQ. 0) then
+     flush(output_unit_write)
+  end if
 
-  if (params%orbit_model(1:2).eq.'FO'.and.params%field_model(1:3).eq.'ANA') then
+  if (params%orbit_model(1:2).eq.'FO'.and.((params%field_model(1:3).eq.'ANA') &
+       .or.(params%field_model(1:3).eq.'UNI'))) then
      call FO_init(params,F,spp,.false.,.true.)
      ! Initial half-time particle push
      
@@ -322,7 +395,10 @@ program main
      end do
   end if
 
-  if (params%orbit_model(1:2).eq.'FO'.and.params%field_model(1:3).eq.'EXT') then
+#ifdef PSPLINE
+  if (params%orbit_model(1:2).eq.'FO'.and.params%field_model(1:3).eq.'EXT' &
+       .and..not.((params%field_model(10:13).eq.'MARS').or. &
+       (params%field_model(10:14).eq.'AORSA'))) then
      call FO_init(params,F,spp,.false.,.true.)
      ! Initial half-time particle push
      
@@ -337,13 +413,18 @@ program main
         call save_restart_variables(params,spp,F)
      end do
   end if
+#endif
 
-  if (params%orbit_model(1:2).eq.'FO'.and.params%field_model.eq.'M3D_C1') then
+#ifdef FIO
+  if (params%orbit_model(1:2).eq.'FO'.and. &
+       (TRIM(params%field_model).eq.'M3D_C1'.or. &
+       TRIM(params%field_model).eq.'NIMROD').and. &
+       .not.F%ReInterp_2x1t) then
      call FO_init(params,F,spp,.false.,.true.)
      ! Initial half-time particle push
      
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_FOm3dc1_top(params,F,P,spp)
+        call adv_FOfio_top(params,F,P,spp)
         
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt        
@@ -353,6 +434,92 @@ program main
         call save_restart_variables(params,spp,F)
      end do
   end if
+
+  if (params%orbit_model(1:2).eq.'FO'.and. &
+       (params%field_model.eq.'M3D_C1'.or. &
+       TRIM(params%field_model).eq.'NIMROD') &
+       .and.F%ReInterp_2x1t) then
+     call FO_init(params,F,spp,.false.,.true.)
+     ! Initial half-time particle push
+     
+     do it=F%ind0_2x1t,params%time_slice
+
+        !write(6,*) it,F%ind0_2x1t
+        
+        if (it.gt.F%ind0_2x1t) then
+           if (params%field_model.eq.'M3D_C1') then
+              call initialize_m3d_c1(params, F, P, spp,.false.)
+           else
+              call initialize_nimrod(params, F, P, spp,.false.)
+           end if
+           if (params%collisions) then
+              if (params%field_model.eq.'M3D_C1') then
+                 call initialize_m3d_c1_imp(params,F,P, &
+                      params%num_impurity_species,.false.)
+              end if
+           end if
+        end if
+
+        if (params%mpi_params%rank .EQ. 0) then
+           write(output_unit_write,*) 'tskip',params%t_skip
+           flush(output_unit_write)
+        end if
+
+        call adv_FOfio_top(params,F,P,spp)
+               
+        params%it = params%it+params%t_skip
+        params%time = params%init_time &
+             +REAL(params%it,rp)*params%dt 
+        
+        call save_simulation_outputs(params,spp,F)
+        call save_restart_variables(params,spp,F)
+
+        F%ind_2x1t=F%ind_2x1t+1_ip
+        if (params%mpi_params%rank .EQ. 0) then
+           write(output_unit_write,*) 'KORC time ',params%time*params%cpp%time
+           flush(output_unit_write)
+        end if
+              
+     end do
+     
+  end if
+#endif
+
+#ifdef PSPLINE
+  if (params%orbit_model(1:2).eq.'FO'.and. &
+       params%field_model(10:13).eq.'MARS') then
+     call FO_init(params,F,spp,.false.,.true.)
+     ! Initial half-time particle push
+     
+     do it=params%ito,params%t_steps,params%t_skip
+        call adv_FOinterp_mars_top(params,F,P,spp)
+        
+        params%time = params%init_time &
+             +REAL(it-1_ip+params%t_skip,rp)*params%dt        
+        params%it = it-1_ip+params%t_skip
+
+        call save_simulation_outputs(params,spp,F)
+        call save_restart_variables(params,spp,F)
+     end do
+  end if
+
+  if (params%orbit_model(1:2).eq.'FO'.and. &
+       params%field_model(10:14).eq.'AORSA') then
+     call FO_init(params,F,spp,.false.,.true.)
+     ! Initial half-time particle push
+
+     do it=params%ito,params%t_steps,params%t_skip
+        call adv_FOinterp_aorsa_top(params,F,P,spp)
+
+        params%time = params%init_time &
+             +REAL(it-1_ip+params%t_skip,rp)*params%dt        
+        params%it = it-1_ip+params%t_skip
+
+        call save_simulation_outputs(params,spp,F)
+        call save_restart_variables(params,spp,F)
+     end do
+  end if
+#endif
   
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn'.and..not.params%field_model.eq.'M3D_C1') then
      do it=params%ito,params%t_steps,params%t_skip*params%t_it_SC
@@ -362,12 +529,17 @@ program main
              +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt        
         params%it = it-1_ip+params%t_skip*params%t_it_SC
 
-        call save_simulation_outputs(params,spp,F)
+        call save_simulation_outputs(params,spp,F)        
         call save_restart_variables(params,spp,F)
+
+        if (params%mpi_params%rank .EQ. 0) then
+           flush(output_unit_write)
+        end if
         
      end do
   end if
 
+#ifdef PSPLINE
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
        F%axisymmetric_fields.and.params%field_model(10:12).eq.'PSI'.and. &
        params%SC_E.and..not.params%field_model.eq.'M3D_C1') then
@@ -419,13 +591,18 @@ program main
      end do
   end if
   
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-       F%axisymmetric_fields.and.(params%field_model(10:12).eq.'PSI'.OR. &
+  if (params%orbit_model(1:2).eq.'GC'.and. &
+       params%field_eval.eq.'interp'.and. &
+       F%axisymmetric_fields.and. &
+       (params%field_model(10:12).eq.'PSI'.OR. &
        params%field_model(12:14).eq.'PSI').and. &
-       (.not.params%SC_E).and.F%Dim2x1t.and.F%ReInterp_2x1t.and..not.params%field_model.eq.'M3D_C1') then
+       (.not.params%SC_E).and. &
+       F%Dim2x1t.and.F%ReInterp_2x1t.and. &
+       .not.params%field_model.eq.'M3D_C1') then
 
      if (params%mpi_params%rank .EQ. 0) then
-        write(output_unit_write,*) 'time',F%X%PHI(F%ind_2x1t)*params%cpp%time
+        write(output_unit_write,*) 'initial 2x1t_ind time',F%X%PHI(F%ind_2x1t)*params%cpp%time
+        flush(output_unit_write)  
      end if
         
      do it=params%ito,params%t_steps,params%t_skip
@@ -439,11 +616,21 @@ program main
 
         F%ind_2x1t=F%ind_2x1t+1_ip
         if (params%mpi_params%rank .EQ. 0) then
-           write(output_unit_write,*) 'time',F%X%PHI(F%ind_2x1t)*params%cpp%time
+           write(output_unit_write,*) 'KORC time',params%time*params%cpp%time
+           write(output_unit_write,*) '2x1t_ind time',F%X%PHI(F%ind_2x1t)*params%cpp%time
         end if
         call initialize_fields_interpolant(params,F)
 
+        if (params%LargeCollisions) then
+           call initialize_collision_params(params,spp,P,F,.false.)
+           call define_collisions_time_step(params,F,.false.)
+        end if
+
         call save_restart_variables(params,spp,F)
+        
+        if (params%mpi_params%rank .EQ. 0) then
+           flush(output_unit_write)  
+        end if
         
      end do
   end if
@@ -523,11 +710,13 @@ program main
         call save_restart_variables(params,spp,F)
      end do
   end if
+#endif
 
+#ifdef FIO
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_model.eq.'M3D_C1'.and. &
        .not.F%ReInterp_2x1t) then
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_m3dc1_top(params,spp,P,F)
+        call adv_GCinterp_fio_top(params,spp,P,F)
         
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt        
@@ -535,8 +724,13 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (params%mpi_params%rank .EQ. 0) then
+           flush(output_unit_write)
+        end if
         
      end do
+     
   end if
 
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_model.eq.'M3D_C1'.and. &
@@ -544,18 +738,22 @@ program main
 
      do it=F%ind0_2x1t,params%time_slice
 
-        if (it.gt.0) then
+!        write(6,*) it,F%ind0_2x1t
+        
+        if (it.gt.F%ind0_2x1t) then
            call initialize_m3d_c1(params, F, P, spp,.false.)
-           if (params%collisions) then
+           if (params%collisions.or.params%radiation) then
               call initialize_m3d_c1_imp(params,F,P, &
                    params%num_impurity_species,.false.)
            end if
         end if
-           
-        write(output_unit_write,*) 'tskip',params%t_skip
-        flush(output_unit_write)
         
-        call adv_GCinterp_m3dc1_top(params,spp,P,F)
+        if (params%mpi_params%rank .EQ. 0) then
+           write(output_unit_write,*) 'tskip',params%t_skip
+           flush(output_unit_write)
+        end if
+           
+        call adv_GCinterp_fio_top(params,spp,P,F)
                
         params%it = params%it+params%t_skip
         params%time = params%init_time &
@@ -564,7 +762,10 @@ program main
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
 
+        !comment out for debugging only
         F%ind_2x1t=F%ind_2x1t+1_ip
+
+
         if (params%mpi_params%rank .EQ. 0) then
            write(output_unit_write,*) 'KORC time ',params%time*params%cpp%time
            flush(output_unit_write)
@@ -572,15 +773,23 @@ program main
               
      end do
   end if
+#endif
   
   call timing_KORC(params)
 
   ! * * * FINALIZING SIMULATION * * * 
   call finalize_HDF5()
 
-  
+#ifdef PSPLINE
   call finalize_interpolants(params)
-
+#endif
+  
+#ifdef FIO
+  if (TRIM(params%field_model) .eq. 'M3D_C1'.or. &
+      TRIM(params%field_model) .eq. 'NIMROD') then
+     call finalize_FIO(params,F,P)
+  end if
+#endif
   
   ! DEALLOCATION OF VARIABLES
   call deallocate_variables(params,F,P,spp)

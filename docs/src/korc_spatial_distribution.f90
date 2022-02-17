@@ -12,6 +12,7 @@ MODULE korc_spatial_distribution
   use korc_hammersley_generator
   use korc_avalanche
   use korc_experimental_pdf
+  USE korc_input
 
   IMPLICIT NONE
 
@@ -114,8 +115,55 @@ subroutine disk(params,spp)
   DEALLOCATE(r)
 end subroutine disk
 
-
 subroutine torus(params,spp)
+    TYPE(KORC_PARAMS), INTENT(IN)       :: params
+    TYPE(SPECIES), INTENT(INOUT)        :: spp
+    REAL(rp), DIMENSION(:), ALLOCATABLE :: r
+    REAL(rp), DIMENSION(:), ALLOCATABLE :: theta
+    REAL(rp), DIMENSION(:), ALLOCATABLE :: zeta
+
+    ALLOCATE( theta(spp%ppp) )
+    ALLOCATE( zeta(spp%ppp) )
+    ALLOCATE( r(spp%ppp) )
+
+    ! Initial condition of uniformly distributed particles on a disk in the xz-plane
+    ! A unique velocity direction
+!    call init_u_random(10986546_8)
+
+    call init_random_seed()
+!    call RANDOM_NUMBER(theta)
+!    theta = 2.0_rp*C_PI*theta
+    
+    call set_random_dist(0.0_rp, 2.0_rp*C_PI)
+    call get_randoms(theta)
+
+!    call init_random_seed()
+!    call RANDOM_NUMBER(zeta)
+!    zeta = 2.0_rp*C_PI*zeta
+
+    call get_randoms(zeta)
+!
+    ! Uniform distribution on a disk at a fixed azimuthal theta
+!    call init_random_seed()
+!    call RANDOM_NUMBER(r)
+
+    call set_random_dist(0.0_rp, 1.0_rp)
+    call get_randoms(r)
+
+    r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
+
+!$OMP PARALLEL WORKSHARE
+    spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*SIN(zeta)
+    spp%vars%X(:,2) = ( spp%Ro + r*COS(theta) )*COS(zeta)
+    spp%vars%X(:,3) = spp%Zo + r*SIN(theta)
+!$OMP END PARALLEL WORKSHARE
+
+    DEALLOCATE(theta)
+    DEALLOCATE(zeta)
+    DEALLOCATE(r)
+end subroutine torus
+
+!subroutine torus(params,spp)
   !! @note Subrotuine for generating a uniform torus/torus 
   !! shell as the initial spatial condition of a given species 
   !! of particles in the simulation.@endnote
@@ -123,65 +171,73 @@ subroutine torus(params,spp)
   !! Sampling method. This distribution follows the same radial 
   !! distribution of a uniform disk/ring distribution, see the 
   !! documentation of the [[disk]] subroutine.
-  TYPE(KORC_PARAMS), INTENT(IN) 	:: params
+!  TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
-  TYPE(SPECIES), INTENT(INOUT) 		:: spp
+!  TYPE(SPECIES), INTENT(INOUT) 		:: spp
     !! An instance of the derived type SPECIES 
     !! containing all the parameters and simulation variables of the 
     !! different species in the simulation.
-  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: r
+!  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: r
     !! Radial position of the particles \(r\).
-  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
+!  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
   !! Uniform deviates in the range \([0,2\pi]\) 
   !! representing the uniform poloidal angle \(\theta\)
   !! distribution of the particles.
-  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: zeta
+!  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: zeta
   !! Uniform deviates in the range \([0,2\pi]\) representing 
   !! the uniform toroidal angle \(\zeta\) distribution of the particles.
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
+!  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
-  ALLOCATE( theta(spp%ppp) )
-  ALLOCATE( zeta(spp%ppp) )
-  ALLOCATE( r(spp%ppp) )
+!  ALLOCATE( theta(spp%ppp) )
+!  ALLOCATE( zeta(spp%ppp) )
+!  ALLOCATE( r(spp%ppp) )
 
   ! Initial condition of uniformly distributed particles on a disk in the xz-plane
   ! A unique velocity direction
-  call init_u_random(10986546_8)
+!  call init_u_random(10986546_8)
 
-  if (.not.params%SameRandSeed) then
-     call init_random_seed()
-  else
-     call random_seed(put=seed)
-  end if
-  call RANDOM_NUMBER(theta)
-  theta = 2.0_rp*C_PI*theta
+!  if (.not.params%SameRandSeed) then
+!     call init_random_seed()
+!  else
+!     call random_seed(put=seed)
+!  end if
+!  call RANDOM_NUMBER(theta)
+!  theta = 2.0_rp*C_PI*theta
 
-  if (.not.params%SameRandSeed) then
-     call init_random_seed()
-  else
-     call random_seed(put=seed)
-  end if
-  call RANDOM_NUMBER(zeta)
-  zeta = 2.0_rp*C_PI*zeta
+!  if (.not.params%SameRandSeed) then
+!     call init_random_seed()
+!  else
+!     call random_seed(put=seed)
+!  end if
+!  call RANDOM_NUMBER(zeta)
+!  zeta = 2.0_rp*C_PI*zeta
 
-  ! Uniform distribution on a disk at a fixed azimuthal theta
-  if (.not.params%SameRandSeed) then
-     call init_random_seed()
-  else
-     call random_seed(put=seed)
-  end if
-  call RANDOM_NUMBER(r)
-
-  r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
-  spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*SIN(zeta)
-  spp%vars%X(:,2) = ( spp%Ro + r*COS(theta) )*COS(zeta)
-  spp%vars%X(:,3) = spp%Zo + r*SIN(theta)
-
-  DEALLOCATE(theta)
-  DEALLOCATE(zeta)
-  DEALLOCATE(r)
+  !write(6,*) 'Ro',spp%Ro*params%cpp%length
+  !write(6,*) 'Zo',spp%Zo*params%cpp%length
+  !write(6,*) 'r_in',spp%r_inner*params%cpp%length
+  !write(6,*) 'r_out',spp%r_outter*params%cpp%length
   
-end subroutine torus
+  ! Uniform distribution on a disk at a fixed azimuthal theta
+!  if (.not.params%SameRandSeed) then
+!     call init_random_seed()
+!  else
+!     call random_seed(put=seed)
+!  end if
+!  call RANDOM_NUMBER(r)
+
+!  r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
+!  spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*SIN(zeta)
+!  spp%vars%X(:,2) = ( spp%Ro + r*COS(theta) )*COS(zeta)
+!  spp%vars%X(:,3) = spp%Zo + r*SIN(theta)
+
+  !write(6,*) 'r_sam',r*params%cpp%length
+  !write(6,*) 'R_sam',sqrt(spp%vars%X(:,1)**2+spp%vars%X(:,2)**2)*params%cpp%length
+
+!  DEALLOCATE(theta)
+!  DEALLOCATE(zeta)
+!  DEALLOCATE(r)
+  
+!end subroutine torus
 
 
 subroutine elliptic_torus(params,spp)
@@ -1244,12 +1300,14 @@ subroutine MH_psi(params,spp,F)
   !! Previous sample of R location
   REAL(rp) 				:: Z_buffer
   !! Previous sample of Z location
+  REAL(rp) 				:: PHI_buffer
  
 
   REAL(rp) 				:: R_test
   !! Present sample of R location
   REAL(rp) 				:: Z_test
   !! Present sample of Z location
+  REAL(rp) 				:: PHI_test
 
   REAL(rp) 				:: psi_max,psi_max_buff
   REAL(rp)  :: PSIp_lim,PSIP0,PSIN,PSIN0,PSIN1,sigma,psi0,psi1
@@ -1319,6 +1377,7 @@ subroutine MH_psi(params,spp,F)
      
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
+     PHI_buffer = 0._rp
 
 
      if (.not.params%SameRandSeed) then
@@ -1335,6 +1394,7 @@ subroutine MH_psi(params,spp,F)
         if (modulo(ii,100).eq.0) then
            write(output_unit_write,'("Burn: ",I10)') ii
         end if
+        !write(6,'("Burn: ",I10)') ii
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
@@ -1359,6 +1419,7 @@ subroutine MH_psi(params,spp,F)
            !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
            Z_test = Z_buffer + get_random_N()*spp%dZ
         end do
+        PHI_test = 2.0_rp*C_PI*get_random_U()
 
         
         ! initialize 2D gaussian argument and distribution function, or
@@ -1366,18 +1427,21 @@ subroutine MH_psi(params,spp,F)
         if (ii==1) then
 
            spp%vars%Y(1,1)=R_buffer
-           spp%vars%Y(1,2)=0
+           spp%vars%Y(1,2)=PHI_buffer
            spp%vars%Y(1,3)=Z_buffer
 
            !write(6,*) 'R',R_buffer
            !write(6,*) 'Z',Z_buffer
-           
-           if (params%field_model.eq.'M3D_C1') then
-              call get_m3d_c1_vector_potential(spp%vars,F,params)
+
+           spp%vars%flagCon(1)=1_is
+           spp%vars%initLCFS(1)=1_is
+           if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
+#ifdef FIO
+              call get_fio_vector_potential(spp%vars,F,params)
+#endif
            else
               call get_fields(params,spp%vars,F)
            end if
-           spp%vars%flagCon=1_is
 
            !write(6,*) 'may have crashed'
 
@@ -1392,8 +1456,6 @@ subroutine MH_psi(params,spp,F)
            
            psi0=spp%vars%PSI_P(1)
            PSIN0=(psi0-PSIp0)/(PSIp_lim-PSIp0)
-
-
            
         end if
         
@@ -1404,15 +1466,18 @@ subroutine MH_psi(params,spp,F)
 !        psi1=PSI_ROT_exp(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
         !             spp%sigmaZ,theta_rad)
         spp%vars%Y(1,1)=R_test
-        spp%vars%Y(1,2)=0._rp
+        spp%vars%Y(1,2)=PHI_test
         spp%vars%Y(1,3)=Z_test
 
-        if (params%field_model.eq.'M3D_C1') then
-           call get_m3d_c1_vector_potential(spp%vars,F,params)
+        spp%vars%flagCon(1)=1_is
+        spp%vars%initLCFS(1)=1_is
+        if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
+#ifdef FIO
+           call get_fio_vector_potential(spp%vars,F,params)
+#endif
         else
            call get_fields(params,spp%vars,F)
         end if
-        spp%vars%flagCon=1_is
         
         psi1=spp%vars%PSI_P(1)
 
@@ -1437,7 +1502,9 @@ subroutine MH_psi(params,spp,F)
         ! phase space and cylindrical coordinate Jacobian R for spatial
         ! phase space incorporated here.
 
-        ratio = indicator(PSIN1,psi_max)* &
+        if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
+        ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
+             indicator(PSIN1,psi_max)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 
@@ -1448,6 +1515,7 @@ subroutine MH_psi(params,spp,F)
            accepted=.true.
            R_buffer = R_test
            Z_buffer = Z_test
+           PHI_buffer = PHI_test
            ii = ii + 1_idef
 
            !write(output_unit_write,*) 'PSIN',PSIN1
@@ -1459,6 +1527,7 @@ subroutine MH_psi(params,spp,F)
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
+              PHI_buffer = PHI_test
               ii = ii + 1_idef
 
               !write(output_unit_write,*) 'PSIN',PSIN1
@@ -1472,10 +1541,13 @@ subroutine MH_psi(params,spp,F)
      do while (ii .LE. nsamples)
 
 !        write(output_unit_write,'("sample:",I15)') ii
-        
-       if (modulo(ii,nsamples/10).eq.0) then
+
+#if DBG_CHECK        
+#else
+        if (modulo(ii,nsamples/10).eq.0) then
            write(output_unit_write,'("Sample: ",I10)') ii
         end if
+#endif
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
@@ -1484,7 +1556,8 @@ subroutine MH_psi(params,spp,F)
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
-        
+
+        PHI_test = 2.0_rp*C_PI*get_random_U()
 
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
            !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
@@ -1505,15 +1578,19 @@ subroutine MH_psi(params,spp,F)
 !        psi1=PSI_ROT_exp(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
 !             spp%sigmaZ,theta_rad)
         spp%vars%Y(1,1)=R_test
-        spp%vars%Y(1,2)=0
+        spp%vars%Y(1,2)=PHI_test
         spp%vars%Y(1,3)=Z_test
 
-        if (params%field_model.eq.'M3D_C1') then
-           call get_m3d_c1_vector_potential(spp%vars,F,params)
+        spp%vars%flagCon(1)=1_is
+        spp%vars%initLCFS(1)=1_is
+        if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
+#ifdef FIO
+           call get_fio_vector_potential(spp%vars,F,params)
+#endif
         else
            call get_fields(params,spp%vars,F)
         end if
-        spp%vars%flagCon=1_is
+
         
         psi1=spp%vars%PSI_P(1)
 
@@ -1533,8 +1610,10 @@ subroutine MH_psi(params,spp,F)
         !write(output_unit_write,*) 'PSIN',PSIN1
         !write(output_unit_write,*) 'PSIN0',PSIN0
 
-        
-        ratio = indicator(PSIN1,psi_max_buff)* &
+
+        if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
+        ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
+             indicator(PSIN1,psi_max)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 
@@ -1544,7 +1623,8 @@ subroutine MH_psi(params,spp,F)
         if (ratio .GE. 1.0_rp) then
            accepted=.true.
            R_buffer = R_test
-           Z_buffer = Z_test                     
+           Z_buffer = Z_test
+           PHI_buffer = PHI_test                     
         else
            !call RANDOM_NUMBER(rand_unif)
            !if (rand_unif .LT. ratio) then
@@ -1553,6 +1633,7 @@ subroutine MH_psi(params,spp,F)
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
+              PHI_buffer = PHI_test
            end if
         end if
 
@@ -1566,6 +1647,7 @@ subroutine MH_psi(params,spp,F)
              ACCEPTED) THEN
            R_samples(ii) = R_buffer
            Z_samples(ii) = Z_buffer
+           PHI_samples(ii) = PHI_buffer
 
 
            !write(output_unit_write,*) 'PSIN',PSIN1
@@ -1577,7 +1659,6 @@ subroutine MH_psi(params,spp,F)
            !call RANDOM_NUMBER(rand_unif)
            !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
            !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
-           PHI_samples(ii) = 2.0_rp*C_PI*get_random_U()
            ii = ii + 1_idef 
         END IF
         
@@ -1624,6 +1705,945 @@ subroutine MH_psi(params,spp,F)
   
   
 end subroutine MH_psi
+
+subroutine FIO_therm(params,spp,F,P)
+  !! @note Subroutine that generates a 2D Gaussian distribution in an 
+  !! elliptic torus as the initial spatial condition of a given particle 
+  !! species in the simulation. @endnote
+  TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
+  !! Core KORC simulation parameters.
+  TYPE(SPECIES), INTENT(INOUT) 		:: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)            :: P
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: R_samples,X_samples,Y_samples
+  !! Major radial location of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: PHI_samples
+  !! Azimuithal angle of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Z_samples
+  !! Vertical location of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: V_samples,G_samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: XI_samples,ETA_samples
+
+  REAL(rp) 				:: min_R,max_R
+  REAL(rp) 				:: min_Z,max_Z
+    REAL(rp) 				:: min_V,max_V
+ 
+  REAL(rp) 				:: R_buffer
+  !! Previous sample of R location
+  REAL(rp) 				:: Z_buffer
+  !! Previous sample of Z location
+  REAL(rp) 				:: PHI_buffer
+  REAL(rp) 				:: V_buffer,XI_buffer
+  REAL(rp) 				:: V_test,XI_test
+
+  REAL(rp) 				:: R_test
+  !! Present sample of R location
+  REAL(rp) 				:: Z_test
+  !! Present sample of Z location
+  REAL(rp) 				:: PHI_test
+
+  REAL(rp) 				:: psi_max,psi_max_buff
+  REAL(rp)  :: PSIp_lim,PSIP0,PSIN,PSIN0,PSIN1,sigma,psi0,psi1
+  REAL(rp)  :: vth0,vth1
+
+  REAL(rp) 				:: rand_unif
+  !! Uniform random variable [0,1]
+  REAL(rp) 				:: ratio
+  !! MH selection criteria
+  INTEGER				:: nsamples
+  !! Total number of samples to be distributed over all mpi processes
+  INTEGER 				:: ii
+  !! Sample iterator.
+  INTEGER 				:: mpierr
+  !! mpi error indicator
+
+  LOGICAL :: accepted
+  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
+
+  if (params%mpi_params%rank.EQ.0_idef) then
+     write(output_unit_write,*) '*** START SAMPLING ***'
+  end if
+  
+  nsamples = spp%ppp*params%mpi_params%nmpi
+
+  params%GC_coords=.TRUE.
+  PSIp_lim=F%PSIp_lim
+
+  if (params%field_model.eq.'M3D_C1') then
+     min_R=params%rmin/params%cpp%length
+     max_R=params%rmax/params%cpp%length
+     min_Z=params%Zmin/params%cpp%length
+     max_Z=params%Zmax/params%cpp%length
+
+     PSIp0=F%PSIp_0
+     psi_max = spp%psi_max
+     psi_max_buff = spp%psi_max
+  else
+     min_R=minval(F%X%R)
+     max_R=maxval(F%X%R)
+     min_Z=minval(F%X%Z)
+     max_Z=maxval(F%X%Z)
+
+     PSIp0=F%PSIP_min
+     psi_max = spp%psi_max
+     psi_max_buff = spp%psi_max*2._rp
+  end if  
+
+  sigma=spp%sigmaR*params%cpp%length
+  
+  !write(output_unit_write,*) min_R,max_R
+  !write(output_unit_write,*) min_Z,max_Z
+ 
+  
+
+  ALLOCATE(R_samples(nsamples))
+  ALLOCATE(X_samples(nsamples))
+  ALLOCATE(Y_samples(nsamples))
+  ! Number of samples to distribute among all MPI processes
+  ALLOCATE(PHI_samples(nsamples))
+  ! Number of samples to distribute among all MPI processes
+  ALLOCATE(Z_samples(nsamples))
+  ! Number of samples to distribute among all MPI processes
+  ALLOCATE(V_samples(nsamples))
+  ALLOCATE(G_samples(nsamples))
+  ALLOCATE(XI_samples(nsamples))
+  ALLOCATE(ETA_samples(nsamples))
+  
+  if (params%mpi_params%rank.EQ.0_idef) then
+        ! Transient !
+
+     
+     R_buffer = spp%Ro
+     Z_buffer = spp%Zo
+     PHI_buffer = 0._rp
+
+     
+     spp%vars%Y(1,1)=R_buffer
+     spp%vars%Y(1,2)=PHI_buffer
+     spp%vars%Y(1,3)=Z_buffer
+
+     !write(6,*) 'R',R_buffer
+     !write(6,*) 'Z',Z_buffer
+
+     spp%vars%flagCon(1)=1_is
+     if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
+#ifdef FIO
+        call get_fio_vector_potential(spp%vars,F,params)
+        call get_fio_profile(spp%vars,P,params)
+#endif
+     end if
+
+     !write(6,*) 'may have crashed'
+
+
+     psi0=spp%vars%PSI_P(1)
+     PSIN0=(psi0-PSIp0)/(PSIp_lim-PSIp0)
+
+     vth0=sqrt(2*spp%vars%te(1))
+
+     V_buffer = vth0
+     min_V=6.8e-2*V_buffer
+     max_V=V_buffer*5._rp
+     XI_buffer=0._rp
+
+     !write(6,*) 'R',R_buffer
+     !write(6,*) 'Z',Z_buffer
+     !write(6,*) 'PSIlim',PSIp_lim
+     !write(6,*) 'PSI0',PSIp0
+     !write(output_unit_write,*) 'PSI1',psi1
+     !write(6,*) 'PSI0',psi0
+     !write(output_unit_write,*) 'PSIN1',PSIN1
+     !write(6,*) 'PSIN0',PSIN0
+     
+     if (.not.params%SameRandSeed) then
+        call init_random_seed()
+     else
+        call random_seed(put=seed)
+     end if
+     
+     write(output_unit_write,'("Begin burn: ",I10)')
+     accepted=.false.
+     ii=1_idef
+     do while (ii .LE. 1000_idef)
+
+        if (modulo(ii,100).eq.0) then
+           write(output_unit_write,'("Burn: ",I10)') ii
+        end if
+
+        
+        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
+        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
+        R_test = R_buffer + get_random_N()*spp%dR
+        
+        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
+        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + get_random_N()*spp%dZ
+        
+        V_test=V_buffer+get_random_N()*spp%dgam
+
+
+        do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           R_test = R_buffer + get_random_N()*spp%dR
+        end do
+
+        do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           Z_test = Z_buffer + get_random_N()*spp%dZ
+        end do
+
+        do while ((V_test.GT.max_V).OR.(V_test .LT. min_V))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           V_test = V_buffer + get_random_N()*spp%dgam
+        end do
+        
+        PHI_test = 2.0_rp*C_PI*get_random_U()
+
+        XI_test = -1+2.0_rp*get_random_U()
+
+               
+        if (accepted) then
+           PSIN0=PSIN1
+           vth0=vth1
+        end if
+        
+        spp%vars%Y(1,1)=R_test
+        spp%vars%Y(1,2)=PHI_test
+        spp%vars%Y(1,3)=Z_test
+
+        spp%vars%flagCon(1)=1_is
+        if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
+#ifdef FIO
+           call get_fio_vector_potential(spp%vars,F,params)
+           call get_fio_profile(spp%vars,P,params)
+#endif
+        end if
+        
+        psi1=spp%vars%PSI_P(1)
+
+        !write(output_unit_write,*) 'PSIlim',PSIp_lim
+        !write(output_unit_write,*) 'PSI0',PSIp0
+        !write(output_unit_write,*) 'PSI',psi1
+
+        PSIN1=(psi1-PSIp0)/(PSIp_lim-PSIp0)
+
+        !write(6,*) 'R',R_test*params%cpp%length
+        !write(6,*) 'Z',Z_test*params%cpp%length
+        !write(6,*) 'PSIlim',PSIp_lim
+        !write(6,*) 'PSI0',PSIp0
+        !write(6,*) 'PSI1',psi1
+        !write(6,*) 'PSI0',psi0
+        !write(6,*) 'PSIN',PSIN1
+        !write(6,*) 'PSIN0',PSIN0
+
+        !write(6,*) 'te',spp%vars%te(1)
+        !write(6,*) 'vth0,v_buffer',vth0,V_buffer
+        
+        vth1=sqrt(2*spp%vars%te(1))
+
+
+        !write(6,*) 'vth1,v_test',vth1,V_test
+        
+        ! Calculate acceptance ratio for MH algorithm. fRE function
+        ! incorporates p^2 factor of spherical coordinate Jacobian
+        ! for velocity phase space, factors of sin(pitch angle) for velocity
+        ! phase space and cylindrical coordinate Jacobian R for spatial
+        ! phase space incorporated here.
+
+        
+        ratio = real(spp%vars%flagCon(1))*indicator(PSIN1,psi_max)* &
+             R_test*EXP(-PSIN1/sigma)*V_test**2/vth1**3* &
+             EXP(-(V_test/vth1)**2)/ &
+             (R_buffer*EXP(-PSIN0/sigma)*V_buffer**2/vth0**3* &
+             EXP(-(V_buffer/vth0)**2))
+
+        accepted=.false.
+        if (ratio .GE. 1.0_rp) then
+           accepted=.true.
+           R_buffer = R_test
+           Z_buffer = Z_test
+           PHI_buffer = PHI_test
+           V_buffer = V_test
+           XI_buffer = XI_test
+           ii = ii + 1_idef
+
+           !write(output_unit_write,*) 'PSIN',PSIN1
+        else
+!           call RANDOM_NUMBER(rand_unif)
+!           if (rand_unif .LT. ratio) then
+           !if (get_random_mkl_U() .LT. ratio) then
+           if (get_random_U() .LT. ratio) then
+              accepted=.true.
+              R_buffer = R_test
+              Z_buffer = Z_test
+              PHI_buffer = PHI_test
+              V_buffer = V_test
+              XI_buffer = XI_test
+              ii = ii + 1_idef
+
+              !write(output_unit_write,*) 'PSIN',PSIN1
+           end if
+        end if
+     end do
+     ! Transient !
+
+     write(output_unit_write,'("Begin sample: ",I10)')
+     ii=1_idef
+     do while (ii .LE. nsamples)
+
+!        write(output_unit_write,'("sample:",I15)') ii
+        
+       if (modulo(ii,nsamples/10).eq.0) then
+           write(output_unit_write,'("Sample: ",I10)') ii
+        end if
+        
+        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
+        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
+        R_test = R_buffer + get_random_N()*spp%dR
+        
+        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
+        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + get_random_N()*spp%dZ
+
+        PHI_test = 2.0_rp*C_PI*get_random_U()
+
+        do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           R_test = R_buffer + get_random_N()*spp%dR
+        end do
+
+        do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           Z_test = Z_buffer + get_random_N()*spp%dZ
+        end do
+
+        V_test=V_buffer+get_random_N()*spp%dgam
+
+        do while ((V_test.GT.max_V).OR.(V_test .LT. min_V))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           V_test = V_buffer + get_random_N()*spp%dgam
+        end do
+
+        XI_test = -1+2.0_rp*get_random_U()
+        
+        if (accepted) then
+           PSIN0=PSIN1
+           vth0=vth1
+        end if
+        
+        spp%vars%Y(1,1)=R_test
+        spp%vars%Y(1,2)=PHI_test
+        spp%vars%Y(1,3)=Z_test
+
+        spp%vars%flagCon(1)=1_is
+        if (params%field_model.eq.'M3D_C1'.or.params%field_model.eq.'NIMROD') then
+#ifdef FIO
+           call get_fio_vector_potential(spp%vars,F,params)
+           call get_fio_profile(spp%vars,P,params)
+#endif
+        end if
+
+        
+        psi1=spp%vars%PSI_P(1)
+
+        !write(output_unit_write,*) 'PSIlim',PSIp_lim
+        !write(output_unit_write,*) 'PSI0',PSIp0
+        !write(output_unit_write,*) 'PSI',psi1
+        
+        PSIN1=(psi1-PSIp0)/(PSIp_lim-PSIp0)
+
+
+        !write(output_unit_write,*) 'R',R_test
+        !write(output_unit_write,*) 'Z',Z_test
+        !write(output_unit_write,*) 'PSIlim',PSIp_lim
+        !write(output_unit_write,*) 'PSI0',PSIp0
+        !write(output_unit_write,*) 'PSI1',psi1
+        !write(output_unit_write,*) 'PSI0',psi0
+        !write(output_unit_write,*) 'PSIN',PSIN1
+        !write(output_unit_write,*) 'PSIN0',PSIN0
+
+        vth1=sqrt(2*spp%vars%te(1))
+        
+        ratio = real(spp%vars%flagCon(1))*indicator(PSIN1,psi_max)* &
+             R_test*EXP(-PSIN1/sigma)*V_test**2/vth1**3* &
+             EXP(-(V_test/vth1)**2)/ &
+             (R_buffer*EXP(-PSIN0/sigma)*V_buffer**2/vth0**3* &
+             EXP(-(V_buffer/vth0)**2))
+        
+        accepted=.false.
+        if (ratio .GE. 1.0_rp) then
+           accepted=.true.
+           R_buffer = R_test
+           Z_buffer = Z_test
+           PHI_buffer = PHI_test
+           V_buffer = V_test
+           XI_buffer = XI_test
+        else
+           !call RANDOM_NUMBER(rand_unif)
+           !if (rand_unif .LT. ratio) then
+           !if (get_random_mkl_U() .LT. ratio) then
+           if (get_random_U() .LT. ratio) then
+              accepted=.true.
+              R_buffer = R_test
+              Z_buffer = Z_test
+              PHI_buffer = PHI_test
+              V_buffer = V_test
+              XI_buffer = XI_test
+           end if
+        end if
+
+!        write(output_unit_write,'("R: ",E17.10)') R_buffer
+!        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
+        
+        ! Only accept sample if it is within desired boundary, but
+        ! add to MC above if within buffer. This helps make the boundary
+        ! more defined.
+        IF ((INT(indicator(PSIN1,psi_max)).EQ.1).AND. &
+             ACCEPTED) THEN
+           R_samples(ii) = R_buffer
+           Z_samples(ii) = Z_buffer
+           PHI_samples(ii) = PHI_buffer
+           V_samples(ii) = V_buffer
+           XI_samples(ii) = XI_buffer
+
+           !write(output_unit_write,*) 'PSIN',PSIN1
+
+           
+!           write(output_unit_write,*) 'RS',R_buffer
+           
+           ! Sample phi location uniformly
+           !call RANDOM_NUMBER(rand_unif)
+           !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
+           !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
+           ii = ii + 1_idef 
+        END IF
+        
+     end do
+
+!  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
+!  write(output_unit_write,'("R_sample: ",E17.10)') R_samples(:)*params%cpp%length
+
+     X_samples=R_samples*cos(PHI_samples)
+     Y_samples=R_samples*sin(PHI_samples)
+
+!     write(output_unit_write,*) 'R_samples',R_samples
+!     write(output_unit_write,*) 'PHI_samples',PHI_samples
+!     write(output_unit_write,*) 'Z_samples',Z_samples
+!     write(output_unit_write,*) 'G_samples',G_samples
+!     write(output_unit_write,*) 'eta_samples',eta_samples
+
+     G_samples=1/sqrt(1-V_samples**2)
+     ETA_samples=acos(XI_samples)*180/C_PI
+     
+  end if
+
+  params%GC_coords=.FALSE.
+  
+  call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+
+  CALL MPI_SCATTER(X_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(G_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%g,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(ETA_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+
+  
+  call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+  if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
+
+  
+  
+  DEALLOCATE(R_samples)
+  DEALLOCATE(X_samples)
+  DEALLOCATE(Y_samples)
+  DEALLOCATE(Z_samples)
+  DEALLOCATE(PHI_samples)
+  DEALLOCATE(V_samples)
+  DEALLOCATE(G_samples)
+  DEALLOCATE(XI_samples)
+  DEALLOCATE(ETA_samples)
+
+end subroutine FIO_therm
+
+SUBROUTINE load_data_from_hdf5_BMC(params,Nr_a,r_a,nRE)
+  TYPE(KORC_PARAMS), INTENT(IN) :: params
+  CHARACTER(MAX_STRING_LENGTH) :: filename
+  CHARACTER(MAX_STRING_LENGTH) :: gname
+  CHARACTER(MAX_STRING_LENGTH) :: subgname
+  CHARACTER(MAX_STRING_LENGTH) :: dset
+  INTEGER(HID_T) :: h5file_id
+  INTEGER(HID_T) :: group_id
+  INTEGER(HID_T) :: subgroup_id
+  REAL(rp) :: rdatum
+  INTEGER :: h5error
+  INTEGER, intent(out) :: Nr_a
+  REAL(rp), INTENT(out), ALLOCATABLE,DIMENSION(:) :: r_a,nRE
+
+  filename = TRIM(filename_exp)
+  call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
+  if (h5error .EQ. -1) then
+     write(output_unit_write,'("KORC ERROR: Something went wrong in: load_data_from_hdf5 (korc_experimental) --> h5fopen_f")')
+     call korc_abort(20)
+  end if
+
+  dset = "/Nr_a"
+  call load_from_hdf5(h5file_id,dset,rdatum)
+  Nr_a = INT(rdatum)
+
+  ALLOCATE(r_a(Nr_a))
+  ALLOCATE(nRE(Nr_a))
+
+
+  dset = "/r_a"
+  call load_array_from_hdf5(h5file_id,dset,r_a)
+
+  dset = "/nRE"
+  call load_array_from_hdf5(h5file_id,dset,nRE)
+
+
+
+  call h5fclose_f(h5file_id, h5error)
+  if (h5error .EQ. -1) then
+     write(output_unit_write,'("KORC ERROR: Something went wrong in: load_data_from_hdf5 (korc_experimental) --> h5fclose_f")')
+  end if
+
+END SUBROUTINE load_data_from_hdf5_BMC
+
+FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
+  REAL(rp), INTENT(IN) 	:: rm
+  INTEGER :: Nr_a
+  REAL(rp), INTENT(IN),dimension(Nr_a) 	:: r_a,nRE
+  REAL(rp) 				:: fRE_BMC
+  REAL(rp) 				:: D
+  REAL(rp) 				:: g0
+  REAL(rp) 				:: g1
+  REAL(rp) 				:: f0
+  REAL(rp) 				:: f1
+  REAL(rp) 				:: m
+  INTEGER 				:: index
+
+  !write(6,*) r_a(Nr_a),rm
+  
+  index = MINLOC(ABS(r_a - rm),1)
+  ! index of gamma supplied to function in Hollmann input gamma range
+  D = r_a(index) - rm
+
+  !write(6,*) index
+  !write(6,*) ''
+  
+  ! linear interpolation of Hollmann input gamma range to gamma supplied
+  ! to function
+  if (D.GT.0) then
+     f0 = nRE(index-1)
+     g0 = r_a(index-1)
+
+     f1 = nRE(index)
+     g1 = r_a(index)
+  else
+     f0 = nRE(index)
+     g0 = r_a(index)
+
+     f1 = nRE(index+1)
+     g1 = r_a(index+1)
+  end if
+
+  m = (f1-f0)/(g1-g0)
+
+  fRE_BMC = f0 + m*(rm - g0)
+  ! end of linear interpolation, fRE_H is evaluation of input Hollmann energy
+  ! distribution PDF at gamma supplied to function
+
+END FUNCTION fRE_BMC
+
+subroutine BMC_radial(params,spp,F,P)
+  !! @note Subroutine that generates a 2D Gaussian distribution in an 
+  !! elliptic torus as the initial spatial condition of a given particle 
+  !! species in the simulation. @endnote
+  TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
+  !! Core KORC simulation parameters.
+  TYPE(SPECIES), INTENT(INOUT) 		:: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)            :: P
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: R_samples,X_samples,Y_samples
+  !! Major radial location of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: PHI_samples
+  !! Azimuithal angle of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Z_samples
+  !! Vertical location of all samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: V_samples,G_samples
+  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: XI_samples,ETA_samples
+
+  REAL(rp) 				:: min_R,max_R
+  REAL(rp) 				:: min_Z,max_Z
+    REAL(rp) 				:: min_V,max_V
+ 
+  REAL(rp) 				:: R_buffer
+  !! Previous sample of R location
+  REAL(rp) 				:: Z_buffer
+  !! Previous sample of Z location
+  REAL(rp) 				:: PHI_buffer
+  REAL(rp) 				:: V_buffer,XI_buffer
+  REAL(rp) 				:: V_test,XI_test
+
+  REAL(rp) 				:: R_test
+  !! Present sample of R location
+  REAL(rp) 				:: Z_test
+  !! Present sample of Z location
+  REAL(rp) 				:: PHI_test
+
+  REAL(rp) 				:: psi_max,psi_max_buff
+  REAL(rp)  :: PSIp_lim,PSIP0,PSIN,PSIN0,PSIN1,sigma,psi0,psi1
+  REAL(rp)  :: vth0,vth1
+
+  REAL(rp) 				:: rand_unif
+  !! Uniform random variable [0,1]
+  REAL(rp) 				:: ratio
+  !! MH selection criteria
+  INTEGER				:: nsamples
+  !! Total number of samples to be distributed over all mpi processes
+  INTEGER 				:: ii
+  !! Sample iterator.
+  INTEGER 				:: mpierr
+  !! mpi error indicator
+
+  LOGICAL :: accepted
+  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
+  REAL(rp) :: rm_buffer,rm_test
+  INTEGER :: Nr_a
+  REAL(rp), ALLOCATABLE,DIMENSION(:) :: r_a,nRE
+
+  if (params%mpi_params%rank.EQ.0_idef) then
+     write(output_unit_write,*) '*** START SAMPLING ***'
+  end if
+  
+  nsamples = spp%ppp*params%mpi_params%nmpi
+
+  params%GC_coords=.TRUE.
+  PSIp_lim=F%PSIp_lim
+
+  if (params%field_model.eq.'M3D_C1') then
+     min_R=params%rmin/params%cpp%length
+     max_R=params%rmax/params%cpp%length
+     min_Z=params%Zmin/params%cpp%length
+     max_Z=params%Zmax/params%cpp%length
+
+     PSIp0=F%PSIp_0
+     psi_max = spp%psi_max
+     psi_max_buff = spp%psi_max
+  else
+     min_R=minval(F%X%R)
+     max_R=maxval(F%X%R)
+     min_Z=minval(F%X%Z)
+     max_Z=maxval(F%X%Z)
+
+     PSIp0=F%PSIP_min
+     psi_max = spp%psi_max
+     psi_max_buff = spp%psi_max*2._rp
+  end if  
+
+  sigma=spp%sigmaR*params%cpp%length
+  
+  !write(output_unit_write,*) min_R,max_R
+  !write(output_unit_write,*) min_Z,max_Z
+ 
+  ALLOCATE(R_samples(nsamples))
+  ALLOCATE(X_samples(nsamples))
+  ALLOCATE(Y_samples(nsamples))
+  ! Number of samples to distribute among all MPI processes
+  ALLOCATE(PHI_samples(nsamples))
+  ! Number of samples to distribute among all MPI processes
+  ALLOCATE(Z_samples(nsamples))
+  ! Number of samples to distribute among all MPI processes
+
+  call load_data_from_hdf5_BMC(params,Nr_a,r_a,nRE)
+  
+  if (params%mpi_params%rank.EQ.0_idef) then
+        ! Transient !
+
+     
+     R_buffer = spp%Ro
+     Z_buffer = spp%Zo
+     PHI_buffer = 0._rp
+
+     
+
+     write(6,*) 'R_buffer',R_buffer*params%cpp%length
+     write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+     !write(6,*) 'PSIlim',PSIp_lim
+     !write(6,*) 'PSI0',PSIp0
+     !write(output_unit_write,*) 'PSI1',psi1
+     !write(6,*) 'PSI0',psi0
+     !write(output_unit_write,*) 'PSIN1',PSIN1
+     !write(6,*) 'PSIN0',PSIN0
+     
+     if (.not.params%SameRandSeed) then
+        call init_random_seed()
+     else
+        call random_seed(put=seed)
+     end if
+     
+     write(output_unit_write,'("Begin burn: ",I10)')
+     flush(output_unit_write)
+     accepted=.false.
+     ii=1_idef
+     do while (ii .LE. 1000_idef)
+
+        if (modulo(ii,100).eq.0) then
+           write(output_unit_write,'("Burn: ",I10)') ii        
+        end if
+        write(6,'("Burn: ",I10)') ii
+
+        
+        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
+        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
+        R_test = R_buffer + get_random_N()*spp%dR
+        
+        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
+        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + get_random_N()*spp%dZ
+        
+
+
+        do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           R_test = R_buffer + get_random_N()*spp%dR
+        end do
+
+        do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           Z_test = Z_buffer + get_random_N()*spp%dZ
+        end do
+
+        
+        PHI_test = 2.0_rp*C_PI*get_random_U()
+
+        rm_buffer=sqrt((R_buffer-F%AB%Ro)**2+(Z_buffer)**2)/F%AB%a
+        rm_test=sqrt((R_test-F%AB%Ro)**2+(Z_test)**2)/F%AB%a
+
+        write(6,*) 'Ro',F%AB%Ro*params%cpp%length
+        write(6,*) 'a',F%AB%a*params%cpp%length
+        
+        write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
+        write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
+        
+        write(6,*) 'R_buffer',R_test*params%cpp%length
+        write(6,*) 'Z_buffer',Z_test*params%cpp%length
+        write(6,*) 'rm_buffer',rm_buffer*params%cpp%length
+        
+        write(6,*) 'R_test',R_test*params%cpp%length
+        write(6,*) 'Z_test',Z_test*params%cpp%length
+        write(6,*) 'rm_test',rm_test*params%cpp%length
+        
+        if (rm_test.gt.1._rp) cycle
+
+        !write(6,*) 'R',R_test*params%cpp%length
+        !write(6,*) 'Z',Z_test*params%cpp%length
+        !write(6,*) 'PSIlim',PSIp_lim
+        !write(6,*) 'PSI0',PSIp0
+        !write(6,*) 'PSI1',psi1
+        !write(6,*) 'PSI0',psi0
+        !write(6,*) 'PSIN',PSIN1
+        !write(6,*) 'PSIN0',PSIN0
+
+        !write(6,*) 'te',spp%vars%te(1)
+        !write(6,*) 'vth0,v_buffer',vth0,V_buffer
+
+
+
+        !write(6,*) 'vth1,v_test',vth1,V_test
+        
+        ! Calculate acceptance ratio for MH algorithm. fRE function
+        ! incorporates p^2 factor of spherical coordinate Jacobian
+        ! for velocity phase space, factors of sin(pitch angle) for velocity
+        ! phase space and cylindrical coordinate Jacobian R for spatial
+        ! phase space incorporated here.
+
+        
+        ratio = indicator(rm_test,1._rp)*R_test*fRE_BMC(Nr_a,r_a,nRE,rm_test)/ &
+             R_buffer*fRE_BMC(Nr_a,r_a,nRE,rm_buffer)
+
+        accepted=.false.
+        if (ratio .GE. 1.0_rp) then
+           accepted=.true.
+           R_buffer = R_test
+           Z_buffer = Z_test
+           PHI_buffer = PHI_test
+           ii = ii + 1_idef
+
+           !write(output_unit_write,*) 'PSIN',PSIN1
+           write(6,*) 'accepted'
+        else
+!           call RANDOM_NUMBER(rand_unif)
+!           if (rand_unif .LT. ratio) then
+           !if (get_random_mkl_U() .LT. ratio) then
+           if (get_random_U() .LT. ratio) then
+              accepted=.true.
+              R_buffer = R_test
+              Z_buffer = Z_test
+              PHI_buffer = PHI_test
+              ii = ii + 1_idef
+
+              !write(output_unit_write,*) 'PSIN',PSIN1
+              write(6,*) 'accepted'
+           end if
+        end if
+     end do
+     ! Transient !
+
+     write(output_unit_write,'("Begin sample: ",I10)')
+     ii=1_idef
+     do while (ii .LE. nsamples)
+
+!        write(output_unit_write,'("sample:",I15)') ii
+        
+       if (modulo(ii,nsamples/10).eq.0) then
+           write(output_unit_write,'("Sample: ",I10)') ii
+        end if
+        
+        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
+        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
+        R_test = R_buffer + get_random_N()*spp%dR
+        
+        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
+        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + get_random_N()*spp%dZ
+
+        PHI_test = 2.0_rp*C_PI*get_random_U()
+
+        do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           R_test = R_buffer + get_random_N()*spp%dR
+        end do
+
+        do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
+           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
+           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
+           Z_test = Z_buffer + get_random_N()*spp%dZ
+        end do
+
+        
+        rm_buffer=sqrt((R_buffer-F%AB%Ro)**2+(Z_buffer)**2)/F%AB%a
+        rm_test=sqrt((R_test-F%AB%Ro)**2+(Z_test)**2)/F%AB%a
+
+        !write(6,*) 'rm_buffer',rm_buffer
+        !write(6,*) 'rm_test',rm_test
+        
+        if (rm_test.gt.1._rp) cycle
+
+        !write(6,*) 'R',R_test*params%cpp%length
+        !write(6,*) 'Z',Z_test*params%cpp%length
+        
+        ratio = indicator(rm_test,1._rp)*R_test*fRE_BMC(Nr_a,r_a,nRE,rm_test)/ &
+             R_buffer*fRE_BMC(Nr_a,r_a,nRE,rm_buffer)
+        
+        accepted=.false.
+        if (ratio .GE. 1.0_rp) then
+           accepted=.true.
+           R_buffer = R_test
+           Z_buffer = Z_test
+           PHI_buffer = PHI_test
+        else
+           !call RANDOM_NUMBER(rand_unif)
+           !if (rand_unif .LT. ratio) then
+           !if (get_random_mkl_U() .LT. ratio) then
+           if (get_random_U() .LT. ratio) then
+              accepted=.true.
+              R_buffer = R_test
+              Z_buffer = Z_test
+              PHI_buffer = PHI_test
+           end if
+        end if
+
+!        write(output_unit_write,'("R: ",E17.10)') R_buffer
+!        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
+        
+        ! Only accept sample if it is within desired boundary, but
+        ! add to MC above if within buffer. This helps make the boundary
+        ! more defined.
+        IF (ACCEPTED) THEN
+           R_samples(ii) = R_buffer
+           Z_samples(ii) = Z_buffer
+           PHI_samples(ii) = PHI_buffer
+
+           !write(output_unit_write,*) 'PSIN',PSIN1
+
+           
+!           write(output_unit_write,*) 'RS',R_buffer
+           
+           ! Sample phi location uniformly
+           !call RANDOM_NUMBER(rand_unif)
+           !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
+           !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
+           ii = ii + 1_idef
+           !write(6,*) 'accepted'
+        END IF
+        
+     end do
+
+!  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
+!  write(output_unit_write,'("R_sample: ",E17.10)') R_samples(:)*params%cpp%length
+
+     X_samples=R_samples*cos(PHI_samples)
+     Y_samples=R_samples*sin(PHI_samples)
+
+!     write(output_unit_write,*) 'R_samples',R_samples
+!     write(output_unit_write,*) 'PHI_samples',PHI_samples
+!     write(output_unit_write,*) 'Z_samples',Z_samples
+!     write(output_unit_write,*) 'G_samples',G_samples
+!     write(output_unit_write,*) 'eta_samples',eta_samples
+     
+  end if
+
+  params%GC_coords=.FALSE.
+  
+  call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+
+  CALL MPI_SCATTER(X_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
+       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+
+  
+  call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
+
+  if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
+  
+  
+  DEALLOCATE(R_samples)
+  DEALLOCATE(X_samples)
+  DEALLOCATE(Y_samples)
+  DEALLOCATE(Z_samples)
+  DEALLOCATE(PHI_samples)
+  DEALLOCATE(r_a)
+  DEALLOCATE(nRE)
+  
+  
+end subroutine BMC_radial
 
 subroutine intitial_spatial_distribution(params,spp,P,F)
   !! @note Subroutine that contains calls to the different subroutines 
@@ -1677,7 +2697,24 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
         call get_Hollmann_distribution_3D(params,spp(ss),F)
      CASE ('HOLLMANN-3D-PSI')
         call get_Hollmann_distribution_3D_psi(params,spp(ss),F)
+     CASE ('HOLLMANN-1DTRANSPORT')
+        call get_Hollmann_distribution_1Dtransport(params,spp(ss),F)
      CASE('MH_psi')
+
+#if DBG_CHECK        
+#else
+        if (spp(ss)%ppp*params%mpi_params%nmpi.lt.10) then
+           if(params%mpi_params%rank.eq.0) then
+              write(6,*) &
+                   'num_samples need to be atleast 10 but is only: ', &
+                   spp(ss)%ppp*params%mpi_params%nmpi
+           end if
+           call korc_abort(19)
+        end if
+#endif
+        
+        call MH_psi(params,spp(ss),F)
+     CASE('FIO_therm')
 
         if (spp(ss)%ppp*params%mpi_params%nmpi.lt.10) then
            if(params%mpi_params%rank.eq.0) then
@@ -1685,10 +2722,22 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
                    'num_samples need to be atleast 10 but is only: ', &
                    spp(ss)%ppp*params%mpi_params%nmpi
            end if
-           call korc_abort
+           call korc_abort(19)
         end if
         
-        call MH_psi(params,spp(ss),F)
+        call FIO_therm(params,spp(ss),F,P)
+     CASE('BMC_radial')
+
+        if (spp(ss)%ppp*params%mpi_params%nmpi.lt.10) then
+           if(params%mpi_params%rank.eq.0) then
+              write(6,*) &
+                   'num_samples need to be atleast 10 but is only: ', &
+                   spp(ss)%ppp*params%mpi_params%nmpi
+           end if
+           call korc_abort(19)
+        end if
+        
+        call BMC_radial(params,spp(ss),F,P)
      CASE DEFAULT
         call torus(params,spp(ss))
      END SELECT

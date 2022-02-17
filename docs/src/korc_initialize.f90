@@ -121,6 +121,8 @@ CONTAINS
     params%proceed = proceed
     params%reinit  = reinit
 
+    params%load_balance = load_balance
+    
     params%simulation_time = simulation_time
     params%snapshot_frequency = snapshot_frequency
     params%restart_overwrite_frequency=restart_overwrite_frequency
@@ -140,6 +142,7 @@ CONTAINS
          (C_ME*C_C**2) ! Minimum value of relativistic gamma factor
     params%radiation = radiation
     params%collisions = collisions
+    params%LargeCollisions = LargeCollisions
     params%collisions_model = TRIM(collisions_model)
     params%bound_electron_model = TRIM(bound_electron_model)
     params%GC_rad_model = TRIM(GC_rad_model)
@@ -254,10 +257,11 @@ CONTAINS
 
     if (params%restart) then
        call load_time_stepping_params(params)
-
-    else if (params%proceed) then
+       
+    else if (params%proceed.or.params%reinit) then
+       
        call load_prev_time(params)
-
+       
        params%ito = 1_ip
 
        params%dt = params%dt*(2.0_rp*C_PI*params%cpp%time_r)
@@ -265,17 +269,23 @@ CONTAINS
        params%t_steps = CEILING((params%simulation_time-params%init_time)/ &
             params%dt,ip)
 
-       params%output_cadence = FLOOR(params%snapshot_frequency/params%dt,ip)
+       params%output_cadence = CEILING(params%snapshot_frequency/params%dt,ip)
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
        params%num_snapshots = params%t_steps/params%output_cadence
 
-       params%restart_output_cadence = FLOOR(params%restart_overwrite_frequency/ &
+       if (params%t_steps.gt.params%output_cadence) then
+          params%dt=params%snapshot_frequency/float(params%output_cadence)
+       endif
+       
+       params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
             params%dt,ip)
+
 
        params%t_skip=min(params%t_steps,params%output_cadence)
        params%t_skip=max(1_ip,params%t_skip)
+
 
     else
        params%ito = 1_ip
@@ -284,22 +294,21 @@ CONTAINS
 
        params%t_steps = CEILING(params%simulation_time/params%dt,ip)
        
-       params%output_cadence = FLOOR(params%snapshot_frequency/params%dt,ip)
+       params%output_cadence = CEILING(params%snapshot_frequency/params%dt,ip)
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
        params%num_snapshots = params%t_steps/params%output_cadence
 
-       params%restart_output_cadence = FLOOR(params%restart_overwrite_frequency/ &
+       if (params%t_steps.gt.params%output_cadence) then
+          params%dt=params%snapshot_frequency/float(params%output_cadence)
+       endif
+
+       params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
             params%dt,ip)
 
-       if (.not.F%ReInterp_2x1t) then
-          params%t_skip=min(params%t_steps,params%output_cadence)
-          params%t_skip=max(1_ip,params%t_skip)
-       else
-          params%t_skip=params%output_cadence
-          params%t_skip=max(1_ip,params%t_skip)
-       end if
+       params%t_skip=min(params%t_steps,params%output_cadence)
+       params%t_skip=max(1_ip,params%t_skip)
 
     end if
 
@@ -470,6 +479,8 @@ CONTAINS
        spp(ii)%q = q(ii)*C_E
        spp(ii)%m = m(ii)*C_ME
        spp(ii)%ppp = ppp(ii)
+       spp(ii)%pinit = pinit(ii)
+       spp(ii)%pRE = pinit(ii)
 
        spp(ii)%Ro = Ro(ii)
        spp(ii)%PHIo = C_PI*PHIo(ii)/180.0_rp
@@ -517,11 +528,15 @@ CONTAINS
        ALLOCATE( spp(ii)%vars%mu(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%Prad(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%Pin(spp(ii)%ppp) )
-       ALLOCATE( spp(ii)%vars%flagCon(spp(ii)%ppp) )
+       ALLOCATE( spp(ii)%vars%flagCon(spp(ii)%ppp) )       
        ALLOCATE( spp(ii)%vars%flagCol(spp(ii)%ppp) )
+       ALLOCATE( spp(ii)%vars%initLCFS(spp(ii)%ppp) )
+       ALLOCATE( spp(ii)%vars%flagRE(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%wt(spp(ii)%ppp) )
+#ifdef FIO
        ALLOCATE( spp(ii)%vars%hint(spp(ii)%ppp))
-
+#endif
+       
        !     write(output_unit_write,'("0 size of PSI_P: ",I16)') size(spp(ii)%vars%PSI_P)
 
        spp(ii)%vars%X = 0.0_rp
@@ -540,8 +555,16 @@ CONTAINS
        spp(ii)%vars%mu = 0.0_rp
        spp(ii)%vars%Prad = 0.0_rp
        spp(ii)%vars%Pin = 0.0_rp
-       spp(ii)%vars%flagCon = 1_is
-       spp(ii)%vars%flagCol = 1_is
+       spp(ii)%vars%flagCon(1:spp(ii)%pinit) = 1_is
+       spp(ii)%vars%flagCol(1:spp(ii)%pinit) = 1_is
+       spp(ii)%vars%flagRE(1:spp(ii)%pinit) = 1_is
+       spp(ii)%vars%initLCFS(1:spp(ii)%pinit) = 1_is
+       if (spp(ii)%pinit.lt.spp(ii)%ppp) then
+          spp(ii)%vars%flagCon(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
+          spp(ii)%vars%flagCol(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is          
+          spp(ii)%vars%flagRE(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
+          spp(ii)%vars%initLCFS(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
+       endif
        spp(ii)%vars%wt = 0.0_rp
 
        if (params%orbit_model(1:2).eq.'GC') then
@@ -553,7 +576,9 @@ CONTAINS
           ALLOCATE( spp(ii)%vars%k4(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k5(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k6(spp(ii)%ppp,4) )
-          if (params%orbit_model(3:5)=='pre'.or.params%field_model=='M3D_C1') then
+          if (params%orbit_model(3:5)=='pre'.or. &
+               TRIM(params%field_model)=='M3D_C1'.or. &
+               TRIM(params%field_model)=='NIMROD') then
              ALLOCATE( spp(ii)%vars%gradB(spp(ii)%ppp,3) )
              ALLOCATE( spp(ii)%vars%curlb(spp(ii)%ppp,3) )
 
@@ -592,6 +617,7 @@ CONTAINS
 
 
     DEALLOCATE(ppp)
+    DEALLOCATE(pinit)
     DEALLOCATE(q)
     DEALLOCATE(m)
     DEALLOCATE(Eno)
@@ -647,12 +673,21 @@ CONTAINS
     if (params%restart.OR.params%proceed.or.params%reinit) then
        call load_particles_ic(params,spp,F)
 
-       call init_random_seed()
+       if(params%LargeCollisions.and.(.not.params%load_balance)) then
+          do ii=1_idef,params%num_species
+             spp(ii)%pRE=int(sum(float(spp(ii)%vars%flagRE)))
+          end do
+       end if
 
+       !write(6,*) 'flagRE',spp(1)%vars%flagRE
+       !write(6,*) 'pRE',spp(1)%pRE
+       
+       call init_random_seed()              
     else
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING SPATIAL DISTRIBUTION * * * *")')
+          flush(output_unit_write)
        end if
        call intitial_spatial_distribution(params,spp,P,F)
        if (params%mpi_params%rank .EQ. 0) then

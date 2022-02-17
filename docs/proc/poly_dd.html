@@ -234,7 +234,7 @@ public function poly_dd(x, coeffs)
   
 <tr>
   
-  <td><span class="anchor" id="variable-x~12"></span>real(kind=DP),</td>
+  <td><span class="anchor" id="variable-x~15"></span>real(kind=DP),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -299,10 +299,25 @@ public function poly_dd(x, coeffs)
 <polygon fill="none" stroke="#000000" points="351,-82 297,-82 297,-58 351,-58 351,-82"/>
 <text text-anchor="middle" x="324" y="-67.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">poly_dd</text>
 </g>
-<!-- interface~poly -->
+<!-- proc~poly_ddv -->
 <g id="proc~~poly_dd~~CalledByGraph_node2" class="node">
+<title>proc~poly_ddv</title>
+<g id="a_proc~~poly_dd~~CalledByGraph_node2"><a xlink:href=".././proc/poly_ddv.html" xlink:title="poly_ddv">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="261,-62 206,-62 206,-38 261,-38 261,-62"/>
+<text text-anchor="middle" x="233.5" y="-47.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_ddv</text>
+</a>
+</g>
+</g>
+<!-- proc~poly_ddv&#45;&gt;proc~poly_dd -->
+<g id="proc~~poly_dd~~CalledByGraph_edge1" class="edge">
+<title>proc~poly_ddv&#45;&gt;proc~poly_dd</title>
+<path fill="none" stroke="#000000" d="M261.1447,-56.1093C269.2895,-57.9093 278.3359,-59.9085 286.9692,-61.8164"/>
+<polygon fill="#000000" stroke="#000000" points="286.3158,-65.2564 296.8355,-63.9968 287.8264,-58.4213 286.3158,-65.2564"/>
+</g>
+<!-- interface~poly -->
+<g id="proc~~poly_dd~~CalledByGraph_node3" class="node">
 <title>interface~poly</title>
-<g id="a_proc~~poly_dd~~CalledByGraph_node2"><a xlink:href=".././interface/poly.html" xlink:title="poly">
+<g id="a_proc~~poly_dd~~CalledByGraph_node3"><a xlink:href=".././interface/poly.html" xlink:title="poly">
 <polygon fill="#a7506f" stroke="#a7506f" points="54,-64 0,-64 0,-40 54,-40 54,-64"/>
 <text text-anchor="middle" x="27" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly</text>
 </a>
@@ -313,15 +328,6 @@ public function poly_dd(x, coeffs)
 <title>interface~poly&#45;&gt;proc~poly_dd</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M54.1369,-58.54C65.1969,-60.959 78.1474,-63.4795 90,-65 158.9871,-73.8498 240.3324,-73.1006 286.6691,-71.6322"/>
 <polygon fill="#000000" stroke="#000000" points="286.9647,-75.1241 296.8375,-71.2801 286.7224,-68.1283 286.9647,-75.1241"/>
-</g>
-<!-- proc~poly_ddv -->
-<g id="proc~~poly_dd~~CalledByGraph_node3" class="node">
-<title>proc~poly_ddv</title>
-<g id="a_proc~~poly_dd~~CalledByGraph_node3"><a xlink:href=".././proc/poly_ddv.html" xlink:title="poly_ddv">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="261,-62 206,-62 206,-38 261,-38 261,-62"/>
-<text text-anchor="middle" x="233.5" y="-47.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_ddv</text>
-</a>
-</g>
 </g>
 <!-- interface~poly&#45;&gt;proc~poly_ddv -->
 <g id="proc~~poly_dd~~CalledByGraph_edge4" class="edge">
@@ -343,12 +349,6 @@ public function poly_dd(x, coeffs)
 <title>interface~poly&#45;&gt;proc~poly_msk_ddv</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M54.062,-41.4905C64.7721,-37.3312 77.3178,-32.4591 89.0916,-27.8868"/>
 <polygon fill="#000000" stroke="#000000" points="90.688,-31.0215 98.7427,-24.1387 88.1539,-24.4963 90.688,-31.0215"/>
-</g>
-<!-- proc~poly_ddv&#45;&gt;proc~poly_dd -->
-<g id="proc~~poly_dd~~CalledByGraph_edge1" class="edge">
-<title>proc~poly_ddv&#45;&gt;proc~poly_dd</title>
-<path fill="none" stroke="#000000" d="M261.1447,-56.1093C269.2895,-57.9093 278.3359,-59.9085 286.9692,-61.8164"/>
-<polygon fill="#000000" stroke="#000000" points="286.3158,-65.2564 296.8355,-63.9968 287.8264,-58.4213 286.3158,-65.2564"/>
 </g>
 <!-- proc~poly_msk_ddv&#45;&gt;proc~poly_ddv -->
 <g id="proc~~poly_dd~~CalledByGraph_edge3" class="edge">
@@ -525,7 +525,7 @@ public function poly_dd(x, coeffs)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

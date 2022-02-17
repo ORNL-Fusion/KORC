@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="<p> 1.9% of total for derived types.</p>Including implementation: 11 statements,  1.9% of total for derived types.">11 statements</a>
+    title="<p> 2.0% of total for derived types.</p>Including implementation: 14 statements,  2.0% of total for derived types.">14 statements</a>
      </li> 
      
      
@@ -194,6 +194,12 @@
       <a class="list-group-item" href="../type/a_field.html#variable-bp_sign">Bp_sign</a>
       
       <a class="list-group-item" href="../type/a_field.html#variable-current_direction">current_direction</a>
+      
+      <a class="list-group-item" href="../type/a_field.html#variable-ero">Ero</a>
+      
+      <a class="list-group-item" href="../type/a_field.html#variable-rmn">rmn</a>
+      
+      <a class="list-group-item" href="../type/a_field.html#variable-sigmamn">sigmamn</a>
       
     </div>
   </div>
@@ -359,6 +365,12 @@
       <a class="list-group-item" href="../type/a_field.html#variable-bp_sign">Bp_sign</a>
       
       <a class="list-group-item" href="../type/a_field.html#variable-current_direction">current_direction</a>
+      
+      <a class="list-group-item" href="../type/a_field.html#variable-ero">Ero</a>
+      
+      <a class="list-group-item" href="../type/a_field.html#variable-rmn">rmn</a>
+      
+      <a class="list-group-item" href="../type/a_field.html#variable-sigmamn">sigmamn</a>
       
     </div>
   </div>
@@ -540,6 +552,48 @@
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ero"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ero</strong></td><td></td><td></td><td><p>radial electric field amplitude.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rmn"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rmn</strong></td><td></td><td></td><td><p>mode location rmn</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigmamn"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>sigmamn</strong></td><td></td><td></td><td><p>mode width sigmamn</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -594,6 +648,12 @@
      <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">current_direction</span> 
      <span class="c">!! Direction of plasma current: PARALLEL or ANTI-PARALLEL to the</span>
      <span class="c">!! toroidal magnetic field.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">Ero</span> 
+     <span class="c">!! radial electric field amplitude.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">rmn</span>
+     <span class="c">!! mode location rmn</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>			<span class="kd">::</span> <span class="n">sigmamn</span>
+     <span class="c">!! mode width sigmamn</span>
   <span class="k">END TYPE </span><span class="n">A_FIELD</span>
 </pre></div>
 
@@ -609,7 +669,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">
