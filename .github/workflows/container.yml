@@ -30,14 +30,20 @@ jobs:
           repository: ornl-fusion/cmfkit
           path: ./.cmfkit_base
 
-      - name: launch build
-        env:
-          CMFKIT_PLATFORM:  readybake
-          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
-          CMFKIT_READYBAKE_IMAGE_SEED:  ${{ matrix.seed_image }}
-
-          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
-
+      - name: yield readybake image
         run: |
-          ./.cmfkit_base/launch build
+          . ./.cmfkit_base/mod_readybake
+          _readybake_isolate_buildpath "${{ matrix.seed_image }}"
+          _readybake_yield_image
+
+#      - name: launch build
+#        env:
+#          CMFKIT_PLATFORM:  readybake
+#          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
+#          CMFKIT_READYBAKE_IMAGE_SEED:  ${{ matrix.seed_image }}
+#
+#          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
+#
+#        run: |
+#          ./.cmfkit_base/launch build
 
