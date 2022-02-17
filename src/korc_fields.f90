@@ -560,8 +560,18 @@ CONTAINS
           
        end do
        !$OMP END SIMD
+    CASE('NONE')
+       !$OMP SIMD
+       do cc=1_idef,pchunk         
+          E_PHI(cc) = E_PHI(cc)
+       end do
+       !$OMP END SIMD
     CASE DEFAULT
-       E_PHI(cc)=E_PHI(cc)
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          E_PHI(cc)=E_PHI(cc)
+       end do
+       !$OMP END SIMD
     END SELECT
     
     !write(output_unit_write,*) arg,arg1

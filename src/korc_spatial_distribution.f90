@@ -2386,8 +2386,8 @@ subroutine BMC_radial(params,spp,F,P)
 
      
 
-     !write(6,*) 'R',R_buffer*params%cpp%length
-     !write(6,*) 'Z',Z_buffer*params%cpp%length
+     !write(6,*) 'R_buffer',R_buffer*params%cpp%length
+     !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
      !write(6,*) 'PSIlim',PSIp_lim
      !write(6,*) 'PSI0',PSIp0
      !write(output_unit_write,*) 'PSI1',psi1
@@ -2402,13 +2402,15 @@ subroutine BMC_radial(params,spp,F,P)
      end if
      
      write(output_unit_write,'("Begin burn: ",I10)')
+     flush(output_unit_write)
      accepted=.false.
      ii=1_idef
      do while (ii .LE. 1000_idef)
-
+        
         if (modulo(ii,100).eq.0) then
-           write(output_unit_write,'("Burn: ",I10)') ii
+           write(output_unit_write,'("Burn: ",I10)') ii        
         end if
+        write(6,'("Burn: ",I10)') ii
 
         
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
@@ -2418,8 +2420,6 @@ subroutine BMC_radial(params,spp,F,P)
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
-        
-
 
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
            !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
@@ -2432,15 +2432,26 @@ subroutine BMC_radial(params,spp,F,P)
            !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
            Z_test = Z_buffer + get_random_N()*spp%dZ
         end do
-
         
         PHI_test = 2.0_rp*C_PI*get_random_U()
 
         rm_buffer=sqrt((R_buffer-F%AB%Ro)**2+(Z_buffer)**2)/F%AB%a
         rm_test=sqrt((R_test-F%AB%Ro)**2+(Z_test)**2)/F%AB%a
 
-        !write(6,*) 'rm_buffer',rm_buffer
-        !write(6,*) 'rm_test',rm_test
+        !write(6,*) 'Ro',F%AB%Ro*params%cpp%length
+        !write(6,*) 'a',F%AB%a*params%cpp%length
+        
+        !write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
+        !write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
+
+        !write(6,*) 'accepted',accepted
+        !write(6,*) 'R_buffer',R_buffer*params%cpp%length
+        !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
+        !write(6,*) 'rm_buffer',rm_buffer*params%cpp%length
+        
+        !write(6,*) 'R_test',R_test*params%cpp%length
+        !write(6,*) 'Z_test',Z_test*params%cpp%length
+        !write(6,*) 'rm_test',rm_test*params%cpp%length
         
         if (rm_test.gt.1._rp) cycle
 
@@ -2479,7 +2490,7 @@ subroutine BMC_radial(params,spp,F,P)
            ii = ii + 1_idef
 
            !write(output_unit_write,*) 'PSIN',PSIN1
-           !write(6,*) 'accepted'
+           write(6,*) 'accepted'
         else
 !           call RANDOM_NUMBER(rand_unif)
 !           if (rand_unif .LT. ratio) then
@@ -2492,7 +2503,7 @@ subroutine BMC_radial(params,spp,F,P)
               ii = ii + 1_idef
 
               !write(output_unit_write,*) 'PSIN',PSIN1
-              !write(6,*) 'accepted'
+              write(6,*) 'accepted'
            end if
         end if
      end do
