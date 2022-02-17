@@ -9,13 +9,14 @@ jobs:
       matrix:
         seed_image:
           - 'rikorose/gcc-cmake:gcc-11'
+          - 'ubuntu:22.04'
 
         build_type:
           - Debug
           - Release
 
         scenario:
-          - basic
+          - ci_debug
 
     runs-on: ubuntu-latest
 
