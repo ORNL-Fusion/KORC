@@ -553,8 +553,8 @@ CONTAINS
           
           rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
-          E_PHI(cc) = E_PHI(cc)+E_dyn-(2._rp*r_a(cc)**3._rp- &
-               3._rp*r_a(cc)**2._rp+1._rp)*0.05/params%cpp%Eo
+          E_PHI(cc) = E_PHI(cc)+E_dyn-sign((2._rp*r_a(cc)**3._rp- &
+               3._rp*r_a(cc)**2._rp+1._rp)*0.05/params%cpp%Eo,E_dyn)
 
           !write(6,*) 'r/a',r_a,'E_PHI_out',E_PHI(cc)
           
