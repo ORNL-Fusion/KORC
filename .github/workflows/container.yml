@@ -39,5 +39,5 @@ jobs:
           CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
         run: |
-          cd ./.cmfkit_base && ./launch build
+          ./.cmfkit_base/launch build
 
