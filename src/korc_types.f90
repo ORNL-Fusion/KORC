@@ -389,6 +389,7 @@ module korc_types
      REAL(rp), DIMENSION(:), ALLOCATABLE 	:: wt 
      !! Weight of each electron. This is used when sampling weighted
      !! PDFs and in the synthetic camera diagnostic.
+     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: initLCFS
 #ifdef FIO
      TYPE(C_PTR), DIMENSION(:), ALLOCATABLE :: hint
      !! Hint for M3D_C1 interpolation.
@@ -530,6 +531,12 @@ module korc_types
      CHARACTER(MAX_STRING_LENGTH) :: current_direction 
      !! Direction of plasma current: PARALLEL or ANTI-PARALLEL to the
      !! toroidal magnetic field.
+     REAL(rp) 			:: Ero 
+     !! radial electric field amplitude.
+     REAL(rp) 			:: rmn
+     !! mode location rmn
+     REAL(rp)			:: sigmamn
+     !! mode width sigmamn
   END TYPE A_FIELD
 
   TYPE, PRIVATE :: MESH
@@ -599,6 +606,7 @@ module korc_types
      REAL(rp)  :: E_dyn
      REAL(rp)  :: E_pulse
      REAL(rp)  :: E_width
+     CHARACTER(30) :: E_profile
      REAL(rp)  :: PSIP_min
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp)  :: AMP
@@ -626,6 +634,8 @@ module korc_types
      !! 2-D array defining the simulation domain where pre-computed data exist.
      REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: FLAG3D 
      !! 3-D array defining the simulation domain where pre-computed data exist.
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: LCFS2D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE    :: LCFS3D 
      REAL(rp) 					:: Eo 
      !! Characteristic electric field.
      REAL(rp) 					:: Bo 
@@ -677,6 +687,7 @@ module korc_types
      real(c_double)  ::  time0,time1
 #endif
      REAL(rp)  :: psip_conv
+     LOGICAL :: useLCFS
      
   END TYPE FIELDS
 

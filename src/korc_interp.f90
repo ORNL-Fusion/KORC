@@ -425,10 +425,13 @@ module korc_interp
      !! and plasma profiles are known.
      INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: FLAG2D
      !! 2-D array with info of the spatial domain where the axisymmetric fields
-     !! and plasma profiles are known.
+     !! and plasma profiles are known.     
      INTEGER(KIND=1), DIMENSION(:,:,:), ALLOCATABLE    :: FLAG3D
      !! 3-D array with info of the spatial domain where the 3-D fields and plasma
      !! profiles are known.
+     INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: LCFS2D
+     !! 2-D array with info of the spatial domain where the axisymmetric fields
+     !! and plasma profiles are known.
 
      REAL(rp)                                          :: Ro
      !! Smaller radial position of the fields and profiles domain.
@@ -548,6 +551,7 @@ module korc_interp
        interp_2D_profiles,&
        interp_3D_profiles,&
        check_if_in_fields_domain,&
+       check_if_in_LCFS,&
        check_if_in_profiles_domain,&
        check_if_in_profiles_domain_p,&
        check_if_in_fields_domain_p,&
@@ -620,6 +624,11 @@ CONTAINS
 
              fields_domain%FLAG2D = F%FLAG3D(:,F%ind_2x1t,:)
 
+             if (.not.ALLOCATED(fields_domain%LCFS2D)) &
+                  ALLOCATE(fields_domain%LCFS2D(bfield_2d%NR,bfield_2d%NZ))
+
+             fields_domain%LCFS2D = F%LCFS3D(:,F%ind_2x1t,:)
+
              fields_domain%DR = ABS(F%X%R(2) - F%X%R(1))
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
 
@@ -643,8 +652,8 @@ CONTAINS
              bfield_2d%A%x2 = F%X%Z
 
 #if DBG_CHECK    
-             write(6,*) 'R',F%X%R
-             write(6,*) 'Z',F%X%Z
+             !write(6,*) 'R',F%X%R
+             !write(6,*) 'Z',F%X%Z
 #endif
              
              call EZspline_setup(bfield_2d%A, F%PSIp, ezerr, .TRUE.)
@@ -656,6 +665,11 @@ CONTAINS
                   ALLOCATE(fields_domain%FLAG2D(bfield_2d%NR,bfield_2d%NZ))
 
              fields_domain%FLAG2D = F%FLAG2D
+
+             if (.not.ALLOCATED(fields_domain%LCFS2D)) &
+                  ALLOCATE(fields_domain%LCFS2D(bfield_2d%NR,bfield_2d%NZ))
+
+             fields_domain%LCFS2D = F%LCFS2D
 
              fields_domain%DR = ABS(F%X%R(2) - F%X%R(1))
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
@@ -1090,6 +1104,11 @@ CONTAINS
                   ALLOCATE(fields_domain%FLAG2D(bfield_2d%NR,bfield_2d%NZ))
 
              fields_domain%FLAG2D = F%FLAG2D
+
+             if (.not.ALLOCATED(fields_domain%LCFS2D)) &
+                  ALLOCATE(fields_domain%LCFS2D(bfield_2d%NR,bfield_2d%NZ))
+
+             fields_domain%LCFS2D = F%LCFS2D
 
              fields_domain%DR = ABS(F%X%R(2) - F%X%R(1))
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
@@ -2228,18 +2247,22 @@ CONTAINS
 !          end if
 
 #if DBG_CHECK    
-          if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
+          if ((IR.lt.1).or.(IZ.lt.1).or.(IR.GT. &
                bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
-             write(6,'("YR:",E17.10)') Y_R(pp)
-             write(6,'("YZ:",E17.10)') Y_Z(pp)
-             write(6,'("IR: ",I16)') IR
-             write(6,'("IZ: ",I16)') IZ
+          
+             !write(6,'("YR:",E17.10)') Y_R(pp)
+             !write(6,'("YZ:",E17.10)') Y_Z(pp)
+             !write(6,'("IR: ",I16)') IR
+             !write(6,'("IZ: ",I16)') IZ
+             !write(6,*) 'NR',bfield_2d%NR
+             !write(6,*) 'NZ',bfield_2d%NZ
+             !write(6,*) 'FLAG',fields_domain%FLAG2D(IR,IZ)
              !call KORC_ABORT(23)
           end if
 #endif
           
-          if ((IR.lt.0).or.(IZ.lt.0).or. &
-               ((IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)).or. &
+          if ((IR.lt.1).or.(IZ.lt.1).or. &
+               (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
                (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
              if (F%Analytic_IWL.eq.'NONE') then
                 flag(pp) = 0_is
@@ -2265,7 +2288,96 @@ CONTAINS
     end if
   end subroutine check_if_in_fields_domain_p
 
+  subroutine check_if_in_LCFS(F,Y,inLCFS)
+    !! @note Subrotuine that checks if particles in the simulation are within
+    !! the spatial domain where interpolants and fields are known. @endnote
+    !! External fields and interpolants can have different spatial domains where
+    !! they are defined. Therefore, it is necessary to
+    !! check if a given particle has left these spatial domains to stop
+    !! following it, otherwise this will cause an error in the simulation.
+    TYPE(FIELDS), INTENT(IN)                                   :: F
+    REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)      :: Y
+    !! Particles' position in cylindrical coordinates,
+    !! Y(1,:) = \(R\), Y(2,:) = \(\phi\), and Y(3,:) = \(Z\).
+    INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)  :: inLCFS
+    !! Flag that determines whether particles are followed in the
+    !! simulation (flag=1), or not (flag=0).
+    INTEGER                                                :: IR
+    !! Variable used to localize the grid cell in the \((R,\phi,Z)\)
+    !! or \((R,Z)\) grid containing the fields data that corresponds
+    !! to the radial position of the particles.
+    INTEGER                                                :: IPHI
+    !! Variable used to localize the grid cell in the \((R,\phi,Z)\)
+    !! or \((R,Z)\) grid containing the fields data that corresponds
+    !! to the azimuthal position of the particles.
+    INTEGER                                                :: IZ
+    !! Variable used to localize the grid cell in the \((R,\phi,Z)\)
+    !! or \((R,Z)\) grid containing the fields data that corresponds
+    !! to the vertical position of the particles.
+    INTEGER(ip)                                            :: pp
+    !! Particle iterator.
+    INTEGER(ip)                                            :: ss
+    !! Species iterator.
+    REAL(rp) :: Rwall
 
+    if (size(Y,1).eq.1) then
+       ss = size(Y,1)
+    else
+       if (Y(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(Y,1)
+       end if
+    endif
+
+!    write(output_unit_write,'("R: ",E15.10)') Y(1,1)
+!    write(output_unit_write,'("PHI: ",E15.10)') Y(2,1)
+!    write(output_unit_write,'("Z: ",E15.10)') Y(1,3)
+
+    !    write(output_unit_write,*) 'Flag',flag(1)
+
+    !write(6,*) 'ss',ss
+    !write(6,*) 'inLCFS',inLCFS
+    
+
+       
+    !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,IR,IZ) &
+    !$OMP& SHARED(Y,inLCFS,fields_domain,bfield_2d)
+    do pp=1_idef,ss
+
+       IR = INT(FLOOR((Y(pp,1)  - fields_domain%Ro + 0.5_rp* &
+            fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
+       IZ = INT(FLOOR((Y(pp,3)  + ABS(fields_domain%Zo) + 0.5_rp* &
+            fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
+
+#if DBG_CHECK    
+       if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
+            bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
+          write(6,'("YR:",E17.10)') Y(1,1)
+          write(6,'("YZ:",E17.10)') Y(1,3)
+          write(6,'("IR: ",I16)') IR
+          write(6,'("IZ: ",I16)') IZ
+          !call KORC_ABORT(23)
+       end if
+#endif
+
+       !write(output_unit_write,'("IR: ",I16)') IR
+       !write(output_unit_write,'("IZ: ",I16)') IZ
+
+       if (((IR.lt.0).or.(IZ.lt.0).or. &
+            (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)).or. &
+            (fields_domain%LCFS2D(IR,IZ).NE.1_is)) then
+          !write(output_unit_write,*) 'here'
+
+          inLCFS(pp) = 0_is
+
+       end if
+    end do
+    !$OMP END PARALLEL DO
+
+  
+  end subroutine check_if_in_LCFS
+  
   subroutine initialize_profiles_interpolant(params,P)
     !! @note Subroutine that initializes plasma profiles interpolants. @endnote
     !! This subroutine initializes either 2-D or 3-D PSPLINE interpolants
@@ -3358,17 +3470,17 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   !$OMP END SIMD
 
 #if DBG_CHECK    
-  write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
-       Y_Z*params%cpp%length,time
-  write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
-  write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
-  write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
-  write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
-  write(6,*) 'AMP',amp
-  write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
-  write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
-  write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
-  write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
+  !write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
+  !     Y_Z*params%cpp%length,time
+  !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
+  !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
+  !write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
+  !write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
+  !write(6,*) 'AMP',amp
+  !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
+  !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
+  !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
+  !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
 #endif
   
 end subroutine interp_FOfields_aorsa_p
@@ -4592,6 +4704,8 @@ subroutine interp_fields(params,prtcls,F)
 
 #ifdef PSPLINE
   call check_if_in_fields_domain(F,prtcls%Y, prtcls%flagCon)
+
+  call check_if_in_LCFS(F,prtcls%Y, prtcls%initLCFS)
 #endif
   
   !write(output_unit_write,*) 'checked domain'

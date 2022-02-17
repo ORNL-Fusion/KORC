@@ -442,6 +442,8 @@ CONTAINS
     V2 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*COS(theta)
     V3 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*SIN(theta)
 
+    !write(6,*) 'V123',V1,V2,V3
+    
     !do jj=1_idef,spp%ppp
     !   write(6,*) 'MPI',params%mpi_params%rank,'X', &
     !        spp%vars%X(jj,:)*params%cpp%length
@@ -451,7 +453,10 @@ CONTAINS
     !! Call to subroutine [[unitVectors]] in [[korc_fields]].
 
     !
-    !write(output_unit_write,*) 'b-hat',b1
+    !write(6,*) 'X',spp%vars%X
+    !write(6,*) 'b-hat',b1
+    !write(6,*) 'b-1',b2
+    !write(6,*) 'b-2',b3
 
     
     do jj=1_idef,spp%ppp
@@ -462,9 +467,9 @@ CONTAINS
        end if
     end do
     
-!    write(output_unit_write,'("Vx: ",E17.10)') spp%vars%V(:,1)
-!    write(output_unit_write,'("Vy: ",E17.10)') spp%vars%V(:,2)
-!    write(output_unit_write,'("Vz: ",E17.10)') spp%vars%V(:,3)
+    !write(6,'("Vx: ",E17.10)') spp%vars%V(:,1)
+    !write(6,'("Vy: ",E17.10)') spp%vars%V(:,2)
+    !write(6,'("Vz: ",E17.10)') spp%vars%V(:,3)
     
     DEALLOCATE(theta)
     DEALLOCATE(Vo)

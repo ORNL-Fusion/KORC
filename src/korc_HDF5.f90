@@ -1901,6 +1901,11 @@ CONTAINS
              attr = "Poloidal flux at LCFS"
              call save_to_hdf5(h5file_id,dset, &
                   F%PSIp_lim*(params%cpp%Bo*params%cpp%length**2),attr)
+
+             dset = TRIM(gname) // "/PSIP_conv"
+             attr = "Scaling factor fof poloidal flux function"
+             call save_to_hdf5(h5file_id,dset, &
+                  F%psip_conv),attr)
              
              dset = TRIM(gname) // "/Axisymmetric"
              attr = "Radial position of magnetic axis"

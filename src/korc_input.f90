@@ -170,9 +170,16 @@ module korc_input
   ! Mesh points in Z for analytical interpolation mesh
   REAL(rp) :: nPHI= 50
   ! Mesh points in PHI for analytical interpolation mesh
+  CHARACTER(30) :: E_profile
   REAL(rp) :: E_dyn = 0.	
   REAL(rp) :: E_pulse = 5.E-2
   REAL(rp) :: E_width = 2.5E-2
+  REAL(rp) ::Ero=0
+  ! amplitude of radial electric field in V/m
+  REAL(rp) :: rmn =0.6
+  !location of Er 
+  REAL(rp) :: sigmamn=1.E-2
+  ! half width of Er perturbation
 
   !! -----------------------------------------------
   !! externalPlasmaModel
@@ -204,6 +211,7 @@ module korc_input
   CHARACTER(30) :: Analytic_IWL='NONE'
   INTEGER :: ntiles=42
   REAL(rp) :: circumradius=1.016
+  LOGICAL :: useLCFS = .FALSE.
   
   !! -----------------------------------------------
   !! plasmaProfiles
@@ -312,7 +320,7 @@ module korc_input
   REAL(rp) :: Epar_aval = 0.7427 
     ! Parallel electric field in V/m
   REAL(rp) :: Te_aval = 1.0 
-    ! Background electron temperature in eV
+  ! Background electron temperature in eV
 
   !! -----------------------------------------------
   !! ExperimentalPDF
@@ -338,6 +346,7 @@ module korc_input
   REAL(rp) :: lambda_expt = 4.0E-6 
     ! Characteristic wavelength
   REAL(rp) :: A_fact_expt=1.
+  CHARACTER(30) :: filename_exp = 'Exp_PDF.h5' !
   
   !! -----------------------------------------------
   !! HollmannPDF
@@ -432,12 +441,13 @@ CONTAINS
          pinit
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
-         E_dyn,E_pulse,E_width
+         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
          ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_IWL, &
-         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field
+         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field, &
+         useLCFS
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &
@@ -453,7 +463,7 @@ CONTAINS
          Zeff_aval,Epar_aval,Te_aval,dth_aval,dp_aval,dR_aval,dZ_aval
     NAMELIST /ExperimentalPDF/ max_pitch_angle_expt,min_pitch_angle_expt, &
          max_energy_expt,min_energy_expt,Zeff_expt,E_expt,k_expt,t_expt, &
-         Bo_expt,lambda_expt,A_fact_expt
+         Bo_expt,lambda_expt,A_fact_expt,filename_exp
     NAMELIST /HollmannPDF/ E_Hollmann,Zeff_Hollmann,max_pitch_angle_Hollmann, &
          min_pitch_angle_Hollmann,max_energy_Hollmann, &
          min_energy_Hollmann,filename_Hollmann,Bo_Hollmann,lambda_Hollmann, &
@@ -546,7 +556,7 @@ CONTAINS
              if (num_species.eq.1) then
                 runaway = .FALSE.
                 ppp = 1E0
-                pinit = ppp
+                pinit = 0
                 q = -1.0 
                 m = 1.0 
                 spatial_distribution = 'TRACER'
@@ -582,7 +592,10 @@ CONTAINS
              end if
              
              READ(UNIT=default_unit_open,NML=plasma_species,IOSTAT=read_stat)
-                
+
+             if (pinit(1).eq.0) pinit(:)=ppp(:)
+             ! set pinit equal to ppp if no pinit input
+             
           CASE('analytical_fields_params')
              READ(UNIT=default_unit_open,NML=analytical_fields_params,IOSTAT=read_stat)
           CASE('externalPlasmaModel')
