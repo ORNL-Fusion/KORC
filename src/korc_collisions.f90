@@ -933,13 +933,13 @@ contains
        !write(6,'("E_min (MeV)",E17.10)') E/(10**6*C_E)
        !write(6,'("E_min (MeV)",E17.10)') E_min/(10**6*C_E)
 
-       if (.not.params%LargeCollisions) then
-          v = SQRT(1.0_rp - (C_ME*C_C**2/E)**2)
+       !if (.not.params%LargeCollisions) then
+       !   v = SQRT(1.0_rp - (C_ME*C_C**2/E)**2)
           !write(6,*) 'v_min',v
-       else
-          v = SQRT(1.0_rp - (C_ME*C_C**2/E_min)**2)
+       !else
+       v = SQRT(1.0_rp - (C_ME*C_C**2/E_min)**2)
           !write(6,*) 'v_therm',v
-       end if
+       !end if
 
 
        
