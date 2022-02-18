@@ -8,10 +8,9 @@ jobs:
     strategy:
       matrix:
         os_env:
-          - macos-latest
+          - ubuntu-latest
 
         build_type:
-          - Debug
           - Release
 
         scenario:
