@@ -141,7 +141,7 @@ CONTAINS
         
        P%Te_profile = TRIM(Te_profile)
        P%Teo = Teo*C_E ! Converted to Joules
-       P%n_Te = n_Te
+       P%n_Te = n_Te*C_E ! Converted to Joules
        P%a_Te = a_Te
 
        P%Zeff_profile = TRIM(Zeff_profile)
