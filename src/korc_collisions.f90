@@ -2796,6 +2796,20 @@ contains
        end if
     end if
 
+#if DBG_CHECK    
+    do cc=1_idef,achunk  
+       if (dp(cc).gt.pm(cc)) then
+          write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
+          write(6,*) 'p,xi',pm(cc),xi(cc)
+          write(6,*) 'dp,dxi',dp(cc),dxi(cc)
+          write(6,*) 'CBL',CBL(cc)
+          write(6,*) 'v,ne,Te,Zeff',v(cc),ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature,Zeff(cc)
+          write(6,*) 'ppll,pmu,Bmag',Ppll(cc),Pmu(cc),Bmag(cc)
+          call korc_abort(24)
+       endif
+    end do
+#endif
+    
     !$OMP SIMD
     do cc=1_idef,achunk  
 
@@ -2908,6 +2922,20 @@ contains
        call large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
             pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon)
 
+#if DBG_CHECK    
+       do cc=1_idef,achunk  
+          if (abs(pm(cc)-pm0(cc)).gt.pm0(cc)) then
+             write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
+             write(6,*) 'p,xi',pm(cc),xi(cc)
+             write(6,*) 'dp,dxi',dp(cc),dxi(cc)
+             write(6,*) 'CBL',CBL(cc)
+             write(6,*) 'v,ne,Te,Zeff',v(cc),ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature,Zeff(cc)
+             write(6,*) 'ppll,pmu,Bmag',Ppll(cc),Pmu(cc),Bmag(cc)
+             call korc_abort(24)
+          endif
+       end do
+#endif
+       
     end if
 
 #if DBG_CHECK    
