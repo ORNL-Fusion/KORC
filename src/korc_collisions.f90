@@ -594,6 +594,7 @@ contains
                      F%FLAG3D(:,F%ind_2x1t,:))
              else if (F%E_profile.eq.'MST_FSA') then
                 maxEinterp=F%E_dyn
+                minEinterp=0._rp
              end if
 
              cparams_ss%avalanche=.TRUE.
@@ -614,16 +615,16 @@ contains
 
                 if (abs(maxEinterp).gt.abs(minEinterp)) then
                    if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      p_crit=1/sqrt(maxEinterp/cparams_ss%Ec-1._rp)
+                      p_crit=1/sqrt(abs(maxEinterp)/cparams_ss%Ec-1._rp)
                    else
 
-                      p_crit=1/sqrt(maxEinterp/cparams_ms%Ec_min-1._rp)
+                      p_crit=1/sqrt(abs(maxEinterp)/cparams_ms%Ec_min-1._rp)
                    end if
                 else
                    if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      p_crit=1/sqrt(-minEinterp/cparams_ss%Ec-1._rp)
+                      p_crit=1/sqrt(abs(minEinterp)/cparams_ss%Ec-1._rp)
                    else
-                      p_crit=1/sqrt(-minEinterp/cparams_ms%Ec_min-1._rp)
+                      p_crit=1/sqrt(abs(minEinterp)/cparams_ms%Ec_min-1._rp)
                    end if
                 end if
 
@@ -933,13 +934,13 @@ contains
        !write(6,'("E_min (MeV)",E17.10)') E/(10**6*C_E)
        !write(6,'("E_min (MeV)",E17.10)') E_min/(10**6*C_E)
 
-       if (.not.params%LargeCollisions) then
-          v = SQRT(1.0_rp - (C_ME*C_C**2/E)**2)
+       !if (.not.params%LargeCollisions) then
+       !   v = SQRT(1.0_rp - (C_ME*C_C**2/E)**2)
           !write(6,*) 'v_min',v
-       else
-          v = SQRT(1.0_rp - (C_ME*C_C**2/E_min)**2)
+       !else
+       v = SQRT(1.0_rp - (C_ME*C_C**2/E_min)**2)
           !write(6,*) 'v_therm',v
-       end if
+       !end if
 
 
        
@@ -2796,6 +2797,21 @@ contains
        end if
     end if
 
+#if DBG_CHECK    
+    do cc=1_idef,achunk  
+       if (dp(cc).gt.pm(cc)) then
+          write(6,*) 'small angle collision'
+          write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
+          write(6,*) 'p,xi',pm(cc),xi(cc)
+          write(6,*) 'dp,dxi',dp(cc),dxi(cc)
+          write(6,*) 'CBL',CBL(cc)
+          write(6,*) 'v,ne,Te,Zeff',v(cc),ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature,Zeff(cc)
+          write(6,*) 'ppll,pmu,Bmag',Ppll(cc),Pmu(cc),Bmag(cc)
+          call korc_abort(24)
+       endif
+    end do
+#endif
+    
     !$OMP SIMD
     do cc=1_idef,achunk  
 
@@ -2908,6 +2924,21 @@ contains
        call large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
             pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon)
 
+#if DBG_CHECK    
+       do cc=1_idef,achunk  
+          if (abs(pm(cc)-pm0(cc)).gt.pm0(cc)) then
+             write(6,*) 'large angle collision'
+             write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
+             write(6,*) 'p,xi',pm(cc),xi(cc)
+             write(6,*) 'dp,dxi',dp(cc),dxi(cc)
+             write(6,*) 'CBL',CBL(cc)
+             write(6,*) 'v,ne,Te,Zeff',v(cc),ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature/params%cpp%charge,Zeff(cc)
+             write(6,*) 'ppll,pmu,Bmag',Ppll(cc),Pmu(cc),Bmag(cc)
+             call korc_abort(24)
+          endif
+       end do
+#endif
+       
     end if
 
 #if DBG_CHECK    
@@ -3232,7 +3263,7 @@ contains
     REAL(rp), INTENT(IN), DIMENSION(achunk)  :: Bmag,E_PHI
     INTEGER(is), INTENT(IN), DIMENSION(achunk)  :: flagCol,flagCon
     REAL(rp), INTENT(IN)  :: me
-    REAL(rp), DIMENSION(achunk)  :: gam,prob0,prob1
+    REAL(rp), DIMENSION(achunk)  :: gam,prob0,prob1,pm0,xi0,gam0
     REAL(rp) :: gam_min,p_min,gammax,dt,gamsecmax,psecmax,ptrial
     REAL(rp) :: gamtrial,cosgam1,xirad,xip,xim,xitrial,sinsq1,cossq1,pitchprob1
     REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c,pRE
@@ -3254,8 +3285,12 @@ contains
     
     !$OMP SIMD
     do cc=1_idef,achunk
+       pm0(cc)=pm(cc)
+       xi0(cc)=xi(cc)
+       
        gam(cc) = sqrt(1+pm(cc)*pm(cc))       
-
+       gam0(cc)=gam(cc)
+       
 #ifdef PARALLEL_RANDOM
        prob0(cc) = get_random()
 #else
@@ -3504,6 +3539,9 @@ contains
 
              sinsq1=(1-xi(cc)*xi(cc))*(1-xitrial*xitrial)
              cossq1=(cosgam1-xi(cc)*xitrial)**2
+
+             if ((sinsq1-cossq1).le.0._rp) cycle
+             
              pitchprob1=1/(C_PI*sqrt(sinsq1-cossq1))
 
              !if (isnan(pitchprob1)) cycle
@@ -3573,6 +3611,18 @@ contains
              xi(cc)=(tmppm*xi(cc)-ptrial*xitrial)/pm(cc)
           end if
 
+#if DBG_CHECK    
+          if (abs(pm(cc)-pm0(cc)).gt.pm0(cc)) then
+             write(6,*) 'Conservative update'
+             write(6,*) 'p0,gam0,xi0',pm0(cc),gam0(cc),xi0(cc)
+             write(6,*) 'ptrial,gamtrial,xitrial',ptrial,gamtrial,xitrial
+             write(6,*) 'gamvth,Te',gamvth,Te(cc)*params%cpp%temperature/params%cpp%charge
+             write(6,*) 'p,xi',pm(cc),xi(cc)
+             call korc_abort(24)
+          endif
+
+#endif
+          
           !$OMP ATOMIC READ
           pRE=spp%pRE
           

@@ -170,7 +170,7 @@ module korc_input
   ! Mesh points in Z for analytical interpolation mesh
   REAL(rp) :: nPHI= 50
   ! Mesh points in PHI for analytical interpolation mesh
-  CHARACTER(30) :: E_profile
+  CHARACTER(30) :: E_profile = 'NONE'
   REAL(rp) :: E_dyn = 0.	
   REAL(rp) :: E_pulse = 5.E-2
   REAL(rp) :: E_width = 2.5E-2

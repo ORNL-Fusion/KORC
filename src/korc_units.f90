@@ -160,11 +160,9 @@ subroutine normalize_variables(params,spp,F,P)
   F%E_width=F%E_width/params%cpp%time
   F%t0_2x1t=F%t0_2x1t/params%cpp%time
   F%circumradius=F%circumradius/params%cpp%length
+  F%AB%a = F%AB%a/params%cpp%length
+  F%AB%Ro = F%AB%Ro/params%cpp%length
 
-  if (F%E_profile.eq.'MST_FSA') then
-     F%AB%a = F%AB%a/params%cpp%length
-     F%AB%Ro = F%AB%Ro/params%cpp%length
-  end if
   
   P%a = P%a/params%cpp%length
   P%R0 = P%R0/params%cpp%length
@@ -173,6 +171,7 @@ subroutine normalize_variables(params,spp,F,P)
   P%Z0_RE = P%Z0_RE/params%cpp%length
   P%neo = P%neo/params%cpp%density
   P%n_ne = P%n_ne/params%cpp%density
+  P%n_Te = P%n_Te/params%cpp%temperature
   P%n_shelf = P%n_shelf/params%cpp%density
   P%Teo = P%Teo/params%cpp%temperature
   P%n_REr0=P%n_REr0/params%cpp%length
@@ -223,10 +222,6 @@ subroutine normalize_variables(params,spp,F,P)
      F%AB%lambda = F%AB%lambda/params%cpp%length
      F%AB%Bpo = F%AB%Bpo/params%cpp%Bo
 
-     if (.not.(F%E_profile.eq.'MST_FSA')) then
-        F%AB%a = F%AB%a/params%cpp%length
-        F%AB%Ro = F%AB%Ro/params%cpp%length
-     end if
      
      if (params%field_eval.eq.'interp') then
         if (ALLOCATED(F%B_2D%R)) F%B_2D%R = F%B_2D%R/params%cpp%Bo
