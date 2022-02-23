@@ -1905,7 +1905,7 @@ CONTAINS
              dset = TRIM(gname) // "/PSIP_conv"
              attr = "Scaling factor fof poloidal flux function"
              call save_to_hdf5(h5file_id,dset, &
-                  F%psip_conv),attr)
+                  F%psip_conv,attr)
              
              dset = TRIM(gname) // "/Axisymmetric"
              attr = "Radial position of magnetic axis"
