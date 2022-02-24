@@ -273,10 +273,13 @@ CONTAINS
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
-       params%num_snapshots = params%t_steps/params%output_cadence
-
+       !params%num_snapshots = params%t_steps/params%output_cadence
+       params%num_snapshots = ceiling(params%simulation_time/ &
+            params%snapshot_frequency)
+       
        if (params%t_steps.gt.params%output_cadence) then
           params%dt=params%snapshot_frequency/float(params%output_cadence)
+          params%t_steps = FLOOR(params%simulation_time/params%dt,ip)
        endif
        
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
@@ -298,14 +301,19 @@ CONTAINS
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
-       params%num_snapshots = params%t_steps/params%output_cadence
+       !params%num_snapshots = params%t_steps/params%output_cadence
+       params%num_snapshots = ceiling(params%simulation_time/ &
+            params%snapshot_frequency)
 
        if (params%t_steps.gt.params%output_cadence) then
           params%dt=params%snapshot_frequency/float(params%output_cadence)
+          params%t_steps = FLOOR(params%simulation_time/params%dt,ip)
+       else
+          params%dt=params%simulation_time/float(params%t_steps)
        endif
 
-       params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
-            params%dt,ip)
+       params%restart_output_cadence = &
+            CEILING(params%restart_overwrite_frequency/params%dt,ip)
 
        params%t_skip=min(params%t_steps,params%output_cadence)
        params%t_skip=max(1_ip,params%t_skip)
