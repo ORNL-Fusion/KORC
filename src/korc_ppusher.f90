@@ -2659,7 +2659,7 @@ contains
              Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
                   spp(ii)%vars%B(pp,:)))
 
-             pmag=sqrt(spp(ii)%vars%g(pp)**2-1)
+             pmag=spp(ii)%m*sqrt(spp(ii)%vars%g(pp)**2-1)
 
              spp(ii)%vars%V(pp,1)=pmag*cos(deg2rad(spp(ii)%vars%eta(pp)))
 
@@ -2888,12 +2888,11 @@ contains
 
                 !$OMP SIMD
                 do cc=1_idef,pchunk
-                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                        2*V_MU(cc)*Bmag(cc)*m_cache)
+                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                        2*V_MU(cc)*Bmag(cc)/m_cache)
 
                    spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
-                        Bmag(cc)*spp(ii)%vars%V(pp-1+cc,2)), &
-                        spp(ii)%vars%V(pp-1+cc,1)))
+                        Bmag(cc)*V_MU(cc)),V_PLL(cc)))
                 end do
                 !$OMP END SIMD
 
@@ -2994,13 +2993,13 @@ contains
                 do cc=1_idef,achunk
                    V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
                    V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-                   
-                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                        2*V_MU(cc)*Bmag(cc)*m_cache)
+
+
+                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                        2*V_MU(cc)*Bmag(cc)/m_cache)
 
                    spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
-                        Bmag(cc)*spp(ii)%vars%V(pp-1+cc,2)), &
-                        spp(ii)%vars%V(pp-1+cc,1)))
+                        Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
                 end do
                 !$OMP END SIMD
 
@@ -3101,13 +3100,13 @@ contains
                 do cc=1_idef,achunk
                    V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
                    V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-                   
-                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                        2*V_MU(cc)*Bmag(cc)*m_cache)
+
+
+                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                        2*V_MU(cc)*Bmag(cc)/m_cache)
 
                    spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
-                        Bmag(cc)*spp(ii)%vars%V(pp-1+cc,2)), &
-                        spp(ii)%vars%V(pp-1+cc,1)))
+                        Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
                 end do
                 !$OMP END SIMD
 
@@ -3197,10 +3196,14 @@ contains
        V0(cc)=V_PLL(cc)
     end do
     !$OMP END SIMD
-
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3248,9 +3251,14 @@ contains
     !    write(output_unit_write,'("k1Z: ",E17.10)') k1_Z(1)
     !    write(output_unit_write,'("k1PLL: ",E17.10)') k1_PLL(1) 
 
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3283,9 +3291,14 @@ contains
     !    write(output_unit_write,'("Y_PHI 2: ",E17.10)') Y_PHI(1)
     !    write(output_unit_write,'("Y_Z 2: ",E17.10)') Y_Z(1)
 
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3318,9 +3331,14 @@ contains
     !    write(output_unit_write,'("Y_PHI 3: ",E17.10)') Y_PHI(1)
     !    write(output_unit_write,'("Y_Z 3: ",E17.10)') Y_Z(1)
 
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3356,9 +3374,14 @@ contains
     !    write(output_unit_write,'("Y_PHI 4: ",E17.10)') Y_PHI(1)
     !    write(output_unit_write,'("Y_Z 4: ",E17.10)') Y_Z(1)
 
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3394,9 +3417,14 @@ contains
     !    write(output_unit_write,'("Y_PHI 5: ",E17.10)') Y_PHI(1)
     !    write(output_unit_write,'("Y_Z 5: ",E17.10)') Y_Z(1)
 
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3448,9 +3476,14 @@ contains
     end do
     !$OMP END SIMD
 
-    call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
-         Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,PSIp)
+    if (params%field_model(1:3).eq.'ANA') then
+       call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
+            Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
+    else if (params%field_model(1:3).eq.'UNI') then
+       call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+            curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    end if
 
     if (params%SC_E_add) then
 #ifdef PSPLINE
@@ -3654,14 +3687,18 @@ contains
                 B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
                 B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
 
-                Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
+                Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
+                     B_Z(cc)*B_Z(cc))
+                
+                V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+                V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
 
-                spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                     2*V_MU(cc)*Bmag(cc))
+                spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                     2*V_MU(cc)*Bmag(cc)/m_cache)
 
-                spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                     spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                     180.0_rp/C_PI
+                spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                     Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+
              end do
              !$OMP END SIMD
 
@@ -3838,12 +3875,17 @@ contains
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
                   B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
+
+
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
+
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+
           end do
           !$OMP END SIMD
 
@@ -4030,12 +4072,13 @@ contains
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
                   B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
+
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+
           end do
           !$OMP END SIMD
 
@@ -4150,7 +4193,7 @@ contains
 
                    end if
 
-                   
+
                 end do !timestep iterator
 
 
@@ -4235,15 +4278,19 @@ contains
                 Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
                      B_Z(cc)*B_Z(cc))
 
-                spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                     2*V_MU(cc)*Bmag(cc))
+                V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+                V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
 
-                spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                     spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                     180.0_rp/C_PI
+
+                spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                     2*V_MU(cc)*Bmag(cc)/m_cache)
+
+                spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                     Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+
              end do
              !$OMP END SIMD
-             
+
           end do !particle chunk iterator
           !$OMP END PARALLEL DO
 
@@ -4252,15 +4299,15 @@ contains
           do tt=1_ip,params%coll_per_dump
 
 #if DBG_CHECK    
-    !         if(params%mpi_params%rank.eq.6) then
-    !            write(6,*) 'before loop load:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
-    !            write(6,*) 'before loop load:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
-    !         end if
+             !         if(params%mpi_params%rank.eq.6) then
+             !            write(6,*) 'before loop load:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
+             !            write(6,*) 'before loop load:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
+             !         end if
 # endif
-             
+
              !if (modulo(tt,params%coll_per_dump/10).eq.0) &
              !     write(6,*) 'mpi',params%mpi_params%rank,', Coll step',tt
-             
+
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk,tt) &
              !$OMP& SHARED(params,ii,spp,P,F) &
@@ -4268,9 +4315,8 @@ contains
              !$OMP& B_R,B_PHI,B_Z,achunk, &
              !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
              !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,thread_num)
-
              do pp=1_idef,spp(ii)%pRE,pchunk
-                
+
                 thread_num = OMP_GET_THREAD_NUM()
 
                 if ((spp(ii)%pRE-pp).lt.pchunk) then
@@ -4279,9 +4325,9 @@ contains
                    achunk=pchunk
                 end if
 
-                
+
                 !          write(output_unit_write,'("pp: ",I16)') pp
-                
+
                 !$OMP SIMD
                 do cc=1_idef,achunk
                    Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
@@ -4337,13 +4383,13 @@ contains
                       endif
                    end do
 # endif
-                   
+
                    call advance_GCinterp_psiwE_vars(spp(ii)%vars,achunk, &
                         pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                         q_cache,m_cache,flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
                         curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
-                   
+
                 end do
 
 #if DBG_CHECK    
@@ -4358,7 +4404,7 @@ contains
                    endif
                 end do
 # endif
-                
+
                 call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
                      tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
                      flagCon,flagCol,F,P,E_PHI,ne,PSIp)
@@ -4373,13 +4419,13 @@ contains
                       write(6,*) 'part,pRE',pp-1+cc,spp%pRE
                       call korc_abort(25)
                    endif
-                end do                              
+                end do
 
                 if((params%mpi_params%rank.eq.6).and.(pp.eq.1)) then
                    write(6,*) 'before loop save:ppll',V_PLL,'mu',V_MU
                 end if
 #endif
-                
+
                 !$OMP SIMD
                 do cc=1_idef,achunk
                    spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
@@ -4411,62 +4457,62 @@ contains
                 !$OMP END SIMD
 
 #if DBG_CHECK    
-          !      if(params%mpi_params%rank.eq.6.and.(pp.eq.1)) then
-          !         write(6,*) 'after loop save 1:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
-          !         write(6,*) 'after loop save 1:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
-          !      end if
+                !      if(params%mpi_params%rank.eq.6.and.(pp.eq.1)) then
+                !         write(6,*) 'after loop save 1:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
+                !         write(6,*) 'after loop save 1:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
+                !      end if
 #endif
-                
+
              end do !particle chunk iterator
              !$OMP END PARALLEL DO
 
 #if DBG_CHECK    
-          !   if(params%mpi_params%rank.eq.6) then
-          !      write(6,*) 'after loop save 2:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
-          !      write(6,*) 'after loop save 2:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
-          !   end if
+             !   if(params%mpi_params%rank.eq.6) then
+             !      write(6,*) 'after loop save 2:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
+             !      write(6,*) 'after loop save 2:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
+             !   end if
 #endif
-             
+
           end do !timestep iterator
 
-          
-             !$OMP PARALLEL DO default(none) &
-             !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
-             !$OMP& SHARED(ii,spp) &
-             !$OMP& PRIVATE(pp,Bmag,cc, &
-             !$OMP& B_R,B_PHI,B_Z,achunk)
 
-             do pp=1_idef,spp(ii)%pRE,pchunk
+          !$OMP PARALLEL DO default(none) &
+          !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
+          !$OMP& SHARED(ii,spp) &
+          !$OMP& PRIVATE(pp,Bmag,cc, &
+          !$OMP& B_R,B_PHI,B_Z,achunk,V_PLL,V_MU)
+          do pp=1_idef,spp(ii)%pRE,pchunk
 
-                if ((spp(ii)%pRE-pp).lt.pchunk) then
-                   achunk=spp(ii)%pRE-pp+1
-                else
-                   achunk=pchunk
-                end if
-                
-                !$OMP SIMD
-                do cc=1_idef,achunk
-                   B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-                   B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-                   B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
+             if ((spp(ii)%pRE-pp).lt.pchunk) then
+                achunk=spp(ii)%pRE-pp+1
+             else
+                achunk=pchunk
+             end if
 
-                   Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
-                        B_Z(cc)*B_Z(cc))
+             !$OMP SIMD
+             do cc=1_idef,achunk
+                B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
+                B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
+                B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
 
-                   spp(ii)%vars%g(pp-1+cc)=sqrt(1+spp(ii)%vars%V(pp-1+cc,1)**2 &
-                        +2*spp(ii)%vars%V(pp-1+cc,2)*Bmag(cc))
+                Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
+                     B_Z(cc)*B_Z(cc))
 
-                   spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                        spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                        180.0_rp/C_PI
-                end do
-                !$OMP END SIMD
+                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
+                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
 
-             end do !particle chunk iterator
-             !$OMP END PARALLEL DO
-          
+                spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                     2*V_MU(cc)*Bmag(cc)/m_cache)
+
+                spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                     Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+             end do
+             !$OMP END SIMD
+
+          end do !particle chunk iterator
+          !$OMP END PARALLEL DO
+
        endif
-
 
     end do !species iterator
 
@@ -4633,20 +4679,21 @@ contains
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
                   B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
+             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
+
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+
           end do
           !$OMP END SIMD
 
        end do !particle chunk iterator
        !$OMP END PARALLEL DO
-
-
-
 
     end do !species iterator
 
@@ -4779,12 +4826,12 @@ contains
 
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+ 
           end do
           !$OMP END SIMD
 
@@ -4922,12 +4969,12 @@ contains
 
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
+
           end do
           !$OMP END SIMD
 
@@ -5066,13 +5113,12 @@ contains
              B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
 
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
+                          
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
-
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc)))                  
           end do
           !$OMP END SIMD
 
@@ -5211,12 +5257,11 @@ contains
 
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc))) 
           end do
           !$OMP END SIMD
 
@@ -5353,12 +5398,11 @@ contains
 
              Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
+             spp(ii)%vars%g(pp-1+cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+ &
+                  2*V_MU(cc)*Bmag(cc)/m_cache)
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+             spp(ii)%vars%eta(pp-1+cc) = rad2deg(atan2(sqrt(2*m_cache* &
+                  Bmag(cc)*V_MU(cc)),V_PLL(cc))) 
           end do
           !$OMP END SIMD
 
@@ -8932,9 +8976,9 @@ contains
        bhat_PHI(cc) = B_PHI(cc)/Bmag(cc)
        bhat_Z(cc) = B_Z(cc)/Bmag(cc)
 
-       Bst_R(cc)=q_cache*B_R(cc)+V_PLL(cc)*curlb_R(cc)
-       Bst_PHI(cc)=q_cache*B_PHI(cc)+V_PLL(cc)*curlb_PHI(cc)
-       Bst_Z(cc)=q_cache*B_Z(cc)+V_PLL(cc)*curlb_Z(cc)
+       Bst_R(cc)=q_cache*(B_R(cc)+V_PLL(cc)*curlb_R(cc)/m_cache)
+       Bst_PHI(cc)=q_cache*(B_PHI(cc)+V_PLL(cc)*curlb_PHI(cc)/m_cache)
+       Bst_Z(cc)=q_cache*(B_Z(cc)+V_PLL(cc)*curlb_Z(cc)/m_cache)
 
        bdotBst(cc)=bhat_R(cc)*Bst_R(cc)+bhat_PHI(cc)*Bst_PHI(cc)+ &
             bhat_Z(cc)*Bst_Z(cc)
@@ -8951,21 +8995,21 @@ contains
        bcrossgradB_PHI(cc)=bhat_Z(cc)*gradB_R(cc)-bhat_R(cc)*gradB_Z(cc)
        bcrossgradB_Z(cc)=bhat_R(cc)*gradB_PHI(cc)-bhat_PHI(cc)*gradB_R(cc)
 
-       gamgc(cc)=sqrt(1+V_PLL(cc)*V_PLL(cc)+2*V_MU(cc)*Bmag(cc))
+       gamgc(cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+2*V_MU(cc)*Bmag(cc)/m_cache)
 
-       pm(cc)=sqrt(gamgc(cc)**2-1)
+       pm(cc)=m_cache*sqrt(gamgc(cc)**2-1)
        xi(cc)=V_PLL(cc)/pm(cc)
 
-       RHS_R(cc)=(q_cache*Ecrossb_R(cc)+(m_cache*V_MU(cc)* &
+       RHS_R(cc)=(q_cache*Ecrossb_R(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_R(cc)+V_PLL(cc)*Bst_R(cc))/(m_cache*gamgc(cc)))/ &
             bdotBst(cc)
-       RHS_PHI(cc)=(q_cache*Ecrossb_PHI(cc)+(m_cache*V_MU(cc)* &
+       RHS_PHI(cc)=(q_cache*Ecrossb_PHI(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_PHI(cc)+V_PLL(cc)*Bst_PHI(cc))/(m_cache*gamgc(cc)))/ &
             (Y_R(cc)*bdotBst(cc))
-       RHS_Z(cc)=(q_cache*Ecrossb_Z(cc)+(m_cache*V_MU(cc)* &
+       RHS_Z(cc)=(q_cache*Ecrossb_Z(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_Z(cc)+V_PLL(cc)*Bst_Z(cc))/(m_cache*gamgc(cc)))/ &
             bdotBst(cc)
-       RHS_PLL(cc)=(q_cache*BstdotE(cc)-V_MU(cc)*BstdotgradB(cc)/gamgc(cc))/ &
+       RHS_PLL(cc)=(m_cache*BstdotE(cc)-V_MU(cc)*BstdotgradB(cc)/gamgc(cc))/ &
             bdotBst(cc)
 
     end do
@@ -9030,9 +9074,9 @@ contains
        bhat_PHI(cc) = B_PHI(cc)/Bmag(cc)
        bhat_Z(cc) = B_Z(cc)/Bmag(cc)
 
-       Bst_R(cc)=q_cache*B_R(cc)+V_PLL(cc)*curlb_R(cc)
-       Bst_PHI(cc)=q_cache*B_PHI(cc)+V_PLL(cc)*curlb_PHI(cc)
-       Bst_Z(cc)=q_cache*B_Z(cc)+V_PLL(cc)*curlb_Z(cc)
+       Bst_R(cc)=q_cache*(B_R(cc)+V_PLL(cc)*curlb_R(cc)/m_cache)
+       Bst_PHI(cc)=q_cache*(B_PHI(cc)+V_PLL(cc)*curlb_PHI(cc)/m_cache)
+       Bst_Z(cc)=q_cache*(B_Z(cc)+V_PLL(cc)*curlb_Z(cc)/m_cache)
 
       ! write(output_unit_write,*) 'bmag',Bmag(cc),'bhat',bhat_R(cc),bhat_PHI(cc),bhat_Z(cc),'Bst',Bst_R(cc),Bst_PHI(cc),Bst_Z(cc)
        
@@ -9056,21 +9100,21 @@ contains
 
       ! write(output_unit_write,*) 'bcrossgradB',bcrossgradB_R(cc),bcrossgradB_PHI(cc),bcrossgradB_Z(cc)
        
-       gamgc(cc)=sqrt(1+V_PLL(cc)*V_PLL(cc)+2*V_MU(cc)*Bmag(cc))
+       gamgc(cc)=sqrt(1+(V_PLL(cc)/m_cache)**2+2*V_MU(cc)*Bmag(cc)/m_cache)
        
-       pm(cc)=sqrt(gamgc(cc)**2-1)
+       pm(cc)=m_cache*sqrt(gamgc(cc)**2-1)
        xi(cc)=V_PLL(cc)/pm(cc)
 
-       RHS_R(cc)=(q_cache*Ecrossb_R(cc)+(m_cache*V_MU(cc)* &
+       RHS_R(cc)=(q_cache*Ecrossb_R(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_R(cc)+V_PLL(cc)*Bst_R(cc))/(m_cache*gamgc(cc)))/ &
             bdotBst(cc)
-       RHS_PHI(cc)=(q_cache*Ecrossb_PHI(cc)+(m_cache*V_MU(cc)* &
+       RHS_PHI(cc)=(q_cache*Ecrossb_PHI(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_PHI(cc)+V_PLL(cc)*Bst_PHI(cc))/(m_cache*gamgc(cc)))/ &
             (Y_R(cc)*bdotBst(cc))
-       RHS_Z(cc)=(q_cache*Ecrossb_Z(cc)+(m_cache*V_MU(cc)* &
+       RHS_Z(cc)=(q_cache*Ecrossb_Z(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_Z(cc)+V_PLL(cc)*Bst_Z(cc))/(m_cache*gamgc(cc)))/ &
             bdotBst(cc)
-       RHS_PLL(cc)=(q_cache*BstdotE(cc)-V_MU(cc)*BstdotgradB(cc)/gamgc(cc))/ &
+       RHS_PLL(cc)=(m_cache*BstdotE(cc)-V_MU(cc)*BstdotgradB(cc)/gamgc(cc))/ &
             bdotBst(cc)
        RHS_MU(cc)=0._rp
 

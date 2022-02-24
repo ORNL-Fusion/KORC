@@ -521,7 +521,9 @@ program main
   end if
 #endif
   
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn'.and..not.params%field_model.eq.'M3D_C1') then
+  if ((params%orbit_model(1:2).eq.'GC').and.((params%field_eval.eq.'eqn').or. &
+       (params%field_model(1:3).eq.'UNI')).and. &
+       (.not.params%field_model.eq.'M3D_C1')) then
      do it=params%ito,params%t_steps,params%t_skip*params%t_it_SC
         call adv_GCeqn_top(params,F,P,spp)
         

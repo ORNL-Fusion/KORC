@@ -32,7 +32,8 @@ module korc_fields
        init_SC_E1D_FS,&
        reinit_SC_E1D_FS,&
        define_SC_time_step,&
-       uniform_fields_p
+       uniform_fields_p,&
+       uniform_fields_GC_p
   PRIVATE :: get_analytical_fields,&
        analytical_fields,&
        analytical_fields_GC_init,&
@@ -662,6 +663,49 @@ CONTAINS
     !$OMP END SIMD
     
   end subroutine uniform_fields_p
+  
+  subroutine uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+    INTEGER, INTENT(IN) :: pchunk
+    !! @note Subroutine that returns the value of a uniform magnetic
+    !! field. @endnote
+    !! This subroutine is used only when the simulation is ran for a
+    !! 'UNIFORM' plasma. As a convention, in a uniform plasma we
+    !! set \(\mathbf{B} = B_0 \hat{x}\).
+    TYPE(FIELDS), INTENT(IN)                               :: F
+    !! An instance of the KORC derived type FIELDS.
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: B_R,B_PHI,B_Z
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: gradB_R,gradB_PHI,gradB_Z
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: curlb_R,curlb_PHI,curlb_Z
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: PSIp
+    REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: E_R,E_PHI,E_Z
+    !! Magnetic field components in Cartesian coordinates; 
+    !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
+    integer(ip) :: cc
+
+    !$OMP SIMD
+    do cc=1_idef,pchunk
+       PSIp(cc) = 0._rp
+       
+       B_R(cc) = 0._rp
+       B_PHI(cc) = 0._rp
+       B_Z(cc) = F%Bo
+
+       gradB_R(cc) = 0._rp
+       gradB_PHI(cc) = 0._rp
+       gradB_Z(cc) = 0._rp
+
+       curlb_R(cc) = 0._rp
+       curlb_PHI(cc) = 0._rp
+       curlb_Z(cc) = 0._rp
+       
+       E_R(cc) = 0._rp
+       E_PHI(cc) = 0._rp
+       E_Z(cc) = F%Eo
+    end do
+    !$OMP END SIMD
+    
+  end subroutine uniform_fields_GC_p
 
 
   subroutine uniform_electric_field(F,E)
