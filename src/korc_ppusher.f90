@@ -9044,7 +9044,7 @@ contains
        RHS_Z(cc)=(q_cache*Ecrossb_Z(cc)+(q_cache*V_MU(cc)* &
             bcrossgradB_Z(cc)+V_PLL(cc)*Bst_Z(cc))/(m_cache*gamgc(cc)))/ &
             bdotBst(cc)
-       RHS_PLL(cc)=(m_cache*BstdotE(cc)-V_MU(cc)*BstdotgradB(cc)/gamgc(cc))/ &
+       RHS_PLL(cc)=(sign(m_cache,q_cache)*BstdotE(cc)-V_MU(cc)*BstdotgradB(cc)/gamgc(cc))/ &
             bdotBst(cc)
 
     end do
