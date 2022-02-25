@@ -2743,7 +2743,10 @@ contains
     !! and simulation variables of the different species in the simulation.
     REAL(rp), DIMENSION(params%pchunk)               :: Bmag
     REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z,E_PHI
+    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
+    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
+    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
+    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
     REAL(rp),DIMENSION(params%pchunk) :: PSIp,ne
     REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
     REAL(rp) :: B0,EF0,R0,q0,lam,ar,m_cache,q_cache,ne0,Te0,Zeff0
@@ -2783,8 +2786,9 @@ contains
              !$OMP& FIRSTPRIVATE(E0,q_cache,m_cache,pchunk) &
              !$OMP& shared(F,P,params,ii,spp) &
              !$OMP& PRIVATE(pp,tt,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-             !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
-             !$OMP& Vden,Vdenave) &
+             !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,PSIp,ne, &
+             !$OMP& Vden,Vdenave,gradB_R,gradB_PHI,gradB_Z, &
+             !$OMP& curlb_R,curlb_PHI,curlb_Z) &
              !$OMP& REDUCTION(+:VdenOMP)
              do pp=1_idef,spp(ii)%ppp,pchunk
 
@@ -2815,7 +2819,7 @@ contains
                       call advance_GCeqn_vars(spp(ii)%vars,pp, &
                            tt+params%t_skip*(ttt-1),params, &
                            Y_R,Y_PHI, Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                           B_R,B_PHI,B_Z,F,P,PSIp,E_PHI)
+                           B_R,B_PHI,B_Z,F,P,PSIp,E_R,E_PHI,E_Z)
 
                       !                   write(output_unit_write,*) params%mpi_params%rank,'Y_R',Y_R
 
@@ -2847,7 +2851,9 @@ contains
                       spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
 
                       spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+                      spp(ii)%vars%E(pp-1+cc,1) = E_R(cc)
                       spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
+                      spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
                    end do
                    !$OMP END SIMD
 
@@ -2883,8 +2889,16 @@ contains
 
                 end if
 
-                call analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
-                     Bmag,E_PHI)
+                if (params%field_model(1:3).eq.'ANA') then
+                   call analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+                        Bmag,E_PHI)
+                else if (params%field_model(1:3).eq.'UNI') then
+                   call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z, &
+                        E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+                        gradB_R,gradB_PHI,gradB_Z,PSIp)
+
+                   Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+                end if
 
                 !$OMP SIMD
                 do cc=1_idef,pchunk
@@ -2966,8 +2980,10 @@ contains
 
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
-             !$OMP& shared(F,ii,spp) &
-             !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,achunk,E_PHI)
+             !$OMP& shared(F,ii,spp,params) &
+             !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,achunk, &
+             !$OMP& E_R,E_PHI,E_Z,gradB_R,gradB_PHI,gradB_Z, &
+             !$OMP& curlb_R,curlb_PHI,curlb_Z,PSIp,B_R,B_PHI,B_Z)
              do pp=1_idef,spp(ii)%pRE,pchunk
 
                 if ((spp(ii)%pRE-pp).lt.pchunk) then
@@ -2986,8 +3002,16 @@ contains
 
                 !write(6,*) 'Y_R',Y_R
                 
-                call analytical_fields_Bmag_p(achunk,F,Y_R,Y_PHI,Y_Z, &
-                     Bmag,E_PHI)                
+                if (params%field_model(1:3).eq.'ANA') then
+                   call analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+                        Bmag,E_PHI)
+                else if (params%field_model(1:3).eq.'UNI') then
+                   call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z, &
+                        E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+                        gradB_R,gradB_PHI,gradB_Z,PSIp)
+
+                   Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+                end if               
 
                 !$OMP SIMD
                 do cc=1_idef,achunk
@@ -3073,8 +3097,10 @@ contains
 
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
-             !$OMP& shared(F,ii,spp) &
-             !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,achunk,E_PHI)
+             !$OMP& shared(F,ii,spp,params) &
+             !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,achunk, &
+             !$OMP& E_R,E_PHI,E_Z,gradB_R,gradB_PHI,gradB_Z, &
+             !$OMP& curlb_R,curlb_PHI,curlb_Z,PSIp,B_R,B_PHI,B_Z)
              do pp=1_idef,spp(ii)%pRE,pchunk
 
                 if ((spp(ii)%pRE-pp).lt.pchunk) then
@@ -3093,9 +3119,16 @@ contains
 
                 !write(6,*) 'Y_R',Y_R
                 
-                call analytical_fields_Bmag_p(achunk,F,Y_R,Y_PHI,Y_Z, &
-                     Bmag,E_PHI)                
+                if (params%field_model(1:3).eq.'ANA') then
+                   call analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+                        Bmag,E_PHI)
+                else if (params%field_model(1:3).eq.'UNI') then
+                   call uniform_fields_GC_p(pchunk,F,B_R,B_PHI,B_Z, &
+                        E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+                        gradB_R,gradB_PHI,gradB_Z,PSIp)
 
+                   Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+                end if 
                 !$OMP SIMD
                 do cc=1_idef,achunk
                    V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
@@ -3130,7 +3163,7 @@ contains
   end subroutine adv_GCeqn_top
 
   subroutine advance_GCeqn_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-       flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,F,P,PSIp,E_PHI)
+       flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,F,P,PSIp,E_R,E_PHI,E_Z)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -3169,8 +3202,8 @@ contains
     REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: PSIp
     REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z
     REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,V0,E_Z,E_R
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI
+    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,V0
+    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI,E_Z,E_R
     REAL(rp),DIMENSION(params%pchunk) :: Bmag,ne,Te,Zeff
     INTEGER(is),dimension(params%pchunk), intent(inout) :: flagCon,flagCol
 
@@ -3460,7 +3493,9 @@ contains
     !    write(output_unit_write,'("Y_PHI 6: ",E17.10)') Y_PHI(1)
     !    write(output_unit_write,'("Y_Z 6: ",E17.10)') Y_Z(1)
 
-    call cyl_check_if_confined_p(pchunk,ar,R0,Y_R,Y_Z,flagCon)
+    if (params%field_model(1:3).eq.'ANA') then
+       call cyl_check_if_confined_p(pchunk,ar,R0,Y_R,Y_Z,flagCon)
+    end if
 
     !$OMP SIMD
     !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,Y0_R,Y0_PHI,Y0_Z,V0)
