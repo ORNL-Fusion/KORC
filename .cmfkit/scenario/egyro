@@ -42,9 +42,9 @@ __test() {
   _debug "__test() pwd"
   pwd
 
-  _debug "__test() find / -name xkorc"
-  find / -name xkorc
+  _debug "__test() find ./ -name xkorc"
+  find ./ -name xkorc
 
-  /usr/local/src/korc/build/build/bin/xkorc ${input_file} ${output_dir}/
+  /usr/local/src/korc/build/build/bin/xkorc ${input_file} ${output_dir}/ | tail -1
 }
 
