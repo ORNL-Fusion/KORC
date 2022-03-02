@@ -36,15 +36,17 @@ __test() {
   #local readonly output_file="regtest1.txt"
   local readonly output_dir="OUT_TEST"
 
-  cd ./test/reg_tests
-  mkdir -p ${output_dir}
-
   _debug "__test() pwd"
   pwd
 
   _debug "__test() find ./ -name xkorc"
   find ./ -name xkorc
 
-  /usr/local/src/korc/build/build/bin/xkorc ${input_file} ${output_dir}/ | tail -1
+  cd ./test/reg_tests
+  mkdir -p ${output_dir}
+
+  #/usr/local/src/korc/build/build/bin/xkorc ${input_file} ${output_dir}/
+
+  #/usr/local/src/korc/build/build/bin/xkorc ${input_file} ${output_dir}/ >& ${output_dir}/$OUT_DIR.txt &
 }
 
