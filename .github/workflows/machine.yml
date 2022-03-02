@@ -15,7 +15,7 @@ jobs:
           - Release
 
         scenario:
-          - basic
+          - egyro
 
     runs-on: ${{ matrix.os_env }}
 
