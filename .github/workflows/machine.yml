@@ -29,7 +29,7 @@ jobs:
           repository: ornl-fusion/cmfkit
           path: ./.cmfkit_base
 
-      - name: launch build
+      - name: launch build & test
         env:
           CMFKIT_PLATFORM:   github-vm-${{ matrix.os_env }}
           CMFKIT_SCENARIO:             ${{ matrix.scenario }}
@@ -38,4 +38,5 @@ jobs:
 
         run: |
           ./.cmfkit_base/launch build
+          ./.cmfkit_base/launch test
 
