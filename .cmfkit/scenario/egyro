@@ -39,6 +39,12 @@ __test() {
   cd ./test/reg_tests
   mkdir -p ${output_dir}
 
+  _debug "__test() pwd"
+  pwd
+
+  _debug "__test() find / -name xkorc"
+  find / -name xkorc
+
   /usr/local/src/korc/build/build/bin/xkorc ${input_file} ${output_dir}/
 }
 
