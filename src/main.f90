@@ -615,9 +615,16 @@ program main
      do it=params%ito,params%t_steps,params%t_skip
         call adv_GCinterp_psiwE_top(params,spp,P,F)
 
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt        
-        params%it = it-1_ip+params%t_skip
+        if (.not.params%LargeCollisions) then
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)*params%dt        
+           params%it = it-1_ip+params%t_skip
+        else
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)/REAL(params%t_skip,rp)* &
+                params%snapshot_frequency       
+           params%it = it-1_ip+params%t_skip
+        endif
 
         call save_simulation_outputs(params,spp,F)
 
