@@ -29,7 +29,8 @@ __build() {
   _deflist_report_cmdline
 
   mkdir -p ./build && cd $_
-  cmake $CMFKIT_CMDLINE_CMAKE_DEFINITIONS .. && make
+  cmake $CMFKIT_CMDLINE_CMAKE_DEFINITIONS .. && make \
+    || return 1
 }
 
 
