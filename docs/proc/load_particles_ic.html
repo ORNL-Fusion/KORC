@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>load_particles_ic &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>load_particles_ic
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.4% of total for procedures.">338 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_HDF5.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_hdf5.f90.html'>korc_HDF5.f90</a></li>
+    
+     <li><a href='../module/korc_hdf5.html'>korc_HDF5</a></li>
+    
+  
+     <li class="active">load_particles_ic</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/load_particles_ic.html#src">load_particles_ic</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine load_particles_ic(params, spp, F)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subroutine that loads all the electrons' data from
+ "restart_file.h5" to restart a simulation.</p></div>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~7"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spp~4"></span>type(SPECIES),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>spp</strong></td><td><p>An instance of KORC's derived type SPECIES containing all the
+ information of different electron species. See korc_types.f90.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~4"></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~load_particles_ic~~CallsGraph Pages: 1 -->
+<svg id="procload_particles_icCallsGraph" width="616pt" height="238pt"
+ viewBox="0.00 0.00 616.00 238.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~load_particles_ic~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 234)">
+<title>proc~~load_particles_ic~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-234 612,-234 612,4 -4,4"/>
+<!-- proc~load_particles_ic -->
+<g id="proc~~load_particles_ic~~CallsGraph_node1" class="node">
+<title>proc~load_particles_ic</title>
+<polygon fill="none" stroke="#000000" points="91,-128 0,-128 0,-104 91,-104 91,-128"/>
+<text text-anchor="middle" x="45.5" y="-113.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">load_particles_ic</text>
+</g>
+<!-- mpi_barrier -->
+<g id="proc~~load_particles_ic~~CallsGraph_node2" class="node">
+<title>mpi_barrier</title>
+<polygon fill="#777777" stroke="#777777" points="217.5,-230 151.5,-230 151.5,-206 217.5,-206 217.5,-230"/>
+<text text-anchor="middle" x="184.5" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
+</g>
+<!-- proc~load_particles_ic&#45;&gt;mpi_barrier -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge1" class="edge">
+<title>proc~load_particles_ic&#45;&gt;mpi_barrier</title>
+<path fill="none" stroke="#000000" d="M54.7717,-128.0847C68.7149,-145.5172 96.6965,-177.7366 127,-197 131.6526,-199.9576 136.7806,-202.5788 142.0004,-204.8786"/>
+<polygon fill="#000000" stroke="#000000" points="140.8289,-208.18 151.4123,-208.6742 143.4471,-201.688 140.8289,-208.18"/>
+</g>
+<!-- h5fclose_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_node3" class="node">
+<title>h5fclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="214.5,-188 154.5,-188 154.5,-164 214.5,-164 214.5,-188"/>
+<text text-anchor="middle" x="184.5" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fclose_f</text>
+</g>
+<!-- proc~load_particles_ic&#45;&gt;h5fclose_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge2" class="edge">
+<title>proc~load_particles_ic&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M73.6287,-128.1419C94.7301,-137.2504 123.8314,-149.8121 146.9247,-159.7804"/>
+<polygon fill="#000000" stroke="#000000" points="145.8448,-163.1264 156.4131,-163.8762 148.619,-156.6996 145.8448,-163.1264"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_node4" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~load_particles_ic~~CallsGraph_node4"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="512.5,-108 450.5,-108 450.5,-84 512.5,-84 512.5,-108"/>
+<text text-anchor="middle" x="481.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~load_particles_ic&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge3" class="edge">
+<title>proc~load_particles_ic&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M91.1901,-116.6593C102.8651,-116.8006 115.3969,-116.9288 127,-117 254.5532,-117.7825 287.8922,-136.1638 414,-117 422.8157,-115.6603 432.0646,-113.3895 440.7905,-110.8241"/>
+<polygon fill="#000000" stroke="#000000" points="441.8651,-114.1553 450.3693,-107.8363 439.7807,-107.4728 441.8651,-114.1553"/>
+</g>
+<!-- interface~load_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_node5" class="node">
+<title>interface~load_array_from_hdf5</title>
+<g id="a_proc~~load_particles_ic~~CallsGraph_node5"><a xlink:href=".././interface/load_array_from_hdf5.html" xlink:title="load_array_from_hdf5">
+<polygon fill="#a7506f" stroke="#a7506f" points="242,-108 127,-108 127,-84 242,-84 242,-108"/>
+<text text-anchor="middle" x="184.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~load_particles_ic&#45;&gt;interface~load_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge4" class="edge">
+<title>proc~load_particles_ic&#45;&gt;interface~load_array_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M91.0138,-109.4513C99.2085,-108.2722 107.9104,-107.0201 116.5795,-105.7727"/>
+<polygon fill="#000000" stroke="#000000" points="117.3092,-109.2039 126.7088,-104.3153 116.3122,-102.2752 117.3092,-109.2039"/>
+</g>
+<!-- mpi_scatter -->
+<g id="proc~~load_particles_ic~~CallsGraph_node6" class="node">
+<title>mpi_scatter</title>
+<polygon fill="#777777" stroke="#777777" points="218,-66 151,-66 151,-42 218,-42 218,-66"/>
+<text text-anchor="middle" x="184.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
+</g>
+<!-- proc~load_particles_ic&#45;&gt;mpi_scatter -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge5" class="edge">
+<title>proc~load_particles_ic&#45;&gt;mpi_scatter</title>
+<path fill="none" stroke="#000000" d="M67.6537,-103.9784C83.8596,-95.4013 106.5015,-83.8638 127,-75 131.6365,-72.9951 136.5335,-71.0108 141.4344,-69.1085"/>
+<polygon fill="#000000" stroke="#000000" points="142.6813,-72.3789 150.7965,-65.5676 140.205,-65.8316 142.6813,-72.3789"/>
+</g>
+<!-- h5fopen_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_node7" class="node">
+<title>h5fopen_f</title>
+<polygon fill="#777777" stroke="#777777" points="214,-24 155,-24 155,0 214,0 214,-24"/>
+<text text-anchor="middle" x="184.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fopen_f</text>
+</g>
+<!-- proc~load_particles_ic&#45;&gt;h5fopen_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge6" class="edge">
+<title>proc~load_particles_ic&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M54.4747,-103.9C68.2541,-86.0911 96.2721,-52.7973 127,-33 132.7023,-29.3261 139.1356,-26.1788 145.5809,-23.5238"/>
+<polygon fill="#000000" stroke="#000000" points="146.8326,-26.7924 154.9488,-19.9823 144.3572,-20.2447 146.8326,-26.7924"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_node8" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="608,-108 549,-108 549,-84 608,-84 608,-108"/>
+<text text-anchor="middle" x="578.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge7" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M512.7253,-96C521.0847,-96 530.2317,-96 538.9754,-96"/>
+<polygon fill="#000000" stroke="#000000" points="538.9832,-99.5001 548.9832,-96 538.9831,-92.5001 538.9832,-99.5001"/>
+</g>
+<!-- proc~rload_2d_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_node9" class="node">
+<title>proc~rload_2d_array_from_hdf5</title>
+<g id="a_proc~~load_particles_ic~~CallsGraph_node9"><a xlink:href=".././proc/rload_2d_array_from_hdf5.html" xlink:title="rload_2d_array_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="414,-108 278,-108 278,-84 414,-84 414,-108"/>
+<text text-anchor="middle" x="346" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_2d_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_array_from_hdf5&#45;&gt;proc~rload_2d_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge8" class="edge">
+<title>interface~load_array_from_hdf5&#45;&gt;proc~rload_2d_array_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M242.349,-96C250.6108,-96 259.2213,-96 267.7935,-96"/>
+<polygon fill="#000000" stroke="#000000" points="267.8158,-99.5001 277.8158,-96 267.8157,-92.5001 267.8158,-99.5001"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_node10" class="node">
+<title>proc~rload_3d_array_from_hdf5</title>
+<g id="a_proc~~load_particles_ic~~CallsGraph_node10"><a xlink:href=".././proc/rload_3d_array_from_hdf5.html" xlink:title="rload_3d_array_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="414,-66 278,-66 278,-42 414,-42 414,-66"/>
+<text text-anchor="middle" x="346" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_3d_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_array_from_hdf5&#45;&gt;proc~rload_3d_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge10" class="edge">
+<title>interface~load_array_from_hdf5&#45;&gt;proc~rload_3d_array_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M230.7794,-83.9645C249.194,-79.1756 270.5529,-73.6209 289.842,-68.6045"/>
+<polygon fill="#000000" stroke="#000000" points="290.9167,-71.9416 299.7138,-66.0373 289.1548,-65.1669 290.9167,-71.9416"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_node11" class="node">
+<title>proc~rload_1d_array_from_hdf5</title>
+<g id="a_proc~~load_particles_ic~~CallsGraph_node11"><a xlink:href=".././proc/rload_1d_array_from_hdf5.html" xlink:title="rload_1d_array_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="414,-24 278,-24 278,0 414,0 414,-24"/>
+<text text-anchor="middle" x="346" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_1d_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_array_from_hdf5&#45;&gt;proc~rload_1d_array_from_hdf5 -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge9" class="edge">
+<title>interface~load_array_from_hdf5&#45;&gt;proc~rload_1d_array_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.6927,-83.916C231.4095,-81.4067 237.0215,-78.4512 242,-75 262.2052,-60.9931 257.4467,-46.4909 278,-33 280.6017,-31.2923 283.3497,-29.7173 286.19,-28.2655"/>
+<polygon fill="#000000" stroke="#000000" points="287.8497,-31.3559 295.5096,-24.0363 284.957,-24.9816 287.8497,-31.3559"/>
+</g>
+<!-- proc~rload_2d_array_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge11" class="edge">
+<title>proc~rload_2d_array_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M414.147,-96C423.0438,-96 431.9316,-96 440.1964,-96"/>
+<polygon fill="#000000" stroke="#000000" points="440.286,-99.5001 450.286,-96 440.286,-92.5001 440.286,-99.5001"/>
+</g>
+<!-- h5dclose_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_node12" class="node">
+<title>h5dclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="513,-24 450,-24 450,0 513,0 513,-24"/>
+<text text-anchor="middle" x="481.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dclose_f</text>
+</g>
+<!-- proc~rload_2d_array_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge12" class="edge">
+<title>proc~rload_2d_array_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M396.4904,-83.9637C402.6339,-81.4854 408.6288,-78.5256 414,-75 434.5533,-61.5091 431.5992,-49.3051 450,-33 451.1068,-32.0192 452.2624,-31.0486 453.4497,-30.094"/>
+<polygon fill="#000000" stroke="#000000" points="455.6086,-32.8505 461.5627,-24.087 451.4431,-27.2248 455.6086,-32.8505"/>
+</g>
+<!-- h5dread_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_node13" class="node">
+<title>h5dread_f</title>
+<polygon fill="#777777" stroke="#777777" points="511.5,-66 451.5,-66 451.5,-42 511.5,-42 511.5,-66"/>
+<text text-anchor="middle" x="481.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dread_f</text>
+</g>
+<!-- proc~rload_2d_array_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge13" class="edge">
+<title>proc~rload_2d_array_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M385.1988,-83.9098C394.6319,-80.9961 404.6766,-77.8899 414,-75 422.9531,-72.2248 432.572,-69.2364 441.6626,-66.409"/>
+<polygon fill="#000000" stroke="#000000" points="442.7543,-69.7349 451.2629,-63.4218 440.6746,-63.051 442.7543,-69.7349"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge14" class="edge">
+<title>proc~rload_3d_array_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M385.1988,-66.0902C394.6319,-69.0039 404.6766,-72.1101 414,-75 422.6023,-77.6664 431.8193,-80.5298 440.5918,-83.258"/>
+<polygon fill="#000000" stroke="#000000" points="439.6625,-86.6343 450.2508,-86.2631 441.742,-79.9503 439.6625,-86.6343"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge15" class="edge">
+<title>proc~rload_3d_array_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M385.1988,-41.9098C394.6319,-38.9961 404.6766,-35.8899 414,-33 422.5172,-30.36 431.6369,-27.5269 440.3311,-24.8231"/>
+<polygon fill="#000000" stroke="#000000" points="441.4027,-28.1553 449.9115,-21.8425 439.3232,-21.4713 441.4027,-28.1553"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge16" class="edge">
+<title>proc~rload_3d_array_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M414.147,-54C423.4238,-54 432.6907,-54 441.2519,-54"/>
+<polygon fill="#000000" stroke="#000000" points="441.298,-57.5001 451.298,-54 441.2979,-50.5001 441.298,-57.5001"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge17" class="edge">
+<title>proc~rload_1d_array_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M396.4904,-24.0363C402.6339,-26.5146 408.6288,-29.4744 414,-33 434.5533,-46.4909 431.5992,-58.6949 450,-75 451.1068,-75.9808 452.2624,-76.9514 453.4497,-77.906"/>
+<polygon fill="#000000" stroke="#000000" points="451.4431,-80.7752 461.5627,-83.913 455.6086,-75.1495 451.4431,-80.7752"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge18" class="edge">
+<title>proc~rload_1d_array_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M414.147,-12C422.9512,-12 431.7464,-12 439.938,-12"/>
+<polygon fill="#000000" stroke="#000000" points="439.9464,-15.5001 449.9463,-12 439.9463,-8.5001 439.9464,-15.5001"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~load_particles_ic~~CallsGraph_edge19" class="edge">
+<title>proc~rload_1d_array_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M385.1988,-24.0902C394.6319,-27.0039 404.6766,-30.1101 414,-33 422.9531,-35.7752 432.572,-38.7636 441.6626,-41.591"/>
+<polygon fill="#000000" stroke="#000000" points="440.6746,-44.949 451.2629,-44.5782 442.7543,-38.2651 440.6746,-44.949"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~load_particles_ic~~CalledByGraph Pages: 1 -->
+<svg id="procload_particles_icCalledByGraph" width="327pt" height="32pt"
+ viewBox="0.00 0.00 327.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~load_particles_ic~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~load_particles_ic~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 323,-28 323,4 -4,4"/>
+<!-- proc~load_particles_ic -->
+<g id="proc~~load_particles_ic~~CalledByGraph_node1" class="node">
+<title>proc~load_particles_ic</title>
+<polygon fill="none" stroke="#000000" points="319,-24 228,-24 228,0 319,0 319,-24"/>
+<text text-anchor="middle" x="273.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">load_particles_ic</text>
+</g>
+<!-- proc~set_up_particles_ic -->
+<g id="proc~~load_particles_ic~~CalledByGraph_node2" class="node">
+<title>proc~set_up_particles_ic</title>
+<g id="a_proc~~load_particles_ic~~CalledByGraph_node2"><a xlink:href=".././proc/set_up_particles_ic.html" xlink:title="set_up_particles_ic">
+<polygon fill="#d9534f" stroke="#d9534f" points="192,-24 90,-24 90,0 192,0 192,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_up_particles_ic</text>
+</a>
+</g>
+</g>
+<!-- proc~set_up_particles_ic&#45;&gt;proc~load_particles_ic -->
+<g id="proc~~load_particles_ic~~CalledByGraph_edge1" class="edge">
+<title>proc~set_up_particles_ic&#45;&gt;proc~load_particles_ic</title>
+<path fill="none" stroke="#000000" d="M192.228,-12C200.5116,-12 209.126,-12 217.5153,-12"/>
+<polygon fill="#000000" stroke="#000000" points="217.5995,-15.5001 227.5994,-12 217.5994,-8.5001 217.5995,-15.5001"/>
+</g>
+<!-- program~main -->
+<g id="proc~~load_particles_ic~~CalledByGraph_node3" class="node">
+<title>program~main</title>
+<g id="a_proc~~load_particles_ic~~CalledByGraph_node3"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~set_up_particles_ic -->
+<g id="proc~~load_particles_ic~~CalledByGraph_edge2" class="edge">
+<title>program~main&#45;&gt;proc~set_up_particles_ic</title>
+<path fill="none" stroke="#000000" d="M54.0164,-12C61.7663,-12 70.5499,-12 79.4824,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.5837,-15.5001 89.5837,-12 79.5836,-8.5001 79.5837,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/load_particles_ic.html#src">load_particles_ic</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">load_particles_ic</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">spp</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+    <span class="c">!! @note Subroutine that loads all the electrons&#39; data from</span>
+    <span class="c">!! &quot;restart_file.h5&quot; to restart a simulation.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">SPECIES</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">spp</span>
+    <span class="c">!! An instance of KORC&#39;s derived type SPECIES containing all the</span>
+    <span class="c">!! information of different electron species. See korc_types.f90.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">F</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">X_send_buffer</span><span class="p">,</span><span class="n">X_send_buffer_tmp</span><span class="p">,</span><span class="n">X_send_buffer_tmp1</span>
+    <span class="c">!! Temporary buffer used by MPI for scattering the electrons&#39; position</span>
+    <span class="c">!! to different MPI processes.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">X_receive_buffer</span>
+    <span class="c">!! Temporary buffer used by MPI for scattering the electrons&#39; position</span>
+    <span class="c">!! among MPI processes.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">V_send_buffer</span><span class="p">,</span><span class="n">V_send_buffer_tmp</span><span class="p">,</span><span class="n">V_send_buffer_tmp1</span>
+    <span class="c">!! Temporary buffer used by MPI for scattering the electrons&#39; velocity</span>
+    <span class="c">!! among MPI processes.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">V1_send_buffer_tmp</span><span class="p">,</span><span class="n">V2_send_buffer_tmp</span><span class="p">,</span><span class="n">V3_send_buffer_tmp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">V1_send_buffer_tmp1</span><span class="p">,</span><span class="n">V2_send_buffer_tmp1</span><span class="p">,</span><span class="n">V3_send_buffer_tmp1</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">V_receive_buffer</span>
+    <span class="c">!! Temporary buffer used by MPI for scattering the electrons&#39; velocity</span>
+    <span class="c">!! among MPI processes.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">AUX_send_buffer</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">AUX_send_buffer_tmp</span>
+    <span class="c">!!  Temporary buffer used by MPI to scatter various electrons&#39; variables</span>
+    <span class="c">!! among MPI processes.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">AUX_receive_buffer</span>
+    <span class="c">!! Temporary buffer used by MPI to scatter various electrons&#39; variables</span>
+    <span class="c">!! among MPI processes.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">JSC0_buffer</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">JSC1_buffer</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">JSC2_buffer</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">JSC3_buffer</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 		<span class="kd">::</span> <span class="n">ESC_buffer</span>
+
+
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">filename</span>
+    <span class="c">!! String containing the name of the HDF5 file.</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">dset</span>
+    <span class="c">!! Name of data set to be saved to file.</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">HID_T</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">h5file_id</span>
+    <span class="c">!! HDF5 file identifier.</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">19</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">tmp_str</span>
+    <span class="c">!! Temporary string used to manipulate various strings.</span>
+    <span class="kt">INTEGER</span> 						<span class="kd">::</span> <span class="n">h5error</span>
+    <span class="c">!! HDF5 error status.</span>
+    <span class="kt">INTEGER</span> 						<span class="kd">::</span> <span class="n">mpierr</span>
+    <span class="c">!! Electron species iterator.</span>
+    <span class="kt">INTEGER</span> 						<span class="kd">::</span> <span class="n">ss</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">jj</span>
+    <span class="c">!! MPI error status.</span>
+    <span class="kt">INTEGER</span>  <span class="kd">::</span> <span class="n">recieve_num</span><span class="p">,</span><span class="n">send_num</span><span class="p">,</span><span class="n">nmpi_ratio</span>
+    
+    <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">num_species</span>
+
+       <span class="c">!write(6,*) params%mpi_params%nmpi,params%mpi_params%nmpi_prev</span>
+       
+       <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">/</span> <span class="p">&amp;</span>
+            <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ppp must be divisible by factor increase in MPI nodes&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+       <span class="n">endif</span>
+
+       <span class="n">nmpi_ratio</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span>
+       
+       <span class="n">send_num</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span>
+       <span class="n">recieve_num</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span>
+       
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">X_send_buffer</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">X_send_buffer_tmp</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">X_send_buffer_tmp1</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">X_receive_buffer</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">recieve_num</span><span class="p">))</span>
+
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V_send_buffer</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V_send_buffer_tmp</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V_send_buffer_tmp1</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V_receive_buffer</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">recieve_num</span><span class="p">))</span>
+
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V1_send_buffer_tmp</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V2_send_buffer_tmp</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V3_send_buffer_tmp</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V1_send_buffer_tmp1</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V2_send_buffer_tmp1</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V3_send_buffer_tmp1</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">AUX_send_buffer</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">AUX_send_buffer_tmp</span><span class="p">(</span><span class="n">send_num</span><span class="p">))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">AUX_receive_buffer</span><span class="p">(</span><span class="n">recieve_num</span><span class="p">))</span>
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span>
+<span class="k">          </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/X&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">X_send_buffer</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;shape of X_send_buffer&#39;,shape(X_send_buffer)</span>
+          <span class="c">!write(6,*) &#39;X_send_buffer&#39;,X_send_buffer</span>
+          <span class="c">!write(6,*) &#39;recieve_num&#39;,recieve_num</span>
+
+<span class="cp">#if DBG_CHECK</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;X_send_buffer&#39;</span><span class="p">,</span><span class="n">X_send_buffer</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+<span class="cp">#endif</span>
+          
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">load_balance</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">-</span><span class="mi">1</span>
+
+                <span class="n">V1_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">X_send_buffer</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">V2_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">X_send_buffer</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">V3_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">X_send_buffer</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                
+             <span class="k">end do</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span>
+
+                <span class="n">V1_send_buffer_tmp1</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V1_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+                <span class="n">V2_send_buffer_tmp1</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V2_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+                <span class="n">V3_send_buffer_tmp1</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V3_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+                                                
+             <span class="k">end do</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">-</span><span class="mi">1</span>
+
+                <span class="n">X_send_buffer_tmp1</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V1_send_buffer_tmp1</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">X_send_buffer_tmp1</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V2_send_buffer_tmp1</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">X_send_buffer_tmp1</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V3_send_buffer_tmp1</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+
+
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             </span><span class="n">X_send_buffer_tmp1</span><span class="o">=</span><span class="n">X_send_buffer</span>
+          <span class="k">end if</span>
+<span class="k">          </span>
+<span class="k">          do </span><span class="n">jj</span><span class="o">=</span><span class="mi">0_idef</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">-</span><span class="mi">1_idef</span>
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">0_idef</span><span class="p">,</span><span class="n">nmpi_ratio</span><span class="o">-</span><span class="mi">1_idef</span>
+
+                <span class="n">X_send_buffer_tmp</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">X_send_buffer_tmp1</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">X_send_buffer_tmp</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span><span class="o">=</span><span class="p">&amp;</span>
+                     <span class="n">X_send_buffer_tmp1</span><span class="p">(</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">X_send_buffer_tmp</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">3</span><span class="p">))</span><span class="o">=</span><span class="p">&amp;</span>
+                     <span class="n">X_send_buffer_tmp1</span><span class="p">(</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+             <span class="k">end do</span>
+<span class="k">          end do</span>
+
+<span class="cp">#if DBG_CHECK</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;X_send_buffer_tmp1&#39;</span><span class="p">,</span><span class="n">X_send_buffer_tmp1</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;X_send_buffer_tmp&#39;</span><span class="p">,</span><span class="n">X_send_buffer_tmp</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+<span class="cp">#endif</span>
+
+          
+       <span class="k">end if</span>
+
+<span class="k">       </span><span class="n">X_receive_buffer</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">X_send_buffer_tmp</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">X_receive_buffer</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">).</span><span class="n">EQ</span><span class="p">.</span><span class="s1">&#39;FO&#39;</span><span class="p">)</span> <span class="k">then  </span>
+<span class="k">          </span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">,:)</span> <span class="o">=</span> <span class="p">&amp;</span>
+               <span class="nb">RESHAPE</span><span class="p">(</span><span class="n">X_receive_buffer</span><span class="p">,(</span><span class="o">/</span><span class="n">recieve_num</span><span class="p">,</span><span class="mi">3</span><span class="o">/</span><span class="p">))</span>
+          <span class="c">!set dummy values for new particles, so EZspline doesn&#39;t throw errors</span>
+
+          <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">-</span><span class="n">recieve_num</span>
+             <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(</span><span class="n">recieve_num</span><span class="o">+</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">,:)</span>
+          <span class="k">end do</span>
+<span class="k">          </span>
+<span class="k">       else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">).</span><span class="n">EQ</span><span class="p">.</span><span class="s1">&#39;GC&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">,:)</span> <span class="o">=</span> <span class="p">&amp;</span>
+               <span class="nb">RESHAPE</span><span class="p">(</span><span class="n">X_receive_buffer</span><span class="p">,(</span><span class="o">/</span><span class="n">recieve_num</span><span class="p">,</span><span class="mi">3</span><span class="o">/</span><span class="p">))</span>
+
+          <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">-</span><span class="n">recieve_num</span>
+             <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(</span><span class="n">recieve_num</span><span class="o">+</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(</span><span class="mi">1</span><span class="p">,:)</span>
+          <span class="k">end do</span>
+<span class="k">          </span>
+<span class="k">          </span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="nb">modulo</span><span class="p">(</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/V&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">V_send_buffer</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+<span class="cp">#if DBG_CHECK</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_send_buffer&#39;</span><span class="p">,</span><span class="n">V_send_buffer</span>
+<span class="cp">#endif</span>
+          
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">load_balance</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">-</span><span class="mi">1</span>
+
+                <span class="n">V1_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V_send_buffer</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">V2_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V_send_buffer</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">V3_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V_send_buffer</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                
+             <span class="k">end do</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span>
+
+                <span class="n">V1_send_buffer_tmp1</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V1_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+                <span class="n">V2_send_buffer_tmp1</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V2_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+                <span class="n">V3_send_buffer_tmp1</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V3_send_buffer_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+                                                
+             <span class="k">end do</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">-</span><span class="mi">1</span>
+
+                <span class="n">V_send_buffer_tmp1</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V1_send_buffer_tmp1</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">V_send_buffer_tmp1</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V2_send_buffer_tmp1</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+                <span class="n">V_send_buffer_tmp1</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V3_send_buffer_tmp1</span><span class="p">(</span><span class="n">ii</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">+</span><span class="mi">1</span><span class="p">:(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="p">)</span>
+
+
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             </span><span class="n">V_send_buffer_tmp1</span><span class="o">=</span><span class="n">V_send_buffer</span>
+          <span class="k">end if</span>
+<span class="k">          </span>
+<span class="k">          </span>
+<span class="k">          do </span><span class="n">jj</span><span class="o">=</span><span class="mi">0_idef</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">-</span><span class="mi">1_idef</span>
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">0_idef</span><span class="p">,</span><span class="n">nmpi_ratio</span><span class="o">-</span><span class="mi">1_idef</span>
+
+                <span class="n">V_send_buffer_tmp</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">V_send_buffer_tmp1</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">V_send_buffer_tmp</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span><span class="o">=</span><span class="p">&amp;</span>
+                     <span class="n">V_send_buffer_tmp1</span><span class="p">(</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">V_send_buffer_tmp</span><span class="p">(</span><span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">jj</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">3</span><span class="p">))</span><span class="o">=</span><span class="p">&amp;</span>
+                     <span class="n">V_send_buffer_tmp1</span><span class="p">(</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">jj</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">recieve_num</span><span class="o">*</span><span class="p">(</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+             <span class="k">end do</span>
+<span class="k">          end do</span>
+
+
+<span class="cp">#if DBG_CHECK</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_send_buffer_tmp1&#39;</span><span class="p">,</span><span class="n">V_send_buffer_tmp1</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_send_buffer_tmp&#39;</span><span class="p">,</span><span class="n">V_send_buffer_tmp</span>
+<span class="cp">#endif</span>
+          
+       <span class="k">end if</span>
+
+<span class="k">       </span>
+
+<span class="k">       </span><span class="n">V_receive_buffer</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">V_send_buffer_tmp</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">V_receive_buffer</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+       <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">,:)</span> <span class="o">=</span> <span class="p">&amp;</span>
+            <span class="nb">RESHAPE</span><span class="p">(</span><span class="n">V_receive_buffer</span><span class="p">,(</span><span class="o">/</span><span class="n">recieve_num</span><span class="p">,</span><span class="mi">3</span><span class="o">/</span><span class="p">))</span>
+
+       <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">-</span><span class="n">recieve_num</span>
+          <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(</span><span class="n">recieve_num</span><span class="o">+</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">,:)</span>
+       <span class="k">end do</span>
+<span class="k">       </span>
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/flagCon&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">AUX_send_buffer</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">load_balance</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span>
+
+                <span class="c">!write(6,*) &#39;send index&#39;,ii</span>
+                <span class="c">!write(6,*) &#39;tmp index&#39;,(mod(ii-1,params%mpi_params%nmpi))* &amp;</span>
+                <span class="c">!     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1</span>
+
+                <span class="n">AUX_send_buffer_tmp</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">AUX_send_buffer</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             </span><span class="n">AUX_send_buffer_tmp</span><span class="o">=</span><span class="n">AUX_send_buffer</span>
+          <span class="k">end if</span>
+<span class="k">          </span>
+<span class="k">       end if</span>
+<span class="k">       </span>
+<span class="k">       </span><span class="n">AUX_receive_buffer</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">AUX_send_buffer_tmp</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+       <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">)</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="k">is</span><span class="p">)</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/flagCol&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">AUX_send_buffer</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">load_balance</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span>
+
+                <span class="c">!write(6,*) &#39;send index&#39;,ii</span>
+                <span class="c">!write(6,*) &#39;tmp index&#39;,(mod(ii-1,params%mpi_params%nmpi))* &amp;</span>
+                <span class="c">!     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1</span>
+
+                <span class="n">AUX_send_buffer_tmp</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">AUX_send_buffer</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             </span><span class="n">AUX_send_buffer_tmp</span><span class="o">=</span><span class="n">AUX_send_buffer</span>
+          <span class="k">end if</span>
+<span class="k">          </span>
+<span class="k">       end if</span>
+<span class="k">       </span>
+<span class="k">       </span><span class="n">AUX_receive_buffer</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">AUX_send_buffer_tmp</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+       <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCol</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">)</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="k">is</span><span class="p">)</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/flagRE&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">AUX_send_buffer</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;ppp&#39;,spp(ss)%ppp</span>
+          <span class="c">!write(6,*) &#39;nmpi_prev&#39;,params%mpi_params%nmpi_prev</span>
+          <span class="c">!write(6,*) &#39;nmpi&#39;,params%mpi_params%nmpi</span>
+          <span class="c">!write(6,*) &#39;nmpi_ratio&#39;,nmpi_ratio</span>
+          
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">load_balance</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span>
+
+                <span class="c">!write(6,*) &#39;send index&#39;,ii</span>
+                <span class="c">!write(6,*) &#39;tmp index&#39;,(mod(ii-1,params%mpi_params%nmpi))* &amp;</span>
+                <span class="c">!     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1</span>
+
+                <span class="n">AUX_send_buffer_tmp</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">AUX_send_buffer</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             </span><span class="n">AUX_send_buffer_tmp</span><span class="o">=</span><span class="n">AUX_send_buffer</span>
+          <span class="k">end if</span>
+
+<span class="cp">#if DBG_CHECK</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagRE_send_buffer&#39;</span><span class="p">,</span><span class="n">AUX_send_buffer</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagRE_send_buffer_tmp&#39;</span><span class="p">,</span><span class="n">AUX_send_buffer_tmp</span>
+<span class="cp">#endif</span>
+          
+       <span class="k">end if             </span>
+<span class="k">       </span>
+<span class="k">       </span><span class="n">AUX_receive_buffer</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">AUX_send_buffer_tmp</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+       <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagRE</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">)</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="k">is</span><span class="p">)</span>
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/g&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">AUX_send_buffer</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">load_balance</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi_prev</span><span class="o">*</span><span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span>
+
+                <span class="c">!write(6,*) &#39;send index&#39;,ii</span>
+                <span class="c">!write(6,*) &#39;tmp index&#39;,(mod(ii-1,params%mpi_params%nmpi))* &amp;</span>
+                <span class="c">!     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1</span>
+
+                <span class="n">AUX_send_buffer_tmp</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">ppp</span><span class="o">/</span><span class="n">nmpi_ratio</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">&amp;</span>
+                     <span class="n">AUX_send_buffer</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             </span><span class="n">AUX_send_buffer_tmp</span><span class="o">=</span><span class="n">AUX_send_buffer</span>
+          <span class="k">end if</span>
+<span class="k">          </span>
+<span class="k">       end if</span>
+
+<span class="k">       </span><span class="n">AUX_receive_buffer</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">AUX_send_buffer_tmp</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">AUX_receive_buffer</span><span class="p">,</span><span class="n">recieve_num</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+       <span class="n">spp</span><span class="p">(</span><span class="n">ss</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">recieve_num</span><span class="p">)</span> <span class="o">=</span> <span class="n">AUX_receive_buffer</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span>
+<span class="k">          ALLOCATE</span><span class="p">(</span><span class="n">JSC0_buffer</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">JSC1_buffer</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">JSC2_buffer</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">JSC3_buffer</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">ESC_buffer</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+
+          <span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+          <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">                  &amp;load_particles_ic --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">,</span><span class="s1">&#39;(I18)&#39;</span><span class="p">)</span> <span class="n">ss</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/J0_SC&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">JSC0_buffer</span><span class="p">)</span>
+          
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/J1_SC&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">JSC1_buffer</span><span class="p">)</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/J2_SC&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">JSC2_buffer</span><span class="p">)</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/J3_SC&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">JSC3_buffer</span><span class="p">)</span>
+
+          <span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/spp_&quot;</span> <span class="o">//</span> <span class="nb">TRIM</span><span class="p">(</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">tmp_str</span><span class="p">))</span> <span class="o">//</span> <span class="s2">&quot;/E_SC&quot;</span>
+          <span class="k">call </span><span class="n">load_array_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">ESC_buffer</span><span class="p">)</span>
+          
+          <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+          <span class="n">F</span><span class="p">%</span><span class="n">J0_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="n">JSC0_buffer</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">J1_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="n">JSC1_buffer</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">J2_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="n">JSC2_buffer</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">J3_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="n">JSC3_buffer</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">E_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="n">ESC_buffer</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">Eo</span>
+          
+          <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">JSC0_buffer</span><span class="p">)</span>
+          <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">JSC1_buffer</span><span class="p">)</span>
+          <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">JSC2_buffer</span><span class="p">)</span>
+          <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">JSC3_buffer</span><span class="p">)</span>
+          <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">ESC_buffer</span><span class="p">)</span>
+          
+       <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">       DEALLOCATE</span><span class="p">(</span><span class="n">X_send_buffer</span><span class="p">)</span>
+       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">X_receive_buffer</span><span class="p">)</span>
+
+       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">V_send_buffer</span><span class="p">)</span>
+       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">V_receive_buffer</span><span class="p">)</span>
+
+       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">AUX_send_buffer</span><span class="p">)</span>
+       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">AUX_receive_buffer</span><span class="p">)</span>
+    <span class="k">end do</span>
+
+<span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">).</span><span class="n">EQ</span><span class="p">.</span><span class="s1">&#39;GC&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">params</span><span class="p">%</span><span class="n">GC_coords</span><span class="o">=</span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+    <span class="k">end if</span>
+
+<span class="cp">#if DBG_CHECK    </span>
+    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;mpi&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_R&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_PHI&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_Z&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_PLL&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">velocity</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">mass</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_MU&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">energy</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">Bo</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCon&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCol&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCol</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagRE&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagRE</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">1_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;mpi&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_R&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_PHI&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_Z&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_PLL&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">velocity</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">mass</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_MU&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">energy</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">Bo</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCon&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCol&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCol</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagRE&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagRE</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">2_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;mpi&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_R&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_PHI&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_Z&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_PLL&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">velocity</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">mass</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_MU&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">energy</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">Bo</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCon&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCol&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCol</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagRE&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagRE</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">3_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;mpi&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_R&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_PHI&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Y_Z&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(:,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_PLL&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">velocity</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">mass</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_MU&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">energy</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">Bo</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCon&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagCol&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCol</span>
+       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;flagRE&#39;</span><span class="p">,</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagRE</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<span class="cp">#endif</span>
+
+    
+  <span class="k">end subroutine </span><span class="n">load_particles_ic</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

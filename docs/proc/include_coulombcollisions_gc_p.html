@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>include_CoulombCollisions_GC_p &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>include_CoulombCollisions_GC_p
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.6% of total for procedures.">147 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_collisions.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_collisions.f90.html'>korc_collisions.f90</a></li>
+    
+     <li><a href='../module/korc_collisions.html'>korc_collisions</a></li>
+    
+  
+     <li class="active">include_CoulombCollisions_GC_p</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/include_coulombcollisions_gc_p.html#src">include_CoulombCollisions_GC_p</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine include_CoulombCollisions_GC_p(tt, params, Y_R, Y_PHI, Y_Z, Ppll, Pmu, me, flagCon, flagCol, F, P, E_PHI, ne, PSIp)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tt~3"></span>integer(kind=ip),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>tt</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~36"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_r"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_phi"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_z"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ppll"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Ppll</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pmu"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Pmu</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-me~4"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>me</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcon~4"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>flagCon</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcol~4"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>flagCol</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~9"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p~7"></span>type(PROFILES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_phi"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne~26"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>ne</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip~4"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~include_coulombcollisions_gc_p~~CallsGraph Pages: 1 -->
+<svg id="procinclude_coulombcollisions_gc_pCallsGraph" width="641pt" height="965pt"
+ viewBox="0.00 0.00 641.00 965.03" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph" class="graph" transform="scale(.8829 .8829) rotate(0) translate(4 1089)">
+<title>proc~~include_coulombcollisions_gc_p~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-1089 722,-1089 722,4 -4,4"/>
+<!-- proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node1" class="node">
+<title>proc~include_coulombcollisions_gc_p</title>
+<polygon fill="none" stroke="#000000" points="172,-665 0,-665 0,-641 172,-641 172,-665"/>
+<text text-anchor="middle" x="86" y="-650.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">include_CoulombCollisions_GC_p</text>
+</g>
+<!-- proc~calculate_gcfieldswe_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node2" class="node">
+<title>proc~calculate_gcfieldswe_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node2"><a xlink:href=".././proc/calculate_gcfieldswe_p.html" xlink:title="calculate_GCfieldswE_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="339.5,-896 213.5,-896 213.5,-872 339.5,-872 339.5,-896"/>
+<text text-anchor="middle" x="276.5" y="-881.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfieldswE_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfieldswe_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge1" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfieldswe_p</title>
+<path fill="none" stroke="#000000" d="M89.5247,-665.0576C100.6243,-700.8924 138.3206,-807.6842 208,-863 209.8205,-864.4453 211.7403,-865.7914 213.7351,-867.0453"/>
+<polygon fill="#000000" stroke="#000000" points="212.4227,-870.3137 222.8869,-871.9723 215.741,-864.1501 212.4227,-870.3137"/>
+</g>
+<!-- proc~dca_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node3" class="node">
+<title>proc~dca_sd</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node3"><a xlink:href=".././proc/dca_sd.html" xlink:title="dCA_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="303.5,-262 249.5,-262 249.5,-238 303.5,-238 303.5,-262"/>
+<text text-anchor="middle" x="276.5" y="-247.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">dCA_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge2" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M88.3284,-640.77C99.8047,-581.6763 152.0485,-326.3029 208,-271 216.4844,-262.6139 228.2258,-257.5639 239.5929,-254.5273"/>
+<polygon fill="#000000" stroke="#000000" points="240.3949,-257.9345 249.3946,-252.3439 238.8728,-251.102 240.3949,-257.9345"/>
+</g>
+<!-- proc~interp_fields_3d_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node4" class="node">
+<title>proc~interp_fields_3d_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node4"><a xlink:href=".././proc/interp_fields_3d_p.html" xlink:title="interp_fields_3D_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="326.5,-812 226.5,-812 226.5,-788 326.5,-788 326.5,-812"/>
+<text text-anchor="middle" x="276.5" y="-797.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_fields_3D_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_3d_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge3" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_3d_p</title>
+<path fill="none" stroke="#000000" d="M94.3022,-665.001C112.1756,-689.9456 156.8463,-747.6726 208,-779 210.9535,-780.8088 214.0749,-782.4725 217.2927,-784.0014"/>
+<polygon fill="#000000" stroke="#000000" points="215.9861,-787.2492 226.557,-787.9613 218.7375,-780.8126 215.9861,-787.2492"/>
+</g>
+<!-- proc~get_random -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node5" class="node">
+<title>proc~get_random</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node5"><a xlink:href=".././proc/get_random.html" xlink:title="get_random">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-1064 242,-1064 242,-1040 311,-1040 311,-1064"/>
+<text text-anchor="middle" x="276.5" y="-1049.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_random</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~get_random -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge4" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~get_random</title>
+<path fill="none" stroke="#000000" d="M88.3469,-665.1032C99.9096,-723.5841 152.496,-976.3073 208,-1031 214.6367,-1037.5397 223.2542,-1042.0502 232.1253,-1045.1592"/>
+<polygon fill="#000000" stroke="#000000" points="231.1869,-1048.5315 241.769,-1048.0124 233.1729,-1041.8191 231.1869,-1048.5315"/>
+</g>
+<!-- proc~calculate_gcfields_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node6" class="node">
+<title>proc~calculate_gcfields_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node6"><a xlink:href=".././proc/calculate_gcfields_p.html" xlink:title="calculate_GCfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="332.5,-1022 220.5,-1022 220.5,-998 332.5,-998 332.5,-1022"/>
+<text text-anchor="middle" x="276.5" y="-1007.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge5" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p</title>
+<path fill="none" stroke="#000000" d="M86.6653,-665.1532C89.9805,-713.5806 108.8113,-894.7282 208,-989 209.2707,-990.2077 210.6091,-991.3461 212.0039,-992.4191"/>
+<polygon fill="#000000" stroke="#000000" points="210.2212,-995.4336 220.5303,-997.8777 213.9955,-989.5383 210.2212,-995.4336"/>
+</g>
+<!-- proc~analytical_profiles_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node7" class="node">
+<title>proc~analytical_profiles_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node7"><a xlink:href=".././proc/analytical_profiles_p.html" xlink:title="analytical_profiles_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="330.5,-854 222.5,-854 222.5,-830 330.5,-830 330.5,-854"/>
+<text text-anchor="middle" x="276.5" y="-839.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_profiles_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~analytical_profiles_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge6" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~analytical_profiles_p</title>
+<path fill="none" stroke="#000000" d="M91.4365,-665.2335C105.8066,-696.1608 147.863,-778.0594 208,-821 210.2476,-822.6049 212.6206,-824.0894 215.0803,-825.4622"/>
+<polygon fill="#000000" stroke="#000000" points="213.7755,-828.7199 224.2974,-829.9608 216.8458,-822.4292 213.7755,-828.7199"/>
+</g>
+<!-- proc~interp_hcollision_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node8" class="node">
+<title>proc~interp_hcollision_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node8"><a xlink:href=".././proc/interp_hcollision_p.html" xlink:title="interp_Hcollision_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="327,-644 226,-644 226,-620 327,-620 327,-644"/>
+<text text-anchor="middle" x="276.5" y="-629.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_Hcollision_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_hcollision_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge7" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_hcollision_p</title>
+<path fill="none" stroke="#000000" d="M172.054,-643.5137C186.8912,-641.8781 202.0289,-640.2094 216.0088,-638.6683"/>
+<polygon fill="#000000" stroke="#000000" points="216.4066,-642.1458 225.9628,-637.571 215.6395,-635.1879 216.4066,-642.1458"/>
+</g>
+<!-- proc~cb_ei_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node9" class="node">
+<title>proc~cb_ei_sd</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node9"><a xlink:href=".././proc/cb_ei_sd.html" xlink:title="CB_ei_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="307.5,-560 245.5,-560 245.5,-536 307.5,-536 307.5,-560"/>
+<text text-anchor="middle" x="276.5" y="-545.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ei_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge8" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd</title>
+<path fill="none" stroke="#000000" d="M100.4878,-640.8107C122.4582,-622.8592 166.0932,-589.2551 208,-569 216.6356,-564.8261 226.2837,-561.2614 235.5509,-558.3175"/>
+<polygon fill="#000000" stroke="#000000" points="236.8177,-561.5917 245.3914,-555.3674 234.8075,-554.8866 236.8177,-561.5917"/>
+</g>
+<!-- proc~interp_fields_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node10" class="node">
+<title>proc~interp_fields_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node10"><a xlink:href=".././proc/interp_fields_p.html" xlink:title="interp_fields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="317,-728 236,-728 236,-704 317,-704 317,-728"/>
+<text text-anchor="middle" x="276.5" y="-713.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_fields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge9" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M120.0774,-665.0797C144.4866,-673.6469 178.1776,-685.2984 208,-695 213.9771,-696.9444 220.2635,-698.9394 226.5041,-700.8893"/>
+<polygon fill="#000000" stroke="#000000" points="225.6343,-704.2839 236.2223,-703.9025 227.7074,-697.5979 225.6343,-704.2839"/>
+</g>
+<!-- proc~calculate_gcfields_p_fs -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node11" class="node">
+<title>proc~calculate_gcfields_p_fs</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node11"><a xlink:href=".././proc/calculate_gcfields_p_fs.html" xlink:title="calculate_GCfields_p_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="342,-980 211,-980 211,-956 342,-956 342,-980"/>
+<text text-anchor="middle" x="276.5" y="-965.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfields_p_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p_fs -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge10" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p_fs</title>
+<path fill="none" stroke="#000000" d="M87.3721,-665.156C93.0584,-709.7547 118.8304,-865.9939 208,-947 209.3292,-948.2075 210.7264,-949.3457 212.1796,-950.4184"/>
+<polygon fill="#000000" stroke="#000000" points="210.6833,-953.6075 221.0327,-955.8745 214.3559,-947.6483 210.6833,-953.6075"/>
+</g>
+<!-- proc~interp_focollision_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node12" class="node">
+<title>proc~interp_focollision_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node12"><a xlink:href=".././proc/interp_focollision_p.html" xlink:title="interp_FOcollision_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="330.5,-686 222.5,-686 222.5,-662 330.5,-662 330.5,-686"/>
+<text text-anchor="middle" x="276.5" y="-671.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOcollision_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_focollision_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge11" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_focollision_p</title>
+<path fill="none" stroke="#000000" d="M172.054,-662.4863C185.5917,-663.9786 199.3795,-665.4985 212.3097,-666.9239"/>
+<polygon fill="#000000" stroke="#000000" points="212.1512,-670.4276 222.4746,-668.0444 212.9183,-663.4697 212.1512,-670.4276"/>
+</g>
+<!-- proc~analytical_fields_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node13" class="node">
+<title>proc~analytical_fields_gc_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node13"><a xlink:href=".././proc/analytical_fields_gc_p.html" xlink:title="analytical_fields_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="336.5,-602 216.5,-602 216.5,-578 336.5,-578 336.5,-602"/>
+<text text-anchor="middle" x="276.5" y="-587.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~analytical_fields_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge12" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~analytical_fields_gc_p</title>
+<path fill="none" stroke="#000000" d="M120.0774,-640.9203C144.4866,-632.3531 178.1776,-620.7016 208,-611 213.9771,-609.0556 220.2635,-607.0606 226.5041,-605.1107"/>
+<polygon fill="#000000" stroke="#000000" points="227.7074,-608.4021 236.2223,-602.0975 225.6343,-601.7161 227.7074,-608.4021"/>
+</g>
+<!-- proc~calculate_2dbdbfields_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node14" class="node">
+<title>proc~calculate_2dbdbfields_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node14"><a xlink:href=".././proc/calculate_2dbdbfields_p.html" xlink:title="calculate_2DBdBfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="341,-770 212,-770 212,-746 341,-746 341,-770"/>
+<text text-anchor="middle" x="276.5" y="-755.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_2DBdBfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_2dbdbfields_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge13" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_2dbdbfields_p</title>
+<path fill="none" stroke="#000000" d="M100.4878,-665.1893C122.4582,-683.1408 166.0932,-716.7449 208,-737 212.0142,-738.9402 216.2472,-740.7488 220.559,-742.4245"/>
+<polygon fill="#000000" stroke="#000000" points="219.4758,-745.7548 230.0699,-745.8805 221.8665,-739.1757 219.4758,-745.7548"/>
+</g>
+<!-- proc~cb_ei_sd_fio -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node15" class="node">
+<title>proc~cb_ei_sd_fio</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node15"><a xlink:href=".././proc/cb_ei_sd_fio.html" xlink:title="CB_ei_SD_FIO">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="319,-506 234,-506 234,-482 319,-482 319,-506"/>
+<text text-anchor="middle" x="276.5" y="-491.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ei_SD_FIO</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd_fio -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge14" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd_fio</title>
+<path fill="none" stroke="#000000" d="M95.2792,-640.8666C114.2706,-616.6684 159.857,-561.7516 208,-527 216.6788,-520.7353 226.7321,-515.1284 236.4183,-510.3912"/>
+<polygon fill="#000000" stroke="#000000" points="237.9632,-513.5325 245.5359,-506.1226 234.9952,-507.1929 237.9632,-513.5325"/>
+</g>
+<!-- proc~cf_sd_fio -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node16" class="node">
+<title>proc~cf_sd_fio</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node16"><a xlink:href=".././proc/cf_sd_fio.html" xlink:title="CF_SD_FIO">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311.5,-304 241.5,-304 241.5,-280 311.5,-280 311.5,-304"/>
+<text text-anchor="middle" x="276.5" y="-289.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CF_SD_FIO</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd_fio -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge15" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd_fio</title>
+<path fill="none" stroke="#000000" d="M87.7129,-640.8201C94.6682,-595.2792 124.5229,-432.5421 208,-333 216.1405,-323.2928 227.2008,-315.2906 238.058,-309.0134"/>
+<polygon fill="#000000" stroke="#000000" points="239.9288,-311.9808 247.0616,-304.1467 236.6002,-305.8228 239.9288,-311.9808"/>
+</g>
+<!-- proc~ca_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node17" class="node">
+<title>proc~ca_sd</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node17"><a xlink:href=".././proc/ca_sd.html" xlink:title="CA_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="303.5,-178 249.5,-178 249.5,-154 303.5,-154 303.5,-178"/>
+<text text-anchor="middle" x="276.5" y="-163.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CA_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge16" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M87.5727,-640.8484C96.3936,-574.4619 141.7071,-256.097 208,-187 216.2589,-178.3917 227.9437,-173.286 239.3283,-170.2666"/>
+<polygon fill="#000000" stroke="#000000" points="240.1414,-173.6716 249.1621,-168.1148 238.645,-166.8334 240.1414,-173.6716"/>
+</g>
+<!-- proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node18" class="node">
+<title>proc~calculate_gcfields_2x1t_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node18"><a xlink:href=".././proc/calculate_gcfields_2x1t_p.html" xlink:title="calculate_GCfields_2x1t_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="345,-938 208,-938 208,-914 345,-914 345,-938"/>
+<text text-anchor="middle" x="276.5" y="-923.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfields_2x1t_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge17" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_2x1t_p</title>
+<path fill="none" stroke="#000000" d="M88.2802,-665.087C96.5347,-705.4681 128.6582,-836.9826 208,-905 209.5582,-906.3358 211.2001,-907.5866 212.9084,-908.7579"/>
+<polygon fill="#000000" stroke="#000000" points="211.5157,-911.9958 221.9238,-913.9764 215.0225,-905.9375 211.5157,-911.9958"/>
+</g>
+<!-- proc~add_analytical_e_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node19" class="node">
+<title>proc~add_analytical_e_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node19"><a xlink:href=".././proc/add_analytical_e_p.html" xlink:title="add_analytical_E_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="328.5,-220 224.5,-220 224.5,-196 328.5,-196 328.5,-220"/>
+<text text-anchor="middle" x="276.5" y="-205.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">add_analytical_E_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~add_analytical_e_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge18" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~add_analytical_e_p</title>
+<path fill="none" stroke="#000000" d="M87.9286,-640.7155C98.0533,-577.6849 146.9252,-291.1409 208,-229 210.2383,-226.7226 212.7166,-224.6908 215.3642,-222.8782"/>
+<polygon fill="#000000" stroke="#000000" points="217.339,-225.7818 224.3096,-217.803 213.8848,-219.6934 217.339,-225.7818"/>
+</g>
+<!-- proc~cf_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node20" class="node">
+<title>proc~cf_sd</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node20"><a xlink:href=".././proc/cf_sd.html" xlink:title="CF_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="303.5,-366 249.5,-366 249.5,-342 303.5,-342 303.5,-366"/>
+<text text-anchor="middle" x="276.5" y="-351.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CF_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge19" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd</title>
+<path fill="none" stroke="#000000" d="M93.7038,-640.9085C122.7823,-595.2682 226.0982,-433.1084 263.1523,-374.95"/>
+<polygon fill="#000000" stroke="#000000" points="266.2788,-376.5563 268.7004,-366.2419 260.3752,-372.795 266.2788,-376.5563"/>
+</g>
+<!-- proc~cb_ee_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node21" class="node">
+<title>proc~cb_ee_sd</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node21"><a xlink:href=".././proc/cb_ee_sd.html" xlink:title="CB_ee_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="309,-136 244,-136 244,-112 309,-112 309,-136"/>
+<text text-anchor="middle" x="276.5" y="-121.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ee_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge20" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M87.3088,-640.6962C95.0109,-570.4898 136.5566,-220.9993 208,-145 214.9648,-137.5911 224.4667,-132.7725 234.1751,-129.6455"/>
+<polygon fill="#000000" stroke="#000000" points="235.1125,-133.0179 243.866,-127.049 233.3008,-126.2564 235.1125,-133.0179"/>
+</g>
+<!-- ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node22" class="node">
+<title>ezspline_error</title>
+<polygon fill="#777777" stroke="#777777" points="499,-812 420,-812 420,-788 499,-788 499,-812"/>
+<text text-anchor="middle" x="459.5" y="-797.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_error</text>
+</g>
+<!-- proc~calculate_gcfieldswe_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge22" class="edge">
+<title>proc~calculate_gcfieldswe_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M320.4649,-871.9901C328.7256,-869.3222 337.2102,-866.2957 345,-863 375.6701,-850.0242 408.8103,-831.2178 431.506,-817.5322"/>
+<polygon fill="#000000" stroke="#000000" points="433.5423,-820.39 440.2584,-812.1958 429.8982,-814.4133 433.5423,-820.39"/>
+</g>
+<!-- proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node28" class="node">
+<title>proc~check_if_in_fields_domain_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node28"><a xlink:href=".././proc/check_if_in_fields_domain_p.html" xlink:title="check_if_in_fields_domain_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="533,-896 386,-896 386,-872 533,-872 533,-896"/>
+<text text-anchor="middle" x="459.5" y="-881.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_fields_domain_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_gcfieldswe_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge21" class="edge">
+<title>proc~calculate_gcfieldswe_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M339.7345,-884C351.357,-884 363.6542,-884 375.7685,-884"/>
+<polygon fill="#000000" stroke="#000000" points="375.8827,-887.5001 385.8826,-884 375.8826,-880.5001 375.8827,-887.5001"/>
+</g>
+<!-- ezspline_derivative -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node34" class="node">
+<title>ezspline_derivative</title>
+<polygon fill="#777777" stroke="#777777" points="510.5,-959 408.5,-959 408.5,-935 510.5,-935 510.5,-959"/>
+<text text-anchor="middle" x="459.5" y="-944.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_derivative</text>
+</g>
+<!-- proc~calculate_gcfieldswe_p&#45;&gt;ezspline_derivative -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge23" class="edge">
+<title>proc~calculate_gcfieldswe_p&#45;&gt;ezspline_derivative</title>
+<path fill="none" stroke="#000000" d="M317.1839,-896.0758C326.3628,-898.9103 336.0401,-901.9857 345,-905 369.5383,-913.2551 396.7572,-923.2059 418.4979,-931.3494"/>
+<polygon fill="#000000" stroke="#000000" points="417.4802,-934.7059 428.0722,-934.9512 419.945,-928.1542 417.4802,-934.7059"/>
+</g>
+<!-- proc~psi -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node23" class="node">
+<title>proc~psi</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node23"><a xlink:href=".././proc/psi.html" xlink:title="psi">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="486.5,-142 432.5,-142 432.5,-118 486.5,-118 486.5,-142"/>
+<text text-anchor="middle" x="459.5" y="-127.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">psi</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~psi -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge26" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M303.657,-246.846C317.3441,-244.065 333.443,-238.8347 345,-229 372.5501,-205.5557 353.7138,-179.7509 381,-156 392.5023,-145.988 407.9738,-139.8082 422.1406,-136.0042"/>
+<polygon fill="#000000" stroke="#000000" points="423.2262,-139.344 432.1502,-133.6333 421.6128,-132.5325 423.2262,-139.344"/>
+</g>
+<!-- proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node24" class="node">
+<title>proc~vte</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node24"><a xlink:href=".././proc/vte.html" xlink:title="VTe">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="718,-339 664,-339 664,-315 718,-315 718,-339"/>
+<text text-anchor="middle" x="691" y="-324.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">VTe</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge25" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M303.7634,-241.8259C329.4695,-234.2782 366.1958,-223.949 381,-222 450.1808,-212.8924 469.0142,-211.5167 538,-222 579.4156,-228.2937 593.2691,-226.5772 628,-250 649.6278,-264.586 667.664,-288.7621 678.8187,-306.1358"/>
+<polygon fill="#000000" stroke="#000000" points="676.0524,-308.3174 684.2869,-314.984 682.0071,-304.6374 676.0524,-308.3174"/>
+</g>
+<!-- proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node29" class="node">
+<title>proc~gammacee</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node29"><a xlink:href=".././proc/gammacee.html" xlink:title="Gammacee">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="493,-298 426,-298 426,-274 493,-274 493,-298"/>
+<text text-anchor="middle" x="459.5" y="-283.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Gammacee</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge24" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M303.5023,-255.3119C333.0926,-261.133 380.9933,-270.5561 415.9185,-277.4266"/>
+<polygon fill="#000000" stroke="#000000" points="415.3642,-280.8846 425.8517,-279.3807 416.7154,-274.0162 415.3642,-280.8846"/>
+</g>
+<!-- proc~interp_fields_3d_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge29" class="edge">
+<title>proc~interp_fields_3d_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M326.5056,-800C352.3627,-800 383.8286,-800 409.6615,-800"/>
+<polygon fill="#000000" stroke="#000000" points="409.9889,-803.5001 419.9889,-800 409.9889,-796.5001 409.9889,-803.5001"/>
+</g>
+<!-- ezspline_interp -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node25" class="node">
+<title>ezspline_interp</title>
+<polygon fill="#777777" stroke="#777777" points="501,-770 418,-770 418,-746 501,-746 501,-770"/>
+<text text-anchor="middle" x="459.5" y="-755.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_interp</text>
+</g>
+<!-- proc~interp_fields_3d_p&#45;&gt;ezspline_interp -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge27" class="edge">
+<title>proc~interp_fields_3d_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M326.5056,-788.5233C351.8236,-782.7126 382.5191,-775.6678 408.0386,-769.8108"/>
+<polygon fill="#000000" stroke="#000000" points="408.9393,-773.1952 417.903,-767.5469 407.3734,-766.3726 408.9393,-773.1952"/>
+</g>
+<!-- proc~interp_fields_3d_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge28" class="edge">
+<title>proc~interp_fields_3d_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M320.4649,-812.0099C328.7256,-814.6778 337.2102,-817.7043 345,-821 375.6701,-833.9758 408.8103,-852.7822 431.506,-866.4678"/>
+<polygon fill="#000000" stroke="#000000" points="429.8982,-869.5867 440.2584,-871.8042 433.5423,-863.61 429.8982,-869.5867"/>
+</g>
+<!-- omp_get_thread_num -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node30" class="node">
+<title>omp_get_thread_num</title>
+<polygon fill="#777777" stroke="#777777" points="517,-1085 402,-1085 402,-1061 517,-1061 517,-1085"/>
+<text text-anchor="middle" x="459.5" y="-1070.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_get_thread_num</text>
+</g>
+<!-- proc~get_random&#45;&gt;omp_get_thread_num -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge30" class="edge">
+<title>proc~get_random&#45;&gt;omp_get_thread_num</title>
+<path fill="none" stroke="#000000" d="M311.3516,-1055.9994C333.9726,-1058.5952 364.2092,-1062.065 391.4663,-1065.1929"/>
+<polygon fill="#000000" stroke="#000000" points="391.411,-1068.7094 401.7449,-1066.3724 392.2091,-1061.755 391.411,-1068.7094"/>
+</g>
+<!-- interface~random_get_number -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node36" class="node">
+<title>interface~random_get_number</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node36"><a xlink:href=".././interface/random_get_number.html" xlink:title="random_get_number">
+<polygon fill="#a7506f" stroke="#a7506f" points="514.5,-1043 404.5,-1043 404.5,-1019 514.5,-1019 514.5,-1043"/>
+<text text-anchor="middle" x="459.5" y="-1028.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_get_number</text>
+</a>
+</g>
+</g>
+<!-- proc~get_random&#45;&gt;interface~random_get_number -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge31" class="edge">
+<title>proc~get_random&#45;&gt;interface~random_get_number</title>
+<path fill="none" stroke="#000000" d="M311.3516,-1048.0006C334.7188,-1045.3192 366.2122,-1041.7052 394.1535,-1038.4988"/>
+<polygon fill="#000000" stroke="#000000" points="394.7295,-1041.9557 404.2653,-1037.3384 393.9314,-1035.0014 394.7295,-1041.9557"/>
+</g>
+<!-- proc~calculate_gcfields_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge33" class="edge">
+<title>proc~calculate_gcfields_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M332.7346,-998.1469C337.2441,-995.6536 341.4286,-992.6405 345,-989 385.7858,-947.4246 348.7714,-911.511 381,-863 393.3201,-844.4556 412.8206,-828.7654 429.3029,-817.6816"/>
+<polygon fill="#000000" stroke="#000000" points="431.5837,-820.375 438.0844,-812.0089 427.7854,-814.4951 431.5837,-820.375"/>
+</g>
+<!-- proc~calculate_gcfields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge32" class="edge">
+<title>proc~calculate_gcfields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M330.4853,-997.8432C335.6773,-995.4116 340.6285,-992.4959 345,-989 370.1859,-968.8587 357.881,-948.4836 381,-926 391.6997,-915.5944 405.4964,-907.063 418.5315,-900.4725"/>
+<polygon fill="#000000" stroke="#000000" points="420.3261,-903.4938 427.8332,-896.0175 417.3024,-897.1805 420.3261,-903.4938"/>
+</g>
+<!-- proc~calculate_gcfields_p&#45;&gt;ezspline_derivative -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge34" class="edge">
+<title>proc~calculate_gcfields_p&#45;&gt;ezspline_derivative</title>
+<path fill="none" stroke="#000000" d="M317.1839,-997.9242C326.3628,-995.0897 336.0401,-992.0143 345,-989 369.5383,-980.7449 396.7572,-970.7941 418.4979,-962.6506"/>
+<polygon fill="#000000" stroke="#000000" points="419.945,-965.8458 428.0722,-959.0488 417.4802,-959.2941 419.945,-965.8458"/>
+</g>
+<!-- proc~interp_hcollision_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge37" class="edge">
+<title>proc~interp_hcollision_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M327.3237,-641.1654C333.8848,-644.0903 340.0349,-647.9388 345,-653 385.7858,-694.5754 339.4709,-738.167 381,-779 388.8559,-786.7242 399.2239,-791.6901 409.8403,-794.8616"/>
+<polygon fill="#000000" stroke="#000000" points="409.0449,-798.2704 419.595,-797.2975 410.7409,-791.479 409.0449,-798.2704"/>
+</g>
+<!-- proc~interp_hcollision_p&#45;&gt;ezspline_interp -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge35" class="edge">
+<title>proc~interp_hcollision_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M327.1106,-641.9034C333.6241,-644.7233 339.8172,-648.3461 345,-653 375.2213,-680.1376 350.2941,-710.4119 381,-737 388.6789,-743.6491 398.2479,-748.2192 408.0364,-751.3538"/>
+<polygon fill="#000000" stroke="#000000" points="407.2671,-754.7719 417.8361,-754.0338 409.1136,-748.0198 407.2671,-754.7719"/>
+</g>
+<!-- proc~check_if_in_profiles_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node35" class="node">
+<title>proc~check_if_in_profiles_domain_p</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node35"><a xlink:href=".././proc/check_if_in_profiles_domain_p.html" xlink:title="check_if_in_profiles_domain_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="538,-728 381,-728 381,-704 538,-704 538,-728"/>
+<text text-anchor="middle" x="459.5" y="-713.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_profiles_domain_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_hcollision_p&#45;&gt;proc~check_if_in_profiles_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge36" class="edge">
+<title>proc~interp_hcollision_p&#45;&gt;proc~check_if_in_profiles_domain_p</title>
+<path fill="none" stroke="#000000" d="M326.435,-644.0517C332.9058,-646.5406 339.2677,-649.499 345,-653 364.5807,-664.9589 361.5542,-677.8229 381,-690 387.274,-693.9288 394.2052,-697.3298 401.2744,-700.2561"/>
+<polygon fill="#000000" stroke="#000000" points="400.3605,-703.6538 410.951,-703.9573 402.8613,-697.1157 400.3605,-703.6538"/>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge38" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M307.6069,-553.934C319.8653,-557.1682 333.688,-561.9873 345,-569 364.7731,-581.258 359.6287,-597.8075 381,-607 445.0996,-634.5713 477.4294,-641.6431 538,-607 588.3424,-578.2068 658.6882,-409.1979 682.6367,-348.6051"/>
+<polygon fill="#000000" stroke="#000000" points="685.9223,-349.8133 686.3143,-339.2257 679.4054,-347.2579 685.9223,-349.8133"/>
+</g>
+<!-- proc~clogei -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node26" class="node">
+<title>proc~clogei</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node26"><a xlink:href=".././proc/clogei.html" xlink:title="CLogei">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="628,-688 574,-688 574,-664 628,-664 628,-688"/>
+<text text-anchor="middle" x="601" y="-673.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLogei</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~clogei -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge39" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~clogei</title>
+<path fill="none" stroke="#000000" d="M307.6266,-551.7227C320.4617,-554.6273 334.7069,-559.7976 345,-569 374.9761,-595.7997 348.6311,-628.1453 381,-652 434.6273,-691.5214 516.5313,-688.5171 563.8086,-682.4623"/>
+<polygon fill="#000000" stroke="#000000" points="564.4932,-685.9008 573.914,-681.0533 563.5265,-678.9679 564.4932,-685.9008"/>
+</g>
+<!-- proc~g_j -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node27" class="node">
+<title>proc~g_j</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node27"><a xlink:href=".././proc/g_j.html" xlink:title="g_j">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="486.5,-572 432.5,-572 432.5,-548 486.5,-548 486.5,-572"/>
+<text text-anchor="middle" x="459.5" y="-557.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">g_j</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~g_j -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge40" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~g_j</title>
+<path fill="none" stroke="#000000" d="M307.5435,-550.0356C339.1968,-552.1113 388.3219,-555.3326 422.0995,-557.5475"/>
+<polygon fill="#000000" stroke="#000000" points="422.2778,-561.0666 432.4854,-558.2286 422.7359,-554.0816 422.2778,-561.0666"/>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge41" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M307.6262,-540.0215C321.1019,-535.0058 335.8539,-527.116 345,-515 401.5248,-440.1206 317.7121,-376.2576 381,-307 389.9361,-297.2211 402.8778,-291.7905 415.6846,-288.8341"/>
+<polygon fill="#000000" stroke="#000000" points="416.649,-292.2153 425.8473,-286.9577 415.378,-285.3316 416.649,-292.2153"/>
+</g>
+<!-- proc~clogee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node31" class="node">
+<title>proc~clogee</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node31"><a xlink:href=".././proc/clogee.html" xlink:title="CLogee">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="628,-420 574,-420 574,-396 628,-396 628,-420"/>
+<text text-anchor="middle" x="601" y="-405.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLogee</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~clogee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge42" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M307.5805,-557.354C319.3252,-560.9345 332.7974,-565.0964 345,-569 426.857,-595.186 467.5951,-630.2892 538,-581 563.4734,-563.1666 586.6166,-472.5121 596.2577,-430.0275"/>
+<polygon fill="#000000" stroke="#000000" points="599.7094,-430.6286 598.4611,-420.1076 592.8759,-429.1107 599.7094,-430.6286"/>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge45" class="edge">
+<title>proc~interp_fields_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M317.3086,-724.3988C326.8643,-727.4529 336.6754,-731.5481 345,-737 365.5672,-750.4697 360.1932,-765.9034 381,-779 389.6859,-784.4672 399.7747,-788.5231 409.7674,-791.5281"/>
+<polygon fill="#000000" stroke="#000000" points="409.1065,-794.9748 419.6727,-794.1962 410.9272,-788.2157 409.1065,-794.9748"/>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;ezspline_interp -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge43" class="edge">
+<title>proc~interp_fields_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M317.1136,-725.3212C343.8646,-731.4607 379.1242,-739.5531 407.8626,-746.1488"/>
+<polygon fill="#000000" stroke="#000000" points="407.2016,-749.588 417.7312,-748.4137 408.7675,-742.7654 407.2016,-749.588"/>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge44" class="edge">
+<title>proc~interp_fields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M317.1864,-722.2469C327.1783,-725.3584 337.2258,-730.0191 345,-737 375.2213,-764.1376 356.4286,-788.6577 381,-821 394.6468,-838.9627 414.492,-854.8296 430.814,-866.1465"/>
+<polygon fill="#000000" stroke="#000000" points="429.2043,-869.2815 439.4576,-871.9501 433.1064,-863.4699 429.2043,-869.2815"/>
+</g>
+<!-- proc~calculate_gcfields_p_fs&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge47" class="edge">
+<title>proc~calculate_gcfields_p_fs&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M331.9249,-955.8276C336.6575,-953.4009 341.1129,-950.4905 345,-947 375.2213,-919.8624 356.4286,-895.3423 381,-863 394.6468,-845.0373 414.492,-829.1704 430.814,-817.8535"/>
+<polygon fill="#000000" stroke="#000000" points="433.1064,-820.5301 439.4576,-812.0499 429.2043,-814.7185 433.1064,-820.5301"/>
+</g>
+<!-- proc~calculate_gcfields_p_fs&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge46" class="edge">
+<title>proc~calculate_gcfields_p_fs&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M321.2616,-955.9099C329.2845,-953.2842 337.48,-950.2933 345,-947 361.9675,-939.5694 364.831,-935.0374 381,-926 396.1627,-917.525 413.141,-908.3969 427.4187,-900.8223"/>
+<polygon fill="#000000" stroke="#000000" points="429.1609,-903.8603 436.3649,-896.0916 425.8886,-897.6722 429.1609,-903.8603"/>
+</g>
+<!-- proc~calculate_gcfields_p_fs&#45;&gt;ezspline_derivative -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge48" class="edge">
+<title>proc~calculate_gcfields_p_fs&#45;&gt;ezspline_derivative</title>
+<path fill="none" stroke="#000000" d="M342.0503,-960.4778C360.3966,-958.3725 380.2603,-956.0931 398.3415,-954.0182"/>
+<polygon fill="#000000" stroke="#000000" points="398.9325,-957.4734 408.4682,-952.8561 398.1344,-950.5191 398.9325,-957.4734"/>
+</g>
+<!-- proc~interp_focollision_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge51" class="edge">
+<title>proc~interp_focollision_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M330.5654,-685.4922C335.8037,-688.05 340.7427,-691.1771 345,-695 375.2213,-722.1376 350.2941,-752.4119 381,-779 389.163,-786.0683 399.4619,-790.7872 409.8898,-793.9297"/>
+<polygon fill="#000000" stroke="#000000" points="409.306,-797.3931 419.8618,-796.4849 411.0435,-790.6122 409.306,-797.3931"/>
+</g>
+<!-- proc~interp_focollision_p&#45;&gt;ezspline_interp -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge49" class="edge">
+<title>proc~interp_focollision_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M327.3613,-686.0018C333.55,-688.4858 339.589,-691.4563 345,-695 365.5672,-708.4697 360.1932,-723.9034 381,-737 389.1524,-742.1314 398.5405,-746.0195 407.9252,-748.9624"/>
+<polygon fill="#000000" stroke="#000000" points="407.0776,-752.3597 417.6519,-751.6995 408.9739,-745.6214 407.0776,-752.3597"/>
+</g>
+<!-- proc~interp_focollision_p&#45;&gt;proc~check_if_in_profiles_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge50" class="edge">
+<title>proc~interp_focollision_p&#45;&gt;proc~check_if_in_profiles_domain_p</title>
+<path fill="none" stroke="#000000" d="M328.9405,-686.0355C350.1894,-690.9123 374.8981,-696.5832 397.0666,-701.671"/>
+<polygon fill="#000000" stroke="#000000" points="396.5223,-705.137 407.0519,-703.9627 398.0882,-698.3144 396.5223,-705.137"/>
+</g>
+<!-- proc~calculate_2dbdbfields_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge54" class="edge">
+<title>proc~calculate_2dbdbfields_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M328.9405,-770.0355C354.3753,-775.873 384.7673,-782.8482 409.8263,-788.5995"/>
+<polygon fill="#000000" stroke="#000000" points="409.3238,-792.0751 419.8534,-790.9008 410.8897,-785.2525 409.3238,-792.0751"/>
+</g>
+<!-- proc~calculate_2dbdbfields_p&#45;&gt;ezspline_interp -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge52" class="edge">
+<title>proc~calculate_2dbdbfields_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M341.019,-758C362.8507,-758 386.9329,-758 407.6521,-758"/>
+<polygon fill="#000000" stroke="#000000" points="407.8386,-761.5001 417.8386,-758 407.8385,-754.5001 407.8386,-761.5001"/>
+</g>
+<!-- proc~calculate_2dbdbfields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge53" class="edge">
+<title>proc~calculate_2dbdbfields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M327.3613,-770.0018C333.55,-772.4858 339.589,-775.4563 345,-779 365.5672,-792.4697 363.3367,-803.8988 381,-821 397.7369,-837.2043 418.33,-853.6162 434.2244,-865.6252"/>
+<polygon fill="#000000" stroke="#000000" points="432.4095,-868.638 442.5169,-871.8147 436.5966,-863.0283 432.4095,-868.638"/>
+</g>
+<!-- proc~cb_ei_sd_fio&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge55" class="edge">
+<title>proc~cb_ei_sd_fio&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M319.1312,-491.0998C401.9944,-484.6785 580.8072,-466.744 628,-429 654.641,-407.693 672.9925,-371.8597 682.749,-348.8339"/>
+<polygon fill="#000000" stroke="#000000" points="686.1189,-349.8367 686.6258,-339.254 679.6301,-347.2108 686.1189,-349.8367"/>
+</g>
+<!-- proc~cb_ei_sd_fio&#45;&gt;proc~clogei -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge56" class="edge">
+<title>proc~cb_ei_sd_fio&#45;&gt;proc~clogei</title>
+<path fill="none" stroke="#000000" d="M319.21,-496.5683C384.3312,-501.2616 504.4378,-513.2149 538,-539 574.9782,-567.4095 590.9982,-622.6113 597.3229,-653.5671"/>
+<polygon fill="#000000" stroke="#000000" points="593.9545,-654.5953 599.2353,-663.7803 600.835,-653.3069 593.9545,-654.5953"/>
+</g>
+<!-- proc~cb_ei_sd_fio&#45;&gt;proc~g_j -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge57" class="edge">
+<title>proc~cb_ei_sd_fio&#45;&gt;proc~g_j</title>
+<path fill="none" stroke="#000000" d="M306.9995,-506.0968C327.7684,-514.23 355.9339,-525.0569 381,-534 394.4689,-538.8055 409.3411,-543.8077 422.4853,-548.126"/>
+<polygon fill="#000000" stroke="#000000" points="421.5557,-551.5042 432.1481,-551.2803 423.728,-544.8498 421.5557,-551.5042"/>
+</g>
+<!-- proc~cb_ei_sd_fio&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge58" class="edge">
+<title>proc~cb_ei_sd_fio&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M283.6442,-481.9175C296.262,-460.5057 323.2182,-414.4387 345,-375 361.5325,-345.0658 354.2525,-328.3062 381,-307 390.914,-299.1028 403.538,-294.1622 415.7487,-291.0756"/>
+<polygon fill="#000000" stroke="#000000" points="416.8049,-294.4282 425.8399,-288.8947 415.3262,-287.5861 416.8049,-294.4282"/>
+</g>
+<!-- proc~cb_ei_sd_fio&#45;&gt;proc~clogee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge59" class="edge">
+<title>proc~cb_ei_sd_fio&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M319.2564,-482.6686C383.356,-465.6807 503.2905,-433.8953 563.9057,-417.8308"/>
+<polygon fill="#000000" stroke="#000000" points="565.0382,-421.1516 573.8078,-415.2066 563.2449,-414.3852 565.0382,-421.1516"/>
+</g>
+<!-- proc~cf_sd_fio&#45;&gt;proc~psi -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge60" class="edge">
+<title>proc~cf_sd_fio&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M311.7029,-287.1072C323.3552,-284.0485 335.7053,-279.0778 345,-271 373.5142,-246.219 357.7761,-223.7961 381,-194 395.0459,-175.9793 415.0569,-159.764 431.359,-148.164"/>
+<polygon fill="#000000" stroke="#000000" points="433.7353,-150.7764 439.9727,-142.2122 429.756,-145.0174 433.7353,-150.7764"/>
+</g>
+<!-- proc~cf_sd_fio&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge61" class="edge">
+<title>proc~cf_sd_fio&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M311.7223,-284.1011C322.7503,-280.8753 334.7172,-276.5656 345,-271 363.3165,-261.0861 361.4167,-248.0902 381,-241 446.6101,-217.2459 470.4969,-223.3287 538,-241 587.9556,-254.0776 638.82,-287.5284 667.4981,-308.6477"/>
+<polygon fill="#000000" stroke="#000000" points="665.5604,-311.5695 675.6603,-314.7699 669.7607,-305.9696 665.5604,-311.5695"/>
+</g>
+<!-- proc~cf_sd_fio&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge63" class="edge">
+<title>proc~cf_sd_fio&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M311.7842,-290.8431C341.3648,-289.8733 383.7433,-288.4838 415.5288,-287.4417"/>
+<polygon fill="#000000" stroke="#000000" points="415.9885,-290.9286 425.8684,-287.1027 415.759,-283.9323 415.9885,-290.9286"/>
+</g>
+<!-- proc~cf_sd_fio&#45;&gt;proc~clogee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge62" class="edge">
+<title>proc~cf_sd_fio&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M311.8551,-280.4866C331.8974,-274.5641 357.5784,-267.9769 381,-265 450.2209,-256.202 479.5537,-226.8822 538,-265 579.2393,-291.8957 593.6697,-352.5253 598.5763,-385.5422"/>
+<polygon fill="#000000" stroke="#000000" points="595.124,-386.1348 599.9002,-395.5921 602.0641,-385.2206 595.124,-386.1348"/>
+</g>
+<!-- proc~h_j -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node32" class="node">
+<title>proc~h_j</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node32"><a xlink:href=".././proc/h_j.html" xlink:title="h_j">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="486.5,-340 432.5,-340 432.5,-316 486.5,-316 486.5,-340"/>
+<text text-anchor="middle" x="459.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h_j</text>
+</a>
+</g>
+</g>
+<!-- proc~cf_sd_fio&#45;&gt;proc~h_j -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge64" class="edge">
+<title>proc~cf_sd_fio&#45;&gt;proc~h_j</title>
+<path fill="none" stroke="#000000" d="M311.7842,-298.9412C343.5553,-305.1912 390.0897,-314.3455 422.4062,-320.7029"/>
+<polygon fill="#000000" stroke="#000000" points="421.8747,-324.1653 432.3623,-322.6614 423.226,-317.297 421.8747,-324.1653"/>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~psi -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge67" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M303.5023,-160.6881C334.9929,-154.4932 387.2212,-144.2188 422.4784,-137.2829"/>
+<polygon fill="#000000" stroke="#000000" points="423.2506,-140.6982 432.3869,-135.3337 421.8994,-133.8298 423.2506,-140.6982"/>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge66" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M303.7902,-160.8664C316.8853,-157.6171 332.4217,-152.5644 345,-145 364.391,-133.3386 360.095,-117.6591 381,-109 445.4663,-82.2972 475.2716,-78.4372 538,-109 620.6989,-149.2929 667.2659,-258.625 683.9132,-305.3512"/>
+<polygon fill="#000000" stroke="#000000" points="680.6102,-306.5094 687.1796,-314.8217 687.2277,-304.227 680.6102,-306.5094"/>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge65" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M303.5585,-171.5352C316.5988,-174.8796 332.1559,-179.8963 345,-187 383.5036,-208.2953 420.6218,-244.0848 441.6956,-266.2988"/>
+<polygon fill="#000000" stroke="#000000" points="439.3267,-268.8904 448.7066,-273.8167 444.446,-264.1162 439.3267,-268.8904"/>
+</g>
+<!-- proc~calculate_gcfields_2x1t_p&#45;&gt;ezspline_error -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge69" class="edge">
+<title>proc~calculate_gcfields_2x1t_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M327.3613,-913.9982C333.55,-911.5142 339.589,-908.5437 345,-905 365.5672,-891.5303 363.3367,-880.1012 381,-863 397.7369,-846.7957 418.33,-830.3838 434.2244,-818.3748"/>
+<polygon fill="#000000" stroke="#000000" points="436.5966,-820.9717 442.5169,-812.1853 432.4095,-815.362 436.5966,-820.9717"/>
+</g>
+<!-- proc~calculate_gcfields_2x1t_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge68" class="edge">
+<title>proc~calculate_gcfields_2x1t_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M328.9405,-913.9645C350.1894,-909.0877 374.8981,-903.4168 397.0666,-898.329"/>
+<polygon fill="#000000" stroke="#000000" points="398.0882,-901.6856 407.0519,-896.0373 396.5223,-894.863 398.0882,-901.6856"/>
+</g>
+<!-- proc~calculate_gcfields_2x1t_p&#45;&gt;ezspline_derivative -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge70" class="edge">
+<title>proc~calculate_gcfields_2x1t_p&#45;&gt;ezspline_derivative</title>
+<path fill="none" stroke="#000000" d="M345.1631,-933.8794C362.5487,-935.8744 381.1094,-938.0044 398.1094,-939.9552"/>
+<polygon fill="#000000" stroke="#000000" points="398.1344,-943.4809 408.4682,-941.1439 398.9325,-936.5266 398.1344,-943.4809"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~psi -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge71" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M302.899,-341.9636C316.5384,-334.8659 332.8271,-324.9349 345,-313 371.2544,-287.259 424.5282,-193.4697 447.9786,-151.0679"/>
+<polygon fill="#000000" stroke="#000000" points="451.1309,-152.5992 452.8888,-142.1512 444.9992,-149.2225 451.1309,-152.5992"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge72" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M303.6599,-354.5843C351.2309,-355.3614 452.6871,-355.9225 538,-349 577.7717,-345.7728 622.9584,-338.8726 653.8524,-333.6549"/>
+<polygon fill="#000000" stroke="#000000" points="654.4883,-337.097 663.7531,-331.9576 653.3055,-330.1976 654.4883,-337.097"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge74" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M300.5368,-341.8504C321.4293,-331.6164 352.7017,-317.0747 381,-307 392.2046,-303.011 404.5427,-299.3718 416.0526,-296.2847"/>
+<polygon fill="#000000" stroke="#000000" points="417.1097,-299.6262 425.9049,-293.719 415.3456,-292.8522 417.1097,-299.6262"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~clogee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge73" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M303.7522,-362.4599C324.6944,-368.6778 354.4387,-376.8996 381,-382 444.5056,-394.1946 519.4926,-401.5863 563.4853,-405.2236"/>
+<polygon fill="#000000" stroke="#000000" points="563.4625,-408.7331 573.7113,-406.0474 564.0247,-401.7557 563.4625,-408.7331"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~h_j -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge75" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~h_j</title>
+<path fill="none" stroke="#000000" d="M303.5023,-350.1636C334.9929,-345.6895 387.2212,-338.2691 422.4784,-333.2599"/>
+<polygon fill="#000000" stroke="#000000" points="422.9787,-336.7241 432.3869,-331.8521 421.994,-329.7937 422.9787,-336.7241"/>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~psi -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge79" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M309.2167,-125.0727C340.9432,-126.1129 389.021,-127.6892 422.213,-128.7775"/>
+<polygon fill="#000000" stroke="#000000" points="422.3176,-132.2827 432.427,-129.1124 422.5471,-125.2865 422.3176,-132.2827"/>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge78" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M300.6741,-111.8297C321.394,-102.1191 352.3464,-89.2966 381,-84 449.6154,-71.3166 470.2327,-67.3707 538,-84 581.8257,-94.7543 598.92,-96.4935 628,-131 671.6981,-182.8524 685.2282,-265.496 689.3052,-304.8148"/>
+<polygon fill="#000000" stroke="#000000" points="685.8325,-305.2729 690.2389,-314.9079 692.8027,-304.628 685.8325,-305.2729"/>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge76" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M309.2725,-129.8634C321.2126,-133.0408 334.3764,-137.8389 345,-145 392.1891,-176.8087 429.748,-233.8417 447.8032,-264.7272"/>
+<polygon fill="#000000" stroke="#000000" points="444.9693,-266.8227 452.9674,-273.7711 451.048,-263.3516 444.9693,-266.8227"/>
+</g>
+<!-- proc~delta -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node33" class="node">
+<title>proc~delta</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node33"><a xlink:href=".././proc/delta.html" xlink:title="delta">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="628,-24 574,-24 574,0 628,0 628,-24"/>
+<text text-anchor="middle" x="601" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">delta</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~delta -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge77" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~delta</title>
+<path fill="none" stroke="#000000" d="M286.9291,-111.7589C304.2483,-92.3703 341.0164,-55.0517 381,-38 441.0995,-12.3695 518.3147,-9.3063 563.4643,-10.1458"/>
+<polygon fill="#000000" stroke="#000000" points="563.5912,-13.6503 573.6795,-10.4134 563.7746,-6.6527 563.5912,-13.6503"/>
+</g>
+<!-- proc~clogei&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge81" class="edge">
+<title>proc~clogei&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M616.9094,-663.9266C621.1409,-659.9431 625.2843,-655.1891 628,-650 674.5521,-561.0511 642.887,-525.1491 664,-427 669.8343,-399.8777 678.4422,-369.1285 684.3619,-348.9736"/>
+<polygon fill="#000000" stroke="#000000" points="687.768,-349.7985 687.2615,-339.2158 681.058,-347.8046 687.768,-349.7985"/>
+</g>
+<!-- proc~clog0 -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_node37" class="node">
+<title>proc~clog0</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CallsGraph_node37"><a xlink:href=".././proc/clog0.html" xlink:title="CLog0">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="718,-460 664,-460 664,-436 718,-436 718,-460"/>
+<text text-anchor="middle" x="691" y="-445.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLog0</text>
+</a>
+</g>
+</g>
+<!-- proc~clogei&#45;&gt;proc~clog0 -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge80" class="edge">
+<title>proc~clogei&#45;&gt;proc~clog0</title>
+<path fill="none" stroke="#000000" d="M616.1717,-663.9316C620.482,-659.8842 624.8539,-655.0937 628,-650 664.3695,-591.1158 681.3289,-509.4961 687.7494,-470.4979"/>
+<polygon fill="#000000" stroke="#000000" points="691.2636,-470.6786 689.3512,-460.2578 684.3477,-469.5968 691.2636,-470.6786"/>
+</g>
+<!-- proc~gammacee&#45;&gt;proc~clogee -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge82" class="edge">
+<title>proc~gammacee&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M493.2323,-289.3833C508.093,-292.2201 525.0736,-297.4311 538,-307 565.3681,-327.2596 583.6043,-363.2788 593.1265,-386.3789"/>
+<polygon fill="#000000" stroke="#000000" points="589.9819,-387.9473 596.8899,-395.9804 596.4992,-385.3928 589.9819,-387.9473"/>
+</g>
+<!-- proc~clogee&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge84" class="edge">
+<title>proc~clogee&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M614.6691,-395.6978C629.2907,-382.5384 652.6735,-361.4939 669.7099,-346.1611"/>
+<polygon fill="#000000" stroke="#000000" points="672.4056,-348.4437 677.4972,-339.1525 667.7228,-343.2407 672.4056,-348.4437"/>
+</g>
+<!-- proc~clogee&#45;&gt;proc~clog0 -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge83" class="edge">
+<title>proc~clogee&#45;&gt;proc~clog0</title>
+<path fill="none" stroke="#000000" d="M628.003,-420.0013C636.2922,-423.6854 645.5569,-427.8031 654.3766,-431.7229"/>
+<polygon fill="#000000" stroke="#000000" points="653.1454,-435.0058 663.705,-435.8689 655.9884,-428.6091 653.1454,-435.0058"/>
+</g>
+<!-- proc~delta&#45;&gt;proc~vte -->
+<g id="proc~~include_coulombcollisions_gc_p~~CallsGraph_edge85" class="edge">
+<title>proc~delta&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M616.7321,-24.1693C620.9586,-28.1555 625.1437,-32.887 628,-38 653.9394,-84.4335 679.15,-244.9491 687.827,-304.5183"/>
+<polygon fill="#000000" stroke="#000000" points="684.4063,-305.3206 689.2944,-314.7204 691.335,-304.3239 684.4063,-305.3206"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocinclude_coulombcollisions_gc_pCallsGraph = svgPanZoom('#procinclude_coulombcollisions_gc_pCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~include_coulombcollisions_gc_p~~CalledByGraph Pages: 1 -->
+<svg id="procinclude_coulombcollisions_gc_pCalledByGraph" width="641pt" height="475pt"
+ viewBox="0.00 0.00 641.00 474.89" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph" class="graph" transform="scale(.9771 .9771) rotate(0) translate(4 482)">
+<title>proc~~include_coulombcollisions_gc_p~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-482 652,-482 652,4 -4,4"/>
+<!-- proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node1" class="node">
+<title>proc~include_coulombcollisions_gc_p</title>
+<polygon fill="none" stroke="#000000" points="648,-255 476,-255 476,-231 648,-231 648,-255"/>
+<text text-anchor="middle" x="562" y="-240.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">include_CoulombCollisions_GC_p</text>
+</g>
+<!-- proc~advance_fpeqn_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node2" class="node">
+<title>proc~advance_fpeqn_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node2"><a xlink:href=".././proc/advance_fpeqn_vars.html" xlink:title="advance_FPeqn_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="412,-478 297,-478 297,-454 412,-454 412,-478"/>
+<text text-anchor="middle" x="354.5" y="-463.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPeqn_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge1" class="edge">
+<title>proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M412.0062,-458.4842C421.9622,-455.3978 431.7502,-451.0677 440,-445 503.9094,-397.9944 540.939,-306.5221 555.1865,-264.7494"/>
+<polygon fill="#000000" stroke="#000000" points="558.5829,-265.6257 558.392,-255.0325 551.9353,-263.4326 558.5829,-265.6257"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node3" class="node">
+<title>proc~adv_gcinterp_psi_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node3"><a xlink:href=".././proc/adv_gcinterp_psi_top.html" xlink:title="adv_GCinterp_psi_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-402 103,-402 103,-378 220,-378 220,-402"/>
+<text text-anchor="middle" x="161.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge2" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M220.2399,-377.9513C295.8775,-362.2454 420.0197,-335.7489 440,-327 478.1832,-310.2805 516.9245,-281.057 540.2089,-261.8671"/>
+<polygon fill="#000000" stroke="#000000" points="542.6393,-264.397 548.0584,-255.2929 538.1447,-259.0305 542.6393,-264.397"/>
+</g>
+<!-- proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node11" class="node">
+<title>proc~advance_fpinterp_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node11"><a xlink:href=".././proc/advance_fpinterp_vars.html" xlink:title="advance_FPinterp_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="416,-318 293,-318 293,-294 416,-294 416,-318"/>
+<text text-anchor="middle" x="354.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPinterp_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge16" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M214.3715,-377.8628C220.8668,-375.4009 227.238,-372.4726 233,-369 252.6509,-357.1569 249.4057,-343.9367 269,-332 275.6146,-327.9704 282.9008,-324.5237 290.3451,-321.5858"/>
+<polygon fill="#000000" stroke="#000000" points="291.6244,-324.8448 299.8205,-318.131 289.2265,-318.2683 291.6244,-324.8448"/>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node4" class="node">
+<title>proc~adv_gcinterp_psiwe_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node4"><a xlink:href=".././proc/adv_gcinterp_psiwe_top.html" xlink:title="adv_GCinterp_psiwE_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="420.5,-436 288.5,-436 288.5,-412 420.5,-412 420.5,-436"/>
+<text text-anchor="middle" x="354.5" y="-421.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psiwE_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge12" class="edge">
+<title>proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M411.9115,-411.8423C421.7686,-408.3054 431.5463,-403.7784 440,-398 492.2356,-362.2951 532.62,-297.3909 551.0509,-264.0334"/>
+<polygon fill="#000000" stroke="#000000" points="554.184,-265.5974 555.8575,-255.1356 548.0252,-262.2704 554.184,-265.5974"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node5" class="node">
+<title>proc~advance_gcinterp_3dbdb1_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node5"><a xlink:href=".././proc/advance_gcinterp_3dbdb1_vars.html" xlink:title="advance_GCinterp_3DBdB1_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="440,-276 269,-276 269,-252 440,-252 440,-276"/>
+<text text-anchor="middle" x="354.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB1_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge5" class="edge">
+<title>proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M440.0962,-255.3373C448.6015,-254.4765 457.2749,-253.5987 465.8779,-252.728"/>
+<polygon fill="#000000" stroke="#000000" points="466.3338,-256.1998 475.9306,-251.7106 465.6289,-249.2354 466.3338,-256.1998"/>
+</g>
+<!-- proc~advance_gcinterp_b_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node6" class="node">
+<title>proc~advance_gcinterp_b_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node6"><a xlink:href=".././proc/advance_gcinterp_b_vars.html" xlink:title="advance_GCinterp_B_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="424,-234 285,-234 285,-210 424,-210 424,-234"/>
+<text text-anchor="middle" x="354.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge6" class="edge">
+<title>proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M424.1717,-229.0511C437.5302,-230.4031 451.7366,-231.8408 465.7591,-233.26"/>
+<polygon fill="#000000" stroke="#000000" points="465.6207,-236.7637 475.9224,-234.2885 466.3256,-229.7993 465.6207,-236.7637"/>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node7" class="node">
+<title>proc~advance_gcinterp_psi_vars_fs</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node7"><a xlink:href=".././proc/advance_gcinterp_psi_vars_fs.html" xlink:title="advance_GCinterp_psi_vars_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="436.5,-192 272.5,-192 272.5,-168 436.5,-168 436.5,-192"/>
+<text text-anchor="middle" x="354.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi_vars_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge7" class="edge">
+<title>proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M406.6985,-192.0221C417.7441,-194.7889 429.2959,-197.85 440,-201 466.8886,-208.9128 496.6378,-219.1241 520.0277,-227.4967"/>
+<polygon fill="#000000" stroke="#000000" points="519.0413,-230.8616 529.6357,-230.9604 521.4153,-224.2764 519.0413,-230.8616"/>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node8" class="node">
+<title>proc~advance_gcinterp_b2d_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node8"><a xlink:href=".././proc/advance_gcinterp_b2d_vars.html" xlink:title="advance_GCinterp_B2D_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="430.5,-150 278.5,-150 278.5,-126 430.5,-126 430.5,-150"/>
+<text text-anchor="middle" x="354.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B2D_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge8" class="edge">
+<title>proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M415.2174,-150.0068C423.7072,-152.5182 432.1911,-155.4948 440,-159 478.0279,-176.0696 516.8106,-205.1999 540.1462,-224.2742"/>
+<polygon fill="#000000" stroke="#000000" points="538.0846,-227.1117 548.0147,-230.8057 542.5556,-221.7255 538.0846,-227.1117"/>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node9" class="node">
+<title>proc~advance_gcinterp_psi2x1t_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node9"><a xlink:href=".././proc/advance_gcinterp_psi2x1t_vars.html" xlink:title="advance_GCinterp_psi2x1t_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-108 272,-108 272,-84 437,-84 437,-108"/>
+<text text-anchor="middle" x="354.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi2x1t_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge9" class="edge">
+<title>proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M420.401,-108.1423C427.2356,-110.5784 433.9025,-113.4992 440,-117 486.94,-143.95 527.5157,-194.2257 547.9327,-222.4389"/>
+<polygon fill="#000000" stroke="#000000" points="545.1973,-224.6322 553.8358,-230.7663 550.908,-220.584 545.1973,-224.6322"/>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node10" class="node">
+<title>proc~advance_gcinterp_2dbdb_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node10"><a xlink:href=".././proc/advance_gcinterp_2dbdb_vars.html" xlink:title="advance_GCinterp_2DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-66 272,-66 272,-42 437,-42 437,-66"/>
+<text text-anchor="middle" x="354.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_2DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge10" class="edge">
+<title>proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M423.1175,-66.1593C429.0706,-68.5894 434.7988,-71.5041 440,-75 496.0581,-112.6785 535.4153,-185.208 552.4862,-221.382"/>
+<polygon fill="#000000" stroke="#000000" points="549.3489,-222.9373 556.7054,-230.5618 555.7093,-220.0138 549.3489,-222.9373"/>
+</g>
+<!-- proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge3" class="edge">
+<title>proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M406.6985,-293.9779C417.7441,-291.2111 429.2959,-288.15 440,-285 466.8886,-277.0872 496.6378,-266.8759 520.0277,-258.5033"/>
+<polygon fill="#000000" stroke="#000000" points="521.4153,-261.7236 529.6357,-255.0396 519.0413,-255.1384 521.4153,-261.7236"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node12" class="node">
+<title>proc~advance_gcinterp_3dbdb_vars</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node12"><a xlink:href=".././proc/advance_gcinterp_3dbdb_vars.html" xlink:title="advance_GCinterp_3DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-24 272,-24 272,0 437,0 437,-24"/>
+<text text-anchor="middle" x="354.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge4" class="edge">
+<title>proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M424.7928,-24.1762C430.1974,-26.6085 435.3505,-29.5189 440,-33 505.6536,-82.1553 541.9715,-177.8523 555.6296,-220.9845"/>
+<polygon fill="#000000" stroke="#000000" points="552.3468,-222.218 558.6179,-230.7575 559.0408,-220.1711 552.3468,-222.218"/>
+</g>
+<!-- proc~adv_gceqn_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node13" class="node">
+<title>proc~adv_gceqn_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node13"><a xlink:href=".././proc/adv_gceqn_top.html" xlink:title="adv_GCeqn_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="206,-444 117,-444 117,-420 206,-420 206,-444"/>
+<text text-anchor="middle" x="161.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCeqn_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge11" class="edge">
+<title>proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M205.3892,-419.9777C224.8547,-414.6928 248.0497,-408.4595 269,-403 344.8334,-383.2382 371.4319,-397.9427 440,-360 484.9855,-335.1069 525.5367,-289.4891 546.6542,-263.1713"/>
+<polygon fill="#000000" stroke="#000000" points="549.6161,-265.067 553.0491,-255.0438 544.1148,-260.7385 549.6161,-265.067"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node14" class="node">
+<title>proc~adv_gcinterp_psi_top_fs</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node14"><a xlink:href=".././proc/adv_gcinterp_psi_top_fs.html" xlink:title="adv_GCinterp_psi_top_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="229.5,-234 93.5,-234 93.5,-210 229.5,-210 229.5,-234"/>
+<text text-anchor="middle" x="161.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge15" class="edge">
+<title>proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M215.3303,-234.0872C221.5298,-236.5467 227.5677,-239.4879 233,-243 253.6463,-256.3482 248.0597,-272.1179 269,-285 273.4426,-287.733 278.2201,-290.1106 283.1642,-292.1789"/>
+<polygon fill="#000000" stroke="#000000" points="282.2406,-295.5699 292.8332,-295.7872 284.6881,-289.0117 282.2406,-295.5699"/>
+</g>
+<!-- program~main -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node15" class="node">
+<title>program~main</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node15"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-297 0,-297 0,-273 54,-273 54,-297"/>
+<text text-anchor="middle" x="27" y="-282.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge13" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top</title>
+<path fill="none" stroke="#000000" d="M32.9156,-297.2584C42.398,-315.6112 62.7398,-350.0897 90,-369 92.3918,-370.6592 94.9155,-372.1889 97.5294,-373.5992"/>
+<polygon fill="#000000" stroke="#000000" points="96.1683,-376.8273 106.7037,-377.948 99.1667,-370.5019 96.1683,-376.8273"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge14" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psiwe_top</title>
+<path fill="none" stroke="#000000" d="M29.6517,-297.013C37.7057,-332.2907 62.9888,-434.2813 90,-453 142.2379,-489.2009 169.8801,-460.4285 233,-453 236.4105,-452.5986 266.1973,-445.4933 295.421,-438.4171"/>
+<polygon fill="#000000" stroke="#000000" points="296.3778,-441.7866 305.2711,-436.0282 294.7279,-434.9838 296.3778,-441.7866"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gceqn_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge23" class="edge">
+<title>program~main&#45;&gt;proc~adv_gceqn_top</title>
+<path fill="none" stroke="#000000" d="M29.6067,-297.0681C35.6558,-322.1397 53.0385,-380.0939 90,-411 95.0152,-415.1936 100.8364,-418.5499 106.9498,-421.236"/>
+<polygon fill="#000000" stroke="#000000" points="106.1319,-424.6684 116.7235,-424.9294 108.6064,-418.1203 106.1319,-424.6684"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge24" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs</title>
+<path fill="none" stroke="#000000" d="M42.2672,-272.8979C54.5645,-263.6386 72.6102,-251.1197 90,-243 94.3154,-240.985 98.8682,-239.1153 103.5008,-237.3908"/>
+<polygon fill="#000000" stroke="#000000" points="104.7809,-240.6512 113.0717,-234.0547 102.4769,-234.0412 104.7809,-240.6512"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node16" class="node">
+<title>proc~adv_gcinterp_psi2x1t_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node16"><a xlink:href=".././proc/adv_gcinterp_psi2x1t_top.html" xlink:title="adv_GCinterp_psi2x1t_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-192 93,-192 93,-168 230,-168 230,-192"/>
+<text text-anchor="middle" x="161.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi2x1t_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge25" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top</title>
+<path fill="none" stroke="#000000" d="M32.9156,-272.7416C42.398,-254.3888 62.7398,-219.9103 90,-201 92.3918,-199.3408 94.9155,-197.8111 97.5294,-196.4008"/>
+<polygon fill="#000000" stroke="#000000" points="99.1667,-199.4981 106.7037,-192.052 96.1683,-193.1727 99.1667,-199.4981"/>
+</g>
+<!-- proc~adv_gcinterp_b_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node17" class="node">
+<title>proc~adv_gcinterp_b_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node17"><a xlink:href=".././proc/adv_gcinterp_b_top.html" xlink:title="adv_GCinterp_B_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="217,-150 106,-150 106,-126 217,-126 217,-150"/>
+<text text-anchor="middle" x="161.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge26" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b_top</title>
+<path fill="none" stroke="#000000" d="M29.6067,-272.9319C35.6558,-247.8603 53.0385,-189.9061 90,-159 92.0408,-157.2935 94.2151,-155.7257 96.4882,-154.2852"/>
+<polygon fill="#000000" stroke="#000000" points="98.5291,-157.1614 105.6726,-149.337 95.2089,-150.9989 98.5291,-157.1614"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node18" class="node">
+<title>proc~adv_gcinterp_3dbdb_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node18"><a xlink:href=".././proc/adv_gcinterp_3dbdb_top.html" xlink:title="adv_GCinterp_3DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-108 93,-108 93,-84 230,-84 230,-108"/>
+<text text-anchor="middle" x="161.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge27" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top</title>
+<path fill="none" stroke="#000000" d="M27.9357,-272.83C30.9647,-242.0518 43.2261,-160.474 90,-117 91.303,-115.7889 92.6723,-114.6474 94.097,-113.5713"/>
+<polygon fill="#000000" stroke="#000000" points="96.191,-116.3889 102.787,-108.0976 92.4602,-110.4659 96.191,-116.3889"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node19" class="node">
+<title>proc~adv_gcinterp_3dbdb1_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node19"><a xlink:href=".././proc/adv_gcinterp_3dbdb1_top.html" xlink:title="adv_GCinterp_3DBdB1_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="233,-360 90,-360 90,-336 233,-336 233,-360"/>
+<text text-anchor="middle" x="161.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB1_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge28" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top</title>
+<path fill="none" stroke="#000000" d="M42.2672,-297.1021C54.5645,-306.3614 72.6102,-318.8803 90,-327 94.3154,-329.015 98.8682,-330.8847 103.5008,-332.6092"/>
+<polygon fill="#000000" stroke="#000000" points="102.4769,-335.9588 113.0717,-335.9453 104.7809,-329.3488 102.4769,-335.9588"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node20" class="node">
+<title>proc~adv_gcinterp_2dbdb_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node20"><a xlink:href=".././proc/adv_gcinterp_2dbdb_top.html" xlink:title="adv_GCinterp_2DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-318 93,-318 93,-294 230,-294 230,-318"/>
+<text text-anchor="middle" x="161.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_2DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge29" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-289.2497C62.7691,-290.5848 72.6777,-292.1318 82.9484,-293.7354"/>
+<polygon fill="#000000" stroke="#000000" points="82.4538,-297.2005 92.874,-295.2852 83.5337,-290.2843 82.4538,-297.2005"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_node21" class="node">
+<title>proc~adv_gcinterp_b2d_top</title>
+<g id="a_proc~~include_coulombcollisions_gc_p~~CalledByGraph_node21"><a xlink:href=".././proc/adv_gcinterp_b2d_top.html" xlink:title="adv_GCinterp_B2D_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="223.5,-276 99.5,-276 99.5,-252 223.5,-252 223.5,-276"/>
+<text text-anchor="middle" x="161.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B2D_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b2d_top -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge30" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b2d_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-280.7503C64.5148,-279.1427 76.78,-277.2277 89.2755,-275.2767"/>
+<polygon fill="#000000" stroke="#000000" points="89.9725,-278.7103 99.3129,-273.7095 88.8926,-271.7941 89.9725,-278.7103"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge17" class="edge">
+<title>proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M219.6901,-192.1068C224.5018,-194.5477 229.0324,-197.4793 233,-201 263.3809,-227.9588 238.0226,-258.7288 269,-285 273.2986,-288.6455 278.1328,-291.6766 283.2592,-294.1945"/>
+<polygon fill="#000000" stroke="#000000" points="282.1752,-297.5357 292.7495,-298.1945 284.894,-291.0853 282.1752,-297.5357"/>
+</g>
+<!-- proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge18" class="edge">
+<title>proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M217.0302,-147.9915C222.9382,-150.8104 228.4428,-154.4091 233,-159 274.0304,-200.3341 227.0535,-244.5959 269,-285 273.3019,-289.1438 278.2828,-292.5118 283.6351,-295.2443"/>
+<polygon fill="#000000" stroke="#000000" points="282.3711,-298.5109 292.9389,-299.2678 285.1497,-292.086 282.3711,-298.5109"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge19" class="edge">
+<title>proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M221.8019,-108.1076C225.9351,-110.5582 229.7437,-113.4913 233,-117 284.9453,-172.9714 215.8133,-230.2068 269,-285 273.2285,-289.3562 278.203,-292.8662 283.5903,-295.6877"/>
+<polygon fill="#000000" stroke="#000000" points="282.4242,-298.9981 292.9876,-299.8138 285.2385,-292.5887 282.4242,-298.9981"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge20" class="edge">
+<title>proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M216.8061,-335.9645C239.418,-331.0437 265.7449,-325.3146 289.2862,-320.1916"/>
+<polygon fill="#000000" stroke="#000000" points="290.1588,-323.5837 299.1859,-318.0373 288.6703,-316.7438 290.1588,-323.5837"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge21" class="edge">
+<title>proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M230.088,-306C247.206,-306 265.6061,-306 282.8671,-306"/>
+<polygon fill="#000000" stroke="#000000" points="282.8802,-309.5001 292.8801,-306 282.8801,-302.5001 282.8802,-309.5001"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~include_coulombcollisions_gc_p~~CalledByGraph_edge22" class="edge">
+<title>proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M216.8061,-276.0355C239.418,-280.9563 265.7449,-286.6854 289.2862,-291.8084"/>
+<polygon fill="#000000" stroke="#000000" points="288.6703,-295.2562 299.1859,-293.9627 290.1588,-288.4163 288.6703,-295.2562"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocinclude_coulombcollisions_gc_pCalledByGraph = svgPanZoom('#procinclude_coulombcollisions_gc_pCalledByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/include_coulombcollisions_gc_p.html#src">include_CoulombCollisions_GC_p</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">include_CoulombCollisions_GC_p</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">Ppll</span><span class="p">,</span><span class="n">Pmu</span><span class="p">,</span><span class="n">me</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">P</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">F</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">params</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">Ppll</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">Pmu</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">Bmag</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">E_R</span><span class="p">,</span><span class="n">E_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">E_PHI</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">PSIp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">flagCol</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">flagCon</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">me</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">nAr0</span><span class="p">,</span><span class="n">nAr1</span><span class="p">,</span><span class="n">nAr2</span><span class="p">,</span><span class="n">nAr3</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">nD</span><span class="p">,</span><span class="n">nD1</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">dW</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">rnd1</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">dt</span><span class="p">,</span><span class="nb">time</span>
+<span class="nb">    </span><span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">pm</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  					<span class="kd">::</span> <span class="n">dp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  					<span class="kd">::</span> <span class="n">xi</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  					<span class="kd">::</span> <span class="n">dxi</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  					<span class="kd">::</span> <span class="n">v</span><span class="p">,</span><span class="n">gam</span>
+    <span class="c">!! speed of particle</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">CAL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="p">,</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>					<span class="kd">::</span> <span class="n">dCAL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">CFL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">CBL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">SC_p</span><span class="p">,</span><span class="n">SC_mu</span><span class="p">,</span><span class="n">BREM_p</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">kappa</span>
+    <span class="kt">integer</span> <span class="kd">::</span> <span class="n">cc</span><span class="p">,</span><span class="n">pchunk</span>
+    <span class="kt">integer</span><span class="p">(</span><span class="n">ip</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">tt</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">num_impurity_species</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">nimp</span>
+    
+    <span class="n">pchunk</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="nb">MODULO</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">it</span><span class="o">+</span><span class="n">tt</span><span class="p">,</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">subcycling_iterations</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0_ip</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">dt</span> <span class="o">=</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">subcycling_iterations</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">dt</span>       
+       <span class="nb">time</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">init_time</span><span class="o">+</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">it</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">tt</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">dt</span>
+
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_eval</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;eqn&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>          
+       <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_eval</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;interp&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                   call </span><span class="n">calculate_GCfields_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                        <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                        <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+                <span class="k">else</span>
+<span class="k">                   call </span><span class="n">calculate_GCfields_p_FS</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                        <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                        <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+                <span class="k">end if</span>
+
+<span class="k">             else if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">calculate_GCfieldswE_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+             <span class="k">else if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux3D</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">calculate_GCfields_2x1t_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">PSIp</span><span class="p">,</span><span class="nb">time</span><span class="p">)</span>
+             <span class="k">else if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">calculate_2DBdBfields_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+             <span class="k">else</span>
+<span class="k">                call </span><span class="n">interp_fields_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">)</span>
+             <span class="k">end if</span>
+<span class="k">          else</span>
+<span class="k">             if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">calculate_2DBdBfields_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+             <span class="k">else</span>
+<span class="k">                call </span><span class="n">interp_fields_3D_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">)</span>
+             <span class="k">end if</span>
+<span class="k">          </span><span class="n">endif</span>
+          <span class="k">call </span><span class="n">add_analytical_E_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">tt</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">)</span>
+<span class="cp">#endif</span>
+       <span class="k">end if</span>
+
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;ANALYTICAL&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          call </span><span class="n">analytical_profiles_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="nb">time</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+       <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;EXTERNAL&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">10</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;H&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             call </span><span class="n">interp_Hcollision_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">nAr0</span><span class="p">,</span><span class="n">nAr1</span><span class="p">,</span><span class="n">nAr2</span><span class="p">,</span><span class="n">nAr3</span><span class="p">,</span><span class="n">nD</span><span class="p">,</span><span class="n">nD1</span><span class="p">,</span><span class="n">flagCon</span><span class="p">)</span>
+             <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+                <span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">nAr0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+                <span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">nAr1</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+                <span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">nAr2</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+                <span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span><span class="o">=</span><span class="n">nAr3</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+                <span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span><span class="o">=</span><span class="n">nD</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+                <span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span><span class="o">=</span><span class="n">nD1</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">          else</span>
+<span class="k">             call </span><span class="n">interp_FOcollision_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span><span class="p">,</span><span class="n">flagCon</span><span class="p">)</span>
+          <span class="n">endif</span>
+<span class="cp">#endif</span>
+       <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">       if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">FokPlan</span><span class="p">)</span> <span class="n">E_PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+       
+       <span class="c">!$OMP SIMD</span>
+<span class="c">!       !$OMP&amp; aligned (pm,xi,v,Ppll,Bmag,Pmu)</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+          <span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+          <span class="c">! Transform p_pll,mu to P,eta</span>
+          <span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">Ppll</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Ppll</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">me</span><span class="o">*</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Pmu</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+          <span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Ppll</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+          <span class="n">gam</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+          
+          <span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">gam</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="c">! normalized speed (v_K=v_P/c)</span>
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+
+<span class="c">!       write(output_unit_write,&#39;(&quot;ne: &quot;E17.10)&#39;) ne</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;Te: &quot;E17.10)&#39;) Te</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;Bmag: &quot;E17.10)&#39;) Bmag                </span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;v: &quot;,E17.10)&#39;) v</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;xi: &quot;,E17.10)&#39;) xi</span>
+       <span class="c">!       write(output_unit_write,&#39;(&quot;size(E_PHI_GC): &quot;,I16)&#39;) size(E_PHI)</span>
+
+
+       <span class="c">!$OMP SIMD</span>
+<span class="c">!       !$OMP&amp; aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &amp;</span>
+<span class="c">!       !$OMP&amp; flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       
+<span class="cp">#ifdef PARALLEL_RANDOM</span>
+          <span class="n">rnd1</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">get_random</span><span class="p">()</span>
+          <span class="n">rnd1</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">get_random</span><span class="p">()</span>
+          <span class="c">!       rnd1(:,1) = get_random_mkl()</span>
+          <span class="c">!       rnd1(:,2) = get_random_mkl()</span>
+<span class="cp">#else</span>
+          <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rnd1</span><span class="p">)</span>
+<span class="cp">#endif</span>
+          
+          <span class="n">dW</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">rnd1</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>     
+          <span class="n">dW</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">rnd1</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>     
+
+<span class="c">!          write(output_unit_write,&#39;(&quot;dW1: &quot;,E17.10)&#39;) dW(cc,1)</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;dW2: &quot;,E17.10)&#39;) dW(cc,2)</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">10</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;H&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">CAL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">CA_SD</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+             <span class="n">dCAL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span> <span class="n">dCA_SD</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">me</span><span class="p">,</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+             <span class="n">CFL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">CF_SD_FIO</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,:))</span>
+             <span class="n">CBL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">CB_ee_SD</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">+</span> <span class="p">&amp;</span>
+                  <span class="n">CB_ei_SD_FIO</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">nimp</span><span class="p">(</span><span class="n">cc</span><span class="p">,:),</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span>
+          <span class="k">else</span>
+<span class="k">             </span><span class="n">CAL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">CA_SD</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+             <span class="n">dCAL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span> <span class="n">dCA_SD</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">me</span><span class="p">,</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+             <span class="n">CFL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">CF_SD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+             <span class="n">CBL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">CB_ee_SD</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">+</span> <span class="p">&amp;</span>
+                  <span class="n">CB_ei_SD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">v</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span>
+          <span class="n">endif</span>
+          
+          
+          <span class="n">dp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="o">-</span><span class="n">CFL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">dCAL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">E_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span><span class="o">+</span> <span class="p">&amp;</span>
+               <span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">CAL</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">dW</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+          <span class="n">dxi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">CBL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">+</span> <span class="p">&amp;</span>
+               <span class="n">E_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span><span class="o">-</span> <span class="p">&amp;</span>
+               <span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">CBL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span><span class="o">/</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">dW</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c">!          write(output_unit_write,&#39;(&quot;dp: &quot;,E17.10)&#39;) dp(cc)</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;dxi: &quot;,E17.10)&#39;) dxi(cc)</span>
+
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+          
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">FokPlan</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">radiation</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          if</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">GC_rad_model</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;SDE&#39;</span><span class="p">)</span> <span class="k">then</span>
+
+             <span class="c">!$OMP SIMD</span>
+             <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+                <span class="n">SC_p</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=-</span><span class="n">gam</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span> <span class="p">&amp;</span>
+                     <span class="p">(</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">taur</span><span class="o">/</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">SC_mu</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span> <span class="p">&amp;</span>
+                     <span class="p">((</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">taur</span><span class="o">/</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">gam</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+                <span class="n">kappa</span><span class="o">=</span><span class="mf">2._rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">C_RE</span><span class="o">**</span><span class="mf">2._rp</span><span class="o">*</span><span class="n">C_ME</span><span class="o">*</span><span class="n">C_C</span><span class="o">**</span><span class="mf">2._rp</span>
+                <span class="n">BREM_p</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=-</span><span class="mf">2._rp</span><span class="o">*</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">kappa</span><span class="o">*</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="n">C_a</span><span class="o">/</span><span class="n">C_PI</span><span class="o">*</span><span class="p">(</span><span class="n">gam</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nb">log</span><span class="p">(</span><span class="mf">2._rp</span><span class="o">*</span><span class="n">gam</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">-</span><span class="mf">1._rp</span><span class="o">/</span><span class="mf">3._rp</span><span class="p">)</span>
+
+
+                <span class="n">dp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">SC_p</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">BREM_p</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+                <span class="n">dxi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dxi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">SC_mu</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span> <span class="p">&amp;</span>
+                     <span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+             <span class="k">end do</span>
+             <span class="c">!$OMP END SIMD</span>
+
+          <span class="k">end if</span>
+<span class="k">       end if</span>
+
+       <span class="c">!$OMP SIMD</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>  
+
+          <span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">dp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">dxi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span> 
+<span class="c">!          if (pm(cc)&lt;0) pm(cc)=-pm(cc)</span>
+
+          <span class="c">! Keep xi between [-1,1]</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;High xi at: &quot;,E17.10,&quot; with dxi: &quot;,E17.10)&#39;) &amp;</span>
+<span class="c">!                  time*params%cpp%time, dxi(cc)</span>
+             <span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="nb">mod</span><span class="p">(</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="mf">1._rp</span><span class="p">)</span>
+          <span class="k">else if</span> <span class="p">(</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">&lt;-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=-</span><span class="mi">1</span><span class="o">-</span><span class="nb">mod</span><span class="p">(</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="o">-</span><span class="mf">1._rp</span><span class="p">)</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;Low xi at: &quot;,E17.10,&quot; with dxi: &quot;,E17.10)&#39;) &amp;</span>
+<span class="c">!                  time*params%cpp%time, dxi(cc)</span>
+          <span class="n">endif</span>
+
+       <span class="k">end do</span>
+
+       <span class="c">!$OMP SIMD</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>  
+          <span class="c">! Transform P,xi to p_pll,mu</span>
+          <span class="n">Ppll</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">Pmu</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">Ppll</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Ppll</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">me</span><span class="o">*</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+
+
+<span class="c">!       write(output_unit_write,&#39;(&quot;rnd1: &quot;,E17.10)&#39;) rnd1</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;flag: &quot;,I16)&#39;) flag</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;CA: &quot;,E17.10)&#39;) CAL</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;dCA: &quot;,E17.10)&#39;) dCAL</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;CF &quot;,E17.10)&#39;) CFL</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;CB: &quot;,E17.10)&#39;) CBL</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;dp: &quot;,E17.10)&#39;) dp</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;dxi: &quot;,E17.10)&#39;) dxi</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;Ppll: &quot;,E17.10)&#39;) Ppll</span>
+<span class="c">!      write(output_unit_write,&#39;(&quot;Pmu: &quot;,E17.10)&#39;) Pmu</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;E_PHI_COL: &quot;,E17.10)&#39;) E_PHI</span>
+       
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+          <span class="k">if</span> <span class="p">((</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">p_min</span><span class="o">*</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">pmin_scale</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">p_therm</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">1_ip</span><span class="p">)</span> <span class="k">then</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;Momentum less than zero&quot;)&#39;)</span>
+             <span class="c">!             stop</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;Particle not tracked at: &quot;,E17.10,&quot; &amp;</span>
+<span class="c">!                  &amp; with xi: &quot;,E17.10)&#39;) time*params%cpp%time, xi(cc)</span>
+             <span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mi">0_ip</span>
+          <span class="k">end if</span>
+<span class="k">       end do</span>
+
+<span class="c">!       if (tt .EQ. 1_ip) then</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;dp_rad: &quot;,E17.10)&#39;) &amp;</span>
+<span class="c">!               -gam(1)*pm(1)*(1-xi(1)*xi(1))/ &amp;</span>
+<span class="c">!               (cparams_ss%taur/Bmag(1)**2)*dt</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;dxi_rad: &quot;,E17.10)&#39;) &amp;</span>
+<span class="c">!               xi(1)*(1-xi(1)*xi(1))/ &amp;</span>
+<span class="c">!               ((cparams_ss%taur/Bmag(1)**2)*gam(1))*dt</span>
+<span class="c">!       end if</span>
+       
+<span class="c">!       if (tt .EQ. 1_ip) then</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;CA: &quot;,E17.10)&#39;) CAL(1)</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;dCA: &quot;,E17.10)&#39;) dCAL(1)</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;CF &quot;,E17.10)&#39;) CFL(1)</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;CB: &quot;,E17.10)&#39;) CBL(1)</span>
+<span class="c">!       end if</span>
+
+       
+    <span class="k">end if</span>
+<span class="k">    </span>
+<span class="k">  end subroutine </span><span class="n">include_CoulombCollisions_GC_p</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

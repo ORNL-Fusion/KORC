@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>save_avalanche_params &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>save_avalanche_params
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.3% of total for procedures.">68 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_avalanche.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_avalanche.f90.html'>korc_avalanche.f90</a></li>
+    
+     <li><a href='../module/korc_avalanche.html'>korc_avalanche</a></li>
+    
+  
+     <li class="active">save_avalanche_params</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/save_avalanche_params.html#src">save_avalanche_params</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+private subroutine save_avalanche_params(params)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~152"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~save_avalanche_params~~CallsGraph Pages: 1 -->
+<svg id="procsave_avalanche_paramsCallsGraph" width="509pt" height="368pt"
+ viewBox="0.00 0.00 509.00 368.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~save_avalanche_params~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 364)">
+<title>proc~~save_avalanche_params~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-364 505,-364 505,4 -4,4"/>
+<!-- proc~save_avalanche_params -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node1" class="node">
+<title>proc~save_avalanche_params</title>
+<polygon fill="none" stroke="#000000" points="129,-150 0,-150 0,-126 129,-126 129,-150"/>
+<text text-anchor="middle" x="64.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">save_avalanche_params</text>
+</g>
+<!-- interface~save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node2" class="node">
+<title>interface~save_to_hdf5</title>
+<g id="a_proc~~save_avalanche_params~~CallsGraph_node2"><a xlink:href=".././interface/save_to_hdf5.html" xlink:title="save_to_hdf5">
+<polygon fill="#a7506f" stroke="#a7506f" points="241,-192 165,-192 165,-168 241,-168 241,-192"/>
+<text text-anchor="middle" x="203" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">save_to_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~save_avalanche_params&#45;&gt;interface~save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge1" class="edge">
+<title>proc~save_avalanche_params&#45;&gt;interface~save_to_hdf5</title>
+<path fill="none" stroke="#000000" d="M104.1885,-150.0355C119.9431,-154.8131 138.2107,-160.3527 154.722,-165.3597"/>
+<polygon fill="#000000" stroke="#000000" points="154.152,-168.8442 164.7374,-168.3969 156.1835,-162.1455 154.152,-168.8442"/>
+</g>
+<!-- h5fclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node3" class="node">
+<title>h5fclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="233,-150 173,-150 173,-126 233,-126 233,-150"/>
+<text text-anchor="middle" x="203" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fclose_f</text>
+</g>
+<!-- proc~save_avalanche_params&#45;&gt;h5fclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge2" class="edge">
+<title>proc~save_avalanche_params&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M129.2894,-138C140.6946,-138 152.2618,-138 162.7467,-138"/>
+<polygon fill="#000000" stroke="#000000" points="162.8248,-141.5001 172.8248,-138 162.8248,-134.5001 162.8248,-141.5001"/>
+</g>
+<!-- h5gclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node4" class="node">
+<title>h5gclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="234.5,-108 171.5,-108 171.5,-84 234.5,-84 234.5,-108"/>
+<text text-anchor="middle" x="203" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5gclose_f</text>
+</g>
+<!-- proc~save_avalanche_params&#45;&gt;h5gclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge3" class="edge">
+<title>proc~save_avalanche_params&#45;&gt;h5gclose_f</title>
+<path fill="none" stroke="#000000" d="M104.1885,-125.9645C122.1288,-120.5241 143.3278,-114.0955 161.4812,-108.5905"/>
+<polygon fill="#000000" stroke="#000000" points="162.6591,-111.8908 171.2131,-105.6394 160.6277,-105.192 162.6591,-111.8908"/>
+</g>
+<!-- proc~i2save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node5" class="node">
+<title>proc~i2save_to_hdf5</title>
+<g id="a_proc~~save_avalanche_params~~CallsGraph_node5"><a xlink:href=".././proc/i2save_to_hdf5.html" xlink:title="i2save_to_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="361,-234 277,-234 277,-210 361,-210 361,-234"/>
+<text text-anchor="middle" x="319" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">i2save_to_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~save_to_hdf5&#45;&gt;proc~i2save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge4" class="edge">
+<title>interface~save_to_hdf5&#45;&gt;proc~i2save_to_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M236.2409,-192.0355C248.6181,-196.5169 262.8471,-201.6688 275.9769,-206.4227"/>
+<polygon fill="#000000" stroke="#000000" points="275.16,-209.8492 285.7542,-209.9627 277.5431,-203.2673 275.16,-209.8492"/>
+</g>
+<!-- proc~i1save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node6" class="node">
+<title>proc~i1save_to_hdf5</title>
+<g id="a_proc~~save_avalanche_params~~CallsGraph_node6"><a xlink:href=".././proc/i1save_to_hdf5.html" xlink:title="i1save_to_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="361,-192 277,-192 277,-168 361,-168 361,-192"/>
+<text text-anchor="middle" x="319" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">i1save_to_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~save_to_hdf5&#45;&gt;proc~i1save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge5" class="edge">
+<title>interface~save_to_hdf5&#45;&gt;proc~i1save_to_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.3042,-180C249.3739,-180 258.0208,-180 266.5088,-180"/>
+<polygon fill="#000000" stroke="#000000" points="266.7342,-183.5001 276.7342,-180 266.7341,-176.5001 266.7342,-183.5001"/>
+</g>
+<!-- proc~i4save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node7" class="node">
+<title>proc~i4save_to_hdf5</title>
+<g id="a_proc~~save_avalanche_params~~CallsGraph_node7"><a xlink:href=".././proc/i4save_to_hdf5.html" xlink:title="i4save_to_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="361,-150 277,-150 277,-126 361,-126 361,-150"/>
+<text text-anchor="middle" x="319" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">i4save_to_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~save_to_hdf5&#45;&gt;proc~i4save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge6" class="edge">
+<title>interface~save_to_hdf5&#45;&gt;proc~i4save_to_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M236.2409,-167.9645C248.6181,-163.4831 262.8471,-158.3312 275.9769,-153.5773"/>
+<polygon fill="#000000" stroke="#000000" points="277.5431,-156.7327 285.7542,-150.0373 275.16,-150.1508 277.5431,-156.7327"/>
+</g>
+<!-- proc~i8save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node8" class="node">
+<title>proc~i8save_to_hdf5</title>
+<g id="a_proc~~save_avalanche_params~~CallsGraph_node8"><a xlink:href=".././proc/i8save_to_hdf5.html" xlink:title="i8save_to_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="361,-276 277,-276 277,-252 361,-252 361,-276"/>
+<text text-anchor="middle" x="319" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">i8save_to_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~save_to_hdf5&#45;&gt;proc~i8save_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge7" class="edge">
+<title>interface~save_to_hdf5&#45;&gt;proc~i8save_to_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M215.3462,-192.1547C229.4607,-205.6445 253.6408,-227.5464 277,-243 278.9335,-244.2791 280.9557,-245.5332 283.023,-246.752"/>
+<polygon fill="#000000" stroke="#000000" points="281.7943,-250.0715 292.2408,-251.8382 285.1761,-243.9425 281.7943,-250.0715"/>
+</g>
+<!-- proc~rsave_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node9" class="node">
+<title>proc~rsave_to_hdf5</title>
+<g id="a_proc~~save_avalanche_params~~CallsGraph_node9"><a xlink:href=".././proc/rsave_to_hdf5.html" xlink:title="rsave_to_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="358.5,-108 279.5,-108 279.5,-84 358.5,-84 358.5,-108"/>
+<text text-anchor="middle" x="319" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rsave_to_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~save_to_hdf5&#45;&gt;proc~rsave_to_hdf5 -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge8" class="edge">
+<title>interface~save_to_hdf5&#45;&gt;proc~rsave_to_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M227.9511,-167.895C232.4818,-165.2359 237.0259,-162.2369 241,-159 260.0625,-143.4737 257.6216,-132.1302 277,-117 278.5904,-115.7583 280.2658,-114.5604 281.995,-113.4094"/>
+<polygon fill="#000000" stroke="#000000" points="284.156,-116.1953 290.9438,-108.0603 280.5645,-110.1869 284.156,-116.1953"/>
+</g>
+<!-- h5tset_size_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node10" class="node">
+<title>h5tset_size_f</title>
+<polygon fill="#777777" stroke="#777777" points="486,-318 412,-318 412,-294 486,-294 486,-318"/>
+<text text-anchor="middle" x="449" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5tset_size_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5tset_size_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge9" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5tset_size_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-234.0603C351.9132,-236.6891 356.759,-239.6888 361,-243 380.3784,-258.1302 377.0333,-270.6551 397,-285 399.0756,-286.4912 401.2723,-287.8974 403.5434,-289.2203"/>
+<polygon fill="#000000" stroke="#000000" points="402.0862,-292.4074 412.5734,-293.9139 405.3146,-286.1963 402.0862,-292.4074"/>
+</g>
+<!-- h5dclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node11" class="node">
+<title>h5dclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="480.5,-276 417.5,-276 417.5,-252 480.5,-252 480.5,-276"/>
+<text text-anchor="middle" x="449" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dclose_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge10" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-234.0355C372.2832,-239.2146 391.0854,-245.2891 407.5546,-250.61"/>
+<polygon fill="#000000" stroke="#000000" points="406.8702,-254.0669 417.4619,-253.8108 409.0223,-247.4059 406.8702,-254.0669"/>
+</g>
+<!-- h5aclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node12" class="node">
+<title>h5aclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="480.5,-234 417.5,-234 417.5,-210 480.5,-210 480.5,-234"/>
+<text text-anchor="middle" x="449" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5aclose_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5aclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge11" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5aclose_f</title>
+<path fill="none" stroke="#000000" d="M361.2073,-222C375.8833,-222 392.3344,-222 406.9941,-222"/>
+<polygon fill="#000000" stroke="#000000" points="407.3011,-225.5001 417.3011,-222 407.301,-218.5001 407.3011,-225.5001"/>
+</g>
+<!-- h5tcopy_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node13" class="node">
+<title>h5tcopy_f</title>
+<polygon fill="#777777" stroke="#777777" points="478,-192 420,-192 420,-168 478,-168 478,-192"/>
+<text text-anchor="middle" x="449" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5tcopy_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5tcopy_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge12" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5tcopy_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-209.9645C373.0616,-204.534 392.918,-198.1188 409.9367,-192.6204"/>
+<polygon fill="#000000" stroke="#000000" points="411.1451,-195.9083 419.5848,-189.5034 408.993,-189.2473 411.1451,-195.9083"/>
+</g>
+<!-- h5screate_simple_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node14" class="node">
+<title>h5screate_simple_f</title>
+<polygon fill="#777777" stroke="#777777" points="501,-150 397,-150 397,-126 501,-126 501,-150"/>
+<text text-anchor="middle" x="449" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5screate_simple_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5screate_simple_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge13" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5screate_simple_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-209.9397C351.9132,-207.3109 356.759,-204.3112 361,-201 380.3784,-185.8698 377.0333,-173.3449 397,-159 399.0756,-157.5088 401.2723,-156.1026 403.5434,-154.7797"/>
+<polygon fill="#000000" stroke="#000000" points="405.3146,-157.8037 412.5734,-150.0861 402.0862,-151.5926 405.3146,-157.8037"/>
+</g>
+<!-- h5awrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node15" class="node">
+<title>h5awrite_f</title>
+<polygon fill="#777777" stroke="#777777" points="479.5,-108 418.5,-108 418.5,-84 479.5,-84 479.5,-108"/>
+<text text-anchor="middle" x="449" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5awrite_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5awrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge14" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5awrite_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-209.9193C353.8264,-207.3995 357.7562,-204.4402 361,-201 388.8648,-171.4479 367.9781,-145.4167 397,-117 400.5109,-113.5623 404.6586,-110.6638 409.0554,-108.2256"/>
+<polygon fill="#000000" stroke="#000000" points="410.7683,-111.2871 418.3063,-103.842 407.7708,-104.9613 410.7683,-111.2871"/>
+</g>
+<!-- h5sclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node17" class="node">
+<title>h5sclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="480.5,-66 417.5,-66 417.5,-42 480.5,-42 480.5,-66"/>
+<text text-anchor="middle" x="449" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5sclose_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5sclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge15" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5sclose_f</title>
+<path fill="none" stroke="#000000" d="M350.9307,-209.7365C354.6944,-207.2804 358.1886,-204.3876 361,-201 398.1947,-156.1831 358.0465,-118.297 397,-75 400.1247,-71.5269 403.9049,-68.618 407.9852,-66.1838"/>
+<polygon fill="#000000" stroke="#000000" points="409.8592,-69.161 417.2588,-61.5784 406.7457,-62.8916 409.8592,-69.161"/>
+</g>
+<!-- h5acreate_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node18" class="node">
+<title>h5acreate_f</title>
+<polygon fill="#777777" stroke="#777777" points="483,-360 415,-360 415,-336 483,-336 483,-360"/>
+<text text-anchor="middle" x="449" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5acreate_f</text>
+</g>
+<!-- proc~i2save_to_hdf5&#45;&gt;h5acreate_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge16" class="edge">
+<title>proc~i2save_to_hdf5&#45;&gt;h5acreate_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-234.0807C353.8264,-236.6005 357.7562,-239.5598 361,-243 388.8648,-272.5521 367.9781,-298.5833 397,-327 399.6609,-329.6054 402.6876,-331.9011 405.9112,-333.9214"/>
+<polygon fill="#000000" stroke="#000000" points="404.3173,-337.0379 414.7888,-338.6498 407.608,-330.8596 404.3173,-337.0379"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5tset_size_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge17" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5tset_size_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-192.0807C353.8264,-194.6005 357.7562,-197.5598 361,-201 388.8648,-230.5521 367.9781,-256.5833 397,-285 398.8566,-286.8178 400.8912,-288.4849 403.0465,-290.0128"/>
+<polygon fill="#000000" stroke="#000000" points="401.453,-293.1374 411.8369,-295.2413 405.0315,-287.1211 401.453,-293.1374"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge18" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-192.0603C351.9132,-194.6891 356.759,-197.6888 361,-201 380.3784,-216.1302 377.0333,-228.6551 397,-243 400.4692,-245.4924 404.2767,-247.7474 408.2046,-249.773"/>
+<polygon fill="#000000" stroke="#000000" points="406.9422,-253.0458 417.4857,-254.0872 409.8929,-246.698 406.9422,-253.0458"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5aclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge19" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5aclose_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-192.0355C372.2832,-197.2146 391.0854,-203.2891 407.5546,-208.61"/>
+<polygon fill="#000000" stroke="#000000" points="406.8702,-212.0669 417.4619,-211.8108 409.0223,-205.4059 406.8702,-212.0669"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5tcopy_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge20" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5tcopy_f</title>
+<path fill="none" stroke="#000000" d="M361.2073,-180C376.7487,-180 394.2805,-180 409.5678,-180"/>
+<polygon fill="#000000" stroke="#000000" points="409.7407,-183.5001 419.7407,-180 409.7406,-176.5001 409.7407,-183.5001"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5screate_simple_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge21" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5screate_simple_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-167.9645C370.5317,-163.3513 387.0099,-158.0276 402.0795,-153.1589"/>
+<polygon fill="#000000" stroke="#000000" points="403.3021,-156.4421 411.7418,-150.0373 401.15,-149.7811 403.3021,-156.4421"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5awrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge22" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5awrite_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-167.9397C351.9132,-165.3109 356.759,-162.3112 361,-159 380.3784,-143.8698 377.0333,-131.3449 397,-117 400.7027,-114.3398 404.7908,-111.9502 408.9993,-109.8211"/>
+<polygon fill="#000000" stroke="#000000" points="410.6598,-112.9106 418.3021,-105.5726 407.7518,-106.5432 410.6598,-112.9106"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5sclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge23" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5sclose_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-167.9193C353.8264,-165.3995 357.7562,-162.4402 361,-159 388.8648,-129.4479 367.9781,-103.4167 397,-75 400.2979,-71.7709 404.1576,-69.0176 408.2578,-66.6746"/>
+<polygon fill="#000000" stroke="#000000" points="410.0365,-69.7014 417.4937,-62.1754 406.9709,-63.4084 410.0365,-69.7014"/>
+</g>
+<!-- proc~i1save_to_hdf5&#45;&gt;h5acreate_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge24" class="edge">
+<title>proc~i1save_to_hdf5&#45;&gt;h5acreate_f</title>
+<path fill="none" stroke="#000000" d="M350.9307,-192.2635C354.6944,-194.7196 358.1886,-197.6124 361,-201 398.1947,-245.8169 358.0465,-283.703 397,-327 399.56,-329.8454 402.56,-332.3122 405.8045,-334.4494"/>
+<polygon fill="#000000" stroke="#000000" points="404.3746,-337.6562 414.8297,-339.3711 407.7259,-331.5106 404.3746,-337.6562"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5tset_size_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge25" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5tset_size_f</title>
+<path fill="none" stroke="#000000" d="M350.9307,-150.2635C354.6944,-152.7196 358.1886,-155.6124 361,-159 398.1947,-203.8169 358.0465,-241.703 397,-285 398.7948,-286.995 400.806,-288.8038 402.966,-290.4434"/>
+<polygon fill="#000000" stroke="#000000" points="401.5471,-293.6811 411.8929,-295.9647 405.2292,-287.7278 401.5471,-293.6811"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge26" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-150.0807C353.8264,-152.6005 357.7562,-155.5598 361,-159 388.8648,-188.5521 367.9781,-214.5833 397,-243 400.2979,-246.2291 404.1576,-248.9824 408.2578,-251.3254"/>
+<polygon fill="#000000" stroke="#000000" points="406.9709,-254.5916 417.4937,-255.8246 410.0365,-248.2986 406.9709,-254.5916"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5aclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge27" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5aclose_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-150.0603C351.9132,-152.6891 356.759,-155.6888 361,-159 380.3784,-174.1302 377.0333,-186.6551 397,-201 400.4692,-203.4924 404.2767,-205.7474 408.2046,-207.773"/>
+<polygon fill="#000000" stroke="#000000" points="406.9422,-211.0458 417.4857,-212.0872 409.8929,-204.698 406.9422,-211.0458"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5tcopy_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge28" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5tcopy_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-150.0355C373.0616,-155.466 392.918,-161.8812 409.9367,-167.3796"/>
+<polygon fill="#000000" stroke="#000000" points="408.993,-170.7527 419.5848,-170.4966 411.1451,-164.0917 408.993,-170.7527"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5screate_simple_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge29" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5screate_simple_f</title>
+<path fill="none" stroke="#000000" d="M361.2073,-138C369.307,-138 377.9473,-138 386.5288,-138"/>
+<polygon fill="#000000" stroke="#000000" points="386.5397,-141.5001 396.5397,-138 386.5397,-134.5001 386.5397,-141.5001"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5awrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge30" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5awrite_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-125.9645C372.6853,-120.6555 392.0304,-114.4056 408.7895,-108.9911"/>
+<polygon fill="#000000" stroke="#000000" points="409.8769,-112.318 418.3166,-105.9131 407.7248,-105.657 409.8769,-112.318"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5sclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge31" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5sclose_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-125.9397C351.9132,-123.3109 356.759,-120.3112 361,-117 380.3784,-101.8698 377.0333,-89.3449 397,-75 400.4692,-72.5076 404.2767,-70.2526 408.2046,-68.227"/>
+<polygon fill="#000000" stroke="#000000" points="409.8929,-71.302 417.4857,-63.9128 406.9422,-64.9542 409.8929,-71.302"/>
+</g>
+<!-- proc~i4save_to_hdf5&#45;&gt;h5acreate_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge32" class="edge">
+<title>proc~i4save_to_hdf5&#45;&gt;h5acreate_f</title>
+<path fill="none" stroke="#000000" d="M351.1462,-150.0907C354.8765,-152.5735 358.304,-155.5199 361,-159 407.7656,-219.3663 347.8628,-268.5479 397,-327 399.5696,-330.0568 402.6507,-332.6731 406.0133,-334.9117"/>
+<polygon fill="#000000" stroke="#000000" points="404.3688,-338.0015 414.8211,-339.7337 407.7304,-331.8614 404.3688,-338.0015"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5tset_size_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge33" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5tset_size_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-276.0355C370.5317,-280.6487 387.0099,-285.9724 402.0795,-290.8411"/>
+<polygon fill="#000000" stroke="#000000" points="401.15,-294.2189 411.7418,-293.9627 403.3021,-287.5579 401.15,-294.2189"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge34" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M361.2073,-264C375.8833,-264 392.3344,-264 406.9941,-264"/>
+<polygon fill="#000000" stroke="#000000" points="407.3011,-267.5001 417.3011,-264 407.301,-260.5001 407.3011,-267.5001"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5aclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge35" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5aclose_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-251.9645C372.2832,-246.7854 391.0854,-240.7109 407.5546,-235.39"/>
+<polygon fill="#000000" stroke="#000000" points="409.0223,-238.5941 417.4619,-232.1892 406.8702,-231.9331 409.0223,-238.5941"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5tcopy_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge36" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5tcopy_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-251.9397C351.9132,-249.3109 356.759,-246.3112 361,-243 380.3784,-227.8698 377.0333,-215.3449 397,-201 401.192,-197.9883 405.8779,-195.3234 410.6733,-192.9908"/>
+<polygon fill="#000000" stroke="#000000" points="412.1903,-196.1471 419.929,-188.9108 409.3668,-189.7418 412.1903,-196.1471"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5screate_simple_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge37" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5screate_simple_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-251.9193C353.8264,-249.3995 357.7562,-246.4402 361,-243 388.8648,-213.4479 367.9781,-187.4167 397,-159 398.2435,-157.7824 399.5669,-156.6325 400.9529,-155.5467"/>
+<polygon fill="#000000" stroke="#000000" points="402.9894,-158.3972 409.4563,-150.005 399.1674,-152.5327 402.9894,-158.3972"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5awrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge38" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5awrite_f</title>
+<path fill="none" stroke="#000000" d="M350.9307,-251.7365C354.6944,-249.2804 358.1886,-246.3876 361,-243 398.1947,-198.1831 358.0465,-160.297 397,-117 400.4523,-113.1627 404.7049,-110.0142 409.2782,-107.4336"/>
+<polygon fill="#000000" stroke="#000000" points="410.8034,-110.584 418.342,-103.1395 407.8064,-104.258 410.8034,-110.584"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5sclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge39" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5sclose_f</title>
+<path fill="none" stroke="#000000" d="M351.1462,-251.9093C354.8765,-249.4265 358.304,-246.4801 361,-243 407.7656,-182.6337 347.8628,-133.4521 397,-75 400.1247,-71.283 404.0056,-68.2172 408.2294,-65.69"/>
+<polygon fill="#000000" stroke="#000000" points="409.841,-68.7976 417.2487,-61.2229 406.7341,-62.5249 409.841,-68.7976"/>
+</g>
+<!-- proc~i8save_to_hdf5&#45;&gt;h5acreate_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge40" class="edge">
+<title>proc~i8save_to_hdf5&#45;&gt;h5acreate_f</title>
+<path fill="none" stroke="#000000" d="M331.6415,-276.2057C346.3839,-289.9439 371.9422,-312.2637 397,-327 399.8115,-328.6534 402.7776,-330.2337 405.8097,-331.7317"/>
+<polygon fill="#000000" stroke="#000000" points="404.4683,-334.9672 415.0156,-335.9696 407.3955,-328.6086 404.4683,-334.9672"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5tset_size_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge41" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5tset_size_f</title>
+<path fill="none" stroke="#000000" d="M351.1462,-108.0907C354.8765,-110.5735 358.304,-113.5199 361,-117 407.7656,-177.3663 347.8628,-226.5479 397,-285 398.8795,-287.2358 401.0326,-289.236 403.3694,-291.0251"/>
+<polygon fill="#000000" stroke="#000000" points="401.5521,-294.0165 411.8912,-296.3301 405.2515,-288.0739 401.5521,-294.0165"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge42" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M350.9307,-108.2635C354.6944,-110.7196 358.1886,-113.6124 361,-117 398.1947,-161.8169 358.0465,-199.703 397,-243 400.1247,-246.4731 403.9049,-249.382 407.9852,-251.8162"/>
+<polygon fill="#000000" stroke="#000000" points="406.7457,-255.1084 417.2588,-256.4216 409.8592,-248.839 406.7457,-255.1084"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5aclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge43" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5aclose_f</title>
+<path fill="none" stroke="#000000" d="M349.6879,-108.0807C353.8264,-110.6005 357.7562,-113.5598 361,-117 388.8648,-146.5521 367.9781,-172.5833 397,-201 400.2979,-204.2291 404.1576,-206.9824 408.2578,-209.3254"/>
+<polygon fill="#000000" stroke="#000000" points="406.9709,-212.5916 417.4937,-213.8246 410.0365,-206.2986 406.9709,-212.5916"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5tcopy_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge44" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5tcopy_f</title>
+<path fill="none" stroke="#000000" d="M347.0562,-108.0603C351.9132,-110.6891 356.759,-113.6888 361,-117 380.3784,-132.1302 377.0333,-144.6551 397,-159 401.192,-162.0117 405.8779,-164.6766 410.6733,-167.0092"/>
+<polygon fill="#000000" stroke="#000000" points="409.3668,-170.2582 419.929,-171.0892 412.1903,-163.8529 409.3668,-170.2582"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5screate_simple_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge45" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5screate_simple_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-108.0355C370.5317,-112.6487 387.0099,-117.9724 402.0795,-122.8411"/>
+<polygon fill="#000000" stroke="#000000" points="401.15,-126.2189 411.7418,-125.9627 403.3021,-119.5579 401.15,-126.2189"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5awrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge46" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5awrite_f</title>
+<path fill="none" stroke="#000000" d="M358.7107,-96C374.3912,-96 392.398,-96 408.1849,-96"/>
+<polygon fill="#000000" stroke="#000000" points="408.1918,-99.5001 418.1918,-96 408.1918,-92.5001 408.1918,-99.5001"/>
+</g>
+<!-- h5dwrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_node16" class="node">
+<title>h5dwrite_f</title>
+<polygon fill="#777777" stroke="#777777" points="479.5,-24 418.5,-24 418.5,0 479.5,0 479.5,-24"/>
+<text text-anchor="middle" x="449" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dwrite_f</text>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5dwrite_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge47" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5dwrite_f</title>
+<path fill="none" stroke="#000000" d="M331.6415,-83.7943C346.3839,-70.0561 371.9422,-47.7363 397,-33 400.833,-30.7459 404.9534,-28.6276 409.1367,-26.6685"/>
+<polygon fill="#000000" stroke="#000000" points="410.5579,-29.8671 418.3079,-22.643 407.7444,-23.4574 410.5579,-29.8671"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5sclose_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge48" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5sclose_f</title>
+<path fill="none" stroke="#000000" d="M356.2528,-83.9645C372.2832,-78.7854 391.0854,-72.7109 407.5546,-67.39"/>
+<polygon fill="#000000" stroke="#000000" points="409.0223,-70.5941 417.4619,-64.1892 406.8702,-63.9331 409.0223,-70.5941"/>
+</g>
+<!-- proc~rsave_to_hdf5&#45;&gt;h5acreate_f -->
+<g id="proc~~save_avalanche_params~~CallsGraph_edge49" class="edge">
+<title>proc~rsave_to_hdf5&#45;&gt;h5acreate_f</title>
+<path fill="none" stroke="#000000" d="M351.6924,-108.2676C355.2406,-110.7082 358.4736,-113.5959 361,-117 417.4346,-193.0411 337.576,-253.2714 397,-327 399.5394,-330.1506 402.6248,-332.8318 406.0121,-335.1128"/>
+<polygon fill="#000000" stroke="#000000" points="404.4642,-338.2557 414.9148,-339.9983 407.8318,-332.119 404.4642,-338.2557"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~save_avalanche_params~~CalledByGraph Pages: 1 -->
+<svg id="procsave_avalanche_paramsCalledByGraph" width="310pt" height="74pt"
+ viewBox="0.00 0.00 310.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~save_avalanche_params~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~save_avalanche_params~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-70 306,-70 306,4 -4,4"/>
+<!-- proc~save_avalanche_params -->
+<g id="proc~~save_avalanche_params~~CalledByGraph_node1" class="node">
+<title>proc~save_avalanche_params</title>
+<polygon fill="none" stroke="#000000" points="302,-45 173,-45 173,-21 302,-21 302,-45"/>
+<text text-anchor="middle" x="237.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">save_avalanche_params</text>
+</g>
+<!-- proc~get_avalanche_distribution -->
+<g id="proc~~save_avalanche_params~~CalledByGraph_node2" class="node">
+<title>proc~get_avalanche_distribution</title>
+<g id="a_proc~~save_avalanche_params~~CalledByGraph_node2"><a xlink:href=".././proc/get_avalanche_distribution.html" xlink:title="get_avalanche_distribution">
+<polygon fill="#d9534f" stroke="#d9534f" points="137,-66 0,-66 0,-42 137,-42 137,-66"/>
+<text text-anchor="middle" x="68.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_avalanche_distribution</text>
+</a>
+</g>
+</g>
+<!-- proc~get_avalanche_distribution&#45;&gt;proc~save_avalanche_params -->
+<g id="proc~~save_avalanche_params~~CalledByGraph_edge1" class="edge">
+<title>proc~get_avalanche_distribution&#45;&gt;proc~save_avalanche_params</title>
+<path fill="none" stroke="#000000" d="M137.2388,-45.4585C145.7118,-44.4056 154.404,-43.3255 162.9581,-42.2626"/>
+<polygon fill="#000000" stroke="#000000" points="163.4231,-45.7318 172.9151,-41.0253 162.5598,-38.7853 163.4231,-45.7318"/>
+</g>
+<!-- proc~get_avalanche_4d -->
+<g id="proc~~save_avalanche_params~~CalledByGraph_node3" class="node">
+<title>proc~get_avalanche_4d</title>
+<g id="a_proc~~save_avalanche_params~~CalledByGraph_node3"><a xlink:href=".././proc/get_avalanche_4d.html" xlink:title="get_Avalanche_4D">
+<polygon fill="#d9534f" stroke="#d9534f" points="119,-24 18,-24 18,0 119,0 119,-24"/>
+<text text-anchor="middle" x="68.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_Avalanche_4D</text>
+</a>
+</g>
+</g>
+<!-- proc~get_avalanche_4d&#45;&gt;proc~save_avalanche_params -->
+<g id="proc~~save_avalanche_params~~CalledByGraph_edge2" class="edge">
+<title>proc~get_avalanche_4d&#45;&gt;proc~save_avalanche_params</title>
+<path fill="none" stroke="#000000" d="M119.2056,-18.3007C132.872,-19.9989 147.9504,-21.8725 162.6355,-23.6973"/>
+<polygon fill="#000000" stroke="#000000" points="162.3618,-27.1901 172.7171,-24.9501 163.225,-20.2436 162.3618,-27.1901"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/save_avalanche_params.html#src">save_avalanche_params</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">SUBROUTINE </span><span class="n">save_avalanche_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+  <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">params</span>
+  <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span>
+  <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gname</span>
+  <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">attr_array</span>
+  <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dset</span>
+  <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">attr</span>
+  <span class="kt">INTEGER</span><span class="p">(</span><span class="n">HID_T</span><span class="p">)</span> <span class="kd">::</span> <span class="n">h5file_id</span>
+  <span class="kt">INTEGER</span><span class="p">(</span><span class="n">HID_T</span><span class="p">)</span> <span class="kd">::</span> <span class="n">group_id</span>
+  <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">h5error</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">units</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">     </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;avalanche_parameters.h5&quot;</span>
+     <span class="k">call </span><span class="n">h5fcreate_f</span><span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">H5F_ACC_TRUNC_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+     <span class="n">gname</span> <span class="o">=</span> <span class="s2">&quot;pdf_params&quot;</span>
+     <span class="k">call </span><span class="n">h5gcreate_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">),</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/max_pitch_angle&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Maximum pitch angle in avalanche PDF (degrees)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/min_pitch_angle&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Minimum pitch angle in avalanche PDF (degrees)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/min_energy&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Minimum energy in avalanche PDF (eV)&quot;</span>
+     <span class="n">units</span> <span class="o">=</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="n">C_E</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">units</span><span class="o">*</span><span class="n">aval_params</span><span class="p">%</span><span class="n">min_energy</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/max_energy&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Maximum energy in avalanche PDF (eV)&quot;</span>
+     <span class="n">units</span> <span class="o">=</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="n">C_E</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">units</span><span class="o">*</span><span class="n">aval_params</span><span class="p">%</span><span class="n">max_energy</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/max_p&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Maximum momentum in avalanche PDF (me*c^2)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">max_p</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/min_p&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Maximum momentum in avalanche PDF (me*c^2)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">min_p</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/ne&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Background electron density (m^-3)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">ne</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Zeff&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Effective atomic number of ions.&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">Zeff</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Ec&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Critical electric field in (V/m)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">Ec</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Epar&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Parallel electric field in (V/m)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">Epar</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Te&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Background electron temperature (eV)&quot;</span>
+     <span class="n">units</span> <span class="o">=</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="n">C_E</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">units</span><span class="o">*</span><span class="n">aval_params</span><span class="p">%</span><span class="n">Te</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/lambda_D&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Debye length (m)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">lD</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/bmin&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Maximum approach radius (m)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">bmin</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Clog&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Coulomb logarithm&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">CoulombLog</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Tau&quot;</span>
+     <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Collision time (s)&quot;</span>
+     <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">aval_params</span><span class="p">%</span><span class="n">Tau</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+
+     <span class="k">call </span><span class="n">h5gclose_f</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+
+     <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+  <span class="k">end if</span>
+<span class="k">END SUBROUTINE </span><span class="n">save_avalanche_params</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

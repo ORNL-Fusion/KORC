@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>initialize_nimrod &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>initialize_nimrod
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.5% of total for procedures.">131 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_fio_interface.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_fio_interface.f90.html'>korc_fio_interface.f90</a></li>
+    
+     <li><a href='../module/korc_fio.html'>korc_fio</a></li>
+    
+  
+     <li class="active">initialize_nimrod</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/initialize_nimrod.html#src">initialize_nimrod</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine initialize_nimrod(params, F, P, spp, init)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~45"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~14"></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p~11"></span>type(PROFILES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spp~11"></span>type(SPECIES),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>spp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-init~4"></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>init</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~initialize_nimrod~~CallsGraph Pages: 1 -->
+<svg id="procinitialize_nimrodCallsGraph" width="641pt" height="377pt"
+ viewBox="0.00 0.00 641.00 376.52" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_nimrod~~CallsGraph" class="graph" transform="scale(.9183 .9183) rotate(0) translate(4 406)">
+<title>proc~~initialize_nimrod~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-406 694,-406 694,4 -4,4"/>
+<!-- proc~initialize_nimrod -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node1" class="node">
+<title>proc~initialize_nimrod</title>
+<polygon fill="none" stroke="#000000" points="88,-213 0,-213 0,-189 88,-189 88,-213"/>
+<text text-anchor="middle" x="44" y="-198.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_nimrod</text>
+</g>
+<!-- interface~fio_close_field -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node2" class="node">
+<title>interface~fio_close_field</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node2"><a xlink:href=".././interface/fio_close_field.html" xlink:title="fio_close_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="226.5,-402 147.5,-402 147.5,-378 226.5,-378 226.5,-402"/>
+<text text-anchor="middle" x="187" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_close_field</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_close_field -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge1" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_close_field</title>
+<path fill="none" stroke="#000000" d="M46.3533,-213.1229C52.9334,-243.7906 74.3898,-325.1305 124,-369 128.1564,-372.6754 132.9765,-375.7111 138.0639,-378.2177"/>
+<polygon fill="#000000" stroke="#000000" points="136.851,-381.505 147.4241,-382.1821 139.5809,-375.0592 136.851,-381.505"/>
+</g>
+<!-- interface~fio_close_source -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node3" class="node">
+<title>interface~fio_close_source</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node3"><a xlink:href=".././interface/fio_close_source.html" xlink:title="fio_close_source">
+<polygon fill="#a7506f" stroke="#a7506f" points="232.5,-360 141.5,-360 141.5,-336 232.5,-336 232.5,-360"/>
+<text text-anchor="middle" x="187" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_close_source</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_close_source -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge2" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_close_source</title>
+<path fill="none" stroke="#000000" d="M48.5295,-213.3657C58.3487,-238.4807 83.9855,-295.7245 124,-327 126.5888,-329.0235 129.3821,-330.8566 132.3021,-332.5169"/>
+<polygon fill="#000000" stroke="#000000" points="130.8494,-335.703 141.3651,-336.9959 133.9508,-329.4275 130.8494,-335.703"/>
+</g>
+<!-- interface~fio_set_int_option -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node4" class="node">
+<title>interface~fio_set_int_option</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node4"><a xlink:href=".././interface/fio_set_int_option.html" xlink:title="fio_set_int_option">
+<polygon fill="#a7506f" stroke="#a7506f" points="234.5,-318 139.5,-318 139.5,-294 234.5,-294 234.5,-318"/>
+<text text-anchor="middle" x="187" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_set_int_option</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_set_int_option -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge3" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_set_int_option</title>
+<path fill="none" stroke="#000000" d="M52.4331,-213.0734C65.6774,-231.1846 93.0585,-265.3518 124,-285 126.7251,-286.7305 129.6078,-288.3337 132.581,-289.8167"/>
+<polygon fill="#000000" stroke="#000000" points="131.1484,-293.01 141.7048,-293.9123 134.0151,-286.6239 131.1484,-293.01"/>
+</g>
+<!-- proc~load_prev_iter -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node5" class="node">
+<title>proc~load_prev_iter</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node5"><a xlink:href=".././proc/load_prev_iter.html" xlink:title="load_prev_iter">
+<polygon fill="#d9534f" stroke="#d9534f" points="226.5,-276 147.5,-276 147.5,-252 226.5,-252 226.5,-276"/>
+<text text-anchor="middle" x="187" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_prev_iter</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;proc~load_prev_iter -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge4" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;proc~load_prev_iter</title>
+<path fill="none" stroke="#000000" d="M64.6053,-213.0009C80.5027,-221.9668 103.2173,-234.1495 124,-243 128.4717,-244.9043 133.179,-246.7509 137.9231,-248.5071"/>
+<polygon fill="#000000" stroke="#000000" points="137.0543,-251.9131 147.6489,-251.9747 139.4051,-245.3196 137.0543,-251.9131"/>
+</g>
+<!-- interface~fio_eval_field -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node6" class="node">
+<title>interface~fio_eval_field</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node6"><a xlink:href=".././interface/fio_eval_field.html" xlink:title="fio_eval_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="224,-234 150,-234 150,-210 224,-210 224,-234"/>
+<text text-anchor="middle" x="187" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_eval_field</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge5" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M88.0715,-207.472C104.3818,-209.8673 122.9365,-212.5921 139.5354,-215.0297"/>
+<polygon fill="#000000" stroke="#000000" points="139.1778,-218.5146 149.5802,-216.5048 140.1949,-211.5889 139.1778,-218.5146"/>
+</g>
+<!-- interface~fio_get_field -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node7" class="node">
+<title>interface~fio_get_field</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node7"><a xlink:href=".././interface/fio_get_field.html" xlink:title="fio_get_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="221.5,-192 152.5,-192 152.5,-168 221.5,-168 221.5,-192"/>
+<text text-anchor="middle" x="187" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_get_field</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_get_field -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge6" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_get_field</title>
+<path fill="none" stroke="#000000" d="M88.0715,-194.528C105.1973,-192.013 124.7975,-189.1346 142.01,-186.6069"/>
+<polygon fill="#000000" stroke="#000000" points="142.9898,-190.0007 152.3751,-185.0848 141.9727,-183.0749 142.9898,-190.0007"/>
+</g>
+<!-- interface~fio_get_options -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node8" class="node">
+<title>interface~fio_get_options</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node8"><a xlink:href=".././interface/fio_get_options.html" xlink:title="fio_get_options">
+<polygon fill="#a7506f" stroke="#a7506f" points="229,-150 145,-150 145,-126 229,-126 229,-150"/>
+<text text-anchor="middle" x="187" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_get_options</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_get_options -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge7" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_get_options</title>
+<path fill="none" stroke="#000000" d="M64.6053,-188.9991C80.5027,-180.0332 103.2173,-167.8505 124,-159 128.4717,-157.0957 133.179,-155.2491 137.9231,-153.4929"/>
+<polygon fill="#000000" stroke="#000000" points="139.4051,-156.6804 147.6489,-150.0253 137.0543,-150.0869 139.4051,-156.6804"/>
+</g>
+<!-- korc_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node9" class="node">
+<title>korc_abort</title>
+<polygon fill="#777777" stroke="#777777" points="218,-108 156,-108 156,-84 218,-84 218,-108"/>
+<text text-anchor="middle" x="187" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;korc_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge8" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;korc_abort</title>
+<path fill="none" stroke="#000000" d="M52.4331,-188.9266C65.6774,-170.8154 93.0585,-136.6482 124,-117 130.7748,-112.6979 138.5233,-109.1827 146.2151,-106.3446"/>
+<polygon fill="#000000" stroke="#000000" points="147.4879,-109.6092 155.85,-103.1035 145.256,-102.9746 147.4879,-109.6092"/>
+</g>
+<!-- interface~fio_open_source -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node10" class="node">
+<title>interface~fio_open_source</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node10"><a xlink:href=".././interface/fio_open_source.html" xlink:title="fio_open_source">
+<polygon fill="#a7506f" stroke="#a7506f" points="232,-66 142,-66 142,-42 232,-42 232,-66"/>
+<text text-anchor="middle" x="187" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_open_source</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_open_source -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge9" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_open_source</title>
+<path fill="none" stroke="#000000" d="M48.5295,-188.6343C58.3487,-163.5193 83.9855,-106.2755 124,-75 126.6343,-72.941 129.4802,-71.0791 132.4559,-69.3959"/>
+<polygon fill="#000000" stroke="#000000" points="134.2553,-72.4117 141.6912,-64.8646 131.1718,-66.1274 134.2553,-72.4117"/>
+</g>
+<!-- interface~fio_allocate_search_hint -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node11" class="node">
+<title>interface~fio_allocate_search_hint</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node11"><a xlink:href=".././interface/fio_allocate_search_hint.html" xlink:title="fio_allocate_search_hint">
+<polygon fill="#a7506f" stroke="#a7506f" points="250,-24 124,-24 124,0 250,0 250,-24"/>
+<text text-anchor="middle" x="187" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_allocate_search_hint</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;interface~fio_allocate_search_hint -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge10" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;interface~fio_allocate_search_hint</title>
+<path fill="none" stroke="#000000" d="M46.3533,-188.8771C52.9334,-158.2094 74.3898,-76.8695 124,-33 125.4898,-31.6826 127.0649,-30.4473 128.707,-29.2892"/>
+<polygon fill="#000000" stroke="#000000" points="130.5905,-32.2412 137.3916,-24.1174 127.0088,-26.2269 130.5905,-32.2412"/>
+</g>
+<!-- mpi_bcast -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node12" class="node">
+<title>mpi_bcast</title>
+<polygon fill="#777777" stroke="#777777" points="358.5,-358 298.5,-358 298.5,-334 358.5,-334 358.5,-358"/>
+<text text-anchor="middle" x="328.5" y="-343.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_bcast</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;mpi_bcast -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge11" class="edge">
+<title>proc~load_prev_iter&#45;&gt;mpi_bcast</title>
+<path fill="none" stroke="#000000" d="M226.7601,-273.7818C234.8115,-276.6996 242.9595,-280.3886 250,-285 270.0079,-298.1047 266.9373,-310.5548 286,-325 287.7588,-326.3327 289.6153,-327.6167 291.5299,-328.8474"/>
+<polygon fill="#000000" stroke="#000000" points="289.7709,-331.8733 300.1722,-333.889 293.2982,-325.8269 289.7709,-331.8733"/>
+</g>
+<!-- h5fclose_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node13" class="node">
+<title>h5fclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="358.5,-316 298.5,-316 298.5,-292 358.5,-292 358.5,-316"/>
+<text text-anchor="middle" x="328.5" y="-301.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fclose_f</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge12" class="edge">
+<title>proc~load_prev_iter&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M226.7922,-275.2487C246.1435,-280.719 269.3436,-287.2774 288.6964,-292.7481"/>
+<polygon fill="#000000" stroke="#000000" points="287.8502,-296.146 298.4252,-295.4983 289.7544,-289.41 287.8502,-296.146"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node14" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node14"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="594.5,-276 532.5,-276 532.5,-252 594.5,-252 594.5,-276"/>
+<text text-anchor="middle" x="563.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge13" class="edge">
+<title>proc~load_prev_iter&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M226.5805,-264C298.2901,-264 449.0201,-264 522.0668,-264"/>
+<polygon fill="#000000" stroke="#000000" points="522.2619,-267.5001 532.2618,-264 522.2618,-260.5001 522.2619,-267.5001"/>
+</g>
+<!-- h5fopen_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node15" class="node">
+<title>h5fopen_f</title>
+<polygon fill="#777777" stroke="#777777" points="358,-194 299,-194 299,-170 358,-170 358,-194"/>
+<text text-anchor="middle" x="328.5" y="-179.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fopen_f</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge14" class="edge">
+<title>proc~load_prev_iter&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M226.7601,-254.2182C234.8115,-251.3004 242.9595,-247.6114 250,-243 270.0079,-229.8953 266.9373,-217.4452 286,-203 287.7588,-201.6673 289.6153,-200.3833 291.5299,-199.1526"/>
+<polygon fill="#000000" stroke="#000000" points="293.2982,-202.1731 300.1722,-194.111 289.7709,-196.1267 293.2982,-202.1731"/>
+</g>
+<!-- interface~load_from_hdf5 -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node16" class="node">
+<title>interface~load_from_hdf5</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node16"><a xlink:href=".././interface/load_from_hdf5.html" xlink:title="load_from_hdf5">
+<polygon fill="#a7506f" stroke="#a7506f" points="371,-236 286,-236 286,-212 371,-212 371,-236"/>
+<text text-anchor="middle" x="328.5" y="-221.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;interface~load_from_hdf5 -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge15" class="edge">
+<title>proc~load_prev_iter&#45;&gt;interface~load_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M226.7922,-252.7513C242.0908,-248.4266 259.7951,-243.4219 276.102,-238.8122"/>
+<polygon fill="#000000" stroke="#000000" points="277.37,-242.0909 286.0408,-236.0026 275.4658,-235.3549 277.37,-242.0909"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node17" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="690,-276 631,-276 631,-252 690,-252 690,-276"/>
+<text text-anchor="middle" x="660.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge16" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M594.7253,-264C603.0847,-264 612.2317,-264 620.9754,-264"/>
+<polygon fill="#000000" stroke="#000000" points="620.9832,-267.5001 630.9832,-264 620.9831,-260.5001 620.9832,-267.5001"/>
+</g>
+<!-- proc~rload_from_hdf5 -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node18" class="node">
+<title>proc~rload_from_hdf5</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node18"><a xlink:href=".././proc/rload_from_hdf5.html" xlink:title="rload_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="496,-236 407,-236 407,-212 496,-212 496,-236"/>
+<text text-anchor="middle" x="451.5" y="-221.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_from_hdf5&#45;&gt;proc~rload_from_hdf5 -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge17" class="edge">
+<title>interface~load_from_hdf5&#45;&gt;proc~rload_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M371.1742,-224C379.3628,-224 388.0441,-224 396.5561,-224"/>
+<polygon fill="#000000" stroke="#000000" points="396.8102,-227.5001 406.8102,-224 396.8101,-220.5001 396.8102,-227.5001"/>
+</g>
+<!-- proc~iload_from_hdf5 -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node19" class="node">
+<title>proc~iload_from_hdf5</title>
+<g id="a_proc~~initialize_nimrod~~CallsGraph_node19"><a xlink:href=".././proc/iload_from_hdf5.html" xlink:title="iload_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="495.5,-194 407.5,-194 407.5,-170 495.5,-170 495.5,-194"/>
+<text text-anchor="middle" x="451.5" y="-179.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iload_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_from_hdf5&#45;&gt;proc~iload_from_hdf5 -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge18" class="edge">
+<title>interface~load_from_hdf5&#45;&gt;proc~iload_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M363.7469,-211.9645C377.1283,-207.3952 392.551,-202.1289 406.6983,-197.2981"/>
+<polygon fill="#000000" stroke="#000000" points="407.9155,-200.581 416.248,-194.0373 405.6535,-193.9566 407.9155,-200.581"/>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge19" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M485.1037,-236.0013C496.8992,-240.214 510.2819,-244.9935 522.6088,-249.396"/>
+<polygon fill="#000000" stroke="#000000" points="521.6234,-252.7605 532.218,-252.8279 523.9778,-246.1683 521.6234,-252.7605"/>
+</g>
+<!-- h5dclose_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node20" class="node">
+<title>h5dclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="595,-192 532,-192 532,-168 595,-168 595,-192"/>
+<text text-anchor="middle" x="563.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dclose_f</text>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge20" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M482.1045,-211.9768C494.8213,-206.9809 509.7547,-201.1142 523.3345,-195.7793"/>
+<polygon fill="#000000" stroke="#000000" points="524.9048,-198.9229 532.9325,-192.0087 522.3452,-192.4076 524.9048,-198.9229"/>
+</g>
+<!-- h5dread_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_node21" class="node">
+<title>h5dread_f</title>
+<polygon fill="#777777" stroke="#777777" points="593.5,-234 533.5,-234 533.5,-210 593.5,-210 593.5,-234"/>
+<text text-anchor="middle" x="563.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dread_f</text>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge21" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M496.0872,-223.2038C505.0316,-223.0441 514.3818,-222.8771 523.1717,-222.7201"/>
+<polygon fill="#000000" stroke="#000000" points="523.2392,-226.2196 533.175,-222.5415 523.1141,-219.2207 523.2392,-226.2196"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge22" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M481.6436,-194.213C486.6381,-196.7935 491.6129,-199.7373 496,-203 515.192,-217.273 513.9086,-227.3555 532,-243 533.1186,-243.9673 534.2839,-244.9268 535.4791,-245.8724"/>
+<polygon fill="#000000" stroke="#000000" points="533.488,-248.7525 543.6211,-251.8463 537.6289,-243.1087 533.488,-248.7525"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge23" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M495.7654,-181.2095C504.3724,-181.0559 513.3666,-180.8952 521.8846,-180.7431"/>
+<polygon fill="#000000" stroke="#000000" points="522.0445,-184.2409 531.9804,-180.5629 521.9195,-177.242 522.0445,-184.2409"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_nimrod~~CallsGraph_edge24" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M485.1037,-194.0013C497.2042,-198.3229 510.9751,-203.2411 523.5631,-207.7368"/>
+<polygon fill="#000000" stroke="#000000" points="522.7556,-211.1649 533.3502,-211.2322 525.11,-204.5727 522.7556,-211.1649"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocinitialize_nimrodCallsGraph = svgPanZoom('#procinitialize_nimrodCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~initialize_nimrod~~CalledByGraph Pages: 1 -->
+<svg id="procinitialize_nimrodCalledByGraph" width="186pt" height="32pt"
+ viewBox="0.00 0.00 186.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_nimrod~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~initialize_nimrod~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 182,-28 182,4 -4,4"/>
+<!-- proc~initialize_nimrod -->
+<g id="proc~~initialize_nimrod~~CalledByGraph_node1" class="node">
+<title>proc~initialize_nimrod</title>
+<polygon fill="none" stroke="#000000" points="178,-24 90,-24 90,0 178,0 178,-24"/>
+<text text-anchor="middle" x="134" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_nimrod</text>
+</g>
+<!-- program~main -->
+<g id="proc~~initialize_nimrod~~CalledByGraph_node2" class="node">
+<title>program~main</title>
+<g id="a_proc~~initialize_nimrod~~CalledByGraph_node2"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_nimrod -->
+<g id="proc~~initialize_nimrod~~CalledByGraph_edge1" class="edge">
+<title>program~main&#45;&gt;proc~initialize_nimrod</title>
+<path fill="none" stroke="#000000" d="M54.0006,-12C61.9173,-12 70.8698,-12 79.8467,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.9386,-15.5001 89.9385,-12 79.9385,-8.5001 79.9386,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/initialize_nimrod.html#src">initialize_nimrod</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">SUBROUTINE </span><span class="n">initialize_nimrod</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">spp</span><span class="p">,</span><span class="n">init</span><span class="p">)</span>
+
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">params</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">F</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">P</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">SPECIES</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">spp</span>
+    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">init</span>
+    
+    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">ii</span>
+    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">pp</span>
+    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">status</span>
+    <span class="kt">INTEGER</span>                                    <span class="kd">::</span> <span class="n">isrc</span>
+    <span class="kt">real</span><span class="p">(</span><span class="kt">c_double</span><span class="p">)</span>  <span class="kd">::</span>  <span class="n">time0</span><span class="p">,</span><span class="n">time1</span>
+    <span class="kt">INTEGER</span> <span class="p">(</span><span class="kt">C_INT</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">FIO_tmp</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">)</span> <span class="kd">::</span> <span class="n">hint_tmp</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">Btmp</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span>
+    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">list_file</span> <span class="o">=</span> <span class="mi">102</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">num_files</span><span class="p">,</span><span class="n">ios</span>
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span> <span class="o">=</span> <span class="n">Efield</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_lim</span><span class="o">=</span><span class="n">PSIp_lim</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_0</span><span class="o">=</span><span class="n">PSIp_0</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="o">=</span><span class="n">ReInterp_2x1t</span>
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="o">=</span><span class="n">magnetic_field_directory</span>
+          <span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_list</span><span class="o">=</span><span class="n">magnetic_field_list</span>
+
+          <span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_list</span><span class="p">)</span>
+          
+          <span class="k">OPEN</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">,</span><span class="k">FILE</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span><span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;OLD&#39;</span><span class="p">)</span>
+
+          <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(I4)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span> <span class="n">num_files</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">ios</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Error reading in magnetic_file_list for initialize_nimrod&#39;</span>
+             <span class="k">call </span><span class="n">KORC_abort</span><span class="p">(</span><span class="mi">22</span><span class="p">)</span>
+          <span class="n">endif</span>
+
+          <span class="c">!write(6,*) &#39;num_files&#39;,num_files</span>
+          
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">num_files</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">num_files</span><span class="p">))</span>
+
+          <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">num_files</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(A15,F12.10)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span> <span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">),</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+
+             <span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+             
+             <span class="c">!write(6,*) &#39;ii&#39;,ii,&#39;filename &#39;,TRIM(params%magnetic_field_filenames(ii)), &amp;</span>
+             <span class="c">!     &#39; time&#39;,params%time_of_filenames(ii)</span>
+             
+          <span class="n">enddo</span>
+
+          <span class="k">CLOSE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">list_file</span><span class="p">)</span>
+          
+
+          
+       <span class="n">endif</span>       
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">restart</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>  
+          <span class="k">else</span>
+<span class="k">             </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">ind0_2x1t</span><span class="p">))</span>  
+          <span class="k">end if           </span>
+<span class="k">       </span>
+<span class="k">          </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_NIMROD_SOURCE</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">filename</span> <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+          
+          <span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+          
+          <span class="n">hint_tmp</span><span class="o">=</span><span class="nb">c_null_ptr</span>
+<span class="nb">          </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Ro</span>
+          <span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">PHIo</span>
+          <span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Zo</span>
+
+          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_eval_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>                      <span class="p">&amp;</span>
+               <span class="n">Btmp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">hint_tmp</span><span class="p">)</span>
+
+          <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Btmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="mf">1.0</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.0</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+          <span class="n">status</span><span class="o">=</span><span class="n">fio_close_source</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+          
+          <span class="k">call </span><span class="n">load_prev_iter</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">prev_iter_2x1t</span><span class="o">+</span><span class="mi">1</span>
+       <span class="k">else</span>
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span><span class="o">=</span><span class="n">ind0_2x1t</span>
+       <span class="k">end if</span>
+
+<span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span>
+
+       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>  
+       <span class="k">else</span>
+<span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">))</span>  
+       <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_NIMROD_SOURCE</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">filename</span> <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+
+    <span class="k">else</span>
+<span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! actually for E, to account for F%Efield=-1</span>
+<span class="c">!       status = fio_close_field(F%FIO_A)</span>
+
+       <span class="n">status</span> <span class="o">=</span> <span class="n">fio_close_field</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">)</span>
+<span class="c">!       status = fio_close_field(P%FIO_te)</span>
+<span class="c">!       status = fio_close_field(P%FIO_ni)</span>
+
+       <span class="n">status</span><span class="o">=</span><span class="n">fio_close_source</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>
+
+       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filename</span><span class="p">)</span>  
+       <span class="k">else</span>
+<span class="k">          </span><span class="n">filename</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_directory</span><span class="p">)</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">magnetic_field_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">))</span>  
+       <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">       </span><span class="n">status</span> <span class="o">=</span> <span class="n">fio_open_source</span><span class="p">(</span><span class="n">FIO_NIMROD_SOURCE</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">filename</span> <span class="o">//</span> <span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">isrc</span><span class="p">)</span>       
+             
+    <span class="k">end if</span>
+
+<span class="k">    </span><span class="n">isrc</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">isrc</span>
+    
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_options</span><span class="p">(</span><span class="n">isrc</span><span class="p">)</span>
+
+
+    <span class="c">!if (.not.F%ReInterp_2x1t) then</span>
+    <span class="c">!   status = fio_set_int_option(FIO_TIMESLICE, params%time_slice)</span>
+    <span class="c">!else</span>
+    <span class="c">!   status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t)</span>
+    <span class="c">!end if</span>
+    <span class="c">! For NIMROD dump*, status=fio_get_options(isrc)=0, can&#39;t set FIO_TIMESLICE</span>
+    <span class="c">! as was the case for C1.h5 having information on multiple timeslices </span>
+
+    
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_MAGNETIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_ELECTRIC_FIELD</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span><span class="p">)</span>
+    <span class="c">!status = fio_get_field(isrc, FIO_VECTOR_POTENTIAL, F%FIO_A)</span>
+    <span class="n">F</span><span class="p">%</span><span class="n">FIO_A</span><span class="o">=-</span><span class="mi">1</span>
+
+    <span class="c">!write(6,*) &#39;time_of_filenames&#39;,time_of_filenames</span>
+    <span class="c">!write(6,*) &#39;ind_2x1t&#39;,F%ind_2x1t</span>
+    
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+
+       <span class="c">!status = fio_get_real_field_parameter(F%FIO_B, FIO_TIME, time0)</span>
+       <span class="n">time0</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">)</span>
+
+       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO present time index&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span>
+       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO present time&#39;</span><span class="p">,</span><span class="n">time0</span>
+       
+       <span class="c">!status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t+1)</span>
+
+       <span class="c">!status = fio_get_field(isrc, FIO_MAGNETIC_FIELD, FIO_tmp)</span>
+       
+       <span class="c">!status = fio_get_real_field_parameter(FIO_tmp, FIO_TIME, time1)</span>
+       <span class="n">time1</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">time_of_filenames</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO next time index&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">+</span><span class="mi">1</span>
+       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;FIO next time&#39;</span><span class="p">,</span><span class="n">time1</span>
+
+       <span class="c">!status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t)</span>
+
+       <span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span><span class="o">=</span><span class="n">time1</span><span class="o">-</span><span class="n">time0</span>
+
+       <span class="c">!write(6,*) &#39;snapshot_frequency&#39;,params%snapshot_frequency</span>
+       <span class="c">!write(6,*) &#39;dt&#39;,params%dt</span>
+       
+       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span>
+<span class="k">          </span><span class="n">params</span><span class="p">%</span><span class="n">t_skip</span> <span class="o">=</span> <span class="nb">FLOOR</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="nb">time</span><span class="o">/</span> <span class="p">&amp;</span>
+               <span class="n">params</span><span class="p">%</span><span class="n">dt</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
+          
+       <span class="k">end if</span>
+<span class="k">              </span>
+<span class="k">    end if    </span>
+<span class="k">    </span>
+<span class="k">    if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span><span class="o">=-</span><span class="mi">1</span>
+
+    
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_set_int_option</span><span class="p">(</span><span class="n">FIO_SPECIES</span><span class="p">,</span> <span class="n">FIO_ELECTRON</span><span class="p">);</span>
+       
+    
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fio_get_field</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">FIO_DENSITY</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span><span class="p">);</span>
+    <span class="c">!status = fio_get_field(isrc, FIO_TEMPERATURE, P%FIO_te);</span>
+
+    <span class="c">!status = fio_set_int_option(FIO_SPECIES, FIO_MAIN_ION);</span>
+    <span class="c">!status = fio_get_field(isrc, FIO_DENSITY, P%FIO_ni);</span>
+
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       if</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">restart</span><span class="p">.</span><span class="nb">OR</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">hint_tmp</span><span class="o">=</span><span class="nb">c_null_ptr</span>
+<span class="nb">          </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Ro</span>
+          <span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">PHIo</span>
+          <span class="n">x</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="n">spp</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">Zo</span>
+
+          <span class="n">status</span> <span class="o">=</span> <span class="n">fio_eval_field</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span><span class="p">,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>                      <span class="p">&amp;</span>
+               <span class="n">Btmp</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">hint_tmp</span><span class="p">)</span>
+
+          <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Btmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="mf">1.0</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.0</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">1.0</span>
+       <span class="k">end if    </span>
+
+<span class="k">       do </span><span class="n">ii</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">num_species</span>
+
+          <span class="k">do </span><span class="n">pp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">ppp</span>
+             <span class="n">status</span> <span class="o">=</span> <span class="n">fio_allocate_search_hint</span><span class="p">(</span><span class="n">isrc</span><span class="p">,</span> <span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">hint</span><span class="p">(</span><span class="n">pp</span><span class="p">))</span>
+             <span class="c">!spp(ii)%vars%hint(pp)=c_null_ptr</span>
+          <span class="k">end do</span>
+
+<span class="k">          </span><span class="n">spp</span><span class="p">(</span><span class="n">ii</span><span class="p">)%</span><span class="n">vars</span><span class="p">%</span><span class="n">cart</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+       <span class="k">end do</span>
+<span class="k">    end if</span>
+
+<span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate B&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span>
+       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate E&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span>
+       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Calculate ne&#39;</span><span class="p">,</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_ne</span>
+    <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">  END SUBROUTINE </span><span class="n">initialize_nimrod</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

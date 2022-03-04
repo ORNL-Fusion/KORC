@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_hpc.f90 &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_hpc.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.7% of total for source files.">194 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_hpc.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">korc_hpc.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_hpc.html">korc_hpc</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_hpc.f90.html#src">korc_hpc.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_hpc.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_hpcf90EfferentGraph" width="198pt" height="32pt"
+ viewBox="0.00 0.00 198.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_hpc.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>sourcefile~~korc_hpc.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 194,-28 194,4 -4,4"/>
+<!-- sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~korc_hpc.f90</title>
+<polygon fill="none" stroke="#000000" points="190,-24 117,-24 117,0 190,0 190,-24"/>
+<text text-anchor="middle" x="153.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_hpc.f90</text>
+</g>
+<!-- sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~korc_types.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/korc_types.f90.html" xlink:title="korc_types.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="81,-24 0,-24 0,0 81,0 81,-24"/>
+<text text-anchor="middle" x="40.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_hpc.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_hpc.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M116.8121,-12C108.7486,-12 100.0686,-12 91.5551,-12"/>
+<polygon fill="#000000" stroke="#000000" points="91.3056,-8.5001 81.3056,-12 91.3055,-15.5001 91.3056,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_hpc.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_hpcf90AfferentGraph" width="641pt" height="472pt"
+ viewBox="0.00 0.00 641.00 472.42" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph" class="graph" transform="scale(.5267 .5267) rotate(0) translate(4 892.9438)">
+<title>sourcefile~~korc_hpc.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-892.9438 1213,-892.9438 1213,4 -4,4"/>
+<!-- sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~korc_hpc.f90</title>
+<polygon fill="none" stroke="#000000" points="73,-451.0648 0,-451.0648 0,-427.0648 73,-427.0648 73,-451.0648"/>
+<text text-anchor="middle" x="36.5" y="-436.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_hpc.f90</text>
+</g>
+<!-- sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~korc_profiles.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/korc_profiles.f90.html" xlink:title="korc_profiles.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="635,-759.0648 545,-759.0648 545,-735.0648 635,-735.0648 635,-759.0648"/>
+<text text-anchor="middle" x="590" y="-744.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M468,-749.0648C395.726,-753.976 377.635,-811.6672 309.5,-787.0648"/>
+</g>
+<!-- sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~korc_interp.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/korc_interp.f90.html" xlink:title="korc_interp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="509,-645.0648 427,-645.0648 427,-621.0648 509,-621.0648 509,-645.0648"/>
+<text text-anchor="middle" x="468" y="-630.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M580.6436,-735.0357C566.3915,-717.1742 537.8429,-683.1609 509,-659.0648 505.6526,-656.2683 501.9831,-653.5399 498.2586,-650.9665"/>
+<polygon fill="#000000" stroke="#000000" points="499.8751,-647.8411 489.5936,-645.2836 496.0362,-653.6945 499.8751,-647.8411"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~korc_hdf5.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/korc_hdf5.f90.html" xlink:title="korc_HDF5.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="192,-511.0648 109,-511.0648 109,-487.0648 192,-487.0648 192,-511.0648"/>
+<text text-anchor="middle" x="150.5" y="-496.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M468,-749.0648C397.7176,-753.8407 369.8469,-785.4058 309.5,-749.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M544.7618,-746.6993C521.7533,-746.7942 493.3616,-747.3414 468,-749.0648"/>
+</g>
+<!-- sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~korc_input.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node14"><a xlink:href=".././sourcefile/korc_input.f90.html" xlink:title="korc_input.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="189.5,-411.0648 111.5,-411.0648 111.5,-387.0648 189.5,-387.0648 189.5,-411.0648"/>
+<text text-anchor="middle" x="150.5" y="-396.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_input.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge50" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M548.1368,-735.0328C509.9865,-721.7439 455.3912,-696.4179 427,-654.0648 357.6281,-550.578 474.5715,-468.4649 391,-376.0648 366.0511,-348.4802 346.2405,-351.2777 309.5,-357.0648"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~korc_velocity_distribution.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/korc_velocity_distribution.f90.html" xlink:title="korc_velocity_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="990,-360.0648 843,-360.0648 843,-336.0648 990,-336.0648 990,-360.0648"/>
+<text text-anchor="middle" x="916.5" y="-345.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-863.0648C611.0676,-917.6131 561.8653,-873.029 427,-839.0648 371.6215,-825.1184 362.8152,-807.5287 309.5,-787.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M911.7572,-360.3784C898.7755,-394.5537 862.3441,-493.6915 843,-579.0648 830.1104,-635.9518 843.8826,-793.8769 807,-839.0648 786.7345,-863.8936 767.6729,-848.746 739,-863.0648"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~korc_experimental_pdf.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/korc_experimental_pdf.f90.html" xlink:title="korc_experimental_pdf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="807,-299.0648 671,-299.0648 671,-275.0648 807,-275.0648 807,-299.0648"/>
+<text text-anchor="middle" x="739" y="-284.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M871.9871,-336.0635C862.3759,-333.2728 852.3077,-330.1968 843,-327.0648 826.7292,-321.5897 823.0176,-319.2415 807,-313.0648 798.2532,-309.6919 788.8665,-306.0908 779.9451,-302.6771"/>
+<polygon fill="#000000" stroke="#000000" points="781.0898,-299.3677 770.4993,-299.0659 778.5901,-305.9062 781.0898,-299.3677"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~korc_energy_pdfs.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/korc_energy_pdfs.f90.html" xlink:title="korc_energy_pdfs.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="366,-451.0648 253,-451.0648 253,-427.0648 366,-427.0648 366,-451.0648"/>
+<text text-anchor="middle" x="309.5" y="-436.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_energy_pdfs.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_energy_pdfs.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_energy_pdfs.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M842.9958,-337.6976C714.6199,-320.3367 459.9966,-289.4958 427,-313.0648 386.8558,-341.7392 427.2194,-384.5696 391,-418.0648 386.533,-422.1958 381.3629,-425.5385 375.8366,-428.2401"/>
+<polygon fill="#000000" stroke="#000000" points="374.16,-425.1462 366.2612,-432.2074 376.8394,-431.6131 374.16,-425.1462"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M901.7666,-360.2202C881.5042,-376.4377 843.3974,-405.1801 807,-423.0648 778.4912,-437.0732 767.3646,-430.7666 739,-445.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-475.0648C570.1647,-481.7935 564.9426,-482.661 545,-489.0648 476.3523,-511.1083 462.1803,-528.585 391,-540.0648 319.4797,-551.5994 298.3108,-557.5172 228,-540.0648 209.404,-535.4489 190.3582,-525.4598 175.801,-516.4974"/>
+<polygon fill="#000000" stroke="#000000" points="177.6728,-513.5401 167.3612,-511.107 173.9049,-519.4395 177.6728,-513.5401"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-445.0648C678.6793,-475.4715 656.1692,-461.4708 590,-475.0648"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~korc_avalanche.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node12"><a xlink:href=".././sourcefile/korc_avalanche.f90.html" xlink:title="korc_avalanche.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="791,-379.0648 687,-379.0648 687,-355.0648 791,-355.0648 791,-379.0648"/>
+<text text-anchor="middle" x="739" y="-364.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge48" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M842.7661,-355.9574C828.9519,-357.4361 814.6378,-358.9684 801.2154,-360.4051"/>
+<polygon fill="#000000" stroke="#000000" points="800.7187,-356.9382 791.1481,-361.4827 801.4638,-363.8984 800.7187,-356.9382"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node15"><a xlink:href=".././sourcefile/korc_simple_equilibrium_pdf.f90.html" xlink:title="korc_simple_equilibrium_pdf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="391,-409.0648 228,-409.0648 228,-385.0648 391,-385.0648 391,-409.0648"/>
+<text text-anchor="middle" x="309.5" y="-394.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_simple_equilibrium_pdf.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge62" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M858.2729,-336.059C852.8235,-333.5993 847.6202,-330.6356 843,-327.0648 818.0916,-307.8142 834.3377,-281.6745 807,-266.0648 759.0215,-238.6692 475.507,-240.1085 427,-275.0648 390.0313,-301.7061 424.0162,-339.6582 391,-371.0648 387.2623,-374.6203 383.0385,-377.6896 378.5293,-380.3392"/>
+<polygon fill="#000000" stroke="#000000" points="376.8631,-377.2602 369.5589,-384.9348 380.0548,-383.4903 376.8631,-377.2602"/>
+</g>
+<!-- sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~korc_fields.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node16"><a xlink:href=".././sourcefile/korc_fields.f90.html" xlink:title="korc_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="630,-565.0648 550,-565.0648 550,-541.0648 630,-541.0648 630,-565.0648"/>
+<text text-anchor="middle" x="590" y="-550.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge63" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-445.0648C710.3811,-459.4911 695.9751,-448.9798 671,-469.0648 647.3573,-488.0783 656.7894,-505.9528 635,-527.0648 631.7782,-530.1864 628.1105,-533.0762 624.2916,-535.7065"/>
+<polygon fill="#000000" stroke="#000000" points="622.4096,-532.7554 615.8043,-541.0393 626.1337,-538.6825 622.4096,-532.7554"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M730.4801,-275.0439C717.2381,-256.1965 691.1469,-218.3966 671,-185.0648 653.7159,-156.4693 658.7374,-142.5803 635,-119.0648 618.8972,-103.1125 611.1636,-103.1815 590,-95.0648"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M719.3742,-299.1864C703.9522,-309.7201 683.1182,-326.3608 671,-346.0648 636.6665,-401.8906 676.5078,-438.3459 635,-489.0648 606.9237,-523.3716 579.3989,-504.1014 545,-532.0648 516.8552,-554.9441 493.0871,-590.1235 479.6921,-612.3484"/>
+<polygon fill="#000000" stroke="#000000" points="476.653,-610.6118 474.6039,-621.0066 482.6881,-614.1585 476.653,-610.6118"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge39" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M724.8384,-299.065C690.8749,-327.6453 606.3881,-397.4882 590,-399.0648"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge53" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M722.4858,-274.9278C679.1856,-244.6961 559.4102,-171.3743 468,-213.0648"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge64" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M718.7912,-299.2395C703.2488,-309.6927 682.5404,-326.1975 671,-346.0648 629.8025,-416.9878 682.7637,-460.3869 635,-527.0648 632.941,-529.9392 630.4578,-532.5428 627.7287,-534.8913"/>
+<polygon fill="#000000" stroke="#000000" points="625.5658,-532.1365 619.534,-540.8467 629.681,-537.7991 625.5658,-532.1365"/>
+</g>
+<!-- sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M464.246,-645.1486C455.6363,-670.8461 431.9919,-731.1707 391,-763.0648 361.198,-786.2525 345.0158,-799.8889 309.5,-787.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M309.5,-787.0648C273.9842,-774.2407 256.6311,-787.6837 228,-763.0648 166.2628,-709.9791 210.5084,-652.0972 150.5,-597.0648"/>
+</g>
+<!-- sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~korc_fio_interface.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node19"><a xlink:href=".././sourcefile/korc_fio_interface.f90.html" xlink:title="korc_fio_interface.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="366,-531.0648 253,-531.0648 253,-507.0648 366,-507.0648 366,-531.0648"/>
+<text text-anchor="middle" x="309.5" y="-516.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fio_interface.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge77" class="edge">
+<title>sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M451.0377,-620.8648C423.0334,-600.7229 366.9971,-560.4191 334.4625,-537.0189"/>
+<polygon fill="#000000" stroke="#000000" points="336.5023,-534.1747 326.3403,-531.1771 332.4149,-539.8575 336.5023,-534.1747"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.7781,-437.261C222.4086,-436.7501 184.38,-436.8371 150.5,-439.0648"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge40" class="edge">
+<title>sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M269.0022,-451.0656C255.8256,-455.214 241.1993,-460.0797 228,-465.0648 213.8426,-470.4118 198.5317,-476.9601 185.2874,-482.8774"/>
+<polygon fill="#000000" stroke="#000000" points="183.7269,-479.7417 176.0547,-487.0484 186.6089,-486.1209 183.7269,-479.7417"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge54" class="edge">
+<title>sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M261.7948,-427.0635C242.0751,-422.1025 219.2306,-416.3555 199.3887,-411.3638"/>
+<polygon fill="#000000" stroke="#000000" points="200.1703,-407.9515 189.6185,-408.9059 198.4624,-414.74 200.1703,-407.9515"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~korc_ppusher.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/korc_ppusher.f90.html" xlink:title="korc_ppusher.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="963.5,-835.0648 869.5,-835.0648 869.5,-811.0648 963.5,-811.0648 963.5,-835.0648"/>
+<text text-anchor="middle" x="916.5" y="-820.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M869.4574,-831.0332C824.8948,-839.052 761.538,-851.8097 739,-863.0648"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M904.9065,-810.9688C876.6315,-782.9996 801.8399,-718.2295 739,-745.0648"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M905.256,-810.7497C886.6646,-791.1034 847.5278,-752.6865 807,-731.0648 712.1423,-680.4578 588.0315,-653.1814 519.3505,-641.0303"/>
+<polygon fill="#000000" stroke="#000000" points="519.6735,-637.5343 509.2231,-639.2775 518.4796,-644.4317 519.6735,-637.5343"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge65" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M913.6893,-810.9228C902.1549,-764.475 853.5402,-598.4938 739,-555.0648"/>
+</g>
+<!-- sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~korc_collisions.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node18"><a xlink:href=".././sourcefile/korc_collisions.f90.html" xlink:title="korc_collisions.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="788,-645.0648 690,-645.0648 690,-621.0648 788,-621.0648 788,-645.0648"/>
+<text text-anchor="middle" x="739" y="-630.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge73" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M911.5379,-810.9069C898.7082,-780.9063 861.5838,-702.6339 807,-659.0648 802.3804,-655.3774 797.1794,-652.1696 791.7635,-649.3892"/>
+<polygon fill="#000000" stroke="#000000" points="793.0559,-646.1306 782.5109,-645.1042 790.1142,-652.4826 793.0559,-646.1306"/>
+</g>
+<!-- sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~korc_initialize.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/korc_initialize.f90.html" xlink:title="korc_initialize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1119,-339.0648 1026,-339.0648 1026,-315.0648 1119,-315.0648 1119,-339.0648"/>
+<text text-anchor="middle" x="1072.5" y="-324.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1063.5171,-314.8593C1028.2379,-268.4225 893.5045,-104.876 739,-95.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M468,-95.0648C259.0846,-88.507 92.8628,-342.968 48.2975,-418.3184"/>
+<polygon fill="#000000" stroke="#000000" points="45.2669,-416.5676 43.2531,-426.9693 51.3139,-420.0937 45.2669,-416.5676"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-95.0648C655.9709,-70.9992 631.0971,-73.3014 545,-81.0648 510.3573,-84.1885 502.4899,-90.5568 468,-95.0648"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1025.6949,-333.3655C1017.544,-334.4627 1008.8489,-335.6332 1000.0593,-336.8164"/>
+<polygon fill="#000000" stroke="#000000" points="999.5628,-333.3516 990.1192,-338.1545 1000.4968,-340.289 999.5628,-333.3516"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~korc_spatial_distribution.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/korc_spatial_distribution.f90.html" xlink:title="korc_spatial_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="988,-318.0648 845,-318.0648 845,-294.0648 988,-294.0648 988,-318.0648"/>
+<text text-anchor="middle" x="916.5" y="-303.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1025.6949,-320.7641C1016.9949,-319.593 1007.6751,-318.3384 998.282,-317.0739"/>
+<polygon fill="#000000" stroke="#000000" points="998.4642,-313.5669 988.0866,-315.7015 997.5302,-320.5044 998.4642,-313.5669"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge41" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-483.0648C673.0309,-489.8547 654.9609,-461.7191 590,-475.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1056.6726,-339.2788C1010.7416,-373.6089 872.2098,-469.3542 739,-483.0648"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge55" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-95.0648C670.7955,-90.7337 655.4843,-113.5092 590,-133.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-133.0648C527.871,-151.6184 524.936,-182.04 468,-213.0648"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge66" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-483.0648C714.6635,-485.5696 656.2396,-516.0305 620.2046,-535.9357"/>
+<polygon fill="#000000" stroke="#000000" points="618.1564,-533.0701 611.1208,-540.9917 621.5608,-539.1865 618.1564,-533.0701"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-95.0648C539.3734,-75.6483 522.1955,-96.766 468,-95.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-171.0648C674.0412,-134.9169 659.4096,-121.685 590,-95.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M903.1815,-293.7678C874.8316,-268.1037 805.6467,-208.152 739,-171.0648"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M853.1113,-318.2732C849.3444,-320.7143 845.9105,-323.6168 843,-327.0648 795.844,-382.9285 833.8239,-586.058 807,-654.0648 788.4746,-701.0323 785.4323,-725.2362 739,-745.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-745.0648C709.7366,-757.5615 674.1974,-758.5116 645.1683,-756.1256"/>
+<polygon fill="#000000" stroke="#000000" points="645.4845,-752.6399 635.1928,-755.156 644.8073,-759.6071 645.4845,-752.6399"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M844.8156,-298.3915C835.7976,-297.4262 826.5352,-296.4348 817.4203,-295.4591"/>
+<polygon fill="#000000" stroke="#000000" points="817.5284,-291.9507 807.2126,-294.3664 816.7833,-298.911 817.5284,-291.9507"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge42" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M309.5,-479.0648C274.9586,-490.4496 234.2343,-495.4224 202.6481,-497.563"/>
+<polygon fill="#000000" stroke="#000000" points="202.0803,-494.0908 192.3088,-498.1856 202.5011,-501.0781 202.0803,-494.0908"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-399.0648C514.9506,-406.2849 498.4295,-421.9323 427,-446.0648 410.7358,-451.5596 407.4007,-454.9921 391,-460.0648 355.4673,-471.055 344.8243,-467.422 309.5,-479.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M895.2092,-294.0302C850.5663,-270.5447 745.1674,-224.3949 671,-266.0648 610.6605,-299.9657 651.0426,-366.4469 590,-399.0648"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge49" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M871.9959,-318.0923C862.3841,-320.8814 852.3135,-323.9501 843,-327.0648 821.1845,-334.3605 797.1969,-343.5088 777.7618,-351.2145"/>
+<polygon fill="#000000" stroke="#000000" points="776.3216,-348.0208 768.3335,-354.9807 778.9183,-354.5214 776.3216,-348.0208"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge56" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-171.0648C679.2817,-137.8331 655.4843,-113.5092 590,-133.0648"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge67" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M858.2729,-318.0705C852.8235,-320.5303 847.6202,-323.494 843,-327.0648 818.0916,-346.3154 831.6371,-368.4682 807,-388.0648 757.3869,-427.5275 716.9881,-387.4316 671,-431.0648 637.9433,-462.4288 664.454,-492.2955 635,-527.0648 632.4485,-530.0768 629.4547,-532.8187 626.2445,-535.2948"/>
+<polygon fill="#000000" stroke="#000000" points="624.271,-532.4041 617.9472,-540.9047 628.1918,-538.203 624.271,-532.4041"/>
+</g>
+<!-- sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~korc_finalize.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/korc_finalize.f90.html" xlink:title="korc_finalize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="783,-797.0648 695,-797.0648 695,-773.0648 783,-773.0648 783,-797.0648"/>
+<text text-anchor="middle" x="739" y="-782.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M694.963,-794.9273C615.2497,-810.7088 442.9313,-835.2445 309.5,-787.0648"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M694.6985,-773.7664C679.1409,-769.7987 661.4683,-765.2916 645.1311,-761.1251"/>
+<polygon fill="#000000" stroke="#000000" points="645.717,-757.6625 635.1622,-758.5827 643.9871,-764.4454 645.717,-757.6625"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge68" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M731.6742,-772.6835C715.015,-744.6516 672.802,-674.3168 635,-617.0648 625.2437,-602.2887 613.755,-585.9658 604.828,-573.5028"/>
+<polygon fill="#000000" stroke="#000000" points="607.5249,-571.2584 598.842,-565.1874 601.8438,-575.3481 607.5249,-571.2584"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M127.4304,-486.9229C110.5105,-478.0177 87.3192,-465.8117 68.5927,-455.9557"/>
+<polygon fill="#000000" stroke="#000000" points="70.0146,-452.7489 59.5353,-451.1886 66.7544,-458.9434 70.0146,-452.7489"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M724.3215,-355.0196C710.3059,-343.3588 688.7521,-325.0064 671,-308.0648 576.3944,-217.7785 598.0893,-108.4288 468,-95.0648"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M720.516,-379.1871C704.7034,-390.6044 682.6993,-409.1929 671,-431.0648 625.5091,-516.1101 662.679,-552.6743 635,-645.0648 626.3122,-674.064 611.4429,-705.7024 601.1883,-725.9304"/>
+<polygon fill="#000000" stroke="#000000" points="598.0446,-724.3903 596.5723,-734.8824 604.2662,-727.5985 598.0446,-724.3903"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge43" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M686.9155,-377.583C681.4183,-379.4261 676.012,-381.5719 671,-384.0648 652.6042,-393.2145 653.5967,-404.3306 635,-413.0648 501.3917,-475.8159 451.1097,-437.4044 309.5,-479.0648"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge57" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M686.7475,-356.3234C645.7281,-346.1762 588.4796,-328.1041 545,-299.0648 502.3365,-270.5705 515.5458,-193.7906 468,-213.0648"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge69" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M690.0772,-379.2045C682.9444,-382.7215 676.2492,-387.2465 671,-393.0648 629.6912,-438.8518 672.549,-478.1472 635,-527.0648 632.7235,-530.0306 630.0049,-532.7175 627.047,-535.1381"/>
+<polygon fill="#000000" stroke="#000000" points="624.9693,-532.3203 618.7978,-540.9321 628.9927,-538.0485 624.9693,-532.3203"/>
+</g>
+<!-- sourcefile~main.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~main.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node13"><a xlink:href=".././sourcefile/main.f90.html" xlink:title="main.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1209,-339.0648 1155,-339.0648 1155,-315.0648 1209,-315.0648 1209,-339.0648"/>
+<text text-anchor="middle" x="1182" y="-324.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M916.5,-863.0648C837.6243,-864.505 809.5778,-827.8195 739,-863.0648"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-825.0648C708.4714,-817.8055 699.2422,-819.7421 671,-806.0648 649.069,-795.4439 626.8893,-778.7838 611.2978,-765.8721"/>
+<polygon fill="#000000" stroke="#000000" points="613.25,-762.9388 603.357,-759.1466 608.7259,-768.2805 613.25,-762.9388"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M916.5,-863.0648C835.837,-864.5376 817.488,-843.7282 739,-825.0648"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M916.5,-593.0648C848.669,-557.2734 621.3363,-599.847 518.8571,-621.6834"/>
+<polygon fill="#000000" stroke="#000000" points="518.0867,-618.269 509.0454,-623.7922 519.5576,-625.1127 518.0867,-618.269"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1072.5,-823.0648C1042.5613,-838.8011 1004.7086,-839.1843 973.7878,-835.4489"/>
+<polygon fill="#000000" stroke="#000000" points="973.9736,-831.9414 963.5887,-834.0404 973.0159,-838.8756 973.9736,-831.9414"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1154.9326,-327.0648C1147.1101,-327.0648 1138.2644,-327.0648 1129.3445,-327.0648"/>
+<polygon fill="#000000" stroke="#000000" points="1129.2927,-323.5649 1119.2927,-327.0648 1129.2927,-330.5649 1129.2927,-323.5649"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1072.5,-823.0648C1009.1426,-856.3665 988.0643,-861.7581 916.5,-863.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M916.5,-863.0648C882.7651,-863.6807 872.6511,-860.1655 843,-844.0648 823.9256,-833.7073 825.4635,-822.4758 807,-811.0648 800.865,-807.2731 794.0864,-803.88 787.2559,-800.8961"/>
+<polygon fill="#000000" stroke="#000000" points="788.5452,-797.642 777.9652,-797.0818 785.8867,-804.1175 788.5452,-797.642"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge45" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-825.0648C691.851,-813.8534 350.7273,-774.5408 309.5,-749.0648"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge59" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M468,-213.0648C384.4264,-258.6046 403.944,-345.2858 309.5,-357.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-57.0648C649.2336,-45.4215 619.8657,-68.1855 545,-119.0648 500.3337,-149.4204 515.4217,-187.2244 468,-213.0648"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge71" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1181.6349,-339.4408C1179.1942,-411.5357 1162.4625,-775.7789 1072.5,-823.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1072.5,-823.0648C963.1659,-880.5327 1025.7422,-650.7071 916.5,-593.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M916.5,-593.0648C845.1474,-555.4151 814.4361,-583.6671 739,-555.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-555.0648C707.7321,-543.2093 670.053,-542.8161 640.4086,-545.3325"/>
+<polygon fill="#000000" stroke="#000000" points="639.8905,-541.8665 630.2818,-546.33 640.5768,-548.8328 639.8905,-541.8665"/>
+</g>
+<!-- sourcefile~korc_units.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~korc_units.f90</title>
+<g id="a_sourcefile~~korc_hpc.f90~~AfferentGraph_node17"><a xlink:href=".././sourcefile/korc_units.f90.html" xlink:title="korc_units.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="507,-30.0648 429,-30.0648 429,-6.0648 507,-6.0648 507,-30.0648"/>
+<text text-anchor="middle" x="468" y="-15.6648" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_units.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_units.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge72" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_units.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1072.5,-133.0648C1037.9418,-106.9057 1031.0197,-95.0631 990,-81.0648 883.9413,-44.8714 850.192,-71.0203 739,-57.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M739,-57.0648C688.0172,-48.6168 685.2956,-16.938 635,-5.0648 596.07,4.1253 584.8602,-1.7236 545,-5.0648 535.8724,-5.8299 526.1995,-7.0966 516.9048,-8.5469"/>
+<polygon fill="#000000" stroke="#000000" points="516.3089,-5.0978 507.0112,-10.1776 517.4473,-12.0046 516.3089,-5.0978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1178.9037,-314.6413C1169.5265,-279.7727 1137.9778,-180.4606 1072.5,-133.0648"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge74" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M916.5,-593.0648C893.1397,-580.7386 824.5559,-601.5852 779.8006,-617.5249"/>
+<polygon fill="#000000" stroke="#000000" points="778.5741,-614.2466 770.3609,-620.9394 780.9552,-620.8292 778.5741,-614.2466"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge76" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1072.5,-133.0648C1000.0961,-80.6556 750.7753,-116.7541 671,-157.0648 497.5033,-244.7333 552.2614,-384.5216 391,-493.0648 385.0706,-497.0558 378.4903,-500.4651 371.7134,-503.3704"/>
+<polygon fill="#000000" stroke="#000000" points="370.4239,-500.1165 362.393,-507.027 372.9805,-506.633 370.4239,-500.1165"/>
+</g>
+<!-- sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M116.2962,-411.0661C105.1263,-414.9854 92.5581,-419.3953 80.7577,-423.5358"/>
+<polygon fill="#000000" stroke="#000000" points="79.3508,-420.3202 71.0736,-426.9337 81.6685,-426.9254 79.3508,-420.3202"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M150.5,-439.0648C128.4525,-440.5145 103.9545,-440.6998 83.3362,-440.4478"/>
+<polygon fill="#000000" stroke="#000000" points="83.3033,-436.9469 73.2486,-440.2866 83.1914,-443.946 83.3033,-436.9469"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M262.4982,-409.0694C251.1932,-411.9862 239.1598,-415.1152 228,-418.0648 193.4982,-427.1839 186.1097,-436.7234 150.5,-439.0648"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge46" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M247.5068,-409.107C240.6996,-411.5667 234.0519,-414.5203 228,-418.0648 220.8266,-422.2662 188.7076,-456.9392 168.1359,-479.5387"/>
+<polygon fill="#000000" stroke="#000000" points="165.53,-477.202 161.4008,-486.9591 170.7133,-481.9067 165.53,-477.202"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge60" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M227.6712,-398.0941C218.155,-398.2138 208.6834,-398.3329 199.8023,-398.4446"/>
+<polygon fill="#000000" stroke="#000000" points="199.6358,-394.9464 189.6806,-398.572 199.7239,-401.9458 199.6358,-394.9464"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M309.5,-597.0648C239.2987,-588.9683 202.5816,-644.8276 150.5,-597.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M150.5,-597.0648C105.0897,-555.42 66.5844,-493.0443 48.1488,-460.5245"/>
+<polygon fill="#000000" stroke="#000000" points="51.0138,-458.4757 43.0864,-451.4467 44.9002,-461.8851 51.0138,-458.4757"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M567.6588,-565.1699C560.31,-569.3623 552.1855,-574.2278 545,-579.0648 528.185,-590.3839 525.5781,-595.4015 509,-607.0648 504.9888,-609.8868 500.6829,-612.7692 496.4235,-615.5387"/>
+<polygon fill="#000000" stroke="#000000" points="494.4,-612.6781 487.855,-621.0096 498.167,-618.578 494.4,-612.6781"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge47" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M555.0783,-565.1762C502.0818,-582.052 398.131,-609.2707 309.5,-597.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M309.5,-597.0648C271.9885,-592.7385 260.6872,-591.9691 228,-573.0648 203.7269,-559.0267 181.1707,-535.8666 166.7241,-519.1925"/>
+<polygon fill="#000000" stroke="#000000" points="169.0637,-516.5373 159.9426,-511.1469 163.7113,-521.0488 169.0637,-516.5373"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge61" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M585.1416,-540.98C574.6973,-516.3831 547.8621,-460.045 509,-427.0648 437.3555,-366.264 402.0098,-340.5838 309.5,-357.0648"/>
+</g>
+<!-- sourcefile~korc_units.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge51" class="edge">
+<title>sourcefile~korc_units.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M464.9579,-30.4095C449.9682,-89.8445 381.7773,-344.1883 309.5,-357.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M309.5,-357.0648C271.8353,-363.7749 230.0376,-374.9676 198.7529,-384.1118"/>
+<polygon fill="#000000" stroke="#000000" points="197.5807,-380.8085 188.9836,-387.0004 199.5656,-387.5212 197.5807,-380.8085"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M726.1508,-645.2503C707.0903,-663.0141 669.8198,-696.5682 635,-721.0648 630.7729,-724.0386 626.1845,-726.9834 621.6081,-729.7632"/>
+<polygon fill="#000000" stroke="#000000" points="619.7679,-726.7849 612.9205,-734.8697 623.3151,-732.8196 619.7679,-726.7849"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-631.0648C567.6666,-622.8707 541.4503,-622.2505 519.0554,-624.1362"/>
+<polygon fill="#000000" stroke="#000000" points="518.6534,-620.659 509.0625,-625.1607 519.3673,-627.6225 518.6534,-620.659"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge44" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M705.4067,-645.1012C610.3649,-678.7423 344.196,-769.9588 309.5,-749.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M309.5,-749.0648C264.3936,-721.1917 188.8155,-576.0689 161.1012,-520.6268"/>
+<polygon fill="#000000" stroke="#000000" points="164.0847,-518.7656 156.5014,-511.3667 157.8156,-521.8797 164.0847,-518.7656"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge58" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M689.9857,-639.1261C660.4094,-641.1473 622.3213,-640.818 590,-631.0648"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-631.0648C521.185,-610.2993 451.5392,-414.8169 391,-376.0648 359.6746,-356.0129 346.2867,-351.5786 309.5,-357.0648"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge70" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M716.3701,-620.9145C691.0628,-607.3267 649.9025,-585.2272 621.4684,-569.9606"/>
+<polygon fill="#000000" stroke="#000000" points="622.8207,-566.7141 612.3547,-565.0673 619.5094,-572.8814 622.8207,-566.7141"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge75" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590,-631.0648C502.6432,-599.0135 401.6137,-557.5806 347.8422,-535.1733"/>
+<polygon fill="#000000" stroke="#000000" points="348.9423,-531.8399 338.3658,-531.2173 346.2456,-538.2996 348.9423,-531.8399"/>
+</g>
+<!-- sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.9949,-511.9572C236.5933,-509.8941 218.7631,-507.6513 202.6421,-505.6235"/>
+<polygon fill="#000000" stroke="#000000" points="202.686,-502.1016 192.3273,-504.3261 201.8123,-509.0468 202.686,-502.1016"/>
+</g>
+<!-- sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_hpc.f90~~AfferentGraph_edge52" class="edge">
+<title>sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M291.1308,-506.8952C274.2316,-495.4397 248.7263,-477.4855 228,-460.0648 210.9173,-445.7066 209.5535,-438.8434 192,-425.0648 188.3656,-422.212 184.4041,-419.3987 180.4182,-416.7367"/>
+<polygon fill="#000000" stroke="#000000" points="182.0786,-413.6438 171.7708,-411.1944 178.3013,-419.5372 182.0786,-413.6438"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilekorc_hpcf90AfferentGraph = svgPanZoom('#sourcefilekorc_hpcf90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_hpc.html">korc_hpc</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_hpc.f90.html#src">korc_hpc.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="k">module </span><span class="n">korc_hpc</span>
+<a name="ln-2"></a>  <span class="c">!! @note KORC module containing subroutines to initilize, control, </span>
+<a name="ln-3"></a>  <span class="c">!! and to finalize parallel communications. @endnote</span>
+<a name="ln-4"></a>  <span class="k">use </span><span class="n">korc_types</span>
+<a name="ln-5"></a>  <span class="k">use </span><span class="n">omp_lib</span>
+<a name="ln-6"></a>  <span class="k">use </span><span class="n">mpi</span>
+<a name="ln-7"></a>
+<a name="ln-8"></a>  <span class="k">IMPLICIT NONE</span>
+<a name="ln-9"></a>
+<a name="ln-10"></a><span class="k">  </span><span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">timed_already</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span> 
+<a name="ln-11"></a>  <span class="c">!! Flag to determine if a first call to WMPI_TIME() was made already.</span>
+<a name="ln-12"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">t1</span> 
+<a name="ln-13"></a>  <span class="c">!! Variable to be used in timing a parallel section of KORC.</span>
+<a name="ln-14"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">t2</span> 
+<a name="ln-15"></a>  <span class="c">!! Variable to be used in timing a parallel section of KORC.</span>
+<a name="ln-16"></a>
+<a name="ln-17"></a>  <span class="k">PUBLIC</span> <span class="kd">::</span> <span class="n">korc_abort</span><span class="p">,&amp;</span>
+<a name="ln-18"></a>       <span class="n">initialize_mpi</span><span class="p">,&amp;</span>
+<a name="ln-19"></a>       <span class="n">finalize_mpi</span><span class="p">,&amp;</span>
+<a name="ln-20"></a>       <span class="n">initialize_communications</span><span class="p">,&amp;</span>
+<a name="ln-21"></a>       <span class="n">timing_KORC</span>
+<a name="ln-22"></a>
+<a name="ln-23"></a><span class="k">CONTAINS</span>
+<a name="ln-24"></a>
+<a name="ln-25"></a><span class="k">  subroutine </span><span class="n">korc_abort</span><span class="p">(</span><span class="n">errorcode</span><span class="p">)</span>
+<a name="ln-26"></a>    <span class="c">!! @note Subroutine that terminates the simulation. @endnote</span>
+<a name="ln-27"></a>    <span class="kt">INTEGER</span><span class="p">,</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">errorcode</span>
+<a name="ln-28"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">mpierr</span> 
+<a name="ln-29"></a>    <span class="c">!! MPI error status</span>
+<a name="ln-30"></a>
+<a name="ln-31"></a>    <span class="c">!! 11: korc_hpc:set_paths</span>
+<a name="ln-32"></a>    <span class="c">!! 12: korc_experimental:get_Hollmann_distribution</span>
+<a name="ln-33"></a>    <span class="c">!! 13: korc_input:read_namelist</span>
+<a name="ln-34"></a>    <span class="c">!! 14: korc_hpc:load_particle_ic</span>
+<a name="ln-35"></a>    <span class="c">!! 15: korc_interp:interp_fields</span>
+<a name="ln-36"></a>    <span class="c">!! 16: korc_interp:interp_profiles</span>
+<a name="ln-37"></a>    <span class="c">!! 17: korc_fields:mean_F_field</span>
+<a name="ln-38"></a>    <span class="c">!! 18: korc_fields:initialize_fields</span>
+<a name="ln-39"></a>    <span class="c">!! 19: korc_spatial_distribution:initial_spatial_distribution</span>
+<a name="ln-40"></a>    <span class="c">!! 20: korc_experimental_pdf:load_data_from_hdf5</span>
+<a name="ln-41"></a>    <span class="c">!! 21: korc_interp:get_fio_ion_p</span>
+<a name="ln-42"></a>    <span class="c">!! 22: korc_fio_interface:initialize_nimrod</span>
+<a name="ln-43"></a>    <span class="c">!! 23: korc_interp:check_if_in_fields_domain</span>
+<a name="ln-44"></a>    <span class="c">!! 24: korc_collisions:large_angle_source</span>
+<a name="ln-45"></a>    <span class="c">!! 25: korc_ppusher:adv_GCinterp_psiwE_top</span>
+<a name="ln-46"></a>    <span class="c">!! 26: korc_collisions:define_collisions_time_step</span>
+<a name="ln-47"></a>
+<a name="ln-48"></a>    <span class="nb">flush</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">)</span>
+<a name="ln-49"></a>    
+<a name="ln-50"></a>    <span class="c">!call MPI_BARRIER(MPI_COMM_WORLD,mpierr)</span>
+<a name="ln-51"></a>
+<a name="ln-52"></a>    <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="n">errorcode</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-53"></a>  <span class="k">end subroutine </span><span class="n">korc_abort</span>
+<a name="ln-54"></a>
+<a name="ln-55"></a>  <span class="k">subroutine </span><span class="n">set_paths</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-56"></a>    <span class="c">!! @note Subroutine that sets the input/output paths.@endnote</span>
+<a name="ln-57"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+<a name="ln-58"></a>    <span class="c">!! Core KORC simulation parameters.</span>
+<a name="ln-59"></a>    <span class="kt">INTEGER</span> 				<span class="kd">::</span> <span class="n">argn</span><span class="p">,</span><span class="n">read_stat</span><span class="p">,</span><span class="n">exei</span>
+<a name="ln-60"></a>    <span class="c">!! Number of command line inputs. The default value is </span>
+<a name="ln-61"></a>    <span class="c">!! two: the input files path and the outputs path.</span>
+<a name="ln-62"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ctmp</span>
+<a name="ln-63"></a>
+<a name="ln-64"></a>    <span class="n">argn</span> <span class="o">=</span> <span class="nb">command_argument_count</span><span class="p">()</span>
+<a name="ln-65"></a>
+<a name="ln-66"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">argn</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">2_idef</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-67"></a><span class="k">       call </span><span class="nb">get_command_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_inputs</span><span class="p">)</span>
+<a name="ln-68"></a>       <span class="k">call </span><span class="nb">get_command_argument</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span>
+<a name="ln-69"></a>    <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_inputs</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;TEST&#39;</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-70"></a><span class="k">       call </span><span class="nb">get_command_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span>
+<a name="ln-71"></a>    <span class="k">else</span>
+<a name="ln-72"></a><span class="k">       call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<a name="ln-73"></a>    <span class="k">end if</span>
+<a name="ln-74"></a>
+<a name="ln-75"></a>    <span class="c">!write(6,*) TRIM(params%path_to_outputs)</span>
+<a name="ln-76"></a>    <span class="c">!write(6,*) TRIM(params%path_to_inputs)</span>
+<a name="ln-77"></a>    
+<a name="ln-78"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-79"></a>
+<a name="ln-80"></a><span class="k">       OPEN</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-81"></a>            <span class="k">FILE</span><span class="o">=</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span><span class="o">//</span><span class="s2">&quot;output.korc&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-82"></a>            <span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;UNKNOWN&#39;</span><span class="p">,</span><span class="n">FORM</span><span class="o">=</span><span class="s1">&#39;FORMATTED&#39;</span><span class="p">,</span><span class="n">POSITION</span><span class="o">=</span><span class="s1">&#39;REWIND&#39;</span><span class="p">)</span>
+<a name="ln-83"></a>       
+<a name="ln-84"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * PATHS * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-85"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;The input file is: &#39;</span><span class="p">,&amp;</span>
+<a name="ln-86"></a>            <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_inputs</span><span class="p">)</span>
+<a name="ln-87"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span>      
+<a name="ln-88"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;The output folder is: &#39;</span><span class="p">,&amp;</span>
+<a name="ln-89"></a>            <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span>
+<a name="ln-90"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * * * * * * * * * *&quot;,/)&#39;</span><span class="p">)</span>      
+<a name="ln-91"></a>
+<a name="ln-92"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * GIT INFO * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-93"></a>
+<a name="ln-94"></a><span class="cp">#ifdef MAC</span>
+<a name="ln-95"></a>       <span class="c">!write(6,*) &#39;MAC&#39;</span>
+<a name="ln-96"></a>       <span class="k">call </span><span class="nb">execute_command_line</span><span class="p">(</span><span class="s2">&quot;/Users/21b/Desktop/KORC/src/get_git_details.sh&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-97"></a>            <span class="n">exitstat</span><span class="o">=</span><span class="n">exei</span><span class="p">)</span>
+<a name="ln-98"></a><span class="cp">#elif CORI</span>
+<a name="ln-99"></a>       <span class="c">!write(6,*) &#39;CORI&#39;</span>
+<a name="ln-100"></a>       <span class="k">call </span><span class="nb">execute_command_line</span><span class="p">(</span><span class="s2">&quot;/global/cfs/cdirs/m3236/build_unstable/KORC/src/get_git_details.sh&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-101"></a>            <span class="n">exitstat</span><span class="o">=</span><span class="n">exei</span><span class="p">)</span>
+<a name="ln-102"></a><span class="cp">#endif</span>
+<a name="ln-103"></a>
+<a name="ln-104"></a>       <span class="k">IF</span> <span class="p">(</span><span class="n">exei</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-105"></a><span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Error executing get_git_details.sh&#39;</span>
+<a name="ln-106"></a>          <span class="k">call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<a name="ln-107"></a>       <span class="k">end if</span>
+<a name="ln-108"></a><span class="k">       </span>
+<a name="ln-109"></a><span class="k">       OPEN</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="k">FILE</span><span class="o">=</span><span class="s1">&#39;git_hash.txt&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-110"></a>            <span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;OLD&#39;</span><span class="p">,</span><span class="n">POSITION</span><span class="o">=</span><span class="s1">&#39;REWIND&#39;</span><span class="p">)</span>
+<a name="ln-111"></a>       <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(a)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span> <span class="n">ctmp</span>
+<a name="ln-112"></a>       
+<a name="ln-113"></a>       <span class="k">IF</span> <span class="p">(</span><span class="n">read_stat</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-114"></a><span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Error reading git_hash.txt&#39;</span>
+<a name="ln-115"></a>          <span class="k">call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<a name="ln-116"></a>       <span class="k">end if</span>
+<a name="ln-117"></a><span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Git hash of most recent commit is: &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-118"></a>            <span class="nb">TRIM</span><span class="p">(</span><span class="n">ctmp</span><span class="p">)</span>
+<a name="ln-119"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span>      
+<a name="ln-120"></a>       <span class="k">CLOSE</span><span class="p">(</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;DELETE&#39;</span><span class="p">)</span>
+<a name="ln-121"></a>
+<a name="ln-122"></a>       <span class="k">OPEN</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="k">FILE</span><span class="o">=</span><span class="s1">&#39;git_diff.txt&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-123"></a>            <span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;OLD&#39;</span><span class="p">,</span><span class="n">POSITION</span><span class="o">=</span><span class="s1">&#39;REWIND&#39;</span><span class="p">)</span>
+<a name="ln-124"></a>
+<a name="ln-125"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Git diff of HEAD and most recent commit is:&#39;</span>
+<a name="ln-126"></a>       <span class="k">DO</span>
+<a name="ln-127"></a><span class="k">          READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(a)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span> <span class="n">ctmp</span>
+<a name="ln-128"></a>          
+<a name="ln-129"></a>          <span class="k">IF</span> <span class="p">(</span><span class="n">read_stat</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-130"></a><span class="k">             write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Error reading git_diff.txt&#39;</span>
+<a name="ln-131"></a>             <span class="k">call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<a name="ln-132"></a>          <span class="k">else if</span> <span class="p">(</span><span class="n">read_stat</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-133"></a><span class="k">             CLOSE</span><span class="p">(</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;DELETE&#39;</span><span class="p">)</span>
+<a name="ln-134"></a>       
+<a name="ln-135"></a>             <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * * * * * * * * * * * * * *&quot;,/)&#39;</span><span class="p">)</span>
+<a name="ln-136"></a>             <span class="k">RETURN</span>
+<a name="ln-137"></a><span class="k">          end if</span>
+<a name="ln-138"></a><span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">ctmp</span><span class="p">)</span>
+<a name="ln-139"></a>       <span class="k">END DO</span>
+<a name="ln-140"></a>
+<a name="ln-141"></a><span class="k">     </span>
+<a name="ln-142"></a><span class="k">    end if</span>
+<a name="ln-143"></a><span class="k">  end subroutine </span><span class="n">set_paths</span>
+<a name="ln-144"></a>
+<a name="ln-145"></a>  <span class="k">subroutine </span><span class="n">initialize_mpi</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-146"></a>    <span class="c">!! @note Subroutine that initialize MPI communications.@endnote</span>
+<a name="ln-147"></a>    <span class="c">!! Through this subroutine the default MPI communicator MPI_COMM_WORLD </span>
+<a name="ln-148"></a>    <span class="c">!! is initialized. Also, a Cartesian</span>
+<a name="ln-149"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+<a name="ln-150"></a>    <span class="c">!! Core KORC simulation parameters.</span>
+<a name="ln-151"></a>    <span class="kt">INTEGER</span> 				<span class="kd">::</span> <span class="n">mpierr</span>
+<a name="ln-152"></a>    <span class="c">!! MPI error status.</span>
+<a name="ln-153"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">PARAMETER</span> 			<span class="kd">::</span> <span class="n">NDIMS</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-154"></a>    <span class="c">!! Number of dimensions of non-standard topology. </span>
+<a name="ln-155"></a>    <span class="c">!! NDIMS=1 for a 1-D MPI topology, NDIMS=2 for a 2-D MPI topology, </span>
+<a name="ln-156"></a>    <span class="c">!! and NDIMS=3 for a 3-D MPI topology.</span>
+<a name="ln-157"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">DIMS</span>
+<a name="ln-158"></a>    <span class="c">!! Dimension of the non-standard MPI topology params::mpi_params::mpi_topo. </span>
+<a name="ln-159"></a>    <span class="c">!! This is equal to the number of MPI processes in KORC.</span>
+<a name="ln-160"></a>    <span class="kt">LOGICAL</span> 				<span class="kd">::</span> <span class="n">all_mpis_initialized</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a name="ln-161"></a>    <span class="c">!! Flag to determine if all the MPI processes were initialized correctly.</span>
+<a name="ln-162"></a>    <span class="kt">LOGICAL</span> 				<span class="kd">::</span> <span class="n">mpi_process_initialized</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a name="ln-163"></a>    <span class="c">!! Flag to determine if a given MPI process was initialized correctly.</span>
+<a name="ln-164"></a>    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">PARAMETER</span> 			<span class="kd">::</span> <span class="n">REORDER</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a name="ln-165"></a>    <span class="c">!! Flag to determine if the new MPI topology params::mpi_params::mpi_topo </span>
+<a name="ln-166"></a>    <span class="c">!! needs to be re-ordered.</span>
+<a name="ln-167"></a>    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">PERIODS</span> <span class="c">!&lt; Something here</span>
+<a name="ln-168"></a>    <span class="c">!! Array of logicals determining what dimensions of the new MPI </span>
+<a name="ln-169"></a>    <span class="c">!! topology params::mpi_params::mpi_topo are periodic (T) or not (F).</span>
+<a name="ln-170"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">ii</span>
+<a name="ln-171"></a>    <span class="c">!! Variable to iterate over different MPI processes.</span>
+<a name="ln-172"></a>    <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">mpiinit</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a name="ln-173"></a>
+<a name="ln-174"></a>    <span class="c">!call MPI_INITIALIZED(mpiinit,mpierr)</span>
+<a name="ln-175"></a>    <span class="c">!write(6,*) &#39;initialized after&#39;,mpiinit</span>
+<a name="ln-176"></a>    
+<a name="ln-177"></a>    
+<a name="ln-178"></a>    <span class="k">call </span><span class="n">MPI_INIT</span><span class="p">(</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-179"></a>
+<a name="ln-180"></a>    <span class="c">!write(6,*) &#39;mpi_init error code&#39;,mpierr</span>
+<a name="ln-181"></a>    
+<a name="ln-182"></a>    <span class="c">!call MPI_INITIALIZED(mpiinit,mpierr)</span>
+<a name="ln-183"></a>    <span class="c">!write(6,*) &#39;initialized after&#39;,mpiinit</span>
+<a name="ln-184"></a>    
+<a name="ln-185"></a>
+<a name="ln-186"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">mpierr</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="n">MPI_SUCCESS</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-187"></a><span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-188"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: Initializing MPI. Aborting... &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-189"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-190"></a>       <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-191"></a>    <span class="k">end if</span>
+<a name="ln-192"></a><span class="k">    </span>
+<a name="ln-193"></a><span class="k">    call </span><span class="n">MPI_INITIALIZED</span><span class="p">(</span><span class="n">mpi_process_initialized</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-194"></a>
+<a name="ln-195"></a>    <span class="c">!write(6,*) &#39;initialized after&#39;,mpi_process_initialized</span>
+<a name="ln-196"></a>    
+<a name="ln-197"></a>    <span class="k">call </span><span class="n">MPI_REDUCE</span><span class="p">(</span><span class="n">mpi_process_initialized</span><span class="p">,</span><span class="n">all_mpis_initialized</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-198"></a>         <span class="n">MPI_LOGICAL</span><span class="p">,</span><span class="n">MPI_LAND</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-199"></a>
+<a name="ln-200"></a>    <span class="c">!write(6,*) &#39;made it here 2&#39;</span>
+<a name="ln-201"></a>    
+<a name="ln-202"></a>    <span class="k">call </span><span class="n">MPI_BCAST</span><span class="p">(</span><span class="n">all_mpis_initialized</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-203"></a>         <span class="n">MPI_LOGICAL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-204"></a>
+<a name="ln-205"></a>    <span class="k">call </span><span class="n">MPI_COMM_SIZE</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-206"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">mpierr</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="n">MPI_SUCCESS</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-207"></a><span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-208"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: Obtaining size of communicator. Aborting... &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-209"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-210"></a>       <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-211"></a>    <span class="k">end if</span>
+<a name="ln-212"></a>
+<a name="ln-213"></a>    <span class="c">! * * * Getting the rank of the MPI process in the WORLD COMMON communicator * * * !</span>
+<a name="ln-214"></a>    <span class="k">call </span><span class="n">MPI_COMM_RANK</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-215"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">mpierr</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="n">MPI_SUCCESS</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-216"></a><span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-217"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: Obtaining MPI rank. Aborting... &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-218"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-219"></a>       <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-220"></a>    <span class="k">end if</span>
+<a name="ln-221"></a>    
+<a name="ln-222"></a>    <span class="c">! * * * Here a Cartesian topology for MPI is created * * * !</span>
+<a name="ln-223"></a>    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">DIMS</span><span class="p">(</span><span class="n">NDIMS</span><span class="p">))</span>
+<a name="ln-224"></a>    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">PERIODS</span><span class="p">(</span><span class="n">NDIMS</span><span class="p">))</span>
+<a name="ln-225"></a>
+<a name="ln-226"></a>    <span class="c">! This loop isn&#39;t necessary but helps to do things more general in the future</span>
+<a name="ln-227"></a>    <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">NDIMS</span>
+<a name="ln-228"></a>       <span class="n">DIMS</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span>
+<a name="ln-229"></a>       <span class="n">PERIODS</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<a name="ln-230"></a>    <span class="k">end do</span>
+<a name="ln-231"></a>
+<a name="ln-232"></a>    <span class="c">! * * * Here a periodic topology for MPI is created * * * !</span>
+<a name="ln-233"></a>    <span class="k">call </span><span class="n">MPI_CART_CREATE</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="n">NDIMS</span><span class="p">,</span> <span class="n">DIMS</span><span class="p">,</span> <span class="n">PERIODS</span><span class="p">,</span> <span class="n">REORDER</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-234"></a>         <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">mpi_topo</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-235"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">mpierr</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="n">MPI_SUCCESS</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-236"></a><span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-237"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: Creating new MPI topology. Aborting... &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-238"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-239"></a>       <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-240"></a>    <span class="k">end if</span>
+<a name="ln-241"></a>
+<a name="ln-242"></a>    <span class="c">! * * * Getting the rank of the MPI process in the new topology * * * !</span>
+<a name="ln-243"></a>    <span class="k">call </span><span class="n">MPI_COMM_RANK</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">mpi_topo</span><span class="p">,</span> <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank_topo</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-244"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">mpierr</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="n">MPI_SUCCESS</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-245"></a><span class="k">       write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-246"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: Obtaining new MPI topology ranks. Aborting... &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-247"></a>       <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-248"></a>       <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-249"></a>    <span class="k">end if</span>
+<a name="ln-250"></a>
+<a name="ln-251"></a><span class="k">    DEALLOCATE</span><span class="p">(</span><span class="n">DIMS</span><span class="p">)</span>
+<a name="ln-252"></a>    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">PERIODS</span><span class="p">)</span>
+<a name="ln-253"></a>
+<a name="ln-254"></a>
+<a name="ln-255"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">all_mpis_initialized</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-256"></a>
+<a name="ln-257"></a><span class="k">       call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-258"></a>
+<a name="ln-259"></a>       <span class="k">call </span><span class="n">set_paths</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-260"></a>       
+<a name="ln-261"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-262"></a><span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * COMMUNICATIONS  * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-263"></a>          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;  MPI communications initialized!  &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-264"></a>          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;  Number of MPI processes: &quot;,I5)&#39;</span><span class="p">)</span> <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span>
+<a name="ln-265"></a>          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-266"></a>       <span class="k">end if</span>
+<a name="ln-267"></a>
+<a name="ln-268"></a><span class="k">    else</span>
+<a name="ln-269"></a><span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-270"></a><span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-271"></a>          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: MPI not initialized. Aborting... &quot;)&#39;</span><span class="p">)</span>
+<a name="ln-272"></a>          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-273"></a>          <span class="k">call </span><span class="n">MPI_ABORT</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-274"></a>       <span class="k">end if</span>
+<a name="ln-275"></a><span class="k">    end if</span>
+<a name="ln-276"></a> 
+<a name="ln-277"></a>    <span class="c">!...</span>
+<a name="ln-278"></a>  <span class="k">end subroutine </span><span class="n">initialize_mpi</span>
+<a name="ln-279"></a>
+<a name="ln-280"></a>
+<a name="ln-281"></a>  <span class="k">subroutine </span><span class="n">timing_KORC</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-282"></a>    <span class="c">!! @note Subroutine for timing the execution of any parallel</span>
+<a name="ln-283"></a>    <span class="c">!! section of KORC. @endnote</span>
+<a name="ln-284"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+<a name="ln-285"></a>    <span class="c">!! Core KORC simulation parameters.</span>
+<a name="ln-286"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">individual_runtime</span>
+<a name="ln-287"></a>    <span class="c">!! Execution time of each MPI process.</span>
+<a name="ln-288"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span>   <span class="kd">::</span> <span class="n">runtime</span>
+<a name="ln-289"></a>    <span class="c">!! Execution time of KORC defined as the average of the </span>
+<a name="ln-290"></a>    <span class="c">!! execution times of all MPI processes.</span>
+<a name="ln-291"></a>    <span class="kt">INTEGER</span> 				<span class="kd">::</span> <span class="n">mpierr</span>
+<a name="ln-292"></a>    <span class="c">!! MPI error status.</span>
+<a name="ln-293"></a>    
+<a name="ln-294"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">timed_already</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-295"></a><span class="k">       </span><span class="n">t2</span> <span class="o">=</span> <span class="n">MPI_WTIME</span><span class="p">()</span>
+<a name="ln-296"></a>
+<a name="ln-297"></a>       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">runtime</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">))</span>
+<a name="ln-298"></a>
+<a name="ln-299"></a>       <span class="n">individual_runtime</span> <span class="o">=</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span>
+<a name="ln-300"></a>
+<a name="ln-301"></a>       <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-302"></a>
+<a name="ln-303"></a>       <span class="k">call </span><span class="n">MPI_GATHER</span><span class="p">(</span><span class="n">individual_runtime</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">MPI_DOUBLE_PRECISION</span><span class="p">,</span><span class="n">runtime</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-304"></a>            <span class="mi">1</span><span class="p">,</span><span class="n">MPI_DOUBLE_PRECISION</span><span class="p">,</span><span class="mi">0_idef</span><span class="p">,</span> <span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-305"></a>
+<a name="ln-306"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-307"></a><span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Timing: &quot;,F30.16,&quot; s&quot;)&#39;</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-308"></a>               <span class="nb">SUM</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span><span class="o">/</span><span class="kt">REAL</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span>
+<a name="ln-309"></a>       <span class="k">end if</span>
+<a name="ln-310"></a>
+<a name="ln-311"></a><span class="k">       call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-312"></a>
+<a name="ln-313"></a>       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span>
+<a name="ln-314"></a>
+<a name="ln-315"></a>       <span class="n">timed_already</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a name="ln-316"></a>    <span class="k">end if</span>
+<a name="ln-317"></a>
+<a name="ln-318"></a><span class="k">    </span><span class="n">t1</span> <span class="o">=</span> <span class="n">MPI_WTIME</span><span class="p">()</span>
+<a name="ln-319"></a>
+<a name="ln-320"></a>    <span class="n">timed_already</span> <span class="o">=</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<a name="ln-321"></a>    
+<a name="ln-322"></a>  <span class="k">end subroutine </span><span class="n">timing_KORC</span>
+<a name="ln-323"></a>
+<a name="ln-324"></a>  <span class="c">!&gt; @brief Subroutine for finalizing MPI communications.</span>
+<a name="ln-325"></a>  <span class="c">!! @details This subroutine finalizes all the MPI communications and looks for errors durignt this procces.</span>
+<a name="ln-326"></a>  <span class="c">!!</span>
+<a name="ln-327"></a>  <span class="c">!! @param[in] params Core KORC simulation parameters.</span>
+<a name="ln-328"></a>  <span class="c">!! @param mpi_process_finalized Flag indicating whether an individual MPI process was finalized correctly.</span>
+<a name="ln-329"></a>  <span class="c">!! @param mpierr MPI error status.</span>
+<a name="ln-330"></a>  <span class="k">subroutine </span><span class="n">finalize_mpi</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-331"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+<a name="ln-332"></a>    <span class="kt">LOGICAL</span> 						<span class="kd">::</span> <span class="n">mpi_process_finalized</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<a name="ln-333"></a>    <span class="kt">INTEGER</span> 						<span class="kd">::</span> <span class="n">mpierr</span>
+<a name="ln-334"></a>
+<a name="ln-335"></a>    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-336"></a>
+<a name="ln-337"></a>    <span class="k">call </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-338"></a>
+<a name="ln-339"></a>    <span class="k">call </span><span class="n">MPI_FINALIZED</span><span class="p">(</span><span class="n">mpi_process_finalized</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-340"></a>
+<a name="ln-341"></a>    <span class="k">if</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.</span><span class="n">mpi_process_finalized</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-342"></a><span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * COMMUNICATIONS * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-343"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot; ERROR: MPI not finalized well. MPI process: &quot;,I5)&#39;</span><span class="p">)</span> <span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span>
+<a name="ln-344"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * ** * * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-345"></a>    <span class="k">end if</span>
+<a name="ln-346"></a><span class="k">  end subroutine </span><span class="n">finalize_mpi</span>
+<a name="ln-347"></a>
+<a name="ln-348"></a>
+<a name="ln-349"></a>  <span class="c">! * * * * * * * * * * * *  * * * * * * * * * * * * * !</span>
+<a name="ln-350"></a>  <span class="c">! ** SUBROUTINES FOR INITIALIZING COMMUNICATIONS  ** !</span>
+<a name="ln-351"></a>  <span class="c">! * * * * * * * * * * * *  * * * * * * * * * * * * * !</span>
+<a name="ln-352"></a>
+<a name="ln-353"></a>  <span class="c">!! @note Subroutine for initializing MPI and open MP communications. @endnote</span>
+<a name="ln-354"></a>  <span class="c">!! This subroutine initializes MPI and open MP communications and looks for</span>
+<a name="ln-355"></a>  <span class="c">!! errors durignt this procces. The system environment</span>
+<a name="ln-356"></a>  <span class="c">!! variables, which are modified by the user at the moment of</span>
+<a name="ln-357"></a>  <span class="c">!! running/submitting a KORC simulation, are used to determine the</span>
+<a name="ln-358"></a>  <span class="c">!! open MP configuration. Some open MP parameters are displayed on the</span>
+<a name="ln-359"></a>  <span class="c">!! screen/output file.</span>
+<a name="ln-360"></a>  <span class="c">!!</span>
+<a name="ln-361"></a>  <span class="c">!! @param[in] params Core KORC simulation parameters.</span>
+<a name="ln-362"></a>  <span class="c">!! @param mpi_process_finalized Flag indicating whether an individual MPI process was finalized correctly.</span>
+<a name="ln-363"></a>  <span class="c">!! @param mpierr MPI error status.</span>
+<a name="ln-364"></a>  <span class="k">subroutine </span><span class="n">initialize_communications</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-365"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+<a name="ln-366"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">string</span>
+<a name="ln-367"></a>
+<a name="ln-368"></a>    <span class="k">call </span><span class="n">initialize_mpi</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-369"></a>
+<a name="ln-370"></a>    <span class="c">!$OMP PARALLEL SHARED(params)</span>
+<a name="ln-371"></a>    <span class="n">params</span><span class="p">%</span><span class="n">num_omp_threads</span> <span class="o">=</span> <span class="n">OMP_GET_NUM_THREADS</span><span class="p">()</span>
+<a name="ln-372"></a>    <span class="c">!$OMP END PARALLEL</span>
+<a name="ln-373"></a>
+<a name="ln-374"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-375"></a><span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * OMP SET-UP * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+<a name="ln-376"></a>       <span class="c">!$OMP PARALLEL</span>
+<a name="ln-377"></a>       <span class="c">!$OMP MASTER</span>
+<a name="ln-378"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;OMP threads per MPI process: &quot;,I3)&#39;</span><span class="p">)</span> <span class="n">OMP_GET_NUM_THREADS</span><span class="p">()</span>
+<a name="ln-379"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;Cores available per MPI process: &quot;,I3)&#39;</span><span class="p">)</span> <span class="n">OMP_GET_NUM_PROCS</span><span class="p">()</span>
+<a name="ln-380"></a>       <span class="c">!$OMP END MASTER</span>
+<a name="ln-381"></a>       <span class="c">!$OMP END PARALLEL</span>
+<a name="ln-382"></a><span class="cp">#ifdef GNU</span>
+<a name="ln-383"></a>       <span class="k">call </span><span class="nb">GET_ENVIRONMENT_VARIABLE</span><span class="p">(</span><span class="s2">&quot;OMP_PLACES&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">)</span>
+<a name="ln-384"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;OMP places: &quot;,A30)&#39;</span><span class="p">)</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+<a name="ln-385"></a>       <span class="k">call </span><span class="nb">GET_ENVIRONMENT_VARIABLE</span><span class="p">(</span><span class="s2">&quot;GOMP_CPU_AFFINITY&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">)</span>
+<a name="ln-386"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;OMP CPU affinity: &quot;,A30)&#39;</span><span class="p">)</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+<a name="ln-387"></a><span class="cp">#endif</span>
+<a name="ln-388"></a>       <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * * * * * * * * *  * * * * * * *&quot;,/)&#39;</span><span class="p">)</span>
+<a name="ln-389"></a>    <span class="k">end if</span>
+<a name="ln-390"></a><span class="k">  end subroutine </span><span class="n">initialize_communications</span>
+<a name="ln-391"></a>
+<a name="ln-392"></a><span class="k">end module </span><span class="n">korc_hpc</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

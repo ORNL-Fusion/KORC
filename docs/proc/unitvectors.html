@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>unitVectors &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>unitVectors
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.2% of total for procedures.">61 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_fields.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_fields.f90.html'>korc_fields.f90</a></li>
+    
+     <li><a href='../module/korc_fields.html'>korc_fields</a></li>
+    
+  
+     <li class="active">unitVectors</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/unitvectors.html#src">unitVectors</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine unitVectors(params, Xo, F, b1, b2, b3, flag, cart, hint)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subrotuine that calculates an orthonormal basis using information 
+ of the (local) magnetic field at position <script type="math/tex">\mathbf{X}_0</script>. </p></div>
+<p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~191"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xo"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Xo</strong></td><td><p>Array with the position of the simulated particles.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~130"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>F An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b1~2"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>b1</strong></td><td><p>Basis vector pointing along the local magnetic field, 
+ that is, along <script type="math/tex">\mathbf{b} = \mathbf{B}/B</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b2~2"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>b2</strong></td><td><p>Basis vector perpendicular to b1</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b3~2"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>b3</strong></td><td><p>Basis vector perpendicular to b1 and b2.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flag~27"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td>optional</td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag for each particle to decide whether it is being 
+ followed (flag=T) or not (flag=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cart~2"></span>logical</td>
+  <td></td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cart</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-hint~18"></span>type(C_PTR),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>hint</strong></td><td><p>Flag for each particle to decide whether it is being 
+ followed (flag=T) or not (flag=F).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~unitvectors~~CallsGraph Pages: 1 -->
+<svg id="procunitvectorsCallsGraph" width="641pt" height="930pt"
+ viewBox="0.00 0.00 641.00 929.82" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~unitvectors~~CallsGraph" class="graph" transform="scale(.9317 .9317) rotate(0) translate(4 994)">
+<title>proc~~unitvectors~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-994 684,-994 684,4 -4,4"/>
+<!-- proc~unitvectors -->
+<g id="proc~~unitvectors~~CallsGraph_node1" class="node">
+<title>proc~unitvectors</title>
+<polygon fill="none" stroke="#000000" points="65,-465 0,-465 0,-441 65,-441 65,-465"/>
+<text text-anchor="middle" x="32.5" y="-450.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">unitVectors</text>
+</g>
+<!-- proc~cross~2 -->
+<g id="proc~~unitvectors~~CallsGraph_node2" class="node">
+<title>proc~cross~2</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node2"><a xlink:href=".././proc/cross~2.html" xlink:title="cross">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="176,-507 122,-507 122,-483 176,-483 176,-507"/>
+<text text-anchor="middle" x="149" y="-492.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cross</text>
+</a>
+</g>
+</g>
+<!-- proc~unitvectors&#45;&gt;proc~cross~2 -->
+<g id="proc~~unitvectors~~CallsGraph_edge1" class="edge">
+<title>proc~unitvectors&#45;&gt;proc~cross~2</title>
+<path fill="none" stroke="#000000" d="M65.2618,-464.8111C79.9469,-470.1053 97.3243,-476.3701 112.4319,-481.8166"/>
+<polygon fill="#000000" stroke="#000000" points="111.3865,-485.1602 121.9809,-485.2592 113.7606,-478.5751 111.3865,-485.1602"/>
+</g>
+<!-- init_random_seed -->
+<g id="proc~~unitvectors~~CallsGraph_node3" class="node">
+<title>init_random_seed</title>
+<polygon fill="#777777" stroke="#777777" points="197,-465 101,-465 101,-441 197,-441 197,-465"/>
+<text text-anchor="middle" x="149" y="-450.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
+</g>
+<!-- proc~unitvectors&#45;&gt;init_random_seed -->
+<g id="proc~~unitvectors~~CallsGraph_edge2" class="edge">
+<title>proc~unitvectors&#45;&gt;init_random_seed</title>
+<path fill="none" stroke="#000000" d="M65.2618,-453C73.1948,-453 81.9135,-453 90.6356,-453"/>
+<polygon fill="#000000" stroke="#000000" points="90.8293,-456.5001 100.8293,-453 90.8293,-449.5001 90.8293,-456.5001"/>
+</g>
+<!-- proc~get_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node4" class="node">
+<title>proc~get_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node4"><a xlink:href=".././proc/get_fields.html" xlink:title="get_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="177.5,-423 120.5,-423 120.5,-399 177.5,-399 177.5,-423"/>
+<text text-anchor="middle" x="149" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~unitvectors&#45;&gt;proc~get_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge3" class="edge">
+<title>proc~unitvectors&#45;&gt;proc~get_fields</title>
+<path fill="none" stroke="#000000" d="M65.2618,-441.1889C79.3696,-436.1028 95.9621,-430.1209 110.6399,-424.8294"/>
+<polygon fill="#000000" stroke="#000000" points="112.2212,-427.9799 120.4415,-421.2958 109.8471,-421.3948 112.2212,-427.9799"/>
+</g>
+<!-- proc~get_analytical_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node5" class="node">
+<title>proc~get_analytical_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node5"><a xlink:href=".././proc/get_analytical_fields.html" xlink:title="get_analytical_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="340,-864 233,-864 233,-840 340,-840 340,-864"/>
+<text text-anchor="middle" x="286.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_analytical_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fields&#45;&gt;proc~get_analytical_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge4" class="edge">
+<title>proc~get_fields&#45;&gt;proc~get_analytical_fields</title>
+<path fill="none" stroke="#000000" d="M177.8479,-418.4628C185.0167,-421.5789 192.0559,-425.938 197,-432 248.0869,-494.6385 276.8414,-752.4882 284.4438,-829.9162"/>
+<polygon fill="#000000" stroke="#000000" points="280.9709,-830.3672 285.4121,-839.9862 287.9388,-829.6971 280.9709,-830.3672"/>
+</g>
+<!-- proc~interp_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node6" class="node">
+<title>proc~interp_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node6"><a xlink:href=".././proc/interp_fields.html" xlink:title="interp_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="321,-423 252,-423 252,-399 321,-399 321,-423"/>
+<text text-anchor="middle" x="286.5" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fields&#45;&gt;proc~interp_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge5" class="edge">
+<title>proc~get_fields&#45;&gt;proc~interp_fields</title>
+<path fill="none" stroke="#000000" d="M177.8245,-411C196.3674,-411 220.8403,-411 241.8668,-411"/>
+<polygon fill="#000000" stroke="#000000" points="241.871,-414.5001 251.8709,-411 241.8709,-407.5001 241.871,-414.5001"/>
+</g>
+<!-- proc~uniform_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node7" class="node">
+<title>proc~uniform_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node7"><a xlink:href=".././proc/uniform_fields.html" xlink:title="uniform_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="325.5,-66 247.5,-66 247.5,-42 325.5,-42 325.5,-66"/>
+<text text-anchor="middle" x="286.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">uniform_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fields&#45;&gt;proc~uniform_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge6" class="edge">
+<title>proc~get_fields&#45;&gt;proc~uniform_fields</title>
+<path fill="none" stroke="#000000" d="M153.7331,-398.7113C173.8145,-346.5725 252.126,-143.2474 278.0867,-75.8439"/>
+<polygon fill="#000000" stroke="#000000" points="281.4587,-76.8268 281.7868,-66.2371 274.9265,-74.3109 281.4587,-76.8268"/>
+</g>
+<!-- proc~cyl_check_if_confined -->
+<g id="proc~~unitvectors~~CallsGraph_node11" class="node">
+<title>proc~cyl_check_if_confined</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node11"><a xlink:href=".././proc/cyl_check_if_confined.html" xlink:title="cyl_check_if_confined">
+<polygon fill="#d9534f" stroke="#d9534f" points="510,-990 395,-990 395,-966 510,-966 510,-990"/>
+<text text-anchor="middle" x="452.5" y="-975.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cyl_check_if_confined</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~cyl_check_if_confined -->
+<g id="proc~~unitvectors~~CallsGraph_edge12" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~cyl_check_if_confined</title>
+<path fill="none" stroke="#000000" d="M293.4133,-864.122C306.5751,-886.0844 337.3949,-932.4501 376,-957 378.9962,-958.9054 382.1648,-960.6399 385.4407,-962.2188"/>
+<polygon fill="#000000" stroke="#000000" points="384.3322,-965.5514 394.9028,-966.2686 387.0866,-959.1161 384.3322,-965.5514"/>
+</g>
+<!-- proc~analytical_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node12" class="node">
+<title>proc~analytical_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node12"><a xlink:href=".././proc/analytical_fields.html" xlink:title="analytical_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="496,-948 409,-948 409,-924 496,-924 496,-948"/>
+<text text-anchor="middle" x="452.5" y="-933.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~analytical_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge9" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~analytical_fields</title>
+<path fill="none" stroke="#000000" d="M300.4206,-864.1373C317.2534,-878.2349 346.9544,-901.3036 376,-915 383.2621,-918.4244 391.1838,-921.3782 399.0881,-923.8981"/>
+<polygon fill="#000000" stroke="#000000" points="398.0922,-927.2534 408.6755,-926.7592 400.0939,-920.5457 398.0922,-927.2534"/>
+</g>
+<!-- proc~cart_to_tor_check_if_confined -->
+<g id="proc~~unitvectors~~CallsGraph_node22" class="node">
+<title>proc~cart_to_tor_check_if_confined</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node22"><a xlink:href=".././proc/cart_to_tor_check_if_confined.html" xlink:title="cart_to_tor_check_if_confined">
+<polygon fill="#d9534f" stroke="#d9534f" points="529,-906 376,-906 376,-882 529,-882 529,-906"/>
+<text text-anchor="middle" x="452.5" y="-891.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cart_to_tor_check_if_confined</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~cart_to_tor_check_if_confined -->
+<g id="proc~~unitvectors~~CallsGraph_edge10" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~cart_to_tor_check_if_confined</title>
+<path fill="none" stroke="#000000" d="M334.0689,-864.0355C353.0834,-868.8464 375.1521,-874.43 395.05,-879.4645"/>
+<polygon fill="#000000" stroke="#000000" points="394.3711,-882.9029 404.9241,-881.9627 396.0881,-876.1167 394.3711,-882.9029"/>
+</g>
+<!-- proc~cart_to_cyl -->
+<g id="proc~~unitvectors~~CallsGraph_node24" class="node">
+<title>proc~cart_to_cyl</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node24"><a xlink:href=".././proc/cart_to_cyl.html" xlink:title="cart_to_cyl">
+<polygon fill="#d9534f" stroke="#d9534f" points="484,-864 421,-864 421,-840 484,-840 484,-864"/>
+<text text-anchor="middle" x="452.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cart_to_cyl</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~cart_to_cyl -->
+<g id="proc~~unitvectors~~CallsGraph_edge7" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~cart_to_cyl</title>
+<path fill="none" stroke="#000000" d="M340.3954,-852C363.1754,-852 389.3043,-852 410.6029,-852"/>
+<polygon fill="#000000" stroke="#000000" points="410.6348,-855.5001 420.6347,-852 410.6347,-848.5001 410.6348,-855.5001"/>
+</g>
+<!-- proc~analytical_fields_gc -->
+<g id="proc~~unitvectors~~CallsGraph_node26" class="node">
+<title>proc~analytical_fields_gc</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node26"><a xlink:href=".././proc/analytical_fields_gc.html" xlink:title="analytical_fields_GC">
+<polygon fill="#d9534f" stroke="#d9534f" points="506.5,-822 398.5,-822 398.5,-798 506.5,-798 506.5,-822"/>
+<text text-anchor="middle" x="452.5" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields_GC</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc -->
+<g id="proc~~unitvectors~~CallsGraph_edge8" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc</title>
+<path fill="none" stroke="#000000" d="M334.0689,-839.9645C353.0834,-835.1536 375.1521,-829.57 395.05,-824.5355"/>
+<polygon fill="#000000" stroke="#000000" points="396.0881,-827.8833 404.9241,-822.0373 394.3711,-821.0971 396.0881,-827.8833"/>
+</g>
+<!-- proc~analytical_fields_gc_init -->
+<g id="proc~~unitvectors~~CallsGraph_node28" class="node">
+<title>proc~analytical_fields_gc_init</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node28"><a xlink:href=".././proc/analytical_fields_gc_init.html" xlink:title="analytical_fields_GC_init">
+<polygon fill="#d9534f" stroke="#d9534f" points="516,-780 389,-780 389,-756 516,-756 516,-780"/>
+<text text-anchor="middle" x="452.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields_GC_init</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc_init -->
+<g id="proc~~unitvectors~~CallsGraph_edge11" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc_init</title>
+<path fill="none" stroke="#000000" d="M300.4206,-839.8627C317.2534,-825.7651 346.9544,-802.6964 376,-789 380.3639,-786.9422 384.9659,-785.0544 389.6593,-783.3285"/>
+<polygon fill="#000000" stroke="#000000" points="391.0418,-786.5549 399.3741,-780.0109 388.7795,-779.9305 391.0418,-786.5549"/>
+</g>
+<!-- proc~interp_3d_bfields -->
+<g id="proc~~unitvectors~~CallsGraph_node8" class="node">
+<title>proc~interp_3d_bfields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node8"><a xlink:href=".././proc/interp_3d_bfields.html" xlink:title="interp_3D_bfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="499.5,-402 405.5,-402 405.5,-378 499.5,-378 499.5,-402"/>
+<text text-anchor="middle" x="452.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_3D_bfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_3d_bfields -->
+<g id="proc~~unitvectors~~CallsGraph_edge13" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_3d_bfields</title>
+<path fill="none" stroke="#000000" d="M321.299,-406.5977C342.7736,-403.881 370.8361,-400.331 395.4941,-397.2116"/>
+<polygon fill="#000000" stroke="#000000" points="395.9844,-400.6776 405.466,-395.9501 395.1058,-393.7329 395.9844,-400.6776"/>
+</g>
+<!-- proc~get_fio_vector_potential -->
+<g id="proc~~unitvectors~~CallsGraph_node9" class="node">
+<title>proc~get_fio_vector_potential</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node9"><a xlink:href=".././proc/get_fio_vector_potential.html" xlink:title="get_fio_vector_potential">
+<polygon fill="#d9534f" stroke="#d9534f" points="514.5,-738 390.5,-738 390.5,-714 514.5,-714 514.5,-738"/>
+<text text-anchor="middle" x="452.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_vector_potential</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~get_fio_vector_potential -->
+<g id="proc~~unitvectors~~CallsGraph_edge23" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~get_fio_vector_potential</title>
+<path fill="none" stroke="#000000" d="M288.6306,-423.3346C297.5814,-473.7973 333.6445,-663.7976 376,-705 377.6844,-706.6386 379.4842,-708.152 381.3763,-709.5497"/>
+<polygon fill="#000000" stroke="#000000" points="379.8411,-712.7142 390.1939,-714.9658 383.5048,-706.7495 379.8411,-712.7142"/>
+</g>
+<!-- proc~gradient_2d_bfields -->
+<g id="proc~~unitvectors~~CallsGraph_node10" class="node">
+<title>proc~gradient_2d_bfields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node10"><a xlink:href=".././proc/gradient_2d_bfields.html" xlink:title="gradient_2D_Bfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="506,-360 399,-360 399,-336 506,-336 506,-360"/>
+<text text-anchor="middle" x="452.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">gradient_2D_Bfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~gradient_2d_bfields -->
+<g id="proc~~unitvectors~~CallsGraph_edge24" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~gradient_2d_bfields</title>
+<path fill="none" stroke="#000000" d="M309.5873,-398.828C327.391,-389.7726 352.8107,-377.5526 376,-369 381.7663,-366.8733 387.8469,-364.8499 393.9569,-362.9585"/>
+<polygon fill="#000000" stroke="#000000" points="394.9596,-366.3118 403.5416,-360.0989 392.9583,-359.604 394.9596,-366.3118"/>
+</g>
+<!-- proc~interp_3d_efields -->
+<g id="proc~~unitvectors~~CallsGraph_node13" class="node">
+<title>proc~interp_3d_efields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node13"><a xlink:href=".././proc/interp_3d_efields.html" xlink:title="interp_3D_efields">
+<polygon fill="#d9534f" stroke="#d9534f" points="499.5,-318 405.5,-318 405.5,-294 499.5,-294 499.5,-318"/>
+<text text-anchor="middle" x="452.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_3D_efields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_3d_efields -->
+<g id="proc~~unitvectors~~CallsGraph_edge26" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_3d_efields</title>
+<path fill="none" stroke="#000000" d="M296.1307,-398.7543C311.2041,-380.418 342.1669,-345.9608 376,-327 382.0542,-323.6071 388.689,-320.7363 395.4413,-318.3134"/>
+<polygon fill="#000000" stroke="#000000" points="396.9433,-321.505 405.3643,-315.0756 394.7718,-314.8503 396.9433,-321.505"/>
+</g>
+<!-- proc~interp_fofields_aorsa -->
+<g id="proc~~unitvectors~~CallsGraph_node14" class="node">
+<title>proc~interp_fofields_aorsa</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node14"><a xlink:href=".././proc/interp_fofields_aorsa.html" xlink:title="interp_FOfields_aorsa">
+<polygon fill="#d9534f" stroke="#d9534f" points="510.5,-570 394.5,-570 394.5,-546 510.5,-546 510.5,-570"/>
+<text text-anchor="middle" x="452.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_aorsa</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_fofields_aorsa -->
+<g id="proc~~unitvectors~~CallsGraph_edge28" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_fofields_aorsa</title>
+<path fill="none" stroke="#000000" d="M291.6692,-423.1639C303.0372,-448.4169 332.6909,-506.6953 376,-537 378.8511,-538.995 381.8845,-540.8007 385.0366,-542.4351"/>
+<polygon fill="#000000" stroke="#000000" points="383.6297,-545.6403 394.1808,-546.6026 386.5327,-539.2706 383.6297,-545.6403"/>
+</g>
+<!-- proc~interp_2d_efields -->
+<g id="proc~~unitvectors~~CallsGraph_node15" class="node">
+<title>proc~interp_2d_efields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node15"><a xlink:href=".././proc/interp_2d_efields.html" xlink:title="interp_2D_efields">
+<polygon fill="#d9534f" stroke="#d9534f" points="499.5,-276 405.5,-276 405.5,-252 499.5,-252 499.5,-276"/>
+<text text-anchor="middle" x="452.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_efields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_efields -->
+<g id="proc~~unitvectors~~CallsGraph_edge15" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_efields</title>
+<path fill="none" stroke="#000000" d="M291.6692,-398.8361C303.0372,-373.5831 332.6909,-315.3047 376,-285 381.9737,-280.8201 388.748,-277.4708 395.7364,-274.7875"/>
+<polygon fill="#000000" stroke="#000000" points="396.9997,-278.0549 405.3436,-271.5258 394.7493,-271.4265 396.9997,-278.0549"/>
+</g>
+<!-- proc~interp_fofields_mars -->
+<g id="proc~~unitvectors~~CallsGraph_node16" class="node">
+<title>proc~interp_fofields_mars</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node16"><a xlink:href=".././proc/interp_fofields_mars.html" xlink:title="interp_FOfields_mars">
+<polygon fill="#d9534f" stroke="#d9534f" points="509,-528 396,-528 396,-504 509,-504 509,-528"/>
+<text text-anchor="middle" x="452.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_mars</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_fofields_mars -->
+<g id="proc~~unitvectors~~CallsGraph_edge16" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_fofields_mars</title>
+<path fill="none" stroke="#000000" d="M296.1307,-423.2457C311.2041,-441.582 342.1669,-476.0392 376,-495 379.4166,-496.9147 383.0182,-498.6632 386.7214,-500.2588"/>
+<polygon fill="#000000" stroke="#000000" points="385.5005,-503.5394 396.0886,-503.9174 388.0472,-497.019 385.5005,-503.5394"/>
+</g>
+<!-- proc~interp_2d_curlbfields -->
+<g id="proc~~unitvectors~~CallsGraph_node17" class="node">
+<title>proc~interp_2d_curlbfields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node17"><a xlink:href=".././proc/interp_2d_curlbfields.html" xlink:title="interp_2D_curlbfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="508,-234 397,-234 397,-210 508,-210 508,-234"/>
+<text text-anchor="middle" x="452.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_curlbfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_curlbfields -->
+<g id="proc~~unitvectors~~CallsGraph_edge18" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_curlbfields</title>
+<path fill="none" stroke="#000000" d="M289.4416,-398.6919C297.5278,-367.5897 323.0927,-285.3142 376,-243 379.5443,-240.1653 383.4438,-237.7124 387.5482,-235.59"/>
+<polygon fill="#000000" stroke="#000000" points="389.1025,-238.7291 396.8026,-231.4518 386.2449,-232.3389 389.1025,-238.7291"/>
+</g>
+<!-- proc~calculate_magnetic_field -->
+<g id="proc~~unitvectors~~CallsGraph_node18" class="node">
+<title>proc~calculate_magnetic_field</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node18"><a xlink:href=".././proc/calculate_magnetic_field.html" xlink:title="calculate_magnetic_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="516,-192 389,-192 389,-168 516,-168 516,-192"/>
+<text text-anchor="middle" x="452.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_magnetic_field</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~calculate_magnetic_field -->
+<g id="proc~~unitvectors~~CallsGraph_edge19" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~calculate_magnetic_field</title>
+<path fill="none" stroke="#000000" d="M287.9859,-398.9139C293.0571,-362.9994 313.0175,-256.0079 376,-201 377.5171,-199.675 379.1105,-198.4329 380.7666,-197.2684"/>
+<polygon fill="#000000" stroke="#000000" points="382.7007,-200.1904 389.5059,-192.0701 379.1221,-194.1743 382.7007,-200.1904"/>
+</g>
+<!-- proc~get_fio_magnetic_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node19" class="node">
+<title>proc~get_fio_magnetic_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node19"><a xlink:href=".././proc/get_fio_magnetic_fields.html" xlink:title="get_fio_magnetic_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="514,-654 391,-654 391,-630 514,-630 514,-654"/>
+<text text-anchor="middle" x="452.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_magnetic_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~get_fio_magnetic_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge20" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~get_fio_magnetic_fields</title>
+<path fill="none" stroke="#000000" d="M287.9859,-423.0861C293.0571,-459.0006 313.0175,-565.9921 376,-621 377.7699,-622.5458 379.6438,-623.9789 381.5998,-625.3073"/>
+<polygon fill="#000000" stroke="#000000" points="380.2188,-628.55 390.6351,-630.4872 383.7004,-622.4772 380.2188,-628.55"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~unitvectors~~CallsGraph_node21" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node21"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="483.5,-612 421.5,-612 421.5,-588 483.5,-588 483.5,-612"/>
+<text text-anchor="middle" x="452.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~korc_abort -->
+<g id="proc~~unitvectors~~CallsGraph_edge21" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M289.4416,-423.3081C297.5278,-454.4103 323.0927,-536.6858 376,-579 385.9995,-586.9974 398.8253,-591.9557 411.1059,-595.0275"/>
+<polygon fill="#000000" stroke="#000000" points="410.7086,-598.5216 421.2193,-597.1895 412.172,-591.6763 410.7086,-598.5216"/>
+</g>
+<!-- proc~interp_2d_gradbfields -->
+<g id="proc~~unitvectors~~CallsGraph_node23" class="node">
+<title>proc~interp_2d_gradbfields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node23"><a xlink:href=".././proc/interp_2d_gradbfields.html" xlink:title="interp_2D_gradBfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="510.5,-150 394.5,-150 394.5,-126 510.5,-126 510.5,-150"/>
+<text text-anchor="middle" x="452.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_gradBfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_gradbfields -->
+<g id="proc~~unitvectors~~CallsGraph_edge14" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_gradbfields</title>
+<path fill="none" stroke="#000000" d="M287.0249,-398.9075C289.45,-358.5093 302.8768,-226.9469 376,-159 378.7871,-156.4101 381.8636,-154.1347 385.1344,-152.136"/>
+<polygon fill="#000000" stroke="#000000" points="386.9011,-155.1629 394.1814,-147.4656 383.69,-148.9428 386.9011,-155.1629"/>
+</g>
+<!-- proc~check_if_in_lcfs -->
+<g id="proc~~unitvectors~~CallsGraph_node25" class="node">
+<title>proc~check_if_in_lcfs</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node25"><a xlink:href=".././proc/check_if_in_lcfs.html" xlink:title="check_if_in_LCFS">
+<polygon fill="#d9534f" stroke="#d9534f" points="501.5,-486 403.5,-486 403.5,-462 501.5,-462 501.5,-486"/>
+<text text-anchor="middle" x="452.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_LCFS</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~check_if_in_lcfs -->
+<g id="proc~~unitvectors~~CallsGraph_edge17" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~check_if_in_lcfs</title>
+<path fill="none" stroke="#000000" d="M309.5873,-423.172C327.391,-432.2274 352.8107,-444.4474 376,-453 381.7663,-455.1267 387.8469,-457.1501 393.9569,-459.0415"/>
+<polygon fill="#000000" stroke="#000000" points="392.9583,-462.396 403.5416,-461.9011 394.9596,-455.6882 392.9583,-462.396"/>
+</g>
+<!-- proc~get_fio_electric_fields -->
+<g id="proc~~unitvectors~~CallsGraph_node27" class="node">
+<title>proc~get_fio_electric_fields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node27"><a xlink:href=".././proc/get_fio_electric_fields.html" xlink:title="get_fio_electric_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="509,-696 396,-696 396,-672 509,-672 509,-696"/>
+<text text-anchor="middle" x="452.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_electric_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~get_fio_electric_fields -->
+<g id="proc~~unitvectors~~CallsGraph_edge22" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~get_fio_electric_fields</title>
+<path fill="none" stroke="#000000" d="M287.0249,-423.0925C289.45,-463.4907 302.8768,-595.0531 376,-663 379.1781,-665.9531 382.7324,-668.4975 386.5221,-670.6889"/>
+<polygon fill="#000000" stroke="#000000" points="385.2046,-673.9407 395.7258,-675.1881 388.2789,-667.6519 385.2046,-673.9407"/>
+</g>
+<!-- proc~check_if_in_fields_domain -->
+<g id="proc~~unitvectors~~CallsGraph_node29" class="node">
+<title>proc~check_if_in_fields_domain</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node29"><a xlink:href=".././proc/check_if_in_fields_domain.html" xlink:title="check_if_in_fields_domain">
+<polygon fill="#d9534f" stroke="#d9534f" points="520.5,-444 384.5,-444 384.5,-420 520.5,-420 520.5,-444"/>
+<text text-anchor="middle" x="452.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_fields_domain</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~check_if_in_fields_domain -->
+<g id="proc~~unitvectors~~CallsGraph_edge25" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~check_if_in_fields_domain</title>
+<path fill="none" stroke="#000000" d="M321.299,-415.4023C336.7719,-417.3597 355.6648,-419.7498 374.2401,-422.0997"/>
+<polygon fill="#000000" stroke="#000000" points="373.8427,-425.5772 384.2029,-423.36 374.7213,-418.6325 373.8427,-425.5772"/>
+</g>
+<!-- proc~interp_2d_bfields -->
+<g id="proc~~unitvectors~~CallsGraph_node31" class="node">
+<title>proc~interp_2d_bfields</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node31"><a xlink:href=".././proc/interp_2d_bfields.html" xlink:title="interp_2D_bfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="499.5,-108 405.5,-108 405.5,-84 499.5,-84 499.5,-108"/>
+<text text-anchor="middle" x="452.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_bfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_bfields -->
+<g id="proc~~unitvectors~~CallsGraph_edge27" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_bfields</title>
+<path fill="none" stroke="#000000" d="M288.6306,-398.6654C297.5814,-348.2027 333.6445,-158.2024 376,-117 381.6225,-111.5306 388.5296,-107.4554 395.8714,-104.4247"/>
+<polygon fill="#000000" stroke="#000000" points="397.0527,-107.7196 405.3396,-101.1183 394.7448,-101.111 397.0527,-107.7196"/>
+</g>
+<!-- proc~uniform_magnetic_field -->
+<g id="proc~~unitvectors~~CallsGraph_node20" class="node">
+<title>proc~uniform_magnetic_field</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node20"><a xlink:href=".././proc/uniform_magnetic_field.html" xlink:title="uniform_magnetic_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="513,-66 392,-66 392,-42 513,-42 513,-66"/>
+<text text-anchor="middle" x="452.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">uniform_magnetic_field</text>
+</a>
+</g>
+</g>
+<!-- proc~uniform_fields&#45;&gt;proc~uniform_magnetic_field -->
+<g id="proc~~unitvectors~~CallsGraph_edge30" class="edge">
+<title>proc~uniform_fields&#45;&gt;proc~uniform_magnetic_field</title>
+<path fill="none" stroke="#000000" d="M325.8397,-54C342.5,-54 362.4412,-54 381.5173,-54"/>
+<polygon fill="#000000" stroke="#000000" points="381.6947,-57.5001 391.6947,-54 381.6946,-50.5001 381.6947,-57.5001"/>
+</g>
+<!-- proc~uniform_electric_field -->
+<g id="proc~~unitvectors~~CallsGraph_node30" class="node">
+<title>proc~uniform_electric_field</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node30"><a xlink:href=".././proc/uniform_electric_field.html" xlink:title="uniform_electric_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="508.5,-24 396.5,-24 396.5,0 508.5,0 508.5,-24"/>
+<text text-anchor="middle" x="452.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">uniform_electric_field</text>
+</a>
+</g>
+</g>
+<!-- proc~uniform_fields&#45;&gt;proc~uniform_electric_field -->
+<g id="proc~~unitvectors~~CallsGraph_edge29" class="edge">
+<title>proc~uniform_fields&#45;&gt;proc~uniform_electric_field</title>
+<path fill="none" stroke="#000000" d="M325.8397,-44.0466C346.4684,-38.8273 372.1271,-32.3353 394.9454,-26.562"/>
+<polygon fill="#000000" stroke="#000000" points="396.0273,-29.8986 404.8633,-24.0527 394.3103,-23.1125 396.0273,-29.8986"/>
+</g>
+<!-- ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_node33" class="node">
+<title>ezspline_error</title>
+<polygon fill="#777777" stroke="#777777" points="662,-297 583,-297 583,-273 662,-273 662,-297"/>
+<text text-anchor="middle" x="622.5" y="-282.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_error</text>
+</g>
+<!-- proc~interp_3d_bfields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge31" class="edge">
+<title>proc~interp_3d_bfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M499.5541,-380.7768C509.615,-377.8041 519.9347,-373.9515 529,-369 559.4978,-352.3422 588.2339,-323.9034 605.5983,-304.787"/>
+<polygon fill="#000000" stroke="#000000" points="608.2902,-307.0267 612.3159,-297.2265 603.0574,-302.3772 608.2902,-307.0267"/>
+</g>
+<!-- interface~fio_eval_field -->
+<g id="proc~~unitvectors~~CallsGraph_node35" class="node">
+<title>interface~fio_eval_field</title>
+<g id="a_proc~~unitvectors~~CallsGraph_node35"><a xlink:href=".././interface/fio_eval_field.html" xlink:title="fio_eval_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="659.5,-696 585.5,-696 585.5,-672 659.5,-672 659.5,-696"/>
+<text text-anchor="middle" x="622.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_eval_field</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fio_vector_potential&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~unitvectors~~CallsGraph_edge32" class="edge">
+<title>proc~get_fio_vector_potential&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M501.2152,-713.9645C524.5477,-708.2 552.3707,-701.3261 575.4793,-695.6169"/>
+<polygon fill="#000000" stroke="#000000" points="576.5301,-698.9626 585.3987,-693.1662 574.8511,-692.1669 576.5301,-698.9626"/>
+</g>
+<!-- proc~gradient_2d_bfields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge33" class="edge">
+<title>proc~gradient_2d_bfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M501.0079,-335.8997C510.3774,-333.2215 520.057,-330.2143 529,-327 549.3467,-319.6868 571.4412,-309.8548 589.0413,-301.5422"/>
+<polygon fill="#000000" stroke="#000000" points="590.8058,-304.578 598.317,-297.106 587.7856,-298.2631 590.8058,-304.578"/>
+</g>
+<!-- proc~interp_3d_efields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge34" class="edge">
+<title>proc~interp_3d_efields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M499.8545,-300.1503C522.5169,-297.3509 549.6535,-293.9987 572.6327,-291.1601"/>
+<polygon fill="#000000" stroke="#000000" points="573.3717,-294.5955 582.8672,-289.8958 572.5135,-287.6483 573.3717,-294.5955"/>
+</g>
+<!-- proc~interp_fofields_aorsa&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge36" class="edge">
+<title>proc~interp_fofields_aorsa&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M510.7537,-548.4641C517.4279,-545.5772 523.7195,-541.8381 529,-537 597.6278,-474.1212 616.0744,-356.2431 620.875,-307.2436"/>
+<polygon fill="#000000" stroke="#000000" points="624.3769,-307.3735 621.7656,-297.1056 617.4038,-306.7608 624.3769,-307.3735"/>
+</g>
+<!-- ezspline_interp -->
+<g id="proc~~unitvectors~~CallsGraph_node34" class="node">
+<title>ezspline_interp</title>
+<polygon fill="#777777" stroke="#777777" points="664,-549 581,-549 581,-525 664,-525 664,-549"/>
+<text text-anchor="middle" x="622.5" y="-534.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_interp</text>
+</g>
+<!-- proc~interp_fofields_aorsa&#45;&gt;ezspline_interp -->
+<g id="proc~~unitvectors~~CallsGraph_edge35" class="edge">
+<title>proc~interp_fofields_aorsa&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M510.5289,-550.8317C530.0969,-548.4145 551.7925,-545.7345 570.8355,-543.3821"/>
+<polygon fill="#000000" stroke="#000000" points="571.3227,-546.8486 580.8181,-542.1489 570.4644,-539.9014 571.3227,-546.8486"/>
+</g>
+<!-- proc~interp_2d_efields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge37" class="edge">
+<title>proc~interp_2d_efields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M499.8545,-269.8497C522.5169,-272.6491 549.6535,-276.0013 572.6327,-278.8399"/>
+<polygon fill="#000000" stroke="#000000" points="572.5135,-282.3517 582.8672,-280.1042 573.3717,-275.4045 572.5135,-282.3517"/>
+</g>
+<!-- proc~interp_fofields_mars&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge39" class="edge">
+<title>proc~interp_fofields_mars&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M509.2992,-506.6221C516.4475,-503.7221 523.255,-499.9371 529,-495 587.7505,-444.5114 611.1622,-349.8579 619.0489,-307.0382"/>
+<polygon fill="#000000" stroke="#000000" points="622.5126,-307.5479 620.7686,-297.0976 615.6151,-306.3546 622.5126,-307.5479"/>
+</g>
+<!-- proc~interp_fofields_mars&#45;&gt;ezspline_interp -->
+<g id="proc~~unitvectors~~CallsGraph_edge38" class="edge">
+<title>proc~interp_fofields_mars&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M509.1075,-522.9927C529.0945,-525.4617 551.4477,-528.2229 570.9897,-530.637"/>
+<polygon fill="#000000" stroke="#000000" points="570.5715,-534.1118 580.9252,-531.8643 571.4298,-527.1646 570.5715,-534.1118"/>
+</g>
+<!-- proc~interp_2d_curlbfields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge40" class="edge">
+<title>proc~interp_2d_curlbfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M501.0079,-234.1003C510.3774,-236.7785 520.057,-239.7857 529,-243 549.3467,-250.3132 571.4412,-260.1452 589.0413,-268.4578"/>
+<polygon fill="#000000" stroke="#000000" points="587.7856,-271.7369 598.317,-272.894 590.8058,-265.422 587.7856,-271.7369"/>
+</g>
+<!-- proc~calculate_magnetic_field&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge41" class="edge">
+<title>proc~calculate_magnetic_field&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M508.4363,-192.0718C515.5613,-194.5507 522.5938,-197.501 529,-201 559.4978,-217.6578 588.2339,-246.0966 605.5983,-265.213"/>
+<polygon fill="#000000" stroke="#000000" points="603.0574,-267.6228 612.3159,-272.7735 608.2902,-262.9733 603.0574,-267.6228"/>
+</g>
+<!-- proc~get_fio_magnetic_fields&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~unitvectors~~CallsGraph_edge43" class="edge">
+<title>proc~get_fio_magnetic_fields&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M501.2152,-654.0355C524.5477,-659.8 552.3707,-666.6739 575.4793,-672.3831"/>
+<polygon fill="#000000" stroke="#000000" points="574.8511,-675.8331 585.3987,-674.8338 576.5301,-669.0374 574.8511,-675.8331"/>
+</g>
+<!-- omp_get_thread_num -->
+<g id="proc~~unitvectors~~CallsGraph_node36" class="node">
+<title>omp_get_thread_num</title>
+<polygon fill="#777777" stroke="#777777" points="680,-654 565,-654 565,-630 680,-630 680,-654"/>
+<text text-anchor="middle" x="622.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_get_thread_num</text>
+</g>
+<!-- proc~get_fio_magnetic_fields&#45;&gt;omp_get_thread_num -->
+<g id="proc~~unitvectors~~CallsGraph_edge42" class="edge">
+<title>proc~get_fio_magnetic_fields&#45;&gt;omp_get_thread_num</title>
+<path fill="none" stroke="#000000" d="M514.3548,-642C527.5183,-642 541.4834,-642 554.8506,-642"/>
+<polygon fill="#000000" stroke="#000000" points="554.9328,-645.5001 564.9328,-642 554.9328,-638.5001 554.9328,-645.5001"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~unitvectors~~CallsGraph_node32" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="652,-612 593,-612 593,-588 652,-588 652,-612"/>
+<text text-anchor="middle" x="622.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~unitvectors~~CallsGraph_edge44" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M483.6806,-600C511.5477,-600 552.5257,-600 582.7405,-600"/>
+<polygon fill="#000000" stroke="#000000" points="582.9399,-603.5001 592.9399,-600 582.9398,-596.5001 582.9399,-603.5001"/>
+</g>
+<!-- proc~interp_2d_gradbfields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge45" class="edge">
+<title>proc~interp_2d_gradbfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M510.7409,-149.5105C517.1908,-152.0669 523.4308,-155.1886 529,-159 568.6144,-186.1105 597.9953,-235.6024 612.4602,-263.8159"/>
+<polygon fill="#000000" stroke="#000000" points="609.3597,-265.4415 616.9469,-272.8364 615.6272,-262.3241 609.3597,-265.4415"/>
+</g>
+<!-- proc~get_fio_electric_fields&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~unitvectors~~CallsGraph_edge46" class="edge">
+<title>proc~get_fio_electric_fields&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M509.1075,-684C530.5908,-684 554.808,-684 575.3294,-684"/>
+<polygon fill="#000000" stroke="#000000" points="575.3832,-687.5001 585.3832,-684 575.3831,-680.5001 575.3832,-687.5001"/>
+</g>
+<!-- proc~interp_2d_bfields&#45;&gt;ezspline_error -->
+<g id="proc~~unitvectors~~CallsGraph_edge47" class="edge">
+<title>proc~interp_2d_bfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M499.7654,-102.7199C510.1464,-105.8273 520.5493,-110.3676 529,-117 577.7827,-155.2864 605.0034,-226.4808 616.266,-262.6565"/>
+<polygon fill="#000000" stroke="#000000" points="613.0442,-264.1006 619.2552,-272.6839 619.7525,-262.1008 613.0442,-264.1006"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocunitvectorsCallsGraph = svgPanZoom('#procunitvectorsCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~unitvectors~~CalledByGraph Pages: 1 -->
+<svg id="procunitvectorsCalledByGraph" width="199pt" height="32pt"
+ viewBox="0.00 0.00 199.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~unitvectors~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~unitvectors~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 195,-28 195,4 -4,4"/>
+<!-- proc~unitvectors -->
+<g id="proc~~unitvectors~~CalledByGraph_node1" class="node">
+<title>proc~unitvectors</title>
+<polygon fill="none" stroke="#000000" points="191,-24 126,-24 126,0 191,0 191,-24"/>
+<text text-anchor="middle" x="158.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">unitVectors</text>
+</g>
+<!-- proc~gyro_distribution -->
+<g id="proc~~unitvectors~~CalledByGraph_node2" class="node">
+<title>proc~gyro_distribution</title>
+<g id="a_proc~~unitvectors~~CalledByGraph_node2"><a xlink:href=".././proc/gyro_distribution.html" xlink:title="gyro_distribution">
+<polygon fill="#d9534f" stroke="#d9534f" points="90,-24 0,-24 0,0 90,0 90,-24"/>
+<text text-anchor="middle" x="45" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">gyro_distribution</text>
+</a>
+</g>
+</g>
+<!-- proc~gyro_distribution&#45;&gt;proc~unitvectors -->
+<g id="proc~~unitvectors~~CalledByGraph_edge1" class="edge">
+<title>proc~gyro_distribution&#45;&gt;proc~unitvectors</title>
+<path fill="none" stroke="#000000" d="M90.1843,-12C98.5299,-12 107.224,-12 115.5027,-12"/>
+<polygon fill="#000000" stroke="#000000" points="115.7092,-15.5001 125.7092,-12 115.7091,-8.5001 115.7092,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/unitvectors.html#src">unitVectors</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">unitVectors</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">Xo</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">,</span><span class="n">b3</span><span class="p">,</span><span class="n">flag</span><span class="p">,</span><span class="n">cart</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+    <span class="c">!! @note Subrotuine that calculates an orthonormal basis using information </span>
+    <span class="c">!! of the (local) magnetic field at position \(\mathbf{X}_0\). @endnote</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">Xo</span>
+    <span class="c">!! Array with the position of the simulated particles.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                           <span class="kd">::</span> <span class="n">F</span>
+    <span class="c">!! F An instance of the KORC derived type FIELDS.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">b1</span>
+    <span class="c">!! Basis vector pointing along the local magnetic field, </span>
+    <span class="c">!! that is, along \(\mathbf{b} = \mathbf{B}/B\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">b2</span>
+    <span class="c">!!  Basis vector perpendicular to b1</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">b3</span>
+    <span class="c">!! Basis vector perpendicular to b1 and b2.</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">OPTIONAL</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">flag</span>
+    <span class="c">!! Flag for each particle to decide whether it is being </span>
+    <span class="c">!! followed (flag=T) or not (flag=F).</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">hint</span>
+    <span class="c">!! Flag for each particle to decide whether it is being </span>
+    <span class="c">!! followed (flag=T) or not (flag=F).</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PARTICLES</span><span class="p">)</span>                                                    <span class="kd">::</span> <span class="n">vars</span>
+    <span class="c">!! A temporary instance of the KORC derived type PARTICLES.</span>
+    <span class="kt">INTEGER</span>                                                            <span class="kd">::</span> <span class="n">ii</span>
+    <span class="c">!! Iterator.</span>
+    <span class="kt">INTEGER</span>                                                            <span class="kd">::</span> <span class="n">ppp</span>
+    <span class="c">!! Number of particles.</span>
+    <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">cart</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="kd">::</span><span class="n">b1tmp</span><span class="p">,</span><span class="n">b2tmp</span><span class="p">,</span><span class="n">b3tmp</span><span class="p">,</span><span class="n">tmpvec</span>
+
+<span class="c">!    write(output_unit_write,*) &#39;in unitVector&#39;</span>
+    
+    <span class="n">ppp</span> <span class="o">=</span> <span class="n">SIZE</span><span class="p">(</span><span class="n">Xo</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c">! Number of particles</span>
+
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">(</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">gradB</span><span class="p">(</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">curlb</span><span class="p">(</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">PSI_P</span><span class="p">(</span><span class="n">ppp</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">E</span><span class="p">(</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span><span class="p">(</span><span class="n">ppp</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">initLCFS</span><span class="p">(</span><span class="n">ppp</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="cp">#ifdef FIO</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">hint</span><span class="p">(</span><span class="n">ppp</span><span class="p">)</span> <span class="p">)</span>
+<span class="cp">#endif</span>
+    
+    <span class="n">vars</span><span class="p">%</span><span class="n">X</span> <span class="o">=</span> <span class="n">Xo</span>
+<span class="cp">#ifdef FIO</span>
+    <span class="n">vars</span><span class="p">%</span><span class="n">hint</span> <span class="o">=</span> <span class="n">hint</span>
+<span class="cp">#endif</span>
+    <span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span> <span class="o">=</span> <span class="n">flag</span>
+    <span class="n">vars</span><span class="p">%</span><span class="n">initLCFS</span> <span class="o">=</span> <span class="mi">0_is</span>
+    <span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="o">=</span><span class="mf">0._rp</span>
+    <span class="n">vars</span><span class="p">%</span><span class="n">PSI_P</span><span class="o">=</span><span class="mf">0._rp</span>
+    <span class="n">vars</span><span class="p">%</span><span class="n">cart</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+    
+    <span class="c">!write(output_unit_write,*) &#39;before init_random_seed&#39;</span>
+    
+    <span class="k">call </span><span class="n">init_random_seed</span><span class="p">()</span>
+
+   <span class="c">! write(output_unit_write,*) &#39;before get_fields&#39;</span>
+
+    <span class="c">!write(6,*) &#39;before first get fields&#39;</span>
+    <span class="k">call </span><span class="n">get_fields</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">vars</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+    <span class="c">!write(6,*) &#39;before second get fields&#39;</span>
+
+    <span class="c">!write(6,&#39;(&quot;Bx: &quot;,E17.10)&#39;) vars%B(:,1)*params%cpp%Bo</span>
+    <span class="c">!write(6,&#39;(&quot;By: &quot;,E17.10)&#39;) vars%B(:,2)*params%cpp%Bo</span>
+    <span class="c">!write(6,&#39;(&quot;Bz: &quot;,E17.10)&#39;) vars%B(:,3)*params%cpp%Bo</span>
+
+        <span class="c">!write(output_unit_write,*) &#39;before b1,b2,b3 calculation&#39;</span>
+
+    <span class="n">tmpvec</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mf">1.0_rp</span><span class="p">,</span><span class="mf">1.0_rp</span><span class="p">,</span><span class="mf">1.0_rp</span><span class="o">/</span><span class="p">)</span>
+    
+    <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">ppp</span>
+       <span class="c">!write(6,*) &#39;ii&#39;,ii</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">1_idef</span> <span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">b1tmp</span> <span class="o">=</span> <span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,:)</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+               <span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">vars</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+          <span class="n">b2tmp</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">b1tmp</span><span class="p">,</span><span class="n">tmpvec</span><span class="p">)</span>
+          <span class="n">b2tmp</span> <span class="o">=</span> <span class="n">b2tmp</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">b2tmp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">b2tmp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">b2tmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">b2tmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+               <span class="n">b2tmp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">b2tmp</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+          <span class="n">b3tmp</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">b1tmp</span><span class="p">,</span><span class="n">b2tmp</span><span class="p">)</span>
+          <span class="n">b3tmp</span> <span class="o">=</span> <span class="n">b3tmp</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">b3tmp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">b3tmp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">b3tmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">b3tmp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+               <span class="n">b3tmp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">b3tmp</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+       <span class="k">end if</span>
+<span class="k">       </span><span class="n">b1</span><span class="p">(</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">b1tmp</span>
+       <span class="n">b2</span><span class="p">(</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">b2tmp</span>
+       <span class="n">b3</span><span class="p">(</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">b3tmp</span>
+    <span class="k">end do</span>
+
+    <span class="c">!write(output_unit_write,*) &#39;before copying hint and flag&#39;</span>
+<span class="cp">#ifdef FIO</span>
+    <span class="n">hint</span> <span class="o">=</span> <span class="n">vars</span><span class="p">%</span><span class="n">hint</span>
+<span class="cp">#endif</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="nb">PRESENT</span><span class="p">(</span><span class="n">flag</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">flag</span> <span class="o">=</span> <span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span>
+    <span class="k">end if</span>
+
+<span class="k">    DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">X</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">Y</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">B</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">PSI_P</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">gradB</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">curlb</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">E</span> <span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span> <span class="p">)</span>
+<span class="cp">#ifdef FIO</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span> <span class="n">vars</span><span class="p">%</span><span class="n">hint</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    
+    <span class="c">!write(output_unit_write,*) &#39;out unitVectors&#39;</span>
+    
+  <span class="k">end subroutine </span><span class="n">unitVectors</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

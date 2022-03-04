@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>AVALANCHE_PDF_PARAMS &ndash; KORC </title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>AVALANCHE_PDF_PARAMS
+    <small>Derived Type</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title="<p> 3.9% of total for derived types.</p>Including implementation: 27 statements,  3.9% of total for derived types.">27 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_avalanche.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_avalanche.f90.html'>korc_avalanche.f90</a></li>
+    
+     <li><a href='../module/korc_avalanche.html'>korc_avalanche</a></li>
+    
+  
+     <li class="active">AVALANCHE_PDF_PARAMS</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-max_pitch_angle~2">max_pitch_angle</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-min_pitch_angle~2">min_pitch_angle</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-min_energy~2">min_energy</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-max_energy~2">max_energy</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-min_p~2">min_p</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-max_p~2">max_p</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ne~7">ne</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-zeff~7">Zeff</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ec~3">Ec</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-epar">Epar</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ebar">Ebar</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-te~7">Te</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ld">lD</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-bmin">bmin</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-coulomblog">CoulombLog</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-tau~2">Tau</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dth">dth</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dp">dp</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dr">dR</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dz">dZ</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-fo">fo</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-alpha">alpha</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-cz">cz</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-c1">C1</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-c2">C2</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../type/avalanche_pdf_params.html#src">AVALANCHE_PDF_PARAMS</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      <h2>type, private :: AVALANCHE_PDF_PARAMS</h2>
+    
+    
+    
+    
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-max_pitch_angle~2">max_pitch_angle</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-min_pitch_angle~2">min_pitch_angle</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-min_energy~2">min_energy</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-max_energy~2">max_energy</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-min_p~2">min_p</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-max_p~2">max_p</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ne~7">ne</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-zeff~7">Zeff</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ec~3">Ec</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-epar">Epar</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ebar">Ebar</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-te~7">Te</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-ld">lD</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-bmin">bmin</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-coulomblog">CoulombLog</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-tau~2">Tau</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dth">dth</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dp">dp</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dr">dR</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-dz">dZ</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-fo">fo</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-alpha">alpha</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-cz">cz</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-c1">C1</a>
+      
+      <a class="list-group-item" href="../type/avalanche_pdf_params.html#variable-c2">C2</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../type/avalanche_pdf_params.html#src">AVALANCHE_PDF_PARAMS</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_pitch_angle~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_pitch_angle</strong></td><td></td><td></td><td><p>Maximum pitch angle of sampled PDF in degrees</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_pitch_angle~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_pitch_angle</strong></td><td></td><td></td><td><p>Minimum pitch angle of sampled PDF in degrees</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_energy~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_energy</strong></td><td></td><td></td><td><p>Minimum energy of sampled PDF in MeV</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_energy~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_energy</strong></td><td></td><td></td><td><p>Maximum energy of sampled PDF in MeV</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_p~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_p</strong></td><td></td><td></td><td><p>Minimum momentum of sampled PDF</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_p~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_p</strong></td><td></td><td></td><td><p>Maximum momentum of sampled PDF</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne~7"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ne</strong></td><td></td><td></td><td><p>Background electron density in m^-3</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff~7"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff</strong></td><td></td><td></td><td><p>Effective atomic number of ions</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ec~3"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ec</strong></td><td></td><td></td><td><p>Critical electric field in V/m</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-epar"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Epar</strong></td><td></td><td></td><td><p>Parallel electric field in V/m</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ebar"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ebar</strong></td><td></td><td></td><td><p>Epar/Ec</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te~7"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Te</strong></td><td></td><td></td><td><p>Background electron temperature in eV</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ld"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lD</strong></td><td></td><td></td><td><p>Debye length</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bmin"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>bmin</strong></td><td></td><td></td><td><p>Maximum approach radius</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-coulomblog"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>CoulombLog</strong></td><td></td><td></td><td><p>Coulomb Logarithm</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tau~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Tau</strong></td><td></td><td></td><td><p>Collisional time</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dth"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dth</strong></td><td></td><td></td><td><p>Variance of sampling normal variate for pitch angle</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dp"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dp</strong></td><td></td><td></td><td><p>Variance of sampling normal variate for momentum</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dr"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dR</strong></td><td></td><td></td><td><p>Variance of sampling normal variate for R location</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dz"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dZ</strong></td><td></td><td></td><td><p>Variance of sampling normal variate for Z location</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fo"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>fo</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-alpha"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>alpha</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cz"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>cz</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-c1"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>C1</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-c2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>C2</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <section>
+    <h3><span class="anchor" id="src"></span>Source Code</h3>
+    <div class="highlight"><pre><span></span>  <span class="k">TYPE</span><span class="p">,</span> <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">AVALANCHE_PDF_PARAMS</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">max_pitch_angle</span>
+     <span class="c">!! Maximum pitch angle of sampled PDF in degrees</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">min_pitch_angle</span>
+     <span class="c">!! Minimum pitch angle of sampled PDF in degrees</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">min_energy</span>
+     <span class="c">!! Minimum energy of sampled PDF in MeV</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">max_energy</span>
+     <span class="c">!! Maximum energy of sampled PDF in MeV</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">min_p</span>
+     <span class="c">!! Minimum momentum of sampled PDF</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">max_p</span>
+     <span class="c">!! Maximum momentum of sampled PDF</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ne</span>
+     <span class="c">!! Background electron density in m^-3</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Zeff</span>
+     <span class="c">!! Effective atomic number of ions</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Ec</span>
+     <span class="c">!! Critical electric field in V/m</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Epar</span>
+     <span class="c">!! Parallel electric field in V/m</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Ebar</span>
+     <span class="c">!! Epar/Ec</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Te</span>
+     <span class="c">!! Background electron temperature in eV</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lD</span>
+     <span class="c">!! Debye length</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">bmin</span>
+     <span class="c">!! Maximum approach radius</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">CoulombLog</span>
+     <span class="c">!! Coulomb Logarithm</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Tau</span>
+     <span class="c">!! Collisional time</span>
+
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dth</span>
+     <span class="c">!! Variance of sampling normal variate for pitch angle</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dp</span>
+     <span class="c">!! Variance of sampling normal variate for momentum</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dR</span>
+     <span class="c">!! Variance of sampling normal variate for R location</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dZ</span>
+     <span class="c">!! Variance of sampling normal variate for Z location</span>
+     
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fo</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cz</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">C1</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">C2</span>
+  <span class="k">END TYPE </span><span class="n">AVALANCHE_PDF_PARAMS</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

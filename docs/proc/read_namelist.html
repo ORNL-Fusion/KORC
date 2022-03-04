@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>read_namelist &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>read_namelist
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.8% of total for procedures.">207 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_input.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_input.f90.html'>korc_input.f90</a></li>
+    
+     <li><a href='../module/korc_input.html'>korc_input</a></li>
+    
+  
+     <li class="active">read_namelist</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/read_namelist.html#src">read_namelist</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine read_namelist(params, infile, echo_in, outdir)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <div class="codehilite"><pre><span></span><code><span class="err"> open input file.</span>
+<span class="err"> Remove comments from input file and put into temporary file.</span>
+</code></pre></div>
+
+
+<h2>-----------------------------------------------------------------------</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">check namelist file for namelist order and number.</span>
+</code></pre></div>
+
+
+<h2>-----------------------------------------------------------------------</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">     trim all but the namelist name.</span>
+</code></pre></div>
+
+
+<h2>-----------------------------------------------------------------------</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">     select and read namelist.</span>
+</code></pre></div>
+
+
+<h2>-----------------------------------------------------------------------</h2>
+<div class="codehilite"><pre><span></span><code><span class="err"> close input file.</span>
+<span class="err">   Delete it since it is the temporary file</span>
+</code></pre></div>
+
+
+<h2>-----------------------------------------------------------------------</h2>
+<div class="codehilite"><pre><span></span><code><span class="err"> echo the input parameters to the output file.</span>
+</code></pre></div>
+
+
+<hr>
+<hr>
+<div class="codehilite"><pre><span></span><code><span class="err"> some tests</span>
+</code></pre></div>
+
+
+<hr>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~167"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-infile"></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>infile</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-echo_in"></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>echo_in</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-outdir"></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>outdir</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~read_namelist~~CallsGraph Pages: 1 -->
+<svg id="procread_namelistCallsGraph" width="283pt" height="116pt"
+ viewBox="0.00 0.00 283.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~read_namelist~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>proc~~read_namelist~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 279,-112 279,4 -4,4"/>
+<!-- proc~read_namelist -->
+<g id="proc~~read_namelist~~CallsGraph_node1" class="node">
+<title>proc~read_namelist</title>
+<polygon fill="none" stroke="#000000" points="78,-66 0,-66 0,-42 78,-42 78,-66"/>
+<text text-anchor="middle" x="39" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">read_namelist</text>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~read_namelist~~CallsGraph_node2" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~read_namelist~~CallsGraph_node2"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="178,-108 116,-108 116,-84 178,-84 178,-108"/>
+<text text-anchor="middle" x="147" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~read_namelist&#45;&gt;proc~korc_abort -->
+<g id="proc~~read_namelist~~CallsGraph_edge1" class="edge">
+<title>proc~read_namelist&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M69.9485,-66.0355C81.359,-70.473 94.4602,-75.5678 106.5842,-80.2827"/>
+<polygon fill="#000000" stroke="#000000" points="105.4584,-83.6002 116.047,-83.9627 107.9955,-77.0762 105.4584,-83.6002"/>
+</g>
+<!-- proc~rmcoment -->
+<g id="proc~~read_namelist~~CallsGraph_node3" class="node">
+<title>proc~rmcoment</title>
+<g id="a_proc~~read_namelist~~CallsGraph_node3"><a xlink:href=".././proc/rmcoment.html" xlink:title="rmcoment">
+<polygon fill="#d9534f" stroke="#d9534f" points="176.5,-66 117.5,-66 117.5,-42 176.5,-42 176.5,-66"/>
+<text text-anchor="middle" x="147" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rmcoment</text>
+</a>
+</g>
+</g>
+<!-- proc~read_namelist&#45;&gt;proc~rmcoment -->
+<g id="proc~~read_namelist~~CallsGraph_edge2" class="edge">
+<title>proc~read_namelist&#45;&gt;proc~rmcoment</title>
+<path fill="none" stroke="#000000" d="M78.296,-54C87.6736,-54 97.6916,-54 107.0963,-54"/>
+<polygon fill="#000000" stroke="#000000" points="107.387,-57.5001 117.387,-54 107.387,-50.5001 107.387,-57.5001"/>
+</g>
+<!-- mpi_barrier -->
+<g id="proc~~read_namelist~~CallsGraph_node4" class="node">
+<title>mpi_barrier</title>
+<polygon fill="#777777" stroke="#777777" points="180,-24 114,-24 114,0 180,0 180,-24"/>
+<text text-anchor="middle" x="147" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
+</g>
+<!-- proc~read_namelist&#45;&gt;mpi_barrier -->
+<g id="proc~~read_namelist~~CallsGraph_edge3" class="edge">
+<title>proc~read_namelist&#45;&gt;mpi_barrier</title>
+<path fill="none" stroke="#000000" d="M69.9485,-41.9645C81.359,-37.527 94.4602,-32.4322 106.5842,-27.7173"/>
+<polygon fill="#000000" stroke="#000000" points="107.9955,-30.9238 116.047,-24.0373 105.4584,-24.3998 107.9955,-30.9238"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~read_namelist~~CallsGraph_node5" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="275,-108 216,-108 216,-84 275,-84 275,-108"/>
+<text text-anchor="middle" x="245.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~read_namelist~~CallsGraph_edge4" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M178.166,-96C186.9294,-96 196.58,-96 205.7706,-96"/>
+<polygon fill="#000000" stroke="#000000" points="205.88,-99.5001 215.88,-96 205.8799,-92.5001 205.88,-99.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~read_namelist~~CalledByGraph Pages: 1 -->
+<svg id="procread_namelistCalledByGraph" width="346pt" height="32pt"
+ viewBox="0.00 0.00 346.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~read_namelist~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~read_namelist~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 342,-28 342,4 -4,4"/>
+<!-- proc~read_namelist -->
+<g id="proc~~read_namelist~~CalledByGraph_node1" class="node">
+<title>proc~read_namelist</title>
+<polygon fill="none" stroke="#000000" points="338,-24 260,-24 260,0 338,0 338,-24"/>
+<text text-anchor="middle" x="299" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">read_namelist</text>
+</g>
+<!-- proc~initialize_korc_parameters -->
+<g id="proc~~read_namelist~~CalledByGraph_node2" class="node">
+<title>proc~initialize_korc_parameters</title>
+<g id="a_proc~~read_namelist~~CalledByGraph_node2"><a xlink:href=".././proc/initialize_korc_parameters.html" xlink:title="initialize_korc_parameters">
+<polygon fill="#d9534f" stroke="#d9534f" points="224,-24 90,-24 90,0 224,0 224,-24"/>
+<text text-anchor="middle" x="157" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">initialize_korc_parameters</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_korc_parameters&#45;&gt;proc~read_namelist -->
+<g id="proc~~read_namelist~~CalledByGraph_edge1" class="edge">
+<title>proc~initialize_korc_parameters&#45;&gt;proc~read_namelist</title>
+<path fill="none" stroke="#000000" d="M224.2574,-12C232.826,-12 241.4674,-12 249.6807,-12"/>
+<polygon fill="#000000" stroke="#000000" points="249.8176,-15.5001 259.8176,-12 249.8175,-8.5001 249.8176,-15.5001"/>
+</g>
+<!-- program~main -->
+<g id="proc~~read_namelist~~CalledByGraph_node3" class="node">
+<title>program~main</title>
+<g id="a_proc~~read_namelist~~CalledByGraph_node3"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_korc_parameters -->
+<g id="proc~~read_namelist~~CalledByGraph_edge2" class="edge">
+<title>program~main&#45;&gt;proc~initialize_korc_parameters</title>
+<path fill="none" stroke="#000000" d="M54.2523,-12C61.8797,-12 70.5683,-12 79.5881,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.8737,-15.5001 89.8736,-12 79.8736,-8.5001 79.8737,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/read_namelist.html#src">read_namelist</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">read_namelist</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">infile</span><span class="p">,</span><span class="n">echo_in</span><span class="p">,</span><span class="n">outdir</span><span class="p">)</span>
+
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">infile</span><span class="p">,</span><span class="n">outdir</span>
+    <span class="kt">LOGICAL</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">echo_in</span>
+
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">read_stat</span><span class="p">,</span><span class="n">nc</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">number_of_namelists</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">il</span><span class="p">,</span><span class="n">inst</span>
+    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="kd">::</span> <span class="n">namel_order</span><span class="o">=</span><span class="mi">0</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="kd">::</span> <span class="n">tempfile</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ctmp</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="kd">::</span> <span class="n">outfile</span>
+    <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">reading</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">mpierr</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">tmp</span>
+    
+    <span class="c">!! Namelist declarations</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">input_parameters</span><span class="o">/</span> <span class="n">restart</span><span class="p">,</span><span class="n">field_model</span><span class="p">,</span><span class="n">magnetic_field_filename</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">simulation_time</span><span class="p">,</span><span class="n">snapshot_frequency</span><span class="p">,</span><span class="n">dt</span><span class="p">,</span><span class="n">num_species</span><span class="p">,</span><span class="n">radiation</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">collisions</span><span class="p">,</span><span class="n">collisions_model</span><span class="p">,</span><span class="n">outputs_list</span><span class="p">,</span><span class="n">minimum_particle_energy</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">HDF5_error_handling</span><span class="p">,</span><span class="n">orbit_model</span><span class="p">,</span><span class="n">field_eval</span><span class="p">,</span><span class="n">proceed</span><span class="p">,</span><span class="n">profile_model</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">restart_overwrite_frequency</span><span class="p">,</span><span class="n">FokPlan</span><span class="p">,</span><span class="n">GC_rad_model</span><span class="p">,</span><span class="n">bound_electron_model</span><span class="p">,&amp;</span>
+         <span class="n">FO_GC_compare</span><span class="p">,</span><span class="n">SameRandSeed</span><span class="p">,</span><span class="n">SC_E</span><span class="p">,</span><span class="n">reinit</span><span class="p">,</span><span class="n">SC_E_add</span><span class="p">,</span><span class="n">time_slice</span><span class="p">,</span><span class="n">rmax</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">rmin</span><span class="p">,</span><span class="n">zmax</span><span class="p">,</span><span class="n">zmin</span><span class="p">,</span><span class="n">pchunk</span><span class="p">,</span><span class="n">magnetic_field_directory</span><span class="p">,</span><span class="n">magnetic_field_list</span><span class="p">,&amp;</span>
+         <span class="n">LargeCollisions</span><span class="p">,</span><span class="n">load_balance</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">plasma_species</span><span class="o">/</span> <span class="n">ppp</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">Eno</span><span class="p">,</span><span class="n">etao</span><span class="p">,</span><span class="n">Eo_lims</span><span class="p">,</span><span class="n">etao_lims</span><span class="p">,</span><span class="n">runaway</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">spatial_distribution</span><span class="p">,</span><span class="n">energy_distribution</span><span class="p">,</span><span class="n">pitch_distribution</span><span class="p">,</span><span class="n">Ro</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">PHIo</span><span class="p">,</span><span class="n">Zo</span><span class="p">,</span><span class="n">r_inner</span><span class="p">,</span><span class="n">r_outter</span><span class="p">,</span><span class="n">falloff_rate</span><span class="p">,</span><span class="n">shear_factor</span><span class="p">,</span><span class="n">sigmaR</span><span class="p">,</span><span class="n">sigmaZ</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">theta_gauss</span><span class="p">,</span><span class="n">psi_max</span><span class="p">,</span><span class="n">Xtrace</span><span class="p">,</span><span class="n">Spong_b</span><span class="p">,</span><span class="n">Spong_w</span><span class="p">,</span><span class="n">Spong_dlam</span><span class="p">,</span><span class="n">dth</span><span class="p">,</span><span class="n">dR</span><span class="p">,</span><span class="n">dZ</span><span class="p">,</span><span class="n">dgam</span><span class="p">,&amp;</span>
+         <span class="n">pinit</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">analytical_fields_params</span><span class="o">/</span> <span class="n">Bo</span><span class="p">,</span><span class="n">minor_radius</span><span class="p">,</span><span class="n">major_radius</span><span class="p">,&amp;</span>
+         <span class="n">qa</span><span class="p">,</span><span class="n">qo</span><span class="p">,</span><span class="n">Eo</span><span class="p">,</span><span class="n">current_direction</span><span class="p">,</span><span class="n">nR</span><span class="p">,</span><span class="n">nZ</span><span class="p">,</span><span class="n">nPHI</span><span class="p">,</span><span class="n">dim_1D</span><span class="p">,</span><span class="n">dt_E_SC</span><span class="p">,</span><span class="n">Ip_exp</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">E_dyn</span><span class="p">,</span><span class="n">E_pulse</span><span class="p">,</span><span class="n">E_width</span><span class="p">,</span><span class="n">E_profile</span><span class="p">,</span><span class="n">Ero</span><span class="p">,</span><span class="n">rmn</span><span class="p">,</span><span class="n">sigmamn</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">externalPlasmaModel</span><span class="o">/</span> <span class="n">Efield</span><span class="p">,</span> <span class="n">Bfield</span><span class="p">,</span> <span class="n">Bflux</span><span class="p">,</span><span class="n">Bflux3D</span><span class="p">,</span><span class="n">dBfield</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">axisymmetric_fields</span><span class="p">,</span> <span class="n">Eo</span><span class="p">,</span><span class="n">E_dyn</span><span class="p">,</span><span class="n">E_pulse</span><span class="p">,</span><span class="n">E_width</span><span class="p">,</span><span class="n">res_double</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">dim_1D</span><span class="p">,</span><span class="n">dt_E_SC</span><span class="p">,</span><span class="n">Ip_exp</span><span class="p">,</span><span class="n">PSIp_lim</span><span class="p">,</span><span class="n">Dim2x1t</span><span class="p">,</span><span class="n">t0_2x1t</span><span class="p">,</span><span class="n">E_2x1t</span><span class="p">,</span><span class="n">ReInterp_2x1t</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">ind0_2x1t</span><span class="p">,</span><span class="n">PSIp_0</span><span class="p">,</span><span class="n">B1field</span><span class="p">,</span><span class="n">psip_conv</span><span class="p">,</span><span class="n">MARS_AMP_Scale</span><span class="p">,</span><span class="n">Analytic_IWL</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">ntiles</span><span class="p">,</span><span class="n">circumradius</span><span class="p">,</span><span class="n">AORSA_AMP_Scale</span><span class="p">,</span><span class="n">AORSA_freq</span><span class="p">,</span><span class="n">AORSA_nmode</span><span class="p">,</span><span class="n">E1field</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">useLCFS</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">plasmaProfiles</span><span class="o">/</span> <span class="n">radius_profile</span><span class="p">,</span><span class="n">ne_profile</span><span class="p">,</span><span class="n">neo</span><span class="p">,</span><span class="n">n_ne</span><span class="p">,</span><span class="n">a_ne</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Te_profile</span><span class="p">,</span><span class="n">Teo</span><span class="p">,</span><span class="n">n_Te</span><span class="p">,</span><span class="n">a_Te</span><span class="p">,</span><span class="n">n_REr0</span><span class="p">,</span><span class="n">n_tauion</span><span class="p">,</span><span class="n">n_lamfront</span><span class="p">,</span><span class="n">n_lamback</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Zeff_profile</span><span class="p">,</span><span class="n">Zeffo</span><span class="p">,</span><span class="n">n_Zeff</span><span class="p">,</span><span class="n">a_Zeff</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">axisymmetric</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">n_lamshelf</span><span class="p">,</span><span class="n">n_shelfdelay</span><span class="p">,</span><span class="n">n_tauin</span><span class="p">,</span><span class="n">n_tauout</span><span class="p">,</span><span class="n">n_shelf</span><span class="p">,</span><span class="n">psiN_0</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">CollisionParamsSingleSpecies</span><span class="o">/</span> <span class="n">Te_sing</span><span class="p">,</span><span class="n">Ti_sing</span><span class="p">,</span><span class="n">ne_sing</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Zeff_sing</span><span class="p">,</span><span class="n">dTau_sing</span><span class="p">,</span><span class="n">p_therm</span><span class="p">,</span><span class="n">ConserveLA</span><span class="p">,</span><span class="n">Clog_model</span><span class="p">,</span><span class="n">sample_test</span><span class="p">,&amp;</span>
+         <span class="n">min_secRE</span><span class="p">,</span><span class="n">pmin_scale</span><span class="p">,</span><span class="n">energy_diffusion</span><span class="p">,</span><span class="n">LAC_gam_resolution</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">FP_bremsstrahlung</span><span class="p">,</span><span class="n">pitch_diffusion</span><span class="p">,</span><span class="n">ngrid1</span><span class="p">,</span><span class="n">Clog_const</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">CollisionParamsMultipleSpecies</span><span class="o">/</span> <span class="n">num_impurity_species</span><span class="p">,</span><span class="n">Te_mult</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">ne_mult</span><span class="p">,</span><span class="n">Zo_mult</span><span class="p">,</span><span class="n">Zj_mult</span><span class="p">,</span><span class="n">nz_mult</span><span class="p">,</span><span class="n">IZj_mult</span><span class="p">,</span><span class="n">neut_prof</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">AvalancheGenerationPDF</span><span class="o">/</span> <span class="n">max_pitch_angle_aval</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">min_pitch_angle_aval</span><span class="p">,</span><span class="n">max_energy_aval</span><span class="p">,</span><span class="n">min_energy_aval</span><span class="p">,</span><span class="n">ne_aval</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Zeff_aval</span><span class="p">,</span><span class="n">Epar_aval</span><span class="p">,</span><span class="n">Te_aval</span><span class="p">,</span><span class="n">dth_aval</span><span class="p">,</span><span class="n">dp_aval</span><span class="p">,</span><span class="n">dR_aval</span><span class="p">,</span><span class="n">dZ_aval</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">ExperimentalPDF</span><span class="o">/</span> <span class="n">max_pitch_angle_expt</span><span class="p">,</span><span class="n">min_pitch_angle_expt</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">max_energy_expt</span><span class="p">,</span><span class="n">min_energy_expt</span><span class="p">,</span><span class="n">Zeff_expt</span><span class="p">,</span><span class="n">E_expt</span><span class="p">,</span><span class="n">k_expt</span><span class="p">,</span><span class="n">t_expt</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Bo_expt</span><span class="p">,</span><span class="n">lambda_expt</span><span class="p">,</span><span class="n">A_fact_expt</span><span class="p">,</span><span class="n">filename_exp</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">HollmannPDF</span><span class="o">/</span> <span class="n">E_Hollmann</span><span class="p">,</span><span class="n">Zeff_Hollmann</span><span class="p">,</span><span class="n">max_pitch_angle_Hollmann</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">min_pitch_angle_Hollmann</span><span class="p">,</span><span class="n">max_energy_Hollmann</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">min_energy_Hollmann</span><span class="p">,</span><span class="n">filename_Hollmann</span><span class="p">,</span><span class="n">Bo_Hollmann</span><span class="p">,</span><span class="n">lambda_Hollmann</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">current_direction_Hollmann</span><span class="p">,</span><span class="n">A_fact_Hollmann</span><span class="p">,</span><span class="n">sigma_E_Hollmann</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">sigma_Z_Hollmann</span><span class="p">,</span><span class="n">Eo_Hollmann</span><span class="p">,</span><span class="n">rho_ind</span><span class="p">,</span><span class="n">gam_min_from_col</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">SimpleEquilibriumPDF</span><span class="o">/</span> <span class="n">max_pitch_angle_simple</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">min_pitch_angle_simple</span><span class="p">,</span><span class="n">Zeff_simple</span><span class="p">,</span><span class="n">E_simple</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Bo_simple</span><span class="p">,</span><span class="n">lambda_simple</span>
+    <span class="k">NAMELIST</span> <span class="o">/</span><span class="n">EnergyGammaPDF</span><span class="o">/</span> <span class="n">max_energy_gamma</span><span class="p">,</span><span class="n">min_energy_gamma</span><span class="p">,</span><span class="n">k_gamma</span><span class="p">,</span><span class="n">t_gamma</span>
+
+<span class="c">!!-----------------------------------------------------------------------</span>
+<span class="c">!!     open input file.</span>
+<span class="c">!!     Remove comments from input file and put into temporary file.</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+    <span class="n">tempfile</span><span class="o">=</span><span class="s1">&#39;tempinput.korc&#39;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       CALL </span><span class="n">rmcoment</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span><span class="n">tempfile</span><span class="p">)</span>
+    <span class="k">end if</span>
+<span class="k">    call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>   
+    <span class="k">OPEN</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="k">FILE</span><span class="o">=</span><span class="n">tempfile</span><span class="p">,</span><span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;OLD&#39;</span><span class="p">,</span><span class="n">POSITION</span><span class="o">=</span><span class="s1">&#39;REWIND&#39;</span><span class="p">)</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+<span class="c">!!    check namelist file for namelist order and number.</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+    <span class="k">DO</span>
+<span class="k">       READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">FMT</span><span class="o">=</span><span class="s1">&#39;(a)&#39;</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span> <span class="n">ctmp</span> 
+       <span class="k">IF</span> <span class="p">(</span><span class="n">read_stat</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">EXIT</span>
+<span class="k">       </span><span class="n">nc</span><span class="o">=</span><span class="nb">LEN_TRIM</span><span class="p">(</span><span class="n">ctmp</span><span class="p">)</span>
+       <span class="k">IF</span> <span class="p">(</span><span class="n">nc</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">CYCLE</span>
+<span class="k">       </span><span class="n">ctmp</span><span class="o">=</span><span class="nb">ADJUSTL</span><span class="p">(</span><span class="n">ctmp</span><span class="p">)</span>
+       <span class="n">reading</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+       <span class="k">IF</span> <span class="p">(</span><span class="n">ctmp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span> <span class="k">THEN</span>
+<span class="k">          </span><span class="n">number_of_namelists</span><span class="o">=</span><span class="n">number_of_namelists</span><span class="o">+</span><span class="mi">1</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+<span class="c">!!         trim all but the namelist name.</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+          <span class="k">DO </span><span class="n">il</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nc</span><span class="o">+</span><span class="mi">1</span>
+             <span class="k">IF</span> <span class="p">(</span><span class="n">ctmp</span><span class="p">(</span><span class="n">il</span><span class="p">:</span><span class="n">il</span><span class="p">)</span><span class="o">/=</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="k">THEN</span>
+<span class="k">                IF</span> <span class="p">(.</span><span class="nb">NOT</span><span class="p">.</span><span class="n">reading</span><span class="p">)</span> <span class="n">inst</span><span class="o">=</span><span class="n">il</span>
+                <span class="n">reading</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+                <span class="k">CYCLE</span>
+<span class="k">             </span><span class="n">ENDIF</span>
+             <span class="k">IF</span> <span class="p">(</span><span class="n">ctmp</span><span class="p">(</span><span class="n">il</span><span class="p">:</span><span class="n">il</span><span class="p">)</span><span class="o">==</span><span class="s1">&#39; &#39;</span><span class="p">.</span><span class="nb">AND</span><span class="p">.</span><span class="n">reading</span><span class="p">)</span> <span class="k">THEN</span>
+<span class="k">                </span><span class="n">ctmp</span><span class="o">=</span><span class="n">ctmp</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span><span class="n">il</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">EXIT</span>
+<span class="k">             </span><span class="n">ENDIF</span>
+          <span class="n">ENDDO</span>
+          <span class="k">BACKSPACE</span><span class="p">(</span><span class="n">default_unit_open</span><span class="p">)</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+<span class="c">!!         select and read namelist.</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+          <span class="k">SELECT CASE</span><span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">ctmp</span><span class="p">))</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;input_parameters&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+             
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;plasma_species&#39;</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;reading plasma_species namelist&#39;</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">runaway</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">ppp</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">pinit</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">q</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">spatial_distribution</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Ro</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">PHIo</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Zo</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">r_inner</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">r_outter</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">shear_factor</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">sigmaR</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">sigmaZ</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">theta_gauss</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">psi_max</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">falloff_rate</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">energy_distribution</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">pitch_distribution</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Eno</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">etao</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Eo_lims</span><span class="p">(</span><span class="mi">2_idef</span><span class="o">*</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">etao_lims</span><span class="p">(</span><span class="mi">2_idef</span><span class="o">*</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Xtrace</span><span class="p">(</span><span class="mi">3_idef</span><span class="o">*</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Spong_b</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Spong_w</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Spong_dlam</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">dth</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">dgam</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">dR</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">dZ</span><span class="p">(</span><span class="n">num_species</span><span class="p">))</span>
+
+             <span class="k">if</span> <span class="p">(</span><span class="n">num_species</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span><span class="n">runaway</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+                <span class="n">ppp</span> <span class="o">=</span> <span class="mf">1E0</span>
+                <span class="n">pinit</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> 
+                <span class="n">m</span> <span class="o">=</span> <span class="mf">1.0</span> 
+                <span class="n">spatial_distribution</span> <span class="o">=</span> <span class="s1">&#39;TRACER&#39;</span>
+                <span class="n">Ro</span> <span class="o">=</span> <span class="mf">1.1</span>
+                <span class="n">PHIo</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">Zo</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.05</span>
+                <span class="n">r_inner</span> <span class="o">=</span> <span class="mf">0.0</span> 
+                <span class="n">r_outter</span> <span class="o">=</span> <span class="mf">0.6</span> 
+                <span class="n">shear_factor</span> <span class="o">=</span> <span class="mf">0.35</span> 
+                <span class="n">sigmaR</span> <span class="o">=</span> <span class="mf">1.e6</span>
+                <span class="n">sigmaZ</span> <span class="o">=</span> <span class="mf">0.2</span>
+                <span class="n">theta_gauss</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">psi_max</span><span class="o">=</span><span class="p">.</span><span class="mi">8446</span>
+                <span class="n">falloff_rate</span> <span class="o">=</span> <span class="mf">0.0</span> 
+                <span class="n">energy_distribution</span> <span class="o">=</span> <span class="s1">&#39;MONOENERGETIC&#39;</span>   
+                <span class="n">pitch_distribution</span> <span class="o">=</span> <span class="s1">&#39;MONOPITCH&#39;</span>	
+                <span class="n">Eno</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">0.0E6</span> 
+                <span class="n">etao</span> <span class="o">=</span> <span class="mf">1.0</span>  
+                <span class="n">Eo_lims</span> <span class="o">=</span> <span class="p">(</span><span class="o">/</span><span class="mf">1.0E6</span><span class="p">,</span><span class="mi">5</span><span class="mf">0.0E6</span><span class="o">/</span><span class="p">)</span> 
+                <span class="n">etao_lims</span> <span class="o">=</span> <span class="p">(</span><span class="o">/</span><span class="mf">0.0</span><span class="p">,</span><span class="mi">2</span><span class="mf">0.0</span> <span class="o">/</span><span class="p">)</span>
+                <span class="n">Xtrace</span> <span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="o">/</span><span class="p">)</span>
+                <span class="n">Spong_b</span> <span class="o">=</span> <span class="mf">0.2</span>
+                <span class="n">Spong_w</span> <span class="o">=</span> <span class="mf">0.1</span>
+                <span class="n">Spong_dlam</span> <span class="o">=</span> <span class="mf">0.1</span>
+                <span class="n">dth</span> <span class="o">=</span> <span class="mf">3.</span>
+                <span class="n">dgam</span> <span class="o">=</span> <span class="mf">3.</span>	  
+                <span class="n">dR</span> <span class="o">=</span> <span class="mf">0.1</span>
+                <span class="n">dZ</span> <span class="o">=</span> <span class="mf">0.1</span>
+             <span class="k">else</span>
+<span class="k">                if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                   write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Need to supply all inputs for num_species .gt. 1&quot;)&#39;</span><span class="p">)</span>
+                <span class="k">end if</span>
+<span class="k">             end if</span>
+<span class="k">             </span>
+<span class="k">             READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">plasma_species</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+
+             <span class="k">if</span> <span class="p">(</span><span class="n">pinit</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="n">pinit</span><span class="p">(:)</span><span class="o">=</span><span class="n">ppp</span><span class="p">(:)</span>
+             <span class="c">! set pinit equal to ppp if no pinit input</span>
+             
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;analytical_fields_params&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">analytical_fields_params</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;externalPlasmaModel&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">externalPlasmaModel</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;plasmaProfiles&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">plasmaProfiles</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;CollisionParamsSingleSpecies&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">CollisionParamsSingleSpecies</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;CollisionParamsMultipleSpecies&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">CollisionParamsMultipleSpecies</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;AvalancheGenerationPDF&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">AvalancheGenerationPDF</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;ExperimentalPDF&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">ExperimentalPDF</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;HollmannPDF&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">HollmannPDF</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;EnergyGammaPDF&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">EnergyGammaPDF</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;SimpleEquilibriumPDF&#39;</span><span class="p">)</span>
+             <span class="k">READ</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">SimpleEquilibriumPDF</span><span class="p">,</span><span class="n">IOSTAT</span><span class="o">=</span><span class="n">read_stat</span><span class="p">)</span>
+          <span class="k">CASE </span><span class="n">DEFAULT</span>
+             <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">ctmp</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; is an unrecognized &amp;</span>
+<span class="s1">                  &amp;namelist.&#39;</span><span class="p">)</span>
+             <span class="k">call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+          <span class="k">END SELECT</span>
+<span class="k">          IF</span> <span class="p">(</span><span class="n">read_stat</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="s1">&#39;Error reading namelist &#39;</span><span class="o">//</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">ctmp</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>             
+             <span class="k">call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+          <span class="k">end if</span>
+<span class="k">       </span><span class="n">ENDIF</span>
+    <span class="n">ENDDO</span>
+
+<span class="c">!!-----------------------------------------------------------------------</span>
+<span class="c">!!     close input file.</span>
+<span class="c">!!       Delete it since it is the temporary file</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       CLOSE</span><span class="p">(</span><span class="n">default_unit_open</span><span class="p">)</span>
+    <span class="k">end if</span>
+<span class="k">    call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       CLOSE</span><span class="p">(</span><span class="n">default_unit_open</span><span class="p">,</span><span class="n">STATUS</span><span class="o">=</span><span class="s1">&#39;DELETE&#39;</span><span class="p">)</span>
+    <span class="k">end if</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+<span class="c">!!     echo the input parameters to the output file.</span>
+<span class="c">!!-----------------------------------------------------------------------</span>
+
+
+    <span class="k">IF</span> <span class="p">(</span><span class="n">echo_in</span><span class="p">)</span> <span class="k">THEN</span>
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(a,/)&#39;</span><span class="p">)</span> <span class="s1">&#39;VALUE OF ALL INPUTS:&#39;</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">plasma_species</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">analytical_fields_params</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">externalPlasmaModel</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">plasmaProfiles</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">CollisionParamsSingleSpecies</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">CollisionParamsMultipleSpecies</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">AvalancheGenerationPDF</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">ExperimentalPDF</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">HollmannPDF</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">EnergyGammaPDF</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span> 
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">UNIT</span><span class="o">=</span><span class="n">output_unit_write</span><span class="p">,</span><span class="n">NML</span><span class="o">=</span><span class="n">SimpleEquilibriumPDF</span><span class="p">)</span>
+          <span class="k">WRITE</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/)&#39;</span><span class="p">)</span>
+             
+       <span class="k">end if</span>
+<span class="k">    end if</span>
+
+<span class="c">!!---------------------------------------------------------</span>
+<span class="c">!!     some tests</span>
+<span class="c">!!---------------------------------------------------------</span>
+
+    <span class="c">!write(6,*) TRIM(outputs_list),len(TRIM(outputs_list))</span>
+    
+    <span class="n">tmp</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">outputs_list</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">outputs_list</span><span class="p">(</span><span class="n">tmp</span><span class="p">:</span><span class="n">tmp</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;}&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       if</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+               <span class="s1">&#39;Check that enough characters are allocated for&amp;</span>
+<span class="s1">               &amp; outputs list!&#39;</span>
+       <span class="k">end if</span>
+<span class="k">       call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+    <span class="k">end if</span>
+
+    <span class="c">!write(6,*) TRIM(magnetic_field_filename),len(TRIM(magnetic_field_filename))</span>
+
+    <span class="n">tmp</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">magnetic_field_filename</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">magnetic_field_filename</span><span class="p">(</span><span class="n">tmp</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="n">tmp</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;.h5&#39;</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+         <span class="n">magnetic_field_filename</span><span class="p">(</span><span class="n">tmp</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="n">tmp</span><span class="o">-</span><span class="mi">5</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       if</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+               <span class="s1">&#39;Check that enough characters are allocated for&amp;</span>
+<span class="s1">               &amp; magnetic field filename!&#39;</span>
+       <span class="k">end if</span>
+<span class="k">       call </span><span class="n">korc_abort</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+    <span class="k">end if </span>
+<span class="k">      </span>
+<span class="k">    end subroutine </span><span class="n">read_namelist</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

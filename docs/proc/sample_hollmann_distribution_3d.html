@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>sample_Hollmann_distribution_3D &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>sample_Hollmann_distribution_3D
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.8% of total for procedures.">194 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_experimental_pdf.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_experimental_pdf.f90.html'>korc_experimental_pdf.f90</a></li>
+    
+     <li><a href='../module/korc_experimental_pdf.html'>korc_experimental_pdf</a></li>
+    
+  
+     <li class="active">sample_Hollmann_distribution_3D</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/sample_hollmann_distribution_3d.html#src">sample_Hollmann_distribution_3D</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine sample_Hollmann_distribution_3D(params, spp, F)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subroutine that generates a 2D Gaussian distribution in an 
+ elliptic torus as the initial spatial condition of a given particle 
+ species in the simulation. </p></div>
+<p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~181"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spp~61"></span>type(SPECIES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>spp</strong></td><td><p>An instance of the derived type SPECIES containing all the parameters
+ and simulation variables of the different species in the simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~113"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~sample_hollmann_distribution_3d~~CallsGraph Pages: 1 -->
+<svg id="procsample_hollmann_distribution_3dCallsGraph" width="471pt" height="364pt"
+ viewBox="0.00 0.00 471.00 364.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 360)">
+<title>proc~~sample_hollmann_distribution_3d~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-360 467,-360 467,4 -4,4"/>
+<!-- proc~sample_hollmann_distribution_3d -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node1" class="node">
+<title>proc~sample_hollmann_distribution_3d</title>
+<polygon fill="none" stroke="#000000" points="172,-192 0,-192 0,-168 172,-168 172,-192"/>
+<text text-anchor="middle" x="86" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">sample_Hollmann_distribution_3D</text>
+</g>
+<!-- proc~get_random_u -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node2" class="node">
+<title>proc~get_random_u</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node2"><a xlink:href=".././proc/get_random_u.html" xlink:title="get_random_U">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="297,-356 215,-356 215,-332 297,-332 297,-356"/>
+<text text-anchor="middle" x="256" y="-341.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_random_U</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~get_random_u -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge1" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~get_random_u</title>
+<path fill="none" stroke="#000000" d="M93.6953,-192.3551C111.0571,-219.3561 155.8506,-284.2984 208,-323 209.8398,-324.3653 211.7822,-325.6653 213.7892,-326.8995"/>
+<polygon fill="#000000" stroke="#000000" points="212.4338,-330.148 222.8847,-331.8888 215.8004,-324.0107 212.4338,-330.148"/>
+</g>
+<!-- mpi_barrier -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node3" class="node">
+<title>mpi_barrier</title>
+<polygon fill="#777777" stroke="#777777" points="289,-314 223,-314 223,-290 289,-290 289,-314"/>
+<text text-anchor="middle" x="256" y="-299.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;mpi_barrier -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge3" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;mpi_barrier</title>
+<path fill="none" stroke="#000000" d="M99.6892,-192.0452C121.6653,-211.0828 166.5613,-248.7583 208,-276 212.6526,-279.0586 217.6977,-282.0827 222.7102,-284.927"/>
+<polygon fill="#000000" stroke="#000000" points="221.1569,-288.0671 231.6055,-289.8213 224.5313,-281.9342 221.1569,-288.0671"/>
+</g>
+<!-- proc~deg2rad~5 -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node4" class="node">
+<title>proc~deg2rad~5</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node4"><a xlink:href=".././proc/deg2rad~5.html" xlink:title="deg2rad">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="428.5,-191 374.5,-191 374.5,-167 428.5,-167 428.5,-191"/>
+<text text-anchor="middle" x="401.5" y="-176.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">deg2rad</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~deg2rad~5 -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge2" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~deg2rad~5</title>
+<path fill="none" stroke="#000000" d="M103.1268,-192.2364C125.8184,-207.6223 167.6946,-233.2076 208,-243 249.4606,-253.0731 263.1202,-255.2184 304,-243 333.4411,-234.2005 362.2397,-213.3431 380.8115,-197.816"/>
+<polygon fill="#000000" stroke="#000000" points="383.2952,-200.2962 388.5904,-191.1195 378.7283,-194.9911 383.2952,-200.2962"/>
+</g>
+<!-- proc~indicator_exp -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node5" class="node">
+<title>proc~indicator_exp</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node5"><a xlink:href=".././proc/indicator_exp.html" xlink:title="indicator_exp">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="293.5,-234 218.5,-234 218.5,-210 293.5,-210 293.5,-234"/>
+<text text-anchor="middle" x="256" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">indicator_exp</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~indicator_exp -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge4" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~indicator_exp</title>
+<path fill="none" stroke="#000000" d="M134.7152,-192.0355C157.8767,-197.7578 185.4633,-204.5733 208.4707,-210.2575"/>
+<polygon fill="#000000" stroke="#000000" points="207.8071,-213.6987 218.3547,-212.6994 209.4861,-206.903 207.8071,-213.6987"/>
+</g>
+<!-- proc~init_random_seed -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node6" class="node">
+<title>proc~init_random_seed</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node6"><a xlink:href=".././proc/init_random_seed.html" xlink:title="init_random_seed">
+<polygon fill="#d9534f" stroke="#d9534f" points="304,-192 208,-192 208,-168 304,-168 304,-192"/>
+<text text-anchor="middle" x="256" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~init_random_seed -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge5" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#000000" d="M172.4941,-180C181.0297,-180 189.5452,-180 197.6962,-180"/>
+<polygon fill="#000000" stroke="#000000" points="197.7999,-183.5001 207.7999,-180 197.7998,-176.5001 197.7999,-183.5001"/>
+</g>
+<!-- mpi_scatter -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node7" class="node">
+<title>mpi_scatter</title>
+<polygon fill="#777777" stroke="#777777" points="289.5,-150 222.5,-150 222.5,-126 289.5,-126 289.5,-150"/>
+<text text-anchor="middle" x="256" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;mpi_scatter -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge6" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;mpi_scatter</title>
+<path fill="none" stroke="#000000" d="M134.7152,-167.9645C159.2684,-161.8984 188.7943,-154.6038 212.5662,-148.7307"/>
+<polygon fill="#000000" stroke="#000000" points="213.502,-152.1048 222.3706,-146.3084 211.823,-145.3091 213.502,-152.1048"/>
+</g>
+<!-- proc~get_random_n -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node8" class="node">
+<title>proc~get_random_n</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node8"><a xlink:href=".././proc/get_random_n.html" xlink:title="get_random_N">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="297,-66 215,-66 215,-42 297,-42 297,-66"/>
+<text text-anchor="middle" x="256" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_random_N</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~get_random_n -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge7" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~get_random_n</title>
+<path fill="none" stroke="#000000" d="M97.5091,-167.9673C118.1022,-146.9521 163.2944,-103.1235 208,-75 210.4541,-73.4562 213.0413,-71.9712 215.6902,-70.5544"/>
+<polygon fill="#000000" stroke="#000000" points="217.4328,-73.5969 224.8315,-66.0134 214.3185,-67.3278 217.4328,-73.5969"/>
+</g>
+<!-- proc~fre_h_3d -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node9" class="node">
+<title>proc~fre_h_3d</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node9"><a xlink:href=".././proc/fre_h_3d.html" xlink:title="fRE_H_3D">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="287.5,-108 224.5,-108 224.5,-84 287.5,-84 287.5,-108"/>
+<text text-anchor="middle" x="256" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fRE_H_3D</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~fre_h_3d -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge8" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~fre_h_3d</title>
+<path fill="none" stroke="#000000" d="M108.2693,-167.9526C132.5633,-154.939 172.7055,-133.8123 208,-117 211.3592,-115.3999 214.8704,-113.7749 218.3993,-112.174"/>
+<polygon fill="#000000" stroke="#000000" points="219.9856,-115.2988 227.6896,-108.0256 217.1315,-108.907 219.9856,-115.2988"/>
+</g>
+<!-- proc~psi_rot_exp -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node10" class="node">
+<title>proc~psi_rot_exp</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node10"><a xlink:href=".././proc/psi_rot_exp.html" xlink:title="PSI_ROT_exp">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="296,-24 216,-24 216,0 296,0 296,-24"/>
+<text text-anchor="middle" x="256" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">PSI_ROT_exp</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution_3d&#45;&gt;proc~psi_rot_exp -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge9" class="edge">
+<title>proc~sample_hollmann_distribution_3d&#45;&gt;proc~psi_rot_exp</title>
+<path fill="none" stroke="#000000" d="M93.3519,-167.7014C110.3518,-140.1737 155.005,-72.8904 208,-33 209.8304,-31.6222 211.7654,-30.3122 213.7665,-29.0701"/>
+<polygon fill="#000000" stroke="#000000" points="215.782,-31.9553 222.8452,-24.0583 212.399,-25.8271 215.782,-31.9553"/>
+</g>
+<!-- interface~random_get_number_u -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node12" class="node">
+<title>interface~random_get_number_u</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node12"><a xlink:href=".././interface/random_get_number_u.html" xlink:title="random_get_number_U">
+<polygon fill="#a7506f" stroke="#a7506f" points="463,-356 340,-356 340,-332 463,-332 463,-356"/>
+<text text-anchor="middle" x="401.5" y="-341.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_get_number_U</text>
+</a>
+</g>
+</g>
+<!-- proc~get_random_u&#45;&gt;interface~random_get_number_u -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge10" class="edge">
+<title>proc~get_random_u&#45;&gt;interface~random_get_number_u</title>
+<path fill="none" stroke="#000000" d="M297.3053,-344C307.4686,-344 318.6457,-344 329.7904,-344"/>
+<polygon fill="#000000" stroke="#000000" points="329.9861,-347.5001 339.986,-344 329.986,-340.5001 329.9861,-347.5001"/>
+</g>
+<!-- interface~random_get_number_n -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_node11" class="node">
+<title>interface~random_get_number_n</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CallsGraph_node11"><a xlink:href=".././interface/random_get_number_n.html" xlink:title="random_get_number_N">
+<polygon fill="#a7506f" stroke="#a7506f" points="463,-66 340,-66 340,-42 463,-42 463,-66"/>
+<text text-anchor="middle" x="401.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_get_number_N</text>
+</a>
+</g>
+</g>
+<!-- proc~get_random_n&#45;&gt;interface~random_get_number_n -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge11" class="edge">
+<title>proc~get_random_n&#45;&gt;interface~random_get_number_n</title>
+<path fill="none" stroke="#000000" d="M297.3053,-54C307.4686,-54 318.6457,-54 329.7904,-54"/>
+<polygon fill="#000000" stroke="#000000" points="329.9861,-57.5001 339.986,-54 329.986,-50.5001 329.9861,-57.5001"/>
+</g>
+<!-- proc~fre_h_3d&#45;&gt;proc~deg2rad~5 -->
+<g id="proc~~sample_hollmann_distribution_3d~~CallsGraph_edge12" class="edge">
+<title>proc~fre_h_3d&#45;&gt;proc~deg2rad~5</title>
+<path fill="none" stroke="#000000" d="M285.5324,-108.0658C291.7181,-110.8297 298.1394,-113.8785 304,-117 329.2191,-130.4322 356.5592,-148.1116 375.8523,-161.1532"/>
+<polygon fill="#000000" stroke="#000000" points="374.1394,-164.2216 384.3729,-166.9652 378.084,-158.4388 374.1394,-164.2216"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~sample_hollmann_distribution_3d~~CalledByGraph Pages: 1 -->
+<svg id="procsample_hollmann_distribution_3dCalledByGraph" width="369pt" height="32pt"
+ viewBox="0.00 0.00 369.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~sample_hollmann_distribution_3d~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~sample_hollmann_distribution_3d~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 365,-28 365,4 -4,4"/>
+<!-- proc~sample_hollmann_distribution_3d -->
+<g id="proc~~sample_hollmann_distribution_3d~~CalledByGraph_node1" class="node">
+<title>proc~sample_hollmann_distribution_3d</title>
+<polygon fill="none" stroke="#000000" points="361,-24 189,-24 189,0 361,0 361,-24"/>
+<text text-anchor="middle" x="275" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">sample_Hollmann_distribution_3D</text>
+</g>
+<!-- proc~get_hollmann_distribution_3d -->
+<g id="proc~~sample_hollmann_distribution_3d~~CalledByGraph_node2" class="node">
+<title>proc~get_hollmann_distribution_3d</title>
+<g id="a_proc~~sample_hollmann_distribution_3d~~CalledByGraph_node2"><a xlink:href=".././proc/get_hollmann_distribution_3d.html" xlink:title="get_Hollmann_distribution_3D">
+<polygon fill="#d9534f" stroke="#d9534f" points="153,-24 0,-24 0,0 153,0 153,-24"/>
+<text text-anchor="middle" x="76.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_Hollmann_distribution_3D</text>
+</a>
+</g>
+</g>
+<!-- proc~get_hollmann_distribution_3d&#45;&gt;proc~sample_hollmann_distribution_3d -->
+<g id="proc~~sample_hollmann_distribution_3d~~CalledByGraph_edge1" class="edge">
+<title>proc~get_hollmann_distribution_3d&#45;&gt;proc~sample_hollmann_distribution_3d</title>
+<path fill="none" stroke="#000000" d="M153.2453,-12C161.6356,-12 170.2523,-12 178.8383,-12"/>
+<polygon fill="#000000" stroke="#000000" points="178.8878,-15.5001 188.8878,-12 178.8878,-8.5001 178.8878,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/sample_hollmann_distribution_3d.html#src">sample_Hollmann_distribution_3D</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">sample_Hollmann_distribution_3D</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">spp</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+  <span class="c">!! @note Subroutine that generates a 2D Gaussian distribution in an </span>
+  <span class="c">!! elliptic torus as the initial spatial condition of a given particle </span>
+  <span class="c">!! species in the simulation. @endnote</span>
+  <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+  <span class="c">!! Core KORC simulation parameters.</span>
+  <span class="k">TYPE</span><span class="p">(</span><span class="n">SPECIES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">spp</span>
+  <span class="c">!! An instance of the derived type SPECIES containing all the parameters</span>
+  <span class="c">!! and simulation variables of the different species in the simulation.</span>
+  <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">F</span>
+  <span class="c">!! An instance of the KORC derived type FIELDS.</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">R_samples</span><span class="p">,</span><span class="n">X_samples</span><span class="p">,</span><span class="n">Y_samples</span>
+  <span class="c">!! Major radial location of all samples</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">PHI_samples</span>
+  <span class="c">!! Azimuithal angle of all samples</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">Z_samples</span>
+  <span class="c">!! Vertical location of all samples</span>
+
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">G_samples</span>
+  <span class="c">!! Gamma of all samples</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">eta_samples</span>
+  <span class="c">!! Pitch angle of all samples</span>
+
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">psi_max_buff</span>
+  <span class="c">!! Value of buffer above desired maximum argument of 2D Gaussian spatial</span>
+  <span class="c">!! profile</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">minmax</span>
+  <span class="c">!! Temporary variable used for setting buffers</span>
+
+  <span class="c">!! Minimum domain for momentum sampling including buffer</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">max_pitch_angle</span>
+  <span class="c">!! Maximum domain for pitch angle sampling including buffer</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">min_pitch_angle</span>
+  <span class="c">!! Minimum domain for pitch angle sampling including buffer</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">min_g</span><span class="p">,</span><span class="n">max_g</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">theta_rad</span>
+  <span class="c">!! Angle of rotation of 2D Gaussian spatial distribution in radians</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">R_buffer</span>
+  <span class="c">!! Previous sample of R location</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">Z_buffer</span>
+  <span class="c">!! Previous sample of Z location</span>
+ 
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">eta_buffer</span>
+  <span class="c">!! Previous sample of pitch</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">G_buffer</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">R_test</span>
+  <span class="c">!! Present sample of R location</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">Z_test</span>
+  <span class="c">!! Present sample of Z location</span>
+
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">eta_test</span>
+  <span class="c">!! Present sample of pitch angle</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">G_test</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">psi0</span>
+  <span class="c">!! Previous value of 2D Gaussian argument based on R_buffer, Z_buffer</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">psi1</span>
+  <span class="c">!! Present value of 2D Gaussian argument based on R_test, Z_test</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">f0</span>
+  <span class="c">!! Evaluation of Avalanche distribution with previous sample</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">f1</span>
+  <span class="c">!! Evaluation of Avalanche distribution with present sample</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">rand_unif</span>
+  <span class="c">!! Uniform random variable [0,1]</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">ratio</span>
+  <span class="c">!! MH selection criteria</span>
+  <span class="kt">INTEGER</span>				<span class="kd">::</span> <span class="n">nsamples</span>
+  <span class="c">!! Total number of samples to be distributed over all mpi processes</span>
+  <span class="kt">INTEGER</span> 				<span class="kd">::</span> <span class="n">ii</span>
+  <span class="c">!! Sample iterator.</span>
+  <span class="kt">INTEGER</span> 				<span class="kd">::</span> <span class="n">mpierr</span>
+  <span class="c">!! mpi error indicator</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 						<span class="kd">::</span> <span class="n">dg</span><span class="p">,</span><span class="n">deta</span>
+  <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">accepted</span>
+  <span class="kt">INTEGER</span><span class="p">,</span><span class="k">DIMENSION</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span> <span class="kd">::</span> <span class="n">seed</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="p">)</span>
+  
+  
+  <span class="n">nsamples</span> <span class="o">=</span> <span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span>
+
+  <span class="n">psi_max_buff</span> <span class="o">=</span> <span class="n">spp</span><span class="p">%</span><span class="n">psi_max</span><span class="o">*</span><span class="mf">2._rp</span>
+
+  <span class="n">theta_rad</span><span class="o">=</span><span class="n">C_PI</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">theta_gauss</span><span class="o">/</span><span class="mi">18</span><span class="mf">0.0_rp</span>
+
+
+  <span class="n">deta</span> <span class="o">=</span> <span class="p">(</span><span class="n">h_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">-</span> <span class="n">h_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="mf">0.0_rp</span>
+  <span class="n">dg</span> <span class="o">=</span> <span class="p">(</span><span class="n">h_params</span><span class="p">%</span><span class="n">max_sampling_g</span> <span class="o">-</span> <span class="n">h_params</span><span class="p">%</span><span class="n">min_sampling_g</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="mf">0.0_rp</span>
+  
+  <span class="c">! buffer at minimum gamma boundary  </span>
+  <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+     <span class="n">minmax</span> <span class="o">=</span> <span class="n">h_params</span><span class="p">%</span><span class="n">min_sampling_g</span> <span class="o">-</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">dg</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">h_params</span><span class="p">%</span><span class="n">min_g</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        </span><span class="n">min_g</span> <span class="o">=</span> <span class="n">minmax</span>
+     <span class="k">end if</span>
+     <span class="c">! buffer at maximum gamma boundary  </span>
+     <span class="n">minmax</span> <span class="o">=</span> <span class="n">h_params</span><span class="p">%</span><span class="n">max_sampling_g</span> <span class="o">+</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">dg</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">h_params</span><span class="p">%</span><span class="n">max_g</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        </span><span class="n">max_g</span> <span class="o">=</span> <span class="n">minmax</span>
+     <span class="k">end if</span>
+<span class="k">  end do</span>
+
+  <span class="c">! buffer at minimum pitch angle boundary  </span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">h_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">.</span><span class="n">GE</span><span class="p">.</span><span class="n">korc_zero</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">     do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+        <span class="n">minmax</span> <span class="o">=</span> <span class="n">h_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> <span class="o">-</span>  <span class="kt">REAL</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">deta</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="mf">0.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           </span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">minmax</span>
+        <span class="k">end if</span>
+<span class="k">     end do</span>
+<span class="k">  else</span>
+<span class="k">     </span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">h_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> 
+  <span class="k">end if</span>
+
+  <span class="c">! buffer at maximum pitch angle boundary  </span>
+  <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+     <span class="n">minmax</span> <span class="o">=</span> <span class="n">h_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">+</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">deta</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">LE</span><span class="p">.</span><span class="mi">18</span><span class="mf">0.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        </span><span class="n">max_pitch_angle</span> <span class="o">=</span> <span class="n">minmax</span>
+     <span class="k">end if</span>
+<span class="k">  end do</span>
+
+<span class="k">  </span>
+<span class="k">  if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">     ALLOCATE</span><span class="p">(</span><span class="n">R_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">X_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Y_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="c">! Number of samples to distribute among all MPI processes</span>
+     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">PHI_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="c">! Number of samples to distribute among all MPI processes</span>
+     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Z_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="c">! Number of samples to distribute among all MPI processes</span>
+     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="c">! Number of samples to distribute among all MPI processes</span>
+     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">G_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span>
+     <span class="c">! Number of samples to distribute among all MPI processes</span>
+     
+     <span class="c">! Transient !</span>
+
+     <span class="n">R_buffer</span> <span class="o">=</span> <span class="n">spp</span><span class="p">%</span><span class="n">Ro</span>
+     <span class="n">Z_buffer</span> <span class="o">=</span> <span class="n">spp</span><span class="p">%</span><span class="n">Zo</span>
+
+
+     <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">SameRandSeed</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        call </span><span class="n">init_random_seed</span><span class="p">()</span>
+     <span class="k">else</span>
+<span class="k">        call </span><span class="nb">random_seed</span><span class="p">(</span><span class="n">put</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+     <span class="k">end if</span>
+     
+<span class="c">!     call RANDOM_NUMBER(rand_unif)</span>
+<span class="c">!     eta_buffer = min_pitch_angle + (max_pitch_angle &amp;</span>
+<span class="c">!          - min_pitch_angle)*rand_unif</span>
+<span class="c">!     eta_buffer = min_pitch_angle + (max_pitch_angle &amp;</span>
+<span class="c">!          - min_pitch_angle)*get_random_mkl_U()</span>
+     <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">min_pitch_angle</span> <span class="o">+</span> <span class="p">(</span><span class="n">max_pitch_angle</span> <span class="p">&amp;</span>
+          <span class="o">-</span> <span class="n">min_pitch_angle</span><span class="p">)</span><span class="o">*</span><span class="n">get_random_U</span><span class="p">()</span>
+     
+<span class="c">!     call RANDOM_NUMBER(rand_unif)</span>
+<span class="c">!     G_buffer = min_g + (max_g - min_g)*rand_unif</span>
+<span class="c">!     G_buffer = min_g + (max_g - min_g)*get_random_mkl_U()</span>
+     <span class="n">G_buffer</span> <span class="o">=</span> <span class="n">min_g</span> <span class="o">+</span> <span class="p">(</span><span class="n">max_g</span> <span class="o">-</span> <span class="n">min_g</span><span class="p">)</span><span class="o">*</span><span class="n">get_random_U</span><span class="p">()</span>
+     
+<span class="c">!     write(output_unit_write,*) &#39;R_buffer&#39;,R_buffer</span>
+<span class="c">!     write(output_unit_write,*) &#39;Z_buffer&#39;,Z_buffer</span>
+<span class="c">!     write(output_unit_write,*) &#39;eta_buffer&#39;,eta_buffer</span>
+<span class="c">!     write(output_unit_write,*) &#39;G_buffer&#39;,G_buffer</span>
+     
+     <span class="c">!     write(output_unit_write,&#39;(&quot;length norm: &quot;,E17.10)&#39;) params%cpp%length</span>
+     
+     <span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+     <span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span>
+     <span class="k">do while</span> <span class="p">(</span><span class="n">ii</span> <span class="p">.</span><span class="n">LE</span><span class="p">.</span> <span class="mi">1000_idef</span><span class="p">)</span>
+
+<span class="c">!        write(output_unit_write,&#39;(&quot;burn:&quot;,I15)&#39;) ii</span>
+        
+        <span class="c">!R_test = R_buffer + random_norm(0.0_rp,spp%dR)</span>
+        <span class="c">!R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)</span>
+        <span class="n">R_test</span> <span class="o">=</span> <span class="n">R_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dR</span>
+        
+        <span class="c">!Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)</span>
+        <span class="c">!Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)</span>
+        <span class="n">Z_test</span> <span class="o">=</span> <span class="n">Z_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dZ</span>
+        
+        <span class="c">!eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)</span>
+        <span class="c">!eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)</span>
+        <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dth</span>
+        
+        <span class="c">!G_test = G_buffer + random_norm(0.0_rp,spp%dgam)</span>
+        <span class="c">!G_test = G_buffer + get_random_mkl_N(0.0_rp,spp%dgam)</span>
+        <span class="n">G_test</span> <span class="o">=</span> <span class="n">G_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dgam</span>
+
+
+        <span class="c">! Test that pitch angle and momentum are within chosen boundary</span>
+        <span class="k">do while</span> <span class="p">((</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">OR</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">min_pitch_angle</span><span class="p">))</span>
+           <span class="c">!eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)</span>
+           <span class="c">!eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)</span>
+           <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dth</span>
+        <span class="k">end do</span>
+
+<span class="k">        do while</span> <span class="p">((</span><span class="n">G_test</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">min_g</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="n">G_test</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">max_g</span><span class="p">))</span>
+           <span class="c">!G_test = G_buffer + random_norm(0.0_rp,spp%dgam)</span>
+           <span class="c">!G_test = G_buffer + get_random_mkl_N(0.0_rp,spp%dgam)</span>
+           <span class="n">G_test</span> <span class="o">=</span> <span class="n">G_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dgam</span>
+        <span class="k">end do</span>
+        
+        <span class="c">! initialize 2D gaussian argument and distribution function, or</span>
+        <span class="c">! copy from previous sample</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ii</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           </span><span class="n">psi0</span><span class="o">=</span><span class="n">PSI_ROT_exp</span><span class="p">(</span><span class="n">R_buffer</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Ro</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">sigmaR</span><span class="p">,</span><span class="n">Z_buffer</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Zo</span><span class="p">,</span> <span class="p">&amp;</span>
+                <span class="n">spp</span><span class="p">%</span><span class="n">sigmaZ</span><span class="p">,</span><span class="n">theta_rad</span><span class="p">)</span>
+           
+           <span class="n">f0</span><span class="o">=</span><span class="n">fRE_H_3D</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">eta_buffer</span><span class="p">,</span><span class="n">G_buffer</span><span class="p">,</span><span class="n">R_buffer</span><span class="p">,</span><span class="n">Z_buffer</span><span class="p">,</span> <span class="p">&amp;</span>
+                <span class="n">spp</span><span class="p">%</span><span class="n">Ro</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span>
+<span class="c">!           f0=fRE_H(eta_buffer,G_buffer)</span>
+        <span class="k">end if</span>
+
+<span class="k">        if</span> <span class="p">(</span><span class="n">accepted</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           </span><span class="n">psi0</span><span class="o">=</span><span class="n">psi1</span>
+           <span class="n">f0</span><span class="o">=</span><span class="n">f1</span>
+        <span class="k">end if</span>
+<span class="k">        </span>
+<span class="k">        </span><span class="n">psi1</span><span class="o">=</span><span class="n">PSI_ROT_exp</span><span class="p">(</span><span class="n">R_test</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Ro</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">sigmaR</span><span class="p">,</span><span class="n">Z_test</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Zo</span><span class="p">,</span> <span class="p">&amp;</span>
+             <span class="n">spp</span><span class="p">%</span><span class="n">sigmaZ</span><span class="p">,</span><span class="n">theta_rad</span><span class="p">)</span>       
+        
+                
+        <span class="n">f1</span><span class="o">=</span><span class="n">fRE_H_3D</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">eta_test</span><span class="p">,</span><span class="n">G_test</span><span class="p">,</span><span class="n">R_test</span><span class="p">,</span><span class="n">Z_test</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Ro</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span>    
+<span class="c">!        f1=fRE_H(eta_test,G_test)</span>
+        
+<span class="c">!        write(output_unit_write,&#39;(&quot;psi0: &quot;,E17.10)&#39;) psi0</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;psi1: &quot;,E17.10)&#39;) psi1</span>
+
+<span class="c">!        write(output_unit_write,&#39;(&quot;f0: &quot;,E17.10)&#39;) f0</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;f1: &quot;,E17.10)&#39;) f1</span>
+
+        
+        <span class="c">! Calculate acceptance ratio for MH algorithm. fRE function</span>
+        <span class="c">! incorporates p^2 factor of spherical coordinate Jacobian</span>
+        <span class="c">! for velocity phase space, factors of sin(pitch angle) for velocity</span>
+        <span class="c">! phase space and cylindrical coordinate Jacobian R for spatial</span>
+        <span class="c">! phase space incorporated here.</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">indicator_exp</span><span class="p">(</span><span class="n">psi1</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">psi_max</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+             <span class="n">R_test</span><span class="o">*</span><span class="n">f1</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">eta_test</span><span class="p">))</span><span class="o">/</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="n">R_buffer</span><span class="o">*</span><span class="n">f0</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">eta_buffer</span><span class="p">)))</span>
+<span class="c">!        ratio = indicator_exp(psi1,spp%psi_max)* &amp;</span>
+<span class="c">!             R_test*EXP(-psi1)*f1*sin(deg2rad(eta_test))/ &amp;</span>
+<span class="c">!             (R_buffer*EXP(-psi0)*f0*sin(deg2rad(eta_buffer)))</span>
+
+<span class="c">!        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))</span>
+
+        <span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">1.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           </span><span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+           <span class="n">R_buffer</span> <span class="o">=</span> <span class="n">R_test</span>
+           <span class="n">Z_buffer</span> <span class="o">=</span> <span class="n">Z_test</span>
+           <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+           <span class="n">G_buffer</span> <span class="o">=</span> <span class="n">G_test</span>
+           <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+        <span class="k">else</span>
+<span class="c">!           call RANDOM_NUMBER(rand_unif)</span>
+<span class="c">!           if (rand_unif .LT. ratio) then</span>
+           <span class="c">!if (get_random_mkl_U() .LT. ratio) then</span>
+           <span class="k">if</span> <span class="p">(</span><span class="n">get_random_U</span><span class="p">()</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">ratio</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">              </span><span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+              <span class="n">R_buffer</span> <span class="o">=</span> <span class="n">R_test</span>
+              <span class="n">Z_buffer</span> <span class="o">=</span> <span class="n">Z_test</span>
+              <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+              <span class="n">G_buffer</span> <span class="o">=</span> <span class="n">G_test</span>
+              <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+           <span class="k">end if</span>
+<span class="k">        end if</span>
+<span class="k">     end do</span>
+     <span class="c">! Transient !</span>
+
+     <span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span>
+     <span class="k">do while</span> <span class="p">(</span><span class="n">ii</span> <span class="p">.</span><span class="n">LE</span><span class="p">.</span> <span class="n">nsamples</span><span class="p">)</span>
+
+<span class="c">!        write(output_unit_write,&#39;(&quot;sample:&quot;,I15)&#39;) ii</span>
+        
+       <span class="k">if</span> <span class="p">(</span><span class="nb">modulo</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">nsamples</span><span class="o">/</span><span class="mi">10</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Sample: &quot;,I10)&#39;</span><span class="p">)</span> <span class="n">ii</span>
+        <span class="k">end if</span>
+        
+        <span class="c">!R_test = R_buffer + random_norm(0.0_rp,spp%dR)</span>
+        <span class="c">!R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)</span>
+        <span class="n">R_test</span> <span class="o">=</span> <span class="n">R_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dR</span>
+        
+        <span class="c">!Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)</span>
+        <span class="c">!Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)</span>
+        <span class="n">Z_test</span> <span class="o">=</span> <span class="n">Z_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dZ</span>
+        
+        <span class="c">!eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)</span>
+        <span class="c">!eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)</span>
+        <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dth</span>
+        
+        <span class="c">!G_test = G_buffer + random_norm(0.0_rp,spp%dgam)</span>
+        <span class="c">!G_test = G_buffer + get_random_mkl_N(0.0_rp,spp%dgam)</span>
+        <span class="n">G_test</span> <span class="o">=</span> <span class="n">G_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dgam</span>
+
+
+        <span class="c">! Test that pitch angle and momentum are within chosen boundary</span>
+        <span class="k">do while</span> <span class="p">((</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">OR</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">min_pitch_angle</span><span class="p">))</span>
+           <span class="c">!eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)</span>
+           <span class="c">!eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)</span>
+           <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dth</span>
+        <span class="k">end do</span>
+
+<span class="k">        do while</span> <span class="p">((</span><span class="n">G_test</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">min_g</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="n">G_test</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">max_g</span><span class="p">))</span>
+           <span class="c">!G_test = G_buffer + random_norm(0.0_rp,spp%dgam)</span>
+           <span class="c">!G_test = G_buffer + get_random_mkl_N(0.0_rp,spp%dgam)</span>
+           <span class="n">G_test</span> <span class="o">=</span> <span class="n">G_buffer</span> <span class="o">+</span> <span class="n">get_random_N</span><span class="p">()</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">dgam</span>
+        <span class="k">end do</span>
+
+<span class="k">        if</span> <span class="p">(</span><span class="n">accepted</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           </span><span class="n">psi0</span><span class="o">=</span><span class="n">psi1</span>
+           <span class="n">f0</span><span class="o">=</span><span class="n">f1</span>
+        <span class="k">end if</span>
+<span class="k">        </span>
+<span class="k">        </span><span class="n">psi1</span><span class="o">=</span><span class="n">PSI_ROT_exp</span><span class="p">(</span><span class="n">R_test</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Ro</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">sigmaR</span><span class="p">,</span><span class="n">Z_test</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Zo</span><span class="p">,</span> <span class="p">&amp;</span>
+             <span class="n">spp</span><span class="p">%</span><span class="n">sigmaZ</span><span class="p">,</span><span class="n">theta_rad</span><span class="p">)</span>
+
+<span class="c">!        write(output_unit_write,&#39;(&quot;R: &quot;,E17.10)&#39;) R_test</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;R0: &quot;,E17.10)&#39;) spp%Ro</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;sigma_R: &quot;,E17.10)&#39;) spp%sigmaR</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;dR: &quot;,E17.10)&#39;) spp%dR</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;N_dR: &quot;,E17.10)&#39;) random_norm(0.0_rp,spp%dR)</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;Z: &quot;,E17.10)&#39;) Z_test</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;Z0: &quot;,E17.10)&#39;) spp%Zo</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;sigma_Z: &quot;,E17.10)&#39;) spp%sigmaZ</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;dZ: &quot;,E17.10)&#39;) spp%dZ</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;N_dR: &quot;,Z17.10)&#39;) random_norm(0.0_rp,spp%dZ)</span>
+        
+        <span class="n">f1</span><span class="o">=</span><span class="n">fRE_H_3D</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">eta_test</span><span class="p">,</span><span class="n">G_test</span><span class="p">,</span><span class="n">R_test</span><span class="p">,</span><span class="n">Z_test</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Ro</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span>            
+<span class="c">!        f1=fRE_H(eta_test,G_test)</span>
+        
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">indicator_exp</span><span class="p">(</span><span class="n">psi1</span><span class="p">,</span><span class="n">psi_max_buff</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+             <span class="n">R_test</span><span class="o">*</span><span class="n">f1</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">eta_test</span><span class="p">))</span><span class="o">/</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="n">R_buffer</span><span class="o">*</span><span class="n">f0</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">eta_buffer</span><span class="p">)))</span>
+<span class="c">!        ratio = indicator_exp(psi1,psi_max_buff)* &amp;</span>
+<span class="c">!             R_test*EXP(-psi1)*f1*sin(deg2rad(eta_test))/ &amp;</span>
+<span class="c">!             (R_buffer*EXP(-psi0)*f0*sin(deg2rad(eta_buffer)))</span>
+
+<span class="c">!        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))</span>
+        
+        <span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">1.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">           </span><span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+           <span class="n">R_buffer</span> <span class="o">=</span> <span class="n">R_test</span>
+           <span class="n">Z_buffer</span> <span class="o">=</span> <span class="n">Z_test</span>
+           <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+           <span class="n">G_buffer</span> <span class="o">=</span> <span class="n">G_test</span>
+        <span class="k">else</span>
+           <span class="c">!call RANDOM_NUMBER(rand_unif)</span>
+           <span class="c">!if (rand_unif .LT. ratio) then</span>
+           <span class="c">!if (get_random_mkl_U() .LT. ratio) then</span>
+           <span class="k">if</span> <span class="p">(</span><span class="n">get_random_U</span><span class="p">()</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">ratio</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">              </span><span class="n">accepted</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+              <span class="n">R_buffer</span> <span class="o">=</span> <span class="n">R_test</span>
+              <span class="n">Z_buffer</span> <span class="o">=</span> <span class="n">Z_test</span>
+              <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+              <span class="n">G_buffer</span> <span class="o">=</span> <span class="n">G_test</span>
+           <span class="k">end if</span>
+<span class="k">        end if</span>
+
+<span class="c">!        write(output_unit_write,&#39;(&quot;R: &quot;,E17.10)&#39;) R_buffer</span>
+<span class="c">!        write(output_unit_write,&#39;(&quot;Z: &quot;,E17.10)&#39;) Z_buffer</span>
+        
+        <span class="c">! Only accept sample if it is within desired boundary, but</span>
+        <span class="c">! add to MC above if within buffer. This helps make the boundary</span>
+        <span class="c">! more defined.</span>
+        <span class="k">IF</span> <span class="p">((</span><span class="nb">INT</span><span class="p">(</span><span class="n">indicator_exp</span><span class="p">(</span><span class="n">psi1</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">psi_max</span><span class="p">)).</span><span class="n">EQ</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nb">AND</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="n">G_buffer</span><span class="p">.</span><span class="n">LE</span><span class="p">.</span><span class="n">h_params</span><span class="p">%</span><span class="n">max_sampling_g</span><span class="p">).</span><span class="nb">AND</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="n">G_buffer</span><span class="p">.</span><span class="n">GE</span><span class="p">.</span><span class="n">h_params</span><span class="p">%</span><span class="n">min_sampling_g</span><span class="p">).</span><span class="nb">AND</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="n">eta_buffer</span><span class="p">.</span><span class="n">LE</span><span class="p">.</span><span class="n">h_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">AND</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="p">(</span><span class="n">eta_buffer</span><span class="p">.</span><span class="n">GE</span><span class="p">.</span><span class="n">h_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">).</span><span class="nb">AND</span><span class="p">.</span> <span class="p">&amp;</span>
+             <span class="n">ACCEPTED</span><span class="p">)</span> <span class="k">THEN</span>
+<span class="k">           </span><span class="n">R_samples</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">R_buffer</span>
+           <span class="n">Z_samples</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">Z_buffer</span>
+           <span class="n">eta_samples</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_buffer</span>
+           <span class="n">G_samples</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">G_buffer</span>
+
+<span class="c">!           write(output_unit_write,*) &#39;RS&#39;,R_buffer</span>
+           
+           <span class="c">! Sample phi location uniformly</span>
+           <span class="c">!call RANDOM_NUMBER(rand_unif)</span>
+           <span class="c">!PHI_samples(ii) = 2.0_rp*C_PI*rand_unif</span>
+           <span class="c">!PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()</span>
+           <span class="n">PHI_samples</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">get_random_U</span><span class="p">()</span>
+           <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span> 
+        <span class="k">END IF</span>
+<span class="k">        </span>
+<span class="k">     end do</span>
+
+<span class="c">!  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop &#39;error with sample&#39;</span>
+<span class="c">!  write(output_unit_write,&#39;(&quot;R_sample: &quot;,E17.10)&#39;) R_samples(:)*params%cpp%length</span>
+
+     <span class="n">X_samples</span><span class="o">=</span><span class="n">R_samples</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">PHI_samples</span><span class="p">)</span>
+     <span class="n">Y_samples</span><span class="o">=</span><span class="n">R_samples</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">PHI_samples</span><span class="p">)</span>
+
+<span class="c">!     write(output_unit_write,*) &#39;R_samples&#39;,R_samples</span>
+<span class="c">!     write(output_unit_write,*) &#39;PHI_samples&#39;,PHI_samples</span>
+<span class="c">!     write(output_unit_write,*) &#39;Z_samples&#39;,Z_samples</span>
+<span class="c">!     write(output_unit_write,*) &#39;G_samples&#39;,G_samples</span>
+<span class="c">!     write(output_unit_write,*) &#39;eta_samples&#39;,eta_samples</span>
+     
+  <span class="k">end if</span>
+
+
+<span class="k">  </span>
+<span class="k">  call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+
+  <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">X_samples</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+  <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">Y_samples</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+  <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">Z_samples</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+  <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">eta</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+  <span class="k">CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">G_samples</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">g</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+  
+  <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+<span class="c">!  write(output_unit_write,*) params%mpi_params%rank,&#39;varX&#39;,spp%vars%X(:,1)</span>
+<span class="c">!  write(output_unit_write,*) params%mpi_params%rank,&#39;varY&#39;,spp%vars%X(:,2)</span>
+  
+<span class="c">!  write(output_unit_write,&#39;(&quot;X_X: &quot;,E17.10)&#39;) spp%vars%X(:,1)*params%cpp%length</span>
+  
+  <span class="c">! gamma is kept for each particle, not the momentum</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;GC&#39;</span><span class="p">)</span> <span class="k">call </span><span class="n">cart_to_cyl</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">Y</span><span class="p">)</span>
+
+<span class="c">!  write(output_unit_write,*) params%mpi_params%rank,&#39;varX&#39;,spp%vars%X(:,1)</span>
+<span class="c">!  write(output_unit_write,*) params%mpi_params%rank,&#39;varR&#39;,spp%vars%Y(:,1)</span>
+  
+
+<span class="c">!  write(output_unit_write,&#39;(&quot;Y_R: &quot;,E17.10)&#39;) spp%vars%Y(:,1)*params%cpp%length</span>
+<span class="c">!  write(output_unit_write,&#39;(&quot;Y_PHI: &quot;,E17.10)&#39;) spp%vars%Y(:,1)*params%cpp%length</span>
+<span class="c">!  write(output_unit_write,&#39;(&quot;Y_Z: &quot;,E17.10)&#39;) spp%vars%Y(:,3)*params%cpp%length</span>
+  
+<span class="c">!  if (minval(spp%vars%Y(:,1)).lt.1._rp/params%cpp%length) stop &#39;error with avalanche&#39;</span>
+  
+  <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">     DEALLOCATE</span><span class="p">(</span><span class="n">R_samples</span><span class="p">)</span>
+     <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">X_samples</span><span class="p">)</span>
+     <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">Y_samples</span><span class="p">)</span>
+     <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">Z_samples</span><span class="p">)</span>
+     <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">PHI_samples</span><span class="p">)</span>
+     <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">)</span>
+     <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">G_samples</span><span class="p">)</span>
+  <span class="k">end if</span>
+<span class="k">  </span>
+<span class="k">  </span>
+<span class="k">end subroutine </span><span class="n">sample_Hollmann_distribution_3D</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

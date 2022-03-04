@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>load_prev_iter &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>load_prev_iter
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.1% of total for procedures.">24 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_HDF5.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_hdf5.f90.html'>korc_HDF5.f90</a></li>
+    
+     <li><a href='../module/korc_hdf5.html'>korc_HDF5</a></li>
+    
+  
+     <li class="active">load_prev_iter</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/load_prev_iter.html#src">load_prev_iter</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine load_prev_iter(params)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subroutine that loads KORC parameters that control the time
+ stepping in <a href="../program/main.html">main</a>.</p></div>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~6"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~load_prev_iter~~CallsGraph Pages: 1 -->
+<svg id="procload_prev_iterCallsGraph" width="527pt" height="198pt"
+ viewBox="0.00 0.00 527.00 198.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~load_prev_iter~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 194)">
+<title>proc~~load_prev_iter~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-194 523,-194 523,4 -4,4"/>
+<!-- proc~load_prev_iter -->
+<g id="proc~~load_prev_iter~~CallsGraph_node1" class="node">
+<title>proc~load_prev_iter</title>
+<polygon fill="none" stroke="#000000" points="79,-108 0,-108 0,-84 79,-84 79,-108"/>
+<text text-anchor="middle" x="39.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">load_prev_iter</text>
+</g>
+<!-- mpi_bcast -->
+<g id="proc~~load_prev_iter~~CallsGraph_node2" class="node">
+<title>mpi_bcast</title>
+<polygon fill="#777777" stroke="#777777" points="187.5,-190 127.5,-190 127.5,-166 187.5,-166 187.5,-190"/>
+<text text-anchor="middle" x="157.5" y="-175.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_bcast</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;mpi_bcast -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge1" class="edge">
+<title>proc~load_prev_iter&#45;&gt;mpi_bcast</title>
+<path fill="none" stroke="#000000" d="M52.7251,-108.2007C67.2837,-121.2592 91.722,-142.1042 115,-157 117.2616,-158.4472 119.6371,-159.8667 122.0606,-161.2419"/>
+<polygon fill="#000000" stroke="#000000" points="120.463,-164.3567 130.9298,-165.999 123.7717,-158.1879 120.463,-164.3567"/>
+</g>
+<!-- h5fclose_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_node3" class="node">
+<title>h5fclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="187.5,-148 127.5,-148 127.5,-124 187.5,-124 187.5,-148"/>
+<text text-anchor="middle" x="157.5" y="-133.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fclose_f</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;h5fclose_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge2" class="edge">
+<title>proc~load_prev_iter&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M74.9039,-108.0013C88.3421,-112.5567 103.7357,-117.7748 117.5639,-122.4623"/>
+<polygon fill="#000000" stroke="#000000" points="116.7116,-125.869 127.306,-125.7647 118.959,-119.2395 116.7116,-125.869"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~load_prev_iter~~CallsGraph_node4" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~load_prev_iter~~CallsGraph_node4"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="423.5,-108 361.5,-108 361.5,-84 423.5,-84 423.5,-108"/>
+<text text-anchor="middle" x="392.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge3" class="edge">
+<title>proc~load_prev_iter&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M79.3074,-96C146.5706,-96 282.0785,-96 350.6778,-96"/>
+<polygon fill="#000000" stroke="#000000" points="351.0925,-99.5001 361.0924,-96 351.0924,-92.5001 351.0925,-99.5001"/>
+</g>
+<!-- h5fopen_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_node5" class="node">
+<title>h5fopen_f</title>
+<polygon fill="#777777" stroke="#777777" points="187,-26 128,-26 128,-2 187,-2 187,-26"/>
+<text text-anchor="middle" x="157.5" y="-11.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fopen_f</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;h5fopen_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge4" class="edge">
+<title>proc~load_prev_iter&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M52.7251,-83.7993C67.2837,-70.7408 91.722,-49.8958 115,-35 117.2616,-33.5528 119.6371,-32.1333 122.0606,-30.7581"/>
+<polygon fill="#000000" stroke="#000000" points="123.7717,-33.8121 130.9298,-26.001 120.463,-27.6433 123.7717,-33.8121"/>
+</g>
+<!-- interface~load_from_hdf5 -->
+<g id="proc~~load_prev_iter~~CallsGraph_node6" class="node">
+<title>interface~load_from_hdf5</title>
+<g id="a_proc~~load_prev_iter~~CallsGraph_node6"><a xlink:href=".././interface/load_from_hdf5.html" xlink:title="load_from_hdf5">
+<polygon fill="#a7506f" stroke="#a7506f" points="200,-68 115,-68 115,-44 200,-44 200,-68"/>
+<text text-anchor="middle" x="157.5" y="-53.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;interface~load_from_hdf5 -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge5" class="edge">
+<title>proc~load_prev_iter&#45;&gt;interface~load_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M74.9039,-83.9987C86.5813,-80.0402 99.7353,-75.5813 112.0555,-71.4049"/>
+<polygon fill="#000000" stroke="#000000" points="113.3663,-74.6563 121.7133,-68.1311 111.1189,-68.0268 113.3663,-74.6563"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~load_prev_iter~~CallsGraph_node7" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="519,-108 460,-108 460,-84 519,-84 519,-108"/>
+<text text-anchor="middle" x="489.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge6" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M423.7253,-96C432.0847,-96 441.2317,-96 449.9754,-96"/>
+<polygon fill="#000000" stroke="#000000" points="449.9832,-99.5001 459.9832,-96 449.9831,-92.5001 449.9832,-99.5001"/>
+</g>
+<!-- proc~rload_from_hdf5 -->
+<g id="proc~~load_prev_iter~~CallsGraph_node8" class="node">
+<title>proc~rload_from_hdf5</title>
+<g id="a_proc~~load_prev_iter~~CallsGraph_node8"><a xlink:href=".././proc/rload_from_hdf5.html" xlink:title="rload_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="325,-68 236,-68 236,-44 325,-44 325,-68"/>
+<text text-anchor="middle" x="280.5" y="-53.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_from_hdf5&#45;&gt;proc~rload_from_hdf5 -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge7" class="edge">
+<title>interface~load_from_hdf5&#45;&gt;proc~rload_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M200.1742,-56C208.3628,-56 217.0441,-56 225.5561,-56"/>
+<polygon fill="#000000" stroke="#000000" points="225.8102,-59.5001 235.8102,-56 225.8101,-52.5001 225.8102,-59.5001"/>
+</g>
+<!-- proc~iload_from_hdf5 -->
+<g id="proc~~load_prev_iter~~CallsGraph_node9" class="node">
+<title>proc~iload_from_hdf5</title>
+<g id="a_proc~~load_prev_iter~~CallsGraph_node9"><a xlink:href=".././proc/iload_from_hdf5.html" xlink:title="iload_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="324.5,-26 236.5,-26 236.5,-2 324.5,-2 324.5,-26"/>
+<text text-anchor="middle" x="280.5" y="-11.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iload_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_from_hdf5&#45;&gt;proc~iload_from_hdf5 -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge8" class="edge">
+<title>interface~load_from_hdf5&#45;&gt;proc~iload_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M192.7469,-43.9645C206.1283,-39.3952 221.551,-34.1289 235.6983,-29.2981"/>
+<polygon fill="#000000" stroke="#000000" points="236.9155,-32.581 245.248,-26.0373 234.6535,-25.9566 236.9155,-32.581"/>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge9" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M314.1037,-68.0013C325.8992,-72.214 339.2819,-76.9935 351.6088,-81.396"/>
+<polygon fill="#000000" stroke="#000000" points="350.6234,-84.7605 361.218,-84.8279 352.9778,-78.1683 350.6234,-84.7605"/>
+</g>
+<!-- h5dclose_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_node10" class="node">
+<title>h5dclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="424,-24 361,-24 361,0 424,0 424,-24"/>
+<text text-anchor="middle" x="392.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dclose_f</text>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge10" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M311.1045,-43.9768C323.8213,-38.9809 338.7547,-33.1142 352.3345,-27.7793"/>
+<polygon fill="#000000" stroke="#000000" points="353.9048,-30.9229 361.9325,-24.0087 351.3452,-24.4076 353.9048,-30.9229"/>
+</g>
+<!-- h5dread_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_node11" class="node">
+<title>h5dread_f</title>
+<polygon fill="#777777" stroke="#777777" points="422.5,-66 362.5,-66 362.5,-42 422.5,-42 422.5,-66"/>
+<text text-anchor="middle" x="392.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dread_f</text>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge11" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M325.0872,-55.2038C334.0316,-55.0441 343.3818,-54.8771 352.1717,-54.7201"/>
+<polygon fill="#000000" stroke="#000000" points="352.2392,-58.2196 362.175,-54.5415 352.1141,-51.2207 352.2392,-58.2196"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge12" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M310.6436,-26.213C315.6381,-28.7935 320.6129,-31.7373 325,-35 344.192,-49.273 342.9086,-59.3555 361,-75 362.1186,-75.9673 363.2839,-76.9268 364.4791,-77.8724"/>
+<polygon fill="#000000" stroke="#000000" points="362.488,-80.7525 372.6211,-83.8463 366.6289,-75.1087 362.488,-80.7525"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge13" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M324.7654,-13.2095C333.3724,-13.0559 342.3666,-12.8952 350.8846,-12.7431"/>
+<polygon fill="#000000" stroke="#000000" points="351.0445,-16.2409 360.9804,-12.5629 350.9195,-9.242 351.0445,-16.2409"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~load_prev_iter~~CallsGraph_edge14" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M314.1037,-26.0013C326.2042,-30.3229 339.9751,-35.2411 352.5631,-39.7368"/>
+<polygon fill="#000000" stroke="#000000" points="351.7556,-43.1649 362.3502,-43.2322 354.11,-36.5727 351.7556,-43.1649"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~load_prev_iter~~CalledByGraph Pages: 1 -->
+<svg id="procload_prev_iterCalledByGraph" width="306pt" height="116pt"
+ viewBox="0.00 0.00 306.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~load_prev_iter~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>proc~~load_prev_iter~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 302,-112 302,4 -4,4"/>
+<!-- proc~load_prev_iter -->
+<g id="proc~~load_prev_iter~~CalledByGraph_node1" class="node">
+<title>proc~load_prev_iter</title>
+<polygon fill="none" stroke="#000000" points="298,-66 219,-66 219,-42 298,-42 298,-66"/>
+<text text-anchor="middle" x="258.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">load_prev_iter</text>
+</g>
+<!-- proc~initialize_nimrod -->
+<g id="proc~~load_prev_iter~~CalledByGraph_node2" class="node">
+<title>proc~initialize_nimrod</title>
+<g id="a_proc~~load_prev_iter~~CalledByGraph_node2"><a xlink:href=".././proc/initialize_nimrod.html" xlink:title="initialize_nimrod">
+<polygon fill="#d9534f" stroke="#d9534f" points="180.5,-108 92.5,-108 92.5,-84 180.5,-84 180.5,-108"/>
+<text text-anchor="middle" x="136.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">initialize_nimrod</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nimrod&#45;&gt;proc~load_prev_iter -->
+<g id="proc~~load_prev_iter~~CalledByGraph_edge1" class="edge">
+<title>proc~initialize_nimrod&#45;&gt;proc~load_prev_iter</title>
+<path fill="none" stroke="#000000" d="M171.4603,-83.9645C184.7329,-79.3952 200.0303,-74.1289 214.0625,-69.2981"/>
+<polygon fill="#000000" stroke="#000000" points="215.2185,-72.6019 223.5346,-66.0373 212.9399,-65.9831 215.2185,-72.6019"/>
+</g>
+<!-- proc~initialize_fields -->
+<g id="proc~~load_prev_iter~~CalledByGraph_node3" class="node">
+<title>proc~initialize_fields</title>
+<g id="a_proc~~load_prev_iter~~CalledByGraph_node3"><a xlink:href=".././proc/initialize_fields.html" xlink:title="initialize_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="176.5,-66 96.5,-66 96.5,-42 176.5,-42 176.5,-66"/>
+<text text-anchor="middle" x="136.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">initialize_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~load_prev_iter -->
+<g id="proc~~load_prev_iter~~CalledByGraph_edge2" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~load_prev_iter</title>
+<path fill="none" stroke="#000000" d="M176.7855,-54C186.8841,-54 197.8421,-54 208.3556,-54"/>
+<polygon fill="#000000" stroke="#000000" points="208.6727,-57.5001 218.6727,-54 208.6726,-50.5001 208.6727,-57.5001"/>
+</g>
+<!-- proc~initialize_m3d_c1 -->
+<g id="proc~~load_prev_iter~~CalledByGraph_node4" class="node">
+<title>proc~initialize_m3d_c1</title>
+<g id="a_proc~~load_prev_iter~~CalledByGraph_node4"><a xlink:href=".././proc/initialize_m3d_c1.html" xlink:title="initialize_m3d_c1">
+<polygon fill="#d9534f" stroke="#d9534f" points="183,-24 90,-24 90,0 183,0 183,-24"/>
+<text text-anchor="middle" x="136.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">initialize_m3d_c1</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_m3d_c1&#45;&gt;proc~load_prev_iter -->
+<g id="proc~~load_prev_iter~~CalledByGraph_edge3" class="edge">
+<title>proc~initialize_m3d_c1&#45;&gt;proc~load_prev_iter</title>
+<path fill="none" stroke="#000000" d="M171.4603,-24.0355C184.7329,-28.6048 200.0303,-33.8711 214.0625,-38.7019"/>
+<polygon fill="#000000" stroke="#000000" points="212.9399,-42.0169 223.5346,-41.9627 215.2185,-35.3981 212.9399,-42.0169"/>
+</g>
+<!-- program~main -->
+<g id="proc~~load_prev_iter~~CalledByGraph_node5" class="node">
+<title>program~main</title>
+<g id="a_proc~~load_prev_iter~~CalledByGraph_node5"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-66 0,-66 0,-42 54,-42 54,-66"/>
+<text text-anchor="middle" x="27" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_nimrod -->
+<g id="proc~~load_prev_iter~~CalledByGraph_edge4" class="edge">
+<title>program~main&#45;&gt;proc~initialize_nimrod</title>
+<path fill="none" stroke="#000000" d="M54.0674,-64.382C66.623,-69.1979 81.8145,-75.0247 95.718,-80.3576"/>
+<polygon fill="#000000" stroke="#000000" points="94.4994,-83.6388 105.0896,-83.9522 97.0063,-77.103 94.4994,-83.6388"/>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_fields -->
+<g id="proc~~load_prev_iter~~CalledByGraph_edge5" class="edge">
+<title>program~main&#45;&gt;proc~initialize_fields</title>
+<path fill="none" stroke="#000000" d="M54.0674,-54C63.7652,-54 75.0354,-54 86.0701,-54"/>
+<polygon fill="#000000" stroke="#000000" points="86.086,-57.5001 96.0859,-54 86.0859,-50.5001 86.086,-57.5001"/>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_m3d_c1 -->
+<g id="proc~~load_prev_iter~~CalledByGraph_edge6" class="edge">
+<title>program~main&#45;&gt;proc~initialize_m3d_c1</title>
+<path fill="none" stroke="#000000" d="M54.0674,-43.618C66.623,-38.8021 81.8145,-32.9753 95.718,-27.6424"/>
+<polygon fill="#000000" stroke="#000000" points="97.0063,-30.897 105.0896,-24.0478 94.4994,-24.3612 97.0063,-30.897"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/load_prev_iter.html#src">load_prev_iter</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>    <span class="k">subroutine </span><span class="n">load_prev_iter</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="c">!! @note Subroutine that loads KORC parameters that control the time</span>
+    <span class="c">!! stepping in [[main]].    </span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">filename</span>
+    <span class="c">!! String containing the name of the HDF5 file.</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">dset</span>
+    <span class="c">!! Name of data set to be read from file.</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">HID_T</span><span class="p">)</span> 						<span class="kd">::</span> <span class="n">h5file_id</span>
+    <span class="c">!! HDF5 file identifier.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="nb">KIND</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span> 						<span class="kd">::</span> <span class="n">real_number</span>
+    <span class="c">!! A temporary real number.</span>
+    <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">19</span><span class="p">)</span> 						<span class="kd">::</span> <span class="n">tmp_str</span>
+    <span class="c">!! Temporary string used to manipulate various strings.</span>
+    <span class="kt">INTEGER</span> 							<span class="kd">::</span> <span class="n">h5error</span>
+    <span class="c">!! HDF5 error status.</span>
+    <span class="kt">INTEGER</span> 							<span class="kd">::</span> <span class="n">mpierr</span>
+    <span class="c">!!  MPI error status.</span>
+    <span class="kt">INTEGER</span> 							<span class="kd">::</span> <span class="n">ss</span>
+    <span class="c">!! Electron species iterator.</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;restart_file.h5&quot;</span>
+       <span class="k">call </span><span class="n">h5fopen_f</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">H5F_ACC_RDONLY_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+       <span class="k">if</span> <span class="p">(</span><span class="n">h5error</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;KORC ERROR: Something went wrong in: &amp;</span>
+<span class="s1">               &amp;load_prev_iter --&gt; h5fopen_f&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       </span><span class="n">dset</span> <span class="o">=</span> <span class="s2">&quot;/ind_2x1t&quot;</span>
+       <span class="k">call </span><span class="n">load_from_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">real_number</span><span class="p">)</span>
+       <span class="n">params</span><span class="p">%</span><span class="n">prev_iter_2x1t</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="n">real_number</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
+
+       <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+    <span class="k">end if</span>
+
+<span class="k">    CALL </span><span class="n">MPI_BCAST</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">prev_iter_2x1t</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+  <span class="k">end subroutine </span><span class="n">load_prev_iter</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>GCEoM1_fio_p &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>GCEoM1_fio_p
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.5% of total for procedures.">135 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_ppusher.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_ppusher.f90.html'>korc_ppusher.f90</a></li>
+    
+     <li><a href='../module/korc_ppusher.html'>korc_ppusher</a></li>
+    
+  
+     <li class="active">GCEoM1_fio_p</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/gceom1_fio_p.html#src">GCEoM1_fio_p</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine GCEoM1_fio_p(tt, P, F, params, RHS_R, RHS_PHI, RHS_Z, RHS_PLL, RHS_MU, B_R, B_PHI, B_Z, E_R, E_PHI, E_Z, curlb_R, curlb_PHI, curlb_Z, gradB_R, gradB_PHI, gradB_Z, V_PLL, V_MU, Y_R, Y_PHI, Y_Z, q_cache, m_cache, PSIp, ne, ni, nimp, Te, Zeff, flagCon, flagCol, hint)
+    
+    
+   
+</h2>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href="https://gcc.gnu.org/onlinedocs/gcc-4.4.3/libgomp/Runtime-Library-Routines.html">omp_lib</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gceom1_fio_p~~UsesGraph Pages: 1 -->
+<svg id="procgceom1_fio_pUsesGraph" width="182pt" height="32pt"
+ viewBox="0.00 0.00 182.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gceom1_fio_p~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~gceom1_fio_p~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 178,-28 178,4 -4,4"/>
+<!-- proc~gceom1_fio_p -->
+<g id="proc~~gceom1_fio_p~~UsesGraph_node1" class="node">
+<title>proc~gceom1_fio_p</title>
+<polygon fill="none" stroke="#000000" points="174,-24 90,-24 90,0 174,0 174,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">GCEoM1_fio_p</text>
+</g>
+<!-- omp_lib -->
+<g id="proc~~gceom1_fio_p~~UsesGraph_node2" class="node">
+<title>omp_lib</title>
+<g id="a_proc~~gceom1_fio_p~~UsesGraph_node2"><a xlink:href="https://gcc.gnu.org/onlinedocs/gcc-4.4.3/libgomp/Runtime-Library-Routines.html" xlink:title="omp_lib">
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_lib</text>
+</a>
+</g>
+</g>
+<!-- proc~gceom1_fio_p&#45;&gt;omp_lib -->
+<g id="proc~~gceom1_fio_p~~UsesGraph_edge1" class="edge">
+<title>proc~gceom1_fio_p&#45;&gt;omp_lib</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M89.8975,-12C81.3928,-12 72.509,-12 64.1876,-12"/>
+<polygon fill="#000000" stroke="#000000" points="64.0188,-8.5001 54.0188,-12 64.0188,-15.5001 64.0188,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tt~21"></span>integer(kind=ip),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>tt</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p~62"></span>type(PROFILES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~63"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~114"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rhs_r~3"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>RHS_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rhs_phi~3"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>RHS_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rhs_z~3"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>RHS_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rhs_pll~3"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>RHS_PLL</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rhs_mu~2"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>RHS_MU</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_r~14"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_phi~14"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_z~22"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_r~4"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_phi~19"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_z~10"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-curlb_r~13"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>curlb_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-curlb_phi~13"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>curlb_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-curlb_z~13"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>curlb_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gradb_r~13"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>gradB_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gradb_phi~13"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>gradB_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gradb_z~13"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>gradB_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_pll~16"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_PLL</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_mu~16"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_MU</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_r~21"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_phi~19"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_z~20"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-q_cache~18"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>q_cache</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-m_cache~22"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m_cache</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip~27"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne~38"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>ne</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ni~4"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>ni</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nimp~6"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>nimp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te~35"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Te</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff~18"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Zeff</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcon~26"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>flagCon</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcol~26"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>flagCol</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-hint~10"></span>type(C_PTR),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>hint</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gceom1_fio_p~~CallsGraph Pages: 1 -->
+<svg id="procgceom1_fio_pCallsGraph" width="353pt" height="116pt"
+ viewBox="0.00 0.00 353.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gceom1_fio_p~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>proc~~gceom1_fio_p~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 349,-112 349,4 -4,4"/>
+<!-- proc~gceom1_fio_p -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_node1" class="node">
+<title>proc~gceom1_fio_p</title>
+<polygon fill="none" stroke="#000000" points="84,-66 0,-66 0,-42 84,-42 84,-66"/>
+<text text-anchor="middle" x="42" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">GCEoM1_fio_p</text>
+</g>
+<!-- omp_get_thread_num -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_node2" class="node">
+<title>omp_get_thread_num</title>
+<polygon fill="#777777" stroke="#777777" points="235,-108 120,-108 120,-84 235,-84 235,-108"/>
+<text text-anchor="middle" x="177.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_get_thread_num</text>
+</g>
+<!-- proc~gceom1_fio_p&#45;&gt;omp_get_thread_num -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_edge1" class="edge">
+<title>proc~gceom1_fio_p&#45;&gt;omp_get_thread_num</title>
+<path fill="none" stroke="#000000" d="M80.8289,-66.0355C95.8536,-70.6926 113.2146,-76.0739 129.0428,-80.9801"/>
+<polygon fill="#000000" stroke="#000000" points="128.0775,-84.3451 138.6655,-83.9627 130.15,-77.6589 128.0775,-84.3451"/>
+</g>
+<!-- proc~get_fio_profile_p -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_node3" class="node">
+<title>proc~get_fio_profile_p</title>
+<g id="a_proc~~gceom1_fio_p~~CallsGraph_node3"><a xlink:href=".././proc/get_fio_profile_p.html" xlink:title="get_fio_profile_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="222.5,-66 132.5,-66 132.5,-42 222.5,-42 222.5,-66"/>
+<text text-anchor="middle" x="177.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_profile_p</text>
+</a>
+</g>
+</g>
+<!-- proc~gceom1_fio_p&#45;&gt;proc~get_fio_profile_p -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_edge2" class="edge">
+<title>proc~gceom1_fio_p&#45;&gt;proc~get_fio_profile_p</title>
+<path fill="none" stroke="#000000" d="M84.1303,-54C96.1452,-54 109.4209,-54 122.0994,-54"/>
+<polygon fill="#000000" stroke="#000000" points="122.1037,-57.5001 132.1037,-54 122.1037,-50.5001 122.1037,-57.5001"/>
+</g>
+<!-- proc~get_fio_ion_p -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_node4" class="node">
+<title>proc~get_fio_ion_p</title>
+<g id="a_proc~~gceom1_fio_p~~CallsGraph_node4"><a xlink:href=".././proc/get_fio_ion_p.html" xlink:title="get_fio_ion_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="215.5,-24 139.5,-24 139.5,0 215.5,0 215.5,-24"/>
+<text text-anchor="middle" x="177.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_ion_p</text>
+</a>
+</g>
+</g>
+<!-- proc~gceom1_fio_p&#45;&gt;proc~get_fio_ion_p -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_edge3" class="edge">
+<title>proc~gceom1_fio_p&#45;&gt;proc~get_fio_ion_p</title>
+<path fill="none" stroke="#000000" d="M80.8289,-41.9645C95.9832,-37.2672 113.5141,-31.8333 129.4518,-26.8932"/>
+<polygon fill="#000000" stroke="#000000" points="130.6185,-30.1959 139.1339,-23.8921 128.546,-23.5097 130.6185,-30.1959"/>
+</g>
+<!-- interface~fio_eval_field -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_node5" class="node">
+<title>interface~fio_eval_field</title>
+<g id="a_proc~~gceom1_fio_p~~CallsGraph_node5"><a xlink:href=".././interface/fio_eval_field.html" xlink:title="fio_eval_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="345,-45 271,-45 271,-21 345,-21 345,-45"/>
+<text text-anchor="middle" x="308" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_eval_field</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fio_profile_p&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_edge4" class="edge">
+<title>proc~get_fio_profile_p&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M222.7763,-46.7142C234.969,-44.7521 248.1915,-42.6244 260.5016,-40.6434"/>
+<polygon fill="#000000" stroke="#000000" points="261.2679,-44.0652 270.5848,-39.0208 260.1557,-37.1541 261.2679,-44.0652"/>
+</g>
+<!-- proc~get_fio_ion_p&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~gceom1_fio_p~~CallsGraph_edge5" class="edge">
+<title>proc~get_fio_ion_p&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M215.5968,-18.1305C229.7781,-20.4126 246.042,-23.0298 260.933,-25.426"/>
+<polygon fill="#000000" stroke="#000000" points="260.5512,-28.9095 270.9802,-27.0428 261.6633,-21.9984 260.5512,-28.9095"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gceom1_fio_p~~CalledByGraph Pages: 1 -->
+<svg id="procgceom1_fio_pCalledByGraph" width="271pt" height="32pt"
+ viewBox="0.00 0.00 271.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gceom1_fio_p~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~gceom1_fio_p~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 267,-28 267,4 -4,4"/>
+<!-- proc~gceom1_fio_p -->
+<g id="proc~~gceom1_fio_p~~CalledByGraph_node1" class="node">
+<title>proc~gceom1_fio_p</title>
+<polygon fill="none" stroke="#000000" points="263,-24 179,-24 179,0 263,0 263,-24"/>
+<text text-anchor="middle" x="221" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">GCEoM1_fio_p</text>
+</g>
+<!-- proc~advance_gcinterp_fio_vars -->
+<g id="proc~~gceom1_fio_p~~CalledByGraph_node2" class="node">
+<title>proc~advance_gcinterp_fio_vars</title>
+<g id="a_proc~~gceom1_fio_p~~CalledByGraph_node2"><a xlink:href=".././proc/advance_gcinterp_fio_vars.html" xlink:title="advance_GCinterp_fio_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="143,-24 0,-24 0,0 143,0 143,-24"/>
+<text text-anchor="middle" x="71.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_fio_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_fio_vars&#45;&gt;proc~gceom1_fio_p -->
+<g id="proc~~gceom1_fio_p~~CalledByGraph_edge1" class="edge">
+<title>proc~advance_gcinterp_fio_vars&#45;&gt;proc~gceom1_fio_p</title>
+<path fill="none" stroke="#000000" d="M143.1848,-12C151.7208,-12 160.31,-12 168.5065,-12"/>
+<polygon fill="#000000" stroke="#000000" points="168.645,-15.5001 178.645,-12 168.6449,-8.5001 168.645,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/gceom1_fio_p.html#src">GCEoM1_fio_p</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">GCEoM1_fio_p</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">RHS_MU</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">,</span><span class="n">PSIp</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">ne</span><span class="p">,</span><span class="n">ni</span><span class="p">,</span><span class="n">nimp</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+
+    <span class="k">USE </span><span class="n">omp_lib</span>
+    <span class="k">IMPLICIT NONE</span>
+<span class="k">    </span>
+<span class="k">    TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">F</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">P</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">Bmag</span><span class="p">,</span><span class="n">bhat_R</span><span class="p">,</span><span class="n">bhat_PHI</span><span class="p">,</span><span class="n">bhat_Z</span><span class="p">,</span><span class="n">Bst_R</span><span class="p">,</span><span class="n">Bst_PHI</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">BstdotE</span><span class="p">,</span><span class="n">BstdotgradB</span><span class="p">,</span><span class="n">EcrossB_R</span><span class="p">,</span><span class="n">EcrossB_PHI</span><span class="p">,</span><span class="n">bdotBst</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">bcrossgradB_R</span><span class="p">,</span><span class="n">bcrossgradB_PHI</span><span class="p">,</span><span class="n">bcrossgradB_Z</span><span class="p">,</span><span class="n">gamgc</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">EcrossB_Z</span><span class="p">,</span><span class="n">Bst_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pm</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">tau_R</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">SR_PLL</span><span class="p">,</span><span class="n">SR_MU</span><span class="p">,</span><span class="n">BREM_PLL</span><span class="p">,</span><span class="n">BREM_MU</span><span class="p">,</span><span class="n">BREM_P</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">curlb_R</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">curlb_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">RHS_PLL</span><span class="p">,</span><span class="n">RHS_MU</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">curlb_PHI</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">PSIp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">cc</span><span class="p">,</span><span class="n">pchunk</span><span class="p">,</span><span class="n">ii</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">tt</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>  <span class="kd">::</span> <span class="nb">time</span><span class="p">,</span><span class="n">re_cache</span><span class="p">,</span><span class="n">alpha_cache</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">ni</span><span class="p">,</span><span class="n">nimp</span><span class="p">,</span><span class="n">Zeff</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">hint</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span>
+    <span class="kt">INTEGER</span>             <span class="kd">::</span> <span class="n">thread_num</span>
+
+    <span class="n">pchunk</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span>
+
+    <span class="n">thread_num</span> <span class="o">=</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">()</span>
+    
+<span class="c">!    !$OMP SIMD</span>
+<span class="c">!    do cc=1_idef,pchunk </span>
+<span class="c">!       if(isnan(B_R(cc))) then</span>
+<span class="c">!          write(6,*) thread_num,&#39;0Y&#39;,Y_R(cc)*params%cpp%length,Y_PHI(cc),Y_Z(cc)*params%cpp%length</span>
+<span class="c">!          write(6,*) thread_num,&#39;0B&#39;,B_R(cc),B_PHI(cc),B_Z(cc)</span>
+<span class="c">!          write(6,*) thread_num,&#39;0E&#39;,E_R(cc),E_PHI(cc),E_Z(cc)</span>
+<span class="c">!          write(6,*) thread_num,&#39;0gradB&#39;,gradB_R(cc),gradB_PHI(cc),gradB_Z(cc)</span>
+<span class="c">!          write(6,*) thread_num,&#39;0curlb&#39;,curlb_R(cc),curlb_PHI(cc),curlb_Z(cc)</span>
+<span class="c">!          write(6,*) thread_num,&#39;0V&#39;,V_PLL(cc),V_MU(cc)</span>
+<span class="c">!          write(6,*) &#39;Exb&#39;,Ecrossb_R(cc)</span>
+<span class="c">!          write(6,*) &#39;bxgradB&#39;,bcrossgradB_R(cc)</span>
+<span class="c">!          write(6,*) &#39;Bst&#39;,Bst_R(cc)</span>
+<span class="c">!          write(6,*) &#39;bdotBst&#39;,bdotBst(cc)</span>
+<span class="c">!          write(6,*) thread_num,&#39;0gamma&#39;,gamgc(cc)</span>
+
+<span class="c">!          stop &#39;B_R is a NaN&#39;</span>
+<span class="c">!       endif</span>
+<span class="c">!    end do</span>
+<span class="c">!    !$OMP END SIMD</span>
+
+    
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(gradB_R,gradB_PHI,gradB_Z,curlb_R,curlb_Z, &amp;</span>
+    <span class="c">!    !$OMP&amp; B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &amp;</span>
+    <span class="c">!    !$OMP&amp; V_PLL,V_MU,Y_R,curlb_PHI,tau_R)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+       <span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mf">1._rp</span>
+       <span class="n">Te</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mf">1._rp</span>
+       <span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mf">1._rp</span>
+       
+       <span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       
+       <span class="n">bhat_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">bhat_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">bhat_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">Bst_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">q_cache</span><span class="o">*</span><span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">curlb_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Bst_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">q_cache</span><span class="o">*</span><span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">curlb_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Bst_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">q_cache</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">curlb_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+      <span class="c">! write(output_unit_write,*) &#39;bmag&#39;,Bmag(cc),&#39;bhat&#39;,bhat_R(cc),bhat_PHI(cc),bhat_Z(cc),&#39;Bst&#39;,Bst_R(cc),Bst_PHI(cc),Bst_Z(cc)</span>
+       
+       <span class="n">bdotBst</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">bhat_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bst_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">bhat_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bst_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">bhat_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bst_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">BstdotE</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Bst_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">E_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">Bst_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">E_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">Bst_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   
+       <span class="n">BstdotgradB</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Bst_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">Bst_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">Bst_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="c">!write(output_unit_write,*) &#39;bdotBst&#39;,bdotBst(cc),BstdotE(cc),BstdotgradB(cc)</span>
+       
+       <span class="n">Ecrossb_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">E_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bhat_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bhat_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Ecrossb_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bhat_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">E_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bhat_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Ecrossb_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">E_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bhat_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">E_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bhat_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="c">!write(output_unit_write,*) &#39;Ecrossb&#39;,Ecrossb_R(cc),Ecrossb_PHI(cc),Ecrossb_Z(cc)</span>
+       
+       <span class="n">bcrossgradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">bhat_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">bhat_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">bcrossgradB_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">bhat_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">bhat_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">bcrossgradB_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">bhat_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">bhat_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+      <span class="c">! write(output_unit_write,*) &#39;bcrossgradB&#39;,bcrossgradB_R(cc),bcrossgradB_PHI(cc),bcrossgradB_Z(cc)</span>
+       
+       <span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       
+       <span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+       <span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">pm</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">q_cache</span><span class="o">*</span><span class="n">Ecrossb_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">m_cache</span><span class="o">*</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+            <span class="n">bcrossgradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bst_R</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">m_cache</span><span class="o">*</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span><span class="o">/</span> <span class="p">&amp;</span>
+            <span class="n">bdotBst</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">q_cache</span><span class="o">*</span><span class="n">Ecrossb_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">m_cache</span><span class="o">*</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+            <span class="n">bcrossgradB_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bst_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">m_cache</span><span class="o">*</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span><span class="o">/</span> <span class="p">&amp;</span>
+            <span class="p">(</span><span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">bdotBst</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">q_cache</span><span class="o">*</span><span class="n">Ecrossb_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">m_cache</span><span class="o">*</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+            <span class="n">bcrossgradB_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bst_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">m_cache</span><span class="o">*</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span><span class="o">/</span> <span class="p">&amp;</span>
+            <span class="n">bdotBst</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">q_cache</span><span class="o">*</span><span class="n">BstdotE</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">BstdotgradB</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span> <span class="p">&amp;</span>
+            <span class="n">bdotBst</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">RHS_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mf">0._rp</span>
+
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="c">!write(output_unit_write,*) &#39;bmag&#39;,Bmag(1),&#39;bhat&#39;,bhat_R(1),bhat_PHI(1),bhat_Z(1),&#39;Bst&#39;,Bst_R(1),Bst_PHI(1),Bst_Z(1)</span>
+    <span class="c">!write(output_unit_write,*) &#39;bdotBst&#39;,bdotBst(1),BstdotE(1),BstdotgradB(1)</span>
+    <span class="c">!write(output_unit_write,*) &#39;Ecrossb&#39;,Ecrossb_R(1),Ecrossb_PHI(1),Ecrossb_Z(1)</span>
+    <span class="c">!write(output_unit_write,*) &#39;bcrossgradB&#39;,bcrossgradB_R(1),bcrossgradB_PHI(1),bcrossgradB_Z(1)</span>
+
+    <span class="c">!    !$OMP SIMD</span>
+    <span class="c">!    do cc=1_idef,8</span>
+    <span class="c">!       if(isnan(RHS_R(cc))) stop &#39;RHS_R0 is a NaN&#39;</span>
+    <span class="c">!       if(isnan(RHS_PHI(cc))) stop &#39;RHS_PHI0 is a NaN&#39;</span>
+    <span class="c">!       if(isnan(RHS_Z(cc))) stop &#39;RHS_Z0 is a NaN&#39;</span>
+    <span class="c">!       if(isnan(RHS_PLL(cc))) stop &#39;RHS_PLL0 is a NaN&#39;</span>
+    <span class="c">!       if(isnan(RHS_MU(cc))) stop &#39;RHS_MU0 is a NaN&#39;</span>
+    <span class="c">!    end do</span>
+    <span class="c">!    !$OMP END SIMD</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">radiation</span><span class="p">.</span><span class="nb">and</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">GC_rad_model</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;SDE&#39;</span><span class="p">))</span> <span class="k">then</span>
+
+       <span class="c">!       write(output_unit_write,*) &#39;RHS_PLL&#39;,RHS_PLL(1)</span>
+
+       <span class="n">re_cache</span><span class="o">=</span><span class="n">C_RE</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+       <span class="n">alpha_cache</span><span class="o">=</span><span class="n">C_a</span>
+
+       <span class="k">call </span><span class="n">get_fio_profile_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+
+       <span class="k">call </span><span class="n">get_fio_ion_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">ne</span><span class="p">,</span><span class="n">ni</span><span class="p">,</span><span class="n">nimp</span><span class="p">,</span><span class="n">Zeff</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+          
+       <span class="c">!$OMP SIMD</span>
+       <span class="c">!       !$OMP&amp; aligned(tau_R,Bmag,RHS_PLL,V_PLL,xi,gamgc,RHS_MU,V_MU)</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+          <span class="n">tau_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">E0</span><span class="o">/</span><span class="p">(</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+          <span class="n">SR_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1._rp</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">/</span><span class="n">tau_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+               <span class="p">(</span><span class="mf">1._rp</span><span class="o">/</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+          <span class="n">SR_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=-</span><span class="mf">2._rp</span><span class="o">*</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">tau_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+               <span class="p">(</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">+</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+          
+          <span class="c">!Normalizations done here</span>
+          <span class="n">BREM_P</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=-</span><span class="mf">4._rp</span><span class="o">*</span><span class="n">re_cache</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span> <span class="p">&amp;</span>
+               <span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">*</span><span class="n">alpha_cache</span><span class="o">*</span> <span class="p">&amp;</span>
+               <span class="p">(</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nb">log</span><span class="p">(</span><span class="mf">2._rp</span><span class="o">*</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">-</span><span class="mf">1._rp</span><span class="o">/</span><span class="mf">3._rp</span><span class="p">)</span>
+          <span class="n">BREM_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">BREM_P</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">BREM_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="mf">1._rp</span><span class="o">-</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span> <span class="p">&amp;</span>
+               <span class="p">(</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">xi</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">BREM_P</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+          <span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">SR_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">BREM_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">RHS_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">SR_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">BREM_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+
+
+    <span class="k">end if</span>
+
+<span class="cp">#if DBG_CHECK    </span>
+    <span class="c">!$OMP SIMD</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span> 
+       <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then           </span>
+<span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;gamgc is NaN&#39;</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_PLL&#39;</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;V_MU&#39;</span><span class="p">,</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Bmag&#39;</span><span class="p">,</span><span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          
+          <span class="k">stop</span> <span class="s1">&#39;gamgc is a NaN&#39;</span>
+       <span class="n">endif</span>
+       <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then  </span>
+
+<span class="k">          write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;flags&#39;</span><span class="p">,</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">length</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="n">B_R</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">B_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="n">E_R</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">E_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;gradB&#39;</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">gradB_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">gradB_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;curlb&#39;</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">curlb_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">curlb_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;V&#39;</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">V_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;Exb&#39;</span><span class="p">,</span><span class="n">Ecrossb_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;bxgradB&#39;</span><span class="p">,</span><span class="n">bcrossgradB_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;Bst&#39;</span><span class="p">,</span><span class="n">Bst_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;bdotBst&#39;</span><span class="p">,</span><span class="n">bdotBst</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">thread_num</span><span class="p">,</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span><span class="n">gamgc</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          
+          <span class="k">stop</span> <span class="s1">&#39;RHS_R1 is a NaN&#39;</span>
+       <span class="n">endif</span>
+       <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">          stop</span> <span class="s1">&#39;RHS_PHI1 is a NaN&#39;</span>
+       <span class="k">end if</span>
+<span class="k">       if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">          stop</span> <span class="s1">&#39;RHS_Z1 is a NaN&#39;</span>
+       <span class="n">endif</span>
+       <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">          stop</span> <span class="s1">&#39;RHS_PLL1 is a NaN&#39;</span>
+       <span class="n">endif</span>
+       <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">RHS_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">          stop</span> <span class="s1">&#39;RHS_MU1 is a NaN&#39;</span>
+       <span class="n">endif</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">radiation</span><span class="p">.</span><span class="nb">and</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">GC_rad_model</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;SDE&#39;</span><span class="p">))</span> <span class="k">then</span>
+       <span class="c">!$OMP SIMD</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">ne</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;ne is a NaN&#39;</span>
+          <span class="n">endif</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">Zeff</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;Zeff is a NaN&#39;</span>
+          <span class="n">endif</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">BREM_P</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;BREM_P is a NaN&#39;</span>
+          <span class="n">endif</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">BREM_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;BREM_PLL is a NaN&#39;</span>
+          <span class="n">endif</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">BREM_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;BREM_MU is a NaN&#39;</span>
+          <span class="n">endif</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">SR_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;SR_PLL is a NaN&#39;</span>
+          <span class="n">endif</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="n">SR_MU</span><span class="p">(</span><span class="n">cc</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">             stop</span> <span class="s1">&#39;SR_MU is a NaN&#39;</span>
+          <span class="n">endif</span>
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+    <span class="k">end if</span>
+<span class="cp">#endif</span>
+    <span class="c">!    write(output_unit_write,*) &#39;RHS_R: &#39;,RHS_R(1)</span>
+    <span class="c">!    write(output_unit_write,*) &#39;RHS_PHI: &#39;,RHS_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,*) &#39;RHS_Z: &#39;,RHS_Z(1)</span>
+    <span class="c">!    write(output_unit_write,*) &#39;RHS_PLL: &#39;,RHS_PLL(1)</span>
+    <span class="c">!    write(output_unit_write,*) &#39;RHS_MU: &#39;,RHS_MU(1)</span>
+
+  <span class="k">end subroutine </span><span class="n">GCEoM1_fio_p</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

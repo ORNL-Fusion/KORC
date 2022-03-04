@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>KORC_PARAMS &ndash; KORC </title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>KORC_PARAMS
+    <small>Derived Type</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title="<p> 9.4% of total for derived types.</p>Including implementation: 65 statements,  9.4% of total for derived types.">65 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_types.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_types.f90.html'>korc_types.f90</a></li>
+    
+     <li><a href='../module/korc_types.html'>korc_types</a></li>
+    
+  
+     <li class="active">KORC_PARAMS</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-path_to_inputs">path_to_inputs</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-path_to_outputs">path_to_outputs</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_omp_threads">num_omp_threads</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-restart">restart</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-proceed">proceed</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-load_balance">load_balance</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-reinit">reinit</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-simulation_time">simulation_time</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-snapshot_frequency">snapshot_frequency</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-restart_overwrite_frequency">restart_overwrite_frequency</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-dt">dt</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-time~2">time</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-ito">ito</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-it">it</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-init_time">init_time</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-t_steps">t_steps</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-prev_iter_2x1t">prev_iter_2x1t</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-t_skip">t_skip</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-t_it_sc">t_it_SC</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-output_cadence">output_cadence</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-coll_per_dump">coll_per_dump</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-orbits_per_coll">orbits_per_coll</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-coll_per_dump_dt~2">coll_per_dump_dt</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-restart_output_cadence">restart_output_cadence</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-coll_cadence">coll_cadence</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_snapshots">num_snapshots</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_species">num_species</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-minimum_particle_energy">minimum_particle_energy</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-minimum_particle_g">minimum_particle_g</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-radiation">radiation</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-collisions">collisions</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-largecollisions~2">LargeCollisions</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-gc_rad_model">GC_rad_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-collisions_model">collisions_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-bound_electron_model">bound_electron_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-field_model">field_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-profile_model">profile_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_filename">magnetic_field_filename</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_directory">magnetic_field_directory</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_list">magnetic_field_list</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_filenames">magnetic_field_filenames</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-time_of_filenames">time_of_filenames</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-outputs_list">outputs_list</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-hdf5_error_handling">HDF5_error_handling</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-mpi_params">mpi_params</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-cpp">cpp</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-fo_gc_compare">FO_GC_compare</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-orbit_model">orbit_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-field_eval">field_eval</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-gc_coords">GC_coords</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-fokplan">FokPlan</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-samerandseed">SameRandSeed</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-sc_e">SC_E</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-sc_e_add">SC_E_add</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-time_slice">time_slice</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-rmax">rmax</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-rmin">rmin</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-zmax">zmax</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-zmin">zmin</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-pchunk">pchunk</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_impurity_species~2">num_impurity_species</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-zj~2">Zj</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-gam_min~2">gam_min</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../type/korc_params.html#src">KORC_PARAMS</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      <h2>type, public :: KORC_PARAMS</h2>
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Core KORC parameters. </p></div>
+<p>This KORC derived type contains the variables that control KORC's
+ core behavior.</p>
+    <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Inherits</h3>
+      </div>
+      <div class="panel-body">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: type~~korc_params~~InheritsGraph Pages: 1 -->
+<svg id="typekorc_paramsInheritsGraph" width="297pt" height="74pt"
+ viewBox="0.00 0.00 297.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~korc_params~~InheritsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>type~~korc_params~~InheritsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-70 293,-70 293,4 -4,4"/>
+<!-- type~korc_params -->
+<g id="type~~korc_params~~InheritsGraph_node1" class="node">
+<title>type~korc_params</title>
+<polygon fill="none" stroke="#000000" points="289,-45 196,-45 196,-21 289,-21 289,-45"/>
+<text text-anchor="middle" x="242.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">KORC_PARAMS</text>
+</g>
+<!-- type~charcs_params -->
+<g id="type~~korc_params~~InheritsGraph_node2" class="node">
+<title>type~charcs_params</title>
+<g id="a_type~~korc_params~~InheritsGraph_node2"><a xlink:href=".././type/charcs_params.html" xlink:title="CHARCS_PARAMS">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="107,-66 0,-66 0,-42 107,-42 107,-66"/>
+<text text-anchor="middle" x="53.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CHARCS_PARAMS</text>
+</a>
+</g>
+</g>
+<!-- type~korc_params&#45;&gt;type~charcs_params -->
+<g id="type~~korc_params~~InheritsGraph_edge2" class="edge">
+<title>type~korc_params&#45;&gt;type~charcs_params</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.7809,-38.191C172.0412,-40.8288 142.842,-44.0731 117.086,-46.9349"/>
+<polygon fill="#000000" stroke="#000000" points="116.5843,-43.469 107.032,-48.052 117.3574,-50.4262 116.5843,-43.469"/>
+<text text-anchor="middle" x="151.5" y="-47.4" font-family="Helvetica,sans-Serif" font-size="9.50" fill="#000000">cpp</text>
+</g>
+<!-- type~korc_mpi -->
+<g id="type~~korc_params~~InheritsGraph_node3" class="node">
+<title>type~korc_mpi</title>
+<g id="a_type~~korc_params~~InheritsGraph_node3"><a xlink:href=".././type/korc_mpi.html" xlink:title="KORC_MPI">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="87,-24 20,-24 20,0 87,0 87,-24"/>
+<text text-anchor="middle" x="53.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">KORC_MPI</text>
+</a>
+</g>
+</g>
+<!-- type~korc_params&#45;&gt;type~korc_mpi -->
+<g id="type~~korc_params~~InheritsGraph_edge1" class="edge">
+<title>type~korc_params&#45;&gt;type~korc_mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.7184,-24.5201C189.7665,-23.5891 183.7485,-22.7196 178,-22 151.2917,-18.6566 121.2126,-16.2044 97.3111,-14.5652"/>
+<polygon fill="#000000" stroke="#000000" points="97.3466,-11.06 87.1369,-13.8907 96.8834,-18.0446 97.3466,-11.06"/>
+<text text-anchor="middle" x="151.5" y="-24.4" font-family="Helvetica,sans-Serif" font-size="9.50" fill="#000000">mpi_params</text>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="176pt" height="32pt"
+ viewBox="0.00 0.00 176.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 172,-28 172,4 -4,4"/>
+<!-- Type -->
+<g id="node1" class="node">
+<title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Type</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="168,-24 72,-24 72,0 168,0 168,-24"/>
+<text text-anchor="middle" x="120" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a derived type to the parent type which it
+    extends. Dashed arrows point from a derived type to the other
+    types it contains as a components, with a label listing the name(s) of
+    said component(s).
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+    
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-path_to_inputs">path_to_inputs</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-path_to_outputs">path_to_outputs</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_omp_threads">num_omp_threads</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-restart">restart</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-proceed">proceed</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-load_balance">load_balance</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-reinit">reinit</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-simulation_time">simulation_time</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-snapshot_frequency">snapshot_frequency</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-restart_overwrite_frequency">restart_overwrite_frequency</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-dt">dt</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-time~2">time</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-ito">ito</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-it">it</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-init_time">init_time</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-t_steps">t_steps</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-prev_iter_2x1t">prev_iter_2x1t</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-t_skip">t_skip</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-t_it_sc">t_it_SC</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-output_cadence">output_cadence</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-coll_per_dump">coll_per_dump</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-orbits_per_coll">orbits_per_coll</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-coll_per_dump_dt~2">coll_per_dump_dt</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-restart_output_cadence">restart_output_cadence</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-coll_cadence">coll_cadence</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_snapshots">num_snapshots</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_species">num_species</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-minimum_particle_energy">minimum_particle_energy</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-minimum_particle_g">minimum_particle_g</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-radiation">radiation</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-collisions">collisions</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-largecollisions~2">LargeCollisions</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-gc_rad_model">GC_rad_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-collisions_model">collisions_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-bound_electron_model">bound_electron_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-field_model">field_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-profile_model">profile_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_filename">magnetic_field_filename</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_directory">magnetic_field_directory</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_list">magnetic_field_list</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-magnetic_field_filenames">magnetic_field_filenames</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-time_of_filenames">time_of_filenames</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-outputs_list">outputs_list</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-hdf5_error_handling">HDF5_error_handling</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-mpi_params">mpi_params</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-cpp">cpp</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-fo_gc_compare">FO_GC_compare</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-orbit_model">orbit_model</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-field_eval">field_eval</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-gc_coords">GC_coords</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-fokplan">FokPlan</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-samerandseed">SameRandSeed</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-sc_e">SC_E</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-sc_e_add">SC_E_add</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-time_slice">time_slice</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-rmax">rmax</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-rmin">rmin</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-zmax">zmax</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-zmin">zmin</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-pchunk">pchunk</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-num_impurity_species~2">num_impurity_species</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-zj~2">Zj</a>
+      
+      <a class="list-group-item" href="../type/korc_params.html#variable-gam_min~2">gam_min</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../type/korc_params.html#src">KORC_PARAMS</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-path_to_inputs"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>path_to_inputs</strong></td><td></td><td></td><td><p>Absolute path to KORC's input file.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-path_to_outputs"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>path_to_outputs</strong></td><td></td><td></td><td><p>Absolute path to the outputs' folder.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-num_omp_threads"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>num_omp_threads</strong></td><td></td><td></td><td><p>Number of open MP threads per MPI process used in the simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-restart"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>restart</strong></td><td></td><td></td><td><p>Flag to indicate if the simulations proceeds (restart=T) or not
+ (restart=F). Restart simulation that exited before simulation_time
+ reached.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-proceed"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>proceed</strong></td><td></td><td></td><td><p>Flag to indicate if the simulations continues (proceed=T) or not
+ (proceed=F). Append simulation results after previous simulation_time
+ reached.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-load_balance"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>load_balance</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-reinit"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>reinit</strong></td><td></td><td></td><td><p>Flag to begin a new simulation, reinitializing from restart file state</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-simulation_time"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>simulation_time</strong></td><td></td><td></td><td><p>Total simulation time in seconds.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-snapshot_frequency"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>snapshot_frequency</strong></td><td></td><td></td><td><p>Time between snapshots in time of the simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-restart_overwrite_frequency"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>restart_overwrite_frequency</strong></td><td></td><td></td><td><p>Time between overwrites of restart file in time of the simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dt</strong></td><td></td><td></td><td><p>Time step in the simulation as a fraction of the relativistic electron
+ gyro-period <script type="math/tex">\tau_e = 2\pi\gamma m_e/eB_0</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>time</strong></td><td> =</td><td>0.0_rp</td><td><p>Current physical time in the simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ito"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ito</strong></td><td> =</td><td>0_ip</td><td><p>Initial time iteration in the simulation, this is different from zero
+ in case is a restarting simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-it"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>it</strong></td><td> =</td><td>0_ip</td><td><p>Current time iteration in the simulation, this is different from zero
+ in case is a restarting simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-init_time"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>init_time</strong></td><td> =</td><td>0.0_rp</td><td><p>Time at the beginning of a run with proceed=T     </p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t_steps"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t_steps</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-prev_iter_2x1t"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>prev_iter_2x1t</strong></td><td></td><td></td><td><p>Number of time steps needed for evolving the electrons up to
+ "simulation_time".</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t_skip"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t_skip</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t_it_sc"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t_it_SC</strong></td><td> =</td><td>1_ip</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-output_cadence"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>output_cadence</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-coll_per_dump"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>coll_per_dump</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-orbits_per_coll"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>orbits_per_coll</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-coll_per_dump_dt~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>coll_per_dump_dt</strong></td><td></td><td></td><td><p>Time iteration offset used to decide when the outputs are generated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-restart_output_cadence"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>restart_output_cadence</strong></td><td></td><td></td><td><p>Time iteration offset used to decide when the restart files are
+ generated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-coll_cadence"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>coll_cadence</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-num_snapshots"></span>integer(kind=ip),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>num_snapshots</strong></td><td></td><td></td><td><p>Number of snapshots in time for generating the output files.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-num_species"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>num_species</strong></td><td></td><td></td><td><p>Number of different populations of simulated relativistic electrons
+ in KORC.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-minimum_particle_energy"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>minimum_particle_energy</strong></td><td></td><td></td><td><p>Minimum allowed energy of simulated electrons. 
+ </p><div class="alert alert-success" role="alert"><h4>Todo</h4><p>To improve the criterium to decide when an electron will not
+ be followed anymore in the simulation.</p></div></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-minimum_particle_g"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>minimum_particle_g</strong></td><td></td><td></td><td><p>Minimum allowed relativistic factor <script type="math/tex">\gamma</script> of simulated electrons.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-radiation"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>radiation</strong></td><td></td><td></td><td><p>Flag to indicate if synchrotron radiation losses are included
+ (radiation=T) or not (radiation=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-collisions"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>collisions</strong></td><td></td><td></td><td><p>Flag to indicate if collisionsare included (collisions=T) or not
+ (collisions=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-largecollisions~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>LargeCollisions</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gc_rad_model"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>GC_rad_model</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-collisions_model"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>collisions_model</strong></td><td></td><td></td><td><p>String with the name of the collisions model to be used in the
+ simulation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bound_electron_model"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>bound_electron_model</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-field_model"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>field_model</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-profile_model"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>profile_model</strong></td><td></td><td></td><td><p>String with the name of the model for the fields and plasma profiles.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_filename"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>magnetic_field_filename</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_directory"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>magnetic_field_directory</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_list"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>magnetic_field_list</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_filenames"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>magnetic_field_filenames</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time_of_filenames"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>time_of_filenames</strong></td><td></td><td></td><td><p>String with the name of the model for the fields and plasma profiles.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-outputs_list"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>outputs_list</strong></td><td></td><td></td><td><p>List of electron variables to include in the outputs.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-hdf5_error_handling"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>HDF5_error_handling</strong></td><td></td><td></td><td><p>Flag to indicate whether we allow HDF5 to show warnings 
+ during runtime (HDF5_error_handling=1) or not (HDF5_error_handling=0)</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-mpi_params"></span>type(<a href='../type/korc_mpi.html'>KORC_MPI</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>mpi_params</strong></td><td></td><td></td><td><p>An instance of the KORC_MPI derived type.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cpp"></span>type(<a href='../type/charcs_params.html'>CHARCS_PARAMS</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>cpp</strong></td><td></td><td></td><td><p>An instance of the CHARCS_PARAMS derived type.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fo_gc_compare"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>FO_GC_compare</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-orbit_model"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>orbit_model</strong></td><td></td><td></td><td><p>String with the name of the orbit model ('FO' or 'GC').</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-field_eval"></span>character(len=MAX_STRING_LENGTH),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>field_eval</strong></td><td></td><td></td><td><p>String with the name of the field evaluation method for
+ analytical fields ('interp' or 'eqn')</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gc_coords"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>GC_coords</strong></td><td></td><td></td><td><p>Flag to <a href="../proc/get_fields.html">get_fields</a> to control whether cartesian to cylindrical
+ coordinate transformation needs to be performed</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fokplan"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>FokPlan</strong></td><td></td><td></td><td><p>Flag to decouple spatial-dependence of evolution</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-samerandseed"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>SameRandSeed</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sc_e"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>SC_E</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sc_e_add"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>SC_E_add</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time_slice"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>time_slice</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rmax"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rmax</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rmin"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rmin</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zmax"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>zmax</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zmin"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>zmin</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pchunk"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td></td><td></td><td><p>number of particles per vectorized chunk</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-num_impurity_species~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>num_impurity_species</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zj~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Zj</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gam_min~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>gam_min</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <section>
+    <h3><span class="anchor" id="src"></span>Source Code</h3>
+    <div class="highlight"><pre><span></span>  <span class="k">TYPE</span><span class="p">,</span> <span class="k">PUBLIC</span> <span class="kd">::</span> <span class="n">KORC_PARAMS</span>
+     <span class="c">!! @note Core KORC parameters. @endnote</span>
+     <span class="c">!!  This KORC derived type contains the variables that control KORC&#39;s</span>
+     <span class="c">!! core behavior.</span>
+
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">path_to_inputs</span> 
+     <span class="c">!! Absolute path to KORC&#39;s input file.</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">path_to_outputs</span> 
+     <span class="c">!! Absolute path to the outputs&#39; folder.</span>
+     <span class="kt">INTEGER</span> 			<span class="kd">::</span> <span class="n">num_omp_threads</span> 
+     <span class="c">!! Number of open MP threads per MPI process used in the simulation.</span>
+     <span class="kt">LOGICAL</span> 			<span class="kd">::</span> <span class="n">restart</span> 
+     <span class="c">!! Flag to indicate if the simulations proceeds (restart=T) or not</span>
+     <span class="c">!! (restart=F). Restart simulation that exited before simulation_time</span>
+     <span class="c">!! reached.</span>
+     <span class="kt">LOGICAL</span> 			<span class="kd">::</span> <span class="n">proceed</span> 
+     <span class="c">!! Flag to indicate if the simulations continues (proceed=T) or not</span>
+     <span class="c">!! (proceed=F). Append simulation results after previous simulation_time</span>
+     <span class="c">!! reached.</span>
+     <span class="kt">LOGICAL</span> 			<span class="kd">::</span> <span class="n">load_balance</span>
+     <span class="kt">LOGICAL</span>  <span class="kd">::</span> <span class="n">reinit</span>
+     <span class="c">!! Flag to begin a new simulation, reinitializing from restart file state</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">simulation_time</span> 
+     <span class="c">!! Total simulation time in seconds.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">snapshot_frequency</span> 
+     <span class="c">!! Time between snapshots in time of the simulation.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">restart_overwrite_frequency</span> 
+     <span class="c">!! Time between overwrites of restart file in time of the simulation.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">dt</span> 
+     <span class="c">!! Time step in the simulation as a fraction of the relativistic electron</span>
+     <span class="c">!! gyro-period \(\tau_e = 2\pi\gamma m_e/eB_0\).</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="nb">time</span> <span class="o">=</span> <span class="mf">0.0_rp</span> 
+     <span class="c">!! Current physical time in the simulation.</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">ito</span> <span class="o">=</span> <span class="mi">0_ip</span> 
+     <span class="c">!! Initial time iteration in the simulation, this is different from zero</span>
+     <span class="c">!! in case is a restarting simulation.</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">it</span> <span class="o">=</span> <span class="mi">0_ip</span> 
+     <span class="c">!! Current time iteration in the simulation, this is different from zero</span>
+     <span class="c">!! in case is a restarting simulation.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">init_time</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+     <span class="c">!! Time at the beginning of a run with proceed=T     </span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">t_steps</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">prev_iter_2x1t</span> 
+     <span class="c">!! Number of time steps needed for evolving the electrons up to</span>
+     <span class="c">!! &quot;simulation_time&quot;.</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">t_skip</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">t_it_SC</span><span class="o">=</span><span class="mi">1_ip</span> 
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">output_cadence</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">coll_per_dump</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">orbits_per_coll</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">coll_per_dump_dt</span>
+     <span class="c">!! Time iteration offset used to decide when the outputs are generated.</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">restart_output_cadence</span> 
+     <span class="c">!! Time iteration offset used to decide when the restart files are</span>
+     <span class="c">!! generated.</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">coll_cadence</span> 
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">num_snapshots</span> 
+     <span class="c">!! Number of snapshots in time for generating the output files.</span>
+     <span class="kt">INTEGER</span> 			<span class="kd">::</span> <span class="n">num_species</span> 
+     <span class="c">!! Number of different populations of simulated relativistic electrons</span>
+     <span class="c">!! in KORC.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">minimum_particle_energy</span> 
+     <span class="c">!! Minimum allowed energy of simulated electrons. </span>
+     <span class="c">!! @todo To improve the criterium to decide when an electron will not</span>
+     <span class="c">!! be followed anymore in the simulation.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">minimum_particle_g</span> 
+     <span class="c">!! Minimum allowed relativistic factor \(\gamma\) of simulated electrons.</span>
+     <span class="kt">LOGICAL</span> 			<span class="kd">::</span> <span class="n">radiation</span> 
+     <span class="c">!! Flag to indicate if synchrotron radiation losses are included</span>
+     <span class="c">!! (radiation=T) or not (radiation=F).</span>
+     <span class="kt">LOGICAL</span> 			<span class="kd">::</span> <span class="n">collisions</span> 
+     <span class="c">!! Flag to indicate if collisionsare included (collisions=T) or not</span>
+     <span class="c">!! (collisions=F).</span>
+     <span class="kt">LOGICAL</span> 			<span class="kd">::</span> <span class="n">LargeCollisions</span> 
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">GC_rad_model</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">collisions_model</span> 
+     <span class="c">!! String with the name of the collisions model to be used in the</span>
+     <span class="c">!! simulation.</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">bound_electron_model</span> 
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field_model</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">profile_model</span> 
+     <span class="c">!! String with the name of the model for the fields and plasma profiles.</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">magnetic_field_filename</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">magnetic_field_directory</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">magnetic_field_list</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">magnetic_field_filenames</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">time_of_filenames</span>
+     <span class="c">!! String with the name of the model for the fields and plasma profiles.</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">outputs_list</span> 
+     <span class="c">!! List of electron variables to include in the outputs.</span>
+     <span class="kt">INTEGER</span> 			<span class="kd">::</span> <span class="n">HDF5_error_handling</span> 
+     <span class="c">!! Flag to indicate whether we allow HDF5 to show warnings </span>
+     <span class="c">!! during runtime (HDF5_error_handling=1) or not (HDF5_error_handling=0)</span>
+     <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_MPI</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">mpi_params</span> 
+     <span class="c">!! An instance of the KORC_MPI derived type.</span>
+     <span class="k">TYPE</span><span class="p">(</span><span class="n">CHARCS_PARAMS</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">cpp</span> 
+     <span class="c">!! An instance of the CHARCS_PARAMS derived type.</span>
+     <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">FO_GC_compare</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">orbit_model</span>
+     <span class="c">!! String with the name of the orbit model (&#39;FO&#39; or &#39;GC&#39;).</span>
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field_eval</span>
+     <span class="c">!! String with the name of the field evaluation method for</span>
+     <span class="c">!! analytical fields (&#39;interp&#39; or &#39;eqn&#39;)</span>
+     <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">GC_coords</span>
+     <span class="c">!! Flag to [[get_fields]] to control whether cartesian to cylindrical</span>
+     <span class="c">!! coordinate transformation needs to be performed</span>
+     <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">FokPlan</span>
+     <span class="c">!! Flag to decouple spatial-dependence of evolution</span>
+     <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">SameRandSeed</span>
+     <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">SC_E</span>
+     <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">SC_E_add</span>
+     <span class="kt">INTEGER</span>                      <span class="kd">::</span> <span class="n">time_slice</span> <span class="c">!&lt; M3D-C1 time slice to use.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">rmax</span> <span class="c">!&lt; Maximum r for M3D-C1 fields.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">rmin</span> <span class="c">!&lt; Minimum r for M3D-C1 fields.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">zmax</span> <span class="c">!&lt; Maximum z for M3D-C1 fields.</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">zmin</span> <span class="c">!&lt; Minimum z for M3D-C1 fields.</span>
+     <span class="kt">INTEGER</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+     <span class="c">!! number of particles per vectorized chunk</span>
+     <span class="kt">INTEGER</span>  <span class="kd">::</span> <span class="n">num_impurity_species</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span>        <span class="kd">::</span> <span class="n">Zj</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gam_min</span>
+  <span class="k">END TYPE </span><span class="n">KORC_PARAMS</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,3410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_fio &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_fio 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.8% of total for modules and submodules.">475 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_fio_interface.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_fio_interface.f90.html'>korc_fio_interface.f90</a></li>
+    
+  
+     <li class="active">korc_fio</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_success">FIO_SUCCESS</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_out_of_bounds">FIO_OUT_OF_BOUNDS</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_no_data">FIO_NO_DATA</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_m3dc1_source">FIO_M3DC1_SOURCE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_nimrod_source">FIO_NIMROD_SOURCE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_timeslice">FIO_TIMESLICE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_species">FIO_SPECIES</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_electron">FIO_ELECTRON</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_main_ion">FIO_MAIN_ION</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_density">FIO_DENSITY</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_temperature">FIO_TEMPERATURE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_electric_field">FIO_ELECTRIC_FIELD</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_magnetic_field">FIO_MAGNETIC_FIELD</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_vector_potential">FIO_VECTOR_POTENTIAL</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_time">FIO_TIME</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#inters-0">Interfaces</a></h3></div>
+  <div id="inters-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_add_field">fio_add_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_allocate_search_hint">fio_allocate_search_hint</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_close_field">fio_close_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_close_series">fio_close_series</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_close_source">fio_close_source</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_create_compound_field">fio_create_compound_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_deallocate_search_hint">fio_deallocate_search_hint</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_eval_field">fio_eval_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_eval_field_deriv">fio_eval_field_deriv</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_eval_series">fio_eval_series</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_options">fio_get_options</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_available_fields">fio_get_available_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_open_source">fio_open_source</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_field">fio_get_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_set_int_option">fio_set_int_option</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_real_field_parameter">fio_get_real_field_parameter</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-0">Functions</a></h3></div>
+  <div id="funcs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-fio_make_species">FIO_MAKE_SPECIES</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-initialize_m3d_c1">initialize_m3d_c1</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-initialize_nimrod">initialize_nimrod</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-initialize_m3d_c1_imp">initialize_m3d_c1_imp</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-finalize_fio">finalize_fio</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href="http://fortranwiki.org/fortran/show/ISO_C_BINDING">iso_c_binding</a></li>
+    
+    <li><a href='../module/korc_types.html'>korc_types</a></li>
+    
+    <li><a href='../module/korc_input.html'>korc_input</a></li>
+    
+    <li><a href='../module/korc_hdf5.html'>korc_HDF5</a></li>
+    
+    <li><a href="http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm">mpi</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_fio~~UsesGraph Pages: 1 -->
+<svg id="modulekorc_fioUsesGraph" width="495pt" height="205pt"
+ viewBox="0.00 0.00 495.00 204.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_fio~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 200.9377)">
+<title>module~~korc_fio~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-200.9377 491,-200.9377 491,4 -4,4"/>
+<!-- module~korc_fio -->
+<g id="module~~korc_fio~~UsesGraph_node1" class="node">
+<title>module~korc_fio</title>
+<polygon fill="none" stroke="#000000" points="487,-145 433,-145 433,-121 487,-121 487,-145"/>
+<text text-anchor="middle" x="460" y="-130.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_fio</text>
+</g>
+<!-- iso_c_binding -->
+<g id="module~~korc_fio~~UsesGraph_node2" class="node">
+<title>iso_c_binding</title>
+<g id="a_module~~korc_fio~~UsesGraph_node2"><a xlink:href="http://fortranwiki.org/fortran/show/ISO_C_BINDING" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="77,-186 0,-186 0,-162 77,-162 77,-186"/>
+<text text-anchor="middle" x="38.5" y="-171.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iso_c_binding</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fio&#45;&gt;iso_c_binding -->
+<g id="module~~korc_fio~~UsesGraph_edge1" class="edge">
+<title>module~korc_fio&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-194C196.2959,-191.3892 130.8089,-184.7732 87.291,-179.8614"/>
+<polygon fill="#000000" stroke="#000000" points="87.5965,-176.3736 77.2639,-178.7158 86.8019,-183.3283 87.5965,-176.3736"/>
+</g>
+<!-- module~korc_input -->
+<g id="module~~korc_fio~~UsesGraph_node3" class="node">
+<title>module~korc_input</title>
+<g id="a_module~~korc_fio~~UsesGraph_node3"><a xlink:href=".././module/korc_input.html" xlink:title="korc_input">
+<polygon fill="#337ab7" stroke="#337ab7" points="394.5,-166 333.5,-166 333.5,-142 394.5,-142 394.5,-166"/>
+<text text-anchor="middle" x="364" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_input</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_input -->
+<g id="module~~korc_fio~~UsesGraph_edge2" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M432.747,-138.9616C424.0354,-140.8673 414.1947,-143.0199 404.7388,-145.0884"/>
+<polygon fill="#000000" stroke="#000000" points="403.7219,-141.728 394.7009,-147.2842 405.2179,-148.5663 403.7219,-141.728"/>
+</g>
+<!-- module~korc_hdf5 -->
+<g id="module~~korc_fio~~UsesGraph_node4" class="node">
+<title>module~korc_hdf5</title>
+<g id="a_module~~korc_fio~~UsesGraph_node4"><a xlink:href=".././module/korc_hdf5.html" xlink:title="korc_HDF5">
+<polygon fill="#337ab7" stroke="#337ab7" points="397,-124 331,-124 331,-100 397,-100 397,-124"/>
+<text text-anchor="middle" x="364" y="-109.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_fio~~UsesGraph_edge5" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M432.747,-127.0384C424.7785,-125.2953 415.8654,-123.3455 407.1662,-121.4426"/>
+<polygon fill="#000000" stroke="#000000" points="407.6387,-117.9633 397.1218,-119.2454 406.1428,-124.8016 407.6387,-117.9633"/>
+</g>
+<!-- mpi -->
+<g id="module~~korc_fio~~UsesGraph_node5" class="node">
+<title>mpi</title>
+<g id="a_module~~korc_fio~~UsesGraph_node5"><a xlink:href="http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm" xlink:title="mpi">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-24 117.5,-24 117.5,0 171.5,0 171.5,-24"/>
+<text text-anchor="middle" x="144.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fio&#45;&gt;mpi -->
+<g id="module~~korc_fio~~UsesGraph_edge4" class="edge">
+<title>module~korc_fio&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M449.117,-120.8488C424.6878,-94.6014 362.3334,-33.1895 295,-11 257.8774,1.2336 212.751,-1.1713 181.6501,-5.2842"/>
+<polygon fill="#000000" stroke="#000000" points="181.069,-1.8317 171.6723,-6.7259 182.07,-8.7598 181.069,-1.8317"/>
+</g>
+<!-- module~korc_types -->
+<g id="module~~korc_fio~~UsesGraph_node6" class="node">
+<title>module~korc_types</title>
+<g id="a_module~~korc_fio~~UsesGraph_node6"><a xlink:href=".././module/korc_types.html" xlink:title="korc_types">
+<polygon fill="#337ab7" stroke="#337ab7" points="176,-166 113,-166 113,-142 176,-142 176,-166"/>
+<text text-anchor="middle" x="144.5" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_types -->
+<g id="module~~korc_fio~~UsesGraph_edge3" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M446.0334,-145.0683C433.9125,-154.831 415.4551,-168.0572 397,-175 336.7856,-197.6525 317.5697,-199.8293 253.5,-194"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-194C225.5604,-192.7249 195.8876,-181.0817 174.5677,-170.6839"/>
+<polygon fill="#000000" stroke="#000000" points="175.8982,-167.4345 165.3961,-166.0359 172.7338,-173.6784 175.8982,-167.4345"/>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_types -->
+<g id="module~~korc_fio~~UsesGraph_edge7" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M333.4448,-153.3201C311.2215,-153.1256 280.4359,-153.4759 253.5,-156"/>
+</g>
+<!-- module~korc_hpc -->
+<g id="module~~korc_fio~~UsesGraph_node8" class="node">
+<title>module~korc_hpc</title>
+<g id="a_module~~korc_fio~~UsesGraph_node8"><a xlink:href=".././module/korc_hpc.html" xlink:title="korc_hpc">
+<polygon fill="#337ab7" stroke="#337ab7" points="281,-86 226,-86 226,-62 281,-62 281,-86"/>
+<text text-anchor="middle" x="253.5" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hpc</text>
+</a>
+</g>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_fio~~UsesGraph_edge6" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M343.209,-141.87C339.033,-139.1327 334.7723,-136.1107 331,-133 313.0511,-118.199 313.6542,-108.9016 295,-95 293.2114,-93.6671 291.3255,-92.3773 289.3843,-91.1369"/>
+<polygon fill="#000000" stroke="#000000" points="291.0481,-88.0554 280.6479,-86.0336 287.5173,-94.0997 291.0481,-88.0554"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_types -->
+<g id="module~~korc_fio~~UsesGraph_edge10" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-156C231.3551,-158.0751 206.5724,-157.8237 186.2402,-156.9443"/>
+<polygon fill="#000000" stroke="#000000" points="186.2128,-153.4387 176.0509,-156.4363 185.8642,-160.43 186.2128,-153.4387"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M343.7173,-124.1782C322.2086,-136.0882 286.8054,-152.8791 253.5,-156"/>
+</g>
+<!-- module~korc_constants -->
+<g id="module~~korc_fio~~UsesGraph_node7" class="node">
+<title>module~korc_constants</title>
+<g id="a_module~~korc_fio~~UsesGraph_node7"><a xlink:href=".././module/korc_constants.html" xlink:title="korc_constants">
+<polygon fill="#337ab7" stroke="#337ab7" points="295,-128 212,-128 212,-104 295,-104 295,-128"/>
+<text text-anchor="middle" x="253.5" y="-113.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_constants</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_constants -->
+<g id="module~~korc_fio~~UsesGraph_edge8" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M330.8464,-113.2001C322.8046,-113.4912 314.0151,-113.8094 305.3382,-114.1235"/>
+<polygon fill="#000000" stroke="#000000" points="305.1224,-110.6289 295.2556,-114.4885 305.3757,-117.6243 305.1224,-110.6289"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_fio~~UsesGraph_edge9" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M330.8464,-100.5987C318.1818,-96.2435 303.6627,-91.2505 290.6496,-86.7754"/>
+<polygon fill="#000000" stroke="#000000" points="291.6423,-83.4157 281.0476,-83.4734 289.3659,-90.0352 291.6423,-83.4157"/>
+</g>
+<!-- HDF5 -->
+<g id="module~~korc_fio~~UsesGraph_node9" class="node">
+<title>HDF5</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="280.5,-44 226.5,-44 226.5,-20 280.5,-20 280.5,-44"/>
+<text text-anchor="middle" x="253.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">HDF5</text>
+</g>
+<!-- module~korc_hdf5&#45;&gt;HDF5 -->
+<g id="module~~korc_fio~~UsesGraph_edge11" class="edge">
+<title>module~korc_hdf5&#45;&gt;HDF5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M351.5164,-99.7058C338.2336,-87.027 316.2459,-67.1621 295,-53 293.0893,-51.7264 291.091,-50.4766 289.0482,-49.261"/>
+<polygon fill="#000000" stroke="#000000" points="290.3786,-45.9956 279.9399,-44.1833 286.97,-52.1097 290.3786,-45.9956"/>
+</g>
+<!-- module~korc_types&#45;&gt;iso_c_binding -->
+<g id="module~~korc_fio~~UsesGraph_edge12" class="edge">
+<title>module~korc_types&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M112.9835,-159.9465C104.9127,-161.4693 96.0417,-163.1431 87.3225,-164.7882"/>
+<polygon fill="#000000" stroke="#000000" points="86.3914,-161.4021 77.2137,-166.6955 87.6893,-168.2807 86.3914,-161.4021"/>
+</g>
+<!-- module~korc_constants&#45;&gt;module~korc_types -->
+<g id="module~~korc_fio~~UsesGraph_edge13" class="edge">
+<title>module~korc_constants&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M219.0117,-128.0234C208.5062,-131.6859 196.8487,-135.75 185.9341,-139.5551"/>
+<polygon fill="#000000" stroke="#000000" points="184.4642,-136.3609 176.1737,-142.9578 186.7686,-142.9707 184.4642,-136.3609"/>
+</g>
+<!-- module~korc_hpc&#45;&gt;mpi -->
+<g id="module~~korc_fio~~UsesGraph_edge15" class="edge">
+<title>module~korc_hpc&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M228.7573,-61.8742C223.2013,-59.0423 217.3644,-55.9806 212,-53 198.7243,-45.6237 184.3002,-36.9549 172.2067,-29.493"/>
+<polygon fill="#000000" stroke="#000000" points="173.8115,-26.3695 163.4706,-24.0635 170.1164,-32.3148 173.8115,-26.3695"/>
+</g>
+<!-- module~korc_hpc&#45;&gt;module~korc_types -->
+<g id="module~~korc_fio~~UsesGraph_edge16" class="edge">
+<title>module~korc_hpc&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M227.033,-86.1429C221.9124,-88.8371 216.6861,-91.8394 212,-95 194.6889,-106.6757 176.9842,-122.3171 164.0525,-134.5613"/>
+<polygon fill="#000000" stroke="#000000" points="161.4367,-132.2214 156.6637,-141.6802 166.2936,-137.2623 161.4367,-132.2214"/>
+</g>
+<!-- omp_lib -->
+<g id="module~~korc_fio~~UsesGraph_node10" class="node">
+<title>omp_lib</title>
+<g id="a_module~~korc_fio~~UsesGraph_node10"><a xlink:href="https://gcc.gnu.org/onlinedocs/gcc-4.4.3/libgomp/Runtime-Library-Routines.html" xlink:title="omp_lib">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-86 117.5,-86 117.5,-62 171.5,-62 171.5,-86"/>
+<text text-anchor="middle" x="144.5" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_lib</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;omp_lib -->
+<g id="module~~korc_fio~~UsesGraph_edge14" class="edge">
+<title>module~korc_hpc&#45;&gt;omp_lib</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.9947,-74C212.5969,-74 196.2872,-74 181.7886,-74"/>
+<polygon fill="#000000" stroke="#000000" points="181.6189,-70.5001 171.6189,-74 181.6189,-77.5001 181.6189,-70.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  
+  
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_fio~~UsedByGraph Pages: 1 -->
+<svg id="modulekorc_fioUsedByGraph" width="641pt" height="345pt"
+ viewBox="0.00 0.00 641.00 344.66" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_fio~~UsedByGraph" class="graph" transform="scale(.8083 .8083) rotate(0) translate(4 422.3876)">
+<title>module~~korc_fio~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-422.3876 789,-422.3876 789,4 -4,4"/>
+<!-- module~korc_fio -->
+<g id="module~~korc_fio~~UsedByGraph_node1" class="node">
+<title>module~korc_fio</title>
+<polygon fill="none" stroke="#000000" points="54,-324.6997 0,-324.6997 0,-300.6997 54,-300.6997 54,-324.6997"/>
+<text text-anchor="middle" x="27" y="-310.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_fio</text>
+</g>
+<!-- program~main -->
+<g id="module~~korc_fio~~UsedByGraph_node2" class="node">
+<title>program~main</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node2"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="785,-66.6997 731,-66.6997 731,-42.6997 785,-42.6997 785,-66.6997"/>
+<text text-anchor="middle" x="758" y="-52.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_fio -->
+<g id="module~~korc_fio~~UsedByGraph_edge1" class="edge">
+<title>program~main&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M357.5,-410.6997C299.2219,-406.2933 284.3375,-414.2336 226,-410.6997"/>
+</g>
+<!-- module~korc_collisions -->
+<g id="module~~korc_fio~~UsedByGraph_node3" class="node">
+<title>module~korc_collisions</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node3"><a xlink:href=".././module/korc_collisions.html" xlink:title="korc_collisions">
+<polygon fill="#337ab7" stroke="#337ab7" points="398,-382.6997 317,-382.6997 317,-358.6997 398,-358.6997 398,-382.6997"/>
+<text text-anchor="middle" x="357.5" y="-368.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_fio~~UsedByGraph_edge4" class="edge">
+<title>program~main&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518,-410.6997C495.9184,-415.0312 440.7226,-399.0686 401.2319,-386.0361"/>
+<polygon fill="#000000" stroke="#000000" points="402.1538,-382.6539 391.5599,-382.8 399.9326,-389.2922 402.1538,-382.6539"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M657,-332.6997C600.8896,-375.942 587.515,-397.064 518,-410.6997"/>
+</g>
+<!-- module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_node4" class="node">
+<title>module~korc_interp</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node4"><a xlink:href=".././module/korc_interp.html" xlink:title="korc_interp">
+<polygon fill="#337ab7" stroke="#337ab7" points="154,-227.6997 90,-227.6997 90,-203.6997 154,-203.6997 154,-227.6997"/>
+<text text-anchor="middle" x="122" y="-213.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_edge7" class="edge">
+<title>program~main&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518,-410.6997C448.0006,-424.4305 428.6303,-416.078 357.5,-410.6997"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M357.5,-410.6997C296.5854,-406.0939 279.9029,-399.4448 226,-370.6997"/>
+</g>
+<!-- module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_node5" class="node">
+<title>module~korc_profiles</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node5"><a xlink:href=".././module/korc_profiles.html" xlink:title="korc_profiles">
+<polygon fill="#337ab7" stroke="#337ab7" points="262,-227.6997 190,-227.6997 190,-203.6997 262,-203.6997 262,-227.6997"/>
+<text text-anchor="middle" x="226" y="-213.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_edge14" class="edge">
+<title>program~main&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518,-292.6997C420.37,-266.8028 395.5533,-261.8843 298,-235.6997 289.6246,-233.4517 280.7142,-231.0141 272.1192,-228.6391"/>
+<polygon fill="#000000" stroke="#000000" points="272.7969,-225.195 262.2252,-225.895 270.9261,-231.9404 272.7969,-225.195"/>
+</g>
+<!-- module~korc_ppusher -->
+<g id="module~~korc_fio~~UsedByGraph_node6" class="node">
+<title>module~korc_ppusher</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node6"><a xlink:href=".././module/korc_ppusher.html" xlink:title="korc_ppusher">
+<polygon fill="#337ab7" stroke="#337ab7" points="556,-344.6997 480,-344.6997 480,-320.6997 556,-320.6997 556,-344.6997"/>
+<text text-anchor="middle" x="518" y="-330.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_ppusher -->
+<g id="module~~korc_fio~~UsedByGraph_edge18" class="edge">
+<title>program~main&#45;&gt;module~korc_ppusher</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M657,-332.6997C631.6944,-352.2018 595.3876,-351.5329 566.226,-346.3401"/>
+<polygon fill="#000000" stroke="#000000" points="566.7315,-342.8719 556.2389,-344.3403 565.3571,-349.7356 566.7315,-342.8719"/>
+</g>
+<!-- module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_node7" class="node">
+<title>module~korc_fields</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node7"><a xlink:href=".././module/korc_fields.html" xlink:title="korc_fields">
+<polygon fill="#337ab7" stroke="#337ab7" points="257.5,-185.6997 194.5,-185.6997 194.5,-161.6997 257.5,-161.6997 257.5,-185.6997"/>
+<text text-anchor="middle" x="226" y="-171.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge22" class="edge">
+<title>program~main&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M730.758,-44.1967C719.7948,-40.3464 706.9412,-36.2992 695,-33.6997 617.6919,-16.8708 596.9167,-20.3481 518,-14.6997"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518,-14.6997C420.2933,-5.4691 379.4971,20.9814 298,-33.6997 257.1922,-61.0801 238.1899,-119.0602 230.4932,-151.1503"/>
+<polygon fill="#000000" stroke="#000000" points="226.984,-150.8067 228.225,-161.3286 233.8164,-152.3293 226.984,-150.8067"/>
+</g>
+<!-- module~korc_initialize -->
+<g id="module~~korc_fio~~UsedByGraph_node9" class="node">
+<title>module~korc_initialize</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node9"><a xlink:href=".././module/korc_initialize.html" xlink:title="korc_initialize">
+<polygon fill="#337ab7" stroke="#337ab7" points="695,-66.6997 619,-66.6997 619,-42.6997 695,-42.6997 695,-66.6997"/>
+<text text-anchor="middle" x="657" y="-52.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_initialize -->
+<g id="module~~korc_fio~~UsedByGraph_edge30" class="edge">
+<title>program~main&#45;&gt;module~korc_initialize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M730.9339,-54.6997C723.0382,-54.6997 714.1605,-54.6997 705.369,-54.6997"/>
+<polygon fill="#000000" stroke="#000000" points="705.1523,-51.1998 695.1523,-54.6997 705.1522,-58.1998 705.1523,-51.1998"/>
+</g>
+<!-- module~korc_finalize -->
+<g id="module~~korc_fio~~UsedByGraph_node13" class="node">
+<title>module~korc_finalize</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node13"><a xlink:href=".././module/korc_finalize.html" xlink:title="korc_finalize">
+<polygon fill="#337ab7" stroke="#337ab7" points="393,-226.6997 322,-226.6997 322,-202.6997 393,-202.6997 393,-226.6997"/>
+<text text-anchor="middle" x="357.5" y="-212.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_finalize -->
+<g id="module~~korc_fio~~UsedByGraph_edge35" class="edge">
+<title>program~main&#45;&gt;module~korc_finalize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M657,-332.6997C656.2044,-333.3129 518.9709,-292.9573 518,-292.6997"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518,-292.6997C467.3122,-279.2545 465.0774,-252.6422 417,-231.6997 412.5555,-229.7637 407.8291,-227.982 403.0583,-226.3604"/>
+<polygon fill="#000000" stroke="#000000" points="403.8697,-222.9459 393.2794,-223.2584 401.7531,-229.6183 403.8697,-222.9459"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M755.3728,-66.9257C744.5601,-116.048 701.9441,-298.0629 657,-332.6997"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_fio -->
+<g id="module~~korc_fio~~UsedByGraph_edge2" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M330.4731,-382.7519C304.3529,-393.4705 263.3578,-407.8751 226,-410.6997"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M226,-410.6997C154.1868,-416.1296 81.1004,-361.3308 46.9225,-331.3998"/>
+<polygon fill="#000000" stroke="#000000" points="49.2566,-328.7916 39.4734,-324.7245 44.585,-334.0048 49.2566,-328.7916"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_edge8" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M316.8612,-380.1946C289.5789,-384.3744 253.6987,-385.4707 226,-370.6997"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_edge15" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M319.7187,-358.607C311.9611,-354.965 304.2615,-350.381 298,-344.6997 264.9878,-314.7469 243.6146,-266.008 233.2923,-237.7956"/>
+<polygon fill="#000000" stroke="#000000" points="236.4924,-236.3449 229.876,-228.07 229.888,-238.6648 236.4924,-236.3449"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge23" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M316.9371,-359.0494C309.8111,-355.4347 303.0666,-350.7495 298,-344.6997 253.9803,-292.1382 302.8959,-249.7267 262,-194.6997 261.5306,-194.0682 261.0362,-193.4524 260.5196,-192.8522"/>
+<polygon fill="#000000" stroke="#000000" points="262.5767,-189.9949 252.8011,-185.9095 257.8954,-195.1993 262.5767,-189.9949"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_fio -->
+<g id="module~~korc_fio~~UsedByGraph_edge3" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M109.9682,-227.9849C93.836,-244.4567 65.0226,-273.8767 45.9583,-293.3423"/>
+<polygon fill="#000000" stroke="#000000" points="43.4307,-290.921 38.9341,-300.5144 48.4317,-295.819 43.4307,-290.921"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_edge6" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M189.9177,-215.6997C181.6594,-215.6997 172.8082,-215.6997 164.3145,-215.6997"/>
+<polygon fill="#000000" stroke="#000000" points="164.1952,-212.1998 154.1951,-215.6997 164.1951,-219.1998 164.1952,-212.1998"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_fio~~UsedByGraph_edge5" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M479.9637,-341.7052C458.4843,-346.7907 431.3644,-353.2116 408.1086,-358.7176"/>
+<polygon fill="#000000" stroke="#000000" points="406.9936,-355.3848 398.069,-361.0946 408.6064,-362.1965 406.9936,-355.3848"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_edge11" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M357.5,-330.6997C349.9442,-329.5954 232.7379,-374.2929 226,-370.6997"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M226,-370.6997C172.6486,-342.2488 141.821,-272.9337 129.0253,-237.4342"/>
+<polygon fill="#000000" stroke="#000000" points="132.3331,-236.2902 125.7588,-227.9818 125.7171,-238.5765 132.3331,-236.2902"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_edge13" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M479.8353,-335.051C447.1752,-336.3901 398.9986,-336.765 357.5,-330.6997"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M357.5,-330.6997C329.2851,-326.576 320.8302,-323.7839 298,-306.6997 272.3792,-287.5274 250.833,-257.1123 238.1689,-236.7877"/>
+<polygon fill="#000000" stroke="#000000" points="241.0093,-234.7209 232.8395,-227.9752 235.0195,-238.3434 241.0093,-234.7209"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge27" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M479.8764,-321.6882C433.7213,-307.113 355.0901,-278.1962 298,-235.6997 278.5478,-221.22 280.7155,-210.1199 262,-194.6997 260.6563,-193.5926 259.2471,-192.5081 257.7966,-191.4517"/>
+<polygon fill="#000000" stroke="#000000" points="259.4731,-188.3636 249.2064,-185.7474 255.6008,-194.195 259.4731,-188.3636"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_edge10" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M196.1978,-185.7353C185.3186,-190.1288 172.8436,-195.1668 161.266,-199.8423"/>
+<polygon fill="#000000" stroke="#000000" points="159.7684,-196.6724 151.8066,-203.6625 162.3896,-203.1631 159.7684,-196.6724"/>
+</g>
+<!-- module~korc_experimental_pdf -->
+<g id="module~~korc_fio~~UsedByGraph_node8" class="node">
+<title>module~korc_experimental_pdf</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node8"><a xlink:href=".././module/korc_experimental_pdf.html" xlink:title="korc_experimental_pdf">
+<polygon fill="#337ab7" stroke="#337ab7" points="417,-66.6997 298,-66.6997 298,-42.6997 417,-42.6997 417,-66.6997"/>
+<text text-anchor="middle" x="357.5" y="-52.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf</text>
+</a>
+</g>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fio~~UsedByGraph_edge9" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M322.2718,-66.7219C314.1345,-69.9331 305.6303,-73.6502 298,-77.6997 246.3804,-105.0956 235.5462,-116.0848 190,-152.6997 172.8044,-166.5234 154.5247,-183.6087 141.2535,-196.4979"/>
+<polygon fill="#000000" stroke="#000000" points="138.7552,-194.0457 134.0644,-203.5456 143.6556,-199.0444 138.7552,-194.0457"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge24" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M321.8868,-66.809C313.5916,-70.5384 305.1135,-75.1563 298,-80.6997 272.1611,-100.8356 250.4313,-132.2575 237.808,-152.9122"/>
+<polygon fill="#000000" stroke="#000000" points="234.7658,-151.1804 232.6669,-161.5653 240.7838,-154.756 234.7658,-151.1804"/>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge19" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628.3579,-42.6431C600.6946,-31.9212 557.3241,-17.5143 518,-14.6997"/>
+</g>
+<!-- module~korc_spatial_distribution -->
+<g id="module~~korc_fio~~UsedByGraph_node11" class="node">
+<title>module~korc_spatial_distribution</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node11"><a xlink:href=".././module/korc_spatial_distribution.html" xlink:title="korc_spatial_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="580.5,-136.6997 455.5,-136.6997 455.5,-112.6997 580.5,-112.6997 580.5,-136.6997"/>
+<text text-anchor="middle" x="518" y="-122.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_spatial_distribution -->
+<g id="module~~korc_fio~~UsedByGraph_edge33" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_spatial_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M635.4944,-66.7898C620.8272,-74.9201 600.8922,-85.7462 583,-94.6997 573.747,-99.3301 563.6382,-104.1214 554.2087,-108.4794"/>
+<polygon fill="#000000" stroke="#000000" points="552.6952,-105.323 545.0625,-112.671 555.6115,-111.6866 552.6952,-105.323"/>
+</g>
+<!-- module~korc_velocity_distribution -->
+<g id="module~~korc_fio~~UsedByGraph_node12" class="node">
+<title>module~korc_velocity_distribution</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node12"><a xlink:href=".././module/korc_velocity_distribution.html" xlink:title="korc_velocity_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="583,-85.6997 453,-85.6997 453,-61.6997 583,-61.6997 583,-85.6997"/>
+<text text-anchor="middle" x="518" y="-71.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_velocity_distribution -->
+<g id="module~~korc_fio~~UsedByGraph_edge34" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_velocity_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618.6497,-59.9419C610.6509,-61.0352 601.9582,-62.2234 593.1435,-63.4283"/>
+<polygon fill="#000000" stroke="#000000" points="592.604,-59.9694 583.1701,-64.7916 593.5521,-66.9049 592.604,-59.9694"/>
+</g>
+<!-- module~korc_avalanche -->
+<g id="module~~korc_fio~~UsedByGraph_node10" class="node">
+<title>module~korc_avalanche</title>
+<g id="a_module~~korc_fio~~UsedByGraph_node10"><a xlink:href=".././module/korc_avalanche.html" xlink:title="korc_avalanche">
+<polygon fill="#337ab7" stroke="#337ab7" points="400.5,-146.6997 314.5,-146.6997 314.5,-122.6997 400.5,-122.6997 400.5,-146.6997"/>
+<text text-anchor="middle" x="357.5" y="-132.2997" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche</text>
+</a>
+</g>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_edge12" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M324.33,-146.7926C315.4539,-150.6619 306.0859,-155.3511 298,-160.6997 279.6445,-172.8415 279.6201,-181.5135 262,-194.6997 260.4359,-195.8703 258.8012,-197.0275 257.1283,-198.1612"/>
+<polygon fill="#000000" stroke="#000000" points="255.1559,-195.2677 248.5946,-203.5864 258.9114,-201.175 255.1559,-195.2677"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge20" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M316.9727,-146.7193C301.3727,-151.3459 283.54,-156.6346 267.8205,-161.2967"/>
+<polygon fill="#000000" stroke="#000000" points="266.4324,-158.0576 257.8403,-164.2566 268.4228,-164.7687 266.4324,-158.0576"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_edge16" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M357.5,-174.6997C327.6701,-181.5731 294.7929,-191.8239 269.3743,-200.356"/>
+<polygon fill="#000000" stroke="#000000" points="268.0143,-197.1215 259.6707,-203.651 270.2651,-203.7498 268.0143,-197.1215"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge25" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M357.5,-174.6997C328.0719,-181.4805 293.9471,-180.9871 267.8357,-178.9262"/>
+<polygon fill="#000000" stroke="#000000" points="267.8059,-175.4095 257.5327,-178.0001 267.1791,-182.3814 267.8059,-175.4095"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M484.5887,-136.7331C452.4011,-147.9366 402.1511,-164.4113 357.5,-174.6997"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_fio~~UsedByGraph_edge28" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M490.4091,-112.6663C463.9969,-101.147 423.9595,-83.6852 394.7307,-70.9374"/>
+<polygon fill="#000000" stroke="#000000" points="395.8334,-67.6 385.268,-66.8104 393.035,-74.0163 395.8334,-67.6"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_fio~~UsedByGraph_edge31" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M455.4869,-128.5946C440.7548,-129.5125 425.1831,-130.4827 410.8952,-131.3729"/>
+<polygon fill="#000000" stroke="#000000" points="410.5116,-127.89 400.7486,-132.0051 410.9469,-134.8764 410.5116,-127.89"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge26" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M452.7765,-76.8082C407.5414,-81.0191 346.883,-90.8479 298,-113.6997 277.2992,-123.377 257.6427,-140.4933 244.1144,-153.9745"/>
+<polygon fill="#000000" stroke="#000000" points="241.3514,-151.7958 236.8958,-161.4083 246.3733,-156.6724 241.3514,-151.7958"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_fio~~UsedByGraph_edge29" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M452.7185,-65.9717C444.235,-64.9674 435.5201,-63.9358 426.9714,-62.9238"/>
+<polygon fill="#000000" stroke="#000000" points="427.3783,-59.4476 417.0362,-61.7476 426.5554,-66.3991 427.3783,-59.4476"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_fio~~UsedByGraph_edge32" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M486.2904,-85.7514C461.2301,-95.2758 426.054,-108.645 398.795,-119.0051"/>
+<polygon fill="#000000" stroke="#000000" points="397.2479,-115.8487 389.1438,-122.6731 399.7349,-122.3921 397.2479,-115.8487"/>
+</g>
+<!-- module~korc_finalize&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_fio~~UsedByGraph_edge17" class="edge">
+<title>module~korc_finalize&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M321.9142,-214.9704C306.6897,-215.0861 288.7104,-215.2229 272.4569,-215.3465"/>
+<polygon fill="#000000" stroke="#000000" points="272.0446,-211.8494 262.0715,-215.4254 272.0979,-218.8492 272.0446,-211.8494"/>
+</g>
+<!-- module~korc_finalize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fio~~UsedByGraph_edge21" class="edge">
+<title>module~korc_finalize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M321.9142,-203.6046C305.128,-198.3708 284.9929,-192.093 267.5146,-186.6434"/>
+<polygon fill="#000000" stroke="#000000" points="268.1645,-183.18 257.5759,-183.5447 266.0809,-189.8627 268.1645,-183.18"/>
+</g>
+</g>
+</svg>
+</div><script>var panmodulekorc_fioUsedByGraph = svgPanZoom('#modulekorc_fioUsedByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+  </li>
+  
+      </ul>
+    </div>
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_success">FIO_SUCCESS</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_out_of_bounds">FIO_OUT_OF_BOUNDS</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_no_data">FIO_NO_DATA</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_m3dc1_source">FIO_M3DC1_SOURCE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_nimrod_source">FIO_NIMROD_SOURCE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_timeslice">FIO_TIMESLICE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_species">FIO_SPECIES</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_electron">FIO_ELECTRON</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_main_ion">FIO_MAIN_ION</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_density">FIO_DENSITY</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_temperature">FIO_TEMPERATURE</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_electric_field">FIO_ELECTRIC_FIELD</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_magnetic_field">FIO_MAGNETIC_FIELD</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_vector_potential">FIO_VECTOR_POTENTIAL</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#variable-fio_time">FIO_TIME</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#inters-1">Interfaces</a></h3></div>
+  <div id="inters-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_add_field">fio_add_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_allocate_search_hint">fio_allocate_search_hint</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_close_field">fio_close_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_close_series">fio_close_series</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_close_source">fio_close_source</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_create_compound_field">fio_create_compound_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_deallocate_search_hint">fio_deallocate_search_hint</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_eval_field">fio_eval_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_eval_field_deriv">fio_eval_field_deriv</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_eval_series">fio_eval_series</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_options">fio_get_options</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_available_fields">fio_get_available_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_open_source">fio_open_source</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_field">fio_get_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_set_int_option">fio_set_int_option</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#interface-fio_get_real_field_parameter">fio_get_real_field_parameter</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-1">Functions</a></h3></div>
+  <div id="funcs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-fio_make_species">FIO_MAKE_SPECIES</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-initialize_m3d_c1">initialize_m3d_c1</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-initialize_nimrod">initialize_nimrod</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-initialize_m3d_c1_imp">initialize_m3d_c1_imp</a>
+      
+      <a class="list-group-item" href="../module/korc_fio.html#proc-finalize_fio">finalize_fio</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_success"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_SUCCESS</strong></td><td> =</td><td>0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_out_of_bounds"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_OUT_OF_BOUNDS</strong></td><td> =</td><td>10002</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_no_data"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_NO_DATA</strong></td><td> =</td><td>10006</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_m3dc1_source"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_M3DC1_SOURCE</strong></td><td> =</td><td>3</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_nimrod_source"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_NIMROD_SOURCE</strong></td><td> =</td><td>5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_timeslice"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_TIMESLICE</strong></td><td> =</td><td>1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_species"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_SPECIES</strong></td><td> =</td><td>3</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_electron"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_ELECTRON</strong></td><td> =</td><td>1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_main_ion"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_MAIN_ION</strong></td><td> =</td><td>-1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_density"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_DENSITY</strong></td><td> =</td><td>102</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_temperature"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_TEMPERATURE</strong></td><td> =</td><td>103</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_electric_field"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_ELECTRIC_FIELD</strong></td><td> =</td><td>1001</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_magnetic_field"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_MAGNETIC_FIELD</strong></td><td> =</td><td>1003</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_vector_potential"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_VECTOR_POTENTIAL</strong></td><td> =</td><td>1002</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fio_time"></span>integer(kind=C_INT),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>FIO_TIME</strong></td><td> =</td><td>7001</td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    <section>
+   <h2>Interfaces</h2>
+   
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_add_field"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_add_field(icfield, ifield, op, fac) bind(C, NAME='fio_add_field')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>icfield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>ifield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>op</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>fac</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_allocate_search_hint"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_allocate_search_hint(isrc, hint) bind(C, NAME='fio_allocate_search_hint')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>isrc</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>hint</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_close_field"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_close_field(ifield) bind(C, NAME='fio_close_field')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>ifield</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_close_series"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_close_series(iseries) bind(C, NAME='fio_close_series')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>iseries</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_close_source"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_close_source(isrc) bind(C, NAME='fio_close_source')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>isrc</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_create_compound_field"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_create_compound_field(ifield) bind(C, NAME='fio_create_compound_field')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ifield</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_deallocate_search_hint"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_deallocate_search_hint(isrc, hint) bind(C, NAME='fio_deallocate_search_hint')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>isrc</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>hint</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_eval_field"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_eval_field(ifield, x, v, hint) bind(C, NAME='fio_eval_field')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>ifield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>v</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>hint</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_eval_field_deriv"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_eval_field_deriv(ifield, x, v, hint) bind(C, NAME='fio_eval_field_deriv')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>ifield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>v</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>hint</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_eval_series"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_eval_series(iseries, x, v) bind(C, NAME='fio_eval_series')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>iseries</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=C_DOUBLE),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>v</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_get_options"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_get_options(isrc) bind(C, NAME='fio_get_options')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>isrc</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_get_available_fields"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_get_available_fields(isrc, n, f) bind(C, NAME='fio_get_available_fields')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>isrc</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>f</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_open_source"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_open_source(itype, filename, handle) bind(C, NAME='fio_open_source')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>itype</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(kind=C_CHAR,len=1),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>filename</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>handle</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_get_field"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_get_field(isrc, type, handle) bind(C, NAME='fio_get_field')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>isrc</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>type</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>handle</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_set_int_option"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_set_int_option(iopt, v) bind(C, NAME='fio_set_int_option')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>iopt</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=C_INT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>VALUE</td><td>::</td>
+  <td><strong>v</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-fio_get_real_field_parameter"></span><h3>interface 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+public function fio_get_real_field_parameter(ifield, t, p) bind(C, NAME='fio_get_real_field_parameter')
+    
+    
+   
+</h3>
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=c_int),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>value</td><td>::</td>
+  <td><strong>ifield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=c_int),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>value</td><td>::</td>
+  <td><strong>t</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=c_double)</td>
+  <td></td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>p</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+    </li>
+  
+  </ul>
+</div>
+
+    
+    </section>
+  <br>
+    
+
+    
+    
+    
+    
+     
+    <section>
+    <h2>Functions</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-fio_make_species"></span><h3>
+public function <a href='../proc/fio_make_species.html'>FIO_MAKE_SPECIES</a>(m, p, e)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>p</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>e</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=C_INT)
+  </small></h4>
+  
+    
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_m3d_c1"></span><h3>
+public subroutine <a href='../proc/initialize_m3d_c1.html'>initialize_m3d_c1</a>(params, F, P, spp, init)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PROFILES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(SPECIES),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>spp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>init</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_nimrod"></span><h3>
+public subroutine <a href='../proc/initialize_nimrod.html'>initialize_nimrod</a>(params, F, P, spp, init)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PROFILES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(SPECIES),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>spp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>init</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_m3d_c1_imp"></span><h3>
+public subroutine <a href='../proc/initialize_m3d_c1_imp.html'>initialize_m3d_c1_imp</a>(params, F, P, num_imp, init)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PROFILES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>num_imp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>init</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize_fio"></span><h3>
+public subroutine <a href='../proc/finalize_fio.html'>finalize_fio</a>(params, F, P)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PROFILES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

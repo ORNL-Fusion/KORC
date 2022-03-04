@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>bessik &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>bessik
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.5% of total for procedures.">126 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/special_fun_modules.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/special_fun_modules.f90.html'>special_fun_modules.f90</a></li>
+    
+     <li><a href='../module/special_functions.html'>special_functions</a></li>
+    
+  
+     <li class="active">bessik</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/bessik.html#src">bessik</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine bessik(x, xnu, ri, rk, rip, rkp)
+    
+    
+   
+</h2>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href='../module/nrtype.html'>nrtype</a></li>
+    
+    <li><a href='../module/nrutil.html'>nrutil</a></li>
+    
+    <li><a href='../module/nr.html'>nr</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~bessik~~UsesGraph Pages: 1 -->
+<svg id="procbessikUsesGraph" width="242pt" height="94pt"
+ viewBox="0.00 0.00 242.00 94.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~bessik~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 90)">
+<title>proc~~bessik~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-90 238,-90 238,4 -4,4"/>
+<!-- proc~bessik -->
+<g id="proc~~bessik~~UsesGraph_node1" class="node">
+<title>proc~bessik</title>
+<polygon fill="none" stroke="#000000" points="234,-44 180,-44 180,-20 234,-20 234,-44"/>
+<text text-anchor="middle" x="207" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">bessik</text>
+</g>
+<!-- module~nr -->
+<g id="proc~~bessik~~UsesGraph_node2" class="node">
+<title>module~nr</title>
+<g id="a_proc~~bessik~~UsesGraph_node2"><a xlink:href=".././module/nr.html" xlink:title="nr">
+<polygon fill="#337ab7" stroke="#337ab7" points="144,-86 90,-86 90,-62 144,-62 144,-86"/>
+<text text-anchor="middle" x="117" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">nr</text>
+</a>
+</g>
+</g>
+<!-- proc~bessik&#45;&gt;module~nr -->
+<g id="proc~~bessik~~UsesGraph_edge1" class="edge">
+<title>proc~bessik&#45;&gt;module~nr</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M180.9683,-44.1481C172.013,-48.3273 161.8309,-53.0789 152.2652,-57.5429"/>
+<polygon fill="#000000" stroke="#000000" points="150.5549,-54.4786 142.9732,-61.8792 153.5152,-60.8219 150.5549,-54.4786"/>
+</g>
+<!-- module~nrutil -->
+<g id="proc~~bessik~~UsesGraph_node3" class="node">
+<title>module~nrutil</title>
+<g id="a_proc~~bessik~~UsesGraph_node3"><a xlink:href=".././module/nrutil.html" xlink:title="nrutil">
+<polygon fill="#337ab7" stroke="#337ab7" points="144,-44 90,-44 90,-20 144,-20 144,-44"/>
+<text text-anchor="middle" x="117" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">nrutil</text>
+</a>
+</g>
+</g>
+<!-- proc~bessik&#45;&gt;module~nrutil -->
+<g id="proc~~bessik~~UsesGraph_edge2" class="edge">
+<title>proc~bessik&#45;&gt;module~nrutil</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M179.997,-32C171.9723,-32 163.0335,-32 154.4691,-32"/>
+<polygon fill="#000000" stroke="#000000" points="154.295,-28.5001 144.295,-32 154.2949,-35.5001 154.295,-28.5001"/>
+</g>
+<!-- module~nrtype -->
+<g id="proc~~bessik~~UsesGraph_node4" class="node">
+<title>module~nrtype</title>
+<g id="a_proc~~bessik~~UsesGraph_node4"><a xlink:href=".././module/nrtype.html" xlink:title="nrtype">
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">nrtype</text>
+</a>
+</g>
+</g>
+<!-- proc~bessik&#45;&gt;module~nrtype -->
+<g id="proc~~bessik~~UsesGraph_edge3" class="edge">
+<title>proc~bessik&#45;&gt;module~nrtype</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M179.8835,-20.8359C168.9376,-16.8944 156.0631,-12.9576 144,-11 117.5703,-6.7111 87.3392,-7.1039 64.2281,-8.4944"/>
+<polygon fill="#000000" stroke="#000000" points="63.8849,-5.0097 54.1498,-9.1902 64.3671,-11.993 63.8849,-5.0097"/>
+</g>
+<!-- module~nrutil&#45;&gt;module~nrtype -->
+<g id="proc~~bessik~~UsesGraph_edge4" class="edge">
+<title>module~nrutil&#45;&gt;module~nrtype</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M89.997,-25.9993C81.8842,-24.1965 72.8369,-22.186 64.1869,-20.2638"/>
+<polygon fill="#000000" stroke="#000000" points="64.8161,-16.8183 54.295,-18.0655 63.2976,-23.6516 64.8161,-16.8183"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+
+    
+    <p>@brief Subroutine taken from "Numerical Recipes" that calculates the modified Bessel function of</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-x~81"></span>real(kind=SP),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xnu~2"></span>real(kind=SP),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>xnu</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ri~2"></span>real(kind=SP),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ri</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk~2"></span>real(kind=SP),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rk</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rip~2"></span>real(kind=SP),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rip</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rkp~2"></span>real(kind=SP),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rkp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~bessik~~CallsGraph Pages: 1 -->
+<svg id="procbessikCallsGraph" width="242pt" height="200pt"
+ viewBox="0.00 0.00 242.00 200.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~bessik~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 196)">
+<title>proc~~bessik~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-196 238,-196 238,4 -4,4"/>
+<!-- proc~bessik -->
+<g id="proc~~bessik~~CallsGraph_node1" class="node">
+<title>proc~bessik</title>
+<polygon fill="none" stroke="#000000" points="54,-87 0,-87 0,-63 54,-63 54,-87"/>
+<text text-anchor="middle" x="27" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">bessik</text>
+</g>
+<!-- interface~assert -->
+<g id="proc~~bessik~~CallsGraph_node2" class="node">
+<title>interface~assert</title>
+<g id="a_proc~~bessik~~CallsGraph_node2"><a xlink:href=".././interface/assert.html" xlink:title="assert">
+<polygon fill="#a7506f" stroke="#a7506f" points="144,-108 90,-108 90,-84 144,-84 144,-108"/>
+<text text-anchor="middle" x="117" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">assert</text>
+</a>
+</g>
+</g>
+<!-- proc~bessik&#45;&gt;interface~assert -->
+<g id="proc~~bessik~~CallsGraph_edge1" class="edge">
+<title>proc~bessik&#45;&gt;interface~assert</title>
+<path fill="none" stroke="#000000" d="M54.003,-81.3007C62.1158,-83.1937 71.1631,-85.3047 79.8131,-87.323"/>
+<polygon fill="#000000" stroke="#000000" points="79.1713,-90.7672 89.705,-89.6312 80.7619,-83.9504 79.1713,-90.7672"/>
+</g>
+<!-- interface~beschb -->
+<g id="proc~~bessik~~CallsGraph_node3" class="node">
+<title>interface~beschb</title>
+<g id="a_proc~~bessik~~CallsGraph_node3"><a xlink:href=".././interface/beschb.html" xlink:title="beschb">
+<polygon fill="#a7506f" stroke="#a7506f" points="144,-66 90,-66 90,-42 144,-42 144,-66"/>
+<text text-anchor="middle" x="117" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">beschb</text>
+</a>
+</g>
+</g>
+<!-- proc~bessik&#45;&gt;interface~beschb -->
+<g id="proc~~bessik~~CallsGraph_edge2" class="edge">
+<title>proc~bessik&#45;&gt;interface~beschb</title>
+<path fill="none" stroke="#000000" d="M54.003,-68.6993C62.1158,-66.8063 71.1631,-64.6953 79.8131,-62.677"/>
+<polygon fill="#000000" stroke="#000000" points="80.7619,-66.0496 89.705,-60.3688 79.1713,-59.2328 80.7619,-66.0496"/>
+</g>
+<!-- proc~assert_v -->
+<g id="proc~~bessik~~CallsGraph_node4" class="node">
+<title>proc~assert_v</title>
+<g id="a_proc~~bessik~~CallsGraph_node4"><a xlink:href=".././proc/assert_v.html" xlink:title="assert_v">
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-192 180,-192 180,-168 234,-168 234,-192"/>
+<text text-anchor="middle" x="207" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">assert_v</text>
+</a>
+</g>
+</g>
+<!-- interface~assert&#45;&gt;proc~assert_v -->
+<g id="proc~~bessik~~CallsGraph_edge3" class="edge">
+<title>interface~assert&#45;&gt;proc~assert_v</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M128.193,-108.0567C140.476,-121.0782 160.9826,-142.2118 180,-159 180.9516,-159.84 181.9325,-160.6862 182.9312,-161.5316"/>
+<polygon fill="#000000" stroke="#000000" points="180.777,-164.291 190.7442,-167.8835 185.1928,-158.8595 180.777,-164.291"/>
+</g>
+<!-- proc~assert3 -->
+<g id="proc~~bessik~~CallsGraph_node5" class="node">
+<title>proc~assert3</title>
+<g id="a_proc~~bessik~~CallsGraph_node5"><a xlink:href=".././proc/assert3.html" xlink:title="assert3">
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-150 180,-150 180,-126 234,-126 234,-150"/>
+<text text-anchor="middle" x="207" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">assert3</text>
+</a>
+</g>
+</g>
+<!-- interface~assert&#45;&gt;proc~assert3 -->
+<g id="proc~~bessik~~CallsGraph_edge4" class="edge">
+<title>interface~assert&#45;&gt;proc~assert3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M143.0317,-108.1481C151.987,-112.3273 162.1691,-117.0789 171.7348,-121.5429"/>
+<polygon fill="#000000" stroke="#000000" points="170.4848,-124.8219 181.0268,-125.8792 173.4451,-118.4786 170.4848,-124.8219"/>
+</g>
+<!-- proc~assert1 -->
+<g id="proc~~bessik~~CallsGraph_node6" class="node">
+<title>proc~assert1</title>
+<g id="a_proc~~bessik~~CallsGraph_node6"><a xlink:href=".././proc/assert1.html" xlink:title="assert1">
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-108 180,-108 180,-84 234,-84 234,-108"/>
+<text text-anchor="middle" x="207" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">assert1</text>
+</a>
+</g>
+</g>
+<!-- interface~assert&#45;&gt;proc~assert1 -->
+<g id="proc~~bessik~~CallsGraph_edge5" class="edge">
+<title>interface~assert&#45;&gt;proc~assert1</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M144.003,-96C152.0277,-96 160.9665,-96 169.5309,-96"/>
+<polygon fill="#000000" stroke="#000000" points="169.7051,-99.5001 179.705,-96 169.705,-92.5001 169.7051,-99.5001"/>
+</g>
+<!-- proc~assert4 -->
+<g id="proc~~bessik~~CallsGraph_node7" class="node">
+<title>proc~assert4</title>
+<g id="a_proc~~bessik~~CallsGraph_node7"><a xlink:href=".././proc/assert4.html" xlink:title="assert4">
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-66 180,-66 180,-42 234,-42 234,-66"/>
+<text text-anchor="middle" x="207" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">assert4</text>
+</a>
+</g>
+</g>
+<!-- interface~assert&#45;&gt;proc~assert4 -->
+<g id="proc~~bessik~~CallsGraph_edge6" class="edge">
+<title>interface~assert&#45;&gt;proc~assert4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M143.0317,-83.8519C151.987,-79.6727 162.1691,-74.9211 171.7348,-70.4571"/>
+<polygon fill="#000000" stroke="#000000" points="173.4451,-73.5214 181.0268,-66.1208 170.4848,-67.1781 173.4451,-73.5214"/>
+</g>
+<!-- proc~assert2 -->
+<g id="proc~~bessik~~CallsGraph_node8" class="node">
+<title>proc~assert2</title>
+<g id="a_proc~~bessik~~CallsGraph_node8"><a xlink:href=".././proc/assert2.html" xlink:title="assert2">
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 180,-24 180,0 234,0 234,-24"/>
+<text text-anchor="middle" x="207" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">assert2</text>
+</a>
+</g>
+</g>
+<!-- interface~assert&#45;&gt;proc~assert2 -->
+<g id="proc~~bessik~~CallsGraph_edge7" class="edge">
+<title>interface~assert&#45;&gt;proc~assert2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M133.7138,-83.8479C137.2219,-81.0666 140.8196,-78.0325 144,-75 161.7932,-58.0339 162.2068,-49.9661 180,-33 180.7951,-32.2419 181.6163,-31.4836 182.4556,-30.7293"/>
+<polygon fill="#000000" stroke="#000000" points="184.88,-33.2638 190.2862,-24.1521 180.3778,-27.9037 184.88,-33.2638"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/bessik.html#src">bessik</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>		<span class="k">SUBROUTINE </span><span class="n">bessik</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">xnu</span><span class="p">,</span><span class="n">ri</span><span class="p">,</span><span class="n">rk</span><span class="p">,</span><span class="n">rip</span><span class="p">,</span><span class="n">rkp</span><span class="p">)</span>
+		<span class="k">USE </span><span class="n">nrtype</span>
+		<span class="kt">REAL</span><span class="p">(</span><span class="n">SP</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span><span class="p">,</span><span class="n">xnu</span>
+		<span class="kt">REAL</span><span class="p">(</span><span class="n">SP</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ri</span><span class="p">,</span><span class="n">rk</span><span class="p">,</span><span class="n">rip</span><span class="p">,</span><span class="n">rkp</span>
+		<span class="k">END SUBROUTINE </span><span class="n">bessik</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

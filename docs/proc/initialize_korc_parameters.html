@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>initialize_korc_parameters &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>initialize_korc_parameters
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.0% of total for procedures.">9 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_initialize.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_initialize.f90.html'>korc_initialize.f90</a></li>
+    
+     <li><a href='../module/korc_initialize.html'>korc_initialize</a></li>
+    
+  
+     <li class="active">initialize_korc_parameters</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/initialize_korc_parameters.html#src">initialize_korc_parameters</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine initialize_korc_parameters(params)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Interface for calling initialization subroutines </p></div>
+<p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~156"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~initialize_korc_parameters~~CallsGraph Pages: 1 -->
+<svg id="procinitialize_korc_parametersCallsGraph" width="474pt" height="155pt"
+ viewBox="0.00 0.00 474.00 155.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_korc_parameters~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 151)">
+<title>proc~~initialize_korc_parameters~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-151 470,-151 470,4 -4,4"/>
+<!-- proc~initialize_korc_parameters -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node1" class="node">
+<title>proc~initialize_korc_parameters</title>
+<polygon fill="none" stroke="#000000" points="134,-107 0,-107 0,-83 134,-83 134,-107"/>
+<text text-anchor="middle" x="67" y="-92.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_korc_parameters</text>
+</g>
+<!-- proc~load_korc_params -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node2" class="node">
+<title>proc~load_korc_params</title>
+<g id="a_proc~~initialize_korc_parameters~~CallsGraph_node2"><a xlink:href=".././proc/load_korc_params.html" xlink:title="load_korc_params">
+<polygon fill="#d9534f" stroke="#d9534f" points="269,-147 170,-147 170,-123 269,-123 269,-147"/>
+<text text-anchor="middle" x="219.5" y="-132.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_korc_params</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_korc_parameters&#45;&gt;proc~load_korc_params -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge1" class="edge">
+<title>proc~initialize_korc_parameters&#45;&gt;proc~load_korc_params</title>
+<path fill="none" stroke="#000000" d="M112.755,-107.0013C128.8165,-111.2142 147.0393,-115.9939 163.8244,-120.3966"/>
+<polygon fill="#000000" stroke="#000000" points="162.9531,-123.7864 173.5139,-122.9381 164.7291,-117.0154 162.9531,-123.7864"/>
+</g>
+<!-- mpi_barrier -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node3" class="node">
+<title>mpi_barrier</title>
+<polygon fill="#777777" stroke="#777777" points="371,-108 305,-108 305,-84 371,-84 371,-108"/>
+<text text-anchor="middle" x="338" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
+</g>
+<!-- proc~initialize_korc_parameters&#45;&gt;mpi_barrier -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge3" class="edge">
+<title>proc~initialize_korc_parameters&#45;&gt;mpi_barrier</title>
+<path fill="none" stroke="#000000" d="M134.337,-95.2485C184.4438,-95.4334 251.3659,-95.6803 294.578,-95.8398"/>
+<polygon fill="#000000" stroke="#000000" points="294.7477,-99.3403 304.7605,-95.8773 294.7736,-92.3404 294.7477,-99.3403"/>
+</g>
+<!-- proc~read_namelist -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node4" class="node">
+<title>proc~read_namelist</title>
+<g id="a_proc~~initialize_korc_parameters~~CallsGraph_node4"><a xlink:href=".././proc/read_namelist.html" xlink:title="read_namelist">
+<polygon fill="#d9534f" stroke="#d9534f" points="258.5,-67 180.5,-67 180.5,-43 258.5,-43 258.5,-67"/>
+<text text-anchor="middle" x="219.5" y="-52.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">read_namelist</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_korc_parameters&#45;&gt;proc~read_namelist -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge2" class="edge">
+<title>proc~initialize_korc_parameters&#45;&gt;proc~read_namelist</title>
+<path fill="none" stroke="#000000" d="M112.755,-82.9987C131.0496,-78.2001 152.1483,-72.666 170.7325,-67.7915"/>
+<polygon fill="#000000" stroke="#000000" points="171.6933,-71.1579 180.478,-65.2353 169.9172,-64.387 171.6933,-71.1579"/>
+</g>
+<!-- proc~read_namelist&#45;&gt;mpi_barrier -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge6" class="edge">
+<title>proc~read_namelist&#45;&gt;mpi_barrier</title>
+<path fill="none" stroke="#000000" d="M254.413,-67.0796C267.2681,-71.5274 281.9733,-76.6152 295.4289,-81.2708"/>
+<polygon fill="#000000" stroke="#000000" points="294.3668,-84.6068 304.9616,-84.569 296.6557,-77.9916 294.3668,-84.6068"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node5" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~initialize_korc_parameters~~CallsGraph_node5"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="369,-66 307,-66 307,-42 369,-42 369,-66"/>
+<text text-anchor="middle" x="338" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~read_namelist&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge4" class="edge">
+<title>proc~read_namelist&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M258.6297,-54.6698C270.8487,-54.5667 284.3631,-54.4526 296.7245,-54.3483"/>
+<polygon fill="#000000" stroke="#000000" points="296.8131,-57.8478 306.7832,-54.2634 296.754,-50.848 296.8131,-57.8478"/>
+</g>
+<!-- proc~rmcoment -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node6" class="node">
+<title>proc~rmcoment</title>
+<g id="a_proc~~initialize_korc_parameters~~CallsGraph_node6"><a xlink:href=".././proc/rmcoment.html" xlink:title="rmcoment">
+<polygon fill="#d9534f" stroke="#d9534f" points="367.5,-24 308.5,-24 308.5,0 367.5,0 367.5,-24"/>
+<text text-anchor="middle" x="338" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rmcoment</text>
+</a>
+</g>
+</g>
+<!-- proc~read_namelist&#45;&gt;proc~rmcoment -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge5" class="edge">
+<title>proc~read_namelist&#45;&gt;proc~rmcoment</title>
+<path fill="none" stroke="#000000" d="M252.8242,-42.9077C267.0876,-37.7319 283.8479,-31.6501 298.7107,-26.2569"/>
+<polygon fill="#000000" stroke="#000000" points="299.9521,-29.5298 308.1584,-22.8286 297.5643,-22.9496 299.9521,-29.5298"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_node7" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="466,-66 407,-66 407,-42 466,-42 466,-66"/>
+<text text-anchor="middle" x="436.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~initialize_korc_parameters~~CallsGraph_edge7" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M369.166,-54C377.9294,-54 387.58,-54 396.7706,-54"/>
+<polygon fill="#000000" stroke="#000000" points="396.88,-57.5001 406.88,-54 396.8799,-50.5001 396.88,-57.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~initialize_korc_parameters~~CalledByGraph Pages: 1 -->
+<svg id="procinitialize_korc_parametersCalledByGraph" width="232pt" height="32pt"
+ viewBox="0.00 0.00 232.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_korc_parameters~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~initialize_korc_parameters~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 228,-28 228,4 -4,4"/>
+<!-- proc~initialize_korc_parameters -->
+<g id="proc~~initialize_korc_parameters~~CalledByGraph_node1" class="node">
+<title>proc~initialize_korc_parameters</title>
+<polygon fill="none" stroke="#000000" points="224,-24 90,-24 90,0 224,0 224,-24"/>
+<text text-anchor="middle" x="157" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_korc_parameters</text>
+</g>
+<!-- program~main -->
+<g id="proc~~initialize_korc_parameters~~CalledByGraph_node2" class="node">
+<title>program~main</title>
+<g id="a_proc~~initialize_korc_parameters~~CalledByGraph_node2"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_korc_parameters -->
+<g id="proc~~initialize_korc_parameters~~CalledByGraph_edge1" class="edge">
+<title>program~main&#45;&gt;proc~initialize_korc_parameters</title>
+<path fill="none" stroke="#000000" d="M54.2523,-12C61.8797,-12 70.5683,-12 79.5881,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.8737,-15.5001 89.8736,-12 79.8736,-8.5001 79.8737,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/initialize_korc_parameters.html#src">initialize_korc_parameters</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">initialize_korc_parameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="c">!! @note Interface for calling initialization subroutines @endnote</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="kt">INTEGER</span> 							<span class="kd">::</span> <span class="n">mpierr</span>
+    <span class="c">!! MPI error status.</span>
+
+    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+    <span class="k">call </span><span class="n">read_namelist</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_inputs</span><span class="p">,.</span><span class="n">true</span><span class="p">.,</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span>
+
+    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+    <span class="k">call </span><span class="n">load_korc_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+  <span class="k">end subroutine </span><span class="n">initialize_korc_parameters</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

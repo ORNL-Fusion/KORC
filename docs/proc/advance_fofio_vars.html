@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>advance_FOfio_vars &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>advance_FOfio_vars
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.4% of total for procedures.">107 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_ppusher.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_ppusher.f90.html'>korc_ppusher.f90</a></li>
+    
+     <li><a href='../module/korc_ppusher.html'>korc_ppusher</a></li>
+    
+  
+     <li class="active">advance_FOfio_vars</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/advance_fofio_vars.html#src">advance_FOfio_vars</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine advance_FOfio_vars(tt, a, q_cache, m_cache, params, X_X, X_Y, X_Z, V_X, V_Y, V_Z, B_X, B_Y, B_Z, E_X, E_Y, E_Z, g, flagCon, flagCol, P, F, PSIp, hint)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p>Calls <a href="../proc/radiation_force_p.html">radiation_force_p</a> in <a href="../module/korc_ppusher.html">korc_ppusher</a>.</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tt~8"></span>integer(kind=ip),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>tt</strong></td><td><p>Time step used in the leapfrog step (<script type="math/tex">\Delta t</script>).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a~95"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a</strong></td><td><p>This variable is used to simplify notation in the code, and
+ is given by <script type="math/tex">a=q\Delta t/m</script>,</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-q_cache~4"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>q_cache</strong></td><td><p>Time step used in the leapfrog step (<script type="math/tex">\Delta t</script>).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-m_cache~5"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m_cache</strong></td><td><p>Time step used in the leapfrog step (<script type="math/tex">\Delta t</script>).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~85"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-x_x~6"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>X_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-x_y~6"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>X_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-x_z~6"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>X_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_x~4"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_y~4"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_z~4"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_x~7"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_y~7"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_z~7"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_x~5"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_y~5"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_z~5"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-g~9"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>g</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcon~11"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>flagCon</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcol~11"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>flagCol</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p~35"></span>type(PROFILES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~35"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip~11"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-hint~8"></span>type(C_PTR),</td>
+  <td></td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>hint</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~advance_fofio_vars~~CallsGraph Pages: 1 -->
+<svg id="procadvance_fofio_varsCallsGraph" width="641pt" height="507pt"
+ viewBox="0.00 0.00 641.00 506.65" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~advance_fofio_vars~~CallsGraph" class="graph" transform="scale(.8093 .8093) rotate(0) translate(4 622)">
+<title>proc~~advance_fofio_vars~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-622 788,-622 788,4 -4,4"/>
+<!-- proc~advance_fofio_vars -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node1" class="node">
+<title>proc~advance_fofio_vars</title>
+<polygon fill="none" stroke="#000000" points="109,-443 0,-443 0,-419 109,-419 109,-443"/>
+<text text-anchor="middle" x="54.5" y="-428.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">advance_FOfio_vars</text>
+</g>
+<!-- proc~radiation_force_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node2" class="node">
+<title>proc~radiation_force_p</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node2"><a xlink:href=".././proc/radiation_force_p.html" xlink:title="radiation_force_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="283,-464 189,-464 189,-440 283,-440 283,-464"/>
+<text text-anchor="middle" x="236" y="-449.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">radiation_force_p</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fofio_vars&#45;&gt;proc~radiation_force_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge1" class="edge">
+<title>proc~advance_fofio_vars&#45;&gt;proc~radiation_force_p</title>
+<path fill="none" stroke="#000000" d="M109.4485,-437.3577C131.4349,-439.9016 156.7603,-442.8318 178.9518,-445.3994"/>
+<polygon fill="#000000" stroke="#000000" points="178.5681,-448.8783 188.9041,-446.5509 179.3727,-441.9246 178.5681,-448.8783"/>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node3" class="node">
+<title>proc~include_coulombcollisions_fofio_p</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node3"><a xlink:href=".././proc/include_coulombcollisions_fofio_p.html" xlink:title="include_CoulombCollisions_FOfio_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="327,-422 145,-422 145,-398 327,-398 327,-422"/>
+<text text-anchor="middle" x="236" y="-407.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_FOfio_p</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fofio_vars&#45;&gt;proc~include_coulombcollisions_fofio_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge2" class="edge">
+<title>proc~advance_fofio_vars&#45;&gt;proc~include_coulombcollisions_fofio_p</title>
+<path fill="none" stroke="#000000" d="M109.4485,-424.6423C117.4726,-423.7139 125.9415,-422.734 134.5404,-421.7391"/>
+<polygon fill="#000000" stroke="#000000" points="135.1443,-425.1927 144.6757,-420.5664 134.3396,-418.2391 135.1443,-425.1927"/>
+</g>
+<!-- proc~unitvectors_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node4" class="node">
+<title>proc~unitvectors_p</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node4"><a xlink:href=".././proc/unitvectors_p.html" xlink:title="unitVectors_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="446.5,-611 369.5,-611 369.5,-587 446.5,-587 446.5,-611"/>
+<text text-anchor="middle" x="408" y="-596.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">unitVectors_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~unitvectors_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge3" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~unitvectors_p</title>
+<path fill="none" stroke="#000000" d="M315.4485,-422.2146C319.637,-424.6795 323.5376,-427.5836 327,-431 374.8798,-478.2438 320.3309,-526.002 363,-578 363.711,-578.8664 364.4658,-579.699 365.2581,-580.4989"/>
+<polygon fill="#000000" stroke="#000000" points="363.2303,-583.3583 373.2334,-586.8495 367.5908,-577.8822 363.2303,-583.3583"/>
+</g>
+<!-- proc~get_fio_ion_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node5" class="node">
+<title>proc~get_fio_ion_p</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node5"><a xlink:href=".././proc/get_fio_ion_p.html" xlink:title="get_fio_ion_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="446,-569 370,-569 370,-545 446,-545 446,-569"/>
+<text text-anchor="middle" x="408" y="-554.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_ion_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~get_fio_ion_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge4" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~get_fio_ion_p</title>
+<path fill="none" stroke="#000000" d="M314.2385,-422.1181C318.8343,-424.5922 323.1464,-427.5259 327,-431 363.6416,-464.0328 330.0191,-499.3116 363,-536 363.8754,-536.9738 364.8052,-537.9059 365.7801,-538.7979"/>
+<polygon fill="#000000" stroke="#000000" points="363.8584,-541.7302 373.9755,-544.8759 368.0283,-536.1077 363.8584,-541.7302"/>
+</g>
+<!-- proc~dca_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node6" class="node">
+<title>proc~dca_sd</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node6"><a xlink:href=".././proc/dca_sd.html" xlink:title="dCA_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="435,-443 381,-443 381,-419 435,-419 435,-443"/>
+<text text-anchor="middle" x="408" y="-428.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">dCA_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge6" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M327.0365,-421.1149C342.5508,-423.0091 357.8457,-424.8765 370.8925,-426.4694"/>
+<polygon fill="#000000" stroke="#000000" points="370.4846,-429.9455 380.8351,-427.6834 371.333,-422.9971 370.4846,-429.9455"/>
+</g>
+<!-- proc~ca_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node7" class="node">
+<title>proc~ca_sd</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node7"><a xlink:href=".././proc/ca_sd.html" xlink:title="CA_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="435,-401 381,-401 381,-377 435,-377 435,-401"/>
+<text text-anchor="middle" x="408" y="-386.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CA_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge5" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M327.0365,-398.8851C342.5508,-396.9909 357.8457,-395.1235 370.8925,-393.5306"/>
+<polygon fill="#000000" stroke="#000000" points="371.333,-397.0029 380.8351,-392.3166 370.4846,-390.0545 371.333,-397.0029"/>
+</g>
+<!-- proc~get_random -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node8" class="node">
+<title>proc~get_random</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node8"><a xlink:href=".././proc/get_random.html" xlink:title="get_random">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="442.5,-105 373.5,-105 373.5,-81 442.5,-81 442.5,-105"/>
+<text text-anchor="middle" x="408" y="-90.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_random</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~get_random -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge7" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~get_random</title>
+<path fill="none" stroke="#000000" d="M242.3584,-397.7996C260.7335,-362.604 315.6177,-257.9184 363,-172 373.8572,-152.3126 386.5636,-130.0766 395.7002,-114.2228"/>
+<polygon fill="#000000" stroke="#000000" points="398.9084,-115.6662 400.8793,-105.2562 392.8469,-112.165 398.9084,-115.6662"/>
+</g>
+<!-- proc~get_fio_profile_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node9" class="node">
+<title>proc~get_fio_profile_p</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node9"><a xlink:href=".././proc/get_fio_profile_p.html" xlink:title="get_fio_profile_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="453,-527 363,-527 363,-503 453,-503 453,-527"/>
+<text text-anchor="middle" x="408" y="-512.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_profile_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~get_fio_profile_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge8" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~get_fio_profile_p</title>
+<path fill="none" stroke="#000000" d="M311.7285,-422.1559C317.1489,-424.5997 322.3155,-427.5178 327,-431 352.8817,-450.2389 339.2753,-472.1565 363,-494 364.2645,-495.1643 365.605,-496.2745 367.002,-497.3322"/>
+<polygon fill="#000000" stroke="#000000" points="365.1881,-500.3273 375.4847,-502.8236 368.9922,-494.4512 365.1881,-500.3273"/>
+</g>
+<!-- proc~cf_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node10" class="node">
+<title>proc~cf_sd</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node10"><a xlink:href=".././proc/cf_sd.html" xlink:title="CF_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="435,-359 381,-359 381,-335 435,-335 435,-359"/>
+<text text-anchor="middle" x="408" y="-344.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CF_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cf_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge9" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cf_sd</title>
+<path fill="none" stroke="#000000" d="M269.1633,-397.853C298.3691,-387.1555 340.8484,-371.5962 371.1166,-360.5096"/>
+<polygon fill="#000000" stroke="#000000" points="372.6904,-363.6606 380.8766,-356.9347 370.2828,-357.0877 372.6904,-363.6606"/>
+</g>
+<!-- proc~cb_ei_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node11" class="node">
+<title>proc~cb_ei_sd</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node11"><a xlink:href=".././proc/cb_ei_sd.html" xlink:title="CB_ei_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="439,-205 377,-205 377,-181 439,-181 439,-205"/>
+<text text-anchor="middle" x="408" y="-190.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ei_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ei_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge10" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ei_sd</title>
+<path fill="none" stroke="#000000" d="M245.7403,-397.7114C274.122,-361.9042 356.9528,-257.4025 392.0202,-213.1606"/>
+<polygon fill="#000000" stroke="#000000" points="394.8977,-215.1647 398.3665,-205.1538 389.412,-210.8166 394.8977,-215.1647"/>
+</g>
+<!-- proc~cb_ee_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node12" class="node">
+<title>proc~cb_ee_sd</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node12"><a xlink:href=".././proc/cb_ee_sd.html" xlink:title="CB_ee_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="440.5,-485 375.5,-485 375.5,-461 440.5,-461 440.5,-485"/>
+<text text-anchor="middle" x="408" y="-470.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ee_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge11" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M299.4146,-422.0349C308.806,-424.561 318.2579,-427.5343 327,-431 344.2195,-437.8265 346.5901,-443.4077 363,-452 365.9023,-453.5197 368.9345,-455.0509 371.9941,-456.5567"/>
+<polygon fill="#000000" stroke="#000000" points="370.6236,-459.7813 381.1525,-460.9614 373.6576,-453.473 370.6236,-459.7813"/>
+</g>
+<!-- cart_to_cyl_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node13" class="node">
+<title>cart_to_cyl_p</title>
+<polygon fill="#777777" stroke="#777777" points="445.5,-63 370.5,-63 370.5,-39 445.5,-39 445.5,-63"/>
+<text text-anchor="middle" x="408" y="-48.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cart_to_cyl_p</text>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;cart_to_cyl_p -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge12" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;cart_to_cyl_p</title>
+<path fill="none" stroke="#000000" d="M237.2704,-397.8319C242.8597,-350.0862 269.3196,-173.2077 363,-72 363.8894,-71.0391 364.8317,-70.1183 365.8175,-69.2362"/>
+<polygon fill="#000000" stroke="#000000" points="368.058,-71.934 374.0691,-63.2094 363.9293,-66.2812 368.058,-71.934"/>
+</g>
+<!-- interface~fio_eval_field -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node18" class="node">
+<title>interface~fio_eval_field</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node18"><a xlink:href=".././interface/fio_eval_field.html" xlink:title="fio_eval_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="583.5,-618 509.5,-618 509.5,-594 583.5,-594 583.5,-618"/>
+<text text-anchor="middle" x="546.5" y="-603.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_eval_field</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fio_ion_p&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge13" class="edge">
+<title>proc~get_fio_ion_p&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M442.236,-569.1124C460.4643,-575.5614 483.0849,-583.5643 502.593,-590.4661"/>
+<polygon fill="#000000" stroke="#000000" points="501.5831,-593.8214 512.1779,-593.8572 503.9179,-587.2222 501.5831,-593.8214"/>
+</g>
+<!-- proc~psi -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node14" class="node">
+<title>proc~psi</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node14"><a xlink:href=".././proc/psi.html" xlink:title="psi">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="573.5,-462 519.5,-462 519.5,-438 573.5,-438 573.5,-462"/>
+<text text-anchor="middle" x="546.5" y="-447.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">psi</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~psi -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge16" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M435.033,-434.7085C456.154,-437.606 485.7477,-441.6657 509.1346,-444.8741"/>
+<polygon fill="#000000" stroke="#000000" points="508.6789,-448.3442 519.0619,-446.2359 509.6304,-441.4092 508.6789,-448.3442"/>
+</g>
+<!-- proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node15" class="node">
+<title>proc~vte</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node15"><a xlink:href=".././proc/vte.html" xlink:title="VTe">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="784,-361 730,-361 730,-337 784,-337 784,-361"/>
+<text text-anchor="middle" x="757" y="-346.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">VTe</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge15" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M434.7537,-443.2224C440.7823,-446.0493 447.1322,-449.0846 453,-452 469.202,-460.05 471.439,-466.6502 489,-471 538.6118,-483.2888 555.7566,-487.8796 604,-471 662.0803,-450.6786 714.5625,-398.0435 740.2952,-368.9911"/>
+<polygon fill="#000000" stroke="#000000" points="743.2047,-370.9782 747.1133,-361.1307 737.9168,-366.3915 743.2047,-370.9782"/>
+</g>
+<!-- proc~gammacee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node19" class="node">
+<title>proc~gammacee</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node19"><a xlink:href=".././proc/gammacee.html" xlink:title="Gammacee">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="580,-382 513,-382 513,-358 580,-358 580,-382"/>
+<text text-anchor="middle" x="546.5" y="-367.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Gammacee</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge14" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M435.033,-419.0938C456.3435,-409.7079 486.2792,-396.5232 509.7624,-386.1805"/>
+<polygon fill="#000000" stroke="#000000" points="511.3209,-389.3185 519.0619,-382.0847 508.4994,-382.9123 511.3209,-389.3185"/>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~psi -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge19" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M435.033,-400.9062C456.3435,-410.2921 486.2792,-423.4768 509.7624,-433.8195"/>
+<polygon fill="#000000" stroke="#000000" points="508.4994,-437.0877 519.0619,-437.9153 511.3209,-430.6815 508.4994,-437.0877"/>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge18" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M435.3669,-389.8437C451.0622,-390.2856 471.1365,-390.7795 489,-391 540.1072,-391.6309 553.3468,-397.8261 604,-391 644.4677,-385.5465 689.3725,-372.3253 720.0059,-362.1613"/>
+<polygon fill="#000000" stroke="#000000" points="721.4658,-365.3625 729.8204,-358.8472 719.2262,-358.7304 721.4658,-365.3625"/>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge17" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M435.033,-385.2915C454.2656,-382.6531 480.5235,-379.0509 502.7232,-376.0055"/>
+<polygon fill="#000000" stroke="#000000" points="503.4897,-379.4332 512.9212,-374.6065 502.5383,-372.4981 503.4897,-379.4332"/>
+</g>
+<!-- omp_get_thread_num -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node20" class="node">
+<title>omp_get_thread_num</title>
+<polygon fill="#777777" stroke="#777777" points="604,-66 489,-66 489,-42 604,-42 604,-66"/>
+<text text-anchor="middle" x="546.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_get_thread_num</text>
+</g>
+<!-- proc~get_random&#45;&gt;omp_get_thread_num -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge20" class="edge">
+<title>proc~get_random&#45;&gt;omp_get_thread_num</title>
+<path fill="none" stroke="#000000" d="M442.5921,-83.2593C458.0639,-78.9026 476.6455,-73.6702 493.7903,-68.8424"/>
+<polygon fill="#000000" stroke="#000000" points="495.0076,-72.1358 503.6846,-66.0563 493.1102,-65.3979 495.0076,-72.1358"/>
+</g>
+<!-- interface~random_get_number -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node24" class="node">
+<title>interface~random_get_number</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node24"><a xlink:href=".././interface/random_get_number.html" xlink:title="random_get_number">
+<polygon fill="#a7506f" stroke="#a7506f" points="601.5,-24 491.5,-24 491.5,0 601.5,0 601.5,-24"/>
+<text text-anchor="middle" x="546.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_get_number</text>
+</a>
+</g>
+</g>
+<!-- proc~get_random&#45;&gt;interface~random_get_number -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge21" class="edge">
+<title>proc~get_random&#45;&gt;interface~random_get_number</title>
+<path fill="none" stroke="#000000" d="M438.4507,-80.7743C443.5048,-78.1952 448.5448,-75.2552 453,-72 472.0467,-58.0835 469.3697,-46.0803 489,-33 491.4045,-31.3978 493.9468,-29.8991 496.5705,-28.4999"/>
+<polygon fill="#000000" stroke="#000000" points="498.2128,-31.5942 505.7227,-24.1206 495.1914,-25.2798 498.2128,-31.5942"/>
+</g>
+<!-- proc~get_fio_profile_p&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge22" class="edge">
+<title>proc~get_fio_profile_p&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M438.6179,-527.0038C443.6535,-529.6075 448.644,-532.6133 453,-536 472.9476,-551.5085 468.96,-564.6111 489,-580 493.4533,-583.4197 498.428,-586.5122 503.5369,-589.2715"/>
+<polygon fill="#000000" stroke="#000000" points="502.282,-592.5564 512.7942,-593.877 505.4,-586.2891 502.282,-592.5564"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~psi -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge23" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M435.3189,-358.2346C441.3181,-361.1128 447.5132,-364.4186 453,-368 481.0651,-386.3191 509.4721,-412.571 527.4878,-430.4003"/>
+<polygon fill="#000000" stroke="#000000" points="525.4596,-433.3237 534.9956,-437.9406 530.4201,-428.3847 525.4596,-433.3237"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge24" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M426.378,-334.8564C442.2189,-325.162 466.0904,-312.3484 489,-307 570.6473,-287.9389 668.3425,-315.6999 720.2809,-334.3794"/>
+<polygon fill="#000000" stroke="#000000" points="719.1429,-337.69 729.7363,-337.8628 721.5628,-331.1216 719.1429,-337.69"/>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge26" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M435.033,-351.4892C454.3526,-354.6976 480.7613,-359.0831 503.0243,-362.7802"/>
+<polygon fill="#000000" stroke="#000000" points="502.4829,-366.2382 512.9212,-364.4237 503.6297,-359.3327 502.4829,-366.2382"/>
+</g>
+<!-- proc~clogee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node21" class="node">
+<title>proc~clogee</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node21"><a xlink:href=".././proc/clogee.html" xlink:title="CLogee">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="694,-260 640,-260 640,-236 694,-236 694,-260"/>
+<text text-anchor="middle" x="667" y="-245.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLogee</text>
+</a>
+</g>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~clogee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge25" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M417.4828,-334.79C431.2552,-318.0252 458.5023,-288.3305 489,-274 534.1496,-252.7848 592.2554,-247.9219 629.5717,-247.2647"/>
+<polygon fill="#000000" stroke="#000000" points="630.0106,-250.7613 639.9823,-247.1813 629.9545,-243.7616 630.0106,-250.7613"/>
+</g>
+<!-- proc~h_j -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node22" class="node">
+<title>proc~h_j</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node22"><a xlink:href=".././proc/h_j.html" xlink:title="h_j">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="573.5,-340 519.5,-340 519.5,-316 573.5,-316 573.5,-340"/>
+<text text-anchor="middle" x="546.5" y="-325.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h_j</text>
+</a>
+</g>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~h_j -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge27" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~h_j</title>
+<path fill="none" stroke="#000000" d="M435.033,-343.2915C456.154,-340.394 485.7477,-336.3343 509.1346,-333.1259"/>
+<polygon fill="#000000" stroke="#000000" points="509.6304,-336.5908 519.0619,-331.7641 508.6789,-329.6558 509.6304,-336.5908"/>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge28" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M439.3778,-187.1133C496.5329,-178.2743 618.6504,-168.3181 694,-227 726.5424,-252.3438 743.875,-299.1628 751.6917,-326.8485"/>
+<polygon fill="#000000" stroke="#000000" points="748.3744,-327.9946 754.3148,-336.7674 755.1417,-326.2048 748.3744,-327.9946"/>
+</g>
+<!-- proc~clogei -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node16" class="node">
+<title>proc~clogei</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node16"><a xlink:href=".././proc/clogei.html" xlink:title="CLogei">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="694,-146 640,-146 640,-122 694,-122 694,-146"/>
+<text text-anchor="middle" x="667" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLogei</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~clogei -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge29" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~clogei</title>
+<path fill="none" stroke="#000000" d="M415.6341,-180.8531C428.2315,-162.0979 455.3577,-126.8129 489,-113 535.0452,-94.0948 593.0453,-107.0144 630.0826,-119.3688"/>
+<polygon fill="#000000" stroke="#000000" points="629.351,-122.8205 639.9458,-122.8115 631.6578,-116.2115 629.351,-122.8205"/>
+</g>
+<!-- proc~g_j -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node17" class="node">
+<title>proc~g_j</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node17"><a xlink:href=".././proc/g_j.html" xlink:title="g_j">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="573.5,-146 519.5,-146 519.5,-122 573.5,-122 573.5,-146"/>
+<text text-anchor="middle" x="546.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">g_j</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~g_j -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge30" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~g_j</title>
+<path fill="none" stroke="#000000" d="M436.3618,-180.9181C457.5517,-171.8914 486.6992,-159.4747 509.6866,-149.6822"/>
+<polygon fill="#000000" stroke="#000000" points="511.2917,-152.8029 519.1201,-145.6637 508.5483,-146.3629 511.2917,-152.8029"/>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge31" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M410.9946,-205.0322C418.8003,-233.9739 442.4685,-308.1043 489,-349 493.2408,-352.7272 498.1977,-355.8118 503.3909,-358.36"/>
+<polygon fill="#000000" stroke="#000000" points="502.3173,-361.7065 512.8901,-362.3904 505.0515,-355.2625 502.3173,-361.7065"/>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~clogee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge32" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M439.2415,-199.6343C487.1985,-209.8182 578.7687,-229.2636 629.9839,-240.1394"/>
+<polygon fill="#000000" stroke="#000000" points="629.4581,-243.6057 639.967,-242.2594 630.9122,-236.7584 629.4581,-243.6057"/>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~psi -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge36" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~psi</title>
+<path fill="none" stroke="#000000" d="M440.8226,-467.5493C461.4457,-464.1245 488.0945,-459.6991 509.4715,-456.1491"/>
+<polygon fill="#000000" stroke="#000000" points="510.2013,-459.576 519.4928,-454.485 509.0545,-452.6705 510.2013,-459.576"/>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge35" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M437.2362,-485.1311C442.6303,-487.7878 448.1015,-490.7792 453,-494 470.8872,-505.761 469.5631,-517.029 489,-526 572.1578,-564.3812 620.0685,-601.06 694,-547 722.9122,-525.8589 744.8779,-418.3765 753.277,-371.2242"/>
+<polygon fill="#000000" stroke="#000000" points="756.7686,-371.5742 755.0321,-361.1226 749.8719,-370.3759 756.7686,-371.5742"/>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge33" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M437.2189,-460.8424C442.6145,-458.1882 448.0908,-455.2044 453,-452 481.0651,-433.6809 509.4721,-407.429 527.4878,-389.5997"/>
+<polygon fill="#000000" stroke="#000000" points="530.4201,-391.6153 534.9956,-382.0594 525.4596,-386.6763 530.4201,-391.6153"/>
+</g>
+<!-- proc~delta -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node23" class="node">
+<title>proc~delta</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node23"><a xlink:href=".././proc/delta.html" xlink:title="delta">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="694,-538 640,-538 640,-514 694,-514 694,-538"/>
+<text text-anchor="middle" x="667" y="-523.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">delta</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~delta -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge34" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~delta</title>
+<path fill="none" stroke="#000000" d="M434.4741,-485.0045C450.0488,-491.5893 470.2988,-499.3393 489,-504 536.7112,-515.8906 593.29,-521.4828 629.6427,-524.0226"/>
+<polygon fill="#000000" stroke="#000000" points="629.581,-527.526 639.7888,-524.6886 630.0396,-520.541 629.581,-527.526"/>
+</g>
+<!-- proc~clogei&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge38" class="edge">
+<title>proc~clogei&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M682.111,-146.1064C686.4188,-150.1553 690.8046,-154.9371 694,-160 728.296,-214.3391 745.9933,-289.3468 753.1215,-326.4066"/>
+<polygon fill="#000000" stroke="#000000" points="749.7496,-327.4229 755.001,-336.6247 756.6341,-326.1565 749.7496,-327.4229"/>
+</g>
+<!-- proc~clog0 -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_node25" class="node">
+<title>proc~clog0</title>
+<g id="a_proc~~advance_fofio_vars~~CallsGraph_node25"><a xlink:href=".././proc/clog0.html" xlink:title="CLog0">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="784,-202 730,-202 730,-178 784,-178 784,-202"/>
+<text text-anchor="middle" x="757" y="-187.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLog0</text>
+</a>
+</g>
+</g>
+<!-- proc~clogei&#45;&gt;proc~clog0 -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge37" class="edge">
+<title>proc~clogei&#45;&gt;proc~clog0</title>
+<path fill="none" stroke="#000000" d="M686.5287,-146.1512C698.9121,-153.8564 715.1327,-163.9493 728.8899,-172.5093"/>
+<polygon fill="#000000" stroke="#000000" points="727.1698,-175.5612 737.5095,-177.8725 730.8679,-169.6178 727.1698,-175.5612"/>
+</g>
+<!-- proc~gammacee&#45;&gt;proc~clogee -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge39" class="edge">
+<title>proc~gammacee&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M580.1022,-361.9163C588.4938,-358.8191 597.0676,-354.6246 604,-349 630.303,-327.6589 648.7494,-292.245 658.6178,-269.5255"/>
+<polygon fill="#000000" stroke="#000000" points="661.9391,-270.6537 662.5457,-260.0762 655.4753,-267.9668 661.9391,-270.6537"/>
+</g>
+<!-- proc~clogee&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge41" class="edge">
+<title>proc~clogee&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M680.1837,-260.1615C684.669,-264.4378 689.6461,-269.3401 694,-274 710.8482,-292.0324 728.8404,-313.7226 741.265,-329.1283"/>
+<polygon fill="#000000" stroke="#000000" points="738.5687,-331.3606 747.5522,-336.9774 744.0321,-326.9844 738.5687,-331.3606"/>
+</g>
+<!-- proc~clogee&#45;&gt;proc~clog0 -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge40" class="edge">
+<title>proc~clogee&#45;&gt;proc~clog0</title>
+<path fill="none" stroke="#000000" d="M685.6481,-235.9824C698.4395,-227.739 715.617,-216.6691 729.9124,-207.4565"/>
+<polygon fill="#000000" stroke="#000000" points="731.8661,-210.3613 738.3758,-202.0022 728.0741,-204.4773 731.8661,-210.3613"/>
+</g>
+<!-- proc~delta&#45;&gt;proc~vte -->
+<g id="proc~~advance_fofio_vars~~CallsGraph_edge42" class="edge">
+<title>proc~delta&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M681.8845,-513.7449C686.1832,-509.6899 690.6207,-504.942 694,-500 722.5413,-458.2601 741.8517,-401.5566 750.9684,-370.8818"/>
+<polygon fill="#000000" stroke="#000000" points="754.3569,-371.7628 753.7664,-361.1845 747.6312,-369.8222 754.3569,-371.7628"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocadvance_fofio_varsCallsGraph = svgPanZoom('#procadvance_fofio_varsCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~advance_fofio_vars~~CalledByGraph Pages: 1 -->
+<svg id="procadvance_fofio_varsCalledByGraph" width="324pt" height="32pt"
+ viewBox="0.00 0.00 324.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~advance_fofio_vars~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~advance_fofio_vars~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 320,-28 320,4 -4,4"/>
+<!-- proc~advance_fofio_vars -->
+<g id="proc~~advance_fofio_vars~~CalledByGraph_node1" class="node">
+<title>proc~advance_fofio_vars</title>
+<polygon fill="none" stroke="#000000" points="316,-24 207,-24 207,0 316,0 316,-24"/>
+<text text-anchor="middle" x="261.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">advance_FOfio_vars</text>
+</g>
+<!-- proc~adv_fofio_top -->
+<g id="proc~~advance_fofio_vars~~CalledByGraph_node2" class="node">
+<title>proc~adv_fofio_top</title>
+<g id="a_proc~~advance_fofio_vars~~CalledByGraph_node2"><a xlink:href=".././proc/adv_fofio_top.html" xlink:title="adv_FOfio_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="171,-24 90,-24 90,0 171,0 171,-24"/>
+<text text-anchor="middle" x="130.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOfio_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fofio_top&#45;&gt;proc~advance_fofio_vars -->
+<g id="proc~~advance_fofio_vars~~CalledByGraph_edge1" class="edge">
+<title>proc~adv_fofio_top&#45;&gt;proc~advance_fofio_vars</title>
+<path fill="none" stroke="#000000" d="M171.2311,-12C179.3287,-12 188.0186,-12 196.6923,-12"/>
+<polygon fill="#000000" stroke="#000000" points="196.8306,-15.5001 206.8306,-12 196.8306,-8.5001 196.8306,-15.5001"/>
+</g>
+<!-- program~main -->
+<g id="proc~~advance_fofio_vars~~CalledByGraph_node3" class="node">
+<title>program~main</title>
+<g id="a_proc~~advance_fofio_vars~~CalledByGraph_node3"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fofio_top -->
+<g id="proc~~advance_fofio_vars~~CalledByGraph_edge2" class="edge">
+<title>program~main&#45;&gt;proc~adv_fofio_top</title>
+<path fill="none" stroke="#000000" d="M54.1934,-12C62.0282,-12 70.8405,-12 79.6195,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.8494,-15.5001 89.8494,-12 79.8493,-8.5001 79.8494,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/advance_fofio_vars.html#src">advance_FOfio_vars</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">advance_FOfio_vars</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">V_X</span><span class="p">,</span><span class="n">V_Y</span><span class="p">,</span><span class="n">V_Z</span><span class="p">,</span><span class="n">B_X</span><span class="p">,</span><span class="n">B_Y</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_X</span><span class="p">,</span><span class="n">E_Y</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">PSIp</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">P</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">F</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                       <span class="kd">::</span> <span class="n">tt</span>
+    <span class="c">!! Time step used in the leapfrog step (\(\Delta t\)).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">dt</span>
+    <span class="c">!! Time step used in the leapfrog step (\(\Delta t\)).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                       <span class="kd">::</span> <span class="n">m_cache</span><span class="p">,</span><span class="n">q_cache</span>
+    <span class="c">!! Time step used in the leapfrog step (\(\Delta t\)).</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                                  <span class="kd">::</span> <span class="n">Bmag</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>                                       <span class="kd">::</span> <span class="n">a</span>
+    <span class="c">!! This variable is used to simplify notation in the code, and</span>
+    <span class="c">!! is given by \(a=q\Delta t/m\),</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">sigma</span>
+    <span class="c">!! This variable is \(\sigma = \gamma&#39;^2 - \tau^2\) in the above equations.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">us</span>
+    <span class="c">!! This variable is \(u^{*} = p^{*}/m\) where \( p^{*} =</span>
+    <span class="c">!! \mathbf{p}&#39;\cdot \mathbf{\tau}/mc\).</span>
+    <span class="c">!! Variable &#39;u^*&#39; in Vay, J.-L. PoP (2008).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">g</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gp</span><span class="p">,</span><span class="n">g0</span>
+    <span class="c">!! Relativistic factor \(\gamma\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">s</span>
+    <span class="c">!! This variable is \(s = 1/(1+t^2)\) in the equations above.</span>
+    <span class="c">!! Variable &#39;s&#39; in Vay, J.-L. PoP (2008).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">U_hs_X</span><span class="p">,</span><span class="n">U_hs_Y</span><span class="p">,</span><span class="n">U_hs_Z</span>
+    <span class="c">!! Is \(\mathbf{u}=\mathbf{p}/m\) at half-time step (\(i+1/2\)) in</span>
+    <span class="c">!! the absence of radiation losses or collisions. \(\mathbf{u}^{i+1/2} =</span>
+    <span class="c">!! \mathbf{u}^i + \frac{q\Delta t}{2m}\left( \mathbf{E}^{i+1/2} +</span>
+    <span class="c">!! \mathbf{v}^i\times \mathbf{B}^{i+1/2} \right)\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">tau_X</span><span class="p">,</span><span class="n">tau_Y</span><span class="p">,</span><span class="n">tau_Z</span>
+    <span class="c">!! This variable is \(\mathbf{\tau} = (q\Delta t/2)\mathbf{B}^{i+1/2}\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">up_X</span><span class="p">,</span><span class="n">up_Y</span><span class="p">,</span><span class="n">up_Z</span>
+    <span class="c">!! This variable is \(\mathbf{u}&#39;= \mathbf{p}&#39;/m\), where \(\mathbf{p}&#39;</span>
+    <span class="c">!! = \mathbf{p}^i + q\Delta t \left( \mathbf{E}^{i+1/2} +</span>
+    <span class="c">!! \frac{\mathbf{v}^i}{2} \times \mathbf{B}^{i+1/2} \right)\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">t_X</span><span class="p">,</span><span class="n">t_Y</span><span class="p">,</span><span class="n">t_Z</span>
+    <span class="c">!! This variable is \(\mathbf{t} = {\mathbf \tau}/\gamma^{i+1}\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">V_X</span><span class="p">,</span><span class="n">V_Y</span><span class="p">,</span><span class="n">V_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">B_X</span><span class="p">,</span><span class="n">B_Y</span><span class="p">,</span><span class="n">B_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">E_X</span><span class="p">,</span><span class="n">E_Y</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">PSIp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">U_L_X</span><span class="p">,</span><span class="n">U_L_Y</span><span class="p">,</span><span class="n">U_L_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">U_X</span><span class="p">,</span><span class="n">U_Y</span><span class="p">,</span><span class="n">U_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">U_RC_X</span><span class="p">,</span><span class="n">U_RC_Y</span><span class="p">,</span><span class="n">U_RC_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">U_os_X</span><span class="p">,</span><span class="n">U_os_Y</span><span class="p">,</span><span class="n">U_os_Z</span>
+    <span class="c">!! This variable is \(\mathbf{u}^{i+1}= \mathbf{p}^{i+1}/m\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                          <span class="kd">::</span> <span class="n">cross_X</span><span class="p">,</span><span class="n">cross_Y</span><span class="p">,</span><span class="n">cross_Z</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">Frad_X</span><span class="p">,</span><span class="n">Frad_Y</span><span class="p">,</span><span class="n">Frad_Z</span>
+    <span class="c">!! Synchrotron radiation reaction force of each particle.</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span>
+
+    <span class="kt">INTEGER</span>                                      <span class="kd">::</span> <span class="n">cc</span><span class="p">,</span><span class="n">pchunk</span>
+    <span class="c">!! Chunk iterator.</span>
+
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">)</span> <span class="p">,</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">hint</span>
+
+    <span class="n">dt</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">dt</span>
+    <span class="n">pchunk</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span>
+
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(g0,g,U_X,U_Y,U_Z,V_X,V_Y,V_Z,Bmag,B_X,B_Y,B_Z, &amp;</span>
+    <span class="c">!    !$OMP&amp; U_L_X,U_L_Y,U_L_Z,U_RC_X,U_RC_Y,U_RC_Z, &amp;</span>
+    <span class="c">!    !$OMP&amp; cross_X,cross_Y,cross_Z,U_hs_X,U_hs_Y,U_hs_Z,E_X,E_Y,E_Z, &amp;</span>
+    <span class="c">!    !$OMP&amp; tau_X,tau_Y,tau_Z,up_X,up_Y,up_Z,gp,sigma,us,t_X,t_Y,t_Z,s, &amp;</span>
+    <span class="c">!    !$OMP&amp; U_os_X,U_os_Y,U_os_Z,Frad_X,Frad_Y,Frad_Z)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+       <span class="n">g0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">V_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">V_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">V_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+
+       <span class="c">! Magnitude of magnetic field</span>
+       <span class="n">Bmag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">B_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">B_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+       <span class="n">U_L_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_L_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_L_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">U_RC_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_RC_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_RC_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="c">! LEAP-FROG SCHEME FOR LORENTZ FORCE !</span>
+
+       <span class="n">cross_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">V_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">cross_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">V_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">cross_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">V_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+
+
+       <span class="n">U_hs_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_L_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="n">E_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span><span class="n">cross_X</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">U_hs_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_L_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="n">E_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span><span class="n">cross_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">U_hs_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_L_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="p">(</span><span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span><span class="n">cross_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+
+
+       <span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">B_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">B_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+
+
+       <span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_hs_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">E_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_hs_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">E_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_hs_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">gp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span> <span class="mf">1.0_rp</span> <span class="o">+</span> <span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="p">)</span>
+
+       <span class="n">sigma</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">gp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">gp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+       <span class="n">us</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="c">! variable &#39;u^*&#39; in Vay, J.-L. PoP (2008)</span>
+       <span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="p">(</span><span class="n">sigma</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">sigma</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sigma</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+            <span class="mf">4.0_rp</span><span class="o">*</span><span class="p">(</span><span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">us</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">us</span><span class="p">(</span><span class="n">cc</span><span class="p">))))</span> <span class="p">)</span>
+
+       <span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">tau_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">tau_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">tau_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+
+       <span class="n">s</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0_rp</span> <span class="o">+</span> <span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="c">! variable &#39;s&#39; in Vay, J.-L. PoP (2008)</span>
+
+       <span class="n">cross_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">cross_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">cross_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">U_L_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">cross_X</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">U_L_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">cross_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">U_L_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">up_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">up_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">up_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="n">t_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">cross_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="c">! LEAP-FROG SCHEME FOR LORENTZ FORCE !</span>
+
+       <span class="n">U_os_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="p">(</span><span class="n">U_L_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">U_os_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="p">(</span><span class="n">U_L_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">U_os_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="p">(</span><span class="n">U_L_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="c">! Splitting operator for including radiation</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">radiation</span><span class="p">)</span> <span class="k">then</span>
+          <span class="c">!! Calls [[radiation_force_p]] in [[korc_ppusher]].</span>
+          <span class="k">call </span><span class="n">radiation_force_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">,</span><span class="n">U_os_X</span><span class="p">,</span><span class="n">U_os_Y</span><span class="p">,</span><span class="n">U_os_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">E_X</span><span class="p">,</span><span class="n">E_Y</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">B_Y</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">Frad_X</span><span class="p">,</span><span class="n">Frad_Y</span><span class="p">,</span><span class="n">Frad_Z</span><span class="p">)</span>
+          <span class="n">U_RC_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_RC_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">Frad_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">q_cache</span>
+          <span class="n">U_RC_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_RC_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">Frad_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">q_cache</span>
+          <span class="n">U_RC_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_RC_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">Frad_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">q_cache</span>
+       <span class="k">end if</span>
+       <span class="c">! Splitting operator for including radiation</span>
+
+       <span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_L_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_RC_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">-</span> <span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_L_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_RC_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">-</span> <span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_L_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">U_RC_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">-</span> <span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">collisions</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">       call </span><span class="n">include_CoulombCollisions_FOfio_p</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">U_X</span><span class="p">,</span><span class="n">U_Y</span><span class="p">,</span><span class="n">U_Z</span><span class="p">,</span><span class="n">B_X</span><span class="p">,</span><span class="n">B_Y</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">m_cache</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span><span class="p">,</span><span class="n">PSIp</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+
+    <span class="k">end if</span>
+
+<span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">radiation</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">collisions</span><span class="p">)</span> <span class="k">then</span>
+
+       <span class="c">!$OMP SIMD</span>
+       <span class="c">!       !$OMP&amp; aligned(g,U_X,U_Y,U_Z)</span>
+       <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+          <span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">1._rp</span><span class="o">+</span><span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="k">end do</span>
+       <span class="c">!$OMP END SIMD</span>
+
+    <span class="k">end if</span>
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(g,g0,V_X,V_Y,V_Z,U_X,U_Y,U_Z,X_X,X_Y,X_Z,flagCon,flagCol)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+       <span class="k">if</span> <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0_is</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0_is</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">g0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="k">else</span>
+<span class="k">          </span><span class="n">V_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">V_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">V_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">U_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       </span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">V_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">V_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">V_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span><span class="o">*</span><span class="kt">REAL</span><span class="p">(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+  <span class="k">end subroutine </span><span class="n">advance_FOfio_vars</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

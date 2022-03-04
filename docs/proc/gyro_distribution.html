@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>gyro_distribution &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>gyro_distribution
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.2% of total for procedures.">52 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_velocity_distribution.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_velocity_distribution.f90.html'>korc_velocity_distribution.f90</a></li>
+    
+     <li><a href='../module/korc_velocity_distribution.html'>korc_velocity_distribution</a></li>
+    
+  
+     <li class="active">gyro_distribution</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/gyro_distribution.html#src">gyro_distribution</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+private subroutine gyro_distribution(params, F, spp)
+    
+    
+   
+</h2>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href="http://fortranwiki.org/fortran/show/ISO_C_BINDING">iso_c_binding</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gyro_distribution~~UsesGraph Pages: 1 -->
+<svg id="procgyro_distributionUsesGraph" width="211pt" height="32pt"
+ viewBox="0.00 0.00 211.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gyro_distribution~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~gyro_distribution~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 207,-28 207,4 -4,4"/>
+<!-- proc~gyro_distribution -->
+<g id="proc~~gyro_distribution~~UsesGraph_node1" class="node">
+<title>proc~gyro_distribution</title>
+<polygon fill="none" stroke="#000000" points="203,-24 113,-24 113,0 203,0 203,-24"/>
+<text text-anchor="middle" x="158" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">gyro_distribution</text>
+</g>
+<!-- iso_c_binding -->
+<g id="proc~~gyro_distribution~~UsesGraph_node2" class="node">
+<title>iso_c_binding</title>
+<g id="a_proc~~gyro_distribution~~UsesGraph_node2"><a xlink:href="http://fortranwiki.org/fortran/show/ISO_C_BINDING" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="77,-24 0,-24 0,0 77,0 77,-24"/>
+<text text-anchor="middle" x="38.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iso_c_binding</text>
+</a>
+</g>
+</g>
+<!-- proc~gyro_distribution&#45;&gt;iso_c_binding -->
+<g id="proc~~gyro_distribution~~UsesGraph_edge1" class="edge">
+<title>proc~gyro_distribution&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M112.8222,-12C104.4581,-12 95.6884,-12 87.2244,-12"/>
+<polygon fill="#000000" stroke="#000000" points="87.0997,-8.5001 77.0997,-12 87.0997,-15.5001 87.0997,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subroutine that initializes the gyro-angle distribution 
+ of the particles. </p></div>
+<p>When evolving the particles in the 6-D phase space, in addition to 
+ the position (3 degrees of freedom), energy (one degree of freedom), 
+ pitch angle (one degree of freedom), we need to define the gyro-angle 
+ of the particle (one degree of freedom), which is given by the pitch 
+ angle and the direction of the local magnetic field. By default, this 
+ subroutine generates a uniform gyro-angle distribution.
+ </p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Notice that all the simulation variables are normalized
+ here. </p></div>
+<p>Call to subroutine <a href="../proc/unitvectors.html">unitVectors</a> in <a href="../module/korc_fields.html">korc_fields</a>.</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~69"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~24"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS. This structure 
+ has the information of the magnetic field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spp~28"></span>type(SPECIES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>spp</strong></td><td><p>An instance of the derived type SPECIES containing all the
+ parameters and 
+ simulation variables of the different species in the simulation.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gyro_distribution~~CallsGraph Pages: 1 -->
+<svg id="procgyro_distributionCallsGraph" width="641pt" height="757pt"
+ viewBox="0.00 0.00 641.00 757.06" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gyro_distribution~~CallsGraph" class="graph" transform="scale(.7586 .7586) rotate(0) translate(4 994)">
+<title>proc~~gyro_distribution~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-994 841,-994 841,4 -4,4"/>
+<!-- proc~gyro_distribution -->
+<g id="proc~~gyro_distribution~~CallsGraph_node1" class="node">
+<title>proc~gyro_distribution</title>
+<polygon fill="none" stroke="#000000" points="90,-486 0,-486 0,-462 90,-462 90,-486"/>
+<text text-anchor="middle" x="45" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">gyro_distribution</text>
+</g>
+<!-- proc~init_random_seed -->
+<g id="proc~~gyro_distribution~~CallsGraph_node2" class="node">
+<title>proc~init_random_seed</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node2"><a xlink:href=".././proc/init_random_seed.html" xlink:title="init_random_seed">
+<polygon fill="#d9534f" stroke="#d9534f" points="222,-507 126,-507 126,-483 222,-483 222,-507"/>
+<text text-anchor="middle" x="174" y="-492.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
+</a>
+</g>
+</g>
+<!-- proc~gyro_distribution&#45;&gt;proc~init_random_seed -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge2" class="edge">
+<title>proc~gyro_distribution&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#000000" d="M90.1179,-481.3448C98.3689,-482.688 107.0864,-484.1071 115.6576,-485.5024"/>
+<polygon fill="#000000" stroke="#000000" points="115.1829,-488.9711 125.6154,-487.1234 116.3077,-482.0621 115.1829,-488.9711"/>
+</g>
+<!-- proc~unitvectors -->
+<g id="proc~~gyro_distribution~~CallsGraph_node3" class="node">
+<title>proc~unitvectors</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node3"><a xlink:href=".././proc/unitvectors.html" xlink:title="unitVectors">
+<polygon fill="#d9534f" stroke="#d9534f" points="206.5,-465 141.5,-465 141.5,-441 206.5,-441 206.5,-465"/>
+<text text-anchor="middle" x="174" y="-450.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">unitVectors</text>
+</a>
+</g>
+</g>
+<!-- proc~gyro_distribution&#45;&gt;proc~unitvectors -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge1" class="edge">
+<title>proc~gyro_distribution&#45;&gt;proc~unitvectors</title>
+<path fill="none" stroke="#000000" d="M90.1179,-466.6552C103.4185,-464.49 117.9313,-462.1275 131.0892,-459.9855"/>
+<polygon fill="#000000" stroke="#000000" points="131.9943,-463.3843 141.3019,-458.3229 130.8695,-456.4752 131.9943,-463.3843"/>
+</g>
+<!-- proc~cross~2 -->
+<g id="proc~~gyro_distribution~~CallsGraph_node4" class="node">
+<title>proc~cross~2</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node4"><a xlink:href=".././proc/cross~2.html" xlink:title="cross">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="333,-507 279,-507 279,-483 333,-483 333,-507"/>
+<text text-anchor="middle" x="306" y="-492.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cross</text>
+</a>
+</g>
+</g>
+<!-- proc~unitvectors&#45;&gt;proc~cross~2 -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge3" class="edge">
+<title>proc~unitvectors&#45;&gt;proc~cross~2</title>
+<path fill="none" stroke="#000000" d="M206.6292,-463.382C225.5695,-469.4085 249.4855,-477.0181 269.1084,-483.2618"/>
+<polygon fill="#000000" stroke="#000000" points="268.0515,-486.5983 278.642,-486.2952 270.174,-479.9278 268.0515,-486.5983"/>
+</g>
+<!-- init_random_seed -->
+<g id="proc~~gyro_distribution~~CallsGraph_node5" class="node">
+<title>init_random_seed</title>
+<polygon fill="#777777" stroke="#777777" points="354,-465 258,-465 258,-441 354,-441 354,-465"/>
+<text text-anchor="middle" x="306" y="-450.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
+</g>
+<!-- proc~unitvectors&#45;&gt;init_random_seed -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge4" class="edge">
+<title>proc~unitvectors&#45;&gt;init_random_seed</title>
+<path fill="none" stroke="#000000" d="M206.6292,-453C219.039,-453 233.5847,-453 247.6595,-453"/>
+<polygon fill="#000000" stroke="#000000" points="247.7876,-456.5001 257.7876,-453 247.7875,-449.5001 247.7876,-456.5001"/>
+</g>
+<!-- proc~get_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node6" class="node">
+<title>proc~get_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node6"><a xlink:href=".././proc/get_fields.html" xlink:title="get_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="334.5,-423 277.5,-423 277.5,-399 334.5,-399 334.5,-423"/>
+<text text-anchor="middle" x="306" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~unitvectors&#45;&gt;proc~get_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge5" class="edge">
+<title>proc~unitvectors&#45;&gt;proc~get_fields</title>
+<path fill="none" stroke="#000000" d="M206.6292,-442.618C225.0929,-436.7432 248.2851,-429.3638 267.6192,-423.2121"/>
+<polygon fill="#000000" stroke="#000000" points="268.8645,-426.4888 277.3325,-420.1215 266.742,-419.8183 268.8645,-426.4888"/>
+</g>
+<!-- proc~get_analytical_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node7" class="node">
+<title>proc~get_analytical_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node7"><a xlink:href=".././proc/get_analytical_fields.html" xlink:title="get_analytical_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="497,-864 390,-864 390,-840 497,-840 497,-864"/>
+<text text-anchor="middle" x="443.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_analytical_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fields&#45;&gt;proc~get_analytical_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge6" class="edge">
+<title>proc~get_fields&#45;&gt;proc~get_analytical_fields</title>
+<path fill="none" stroke="#000000" d="M334.8479,-418.4628C342.0167,-421.5789 349.0559,-425.938 354,-432 405.0869,-494.6385 433.8414,-752.4882 441.4438,-829.9162"/>
+<polygon fill="#000000" stroke="#000000" points="437.9709,-830.3672 442.4121,-839.9862 444.9388,-829.6971 437.9709,-830.3672"/>
+</g>
+<!-- proc~interp_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node8" class="node">
+<title>proc~interp_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node8"><a xlink:href=".././proc/interp_fields.html" xlink:title="interp_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="478,-423 409,-423 409,-399 478,-399 478,-423"/>
+<text text-anchor="middle" x="443.5" y="-408.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fields&#45;&gt;proc~interp_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge7" class="edge">
+<title>proc~get_fields&#45;&gt;proc~interp_fields</title>
+<path fill="none" stroke="#000000" d="M334.8245,-411C353.3674,-411 377.8403,-411 398.8668,-411"/>
+<polygon fill="#000000" stroke="#000000" points="398.871,-414.5001 408.8709,-411 398.8709,-407.5001 398.871,-414.5001"/>
+</g>
+<!-- proc~uniform_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node9" class="node">
+<title>proc~uniform_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node9"><a xlink:href=".././proc/uniform_fields.html" xlink:title="uniform_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="482.5,-66 404.5,-66 404.5,-42 482.5,-42 482.5,-66"/>
+<text text-anchor="middle" x="443.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">uniform_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fields&#45;&gt;proc~uniform_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge8" class="edge">
+<title>proc~get_fields&#45;&gt;proc~uniform_fields</title>
+<path fill="none" stroke="#000000" d="M310.7331,-398.7113C330.8145,-346.5725 409.126,-143.2474 435.0867,-75.8439"/>
+<polygon fill="#000000" stroke="#000000" points="438.4587,-76.8268 438.7868,-66.2371 431.9265,-74.3109 438.4587,-76.8268"/>
+</g>
+<!-- proc~cyl_check_if_confined -->
+<g id="proc~~gyro_distribution~~CallsGraph_node13" class="node">
+<title>proc~cyl_check_if_confined</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node13"><a xlink:href=".././proc/cyl_check_if_confined.html" xlink:title="cyl_check_if_confined">
+<polygon fill="#d9534f" stroke="#d9534f" points="667,-990 552,-990 552,-966 667,-966 667,-990"/>
+<text text-anchor="middle" x="609.5" y="-975.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cyl_check_if_confined</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~cyl_check_if_confined -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge14" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~cyl_check_if_confined</title>
+<path fill="none" stroke="#000000" d="M450.4133,-864.122C463.5751,-886.0844 494.3949,-932.4501 533,-957 535.9962,-958.9054 539.1648,-960.6399 542.4407,-962.2188"/>
+<polygon fill="#000000" stroke="#000000" points="541.3322,-965.5514 551.9028,-966.2686 544.0866,-959.1161 541.3322,-965.5514"/>
+</g>
+<!-- proc~analytical_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node14" class="node">
+<title>proc~analytical_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node14"><a xlink:href=".././proc/analytical_fields.html" xlink:title="analytical_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="653,-948 566,-948 566,-924 653,-924 653,-948"/>
+<text text-anchor="middle" x="609.5" y="-933.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~analytical_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge11" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~analytical_fields</title>
+<path fill="none" stroke="#000000" d="M457.4206,-864.1373C474.2534,-878.2349 503.9544,-901.3036 533,-915 540.2621,-918.4244 548.1838,-921.3782 556.0881,-923.8981"/>
+<polygon fill="#000000" stroke="#000000" points="555.0922,-927.2534 565.6755,-926.7592 557.0939,-920.5457 555.0922,-927.2534"/>
+</g>
+<!-- proc~cart_to_tor_check_if_confined -->
+<g id="proc~~gyro_distribution~~CallsGraph_node24" class="node">
+<title>proc~cart_to_tor_check_if_confined</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node24"><a xlink:href=".././proc/cart_to_tor_check_if_confined.html" xlink:title="cart_to_tor_check_if_confined">
+<polygon fill="#d9534f" stroke="#d9534f" points="686,-906 533,-906 533,-882 686,-882 686,-906"/>
+<text text-anchor="middle" x="609.5" y="-891.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cart_to_tor_check_if_confined</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~cart_to_tor_check_if_confined -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge12" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~cart_to_tor_check_if_confined</title>
+<path fill="none" stroke="#000000" d="M491.0689,-864.0355C510.0834,-868.8464 532.1521,-874.43 552.05,-879.4645"/>
+<polygon fill="#000000" stroke="#000000" points="551.3711,-882.9029 561.9241,-881.9627 553.0881,-876.1167 551.3711,-882.9029"/>
+</g>
+<!-- proc~cart_to_cyl -->
+<g id="proc~~gyro_distribution~~CallsGraph_node26" class="node">
+<title>proc~cart_to_cyl</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node26"><a xlink:href=".././proc/cart_to_cyl.html" xlink:title="cart_to_cyl">
+<polygon fill="#d9534f" stroke="#d9534f" points="641,-864 578,-864 578,-840 641,-840 641,-864"/>
+<text text-anchor="middle" x="609.5" y="-849.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cart_to_cyl</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~cart_to_cyl -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge9" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~cart_to_cyl</title>
+<path fill="none" stroke="#000000" d="M497.3954,-852C520.1754,-852 546.3043,-852 567.6029,-852"/>
+<polygon fill="#000000" stroke="#000000" points="567.6348,-855.5001 577.6347,-852 567.6347,-848.5001 567.6348,-855.5001"/>
+</g>
+<!-- proc~analytical_fields_gc -->
+<g id="proc~~gyro_distribution~~CallsGraph_node28" class="node">
+<title>proc~analytical_fields_gc</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node28"><a xlink:href=".././proc/analytical_fields_gc.html" xlink:title="analytical_fields_GC">
+<polygon fill="#d9534f" stroke="#d9534f" points="663.5,-822 555.5,-822 555.5,-798 663.5,-798 663.5,-822"/>
+<text text-anchor="middle" x="609.5" y="-807.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields_GC</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge10" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc</title>
+<path fill="none" stroke="#000000" d="M491.0689,-839.9645C510.0834,-835.1536 532.1521,-829.57 552.05,-824.5355"/>
+<polygon fill="#000000" stroke="#000000" points="553.0881,-827.8833 561.9241,-822.0373 551.3711,-821.0971 553.0881,-827.8833"/>
+</g>
+<!-- proc~analytical_fields_gc_init -->
+<g id="proc~~gyro_distribution~~CallsGraph_node30" class="node">
+<title>proc~analytical_fields_gc_init</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node30"><a xlink:href=".././proc/analytical_fields_gc_init.html" xlink:title="analytical_fields_GC_init">
+<polygon fill="#d9534f" stroke="#d9534f" points="673,-780 546,-780 546,-756 673,-756 673,-780"/>
+<text text-anchor="middle" x="609.5" y="-765.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields_GC_init</text>
+</a>
+</g>
+</g>
+<!-- proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc_init -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge13" class="edge">
+<title>proc~get_analytical_fields&#45;&gt;proc~analytical_fields_gc_init</title>
+<path fill="none" stroke="#000000" d="M457.4206,-839.8627C474.2534,-825.7651 503.9544,-802.6964 533,-789 537.3639,-786.9422 541.9659,-785.0544 546.6593,-783.3285"/>
+<polygon fill="#000000" stroke="#000000" points="548.0418,-786.5549 556.3741,-780.0109 545.7795,-779.9305 548.0418,-786.5549"/>
+</g>
+<!-- proc~interp_3d_bfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node10" class="node">
+<title>proc~interp_3d_bfields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node10"><a xlink:href=".././proc/interp_3d_bfields.html" xlink:title="interp_3D_bfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="656.5,-402 562.5,-402 562.5,-378 656.5,-378 656.5,-402"/>
+<text text-anchor="middle" x="609.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_3D_bfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_3d_bfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge15" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_3d_bfields</title>
+<path fill="none" stroke="#000000" d="M478.299,-406.5977C499.7736,-403.881 527.8361,-400.331 552.4941,-397.2116"/>
+<polygon fill="#000000" stroke="#000000" points="552.9844,-400.6776 562.466,-395.9501 552.1058,-393.7329 552.9844,-400.6776"/>
+</g>
+<!-- proc~get_fio_vector_potential -->
+<g id="proc~~gyro_distribution~~CallsGraph_node11" class="node">
+<title>proc~get_fio_vector_potential</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node11"><a xlink:href=".././proc/get_fio_vector_potential.html" xlink:title="get_fio_vector_potential">
+<polygon fill="#d9534f" stroke="#d9534f" points="671.5,-738 547.5,-738 547.5,-714 671.5,-714 671.5,-738"/>
+<text text-anchor="middle" x="609.5" y="-723.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_vector_potential</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~get_fio_vector_potential -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge25" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~get_fio_vector_potential</title>
+<path fill="none" stroke="#000000" d="M445.6306,-423.3346C454.5814,-473.7973 490.6445,-663.7976 533,-705 534.6844,-706.6386 536.4842,-708.152 538.3763,-709.5497"/>
+<polygon fill="#000000" stroke="#000000" points="536.8411,-712.7142 547.1939,-714.9658 540.5048,-706.7495 536.8411,-712.7142"/>
+</g>
+<!-- proc~gradient_2d_bfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node12" class="node">
+<title>proc~gradient_2d_bfields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node12"><a xlink:href=".././proc/gradient_2d_bfields.html" xlink:title="gradient_2D_Bfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="663,-360 556,-360 556,-336 663,-336 663,-360"/>
+<text text-anchor="middle" x="609.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">gradient_2D_Bfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~gradient_2d_bfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge26" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~gradient_2d_bfields</title>
+<path fill="none" stroke="#000000" d="M466.5873,-398.828C484.391,-389.7726 509.8107,-377.5526 533,-369 538.7663,-366.8733 544.8469,-364.8499 550.9569,-362.9585"/>
+<polygon fill="#000000" stroke="#000000" points="551.9596,-366.3118 560.5416,-360.0989 549.9583,-359.604 551.9596,-366.3118"/>
+</g>
+<!-- proc~interp_3d_efields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node15" class="node">
+<title>proc~interp_3d_efields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node15"><a xlink:href=".././proc/interp_3d_efields.html" xlink:title="interp_3D_efields">
+<polygon fill="#d9534f" stroke="#d9534f" points="656.5,-318 562.5,-318 562.5,-294 656.5,-294 656.5,-318"/>
+<text text-anchor="middle" x="609.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_3D_efields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_3d_efields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge28" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_3d_efields</title>
+<path fill="none" stroke="#000000" d="M453.1307,-398.7543C468.2041,-380.418 499.1669,-345.9608 533,-327 539.0542,-323.6071 545.689,-320.7363 552.4413,-318.3134"/>
+<polygon fill="#000000" stroke="#000000" points="553.9433,-321.505 562.3643,-315.0756 551.7718,-314.8503 553.9433,-321.505"/>
+</g>
+<!-- proc~interp_fofields_aorsa -->
+<g id="proc~~gyro_distribution~~CallsGraph_node16" class="node">
+<title>proc~interp_fofields_aorsa</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node16"><a xlink:href=".././proc/interp_fofields_aorsa.html" xlink:title="interp_FOfields_aorsa">
+<polygon fill="#d9534f" stroke="#d9534f" points="667.5,-570 551.5,-570 551.5,-546 667.5,-546 667.5,-570"/>
+<text text-anchor="middle" x="609.5" y="-555.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_aorsa</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_fofields_aorsa -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge30" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_fofields_aorsa</title>
+<path fill="none" stroke="#000000" d="M448.6692,-423.1639C460.0372,-448.4169 489.6909,-506.6953 533,-537 535.8511,-538.995 538.8845,-540.8007 542.0366,-542.4351"/>
+<polygon fill="#000000" stroke="#000000" points="540.6297,-545.6403 551.1808,-546.6026 543.5327,-539.2706 540.6297,-545.6403"/>
+</g>
+<!-- proc~interp_2d_efields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node17" class="node">
+<title>proc~interp_2d_efields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node17"><a xlink:href=".././proc/interp_2d_efields.html" xlink:title="interp_2D_efields">
+<polygon fill="#d9534f" stroke="#d9534f" points="656.5,-276 562.5,-276 562.5,-252 656.5,-252 656.5,-276"/>
+<text text-anchor="middle" x="609.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_efields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_efields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge17" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_efields</title>
+<path fill="none" stroke="#000000" d="M448.6692,-398.8361C460.0372,-373.5831 489.6909,-315.3047 533,-285 538.9737,-280.8201 545.748,-277.4708 552.7364,-274.7875"/>
+<polygon fill="#000000" stroke="#000000" points="553.9997,-278.0549 562.3436,-271.5258 551.7493,-271.4265 553.9997,-278.0549"/>
+</g>
+<!-- proc~interp_fofields_mars -->
+<g id="proc~~gyro_distribution~~CallsGraph_node18" class="node">
+<title>proc~interp_fofields_mars</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node18"><a xlink:href=".././proc/interp_fofields_mars.html" xlink:title="interp_FOfields_mars">
+<polygon fill="#d9534f" stroke="#d9534f" points="666,-528 553,-528 553,-504 666,-504 666,-528"/>
+<text text-anchor="middle" x="609.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_mars</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_fofields_mars -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge18" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_fofields_mars</title>
+<path fill="none" stroke="#000000" d="M453.1307,-423.2457C468.2041,-441.582 499.1669,-476.0392 533,-495 536.4166,-496.9147 540.0182,-498.6632 543.7214,-500.2588"/>
+<polygon fill="#000000" stroke="#000000" points="542.5005,-503.5394 553.0886,-503.9174 545.0472,-497.019 542.5005,-503.5394"/>
+</g>
+<!-- proc~interp_2d_curlbfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node19" class="node">
+<title>proc~interp_2d_curlbfields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node19"><a xlink:href=".././proc/interp_2d_curlbfields.html" xlink:title="interp_2D_curlbfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="665,-234 554,-234 554,-210 665,-210 665,-234"/>
+<text text-anchor="middle" x="609.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_curlbfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_curlbfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge20" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_curlbfields</title>
+<path fill="none" stroke="#000000" d="M446.4416,-398.6919C454.5278,-367.5897 480.0927,-285.3142 533,-243 536.5443,-240.1653 540.4438,-237.7124 544.5482,-235.59"/>
+<polygon fill="#000000" stroke="#000000" points="546.1025,-238.7291 553.8026,-231.4518 543.2449,-232.3389 546.1025,-238.7291"/>
+</g>
+<!-- proc~calculate_magnetic_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_node20" class="node">
+<title>proc~calculate_magnetic_field</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node20"><a xlink:href=".././proc/calculate_magnetic_field.html" xlink:title="calculate_magnetic_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="673,-192 546,-192 546,-168 673,-168 673,-192"/>
+<text text-anchor="middle" x="609.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_magnetic_field</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~calculate_magnetic_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge21" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~calculate_magnetic_field</title>
+<path fill="none" stroke="#000000" d="M444.9859,-398.9139C450.0571,-362.9994 470.0175,-256.0079 533,-201 534.5171,-199.675 536.1105,-198.4329 537.7666,-197.2684"/>
+<polygon fill="#000000" stroke="#000000" points="539.7007,-200.1904 546.5059,-192.0701 536.1221,-194.1743 539.7007,-200.1904"/>
+</g>
+<!-- proc~get_fio_magnetic_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node21" class="node">
+<title>proc~get_fio_magnetic_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node21"><a xlink:href=".././proc/get_fio_magnetic_fields.html" xlink:title="get_fio_magnetic_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="671,-654 548,-654 548,-630 671,-630 671,-654"/>
+<text text-anchor="middle" x="609.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_magnetic_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~get_fio_magnetic_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge22" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~get_fio_magnetic_fields</title>
+<path fill="none" stroke="#000000" d="M444.9859,-423.0861C450.0571,-459.0006 470.0175,-565.9921 533,-621 534.7699,-622.5458 536.6438,-623.9789 538.5998,-625.3073"/>
+<polygon fill="#000000" stroke="#000000" points="537.2188,-628.55 547.6351,-630.4872 540.7004,-622.4772 537.2188,-628.55"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~gyro_distribution~~CallsGraph_node23" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node23"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="640.5,-612 578.5,-612 578.5,-588 640.5,-588 640.5,-612"/>
+<text text-anchor="middle" x="609.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~korc_abort -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge23" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M446.4416,-423.3081C454.5278,-454.4103 480.0927,-536.6858 533,-579 542.9995,-586.9974 555.8253,-591.9557 568.1059,-595.0275"/>
+<polygon fill="#000000" stroke="#000000" points="567.7086,-598.5216 578.2193,-597.1895 569.172,-591.6763 567.7086,-598.5216"/>
+</g>
+<!-- proc~interp_2d_gradbfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node25" class="node">
+<title>proc~interp_2d_gradbfields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node25"><a xlink:href=".././proc/interp_2d_gradbfields.html" xlink:title="interp_2D_gradBfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="667.5,-150 551.5,-150 551.5,-126 667.5,-126 667.5,-150"/>
+<text text-anchor="middle" x="609.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_gradBfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_gradbfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge16" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_gradbfields</title>
+<path fill="none" stroke="#000000" d="M444.0249,-398.9075C446.45,-358.5093 459.8768,-226.9469 533,-159 535.7871,-156.4101 538.8636,-154.1347 542.1344,-152.136"/>
+<polygon fill="#000000" stroke="#000000" points="543.9011,-155.1629 551.1814,-147.4656 540.69,-148.9428 543.9011,-155.1629"/>
+</g>
+<!-- proc~check_if_in_lcfs -->
+<g id="proc~~gyro_distribution~~CallsGraph_node27" class="node">
+<title>proc~check_if_in_lcfs</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node27"><a xlink:href=".././proc/check_if_in_lcfs.html" xlink:title="check_if_in_LCFS">
+<polygon fill="#d9534f" stroke="#d9534f" points="658.5,-486 560.5,-486 560.5,-462 658.5,-462 658.5,-486"/>
+<text text-anchor="middle" x="609.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_LCFS</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~check_if_in_lcfs -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge19" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~check_if_in_lcfs</title>
+<path fill="none" stroke="#000000" d="M466.5873,-423.172C484.391,-432.2274 509.8107,-444.4474 533,-453 538.7663,-455.1267 544.8469,-457.1501 550.9569,-459.0415"/>
+<polygon fill="#000000" stroke="#000000" points="549.9583,-462.396 560.5416,-461.9011 551.9596,-455.6882 549.9583,-462.396"/>
+</g>
+<!-- proc~get_fio_electric_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node29" class="node">
+<title>proc~get_fio_electric_fields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node29"><a xlink:href=".././proc/get_fio_electric_fields.html" xlink:title="get_fio_electric_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="666,-696 553,-696 553,-672 666,-672 666,-696"/>
+<text text-anchor="middle" x="609.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_fio_electric_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~get_fio_electric_fields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge24" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~get_fio_electric_fields</title>
+<path fill="none" stroke="#000000" d="M444.0249,-423.0925C446.45,-463.4907 459.8768,-595.0531 533,-663 536.1781,-665.9531 539.7324,-668.4975 543.5221,-670.6889"/>
+<polygon fill="#000000" stroke="#000000" points="542.2046,-673.9407 552.7258,-675.1881 545.2789,-667.6519 542.2046,-673.9407"/>
+</g>
+<!-- proc~check_if_in_fields_domain -->
+<g id="proc~~gyro_distribution~~CallsGraph_node31" class="node">
+<title>proc~check_if_in_fields_domain</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node31"><a xlink:href=".././proc/check_if_in_fields_domain.html" xlink:title="check_if_in_fields_domain">
+<polygon fill="#d9534f" stroke="#d9534f" points="677.5,-444 541.5,-444 541.5,-420 677.5,-420 677.5,-444"/>
+<text text-anchor="middle" x="609.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_fields_domain</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~check_if_in_fields_domain -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge27" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~check_if_in_fields_domain</title>
+<path fill="none" stroke="#000000" d="M478.299,-415.4023C493.7719,-417.3597 512.6648,-419.7498 531.2401,-422.0997"/>
+<polygon fill="#000000" stroke="#000000" points="530.8427,-425.5772 541.2029,-423.36 531.7213,-418.6325 530.8427,-425.5772"/>
+</g>
+<!-- proc~interp_2d_bfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_node33" class="node">
+<title>proc~interp_2d_bfields</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node33"><a xlink:href=".././proc/interp_2d_bfields.html" xlink:title="interp_2D_bfields">
+<polygon fill="#d9534f" stroke="#d9534f" points="656.5,-108 562.5,-108 562.5,-84 656.5,-84 656.5,-108"/>
+<text text-anchor="middle" x="609.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_2D_bfields</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields&#45;&gt;proc~interp_2d_bfields -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge29" class="edge">
+<title>proc~interp_fields&#45;&gt;proc~interp_2d_bfields</title>
+<path fill="none" stroke="#000000" d="M445.6306,-398.6654C454.5814,-348.2027 490.6445,-158.2024 533,-117 538.6225,-111.5306 545.5296,-107.4554 552.8714,-104.4247"/>
+<polygon fill="#000000" stroke="#000000" points="554.0527,-107.7196 562.3396,-101.1183 551.7448,-101.111 554.0527,-107.7196"/>
+</g>
+<!-- proc~uniform_magnetic_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_node22" class="node">
+<title>proc~uniform_magnetic_field</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node22"><a xlink:href=".././proc/uniform_magnetic_field.html" xlink:title="uniform_magnetic_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="670,-66 549,-66 549,-42 670,-42 670,-66"/>
+<text text-anchor="middle" x="609.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">uniform_magnetic_field</text>
+</a>
+</g>
+</g>
+<!-- proc~uniform_fields&#45;&gt;proc~uniform_magnetic_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge32" class="edge">
+<title>proc~uniform_fields&#45;&gt;proc~uniform_magnetic_field</title>
+<path fill="none" stroke="#000000" d="M482.8397,-54C499.5,-54 519.4412,-54 538.5173,-54"/>
+<polygon fill="#000000" stroke="#000000" points="538.6947,-57.5001 548.6947,-54 538.6946,-50.5001 538.6947,-57.5001"/>
+</g>
+<!-- proc~uniform_electric_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_node32" class="node">
+<title>proc~uniform_electric_field</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node32"><a xlink:href=".././proc/uniform_electric_field.html" xlink:title="uniform_electric_field">
+<polygon fill="#d9534f" stroke="#d9534f" points="665.5,-24 553.5,-24 553.5,0 665.5,0 665.5,-24"/>
+<text text-anchor="middle" x="609.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">uniform_electric_field</text>
+</a>
+</g>
+</g>
+<!-- proc~uniform_fields&#45;&gt;proc~uniform_electric_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge31" class="edge">
+<title>proc~uniform_fields&#45;&gt;proc~uniform_electric_field</title>
+<path fill="none" stroke="#000000" d="M482.8397,-44.0466C503.4684,-38.8273 529.1271,-32.3353 551.9454,-26.562"/>
+<polygon fill="#000000" stroke="#000000" points="553.0273,-29.8986 561.8633,-24.0527 551.3103,-23.1125 553.0273,-29.8986"/>
+</g>
+<!-- ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_node35" class="node">
+<title>ezspline_error</title>
+<polygon fill="#777777" stroke="#777777" points="819,-297 740,-297 740,-273 819,-273 819,-297"/>
+<text text-anchor="middle" x="779.5" y="-282.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_error</text>
+</g>
+<!-- proc~interp_3d_bfields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge33" class="edge">
+<title>proc~interp_3d_bfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M656.5541,-380.7768C666.615,-377.8041 676.9347,-373.9515 686,-369 716.4978,-352.3422 745.2339,-323.9034 762.5983,-304.787"/>
+<polygon fill="#000000" stroke="#000000" points="765.2902,-307.0267 769.3159,-297.2265 760.0574,-302.3772 765.2902,-307.0267"/>
+</g>
+<!-- interface~fio_eval_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_node37" class="node">
+<title>interface~fio_eval_field</title>
+<g id="a_proc~~gyro_distribution~~CallsGraph_node37"><a xlink:href=".././interface/fio_eval_field.html" xlink:title="fio_eval_field">
+<polygon fill="#a7506f" stroke="#a7506f" points="816.5,-696 742.5,-696 742.5,-672 816.5,-672 816.5,-696"/>
+<text text-anchor="middle" x="779.5" y="-681.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fio_eval_field</text>
+</a>
+</g>
+</g>
+<!-- proc~get_fio_vector_potential&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge34" class="edge">
+<title>proc~get_fio_vector_potential&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M658.2152,-713.9645C681.5477,-708.2 709.3707,-701.3261 732.4793,-695.6169"/>
+<polygon fill="#000000" stroke="#000000" points="733.5301,-698.9626 742.3987,-693.1662 731.8511,-692.1669 733.5301,-698.9626"/>
+</g>
+<!-- proc~gradient_2d_bfields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge35" class="edge">
+<title>proc~gradient_2d_bfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M658.0079,-335.8997C667.3774,-333.2215 677.057,-330.2143 686,-327 706.3467,-319.6868 728.4412,-309.8548 746.0413,-301.5422"/>
+<polygon fill="#000000" stroke="#000000" points="747.8058,-304.578 755.317,-297.106 744.7856,-298.2631 747.8058,-304.578"/>
+</g>
+<!-- proc~interp_3d_efields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge36" class="edge">
+<title>proc~interp_3d_efields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M656.8545,-300.1503C679.5169,-297.3509 706.6535,-293.9987 729.6327,-291.1601"/>
+<polygon fill="#000000" stroke="#000000" points="730.3717,-294.5955 739.8672,-289.8958 729.5135,-287.6483 730.3717,-294.5955"/>
+</g>
+<!-- proc~interp_fofields_aorsa&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge38" class="edge">
+<title>proc~interp_fofields_aorsa&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M667.7537,-548.4641C674.4279,-545.5772 680.7195,-541.8381 686,-537 754.6278,-474.1212 773.0744,-356.2431 777.875,-307.2436"/>
+<polygon fill="#000000" stroke="#000000" points="781.3769,-307.3735 778.7656,-297.1056 774.4038,-306.7608 781.3769,-307.3735"/>
+</g>
+<!-- ezspline_interp -->
+<g id="proc~~gyro_distribution~~CallsGraph_node36" class="node">
+<title>ezspline_interp</title>
+<polygon fill="#777777" stroke="#777777" points="821,-549 738,-549 738,-525 821,-525 821,-549"/>
+<text text-anchor="middle" x="779.5" y="-534.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_interp</text>
+</g>
+<!-- proc~interp_fofields_aorsa&#45;&gt;ezspline_interp -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge37" class="edge">
+<title>proc~interp_fofields_aorsa&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M667.5289,-550.8317C687.0969,-548.4145 708.7925,-545.7345 727.8355,-543.3821"/>
+<polygon fill="#000000" stroke="#000000" points="728.3227,-546.8486 737.8181,-542.1489 727.4644,-539.9014 728.3227,-546.8486"/>
+</g>
+<!-- proc~interp_2d_efields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge39" class="edge">
+<title>proc~interp_2d_efields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M656.8545,-269.8497C679.5169,-272.6491 706.6535,-276.0013 729.6327,-278.8399"/>
+<polygon fill="#000000" stroke="#000000" points="729.5135,-282.3517 739.8672,-280.1042 730.3717,-275.4045 729.5135,-282.3517"/>
+</g>
+<!-- proc~interp_fofields_mars&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge41" class="edge">
+<title>proc~interp_fofields_mars&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M666.2992,-506.6221C673.4475,-503.7221 680.255,-499.9371 686,-495 744.7505,-444.5114 768.1622,-349.8579 776.0489,-307.0382"/>
+<polygon fill="#000000" stroke="#000000" points="779.5126,-307.5479 777.7686,-297.0976 772.6151,-306.3546 779.5126,-307.5479"/>
+</g>
+<!-- proc~interp_fofields_mars&#45;&gt;ezspline_interp -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge40" class="edge">
+<title>proc~interp_fofields_mars&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M666.1075,-522.9927C686.0945,-525.4617 708.4477,-528.2229 727.9897,-530.637"/>
+<polygon fill="#000000" stroke="#000000" points="727.5715,-534.1118 737.9252,-531.8643 728.4298,-527.1646 727.5715,-534.1118"/>
+</g>
+<!-- proc~interp_2d_curlbfields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge42" class="edge">
+<title>proc~interp_2d_curlbfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M658.0079,-234.1003C667.3774,-236.7785 677.057,-239.7857 686,-243 706.3467,-250.3132 728.4412,-260.1452 746.0413,-268.4578"/>
+<polygon fill="#000000" stroke="#000000" points="744.7856,-271.7369 755.317,-272.894 747.8058,-265.422 744.7856,-271.7369"/>
+</g>
+<!-- proc~calculate_magnetic_field&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge43" class="edge">
+<title>proc~calculate_magnetic_field&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M665.4363,-192.0718C672.5613,-194.5507 679.5938,-197.501 686,-201 716.4978,-217.6578 745.2339,-246.0966 762.5983,-265.213"/>
+<polygon fill="#000000" stroke="#000000" points="760.0574,-267.6228 769.3159,-272.7735 765.2902,-262.9733 760.0574,-267.6228"/>
+</g>
+<!-- proc~get_fio_magnetic_fields&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge45" class="edge">
+<title>proc~get_fio_magnetic_fields&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M658.2152,-654.0355C681.5477,-659.8 709.3707,-666.6739 732.4793,-672.3831"/>
+<polygon fill="#000000" stroke="#000000" points="731.8511,-675.8331 742.3987,-674.8338 733.5301,-669.0374 731.8511,-675.8331"/>
+</g>
+<!-- omp_get_thread_num -->
+<g id="proc~~gyro_distribution~~CallsGraph_node38" class="node">
+<title>omp_get_thread_num</title>
+<polygon fill="#777777" stroke="#777777" points="837,-654 722,-654 722,-630 837,-630 837,-654"/>
+<text text-anchor="middle" x="779.5" y="-639.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_get_thread_num</text>
+</g>
+<!-- proc~get_fio_magnetic_fields&#45;&gt;omp_get_thread_num -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge44" class="edge">
+<title>proc~get_fio_magnetic_fields&#45;&gt;omp_get_thread_num</title>
+<path fill="none" stroke="#000000" d="M671.3548,-642C684.5183,-642 698.4834,-642 711.8506,-642"/>
+<polygon fill="#000000" stroke="#000000" points="711.9328,-645.5001 721.9328,-642 711.9328,-638.5001 711.9328,-645.5001"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~gyro_distribution~~CallsGraph_node34" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="809,-612 750,-612 750,-588 809,-588 809,-612"/>
+<text text-anchor="middle" x="779.5" y="-597.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge46" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M640.6806,-600C668.5477,-600 709.5257,-600 739.7405,-600"/>
+<polygon fill="#000000" stroke="#000000" points="739.9399,-603.5001 749.9399,-600 739.9398,-596.5001 739.9399,-603.5001"/>
+</g>
+<!-- proc~interp_2d_gradbfields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge47" class="edge">
+<title>proc~interp_2d_gradbfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M667.7409,-149.5105C674.1908,-152.0669 680.4308,-155.1886 686,-159 725.6144,-186.1105 754.9953,-235.6024 769.4602,-263.8159"/>
+<polygon fill="#000000" stroke="#000000" points="766.3597,-265.4415 773.9469,-272.8364 772.6272,-262.3241 766.3597,-265.4415"/>
+</g>
+<!-- proc~get_fio_electric_fields&#45;&gt;interface~fio_eval_field -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge48" class="edge">
+<title>proc~get_fio_electric_fields&#45;&gt;interface~fio_eval_field</title>
+<path fill="none" stroke="#000000" d="M666.1075,-684C687.5908,-684 711.808,-684 732.3294,-684"/>
+<polygon fill="#000000" stroke="#000000" points="732.3832,-687.5001 742.3832,-684 732.3831,-680.5001 732.3832,-687.5001"/>
+</g>
+<!-- proc~interp_2d_bfields&#45;&gt;ezspline_error -->
+<g id="proc~~gyro_distribution~~CallsGraph_edge49" class="edge">
+<title>proc~interp_2d_bfields&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M656.7654,-102.7199C667.1464,-105.8273 677.5493,-110.3676 686,-117 734.7827,-155.2864 762.0034,-226.4808 773.266,-262.6565"/>
+<polygon fill="#000000" stroke="#000000" points="770.0442,-264.1006 776.2552,-272.6839 776.7525,-262.1008 770.0442,-264.1006"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocgyro_distributionCallsGraph = svgPanZoom('#procgyro_distributionCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/gyro_distribution.html#src">gyro_distribution</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">gyro_distribution</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">spp</span><span class="p">)</span>
+
+    <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">iso_c_binding</span>
+    
+    <span class="c">!! @Note Subroutine that initializes the gyro-angle distribution </span>
+    <span class="c">!! of the particles. @endnote</span>
+    <span class="c">!! When evolving the particles in the 6-D phase space, in addition to </span>
+    <span class="c">!! the position (3 degrees of freedom), energy (one degree of freedom), </span>
+    <span class="c">!! pitch angle (one degree of freedom), we need to define the gyro-angle </span>
+    <span class="c">!! of the particle (one degree of freedom), which is given by the pitch </span>
+    <span class="c">!! angle and the direction of the local magnetic field. By default, this </span>
+    <span class="c">!! subroutine generates a uniform gyro-angle distribution.</span>
+    <span class="c">!! @note Notice that all the simulation variables are normalized</span>
+    <span class="c">!! here. @endnote</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">F</span>
+    <span class="c">!! An instance of the KORC derived type FIELDS. This structure </span>
+    <span class="c">!! has the information of the magnetic field.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">SPECIES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> 		<span class="kd">::</span> <span class="n">spp</span>
+    <span class="c">!! An instance of the derived type SPECIES containing all the</span>
+    <span class="c">!! parameters and </span>
+    <span class="c">!! simulation variables of the different species in the simulation.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span>	<span class="kd">::</span> <span class="n">b1</span>
+    <span class="c">!! Basis vector pointing along the local magnetic field, that is,</span>
+    <span class="c">!!  along \(\mathbf{b} = \mathbf{B}/B\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span>	<span class="kd">::</span> <span class="n">b2</span>
+    <span class="c">!! Basis vector perpendicular to b1</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span>	<span class="kd">::</span> <span class="n">b3</span>
+    <span class="c">!! Basis vector perpendicular to b1 and b2.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">Vo</span>
+    <span class="c">!! Initial particle speed.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">V1</span>
+    <span class="c">!!  Velocity component along b1.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">V2</span>
+    <span class="c">!! Velocity component along b2.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">V3</span>
+    <span class="c">!! Velocity component along b3.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">theta</span>
+    <span class="c">!! Uniform random number in the interval \([0,2\pi]\) </span>
+    <span class="c">!! representing the gyro-angle.</span>
+    <span class="kt">INTEGER</span> 				<span class="kd">::</span> <span class="n">jj</span>
+    <span class="c">!! Particle iterator.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span>    <span class="kd">::</span> <span class="n">hint</span>
+    
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">Vo</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V1</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V2</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">V3</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">b1</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">b2</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">b3</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">hint</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">))</span>
+
+    <span class="n">hint</span><span class="o">=</span><span class="nb">C_NULL_PTR</span>
+<span class="cp">#ifdef FIO</span>
+    <span class="n">hint</span><span class="o">=</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">hint</span>
+<span class="cp">#endif</span>
+    
+    <span class="k">ALLOCATE</span><span class="p">(</span> <span class="n">theta</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="c">! * * * * INITIALIZE VELOCITY * * * *</span>
+
+    <span class="k">call </span><span class="n">init_random_seed</span><span class="p">()</span>
+    <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">theta</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">spatial_distribution</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;TRACER&#39;</span><span class="p">)</span> <span class="n">theta</span><span class="o">=</span><span class="mf">2.0</span><span class="o">*</span><span class="n">C_PI</span>
+
+
+    <span class="n">Vo</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span> <span class="mf">1.0_rp</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="p">(</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">g</span><span class="p">(:)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">V1</span> <span class="o">=</span> <span class="n">Vo</span><span class="o">*</span><span class="nb">COS</span><span class="p">(</span><span class="n">C_PI</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">eta</span><span class="o">/</span><span class="mi">18</span><span class="mf">0.0_rp</span><span class="p">)</span>
+    <span class="n">V2</span> <span class="o">=</span> <span class="n">Vo</span><span class="o">*</span><span class="nb">SIN</span><span class="p">(</span><span class="n">C_PI</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">eta</span><span class="o">/</span><span class="mi">18</span><span class="mf">0.0_rp</span><span class="p">)</span><span class="o">*</span><span class="nb">COS</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">V3</span> <span class="o">=</span> <span class="n">Vo</span><span class="o">*</span><span class="nb">SIN</span><span class="p">(</span><span class="n">C_PI</span><span class="o">*</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">eta</span><span class="o">/</span><span class="mi">18</span><span class="mf">0.0_rp</span><span class="p">)</span><span class="o">*</span><span class="nb">SIN</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+    <span class="c">!write(6,*) &#39;V123&#39;,V1,V2,V3</span>
+    
+    <span class="c">!do jj=1_idef,spp%ppp</span>
+    <span class="c">!   write(6,*) &#39;MPI&#39;,params%mpi_params%rank,&#39;X&#39;, &amp;</span>
+    <span class="c">!        spp%vars%X(jj,:)*params%cpp%length</span>
+    <span class="c">!end do</span>
+    <span class="k">call </span><span class="n">unitVectors</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">X</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="p">,</span><span class="n">b3</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">cart</span><span class="p">,</span><span class="n">hint</span><span class="p">)</span>
+    <span class="c">!! Call to subroutine [[unitVectors]] in [[korc_fields]].</span>
+
+    <span class="c">!</span>
+    <span class="c">!write(6,*) &#39;X&#39;,spp%vars%X</span>
+    <span class="c">!write(6,*) &#39;b-hat&#39;,b1</span>
+    <span class="c">!write(6,*) &#39;b-1&#39;,b2</span>
+    <span class="c">!write(6,*) &#39;b-2&#39;,b3</span>
+
+    
+    <span class="k">do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">spp</span><span class="p">%</span><span class="n">ppp</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">flagCon</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">1_idef</span> <span class="p">)</span> <span class="k">then    </span>
+<span class="k">          </span><span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">V1</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b1</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">V2</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b2</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">V3</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b3</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+          <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">V1</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b1</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">V2</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b2</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">V3</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b3</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+          <span class="n">spp</span><span class="p">%</span><span class="n">vars</span><span class="p">%</span><span class="n">V</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">V1</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b1</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">V2</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b2</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">V3</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">*</span><span class="n">b3</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+       <span class="k">end if</span>
+<span class="k">    end do</span>
+    
+    <span class="c">!write(6,&#39;(&quot;Vx: &quot;,E17.10)&#39;) spp%vars%V(:,1)</span>
+    <span class="c">!write(6,&#39;(&quot;Vy: &quot;,E17.10)&#39;) spp%vars%V(:,2)</span>
+    <span class="c">!write(6,&#39;(&quot;Vz: &quot;,E17.10)&#39;) spp%vars%V(:,3)</span>
+    
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">Vo</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">V1</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">V2</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">V3</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">b3</span><span class="p">)</span>
+    <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">hint</span><span class="p">)</span>
+  <span class="k">end subroutine </span><span class="n">gyro_distribution</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

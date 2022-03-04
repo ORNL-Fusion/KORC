@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>check_if_in_fields_domain_p &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>check_if_in_fields_domain_p
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.2% of total for procedures.">60 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_interp.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_interp.f90.html'>korc_interp.f90</a></li>
+    
+     <li><a href='../module/korc_interp.html'>korc_interp</a></li>
+    
+  
+     <li class="active">check_if_in_fields_domain_p</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/check_if_in_fields_domain_p.html#src">check_if_in_fields_domain_p</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+private subroutine check_if_in_fields_domain_p(pchunk, F, Y_R, Y_PHI, Y_Z, flag)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subrotuine that checks if particles in the simulation are within
+ the spatial domain where interpolants and fields are known. </p></div>
+<p>External fields and interpolants can have different spatial domains where
+ they are defined. Therefore, it is necessary to
+ check if a given particle has left these spatial domains to
+ stop following it, otherwise this will cause an error in the simulation.</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pchunk~8"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~68"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_r~22"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_phi~20"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_z~21"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flag~3"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag that determines whether particles are followed in the
+ simulation (flag=1), or not (flag=0).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~check_if_in_fields_domain_p~~CalledByGraph Pages: 1 -->
+<svg id="proccheck_if_in_fields_domain_pCalledByGraph" width="641pt" height="472pt"
+ viewBox="0.00 0.00 641.00 471.50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph" class="graph" transform="scale(.6254 .6254) rotate(0) translate(4 749.9596)">
+<title>proc~~check_if_in_fields_domain_p~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-749.9596 1021,-749.9596 1021,4 -4,4"/>
+<!-- proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node1" class="node">
+<title>proc~check_if_in_fields_domain_p</title>
+<polygon fill="none" stroke="#000000" points="1017,-358.9596 870,-358.9596 870,-334.9596 1017,-334.9596 1017,-358.9596"/>
+<text text-anchor="middle" x="943.5" y="-344.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">check_if_in_fields_domain_p</text>
+</g>
+<!-- proc~calculate_3dbdbfields1_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node2" class="node">
+<title>proc~calculate_3dbdbfields1_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node2"><a xlink:href=".././proc/calculate_3dbdbfields1_p.html" xlink:title="calculate_3DBdBfields1_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="636,-745.9596 501,-745.9596 501,-721.9596 636,-721.9596 636,-745.9596"/>
+<text text-anchor="middle" x="568.5" y="-731.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_3DBdBfields1_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_3dbdbfields1_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge2" class="edge">
+<title>proc~calculate_3dbdbfields1_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M636.1395,-724.0891C696.1444,-711.8609 782.1035,-685.2759 834,-628.9596 905.7861,-551.0597 932.4275,-420.8551 940.4996,-369.1249"/>
+<polygon fill="#000000" stroke="#000000" points="943.9879,-369.461 941.9871,-359.0569 937.063,-368.4379 943.9879,-369.461"/>
+</g>
+<!-- proc~calculate_3dbdbfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node3" class="node">
+<title>proc~calculate_3dbdbfields_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node3"><a xlink:href=".././proc/calculate_3dbdbfields_p.html" xlink:title="calculate_3DBdBfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="633,-703.9596 504,-703.9596 504,-679.9596 633,-679.9596 633,-703.9596"/>
+<text text-anchor="middle" x="568.5" y="-689.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_3DBdBfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_3dbdbfields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge1" class="edge">
+<title>proc~calculate_3dbdbfields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M625.2761,-679.9442C684.3708,-664.7629 776.2037,-633.2756 834,-574.9596 894.5396,-513.8755 926.5378,-412.8085 938.2321,-368.6882"/>
+<polygon fill="#000000" stroke="#000000" points="941.6253,-369.5462 940.7153,-358.9905 934.844,-367.8098 941.6253,-369.5462"/>
+</g>
+<!-- proc~calculate_gcfieldswe_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node4" class="node">
+<title>proc~calculate_gcfieldswe_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node4"><a xlink:href=".././proc/calculate_gcfieldswe_p.html" xlink:title="calculate_GCfieldswE_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="828.5,-463.9596 702.5,-463.9596 702.5,-439.9596 828.5,-439.9596 828.5,-463.9596"/>
+<text text-anchor="middle" x="765.5" y="-449.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfieldswE_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_gcfieldswe_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge3" class="edge">
+<title>proc~calculate_gcfieldswe_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M812.8095,-439.8926C820.0791,-437.349 827.3662,-434.3789 834,-430.9596 868.0305,-413.419 902.2397,-385.0492 923.1463,-366.2026"/>
+<polygon fill="#000000" stroke="#000000" points="925.728,-368.5842 930.7373,-359.2483 920.9994,-363.4227 925.728,-368.5842"/>
+</g>
+<!-- proc~calculate_gcfields_p_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node5" class="node">
+<title>proc~calculate_gcfields_p_fs</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node5"><a xlink:href=".././proc/calculate_gcfields_p_fs.html" xlink:title="calculate_GCfields_p_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="831,-505.9596 700,-505.9596 700,-481.9596 831,-481.9596 831,-505.9596"/>
+<text text-anchor="middle" x="765.5" y="-491.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfields_p_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_gcfields_p_fs&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge4" class="edge">
+<title>proc~calculate_gcfields_p_fs&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M816.3383,-481.9226C822.5308,-479.4444 828.577,-476.4848 834,-472.9596 877.0066,-445.0031 912.8868,-395.4755 930.9375,-367.5674"/>
+<polygon fill="#000000" stroke="#000000" points="933.9725,-369.3164 936.36,-358.9941 928.0565,-365.5746 933.9725,-369.3164"/>
+</g>
+<!-- proc~interp_fofields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node6" class="node">
+<title>proc~interp_fofields_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node6"><a xlink:href=".././proc/interp_fofields_p.html" xlink:title="interp_FOfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="813,-211.9596 718,-211.9596 718,-187.9596 813,-187.9596 813,-211.9596"/>
+<text text-anchor="middle" x="765.5" y="-197.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fofields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge5" class="edge">
+<title>proc~interp_fofields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M813.1123,-210.7526C820.4192,-213.4673 827.6384,-216.8242 834,-220.9596 877.0066,-248.916 912.8868,-298.4437 930.9375,-326.3517"/>
+<polygon fill="#000000" stroke="#000000" points="928.0565,-328.3445 936.36,-334.925 933.9725,-324.6027 928.0565,-328.3445"/>
+</g>
+<!-- proc~interp_fofields1_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node7" class="node">
+<title>proc~interp_fofields1_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node7"><a xlink:href=".././proc/interp_fofields1_p.html" xlink:title="interp_FOfields1_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="816,-169.9596 715,-169.9596 715,-145.9596 816,-145.9596 816,-169.9596"/>
+<text text-anchor="middle" x="765.5" y="-155.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields1_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fofields1_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge6" class="edge">
+<title>proc~interp_fofields1_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M816.1189,-169.0046C822.4836,-171.6497 828.6338,-174.9197 834,-178.9596 885.896,-218.0292 920.3113,-289.3901 935.1597,-325.2183"/>
+<polygon fill="#000000" stroke="#000000" points="932.0043,-326.7526 938.9829,-334.7244 938.4987,-324.1406 932.0043,-326.7526"/>
+</g>
+<!-- proc~interp_fofields_aorsa_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node8" class="node">
+<title>proc~interp_fofields_aorsa_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node8"><a xlink:href=".././proc/interp_fofields_aorsa_p.html" xlink:title="interp_FOfields_aorsa_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="829,-127.9596 702,-127.9596 702,-103.9596 829,-103.9596 829,-127.9596"/>
+<text text-anchor="middle" x="765.5" y="-113.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_aorsa_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fofields_aorsa_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge7" class="edge">
+<title>proc~interp_fofields_aorsa_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M819.9681,-128.1112C825.0074,-130.5426 829.7923,-133.4597 834,-136.9596 895.3586,-187.9956 926.6217,-282.3664 938.1525,-325.0174"/>
+<polygon fill="#000000" stroke="#000000" points="934.8219,-326.1171 940.722,-334.9171 941.5974,-324.3585 934.8219,-326.1171"/>
+</g>
+<!-- proc~interp_fields_3d_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node9" class="node">
+<title>proc~interp_fields_3d_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node9"><a xlink:href=".././proc/interp_fields_3d_p.html" xlink:title="interp_fields_3D_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="815.5,-421.9596 715.5,-421.9596 715.5,-397.9596 815.5,-397.9596 815.5,-421.9596"/>
+<text text-anchor="middle" x="765.5" y="-407.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_fields_3D_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields_3d_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge8" class="edge">
+<title>proc~interp_fields_3d_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M806.5796,-397.869C815.6486,-395.06 825.18,-391.999 834,-388.9596 857.4315,-380.8849 883.3364,-370.9935 904.0652,-362.8385"/>
+<polygon fill="#000000" stroke="#000000" points="905.4825,-366.0419 913.4939,-359.1088 902.9076,-359.5327 905.4825,-366.0419"/>
+</g>
+<!-- proc~calculate_gcfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node10" class="node">
+<title>proc~calculate_gcfields_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node10"><a xlink:href=".././proc/calculate_gcfields_p.html" xlink:title="calculate_GCfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="821.5,-565.9596 709.5,-565.9596 709.5,-541.9596 821.5,-541.9596 821.5,-565.9596"/>
+<text text-anchor="middle" x="765.5" y="-551.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_gcfields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge9" class="edge">
+<title>proc~calculate_gcfields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M793.507,-541.8298C806.7718,-535.1809 822.244,-526.03 834,-514.9596 880.8297,-470.8611 917.1002,-402.9075 933.6602,-368.5028"/>
+<polygon fill="#000000" stroke="#000000" points="936.8768,-369.8875 937.9793,-359.3502 930.5463,-366.9002 936.8768,-369.8875"/>
+</g>
+<!-- proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node11" class="node">
+<title>proc~calculate_gcfields_2x1t_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node11"><a xlink:href=".././proc/calculate_gcfields_2x1t_p.html" xlink:title="calculate_GCfields_2x1t_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="834,-295.9596 697,-295.9596 697,-271.9596 834,-271.9596 834,-295.9596"/>
+<text text-anchor="middle" x="765.5" y="-281.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_GCfields_2x1t_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_gcfields_2x1t_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge10" class="edge">
+<title>proc~calculate_gcfields_2x1t_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M806.5796,-296.0502C815.6486,-298.8592 825.18,-301.9201 834,-304.9596 857.4315,-313.0343 883.3364,-322.9256 904.0652,-331.0806"/>
+<polygon fill="#000000" stroke="#000000" points="902.9076,-334.3865 913.4939,-334.8103 905.4825,-327.8772 902.9076,-334.3865"/>
+</g>
+<!-- proc~interp_fo3dfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node12" class="node">
+<title>proc~interp_fo3dfields_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node12"><a xlink:href=".././proc/interp_fo3dfields_p.html" xlink:title="interp_FO3Dfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="820,-253.9596 711,-253.9596 711,-229.9596 820,-229.9596 820,-253.9596"/>
+<text text-anchor="middle" x="765.5" y="-239.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FO3Dfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fo3dfields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge11" class="edge">
+<title>proc~interp_fo3dfields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M812.8095,-254.0266C820.0791,-256.5702 827.3662,-259.5402 834,-262.9596 868.0305,-280.5002 902.2397,-308.87 923.1463,-327.7166"/>
+<polygon fill="#000000" stroke="#000000" points="920.9994,-330.4964 930.7373,-334.6708 925.728,-325.335 920.9994,-330.4964"/>
+</g>
+<!-- proc~calculate_2dbdbfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node13" class="node">
+<title>proc~calculate_2dbdbfields_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node13"><a xlink:href=".././proc/calculate_2dbdbfields_p.html" xlink:title="calculate_2DBdBfields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="830,-379.9596 701,-379.9596 701,-355.9596 830,-355.9596 830,-379.9596"/>
+<text text-anchor="middle" x="765.5" y="-365.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">calculate_2DBdBfields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~calculate_2dbdbfields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge12" class="edge">
+<title>proc~calculate_2dbdbfields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M830.0138,-360.3484C839.7143,-359.2039 849.8358,-358.0098 859.866,-356.8265"/>
+<polygon fill="#000000" stroke="#000000" points="860.3258,-360.2966 869.8468,-355.649 859.5056,-353.3448 860.3258,-360.2966"/>
+</g>
+<!-- proc~interp_fofields_mars_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node14" class="node">
+<title>proc~interp_fofields_mars_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node14"><a xlink:href=".././proc/interp_fofields_mars_p.html" xlink:title="interp_FOfields_mars_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="828,-85.9596 703,-85.9596 703,-61.9596 828,-61.9596 828,-85.9596"/>
+<text text-anchor="middle" x="765.5" y="-71.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_FOfields_mars_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fofields_mars_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge13" class="edge">
+<title>proc~interp_fofields_mars_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M820.5678,-85.9802C825.4301,-88.4371 830.0114,-91.396 834,-94.9596 904.9534,-158.3522 931.8148,-275.9434 940.2188,-324.7911"/>
+<polygon fill="#000000" stroke="#000000" points="936.802,-325.5865 941.8588,-334.8966 943.7116,-324.4651 936.802,-325.5865"/>
+</g>
+<!-- proc~interp_fields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node15" class="node">
+<title>proc~interp_fields_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node15"><a xlink:href=".././proc/interp_fields_p.html" xlink:title="interp_fields_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="806,-337.9596 725,-337.9596 725,-313.9596 806,-313.9596 806,-337.9596"/>
+<text text-anchor="middle" x="765.5" y="-323.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">interp_fields_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge14" class="edge">
+<title>proc~interp_fields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M806.3368,-330.7774C822.2584,-332.6558 841.1229,-334.8814 859.6855,-337.0713"/>
+<polygon fill="#000000" stroke="#000000" points="859.3046,-340.5506 869.6458,-338.2464 860.1248,-333.5988 859.3046,-340.5506"/>
+</g>
+<!-- proc~advance_gcinterp_psiwe_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node16" class="node">
+<title>proc~advance_gcinterp_psiwe_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node16"><a xlink:href=".././proc/advance_gcinterp_psiwe_vars.html" xlink:title="advance_GCinterp_psiwE_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="648.5,-505.9596 488.5,-505.9596 488.5,-481.9596 648.5,-481.9596 648.5,-505.9596"/>
+<text text-anchor="middle" x="568.5" y="-491.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psiwE_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psiwe_vars&#45;&gt;proc~calculate_gcfieldswe_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge18" class="edge">
+<title>proc~advance_gcinterp_psiwe_vars&#45;&gt;proc~calculate_gcfieldswe_p</title>
+<path fill="none" stroke="#000000" d="M624.9523,-481.924C648.1359,-476.9813 675.1454,-471.223 699.2563,-466.0826"/>
+<polygon fill="#000000" stroke="#000000" points="699.9891,-469.5051 709.0395,-463.9968 698.5294,-462.659 699.9891,-469.5051"/>
+</g>
+<!-- proc~adv_fointerp_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node17" class="node">
+<title>proc~adv_fointerp_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node17"><a xlink:href=".././proc/adv_fointerp_top.html" xlink:title="adv_FOinterp_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="617,-179.9596 520,-179.9596 520,-155.9596 617,-155.9596 617,-179.9596"/>
+<text text-anchor="middle" x="568.5" y="-165.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fointerp_top&#45;&gt;proc~interp_fofields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge23" class="edge">
+<title>proc~adv_fointerp_top&#45;&gt;proc~interp_fofields_p</title>
+<path fill="none" stroke="#000000" d="M617.1966,-175.8697C644.6139,-180.3232 679.0173,-185.9116 707.7843,-190.5844"/>
+<polygon fill="#000000" stroke="#000000" points="707.2719,-194.047 717.7038,-192.1957 708.3943,-187.1376 707.2719,-194.047"/>
+</g>
+<!-- proc~adv_fointerp_top&#45;&gt;proc~interp_fofields1_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge25" class="edge">
+<title>proc~adv_fointerp_top&#45;&gt;proc~interp_fofields1_p</title>
+<path fill="none" stroke="#000000" d="M617.1966,-165.4877C643.6824,-164.1432 676.6876,-162.4678 704.8331,-161.0391"/>
+<polygon fill="#000000" stroke="#000000" points="705.1518,-164.5275 714.9615,-160.525 704.7969,-157.5365 705.1518,-164.5275"/>
+</g>
+<!-- proc~adv_fointerp_top&#45;&gt;proc~interp_fo3dfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge41" class="edge">
+<title>proc~adv_fointerp_top&#45;&gt;proc~interp_fo3dfields_p</title>
+<path fill="none" stroke="#000000" d="M617.283,-178.0616C631.7671,-182.0089 647.3895,-187.2373 661,-193.9596 678.9321,-202.8162 679.173,-211.8932 697,-220.9596 700.8043,-222.8943 704.8194,-224.6877 708.9204,-226.3429"/>
+<polygon fill="#000000" stroke="#000000" points="707.9942,-229.7331 718.5867,-229.9555 710.4448,-223.1761 707.9942,-229.7331"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node18" class="node">
+<title>proc~adv_gcinterp_psi_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node18"><a xlink:href=".././proc/adv_gcinterp_psi_top.html" xlink:title="adv_GCinterp_psi_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-509.9596 103,-509.9596 103,-485.9596 220,-485.9596 220,-509.9596"/>
+<text text-anchor="middle" x="161.5" y="-495.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~calculate_gcfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge32" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~calculate_gcfields_p</title>
+<path fill="none" stroke="#000000" d="M218.7625,-509.9698C223.8809,-512.4287 228.7322,-515.391 233,-518.9596 260.4464,-541.9094 238.5662,-572.1504 269,-590.9596 304.7497,-613.0541 572.7332,-580.2239 699.4619,-563.1698"/>
+<polygon fill="#000000" stroke="#000000" points="699.9989,-566.6292 709.4396,-561.8204 699.0607,-559.6923 699.9989,-566.6292"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node21" class="node">
+<title>proc~include_coulombcollisions_gc_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node21"><a xlink:href=".././proc/include_coulombcollisions_gc_p.html" xlink:title="include_CoulombCollisions_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="654.5,-421.9596 482.5,-421.9596 482.5,-397.9596 654.5,-397.9596 654.5,-421.9596"/>
+<text text-anchor="middle" x="568.5" y="-407.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge56" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M203.4501,-485.9221C223.2506,-480.4258 247.2563,-474.0278 269,-468.9596 343.8026,-451.5239 429.9017,-434.92 490.5312,-423.7944"/>
+<polygon fill="#000000" stroke="#000000" points="491.2061,-427.2291 500.4138,-421.988 489.9474,-420.3432 491.2061,-427.2291"/>
+</g>
+<!-- proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node36" class="node">
+<title>proc~advance_fpinterp_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node36"><a xlink:href=".././proc/advance_fpinterp_vars.html" xlink:title="advance_FPinterp_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="416,-421.9596 293,-421.9596 293,-397.9596 416,-397.9596 416,-421.9596"/>
+<text text-anchor="middle" x="354.5" y="-407.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPinterp_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge71" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M214.9172,-485.9556C221.254,-483.4773 227.4378,-480.5088 233,-476.9596 253.4426,-463.9154 248.6199,-449.1011 269,-435.9596 275.1854,-431.9711 282.0144,-428.568 289.0359,-425.6703"/>
+<polygon fill="#000000" stroke="#000000" points="290.5695,-428.8324 298.6877,-422.0246 288.096,-422.2839 290.5695,-428.8324"/>
+</g>
+<!-- proc~adv_fointerp_mars_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node19" class="node">
+<title>proc~adv_fointerp_mars_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node19"><a xlink:href=".././proc/adv_fointerp_mars_top.html" xlink:title="adv_FOinterp_mars_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="631.5,-57.9596 505.5,-57.9596 505.5,-33.9596 631.5,-33.9596 631.5,-57.9596"/>
+<text text-anchor="middle" x="568.5" y="-43.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_mars_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fointerp_mars_top&#45;&gt;proc~interp_fofields_mars_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge47" class="edge">
+<title>proc~adv_fointerp_mars_top&#45;&gt;proc~interp_fofields_mars_p</title>
+<path fill="none" stroke="#000000" d="M631.6449,-54.9345C651.0928,-57.6986 672.6607,-60.7641 692.7023,-63.6127"/>
+<polygon fill="#000000" stroke="#000000" points="692.3191,-67.0933 702.7121,-65.0354 693.3041,-60.163 692.3191,-67.0933"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node20" class="node">
+<title>proc~adv_gcinterp_psi2x1t_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node20"><a xlink:href=".././proc/adv_gcinterp_psi2x1t_top.html" xlink:title="adv_GCinterp_psi2x1t_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-215.9596 93,-215.9596 93,-191.9596 230,-191.9596 230,-215.9596"/>
+<text text-anchor="middle" x="161.5" y="-201.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi2x1t_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge38" class="edge">
+<title>proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~calculate_gcfields_2x1t_p</title>
+<path fill="none" stroke="#000000" d="M230.4058,-203.9691C327.7252,-205.4038 510.3756,-213.3374 661,-249.9596 677.5297,-253.9785 680.8631,-257.576 697,-262.9596 702.8849,-264.9229 709.0768,-266.9183 715.2327,-268.8587"/>
+<polygon fill="#000000" stroke="#000000" points="714.2387,-272.2149 724.8273,-271.8503 716.3224,-265.5322 714.2387,-272.2149"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge72" class="edge">
+<title>proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M221.7827,-216.085C225.9201,-218.5317 229.735,-221.459 233,-224.9596 283.8998,-279.5306 216.89,-335.543 269,-388.9596 273.171,-393.2351 278.0609,-396.6947 283.353,-399.4878"/>
+<polygon fill="#000000" stroke="#000000" points="282.0231,-402.7267 292.5831,-403.5855 284.8635,-396.3289 282.0231,-402.7267"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfieldswe_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge19" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfieldswe_p</title>
+<path fill="none" stroke="#000000" d="M624.9523,-421.9951C648.1359,-426.9378 675.1454,-432.6961 699.2563,-437.8365"/>
+<polygon fill="#000000" stroke="#000000" points="698.5294,-441.2602 709.0395,-439.9223 699.9891,-434.414 698.5294,-441.2602"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge21" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p_fs</title>
+<path fill="none" stroke="#000000" d="M641.9316,-421.961C648.6083,-424.4223 655.0774,-427.3875 661,-430.9596 682.0529,-443.6569 676.4328,-459.4898 697,-472.9596 699.6209,-474.676 702.3892,-476.2581 705.2505,-477.7154"/>
+<polygon fill="#000000" stroke="#000000" points="704.0847,-481.0293 714.6387,-481.9578 706.9672,-474.6504 704.0847,-481.0293"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_3d_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge31" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_3d_p</title>
+<path fill="none" stroke="#000000" d="M654.6205,-409.9596C671.6066,-409.9596 689.0918,-409.9596 705.0121,-409.9596"/>
+<polygon fill="#000000" stroke="#000000" points="705.227,-413.4597 715.227,-409.9596 705.227,-406.4597 705.227,-413.4597"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge33" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_p</title>
+<path fill="none" stroke="#000000" d="M647.2803,-422.0846C652.1887,-424.5508 656.8247,-427.4813 661,-430.9596 692.2075,-456.9571 669.942,-484.667 697,-514.9596 704.9675,-523.8796 715.4788,-531.2546 725.8683,-537.0999"/>
+<polygon fill="#000000" stroke="#000000" points="724.4193,-540.2922 734.9,-541.8433 727.6741,-534.0949 724.4193,-540.2922"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge40" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_gcfields_2x1t_p</title>
+<path fill="none" stroke="#000000" d="M580.0952,-397.7701C601.3305,-376.1131 648.7357,-330.7828 697,-304.9596 700.5387,-303.0662 704.2736,-301.3165 708.0989,-299.7044"/>
+<polygon fill="#000000" stroke="#000000" points="709.6704,-302.8493 717.7339,-295.9768 707.1446,-296.3208 709.6704,-302.8493"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_2dbdbfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge45" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~calculate_2dbdbfields_p</title>
+<path fill="none" stroke="#000000" d="M624.9523,-397.924C648.1359,-392.9813 675.1454,-387.223 699.2563,-382.0826"/>
+<polygon fill="#000000" stroke="#000000" points="699.9891,-385.5051 709.0395,-379.9968 698.5294,-378.659 699.9891,-385.5051"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge50" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M590.304,-397.9443C615.4885,-384.3809 658.4159,-362.2211 697,-346.9596 702.8448,-344.6477 709.0511,-342.4303 715.2485,-340.3602"/>
+<polygon fill="#000000" stroke="#000000" points="716.4855,-343.6388 724.9266,-337.2359 714.335,-336.9773 716.4855,-343.6388"/>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node22" class="node">
+<title>proc~adv_gcinterp_psiwe_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node22"><a xlink:href=".././proc/adv_gcinterp_psiwe_top.html" xlink:title="adv_GCinterp_psiwE_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="420.5,-661.9596 288.5,-661.9596 288.5,-637.9596 420.5,-637.9596 420.5,-661.9596"/>
+<text text-anchor="middle" x="354.5" y="-647.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psiwE_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top&#45;&gt;proc~calculate_gcfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge36" class="edge">
+<title>proc~adv_gcinterp_psiwe_top&#45;&gt;proc~calculate_gcfields_p</title>
+<path fill="none" stroke="#000000" d="M420.7072,-657.1768C484.3395,-661.6256 582.1908,-661.849 661,-632.9596 695.3453,-620.3695 727.7836,-592.4154 747.1538,-573.3729"/>
+<polygon fill="#000000" stroke="#000000" points="749.8346,-575.6401 754.3868,-566.073 744.8621,-570.7132 749.8346,-575.6401"/>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge66" class="edge">
+<title>proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M381.7368,-637.9054C400.9272,-628.0136 425.6659,-612.1818 440,-590.9596 480.7971,-530.5577 424.5095,-482.5495 476,-430.9596 477.0906,-429.8668 478.2254,-428.826 479.3997,-427.8347"/>
+<polygon fill="#000000" stroke="#000000" points="481.5274,-430.6168 487.6729,-421.9865 477.4868,-424.9007 481.5274,-430.6168"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node23" class="node">
+<title>proc~advance_gcinterp_3dbdb1_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node23"><a xlink:href=".././proc/advance_gcinterp_3dbdb1_vars.html" xlink:title="advance_GCinterp_3DBdB1_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="440,-745.9596 269,-745.9596 269,-721.9596 440,-721.9596 440,-745.9596"/>
+<text text-anchor="middle" x="354.5" y="-731.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB1_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~calculate_3dbdbfields1_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge15" class="edge">
+<title>proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~calculate_3dbdbfields1_p</title>
+<path fill="none" stroke="#000000" d="M440.0011,-733.9596C456.7765,-733.9596 474.2874,-733.9596 490.791,-733.9596"/>
+<polygon fill="#000000" stroke="#000000" points="490.9211,-737.4597 500.921,-733.9596 490.921,-730.4597 490.9211,-737.4597"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge59" class="edge">
+<title>proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M429.6154,-721.7573C433.436,-719.2894 436.9473,-716.3812 440,-712.9596 524.1143,-618.6769 391.0591,-524.4982 476,-430.9596 476.7749,-430.1062 477.5767,-429.2838 478.4031,-428.4913"/>
+<polygon fill="#000000" stroke="#000000" points="480.7722,-431.0803 486.454,-422.1379 476.4357,-425.5853 480.7722,-431.0803"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node24" class="node">
+<title>proc~include_coulombcollisionsla_gc_p</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node24"><a xlink:href=".././proc/include_coulombcollisionsla_gc_p.html" xlink:title="include_CoulombCollisionsLA_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="661,-463.9596 476,-463.9596 476,-439.9596 661,-439.9596 661,-463.9596"/>
+<text text-anchor="middle" x="568.5" y="-449.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisionsLA_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfieldswe_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge17" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfieldswe_p</title>
+<path fill="none" stroke="#000000" d="M661.2315,-451.9596C671.7101,-451.9596 682.276,-451.9596 692.4528,-451.9596"/>
+<polygon fill="#000000" stroke="#000000" points="692.4823,-455.4597 702.4823,-451.9596 692.4822,-448.4597 692.4823,-455.4597"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfields_p_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge20" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfields_p_fs</title>
+<path fill="none" stroke="#000000" d="M624.9523,-463.9951C648.1359,-468.9378 675.1454,-474.6961 699.2563,-479.8365"/>
+<polygon fill="#000000" stroke="#000000" points="698.5294,-483.2602 709.0395,-481.9223 699.9891,-476.414 698.5294,-483.2602"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~interp_fields_3d_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge30" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~interp_fields_3d_p</title>
+<path fill="none" stroke="#000000" d="M624.9523,-439.924C650.1461,-434.5528 679.8578,-428.2183 705.4581,-422.7604"/>
+<polygon fill="#000000" stroke="#000000" points="706.365,-426.1458 715.4154,-420.6375 704.9054,-419.2996 706.365,-426.1458"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge34" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfields_p</title>
+<path fill="none" stroke="#000000" d="M641.9316,-463.961C648.6083,-466.4223 655.0774,-469.3875 661,-472.9596 682.0529,-485.6569 678.0366,-499.3124 697,-514.9596 707.0606,-523.2608 719.1252,-530.7868 730.3069,-536.9641"/>
+<polygon fill="#000000" stroke="#000000" points="728.9571,-540.2107 739.4285,-541.8233 732.2482,-534.0326 728.9571,-540.2107"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge37" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_gcfields_2x1t_p</title>
+<path fill="none" stroke="#000000" d="M648.6669,-439.9407C653.1261,-437.4357 657.2922,-434.4686 661,-430.9596 703.3005,-390.9262 656.2142,-346.535 697,-304.9596 698.0888,-303.8496 699.2347,-302.798 700.4293,-301.8017"/>
+<polygon fill="#000000" stroke="#000000" points="702.6493,-304.5241 708.936,-295.9961 698.7033,-298.7423 702.6493,-304.5241"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_2dbdbfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge43" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~calculate_2dbdbfields_p</title>
+<path fill="none" stroke="#000000" d="M641.9316,-439.9581C648.6083,-437.4968 655.0774,-434.5316 661,-430.9596 682.0529,-418.2623 676.4328,-402.4293 697,-388.9596 699.6209,-387.2431 702.3892,-385.6611 705.2505,-384.2037"/>
+<polygon fill="#000000" stroke="#000000" points="706.9672,-387.2688 714.6387,-379.9613 704.0847,-380.8898 706.9672,-387.2688"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge49" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M647.2803,-439.8345C652.1887,-437.3683 656.8247,-434.4379 661,-430.9596 692.2075,-404.962 666.7787,-374.0972 697,-346.9596 702.2233,-342.2693 708.4727,-338.6264 715.0421,-335.797"/>
+<polygon fill="#000000" stroke="#000000" points="716.6344,-338.9408 724.8136,-332.2065 714.22,-332.3703 716.6344,-338.9408"/>
+</g>
+<!-- proc~adv_fointerp_aorsa_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node25" class="node">
+<title>proc~adv_fointerp_aorsa_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node25"><a xlink:href=".././proc/adv_fointerp_aorsa_top.html" xlink:title="adv_FOinterp_aorsa_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="226,-97.9596 97,-97.9596 97,-73.9596 226,-73.9596 226,-97.9596"/>
+<text text-anchor="middle" x="161.5" y="-83.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_aorsa_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fointerp_aorsa_top&#45;&gt;proc~interp_fofields_aorsa_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge27" class="edge">
+<title>proc~adv_fointerp_aorsa_top&#45;&gt;proc~interp_fofields_aorsa_p</title>
+<path fill="none" stroke="#000000" d="M226.2348,-87.0405C321.5438,-88.9452 505.1919,-93.8084 661,-104.9596 670.8941,-105.6677 681.2996,-106.5713 691.553,-107.5553"/>
+<polygon fill="#000000" stroke="#000000" points="691.435,-111.0606 701.731,-108.5619 692.1241,-104.0946 691.435,-111.0606"/>
+</g>
+<!-- proc~fo_init -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node26" class="node">
+<title>proc~fo_init</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node26"><a xlink:href=".././proc/fo_init.html" xlink:title="FO_init">
+<polygon fill="#d9534f" stroke="#d9534f" points="595.5,-137.9596 541.5,-137.9596 541.5,-113.9596 595.5,-113.9596 595.5,-137.9596"/>
+<text text-anchor="middle" x="568.5" y="-123.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">FO_init</text>
+</a>
+</g>
+</g>
+<!-- proc~fo_init&#45;&gt;proc~interp_fofields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge24" class="edge">
+<title>proc~fo_init&#45;&gt;proc~interp_fofields_p</title>
+<path fill="none" stroke="#000000" d="M595.636,-128.4934C614.7549,-131.1248 640.497,-136.4169 661,-146.9596 680.0379,-156.7488 678.3385,-168.4706 697,-178.9596 700.6596,-181.0165 704.5448,-182.8961 708.5326,-184.6093"/>
+<polygon fill="#000000" stroke="#000000" points="707.3781,-187.916 717.9656,-188.3101 709.9347,-181.3996 707.3781,-187.916"/>
+</g>
+<!-- proc~fo_init&#45;&gt;proc~interp_fofields1_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge26" class="edge">
+<title>proc~fo_init&#45;&gt;proc~interp_fofields1_p</title>
+<path fill="none" stroke="#000000" d="M595.892,-130.409C623.9169,-134.9613 668.3857,-142.1846 704.7594,-148.0931"/>
+<polygon fill="#000000" stroke="#000000" points="704.3518,-151.5727 714.7836,-149.7214 705.4742,-144.6632 704.3518,-151.5727"/>
+</g>
+<!-- proc~fo_init&#45;&gt;proc~interp_fofields_aorsa_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge28" class="edge">
+<title>proc~fo_init&#45;&gt;proc~interp_fofields_aorsa_p</title>
+<path fill="none" stroke="#000000" d="M595.892,-124.5691C620.6114,-123.3143 658.1244,-121.4101 691.5911,-119.7113"/>
+<polygon fill="#000000" stroke="#000000" points="692.0191,-123.1942 701.8288,-119.1916 691.6642,-116.2032 692.0191,-123.1942"/>
+</g>
+<!-- proc~fo_init&#45;&gt;proc~interp_fo3dfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge42" class="edge">
+<title>proc~fo_init&#45;&gt;proc~interp_fo3dfields_p</title>
+<path fill="none" stroke="#000000" d="M595.8737,-126.0678C615.8507,-127.4869 642.5512,-132.3245 661,-146.9596 689.6534,-169.6898 669.2098,-197.1818 697,-220.9596 698.5595,-222.2939 700.2025,-223.5434 701.9117,-224.7136"/>
+<polygon fill="#000000" stroke="#000000" points="700.5217,-227.9527 710.9308,-229.9278 704.0253,-221.8926 700.5217,-227.9527"/>
+</g>
+<!-- proc~fo_init&#45;&gt;proc~interp_fofields_mars_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge46" class="edge">
+<title>proc~fo_init&#45;&gt;proc~interp_fofields_mars_p</title>
+<path fill="none" stroke="#000000" d="M595.892,-118.7292C625.2983,-110.9671 672.8096,-98.4261 710.0763,-88.5892"/>
+<polygon fill="#000000" stroke="#000000" points="711.0258,-91.9585 719.8013,-86.0222 709.2392,-85.1903 711.0258,-91.9585"/>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node27" class="node">
+<title>proc~advance_gcinterp_psi_vars_fs</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node27"><a xlink:href=".././proc/advance_gcinterp_psi_vars_fs.html" xlink:title="advance_GCinterp_psi_vars_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="436.5,-581.9596 272.5,-581.9596 272.5,-557.9596 436.5,-557.9596 436.5,-581.9596"/>
+<text text-anchor="middle" x="354.5" y="-567.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi_vars_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~calculate_gcfields_p_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge22" class="edge">
+<title>proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~calculate_gcfields_p_fs</title>
+<path fill="none" stroke="#000000" d="M423.9612,-557.9187C486.133,-547.0405 579.742,-530.4132 661,-514.9596 672.5751,-512.7582 684.8567,-510.3528 696.7774,-507.9811"/>
+<polygon fill="#000000" stroke="#000000" points="697.5622,-511.3935 706.6825,-506.0019 696.1905,-504.5292 697.5622,-511.3935"/>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge61" class="edge">
+<title>proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M419.0537,-557.9343C426.7851,-554.4036 434.0368,-549.8445 440,-543.9596 477.5165,-506.9354 437.1759,-466.6101 476,-430.9596 477.2926,-429.7727 478.6378,-428.6482 480.0291,-427.583"/>
+<polygon fill="#000000" stroke="#000000" points="481.976,-430.4919 488.4546,-422.1087 478.1622,-424.6221 481.976,-430.4919"/>
+</g>
+<!-- proc~advance_gcinterp_psi_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node28" class="node">
+<title>proc~advance_gcinterp_psi_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node28"><a xlink:href=".././proc/advance_gcinterp_psi_vars.html" xlink:title="advance_GCinterp_psi_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="641,-623.9596 496,-623.9596 496,-599.9596 641,-599.9596 641,-623.9596"/>
+<text text-anchor="middle" x="568.5" y="-609.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi_vars&#45;&gt;proc~calculate_gcfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge35" class="edge">
+<title>proc~advance_gcinterp_psi_vars&#45;&gt;proc~calculate_gcfields_p</title>
+<path fill="none" stroke="#000000" d="M612.3195,-599.8667C627.7308,-595.5544 645.1543,-590.612 661,-585.9596 679.2623,-580.5976 699.2579,-574.5244 716.8243,-569.1206"/>
+<polygon fill="#000000" stroke="#000000" points="718.3308,-572.3187 726.8549,-566.0267 716.2675,-565.6297 718.3308,-572.3187"/>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node29" class="node">
+<title>proc~advance_gcinterp_b2d_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node29"><a xlink:href=".././proc/advance_gcinterp_b2d_vars.html" xlink:title="advance_GCinterp_B2D_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="430.5,-295.9596 278.5,-295.9596 278.5,-271.9596 430.5,-271.9596 430.5,-295.9596"/>
+<text text-anchor="middle" x="354.5" y="-281.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B2D_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge48" class="edge">
+<title>proc~advance_gcinterp_b2d_vars&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M430.8427,-291.761C513.7057,-300.2288 643.685,-313.5113 714.8116,-320.7797"/>
+<polygon fill="#000000" stroke="#000000" points="714.562,-324.2724 724.866,-321.8072 715.2736,-317.3086 714.562,-324.2724"/>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge62" class="edge">
+<title>proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M417.7544,-296.0939C425.4362,-298.5504 433.0253,-301.4781 440,-304.9596 484.2335,-327.0388 526.9044,-366.6972 550.2323,-390.4466"/>
+<polygon fill="#000000" stroke="#000000" points="547.9114,-393.0816 557.3763,-397.8425 552.9462,-388.2183 547.9114,-393.0816"/>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node30" class="node">
+<title>proc~advance_gcinterp_psi2x1t_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node30"><a xlink:href=".././proc/advance_gcinterp_psi2x1t_vars.html" xlink:title="advance_GCinterp_psi2x1t_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-253.9596 272,-253.9596 272,-229.9596 437,-229.9596 437,-253.9596"/>
+<text text-anchor="middle" x="354.5" y="-239.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi2x1t_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~calculate_gcfields_2x1t_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge39" class="edge">
+<title>proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~calculate_gcfields_2x1t_p</title>
+<path fill="none" stroke="#000000" d="M437.1149,-250.2233C498.8083,-256.4167 585.189,-265.1357 661,-272.9596 669.3473,-273.821 678.0688,-274.728 686.7605,-275.6365"/>
+<polygon fill="#000000" stroke="#000000" points="686.6159,-279.1404 696.926,-276.7009 687.3449,-272.1784 686.6159,-279.1404"/>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge63" class="edge">
+<title>proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M421.4707,-254.1191C427.9586,-256.5489 434.2547,-259.4635 440,-262.9596 493.2384,-295.3552 536.2846,-357.0376 556.3193,-389.2324"/>
+<polygon fill="#000000" stroke="#000000" points="553.376,-391.1284 561.5674,-397.8479 559.3542,-387.4868 553.376,-391.1284"/>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node31" class="node">
+<title>proc~advance_gcinterp_2dbdb_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node31"><a xlink:href=".././proc/advance_gcinterp_2dbdb_vars.html" xlink:title="advance_GCinterp_2DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-337.9596 272,-337.9596 272,-313.9596 437,-313.9596 437,-337.9596"/>
+<text text-anchor="middle" x="354.5" y="-323.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_2DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~calculate_2dbdbfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge44" class="edge">
+<title>proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~calculate_2dbdbfields_p</title>
+<path fill="none" stroke="#000000" d="M437.1776,-334.4084C511.2425,-341.977 618.9286,-352.9815 690.534,-360.2988"/>
+<polygon fill="#000000" stroke="#000000" points="690.5246,-363.816 700.8287,-361.3508 691.2363,-356.8523 690.5246,-363.816"/>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge64" class="edge">
+<title>proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M411.1244,-338.0436C420.864,-340.6384 430.8052,-343.6205 440,-346.9596 474.943,-359.6491 512.9362,-379.0266 538.4773,-392.9393"/>
+<polygon fill="#000000" stroke="#000000" points="536.8471,-396.0372 547.295,-397.7953 540.2239,-389.9055 536.8471,-396.0372"/>
+</g>
+<!-- proc~advance_gcinterp_b_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node32" class="node">
+<title>proc~advance_gcinterp_b_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node32"><a xlink:href=".././proc/advance_gcinterp_b_vars.html" xlink:title="advance_GCinterp_B_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="424,-379.9596 285,-379.9596 285,-355.9596 424,-355.9596 424,-379.9596"/>
+<text text-anchor="middle" x="354.5" y="-365.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b_vars&#45;&gt;proc~interp_fields_3d_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge29" class="edge">
+<title>proc~advance_gcinterp_b_vars&#45;&gt;proc~interp_fields_3d_p</title>
+<path fill="none" stroke="#000000" d="M424.1446,-370.1529C486.437,-372.727 580.1197,-378.1088 661,-388.9596 675.5293,-390.9088 691.0732,-393.6626 705.6125,-396.5363"/>
+<polygon fill="#000000" stroke="#000000" points="704.9971,-399.9827 715.4928,-398.5366 706.3862,-393.1219 704.9971,-399.9827"/>
+</g>
+<!-- proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge60" class="edge">
+<title>proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M415.8238,-379.9951C441.2319,-384.9817 470.8702,-390.7986 497.2375,-395.9735"/>
+<polygon fill="#000000" stroke="#000000" points="496.6803,-399.4308 507.1672,-397.9223 498.0285,-392.5619 496.6803,-399.4308"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node33" class="node">
+<title>proc~advance_gcinterp_3dbdb_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node33"><a xlink:href=".././proc/advance_gcinterp_3dbdb_vars.html" xlink:title="advance_GCinterp_3DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-703.9596 272,-703.9596 272,-679.9596 437,-679.9596 437,-703.9596"/>
+<text text-anchor="middle" x="354.5" y="-689.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~calculate_3dbdbfields_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge16" class="edge">
+<title>proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~calculate_3dbdbfields_p</title>
+<path fill="none" stroke="#000000" d="M437.238,-691.9596C455.8949,-691.9596 475.5906,-691.9596 493.8907,-691.9596"/>
+<polygon fill="#000000" stroke="#000000" points="493.8984,-695.4597 503.8984,-691.9596 493.8983,-688.4597 493.8984,-695.4597"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge58" class="edge">
+<title>proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M429.1429,-679.922C433.1336,-677.4215 436.807,-674.4605 440,-670.9596 512.6825,-591.2662 402.6189,-510.0101 476,-430.9596 476.7842,-430.1147 477.5948,-429.3004 478.4295,-428.5155"/>
+<polygon fill="#000000" stroke="#000000" points="480.7884,-431.1153 486.5426,-422.2192 476.4966,-425.5852 480.7884,-431.1153"/>
+</g>
+<!-- proc~advance_fpeqn_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node34" class="node">
+<title>proc~advance_fpeqn_vars</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node34"><a xlink:href=".././proc/advance_fpeqn_vars.html" xlink:title="advance_FPeqn_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="412,-501.9596 297,-501.9596 297,-477.9596 412,-477.9596 412,-501.9596"/>
+<text text-anchor="middle" x="354.5" y="-487.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPeqn_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge55" class="edge">
+<title>proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M407.578,-477.8496C418.6776,-474.2233 430.0284,-469.6501 440,-463.9596 458.8514,-453.2015 456.7738,-441.0324 476,-430.9596 479.7744,-428.9821 483.7307,-427.1899 487.7938,-425.5656"/>
+<polygon fill="#000000" stroke="#000000" points="489.2233,-428.7703 497.4322,-422.0723 486.838,-422.1892 489.2233,-428.7703"/>
+</g>
+<!-- program~main -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node35" class="node">
+<title>program~main</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node35"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-320.9596 0,-320.9596 0,-296.9596 54,-296.9596 54,-320.9596"/>
+<text text-anchor="middle" x="27" y="-306.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fointerp_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge51" class="edge">
+<title>program~main&#45;&gt;proc~adv_fointerp_top</title>
+<path fill="none" stroke="#000000" d="M28.882,-296.9031C33.676,-270.7784 49.0053,-209.1921 90,-182.9596 157.8881,-139.5179 397.5503,-153.2896 509.75,-162.5187"/>
+<polygon fill="#000000" stroke="#000000" points="509.6189,-166.0199 519.8764,-163.3679 510.2039,-159.0444 509.6189,-166.0199"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge52" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top</title>
+<path fill="none" stroke="#000000" d="M27.9357,-321.1295C30.9647,-351.9078 43.2261,-433.4856 90,-476.9596 91.303,-478.1706 92.6723,-479.3122 94.097,-480.3882"/>
+<polygon fill="#000000" stroke="#000000" points="92.4602,-483.4936 102.787,-485.8619 96.191,-477.5707 92.4602,-483.4936"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fointerp_mars_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge53" class="edge">
+<title>program~main&#45;&gt;proc~adv_fointerp_mars_top</title>
+<path fill="none" stroke="#000000" d="M28.2649,-296.7185C33.2071,-251.504 52.8012,-94.9733 90,-64.9596 215.7939,36.537 426.4953,-5.1689 520.5892,-31.1083"/>
+<polygon fill="#000000" stroke="#000000" points="519.8261,-34.5295 530.4006,-33.8732 521.7249,-27.7919 519.8261,-34.5295"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge54" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top</title>
+<path fill="none" stroke="#000000" d="M32.9156,-296.7012C42.398,-278.3484 62.7398,-243.8699 90,-224.9596 92.3918,-223.3004 94.9155,-221.7706 97.5294,-220.3604"/>
+<polygon fill="#000000" stroke="#000000" points="99.1667,-223.4576 106.7037,-216.0115 96.1683,-217.1323 99.1667,-223.4576"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge67" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psiwe_top</title>
+<path fill="none" stroke="#000000" d="M28.524,-321.2525C34.3866,-366.7085 56.8273,-524.5329 90,-560.9596 138.1072,-613.7857 218.5601,-635.284 278.1296,-644.0178"/>
+<polygon fill="#000000" stroke="#000000" points="277.8645,-647.5142 288.2481,-645.4091 278.8181,-640.5795 277.8645,-647.5142"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fointerp_aorsa_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge68" class="edge">
+<title>program~main&#45;&gt;proc~adv_fointerp_aorsa_top</title>
+<path fill="none" stroke="#000000" d="M29.4359,-296.7583C37.3604,-258.1534 63.4327,-139.5907 90,-111.9596 93.2285,-108.6018 96.9243,-105.6758 100.8974,-103.1262"/>
+<polygon fill="#000000" stroke="#000000" points="102.8989,-106.0195 109.9646,-98.1248 99.5179,-99.8901 102.8989,-106.0195"/>
+</g>
+<!-- program~main&#45;&gt;proc~fo_init -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge69" class="edge">
+<title>program~main&#45;&gt;proc~fo_init</title>
+<path fill="none" stroke="#000000" d="M27.6141,-296.7644C29.8885,-266.046 40.5251,-185.4171 90,-149.9596 160.1231,-99.7039 430.7926,-115.1356 530.9519,-122.798"/>
+<polygon fill="#000000" stroke="#000000" points="530.9605,-126.3093 541.2034,-123.6011 531.5073,-119.3307 530.9605,-126.3093"/>
+</g>
+<!-- proc~adv_gceqn_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node37" class="node">
+<title>proc~adv_gceqn_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node37"><a xlink:href=".././proc/adv_gceqn_top.html" xlink:title="adv_GCeqn_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="206,-551.9596 117,-551.9596 117,-527.9596 206,-527.9596 206,-551.9596"/>
+<text text-anchor="middle" x="161.5" y="-537.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCeqn_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gceqn_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge78" class="edge">
+<title>program~main&#45;&gt;proc~adv_gceqn_top</title>
+<path fill="none" stroke="#000000" d="M29.0974,-321.1737C36.2692,-361.5977 60.9828,-490.1097 90,-518.9596 94.9314,-523.8625 100.9439,-527.6323 107.3663,-530.5287"/>
+<polygon fill="#000000" stroke="#000000" points="106.3994,-533.9052 116.9907,-534.1776 108.8809,-527.3598 106.3994,-533.9052"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node38" class="node">
+<title>proc~adv_gcinterp_psi_top_fs</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node38"><a xlink:href=".././proc/adv_gcinterp_psi_top_fs.html" xlink:title="adv_GCinterp_psi_top_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="229.5,-425.9596 93.5,-425.9596 93.5,-401.9596 229.5,-401.9596 229.5,-425.9596"/>
+<text text-anchor="middle" x="161.5" y="-411.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top_FS</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge79" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs</title>
+<path fill="none" stroke="#000000" d="M32.9156,-321.2179C42.398,-339.5707 62.7398,-374.0492 90,-392.9596 92.3918,-394.6187 94.9155,-396.1485 97.5294,-397.5588"/>
+<polygon fill="#000000" stroke="#000000" points="96.1683,-400.7868 106.7037,-401.9076 99.1667,-394.4615 96.1683,-400.7868"/>
+</g>
+<!-- proc~adv_gcinterp_b_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node39" class="node">
+<title>proc~adv_gcinterp_b_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node39"><a xlink:href=".././proc/adv_gcinterp_b_top.html" xlink:title="adv_GCinterp_B_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="217,-383.9596 106,-383.9596 106,-359.9596 217,-359.9596 217,-383.9596"/>
+<text text-anchor="middle" x="161.5" y="-369.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge80" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b_top</title>
+<path fill="none" stroke="#000000" d="M42.2672,-321.0616C54.5645,-330.3209 72.6102,-342.8399 90,-350.9596 94.3154,-352.9745 98.8682,-354.8442 103.5008,-356.5688"/>
+<polygon fill="#000000" stroke="#000000" points="102.4769,-359.9183 113.0717,-359.9048 104.7809,-353.3084 102.4769,-359.9183"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node40" class="node">
+<title>proc~adv_gcinterp_3dbdb_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node40"><a xlink:href=".././proc/adv_gcinterp_3dbdb_top.html" xlink:title="adv_GCinterp_3DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-341.9596 93,-341.9596 93,-317.9596 230,-317.9596 230,-341.9596"/>
+<text text-anchor="middle" x="161.5" y="-327.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge81" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-313.2092C62.7691,-314.5443 72.6777,-316.0914 82.9484,-317.695"/>
+<polygon fill="#000000" stroke="#000000" points="82.4538,-321.1601 92.874,-319.2447 83.5337,-314.2439 82.4538,-321.1601"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node41" class="node">
+<title>proc~adv_gcinterp_3dbdb1_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node41"><a xlink:href=".././proc/adv_gcinterp_3dbdb1_top.html" xlink:title="adv_GCinterp_3DBdB1_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="233,-299.9596 90,-299.9596 90,-275.9596 233,-275.9596 233,-299.9596"/>
+<text text-anchor="middle" x="161.5" y="-285.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB1_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge82" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-304.7099C61.8845,-303.5129 70.6423,-302.1455 79.7738,-300.7198"/>
+<polygon fill="#000000" stroke="#000000" points="80.4549,-304.1559 89.7953,-299.1551 79.375,-297.2397 80.4549,-304.1559"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node42" class="node">
+<title>proc~adv_gcinterp_2dbdb_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node42"><a xlink:href=".././proc/adv_gcinterp_2dbdb_top.html" xlink:title="adv_GCinterp_2DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-257.9596 93,-257.9596 93,-233.9596 230,-233.9596 230,-257.9596"/>
+<text text-anchor="middle" x="161.5" y="-243.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_2DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge83" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top</title>
+<path fill="none" stroke="#000000" d="M42.2672,-296.8575C54.5645,-287.5982 72.6102,-275.0793 90,-266.9596 94.3154,-264.9446 98.8682,-263.0749 103.5008,-261.3504"/>
+<polygon fill="#000000" stroke="#000000" points="104.7809,-264.6108 113.0717,-258.0143 102.4769,-258.0008 104.7809,-264.6108"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_node43" class="node">
+<title>proc~adv_gcinterp_b2d_top</title>
+<g id="a_proc~~check_if_in_fields_domain_p~~CalledByGraph_node43"><a xlink:href=".././proc/adv_gcinterp_b2d_top.html" xlink:title="adv_GCinterp_B2D_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="223.5,-467.9596 99.5,-467.9596 99.5,-443.9596 223.5,-443.9596 223.5,-467.9596"/>
+<text text-anchor="middle" x="161.5" y="-453.5596" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B2D_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b2d_top -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge84" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b2d_top</title>
+<path fill="none" stroke="#000000" d="M29.6067,-321.0277C35.6558,-346.0993 53.0385,-404.0534 90,-434.9596 91.7338,-436.4093 93.5639,-437.759 95.469,-439.0155"/>
+<polygon fill="#000000" stroke="#000000" points="93.8061,-442.0957 104.2375,-443.9493 97.2388,-435.9952 93.8061,-442.0957"/>
+</g>
+<!-- proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge57" class="edge">
+<title>proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M416.1106,-409.9596C433.5897,-409.9596 453.0525,-409.9596 472.0659,-409.9596"/>
+<polygon fill="#000000" stroke="#000000" points="472.2597,-413.4597 482.2597,-409.9596 472.2596,-406.4597 472.2597,-413.4597"/>
+</g>
+<!-- proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge65" class="edge">
+<title>proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M206.0338,-540.5842C275.0413,-540.6964 403.6549,-537.2289 440,-510.9596 471.5998,-488.12 445.8203,-455.6452 476,-430.9596 477.5774,-429.6693 479.2185,-428.4547 480.9133,-427.3115"/>
+<polygon fill="#000000" stroke="#000000" points="482.891,-430.2108 489.7904,-422.1703 479.3828,-424.1533 482.891,-430.2108"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge70" class="edge">
+<title>proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M229.5446,-412.5493C246.7817,-412.1921 265.3492,-411.8072 282.7628,-411.4463"/>
+<polygon fill="#000000" stroke="#000000" points="282.9382,-414.9436 292.8635,-411.237 282.7931,-407.9451 282.9382,-414.9436"/>
+</g>
+<!-- proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge73" class="edge">
+<title>proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M217.0647,-382.8998C237.7305,-386.9687 261.471,-391.643 283.3423,-395.9492"/>
+<polygon fill="#000000" stroke="#000000" points="282.7542,-399.4006 293.242,-397.8984 284.1065,-392.5324 282.7542,-399.4006"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge74" class="edge">
+<title>proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M214.4158,-342.0238C220.9038,-344.4976 227.2613,-347.4487 233,-350.9596 252.8451,-363.1007 248.8878,-377.2663 269,-388.9596 273.4287,-391.5344 278.1633,-393.795 283.0477,-395.7795"/>
+<polygon fill="#000000" stroke="#000000" points="281.9907,-399.1196 292.5846,-399.2655 284.394,-392.5451 281.9907,-399.1196"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge75" class="edge">
+<title>proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M219.27,-299.9655C224.2266,-302.4259 228.9035,-305.3897 233,-308.9596 262.3946,-334.5751 239.0387,-364.0093 269,-388.9596 273.3312,-392.5664 278.1886,-395.5698 283.3308,-398.0689"/>
+<polygon fill="#000000" stroke="#000000" points="282.2658,-401.4171 292.8421,-402.0439 284.9651,-394.9585 282.2658,-401.4171"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge76" class="edge">
+<title>proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M220.8319,-257.9602C225.2882,-260.4275 229.4299,-263.394 233,-266.9596 273.0006,-306.9096 228.1141,-349.9161 269,-388.9596 273.3198,-393.0847 278.3131,-396.4398 283.6735,-399.1638"/>
+<polygon fill="#000000" stroke="#000000" points="282.4186,-402.4341 292.9874,-403.1768 285.1886,-396.0054 282.4186,-402.4341"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~check_if_in_fields_domain_p~~CalledByGraph_edge77" class="edge">
+<title>proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M211.9564,-443.9337C237.1114,-437.9382 267.7187,-430.6432 294.1136,-424.3522"/>
+<polygon fill="#000000" stroke="#000000" points="295.0872,-427.7182 304.0033,-421.9951 293.4642,-420.909 295.0872,-427.7182"/>
+</g>
+</g>
+</svg>
+</div><script>var panproccheck_if_in_fields_domain_pCalledByGraph = svgPanZoom('#proccheck_if_in_fields_domain_pCalledByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/check_if_in_fields_domain_p.html#src">check_if_in_fields_domain_p</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">check_if_in_fields_domain_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span>
+    <span class="c">!! @note Subrotuine that checks if particles in the simulation are within</span>
+    <span class="c">!! the spatial domain where interpolants and fields are known. @endnote</span>
+    <span class="c">!! External fields and interpolants can have different spatial domains where</span>
+    <span class="c">!! they are defined. Therefore, it is necessary to</span>
+    <span class="c">!! check if a given particle has left these spatial domains to</span>
+    <span class="c">!! stop following it, otherwise this will cause an error in the simulation.</span>
+    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">F</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span>    
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">flag</span>
+    <span class="c">!! Flag that determines whether particles are followed in the</span>
+    <span class="c">!! simulation (flag=1), or not (flag=0).</span>
+    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">IR</span>
+    <span class="c">!! Variable used to localize the grid cell in the \((R,\phi,Z)\)</span>
+    <span class="c">!! or \((R,Z)\) grid containing the fields data that corresponds</span>
+    <span class="c">!! to the radial position of the particles.</span>
+    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">IPHI</span>
+    <span class="c">!! Variable used to localize the grid cell in the \((R,\phi,Z)\)</span>
+    <span class="c">!! or \((R,Z)\) grid containing the fields data that corresponds</span>
+    <span class="c">!! to the azimuthal position of the particles.</span>
+    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">IZ</span>
+    <span class="c">!! Variable used to localize the grid cell in the \((R,\phi,Z)\)</span>
+    <span class="c">!! or \((R,Z)\) grid containing the fields data that corresponds</span>
+    <span class="c">!! to the vertical position of the particles.</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>                                            <span class="kd">::</span> <span class="n">pp</span>
+    <span class="c">!! Particle iterator.</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>                                            <span class="kd">::</span> <span class="n">ss</span>
+    <span class="c">!! Species iterator.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Rwall</span>
+
+    
+<span class="c">!    write(output_unit_write,&#39;(&quot;YR:&quot;,E17.10)&#39;) Y_R</span>
+<span class="c">!    write(output_unit_write,&#39;(&quot;YPHI:&quot;,E17.10)&#39;) Y_PHI</span>
+<span class="c">!    write(output_unit_write,&#39;(&quot;YZ:&quot;,E17.10)&#39;) Y_Z</span>
+
+<span class="c">!    write(output_unit_write,&#39;(&quot;Ro:&quot;,E17.10)&#39;) fields_domain%Ro</span>
+<span class="c">!    write(output_unit_write,&#39;(&quot;Zo:&quot;,E17.10)&#39;) fields_domain%Zo</span>
+<span class="c">!    write(output_unit_write,&#39;(&quot;DR:&quot;,E17.10)&#39;) fields_domain%DR</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;DZ:&quot;,E17.10)&#39;) fields_domain%DZ</span>
+<span class="c">!    write(output_unit_write,&#39;(&quot;DT:&quot;,E17.10)&#39;) fields_domain%DT</span>
+
+
+    
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Dim2x1t</span><span class="p">)</span> <span class="k">then</span>
+          <span class="c">!$OMP SIMD</span>
+          <span class="c">!       !$OMP&amp;  aligned(IR,IPHI,IZ)</span>
+          <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+             <span class="n">IR</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_R</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">-</span> <span class="n">fields_domain</span><span class="p">%</span><span class="n">Ro</span> <span class="o">+</span> <span class="p">&amp;</span>
+                  <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span><span class="p">)</span><span class="o">/</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+
+             <span class="n">IZ</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_Z</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">+</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+                  <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span><span class="p">)</span><span class="o">/</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+
+<span class="c">!             write(output_unit_write,&#39;(&quot;IR: &quot;,I16)&#39;) IR</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;IPHI: &quot;,I16)&#39;) IPHI</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;IZ: &quot;,I16)&#39;) IZ</span>
+             
+             <span class="k">if</span> <span class="p">((</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(</span><span class="n">IR</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">IZ</span><span class="p">).</span><span class="n">NE</span><span class="p">.</span><span class="mi">1_is</span><span class="p">).</span><span class="nb">OR</span><span class="p">.</span> <span class="p">&amp;</span>
+                  <span class="p">((</span><span class="n">IR</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_2X1T</span><span class="p">%</span><span class="n">NR</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="n">IZ</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_2X1T</span><span class="p">%</span><span class="n">NZ</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">                if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Analytic_IWL</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;NONE&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                   </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+                <span class="k">else if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Analytic_IWL</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;D3D&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                   if</span> <span class="p">((</span><span class="n">IR</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="nb">floor</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="o">/</span><span class="mf">6._rp</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="n">IZ</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="nb">floor</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="o">/</span><span class="mf">5._rp</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="n">IZ</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="nb">floor</span><span class="p">(</span><span class="mf">4._rp</span><span class="o">*</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="o">/</span><span class="mf">5._rp</span><span class="p">)))</span> <span class="k">then</span>
+
+<span class="k">                      </span><span class="n">Rwall</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">circumradius</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">C_PI</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="p">)</span><span class="o">/</span> <span class="p">&amp;</span>
+                           <span class="p">(</span><span class="nb">cos</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">Y_PHI</span><span class="p">(</span><span class="n">pp</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">C_PI</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="p">))</span><span class="o">-</span><span class="n">C_PI</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="p">))</span>
+                      <span class="k">if</span> <span class="p">(</span><span class="n">Y_R</span><span class="p">(</span><span class="n">pp</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="n">Rwall</span><span class="p">)</span> <span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+
+                   <span class="k">else</span>
+<span class="k">                      </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+                   <span class="n">endif</span>
+                <span class="n">endif</span>
+
+                <span class="c">!write(output_unit_write,&#39;(&quot;YR:&quot;,E17.10)&#39;) Y_R(pp)</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;YPHI:&quot;,E17.10)&#39;) Y_PHI(pp)</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;YZ:&quot;,E17.10)&#39;) Y_Z(pp)</span>
+
+                <span class="c">!write(output_unit_write,&#39;(&quot;IR: &quot;,I16)&#39;) IR</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;IPHI: &quot;,I16)&#39;) IPHI</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;IZ: &quot;,I16)&#39;) IZ</span>
+
+                <span class="c">!call KORC_ABORT()</span>
+
+             <span class="k">end if</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;IPHI: &quot;,I16)&#39;) IPHI</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;flag: &quot;,I16)&#39;) flag(pp)</span>
+
+
+          <span class="k">end do</span>
+          <span class="c">!$OMP END SIMD</span>
+       <span class="k">else</span>
+          <span class="c">!$OMP SIMD</span>
+          <span class="c">!       !$OMP&amp;  aligned(IR,IPHI,IZ)</span>
+          <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+             <span class="n">IR</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_R</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">-</span> <span class="n">fields_domain</span><span class="p">%</span><span class="n">Ro</span> <span class="o">+</span> <span class="p">&amp;</span>
+                  <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span><span class="p">)</span><span class="o">/</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+             <span class="n">IPHI</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_PHI</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">+</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DPHI</span><span class="p">)</span><span class="o">/</span> <span class="p">&amp;</span>
+                  <span class="n">fields_domain</span><span class="p">%</span><span class="n">DPHI</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+             <span class="n">IZ</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_Z</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">+</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+                  <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span><span class="p">)</span><span class="o">/</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+
+             <span class="k">if</span> <span class="p">((</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(</span><span class="n">IR</span><span class="p">,</span><span class="n">IPHI</span><span class="p">,</span><span class="n">IZ</span><span class="p">).</span><span class="n">NE</span><span class="p">.</span><span class="mi">1_is</span><span class="p">).</span><span class="nb">OR</span><span class="p">.</span> <span class="p">&amp;</span>
+                  <span class="p">((</span><span class="n">IR</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_3d</span><span class="p">%</span><span class="n">NR</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="n">IZ</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_3d</span><span class="p">%</span><span class="n">NZ</span><span class="p">)))</span> <span class="k">then</span>
+<span class="k">                </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+
+                <span class="c">!write(output_unit_write,&#39;(&quot;YR:&quot;,E17.10)&#39;) Y_R</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;YPHI:&quot;,E17.10)&#39;) Y_PHI</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;YZ:&quot;,E17.10)&#39;) Y_Z</span>
+
+                <span class="c">!write(output_unit_write,&#39;(&quot;IR: &quot;,I16)&#39;) IR</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;IPHI: &quot;,I16)&#39;) IPHI</span>
+                <span class="c">!write(output_unit_write,&#39;(&quot;IZ: &quot;,I16)&#39;) IZ</span>
+
+                <span class="c">!call KORC_ABORT()</span>
+
+             <span class="k">end if</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;IPHI: &quot;,I16)&#39;) IPHI</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;flag: &quot;,I16)&#39;) flag(pp)</span>
+
+
+          <span class="k">end do</span>
+          <span class="c">!$OMP END SIMD</span>
+       <span class="k">end if</span>
+<span class="k">    else if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">))</span> <span class="k">then</span>
+       <span class="c">!$OMP SIMD</span>
+<span class="c">!       !$OMP&amp; aligned(IR,IZ)</span>
+       <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+          <span class="c">!write(output_unit_write,*) Y_R(pp),Y_Z(pp),fields_domain%Ro,fields_domain%DR,fields_domain%Zo,fields_domain%DZ</span>
+          
+          <span class="n">IR</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_R</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">-</span> <span class="n">fields_domain</span><span class="p">%</span><span class="n">Ro</span> <span class="o">+</span> <span class="p">&amp;</span>
+               <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span><span class="p">)</span><span class="o">/</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+          <span class="n">IZ</span> <span class="o">=</span> <span class="nb">INT</span><span class="p">(</span><span class="nb">FLOOR</span><span class="p">((</span><span class="n">Y_Z</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>  <span class="o">+</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+               <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span><span class="p">)</span><span class="o">/</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+
+<span class="c">!          write(output_unit_write,*) pp</span>
+
+<span class="c">!          write(output_unit_write,&#39;(&quot;Size of fields_domain R: &quot;,I16)&#39;) &amp;</span>
+<span class="c">!               size(fields_domain%FLAG2D,1)</span>
+<span class="c">!          write(output_unit_write,&#39;(&quot;Size of fields_domain Z: &quot;,I16)&#39;) &amp;</span>
+<span class="c">!               size(fields_domain%FLAG2D,2)   </span>
+          
+<span class="c">!          if ((IR.lt.0).or.(IZ.lt.0)) then</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;YR:&quot;,E17.10)&#39;) Y_R(pp)</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;YZ:&quot;,E17.10)&#39;) Y_Z(pp)</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;IR: &quot;,I16)&#39;) IR</span>
+<span class="c">!             write(output_unit_write,&#39;(&quot;IZ: &quot;,I16)&#39;) IZ</span>
+<span class="c">!          end if</span>
+
+<span class="cp">#if DBG_CHECK    </span>
+          <span class="k">if</span> <span class="p">((</span><span class="n">IR</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">IZ</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">IR</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="n">IZ</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">))</span> <span class="k">then</span>
+          
+             <span class="c">!write(6,&#39;(&quot;YR:&quot;,E17.10)&#39;) Y_R(pp)</span>
+             <span class="c">!write(6,&#39;(&quot;YZ:&quot;,E17.10)&#39;) Y_Z(pp)</span>
+             <span class="c">!write(6,&#39;(&quot;IR: &quot;,I16)&#39;) IR</span>
+             <span class="c">!write(6,&#39;(&quot;IZ: &quot;,I16)&#39;) IZ</span>
+             <span class="c">!write(6,*) &#39;NR&#39;,bfield_2d%NR</span>
+             <span class="c">!write(6,*) &#39;NZ&#39;,bfield_2d%NZ</span>
+             <span class="c">!write(6,*) &#39;FLAG&#39;,fields_domain%FLAG2D(IR,IZ)</span>
+             <span class="c">!call KORC_ABORT(23)</span>
+          <span class="k">end if</span>
+<span class="cp">#endif</span>
+          
+          <span class="k">if</span> <span class="p">((</span><span class="n">IR</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">IZ</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nb">or</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">(</span><span class="n">IR</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="n">IZ</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">).</span><span class="nb">or</span><span class="p">.</span> <span class="p">&amp;</span>
+               <span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(</span><span class="n">IR</span><span class="p">,</span><span class="n">IZ</span><span class="p">).</span><span class="n">NE</span><span class="p">.</span><span class="mi">1_is</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">             if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Analytic_IWL</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;NONE&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+             <span class="k">else if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Analytic_IWL</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;D3D&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                if</span> <span class="p">((</span><span class="n">IR</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="nb">floor</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="o">/</span><span class="mf">6._rp</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+                     <span class="p">(</span><span class="n">IZ</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="nb">floor</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="o">/</span><span class="mf">5._rp</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+                     <span class="p">(</span><span class="n">IZ</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="nb">floor</span><span class="p">(</span><span class="mf">4._rp</span><span class="o">*</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="o">/</span><span class="mf">5._rp</span><span class="p">)))</span> <span class="k">then</span>
+
+<span class="k">                   </span><span class="n">Rwall</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">circumradius</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">C_PI</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="p">)</span><span class="o">/</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="nb">cos</span><span class="p">((</span><span class="nb">mod</span><span class="p">(</span><span class="n">Y_PHI</span><span class="p">(</span><span class="n">pp</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">C_PI</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="p">))</span><span class="o">-</span><span class="n">C_PI</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="p">))</span>
+                   <span class="k">if</span> <span class="p">(</span><span class="n">Y_R</span><span class="p">(</span><span class="n">pp</span><span class="p">).</span><span class="n">lt</span><span class="p">.</span><span class="n">Rwall</span><span class="p">)</span> <span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+
+                <span class="k">else</span>
+<span class="k">                   </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+                <span class="n">endif</span>
+             <span class="n">endif</span>
+
+<span class="c">!             write(output_unit_write,&#39;(&quot;Shit&#39;&#39;s fucked.&quot;)&#39;)</span>
+          <span class="k">end if</span>
+<span class="k">       end do</span>      
+       <span class="c">!$OMP END SIMD</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;Shit&#39;&#39;s not fucked.&quot;)&#39;)</span>
+    <span class="k">end if</span>
+<span class="k">  end subroutine </span><span class="n">check_if_in_fields_domain_p</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>
