@@ -1,0 +1,58 @@
+#!/bin/bash
+
+
+__import() {
+
+  # list of CMake definition variables to import from existing environment
+  _deflist_uptake_outset CMAKE_BUILD_TYPE
+
+  # commit outstanding CMake def variables to the final roster
+  _deflist_accrue_vars
+}
+
+
+__build() {
+
+  # set default cmake build type: 'Release'
+  CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE:-Release}"
+
+  # set compiler flag hdf5 double precision
+  CMAKE_Fortran_FLAGS="-DHDF5_DOUBLE_PRESICION"
+
+  # commit outstanding CMake def variables to the final roster
+  _deflist_accrue_vars
+
+  # convert the CMake def final roster to CMake cmdline form
+  _deflist_render_cmdline
+
+  # output the final CMake cmdline definitions
+  _deflist_report_cmdline
+
+  mkdir -p ./build && cd $_
+  cmake $CMFKIT_CMDLINE_CMAKE_DEFINITIONS .. && make \
+    || return 1
+}
+
+
+__test() {
+
+  local readonly input_file="./input_file_regtest1.korc"
+  local readonly output_dir="OUT_TEST"
+  local lc
+
+  cd ./test/reg_tests
+  mkdir -p ${output_dir}
+
+  ../../build/build/bin/xkorc ${input_file} ${output_dir}/ \
+     > ${output_dir}/korc_regression_stdout.log \
+    2> ${output_dir}/korc_regression_stderr.log
+
+  read lc <<< $(
+    cat ${output_dir}/korc_regression_stderr.log | wc -l
+  )
+
+  [[ ${lc} -eq 0 ]] \
+    || _error "regression test failure: ${input_file}" \
+    || return 1
+}
+

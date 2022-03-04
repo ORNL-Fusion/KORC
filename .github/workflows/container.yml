@@ -1,0 +1,49 @@
+name: container
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+
+  job_one:
+    strategy:
+      matrix:
+        seed_image:
+          - 'rikorose/gcc-cmake:gcc-11'
+          - 'ubuntu:22.04'
+
+        build_type:
+          - Debug
+          - Release
+
+        scenario:
+          - basic
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+
+      - name: grab cmfkit
+        uses: actions/checkout@v2
+        with:
+          repository: ornl-fusion/cmfkit
+          path: ./.cmfkit_base
+
+      - name: yield readybake image
+        run: |
+          . ./.cmfkit_base/mod_readybake
+          _readybake_isolate_buildpath "${{ matrix.seed_image }}"
+          _readybake_yield_image
+
+#      - name: launch build
+#        env:
+#          CMFKIT_PLATFORM:  readybake
+#          CMFKIT_SCENARIO:              ${{ matrix.scenario }}
+#          CMFKIT_READYBAKE_IMAGE_SEED:  ${{ matrix.seed_image }}
+#
+#          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
+#
+#        run: |
+#          ./.cmfkit_base/launch build
+

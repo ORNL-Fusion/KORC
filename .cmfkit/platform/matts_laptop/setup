@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# CMake doesn't like being reconfigured completely. To avoid problems this
+# will delete the CMakeCache.txt file allowing this script to start
+# from a clean slate. Use the -f option on rm to silence any errors from
+# rm. This makes will cause rm to ignore the error to occur if
+# CMakeCache.txt doesn't exist.
+
+[[ -d ./build ]] && rm -f ./build/CMakeCache.txt
+[[ -d ./build ]] && rm -rf ./build/CMakeFiles
+
+CMAKE_C_COMPILER=/opt/local/bin/gcc-mp-8
+CMAKE_CXX_COMPILER=/opt/local/bin/g++-mp-8
+CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran-mp-8
+

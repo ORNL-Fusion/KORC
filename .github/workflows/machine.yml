@@ -1,0 +1,42 @@
+name: machine
+
+on: [ push, workflow_dispatch ]
+
+jobs:
+
+  job_one:
+    strategy:
+      matrix:
+        os_env:
+          - macos-latest
+          - ubuntu-latest
+
+        build_type:
+          - Release
+
+        scenario:
+          - egyro
+
+    runs-on: ${{ matrix.os_env }}
+
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+
+      - name: grab cmfkit
+        uses: actions/checkout@v2
+        with: 
+          repository: ornl-fusion/cmfkit
+          path: ./.cmfkit_base
+
+      - name: launch build & test
+        env:
+          CMFKIT_PLATFORM:   github-vm-${{ matrix.os_env }}
+          CMFKIT_SCENARIO:             ${{ matrix.scenario }}
+
+          CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
+
+        run: |
+          ./.cmfkit_base/launch build
+          ./.cmfkit_base/launch test
+
