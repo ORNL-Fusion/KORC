@@ -316,7 +316,9 @@ module korc_types
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y 
      !! Coordinates of the electrons' position in cylindrical or toroidal
      !! coordinates.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y0 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y0
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y1
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Yborn
      !! Placeholder coordinates of the electrons' position in cylindrical
      !! coordinates for GC orbit model.
      REAL(rp), DIMENSION(:), ALLOCATABLE 	:: V0 

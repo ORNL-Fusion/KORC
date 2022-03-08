@@ -2413,6 +2413,42 @@ CONTAINS
                         YY)
 
                    DEALLOCATE(YY)
+                CASE ('Yborn')
+                   dset = "Yborn"
+                   units = params%cpp%length
+
+                   YY=spp(ss)%vars%Yborn
+                   YY(:,1)=units*YY(:,1)
+                   YY(:,3)=units*YY(:,3)
+
+                   call rsave_2d_array_to_hdf5(subgroup_id, dset, &
+                        YY)
+
+                   DEALLOCATE(YY)
+                CASE ('Y0')
+                   dset = "Y0"
+                   units = params%cpp%length
+
+                   YY=spp(ss)%vars%Y0
+                   YY(:,1)=units*YY(:,1)
+                   YY(:,3)=units*YY(:,3)
+
+                   call rsave_2d_array_to_hdf5(subgroup_id, dset, &
+                        YY)
+
+                   DEALLOCATE(YY)
+                CASE ('Y1')
+                   dset = "Y1"
+                   units = params%cpp%length
+
+                   YY=spp(ss)%vars%Y1
+                   YY(:,1)=units*YY(:,1)
+                   YY(:,3)=units*YY(:,3)
+
+                   call rsave_2d_array_to_hdf5(subgroup_id, dset, &
+                        YY)
+
+                   DEALLOCATE(YY)
 
                 CASE('V')
                    dset = "V"

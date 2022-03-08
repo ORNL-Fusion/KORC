@@ -1330,7 +1330,7 @@ subroutine MH_psi(params,spp,F)
      write(output_unit_write,*) '*** START SAMPLING ***'
   end if
   
-  nsamples = spp%ppp*params%mpi_params%nmpi
+  nsamples = spp%pinit*params%mpi_params%nmpi
 
   params%GC_coords=.TRUE.
   PSIp_lim=F%PSIp_lim
@@ -1683,12 +1683,12 @@ subroutine MH_psi(params,spp,F)
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
-  CALL MPI_SCATTER(X_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Y_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(X_samples,spp%pinit,MPI_REAL8, &
+       spp%vars%X(:,1),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%pinit,MPI_REAL8, &
+       spp%vars%X(:,2),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%pinit,MPI_REAL8, &
+       spp%vars%X(:,3),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
 
   
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)

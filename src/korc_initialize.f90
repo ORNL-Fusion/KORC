@@ -516,6 +516,7 @@ CONTAINS
        ALLOCATE( spp(ii)%vars%V(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%Rgc(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%Y(spp(ii)%ppp,3) )
+       ALLOCATE( spp(ii)%vars%Yborn(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%E(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%B(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%PSI_P(spp(ii)%ppp) )
@@ -543,6 +544,7 @@ CONTAINS
        spp(ii)%vars%V = 0.0_rp
        spp(ii)%vars%Rgc = 0.0_rp
        spp(ii)%vars%Y = 0.0_rp
+       spp(ii)%vars%Yborn = 0.0_rp
        spp(ii)%vars%E = 0.0_rp
        spp(ii)%vars%B = 0.0_rp
        spp(ii)%vars%PSI_P = 0.0_rp
@@ -569,6 +571,7 @@ CONTAINS
 
        if (params%orbit_model(1:2).eq.'GC') then
           ALLOCATE( spp(ii)%vars%Y0(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%Y1(spp(ii)%ppp,3) )
           ALLOCATE( spp(ii)%vars%V0(spp(ii)%ppp) )
           ALLOCATE( spp(ii)%vars%k1(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k2(spp(ii)%ppp,4) )
@@ -596,6 +599,7 @@ CONTAINS
           ALLOCATE( spp(ii)%vars%RHS(spp(ii)%ppp,5) )
 
           spp(ii)%vars%Y0 = 0.0_rp
+          spp(ii)%vars%Y1 = 0.0_rp
           spp(ii)%vars%V0 = 0.0_rp
           spp(ii)%vars%k1 = 0.0_rp
           spp(ii)%vars%k2 = 0.0_rp
