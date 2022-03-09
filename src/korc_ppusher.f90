@@ -7028,6 +7028,11 @@ contains
     end do
     !$OMP END SIMD
 
+    !write(6,*) 'Y',Y_R*params%cpp%length,Y_PHI,Y_Z*params%cpp%length
+    !write(6,*) 'Y0',Y_R0*params%cpp%length,Y_PHI0,Y_Z0*params%cpp%length
+    !write(6,*) 'Y1',Y_R1*params%cpp%length,Y_PHI1,Y_Z1*params%cpp%length
+    !write(6,*) 'flagCon0,flagCon',flagCon0,flagCon
+
     call calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)

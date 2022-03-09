@@ -179,17 +179,19 @@ ST.time = zeros(1,ST.num_snapshots);
 for ll=1:length(list)
     for ss=1:ST.params.simulation.num_species
         tnp = double(ST.params.species.ppp(ss)*ST.params.simulation.nmpi);
+
         
-        if (strcmp(list{ll},'X') || strcmp(list{ll},'Y') || strcmp(list{ll},'V') || strcmp(list{ll},'B') || strcmp(list{ll},'gradB') || strcmp(list{ll},'curlb') || strcmp(list{ll},'E'))
+        if (strcmp(list{ll},'X') || strcmp(list{ll},'Y') || strcmp(list{ll},'V') || ...
+                strcmp(list{ll},'B') || strcmp(list{ll},'gradB') || ...
+                strcmp(list{ll},'curlb') || strcmp(list{ll},'E') || ...
+                strcmp(list{ll},'Y0') || strcmp(list{ll},'Y1') || ...
+                strcmp(list{ll},'Yborn'))
             data.(['sp' num2str(ss)]).(list{ll}) = zeros(tnp,3,ST.num_snapshots);
         elseif (strcmp(list{ll},'RHS'))
             data.(['sp' num2str(ss)]).(list{ll}) = zeros(tnp,5,ST.num_snapshots);
         elseif (strcmp(list{ll},'E_SC') || strcmp(list{ll},'J_SC'))
             tnp_SC=size(ST.params.fields.PSIP_1D,1);
             data.(['sp' num2str(ss)]).(list{ll}) = zeros(tnp_SC,ST.num_snapshots);
-        elseif (strcmp(list{ll},'nimp') )           
-            data.(['sp' num2str(ss)]).(list{ll}) = ...
-                zeros(tnp,ST.params.collisions_ms.num_impurity_species,ST.num_snapshots);
         else
             data.(['sp' num2str(ss)]).(list{ll}) = zeros(tnp,ST.num_snapshots);            
         end
@@ -215,7 +217,9 @@ for impi=1:ST.params.simulation.nmpi
 
                     if (strcmp(list{ll},'X') || strcmp(list{ll},'Y') ||strcmp(list{ll},'V') || ...
                             strcmp(list{ll},'B') || strcmp(list{ll},'gradB') || ...
-                            strcmp(list{ll},'curlb') ||strcmp(list{ll},'E'))
+                            strcmp(list{ll},'curlb') ||strcmp(list{ll},'E')|| ...
+                            strcmp(list{ll},'Y0') || strcmp(list{ll},'Y1') || ...
+                            strcmp(list{ll},'Yborn'))
                         
                         test=h5read(filename, dataset);
                         
@@ -229,9 +233,6 @@ for impi=1:ST.params.simulation.nmpi
                         test=h5read(filename, dataset);
                         
                         data.(['sp' num2str(ss)]).(list{ll})(:,ii) = test;
-                    elseif (strcmp(list{ll},'nimp'))
-                        data.(['sp' num2str(ss)]).(list{ll})(indi:indf,:,ii) = ...
-                            h5read(filename, dataset);
                     else
                         data.(['sp' num2str(ss)]).(list{ll})(indi:indf,ii) = ...
                             h5read(filename, dataset);
