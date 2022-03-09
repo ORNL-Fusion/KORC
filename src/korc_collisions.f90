@@ -3588,6 +3588,13 @@ contains
           spp%vars%Y(spp%pRE,2)=Y_PHI(cc)
           !$OMP ATOMIC WRITE
           spp%vars%Y(spp%pRE,3)=Y_Z(cc)
+          !$OMP ATOMIC WRITE
+          spp%vars%Yborn(spp%pRE,1)=Y_R(cc)
+          !$OMP ATOMIC WRITE
+          spp%vars%Yborn(spp%pRE,2)=Y_PHI(cc)
+          !$OMP ATOMIC WRITE
+          spp%vars%Yborn(spp%pRE,3)=Y_Z(cc)
+          
           
           !! Write changes to primary RE degrees of freedom to temporary
           !! arrays for passing back out to particle derived type

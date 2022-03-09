@@ -2405,7 +2405,53 @@ CONTAINS
                    dset = "Y"
                    units = params%cpp%length
 
+                   !write(6,*) 'Y',spp(ss)%vars%Y(:,1)*units, &
+                   !     spp(ss)%vars%Y(:,2),spp(ss)%vars%Y(:,3)*units
+                   
                    YY=spp(ss)%vars%Y
+                   YY(:,1)=units*YY(:,1)
+                   YY(:,3)=units*YY(:,3)
+
+                   call rsave_2d_array_to_hdf5(subgroup_id, dset, &
+                        YY)
+
+                   !write(6,*) 'YY',YY
+                   
+                   DEALLOCATE(YY)
+                CASE ('Yborn')
+                   dset = "Yborn"
+                   units = params%cpp%length
+
+                   YY=spp(ss)%vars%Yborn
+                   YY(:,1)=units*YY(:,1)
+                   YY(:,3)=units*YY(:,3)
+
+                   call rsave_2d_array_to_hdf5(subgroup_id, dset, &
+                        YY)
+
+                   DEALLOCATE(YY)
+                CASE ('Y0')
+                   dset = "Y0"
+                   units = params%cpp%length
+
+                   !write(6,*) 'Y0',spp(ss)%vars%Y0(:,1)*units, &
+                   !     spp(ss)%vars%Y0(:,2),spp(ss)%vars%Y0(:,3)*units
+                   
+                   YY=spp(ss)%vars%Y0
+                   YY(:,1)=units*YY(:,1)
+                   YY(:,3)=units*YY(:,3)
+
+                   call rsave_2d_array_to_hdf5(subgroup_id, dset, &
+                        YY)
+
+                   !write(6,*) 'YY',YY
+
+                   DEALLOCATE(YY)
+                CASE ('Y1')
+                   dset = "Y1"
+                   units = params%cpp%length
+
+                   YY=spp(ss)%vars%Y1
                    YY(:,1)=units*YY(:,1)
                    YY(:,3)=units*YY(:,3)
 
