@@ -2922,7 +2922,7 @@ contains
        !write(6,*) 'ntot',ntot*params%cpp%density
 
        call large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
-            pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon)
+            pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon,B_R,B_PHI,B_Z)
 
 #if DBG_CHECK    
        do cc=1_idef,achunk  
@@ -3252,13 +3252,14 @@ contains
 #endif
 
   subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
-       pm,xi,ne,netot,Te,Bmag,E_PHI,me,flagCol,flagCon)
+       pm,xi,ne,netot,Te,Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z)
     TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(KORC_PARAMS), INTENT(IN) 			:: params
     TYPE(FIELDS), INTENT(IN)                                   :: F
     INTEGER, INTENT(IN) :: achunk
     REAL(rp), INTENT(INOUT), DIMENSION(achunk)  :: pm,xi
     REAL(rp), INTENT(IN), DIMENSION(achunk)  :: Y_R,Y_PHI,Y_Z
+    REAL(rp), INTENT(IN), DIMENSION(achunk)  :: B_R,B_PHI,B_Z
     REAL(rp), INTENT(IN), DIMENSION(achunk)  :: ne,netot,Te
     REAL(rp), INTENT(IN), DIMENSION(achunk)  :: Bmag,E_PHI
     INTEGER(is), INTENT(IN), DIMENSION(achunk)  :: flagCol,flagCon
@@ -3594,6 +3595,12 @@ contains
           spp%vars%Yborn(spp%pRE,2)=Y_PHI(cc)
           !$OMP ATOMIC WRITE
           spp%vars%Yborn(spp%pRE,3)=Y_Z(cc)
+          !$OMP ATOMIC WRITE
+          spp%vars%B(spp%pRE,1)=B_R(cc)
+          !$OMP ATOMIC WRITE
+          spp%vars%B(spp%pRE,2)=B_PHI(cc)
+          !$OMP ATOMIC WRITE
+          spp%vars%B(spp%pRE,3)=B_Z(cc)
           
           
           !! Write changes to primary RE degrees of freedom to temporary
