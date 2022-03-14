@@ -3307,6 +3307,8 @@ contains
     
     do cc=1_idef,achunk
 
+       if ((flagCol(cc).lt.1).or.(flagCon(cc).lt.1)) cycle
+       
        E_C=Gammacee(vmin,netot(cc),Te(cc))
 
        !write(6,*) 'E',E_PHI*params%cpp%Eo
@@ -3480,7 +3482,7 @@ contains
        
        !write(6,*) 'intpitchprob',intpitchprob
        
-       prob1(cc)=prob1(cc)*dt*2*C_PI*REAL(flagCol(cc))*REAL(flagCon(cc))
+       prob1(cc)=prob1(cc)*dt*2*C_PI
 
        if (ISNAN(prob1(cc))) then
           write(6,*) 'NaN probability from secondary RE source'

@@ -2710,6 +2710,11 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
            call korc_abort(19)
         end if
 #endif
+
+        !! Setting dummy values for all particles
+        spp(ss)%vars%X(:,1)=spp(ss)%Ro
+        spp(ss)%vars%X(:,2)=0._rp
+        spp(ss)%vars%X(:,3)=spp(ss)%Zo
         
         call MH_psi(params,spp(ss),F)
      CASE('FIO_therm')
