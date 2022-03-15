@@ -2002,7 +2002,7 @@ CONTAINS
                         (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                       Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                           (cos((mod(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                           (cos((modulo(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                       if (Y(pp,1).lt.Rwall) flag(pp) = 0_is
 
                    else
@@ -2075,7 +2075,7 @@ CONTAINS
                      (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                    Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                        (cos((mod(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                        (cos((modulo(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                    if (Y(pp,1).lt.Rwall) flag(pp) = 0_is
                       
                 else
@@ -2118,19 +2118,19 @@ CONTAINS
     !! Particle iterator.
     INTEGER(ip)                                            :: ss
     !! Species iterator.
-    REAL(rp) :: Rwall
+    REAL(rp) :: Rwall,lscale
 
+    lscale=7.983650528137727e-04
     
-!    write(output_unit_write,'("YR:",E17.10)') Y_R
-!    write(output_unit_write,'("YPHI:",E17.10)') Y_PHI
-!    write(output_unit_write,'("YZ:",E17.10)') Y_Z
+    !write(output_unit_write,'("YR:",E17.10)') Y_R
+    !write(output_unit_write,'("YPHI:",E17.10)') Y_PHI
+    !write(output_unit_write,'("YZ:",E17.10)') Y_Z
 
-!    write(output_unit_write,'("Ro:",E17.10)') fields_domain%Ro
-!    write(output_unit_write,'("Zo:",E17.10)') fields_domain%Zo
-!    write(output_unit_write,'("DR:",E17.10)') fields_domain%DR
-    !    write(output_unit_write,'("DZ:",E17.10)') fields_domain%DZ
-!    write(output_unit_write,'("DT:",E17.10)') fields_domain%DT
-
+    !write(output_unit_write,'("Ro:",E17.10)') fields_domain%Ro
+    !write(output_unit_write,'("Zo:",E17.10)') fields_domain%Zo
+    !write(output_unit_write,'("DR:",E17.10)') fields_domain%DR
+    !write(output_unit_write,'("DZ:",E17.10)') fields_domain%DZ
+    !write(output_unit_write,'("DT:",E17.10)') fields_domain%DT
 
     
     if (ALLOCATED(fields_domain%FLAG3D)) then
@@ -2159,7 +2159,7 @@ CONTAINS
                         (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                       Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                           (cos((mod(Y_PHI(pp),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                           (cos((modulo(Y_PHI(pp),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                       if (Y_R(pp).lt.Rwall) flag(pp) = 0_is
 
                    else
@@ -2264,6 +2264,16 @@ CONTAINS
           if ((IR.lt.1).or.(IZ.lt.1).or. &
                (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
                (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
+
+
+             !write(6,*) 'Y',Y_R(pp)*lscale,Y_PHI(pp),Y_Z(pp)*lscale
+             !write(6,*) 'flagCon',flag(pp)
+             !write(6,*) 'IFLAG',IR,IZ
+             !write(6,*) 'NFLAG',bfield_2d%NR,bfield_2d%NZ
+             !write(6,*) 'BFLAG',floor(bfield_2d%NR/6._rp),floor(bfield_2d%NR/5._rp),floor(4._rp*bfield_2d%NR/5._rp)
+             !write(6,*) 'FLAGR',fields_domain%Ro*lscale,fields_domain%DR*lscale
+             !write(6,*) 'FLAGZ',fields_domain%Zo*lscale,fields_domain%DZ*lscale
+             
              if (F%Analytic_IWL.eq.'NONE') then
                 flag(pp) = 0_is
              else if (F%Analytic_IWL.eq.'D3D') then
@@ -2272,7 +2282,12 @@ CONTAINS
                      (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                    Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                        (cos((mod(Y_PHI(pp),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                        (cos(modulo(Y_PHI(pp),2*C_PI/F%ntiles)-C_PI/F%ntiles))
+
+                   !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
+                   !write(6,*) 'Rwall',Rwall*lscale
+                   !write(6,*) 'mod',modulo(Y_PHI(pp),2*C_PI/F%ntiles)
+                   
                    if (Y_R(pp).lt.Rwall) flag(pp) = 0_is
 
                 else

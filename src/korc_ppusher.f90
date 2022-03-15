@@ -4626,8 +4626,10 @@ contains
              end do !particle chunk iterator
              !$OMP END PARALLEL DO
           
-       endif
+          endif
 
+          !write(6,*) 'Out Y',spp(ii)%vars%Y(1,1)*params%cpp%length,spp(ii)%vars%Y(1,2),spp(ii)%vars%Y(1,3)*params%cpp%length
+          !write(6,*) 'Out Y0',spp(ii)%vars%Y0(1,1)*params%cpp%length,spp(ii)%vars%Y0(1,2),spp(ii)%vars%Y0(1,3)*params%cpp%length
 
     end do !species iterator
 
