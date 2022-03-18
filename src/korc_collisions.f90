@@ -121,7 +121,7 @@ module korc_collisions
      INTEGER(ip)		:: subcycling_iterations,ngrid1
      REAL(rp) :: coll_per_dump_dt,Clog_const
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
-     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion
+     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion,always_aval
      CHARACTER(30) :: Clog_model,min_secRE,LAC_gam_resolution
      
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
@@ -405,6 +405,7 @@ contains
     cparams_ss%p_therm = p_therm
     cparams_ss%ConserveLA = ConserveLA
     cparams_ss%sample_test = sample_test
+    cparams_ss%always_aval = always_aval
     cparams_ss%Clog_model = Clog_model
     cparams_ss%min_secRE = min_secRE
     cparams_ss%pmin_scale = pmin_scale
@@ -635,6 +636,11 @@ contains
              call korc_abort(25)
           end if
 
+          if (cparams_ss%always_aval) then
+             cparams_ss%avalanche=.TRUE.
+             p_crit = 1.53073
+          endif
+
           if (cparams_ss%avalanche) then
 
              cparams_ss%p_crit=p_crit
@@ -647,8 +653,8 @@ contains
              cparams_ss%p_therm=sqrt(cparams_ss%gam_therm*cparams_ss%gam_therm-1)
 
              if(cparams_ss%min_secRE.eq.'THERM') then
-                cparams_ss%p_min=cparams_ss%p_therm
-                cparams_ss%gam_min=cparams_ss%gam_therm
+                cparams_ss%p_min=min(cparams_ss%p_therm,cparams_ss%p_min)
+                cparams_ss%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
              else
                 cparams_ss%p_min=p_crit
                 cparams_ss%gam_min=gam_crit
@@ -661,8 +667,9 @@ contains
              if (params%mpi_params%rank .EQ. 0) then
                 write(output_unit_write,*) 'Minimum energy of secondary RE is ',&
                      cparams_ss%min_secRE
-                write(output_unit_write,*) 'p_crit/(me*c) is: ',p_crit
-                write(output_unit_write,*) 'gam_min is: ',cparams_ss%gam_min
+                write(output_unit_write,*) 'p_crit/(me*c) and gam_crit are: ',p_crit,gam_crit
+                write(output_unit_write,*) 'p_min/(me*c) and gam_min are: ', &
+                     cparams_ss%p_min,cparams_ss%gam_min
                 if(.not.init) then
                    if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
                          write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo*params%cpp%Eo,'V/m'

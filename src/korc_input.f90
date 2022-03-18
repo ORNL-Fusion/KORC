@@ -270,6 +270,7 @@ module korc_input
   CHARACTER(30) :: Clog_model = 'HESSLOW'
   CHARACTER(30) :: min_secRE = 'CRIT'
   LOGICAL :: sample_test  = .FALSE.
+  LOGICAL :: always_aval  = .FALSE.
   REAL(rp)  :: pmin_scale = 1._rp
   LOGICAL :: energy_diffusion = .TRUE.
   CHARACTER(30) :: LAC_gam_resolution = '2EXP'
@@ -455,7 +456,7 @@ CONTAINS
     NAMELIST /CollisionParamsSingleSpecies/ Te_sing,Ti_sing,ne_sing, &
          Zeff_sing,dTau_sing,p_therm,ConserveLA,Clog_model,sample_test,&
          min_secRE,pmin_scale,energy_diffusion,LAC_gam_resolution, &
-         FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const
+         FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const,always_aval
     NAMELIST /CollisionParamsMultipleSpecies/ num_impurity_species,Te_mult, &
          ne_mult,Zo_mult,Zj_mult,nz_mult,IZj_mult,neut_prof
     NAMELIST /AvalancheGenerationPDF/ max_pitch_angle_aval, &
