@@ -261,6 +261,8 @@ CONTAINS
     else if (params%proceed.or.params%reinit) then
        
        call load_prev_time(params)
+
+       if (params%reinit) params%init_time=0._rp
        
        params%ito = 1_ip
 
