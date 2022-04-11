@@ -10,6 +10,10 @@ module korc_ppusher
   use korc_collisions
   use korc_hpc
 
+#ifdef PARALLEL_RANDOM
+  use korc_random
+#endif
+  
   IMPLICIT NONE
 
   REAL(rp), PRIVATE :: E0
@@ -3772,7 +3776,7 @@ contains
 
              if (.not.params%FokPlan) then
                 do tt=1_ip,params%t_skip
-                   call advance_GCinterp_psi_vars(pchunk,spp(ii)%vars,pp,tt, &
+                   call advance_GCinterp_psi_vars(pchunk,spp(ii),pp,tt, &
                         params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache, &
                         flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
                         curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
@@ -3913,7 +3917,7 @@ contains
                 !write(6,*) 'pp',pp
 
                 do ttt=1_ip,params%orbits_per_coll
-                   call advance_GCinterp_psi_vars(achunk,spp(ii)%vars,pp,tt, &
+                   call advance_GCinterp_psi_vars(achunk,spp(ii),pp,tt, &
                         params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache, &
                         flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
@@ -4273,7 +4277,7 @@ contains
                    !   end if
                    !end if
 
-                   call advance_GCinterp_psiwE_vars(spp(ii)%vars,pchunk,pp,tt, &
+                   call advance_GCinterp_psiwE_vars(spp(ii),pchunk,pp,tt, &
                         params, &
                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
@@ -4491,7 +4495,7 @@ contains
                    end do
 # endif
                    
-                   call advance_GCinterp_psiwE_vars(spp(ii)%vars,achunk, &
+                   call advance_GCinterp_psiwE_vars(spp(ii),achunk, &
                         pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                         q_cache,m_cache,flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
@@ -5904,7 +5908,7 @@ contains
 
   end subroutine advance_GCinterp_psi_vars_FS
 
-  subroutine advance_GCinterp_psi_vars(pchunk,vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+  subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
        curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
@@ -5914,13 +5918,13 @@ contains
     INTEGER,intent(in)                                      :: pchunk
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
+    TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
     REAL(rp)                                      :: dt
     !! Time step used in the leapfrog step (\(\Delta t\)).
 
-    INTEGER                                                    :: cc
+    INTEGER                                                    :: cc,ii
     !! Chunk iterator.
     INTEGER(ip),intent(in)                                      :: tt
     !! time iterator.
@@ -5957,6 +5961,9 @@ contains
 
     INTEGER(is),DIMENSION(pchunk),intent(INOUT) :: flagCon,flagCol
     REAL(rp),intent(IN)  :: q_cache,m_cache
+    LOGICAL :: accepted
+    REAL(rp) :: Rmin,Rmax,Zmin,Zmax,Rtrial,Ztrial,rm_trial,pmag0,Bmag0,maxRnRE
+    REAL(rp),dimension(spp%BMC_Nra) :: RnRE
 
     dt=params%dt
 
@@ -6265,28 +6272,80 @@ contains
     end do
     !$OMP END SIMD
 
+    if (params%recycle_losses) then
+       do cc=1_idef,pchunk
+          if ((flagCon(cc).eq.0_is).and.(pp-1+cc.le.spp%pinit)) then
+             accepted=.false.
+
+             Rmin=minval(F%X%R)
+             Rmax=maxval(F%X%R)
+             Zmin=minval(F%X%Z)
+             Zmax=maxval(F%X%Z)
+             
+             do while (.not.accepted)
+                Rtrial=Rmin+(Rmax-Rmin)*get_random()
+                Ztrial=Zmin+(Zmax-Zmin)*get_random()
+
+                rm_trial=sqrt((Rtrial-F%AB%Ro)**2+(Ztrial)**2)/F%AB%a
+                if (rm_trial.gt.1._rp) cycle
+
+                do ii=1_idef,size(RnRE)
+                   RnRE(ii)=(F%AB%Ro+F%AB%a*(ii-1)/(size(RnRE)-1))*spp%BMC_nRE(ii)
+                end do
+                
+                if (Rtrial*fRE_BMC(spp%BMC_Nra,spp%BMC_ra,spp%BMC_nRE,rm_trial)/maxval(RnRE) &
+                     .gt.get_random()) accepted=.true.
+                
+             end do
+             Y_R(cc)=Rtrial
+             Y_Z(cc)=Ztrial
+             Y_PHI(cc)=2.0_rp*C_PI*get_random_U()
+
+             write(6,*) 'resampled R,Z',Rtrial*params%cpp%length,Ztrial*params%cpp%length
+             
+          end if
+       end do
+    end if
+    
     call calculate_GCfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
 
     call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
 
+    if (params%recycle_losses) then
+       do cc=1_idef,pchunk
+          if ((flagCon(cc).eq.0).and.(pp-1+cc.le.spp%pinit)) then
+             flagCon(cc)=1_is
 
+             pmag0=sqrt(spp%go**2-1)
+             Bmag0=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
+             
+             V_PLL(cc)=pmag0*cos(deg2rad(spp%etao))
+             V_MU(cc)=(pmag0*sin(deg2rad(spp%etao)))**2/ &
+                  (2*m_cache*Bmag0)
 
+             write(6,*) 'resampled ppll/(mc),eta',V_PLL(cc),rad2deg(asin(sqrt(V_MU(cc)*2*m_cache*Bmag0)/pmag0))
+
+          end if
+       end do
+    end if
+
+#if DBG_CHECK 
     call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon) 
 
     !$OMP SIMD
     do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
+       spp%vars%RHS(pp-1+cc,1)=RHS_R(cc)
+       spp%vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
+       spp%vars%RHS(pp-1+cc,3)=RHS_Z(cc)
+       spp%vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
+       spp%vars%RHS(pp-1+cc,5)=RHS_MU(cc)
     end do
     !$OMP END SIMD       
-
+#endif
 
 
 
@@ -6704,7 +6763,7 @@ contains
 #endif
 
 #ifdef PSPLINE
-  subroutine advance_GCinterp_psiwE_vars(vars,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+  subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
        curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
        Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
@@ -6714,13 +6773,13 @@ contains
     !! methods, and descriptions of both.
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
+    TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
     REAL(rp)                                      :: dt
     !! Time step used in the leapfrog step (\(\Delta t\)).
 
-    INTEGER                                                    :: cc
+    INTEGER                                                    :: cc,ii
     INTEGER, INTENT(IN)                 :: pchunk
     !! Chunk iterator.
     INTEGER(ip),intent(in)                                      :: tt
@@ -6761,6 +6820,9 @@ contains
     INTEGER(is),DIMENSION(pchunk),intent(INOUT) :: flagCon,flagCol
     INTEGER(is),DIMENSION(pchunk) :: flagCon0
     REAL(rp),intent(IN)  :: q_cache,m_cache
+    LOGICAL :: accepted
+    REAL(rp) :: Rmin,Rmax,Zmin,Zmax,Rtrial,Ztrial,rm_trial,pmag0,Bmag0,maxRnRE
+    REAL(rp),dimension(spp%BMC_Nra) :: RnRE
 
     dt=params%dt
 
@@ -7035,9 +7097,62 @@ contains
     !write(6,*) 'Y1',Y_R1*params%cpp%length,Y_PHI1,Y_Z1*params%cpp%length
     !write(6,*) 'flagCon0,flagCon',flagCon0,flagCon
 
+    if (params%recycle_losses) then
+       do cc=1_idef,pchunk
+          if ((flagCon(cc).eq.0_is).and.(pp-1+cc.le.spp%pinit)) then
+             accepted=.false.
+
+             Rmin=minval(F%X%R)
+             Rmax=maxval(F%X%R)
+             Zmin=minval(F%X%Z)
+             Zmax=maxval(F%X%Z)
+             
+             do while (.not.accepted)
+                Rtrial=Rmin+(Rmax-Rmin)*get_random()
+                Ztrial=Zmin+(Zmax-Zmin)*get_random()
+
+                rm_trial=sqrt((Rtrial-F%AB%Ro)**2+(Ztrial)**2)/F%AB%a
+                if (rm_trial.gt.1._rp) cycle
+
+                do ii=1_idef,size(RnRE)
+                   RnRE(ii)=(F%AB%Ro+F%AB%a*(ii-1)/(size(RnRE)-1))*spp%BMC_nRE(ii)
+                end do
+                
+                if (Rtrial*fRE_BMC(spp%BMC_Nra,spp%BMC_ra,spp%BMC_nRE,rm_trial)/maxval(RnRE) &
+                     .gt.get_random()) accepted=.true.
+                
+             end do
+             Y_R(cc)=Rtrial
+             Y_Z(cc)=Ztrial
+             Y_PHI(cc)=2.0_rp*C_PI*get_random_U()
+
+             write(6,*) 'resampled R,Z',Rtrial,Ztrial
+             
+          end if
+       end do
+    end if
+    
     call calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
+
+    if (params%recycle_losses) then
+       do cc=1_idef,pchunk
+          if ((flagCon(cc).eq.0).and.(pp-1+cc.le.spp%pinit)) then
+             flagCon(cc)=1_is
+
+             pmag0=sqrt(spp%go**2-1)
+             Bmag0=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
+             
+             V_PLL(cc)=pmag0*cos(deg2rad(spp%etao))
+             V_MU(cc)=(pmag0*sin(deg2rad(spp%etao)))**2/ &
+                  (2*m_cache*Bmag0)
+
+             write(6,*) 'resampled ppll,mu',V_PLL(cc),V_MU(cc)
+
+          end if
+       end do
+    end if
 
 #if DBG_CHECK    
     call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
@@ -7047,11 +7162,11 @@ contains
 
     !$OMP SIMD
     do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
+       spp%vars%RHS(pp-1+cc,1)=RHS_R(cc)
+       spp%vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
+       spp%vars%RHS(pp-1+cc,3)=RHS_Z(cc)
+       spp%vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
+       spp%vars%RHS(pp-1+cc,5)=RHS_MU(cc)
     end do
     !$OMP END SIMD
 #endif
@@ -7059,6 +7174,52 @@ contains
 
   end subroutine advance_GCinterp_psiwE_vars
 
+  FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
+    REAL(rp), INTENT(IN) 	:: rm
+    INTEGER :: Nr_a
+    REAL(rp), INTENT(IN),dimension(Nr_a) 	:: r_a,nRE
+    REAL(rp) 				:: fRE_BMC
+    REAL(rp) 				:: D
+    REAL(rp) 				:: g0
+    REAL(rp) 				:: g1
+    REAL(rp) 				:: f0
+    REAL(rp) 				:: f1
+    REAL(rp) 				:: m
+    INTEGER 				:: index
+
+    !write(6,*) r_a(Nr_a),rm
+
+    index = MINLOC(ABS(r_a - rm),1)
+    ! index of gamma supplied to function in Hollmann input gamma range
+    D = r_a(index) - rm
+
+    !write(6,*) index
+    !write(6,*) ''
+
+    ! linear interpolation of Hollmann input gamma range to gamma supplied
+    ! to function
+    if (D.GT.0) then
+       f0 = nRE(index-1)
+       g0 = r_a(index-1)
+
+       f1 = nRE(index)
+       g1 = r_a(index)
+    else
+       f0 = nRE(index)
+       g0 = r_a(index)
+
+       f1 = nRE(index+1)
+       g1 = r_a(index+1)
+    end if
+
+    m = (f1-f0)/(g1-g0)
+
+    fRE_BMC = f0 + m*(rm - g0)
+    ! end of linear interpolation, fRE_H is evaluation of input Hollmann energy
+    ! distribution PDF at gamma supplied to function
+
+  END FUNCTION fRE_BMC
+  
   subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
        curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)

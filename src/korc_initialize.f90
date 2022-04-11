@@ -168,6 +168,8 @@ CONTAINS
 
     params%pchunk=pchunk
 
+    params%recycle_losses=recycle_losses
+
     ! Loading list of output parameters (parsing)
     imin = SCAN(outputs_list,'{')
     imax = SCAN(outputs_list,'}')

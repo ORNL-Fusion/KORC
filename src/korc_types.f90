@@ -298,6 +298,7 @@ module korc_types
      INTEGER  :: num_impurity_species
      REAL(rp), DIMENSION(:), ALLOCATABLE        :: Zj
      REAL(rp) :: gam_min
+     LOGICAL(rp) :: recycle_losses
   END TYPE KORC_PARAMS
 
 
@@ -492,6 +493,9 @@ module korc_types
      REAL(rp)                            :: dZ
      REAL(rp),DIMENSION(3) :: Xtrace
      !! Initial position in Cartesian coordinates for tracer particle
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: BMC_ra
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: BMC_nRE
+     integer :: BMC_Nra
   END TYPE SPECIES
 
 

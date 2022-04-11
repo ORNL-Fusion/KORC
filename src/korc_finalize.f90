@@ -75,7 +75,9 @@ CONTAINS
           DEALLOCATE(spp(ii)%vars%k4)
           DEALLOCATE(spp(ii)%vars%RHS)
        end if
-       
+
+       if (ALLOCATED(spp(ii)%BMC_ra)) DEALLOCATE(spp(ii)%BMC_ra)
+       if (ALLOCATED(spp(ii)%BMC_nRE)) DEALLOCATE(spp(ii)%BMC_nRE)
     end do
 
     DEALLOCATE(spp)

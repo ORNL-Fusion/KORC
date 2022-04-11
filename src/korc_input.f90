@@ -74,6 +74,7 @@ module korc_input
   LOGICAL :: SC_E = .FALSE.
   LOGICAL :: SC_E_add = .FALSE.
   INTEGER :: pchunk = 1
+  LOGICAL :: recycle_losses = .FALSE.
 
   !! -----------------------------------------------
   !! plasma_species
@@ -434,7 +435,7 @@ CONTAINS
          restart_overwrite_frequency,FokPlan,GC_rad_model,bound_electron_model,&
          FO_GC_compare,SameRandSeed,SC_E,reinit,SC_E_add,time_slice,rmax, &
          rmin,zmax,zmin,pchunk,magnetic_field_directory,magnetic_field_list,&
-         LargeCollisions,load_balance
+         LargeCollisions,load_balance,recycle_losses
     NAMELIST /plasma_species/ ppp,q,m,Eno,etao,Eo_lims,etao_lims,runaway, &
          spatial_distribution,energy_distribution,pitch_distribution,Ro, &
          PHIo,Zo,r_inner,r_outter,falloff_rate,shear_factor,sigmaR,sigmaZ, &

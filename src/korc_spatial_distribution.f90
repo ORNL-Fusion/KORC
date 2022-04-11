@@ -2181,7 +2181,7 @@ subroutine FIO_therm(params,spp,F,P)
 
 end subroutine FIO_therm
 
-SUBROUTINE load_data_from_hdf5_BMC(params,Nr_a,r_a,nRE)
+SUBROUTINE load_data_from_hdf5_BMC(BMC_Nra,BMC_ra,BMC_nRE,params,Nr_a,r_a,nRE)
   TYPE(KORC_PARAMS), INTENT(IN) :: params
   CHARACTER(MAX_STRING_LENGTH) :: filename
   CHARACTER(MAX_STRING_LENGTH) :: gname
@@ -2193,7 +2193,10 @@ SUBROUTINE load_data_from_hdf5_BMC(params,Nr_a,r_a,nRE)
   REAL(rp) :: rdatum
   INTEGER :: h5error
   INTEGER, intent(out) :: Nr_a
+  INTEGER, intent(inout) :: BMC_Nra
   REAL(rp), INTENT(out), ALLOCATABLE,DIMENSION(:) :: r_a,nRE
+  REAL(rp), INTENT(inout), ALLOCATABLE,DIMENSION(:) :: BMC_ra,BMC_nRE
+  INTEGER :: ii
 
   filename = TRIM(filename_exp)
   call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
@@ -2209,14 +2212,18 @@ SUBROUTINE load_data_from_hdf5_BMC(params,Nr_a,r_a,nRE)
   ALLOCATE(r_a(Nr_a))
   ALLOCATE(nRE(Nr_a))
 
-
   dset = "/r_a"
   call load_array_from_hdf5(h5file_id,dset,r_a)
 
   dset = "/nRE"
   call load_array_from_hdf5(h5file_id,dset,nRE)
 
+  ALLOCATE(BMC_ra(Nr_a))
+  ALLOCATE(BMC_nRE(Nr_a))
 
+  BMC_Nra=Nr_a
+  BMC_ra=r_a
+  BMC_nRE=nRE     
 
   call h5fclose_f(h5file_id, h5error)
   if (h5error .EQ. -1) then
@@ -2374,7 +2381,8 @@ subroutine BMC_radial(params,spp,F,P)
   ALLOCATE(Z_samples(nsamples))
   ! Number of samples to distribute among all MPI processes
 
-  call load_data_from_hdf5_BMC(params,Nr_a,r_a,nRE)
+  call load_data_from_hdf5_BMC(spp%BMC_Nra,spp%BMC_ra,spp%BMC_nRE, &
+       params,Nr_a,r_a,nRE)
   
   if (params%mpi_params%rank.EQ.0_idef) then
         ! Transient !
