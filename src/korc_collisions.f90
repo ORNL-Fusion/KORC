@@ -77,6 +77,7 @@ module korc_collisions
      REAL(rp) 			:: Ec,Ec_min
      ! Critical electric field
      LOGICAL  :: LargeCollisions
+     LOGICAL :: lowKE_REs
 
   END TYPE PARAMS_MS
 

@@ -1,5 +1,5 @@
 MODULE korc_spatial_distribution
-  !! @note Module with subroutines for generating the initial spatial distribution 
+  !! @note Module with subroutines for generating the initial spatial distribution
   !! of the different partciles' species in the simulation. @endnote
   USE korc_types
   USE korc_constants
@@ -17,7 +17,7 @@ MODULE korc_spatial_distribution
   IMPLICIT NONE
 
   REAL(rp), PRIVATE, PARAMETER :: minmax_buffer_size = 10.0_rp
-  
+
   PUBLIC :: intitial_spatial_distribution
   PRIVATE :: uniform,&
        disk,&
@@ -39,14 +39,14 @@ MODULE korc_spatial_distribution
 CONTAINS
 
 subroutine uniform(spp)
-  !! @note Initializing to zero the particles' position when 
+  !! @note Initializing to zero the particles' position when
   !! simulating a 'UNIFORM' plasma. @endnote
-  !! Even though in a simulation of a uniform plasma the particles' 
+  !! Even though in a simulation of a uniform plasma the particles'
   !! position is not advanced, we initialize their position to zero.
-  !! @todo Modify KORC for not allocating the particles' position 
+  !! @todo Modify KORC for not allocating the particles' position
   !! spp%vars%X and to do not use it along the simulation.
   TYPE(SPECIES), INTENT(INOUT) :: spp
-    !! An instance of the derived type SPECIES containing all the 
+    !! An instance of the derived type SPECIES containing all the
     !! parameters and simulation variables of the different
     !!species in the simulation.
 
@@ -55,39 +55,39 @@ end subroutine uniform
 
 
 subroutine disk(params,spp)
-  !! @note Subrotuine for generating a uniform disk/ring as the 
-  !! initial spatial condition of a given species of particles  
+  !! @note Subrotuine for generating a uniform disk/ring as the
+  !! initial spatial condition of a given species of particles
   !! in the simulation. @endnote
-  !! This uniform disk/ring distribution is generated using the 
-  !! Inverse Transform Sampling method. In this case, the (toroidal) 
+  !! This uniform disk/ring distribution is generated using the
+  !! Inverse Transform Sampling method. In this case, the (toroidal)
   !! radial distribution function of the particles is:
   !!
   !! $$f(r) = \left\{ \begin{array}{ll} 0 & r<r_{min} \\
-  !! \frac{1}{2\pi^2(r_{max}^2-r_{min}^2)R_0} 
+  !! \frac{1}{2\pi^2(r_{max}^2-r_{min}^2)R_0}
   !! & r_{min}<r<r_{max} \\ 0 & r>r_{max} \end{array} \right.,$$
   !!
-  !! where \(r_{min}\) and \(r_{max}\) are the inner and outer 
-  !! radius of the uniform ring distribution, and \(R_0\) is the 
+  !! where \(r_{min}\) and \(r_{max}\) are the inner and outer
+  !! radius of the uniform ring distribution, and \(R_0\) is the
   !! cylindrical radial position of the center of the disk/ring distribution.
   !! This distribution is so that \(\int_0^{2\pi}\int_{r_{min}}^{r_{max}} f(r)
   !! J(r,\theta) drd\theta = 1 \), where \(\theta\) is the poloidal angle,
-  !! and \(J(r,\theta)=r(R_0 + r\cos\theta)\) is the Jacobian of the 
+  !! and \(J(r,\theta)=r(R_0 + r\cos\theta)\) is the Jacobian of the
   !! transformation of Cartesian coordinates to toroidal coordinates.
-  !! Notice that in the case of a disk \(r_{min}=0\). As a convention, 
+  !! Notice that in the case of a disk \(r_{min}=0\). As a convention,
   !! this spatial distribution will be generated on the \(xz\)-plane.
-  !! Using the Inverse Transform Sampling method we sample \(f(r)\), 
-  !! and obtain the radial position of the particles as \(r = \sqrt{(r_{max}^2 
+  !! Using the Inverse Transform Sampling method we sample \(f(r)\),
+  !! and obtain the radial position of the particles as \(r = \sqrt{(r_{max}^2
   !! - r_{min}^2)U + r_{min}^2}\), where \(U\) is a uniform deviate in \([0,1]\).
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
-    !! An instance of the derived type SPECIES containing all 
-    !! the parameters and simulation variables of the different 
+    !! An instance of the derived type SPECIES containing all
+    !! the parameters and simulation variables of the different
     !! species in the simulation.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: r
     !! Radial position of the particles \(r\).
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
-    !! Uniform deviates in the range \([0,2\pi]\) representing 
+    !! Uniform deviates in the range \([0,2\pi]\) representing
     !! the uniform poloidal angle \(\theta\) distribution of the particles.
 
   ALLOCATE( theta(spp%ppp) )
@@ -99,7 +99,7 @@ subroutine disk(params,spp)
 
   call init_random_seed()
   call RANDOM_NUMBER(theta)
-  
+
   theta = 2.0_rp*C_PI*theta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
@@ -133,7 +133,7 @@ subroutine torus(params,spp)
     call init_random_seed()
 !    call RANDOM_NUMBER(theta)
 !    theta = 2.0_rp*C_PI*theta
-    
+
     call set_random_dist(0.0_rp, 2.0_rp*C_PI)
     call get_randoms(theta)
 
@@ -164,27 +164,27 @@ subroutine torus(params,spp)
 end subroutine torus
 
 !subroutine torus(params,spp)
-  !! @note Subrotuine for generating a uniform torus/torus 
-  !! shell as the initial spatial condition of a given species 
+  !! @note Subrotuine for generating a uniform torus/torus
+  !! shell as the initial spatial condition of a given species
   !! of particles in the simulation.@endnote
-  !! This distribution is generated using the Inverse Transform 
-  !! Sampling method. This distribution follows the same radial 
-  !! distribution of a uniform disk/ring distribution, see the 
+  !! This distribution is generated using the Inverse Transform
+  !! Sampling method. This distribution follows the same radial
+  !! distribution of a uniform disk/ring distribution, see the
   !! documentation of the [[disk]] subroutine.
 !  TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
 !  TYPE(SPECIES), INTENT(INOUT) 		:: spp
-    !! An instance of the derived type SPECIES 
-    !! containing all the parameters and simulation variables of the 
+    !! An instance of the derived type SPECIES
+    !! containing all the parameters and simulation variables of the
     !! different species in the simulation.
 !  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: r
     !! Radial position of the particles \(r\).
 !  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
-  !! Uniform deviates in the range \([0,2\pi]\) 
+  !! Uniform deviates in the range \([0,2\pi]\)
   !! representing the uniform poloidal angle \(\theta\)
   !! distribution of the particles.
 !  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: zeta
-  !! Uniform deviates in the range \([0,2\pi]\) representing 
+  !! Uniform deviates in the range \([0,2\pi]\) representing
   !! the uniform toroidal angle \(\zeta\) distribution of the particles.
 !  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
@@ -216,7 +216,7 @@ end subroutine torus
   !write(6,*) 'Zo',spp%Zo*params%cpp%length
   !write(6,*) 'r_in',spp%r_inner*params%cpp%length
   !write(6,*) 'r_out',spp%r_outter*params%cpp%length
-  
+
   ! Uniform distribution on a disk at a fixed azimuthal theta
 !  if (.not.params%SameRandSeed) then
 !     call init_random_seed()
@@ -236,31 +236,31 @@ end subroutine torus
 !  DEALLOCATE(theta)
 !  DEALLOCATE(zeta)
 !  DEALLOCATE(r)
-  
+
 !end subroutine torus
 
 
 subroutine elliptic_torus(params,spp)
-  !! @note Subroutine for generating a uniform elliptic torus as the initial 
+  !! @note Subroutine for generating a uniform elliptic torus as the initial
   !! spatial condition of a given particle species in the simulation. @endnote
-  !! An initial spatial distribution following the uniform distribution of 
-  !! [[torus]] is modified through a shear transformation and a rotation to 
-  !! generate a uniform spatial distribution on tori with elliptic cross sections. 
-  !! First, we obtain the uniform spatial distribution in a torus of minor radius 
-  !! \(r_0\), see [[torus]]. Then, we perform a shear transformation that changes 
-  !! the cross section of the torus from circular to a tilted ellipse. In 
+  !! An initial spatial distribution following the uniform distribution of
+  !! [[torus]] is modified through a shear transformation and a rotation to
+  !! generate a uniform spatial distribution on tori with elliptic cross sections.
+  !! First, we obtain the uniform spatial distribution in a torus of minor radius
+  !! \(r_0\), see [[torus]]. Then, we perform a shear transformation that changes
+  !! the cross section of the torus from circular to a tilted ellipse. In
   !! cylindrical coordinates this shear transformation is given by:
   !!
   !! $$R' = R + \alpha Z,$$
   !! $$Z' = Z,$$
   !!
-  !! where \(\alpha\) is the shear factor of the transformation. 
+  !! where \(\alpha\) is the shear factor of the transformation.
   !! Here, \(R\) and \(Z\) are the radial and vertical position of the particles
   !! uniformly distributed in a circular torus, \(R'\) and \(Z'\) are their
   !! new positions when following a uniform distribution in a torus with
-  !! elliptic circular cross section. The center of the ellipse is 
+  !! elliptic circular cross section. The center of the ellipse is
   !! \(R_0' = R_0 + \alpha Z_0\), and \(Z_0 = Z_0\), where \(R_0\) and \(Z_0\)
-  !! is the center of the initial circular torus. The major and minor semi-axes 
+  !! is the center of the initial circular torus. The major and minor semi-axes
   !! of the tilted ellipse cross section is:
   !!
   !! $$a' = \left[ - \frac{2r_0^2}{\alpha \sqrt{\alpha^2 + 4} - (2+\alpha^2)}
@@ -268,23 +268,23 @@ subroutine elliptic_torus(params,spp)
   !! $$b' = \left[ \frac{2r_0^2}{\alpha \sqrt{\alpha^2 + 4} + (2+\alpha^2)}
   !!  \right]^{1/2}.$$
   !!
-  !! Finally, we rotate the ellipse cross section anticlockwise along 
+  !! Finally, we rotate the ellipse cross section anticlockwise along
   !! \((R_0',Z_0')\) by \(\Theta = \cot^{-1}(\alpha/2)/2\), so the major semi-axis is
   !! parallel to the \(Z\)-axis.
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
-    !! An instance of the derived type SPECIES containing all the parameters 
+    !! An instance of the derived type SPECIES containing all the parameters
     !! and simulation variables of the different species in the simulation.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: rotation_angle
     !! This is the angle \(\Theta\) in the equations above.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
-    !! Uniform deviates in the range \([0,2\pi]\) representing the uniform 
+    !! Uniform deviates in the range \([0,2\pi]\) representing the uniform
     !! poloidal angle \(\theta\) distribution of the particles.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: r
     !! Radial position of the particles \(r\).
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: zeta
-    !! Uniform deviates in the range \([0,2\pi]\) representing 
+    !! Uniform deviates in the range \([0,2\pi]\) representing
     !! the uniform toroidal angle \(\zeta\) distribution of the particles.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: X
     !! Auxiliary vector used in the coordinate transformations.
@@ -326,7 +326,7 @@ subroutine elliptic_torus(params,spp)
   X = r*COS(theta) + spp%shear_factor*Y
 
   !> @todo Modify this approximation.
-  rotation_angle = 0.5_rp*C_PI - ATAN(1.0_rp,1.0_rp + spp%shear_factor); 
+  rotation_angle = 0.5_rp*C_PI - ATAN(1.0_rp,1.0_rp + spp%shear_factor);
 
   X1 = X*COS(rotation_angle) - Y*SIN(rotation_angle) + spp%Ro
   Y1 = X*SIN(rotation_angle) + Y*COS(rotation_angle) + spp%Zo
@@ -431,7 +431,7 @@ subroutine exponential_torus(params,spp)
   call RANDOM_NUMBER(r)
 
   ! Newton-Raphson applied here for finding the radial distribution
-  do pp=1_idef,spp%ppp 
+  do pp=1_idef,spp%ppp
      rl = 0.0_rp
      rr = spp%r_outter
 
@@ -711,12 +711,12 @@ FUNCTION PSI_ROT(R,R0,sigR,Z,Z0,sigZ,theta)
   !! Angle of counter-clockwise rotation (in radians), of 2D Gaussian
   !! distribution relative to R,Z
   REAL(rp) 		:: PSI_ROT
-  !! Argument of exponential comprising 2D Gaussian distribution 
+  !! Argument of exponential comprising 2D Gaussian distribution
 
   PSI_ROT=(R-R0)**2*((cos(theta))**2/(2*sigR**2)+(sin(theta))**2/(2*sigZ**2))+ &
        2*(R-R0)*(Z-Z0)*cos(theta)*sin(theta)*(1/(2*sigR**2)-1/(2*sigZ**2))+ &
        (Z-Z0)**2*((sin(theta))**2/(2*sigR**2)+(cos(theta))**2/(2*sigZ**2))
-  
+
 END FUNCTION PSI_ROT
 
 
@@ -730,7 +730,7 @@ FUNCTION indicator(psi,psi_max)
   ELSE
      indicator=0
   END IF
-  
+
 END FUNCTION indicator
 
 
@@ -747,8 +747,8 @@ FUNCTION random_norm(mean,sigma)
 END FUNCTION random_norm
 
 subroutine MH_gaussian_elliptic_torus(params,spp)
-  !! @note Subroutine that generates a 2D Gaussian distribution in an 
-  !! elliptic torus as the initial spatial condition of a given particle 
+  !! @note Subroutine that generates a 2D Gaussian distribution in an
+  !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   !! Core KORC simulation parameters.
@@ -756,11 +756,11 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: R_samples
-  !! 
+  !!
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Z_samples
   !!
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: ZETA_samples
-  !! 
+  !!
   REAL(rp) 				:: psi_max_buff
   !!
   REAL(rp) 				:: theta_rad
@@ -793,7 +793,7 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
   psi_max_buff = spp%psi_max*1.1_rp
 
   theta_rad=C_PI*spp%theta_gauss/180.0_rp
-  
+
   if (params%mpi_params%rank.EQ.0_idef) then
      ALLOCATE(R_samples(nsamples))
      ! Number of samples to distribute among all MPI processes
@@ -865,9 +865,9 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
            Z_samples(ii) = Z_buffer
 !           call RANDOM_NUMBER(rand_unif)
            ZETA_samples(ii) = 2.0_rp*C_PI!!*rand_unif
-           ii = ii + 1_idef 
+           ii = ii + 1_idef
         END IF
-        
+
      end do
 
   end if
@@ -879,7 +879,7 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
   CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8,spp%vars%X(:,3), &
        spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
 
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
   if (params%mpi_params%rank.EQ.0_idef) then
@@ -973,19 +973,19 @@ function Spong_2D(R0,b,w,dlam,R,Z,T)
 
   Real(rp) :: rm
   Real(rp) :: lam
-  
+
   REAL(rp) :: Spong_2D
 
   rm=sqrt((R-R0)**2+Z**2)
   lam=(sin(deg2rad(T)))**2
-  
+
   Spong_2D=(1-tanh((rm-b)/w))/(1-tanh(-b/w))*exp(-(lam/dlam)**2)
-  
+
 end function Spong_2D
 
 subroutine Spong_3D(params,spp)
-  !! @note Subroutine that generates a 2D Gaussian distribution in an 
-  !! elliptic torus as the initial spatial condition of a given particle 
+  !! @note Subroutine that generates a 2D Gaussian distribution in an
+  !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   !! Core KORC simulation parameters.
@@ -1021,7 +1021,7 @@ subroutine Spong_3D(params,spp)
   !! Previous sample of R location
   REAL(rp) 				:: Z_buffer
   !! Previous sample of Z location
- 
+
   REAL(rp) 				:: T_buffer
   !! Previous sample of pitch angle
   REAL(rp) 				:: R_test
@@ -1049,8 +1049,8 @@ subroutine Spong_3D(params,spp)
   !! Sample iterator.
   INTEGER 				:: mpierr
   !! mpi error indicator
-  
-  
+
+
   nsamples = spp%ppp*params%mpi_params%nmpi
 
   psi_max_buff = spp%psi_max*1.1_rp
@@ -1058,7 +1058,7 @@ subroutine Spong_3D(params,spp)
   theta_rad=C_PI*spp%theta_gauss/180.0_rp
 
 
-  ! buffer at minimum pitch angle boundary  
+  ! buffer at minimum pitch angle boundary
   if (spp%etao_lims(1).GE.korc_zero) then
      do ii=1_idef,INT(minmax_buffer_size,idef)
         minmax = spp%etao_lims(1) - REAL(ii,rp)* &
@@ -1080,7 +1080,7 @@ subroutine Spong_3D(params,spp)
      end if
   end do
 
-  
+
   if (params%mpi_params%rank.EQ.0_idef) then
      ALLOCATE(R_samples(nsamples))
      ! Number of samples to distribute among all MPI processes
@@ -1090,24 +1090,24 @@ subroutine Spong_3D(params,spp)
      ! Number of samples to distribute among all MPI processes
      ALLOCATE(T_samples(nsamples))
      ! Number of samples to distribute among all MPI processes
-     
+
      ! Transient !
 
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
 
-     
+
      call RANDOM_NUMBER(rand_unif)
      T_buffer = min_pitch_angle + (max_pitch_angle  &
           - min_pitch_angle)*rand_unif
 
 !     write(output_unit_write,'("length norm: ",E17.10)') params%cpp%length
-     
+
      ii=1_idef
      do while (ii .LE. 1000_idef)
 
 !        write(output_unit_write,'("burn:",I15)') ii
-        
+
         R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         T_test = T_buffer + random_norm(0.0_rp,spp%dth)
@@ -1124,20 +1124,20 @@ subroutine Spong_3D(params,spp)
         if (ii==1) then
            psi0=PSI_ROT(R_buffer,spp%Ro,spp%sigmaR,Z_buffer,spp%Zo, &
                 spp%sigmaZ,theta_rad)
-           
+
            f0=Spong_2D(spp%Ro,spp%Spong_b,spp%Spong_w,spp%Spong_dlam, &
-                R_buffer,Z_buffer,T_buffer)           
+                R_buffer,Z_buffer,T_buffer)
         else
            psi0=psi1
            f0=f1
         end if
-        
+
         psi1=PSI_ROT(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
-             spp%sigmaZ,theta_rad)       
-        
-                
+             spp%sigmaZ,theta_rad)
+
+
         f1=Spong_2D(spp%Ro,spp%Spong_b,spp%Spong_w,spp%Spong_dlam, &
-             R_test,Z_test,T_test)    
+             R_test,Z_test,T_test)
 
 !        write(output_unit_write,'("psi0: ",E17.10)') psi0
 !        write(output_unit_write,'("psi1: ",E17.10)') psi1
@@ -1145,7 +1145,7 @@ subroutine Spong_3D(params,spp)
 !        write(output_unit_write,'("f0: ",E17.10)') f0
 !        write(output_unit_write,'("f1: ",E17.10)') f1
 
-        
+
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian
         ! for velocity phase space, factors of sin(pitch angle) for velocity
@@ -1153,7 +1153,7 @@ subroutine Spong_3D(params,spp)
         ! phase space incorporated here.
         ratio = indicator(psi1,spp%psi_max)*R_test*EXP(-psi1)*f1/ &
              (R_buffer*EXP(-psi0)*f0)
-        
+
         if (ratio .GE. 1.0_rp) then
            R_buffer = R_test
            Z_buffer = Z_test
@@ -1175,11 +1175,11 @@ subroutine Spong_3D(params,spp)
      do while (ii .LE. nsamples)
 
 !        write(output_unit_write,'("sample:",I15)') ii
-        
+
         if (modulo(ii,10000).eq.0) then
-           write(output_unit_write,'("Sample: ",I10)') ii
+           !write(output_unit_write,'("Sample: ",I10)') ii
         end if
-        
+
         R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         T_test = T_buffer + random_norm(0.0_rp,spp%dth)
@@ -1197,13 +1197,13 @@ subroutine Spong_3D(params,spp)
 
         psi0=psi1
         f0=f1
-        
+
         psi1=PSI_ROT(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
              spp%sigmaZ,theta_rad)
 
         f1=Spong_2D(spp%Ro,spp%Spong_b,spp%Spong_w,spp%Spong_dlam, &
              R_test,Z_test,T_test)
-        
+
         ratio = indicator(psi1,psi_max_buff)*R_test*EXP(-psi1)*f1/ &
              (R_buffer*EXP(-psi0)*f0)
 
@@ -1219,7 +1219,7 @@ subroutine Spong_3D(params,spp)
               T_buffer = T_test
            end if
         end if
-        
+
         ! Only accept sample if it is within desired boundary, but
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
@@ -1232,15 +1232,15 @@ subroutine Spong_3D(params,spp)
            ! Sample phi location uniformly
            call RANDOM_NUMBER(rand_unif)
            PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
-           ii = ii + 1_idef 
+           ii = ii + 1_idef
         END IF
 
-        
+
      end do
 
 !  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
 !  write(output_unit_write,'("R_sample: ",E17.10)') R_samples(:)*params%cpp%length
-  
+
   end if
 
   CALL MPI_SCATTER(R_samples*cos(PHI_samples),spp%ppp,MPI_REAL8, &
@@ -1251,33 +1251,33 @@ subroutine Spong_3D(params,spp)
        spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
 !  CALL MPI_SCATTER(T_samples,spp%ppp,MPI_REAL8, &
 !       spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  
-  
+
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 !  write(output_unit_write,'("X_X: ",E17.10)') spp%vars%X(:,1)*params%cpp%length
-  
+
   ! gamma is kept for each particle, not the momentum
 
   if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
 
 !  write(output_unit_write,'("Y_R: ",E17.10)') spp%vars%Y(:,1)*params%cpp%length
-  
+
 !  if (minval(spp%vars%Y(:,1)).lt.1._rp/params%cpp%length) stop 'error with avalanche'
-  
+
   if (params%mpi_params%rank.EQ.0_idef) then
      DEALLOCATE(R_samples)
      DEALLOCATE(Z_samples)
      DEALLOCATE(PHI_samples)
      DEALLOCATE(T_samples)
   end if
-  
-  
+
+
 end subroutine Spong_3D
 
 subroutine MH_psi(params,spp,F)
-  !! @note Subroutine that generates a 2D Gaussian distribution in an 
-  !! elliptic torus as the initial spatial condition of a given particle 
+  !! @note Subroutine that generates a 2D Gaussian distribution in an
+  !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
@@ -1295,13 +1295,13 @@ subroutine MH_psi(params,spp,F)
 
   REAL(rp) 				:: min_R,max_R
   REAL(rp) 				:: min_Z,max_Z
- 
+
   REAL(rp) 				:: R_buffer
   !! Previous sample of R location
   REAL(rp) 				:: Z_buffer
   !! Previous sample of Z location
   REAL(rp) 				:: PHI_buffer
- 
+
 
   REAL(rp) 				:: R_test
   !! Present sample of R location
@@ -1329,7 +1329,7 @@ subroutine MH_psi(params,spp,F)
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'
   end if
-  
+
   nsamples = spp%pinit*params%mpi_params%nmpi
 
   params%GC_coords=.TRUE.
@@ -1353,14 +1353,14 @@ subroutine MH_psi(params,spp,F)
      PSIp0=F%PSIP_min
      psi_max = spp%psi_max
      psi_max_buff = spp%psi_max*2._rp
-  end if  
+  end if
 
   sigma=spp%sigmaR*params%cpp%length
-  
+
   !write(output_unit_write,*) min_R,max_R
   !write(output_unit_write,*) min_Z,max_Z
- 
-  
+
+
 
   ALLOCATE(R_samples(nsamples))
   ALLOCATE(X_samples(nsamples))
@@ -1374,7 +1374,7 @@ subroutine MH_psi(params,spp,F)
   if (params%mpi_params%rank.EQ.0_idef) then
         ! Transient !
 
-     
+
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
      PHI_buffer = 0._rp
@@ -1392,18 +1392,18 @@ subroutine MH_psi(params,spp,F)
      do while (ii .LE. 1000_idef)
 
         if (modulo(ii,100).eq.0) then
-           write(output_unit_write,'("Burn: ",I10)') ii
+           !write(output_unit_write,'("Burn: ",I10)') ii
         end if
         !write(6,'("Burn: ",I10)') ii
-        
+
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
         R_test = R_buffer + get_random_N()*spp%dR
-        
+
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
-        
+
 
 
 
@@ -1421,7 +1421,7 @@ subroutine MH_psi(params,spp,F)
         end do
         PHI_test = 2.0_rp*C_PI*get_random_U()
 
-        
+
         ! initialize 2D gaussian argument and distribution function, or
         ! copy from previous sample
         if (ii==1) then
@@ -1453,16 +1453,16 @@ subroutine MH_psi(params,spp,F)
            !write(6,*) 'PSI0',psi0
            !write(output_unit_write,*) 'PSIN1',PSIN1
            !write(6,*) 'PSIN0',PSIN0
-           
+
            psi0=spp%vars%PSI_P(1)
            PSIN0=(psi0-PSIp0)/(PSIp_lim-PSIp0)
-           
+
         end if
-        
+
         if (accepted) then
            PSIN0=PSIN1
         end if
-        
+
 !        psi1=PSI_ROT_exp(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
         !             spp%sigmaZ,theta_rad)
         spp%vars%Y(1,1)=R_test
@@ -1478,7 +1478,7 @@ subroutine MH_psi(params,spp,F)
         else
            call get_fields(params,spp%vars,F)
         end if
-        
+
         psi1=spp%vars%PSI_P(1)
 
         !write(output_unit_write,*) 'PSIlim',PSIp_lim
@@ -1495,7 +1495,7 @@ subroutine MH_psi(params,spp,F)
         !write(output_unit_write,*) 'PSI0',psi0
         !write(output_unit_write,*) 'PSIN',PSIN1
         !write(output_unit_write,*) 'PSIN0',PSIN0
-        
+
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian
         ! for velocity phase space, factors of sin(pitch angle) for velocity
@@ -1542,17 +1542,17 @@ subroutine MH_psi(params,spp,F)
 
 !        write(output_unit_write,'("sample:",I15)') ii
 
-#if DBG_CHECK        
+#if DBG_CHECK
 #else
         if (modulo(ii,nsamples/10).eq.0) then
-           write(output_unit_write,'("Sample: ",I10)') ii
+           !write(output_unit_write,'("Sample: ",I10)') ii
         end if
 #endif
-        
+
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
         R_test = R_buffer + get_random_N()*spp%dR
-        
+
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
@@ -1570,11 +1570,11 @@ subroutine MH_psi(params,spp,F)
            !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
            Z_test = Z_buffer + get_random_N()*spp%dZ
         end do
-        
+
         if (accepted) then
            PSIN0=PSIN1
         end if
-        
+
 !        psi1=PSI_ROT_exp(R_test,spp%Ro,spp%sigmaR,Z_test,spp%Zo, &
 !             spp%sigmaZ,theta_rad)
         spp%vars%Y(1,1)=R_test
@@ -1591,13 +1591,13 @@ subroutine MH_psi(params,spp,F)
            call get_fields(params,spp%vars,F)
         end if
 
-        
+
         psi1=spp%vars%PSI_P(1)
 
         !write(output_unit_write,*) 'PSIlim',PSIp_lim
         !write(output_unit_write,*) 'PSI0',PSIp0
         !write(output_unit_write,*) 'PSI',psi1
-        
+
         PSIN1=(psi1-PSIp0)/(PSIp_lim-PSIp0)
 
 
@@ -1618,13 +1618,13 @@ subroutine MH_psi(params,spp,F)
              (R_buffer*EXP(-PSIN0/sigma))
 
 !        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
-        
+
         accepted=.false.
         if (ratio .GE. 1.0_rp) then
            accepted=.true.
            R_buffer = R_test
            Z_buffer = Z_test
-           PHI_buffer = PHI_test                     
+           PHI_buffer = PHI_test
         else
            !call RANDOM_NUMBER(rand_unif)
            !if (rand_unif .LT. ratio) then
@@ -1639,7 +1639,7 @@ subroutine MH_psi(params,spp,F)
 
 !        write(output_unit_write,'("R: ",E17.10)') R_buffer
 !        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
-        
+
         ! Only accept sample if it is within desired boundary, but
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
@@ -1652,16 +1652,16 @@ subroutine MH_psi(params,spp,F)
 
            !write(output_unit_write,*) 'PSIN',PSIN1
 
-           
+
 !           write(output_unit_write,*) 'RS',R_buffer
-           
+
            ! Sample phi location uniformly
            !call RANDOM_NUMBER(rand_unif)
            !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
            !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
-           ii = ii + 1_idef 
+           ii = ii + 1_idef
         END IF
-        
+
      end do
 
 !  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
@@ -1675,11 +1675,11 @@ subroutine MH_psi(params,spp,F)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
-     
+
   end if
 
   params%GC_coords=.FALSE.
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
@@ -1690,25 +1690,25 @@ subroutine MH_psi(params,spp,F)
   CALL MPI_SCATTER(Z_samples,spp%pinit,MPI_REAL8, &
        spp%vars%X(:,3),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
 
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
   if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
 
-  
-  
+
+
   DEALLOCATE(R_samples)
   DEALLOCATE(X_samples)
   DEALLOCATE(Y_samples)
   DEALLOCATE(Z_samples)
   DEALLOCATE(PHI_samples)
-  
-  
+
+
 end subroutine MH_psi
 
 subroutine FIO_therm(params,spp,F,P)
-  !! @note Subroutine that generates a 2D Gaussian distribution in an 
-  !! elliptic torus as the initial spatial condition of a given particle 
+  !! @note Subroutine that generates a 2D Gaussian distribution in an
+  !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
@@ -1730,7 +1730,7 @@ subroutine FIO_therm(params,spp,F,P)
   REAL(rp) 				:: min_R,max_R
   REAL(rp) 				:: min_Z,max_Z
     REAL(rp) 				:: min_V,max_V
- 
+
   REAL(rp) 				:: R_buffer
   !! Previous sample of R location
   REAL(rp) 				:: Z_buffer
@@ -1766,7 +1766,7 @@ subroutine FIO_therm(params,spp,F,P)
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'
   end if
-  
+
   nsamples = spp%ppp*params%mpi_params%nmpi
 
   params%GC_coords=.TRUE.
@@ -1790,14 +1790,14 @@ subroutine FIO_therm(params,spp,F,P)
      PSIp0=F%PSIP_min
      psi_max = spp%psi_max
      psi_max_buff = spp%psi_max*2._rp
-  end if  
+  end if
 
   sigma=spp%sigmaR*params%cpp%length
-  
+
   !write(output_unit_write,*) min_R,max_R
   !write(output_unit_write,*) min_Z,max_Z
- 
-  
+
+
 
   ALLOCATE(R_samples(nsamples))
   ALLOCATE(X_samples(nsamples))
@@ -1811,16 +1811,16 @@ subroutine FIO_therm(params,spp,F,P)
   ALLOCATE(G_samples(nsamples))
   ALLOCATE(XI_samples(nsamples))
   ALLOCATE(ETA_samples(nsamples))
-  
+
   if (params%mpi_params%rank.EQ.0_idef) then
         ! Transient !
 
-     
+
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
      PHI_buffer = 0._rp
 
-     
+
      spp%vars%Y(1,1)=R_buffer
      spp%vars%Y(1,2)=PHI_buffer
      spp%vars%Y(1,3)=Z_buffer
@@ -1857,31 +1857,31 @@ subroutine FIO_therm(params,spp,F,P)
      !write(6,*) 'PSI0',psi0
      !write(output_unit_write,*) 'PSIN1',PSIN1
      !write(6,*) 'PSIN0',PSIN0
-     
+
      if (.not.params%SameRandSeed) then
         call init_random_seed()
      else
         call random_seed(put=seed)
      end if
-     
+
      write(output_unit_write,'("Begin burn: ",I10)')
      accepted=.false.
      ii=1_idef
      do while (ii .LE. 1000_idef)
 
         if (modulo(ii,100).eq.0) then
-           write(output_unit_write,'("Burn: ",I10)') ii
+           !write(output_unit_write,'("Burn: ",I10)') ii
         end if
 
-        
+
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
         R_test = R_buffer + get_random_N()*spp%dR
-        
+
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
-        
+
         V_test=V_buffer+get_random_N()*spp%dgam
 
 
@@ -1902,17 +1902,17 @@ subroutine FIO_therm(params,spp,F,P)
            !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
            V_test = V_buffer + get_random_N()*spp%dgam
         end do
-        
+
         PHI_test = 2.0_rp*C_PI*get_random_U()
 
         XI_test = -1+2.0_rp*get_random_U()
 
-               
+
         if (accepted) then
            PSIN0=PSIN1
            vth0=vth1
         end if
-        
+
         spp%vars%Y(1,1)=R_test
         spp%vars%Y(1,2)=PHI_test
         spp%vars%Y(1,3)=Z_test
@@ -1924,7 +1924,7 @@ subroutine FIO_therm(params,spp,F,P)
            call get_fio_profile(spp%vars,P,params)
 #endif
         end if
-        
+
         psi1=spp%vars%PSI_P(1)
 
         !write(output_unit_write,*) 'PSIlim',PSIp_lim
@@ -1944,19 +1944,19 @@ subroutine FIO_therm(params,spp,F,P)
 
         !write(6,*) 'te',spp%vars%te(1)
         !write(6,*) 'vth0,v_buffer',vth0,V_buffer
-        
+
         vth1=sqrt(2*spp%vars%te(1))
 
 
         !write(6,*) 'vth1,v_test',vth1,V_test
-        
+
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian
         ! for velocity phase space, factors of sin(pitch angle) for velocity
         ! phase space and cylindrical coordinate Jacobian R for spatial
         ! phase space incorporated here.
 
-        
+
         ratio = real(spp%vars%flagCon(1))*indicator(PSIN1,psi_max)* &
              R_test*EXP(-PSIN1/sigma)*V_test**2/vth1**3* &
              EXP(-(V_test/vth1)**2)/ &
@@ -1998,15 +1998,15 @@ subroutine FIO_therm(params,spp,F,P)
      do while (ii .LE. nsamples)
 
 !        write(output_unit_write,'("sample:",I15)') ii
-        
+
        if (modulo(ii,nsamples/10).eq.0) then
-           write(output_unit_write,'("Sample: ",I10)') ii
+           !write(output_unit_write,'("Sample: ",I10)') ii
         end if
-        
+
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
         R_test = R_buffer + get_random_N()*spp%dR
-        
+
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
@@ -2034,12 +2034,12 @@ subroutine FIO_therm(params,spp,F,P)
         end do
 
         XI_test = -1+2.0_rp*get_random_U()
-        
+
         if (accepted) then
            PSIN0=PSIN1
            vth0=vth1
         end if
-        
+
         spp%vars%Y(1,1)=R_test
         spp%vars%Y(1,2)=PHI_test
         spp%vars%Y(1,3)=Z_test
@@ -2052,13 +2052,13 @@ subroutine FIO_therm(params,spp,F,P)
 #endif
         end if
 
-        
+
         psi1=spp%vars%PSI_P(1)
 
         !write(output_unit_write,*) 'PSIlim',PSIp_lim
         !write(output_unit_write,*) 'PSI0',PSIp0
         !write(output_unit_write,*) 'PSI',psi1
-        
+
         PSIN1=(psi1-PSIp0)/(PSIp_lim-PSIp0)
 
 
@@ -2072,13 +2072,13 @@ subroutine FIO_therm(params,spp,F,P)
         !write(output_unit_write,*) 'PSIN0',PSIN0
 
         vth1=sqrt(2*spp%vars%te(1))
-        
+
         ratio = real(spp%vars%flagCon(1))*indicator(PSIN1,psi_max)* &
              R_test*EXP(-PSIN1/sigma)*V_test**2/vth1**3* &
              EXP(-(V_test/vth1)**2)/ &
              (R_buffer*EXP(-PSIN0/sigma)*V_buffer**2/vth0**3* &
              EXP(-(V_buffer/vth0)**2))
-        
+
         accepted=.false.
         if (ratio .GE. 1.0_rp) then
            accepted=.true.
@@ -2103,7 +2103,7 @@ subroutine FIO_therm(params,spp,F,P)
 
 !        write(output_unit_write,'("R: ",E17.10)') R_buffer
 !        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
-        
+
         ! Only accept sample if it is within desired boundary, but
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
@@ -2117,16 +2117,16 @@ subroutine FIO_therm(params,spp,F,P)
 
            !write(output_unit_write,*) 'PSIN',PSIN1
 
-           
+
 !           write(output_unit_write,*) 'RS',R_buffer
-           
+
            ! Sample phi location uniformly
            !call RANDOM_NUMBER(rand_unif)
            !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
            !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
-           ii = ii + 1_idef 
+           ii = ii + 1_idef
         END IF
-        
+
      end do
 
 !  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
@@ -2143,11 +2143,11 @@ subroutine FIO_therm(params,spp,F,P)
 
      G_samples=1/sqrt(1-V_samples**2)
      ETA_samples=acos(XI_samples)*180/C_PI
-     
+
   end if
 
   params%GC_coords=.FALSE.
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
@@ -2162,13 +2162,13 @@ subroutine FIO_therm(params,spp,F,P)
   CALL MPI_SCATTER(ETA_samples,spp%ppp,MPI_REAL8, &
        spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
 
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
   if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
 
-  
-  
+
+
   DEALLOCATE(R_samples)
   DEALLOCATE(X_samples)
   DEALLOCATE(Y_samples)
@@ -2223,7 +2223,7 @@ SUBROUTINE load_data_from_hdf5_BMC(BMC_Nra,BMC_ra,BMC_nRE,params,Nr_a,r_a,nRE)
 
   BMC_Nra=Nr_a
   BMC_ra=r_a
-  BMC_nRE=nRE     
+  BMC_nRE=nRE
 
   call h5fclose_f(h5file_id, h5error)
   if (h5error .EQ. -1) then
@@ -2246,14 +2246,14 @@ FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
   INTEGER 				:: index
 
   !write(6,*) r_a(Nr_a),rm
-  
+
   index = MINLOC(ABS(r_a - rm),1)
   ! index of gamma supplied to function in Hollmann input gamma range
   D = r_a(index) - rm
 
   !write(6,*) index
   !write(6,*) ''
-  
+
   ! linear interpolation of Hollmann input gamma range to gamma supplied
   ! to function
   if (D.GT.0) then
@@ -2279,8 +2279,8 @@ FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
 END FUNCTION fRE_BMC
 
 subroutine BMC_radial(params,spp,F,P)
-  !! @note Subroutine that generates a 2D Gaussian distribution in an 
-  !! elliptic torus as the initial spatial condition of a given particle 
+  !! @note Subroutine that generates a 2D Gaussian distribution in an
+  !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
@@ -2302,7 +2302,7 @@ subroutine BMC_radial(params,spp,F,P)
   REAL(rp) 				:: min_R,max_R
   REAL(rp) 				:: min_Z,max_Z
     REAL(rp) 				:: min_V,max_V
- 
+
   REAL(rp) 				:: R_buffer
   !! Previous sample of R location
   REAL(rp) 				:: Z_buffer
@@ -2341,7 +2341,7 @@ subroutine BMC_radial(params,spp,F,P)
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'
   end if
-  
+
   nsamples = spp%ppp*params%mpi_params%nmpi
 
   params%GC_coords=.TRUE.
@@ -2365,13 +2365,13 @@ subroutine BMC_radial(params,spp,F,P)
      PSIp0=F%PSIP_min
      psi_max = spp%psi_max
      psi_max_buff = spp%psi_max*2._rp
-  end if  
+  end if
 
   sigma=spp%sigmaR*params%cpp%length
-  
+
   !write(output_unit_write,*) min_R,max_R
   !write(output_unit_write,*) min_Z,max_Z
- 
+
   ALLOCATE(R_samples(nsamples))
   ALLOCATE(X_samples(nsamples))
   ALLOCATE(Y_samples(nsamples))
@@ -2383,16 +2383,16 @@ subroutine BMC_radial(params,spp,F,P)
 
   call load_data_from_hdf5_BMC(spp%BMC_Nra,spp%BMC_ra,spp%BMC_nRE, &
        params,Nr_a,r_a,nRE)
-  
+
   if (params%mpi_params%rank.EQ.0_idef) then
         ! Transient !
 
-     
+
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
      PHI_buffer = 0._rp
 
-     
+
 
      !write(6,*) 'R_buffer',R_buffer*params%cpp%length
      !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
@@ -2402,29 +2402,29 @@ subroutine BMC_radial(params,spp,F,P)
      !write(6,*) 'PSI0',psi0
      !write(output_unit_write,*) 'PSIN1',PSIN1
      !write(6,*) 'PSIN0',PSIN0
-     
+
      if (.not.params%SameRandSeed) then
         call init_random_seed()
      else
         call random_seed(put=seed)
      end if
-     
+
      write(output_unit_write,'("Begin burn: ",I10)')
      flush(output_unit_write)
      accepted=.false.
      ii=1_idef
      do while (ii .LE. 1000_idef)
-        
+
         if (modulo(ii,100).eq.0) then
-           write(output_unit_write,'("Burn: ",I10)') ii        
+           !write(output_unit_write,'("Burn: ",I10)') ii
         end if
         !write(6,'("Burn: ",I10)') ii
 
-        
+
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
         R_test = R_buffer + get_random_N()*spp%dR
-        
+
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
@@ -2440,7 +2440,7 @@ subroutine BMC_radial(params,spp,F,P)
            !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
            Z_test = Z_buffer + get_random_N()*spp%dZ
         end do
-        
+
         PHI_test = 2.0_rp*C_PI*get_random_U()
 
         rm_buffer=sqrt((R_buffer-F%AB%Ro)**2+(Z_buffer)**2)/F%AB%a
@@ -2448,7 +2448,7 @@ subroutine BMC_radial(params,spp,F,P)
 
         !write(6,*) 'Ro',F%AB%Ro*params%cpp%length
         !write(6,*) 'a',F%AB%a*params%cpp%length
-        
+
         !write(6,*) 'R bounds',min_R*params%cpp%length,max_R*params%cpp%length
         !write(6,*) 'Z bounds',min_Z*params%cpp%length,max_Z*params%cpp%length
 
@@ -2456,11 +2456,11 @@ subroutine BMC_radial(params,spp,F,P)
         !write(6,*) 'R_buffer',R_buffer*params%cpp%length
         !write(6,*) 'Z_buffer',Z_buffer*params%cpp%length
         !write(6,*) 'rm_buffer',rm_buffer*params%cpp%length
-        
+
         !write(6,*) 'R_test',R_test*params%cpp%length
         !write(6,*) 'Z_test',Z_test*params%cpp%length
         !write(6,*) 'rm_test',rm_test*params%cpp%length
-        
+
         if (rm_test.gt.1._rp) cycle
 
         !write(6,*) 'R',R_test*params%cpp%length
@@ -2478,14 +2478,14 @@ subroutine BMC_radial(params,spp,F,P)
 
 
         !write(6,*) 'vth1,v_test',vth1,V_test
-        
+
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian
         ! for velocity phase space, factors of sin(pitch angle) for velocity
         ! phase space and cylindrical coordinate Jacobian R for spatial
         ! phase space incorporated here.
 
-        
+
         ratio = indicator(rm_test,1._rp)*R_test*fRE_BMC(Nr_a,r_a,nRE,rm_test)/ &
              R_buffer*fRE_BMC(Nr_a,r_a,nRE,rm_buffer)
 
@@ -2522,15 +2522,15 @@ subroutine BMC_radial(params,spp,F,P)
      do while (ii .LE. nsamples)
 
 !        write(output_unit_write,'("sample:",I15)') ii
-        
+
        if (modulo(ii,nsamples/10).eq.0) then
-           write(output_unit_write,'("Sample: ",I10)') ii
+           !write(output_unit_write,'("Sample: ",I10)') ii
         end if
-        
+
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
         R_test = R_buffer + get_random_N()*spp%dR
-        
+
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
@@ -2549,21 +2549,21 @@ subroutine BMC_radial(params,spp,F,P)
            Z_test = Z_buffer + get_random_N()*spp%dZ
         end do
 
-        
+
         rm_buffer=sqrt((R_buffer-F%AB%Ro)**2+(Z_buffer)**2)/F%AB%a
         rm_test=sqrt((R_test-F%AB%Ro)**2+(Z_test)**2)/F%AB%a
 
         !write(6,*) 'rm_buffer',rm_buffer
         !write(6,*) 'rm_test',rm_test
-        
+
         if (rm_test.gt.1._rp) cycle
 
         !write(6,*) 'R',R_test*params%cpp%length
         !write(6,*) 'Z',Z_test*params%cpp%length
-        
+
         ratio = indicator(rm_test,1._rp)*R_test*fRE_BMC(Nr_a,r_a,nRE,rm_test)/ &
              R_buffer*fRE_BMC(Nr_a,r_a,nRE,rm_buffer)
-        
+
         accepted=.false.
         if (ratio .GE. 1.0_rp) then
            accepted=.true.
@@ -2584,7 +2584,7 @@ subroutine BMC_radial(params,spp,F,P)
 
 !        write(output_unit_write,'("R: ",E17.10)') R_buffer
 !        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
-        
+
         ! Only accept sample if it is within desired boundary, but
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
@@ -2595,9 +2595,9 @@ subroutine BMC_radial(params,spp,F,P)
 
            !write(output_unit_write,*) 'PSIN',PSIN1
 
-           
+
 !           write(output_unit_write,*) 'RS',R_buffer
-           
+
            ! Sample phi location uniformly
            !call RANDOM_NUMBER(rand_unif)
            !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
@@ -2605,7 +2605,7 @@ subroutine BMC_radial(params,spp,F,P)
            ii = ii + 1_idef
            !write(6,*) 'accepted'
         END IF
-        
+
      end do
 
 !  if (minval(R_samples(:)).lt.1._rp/params%cpp%length) stop 'error with sample'
@@ -2619,11 +2619,11 @@ subroutine BMC_radial(params,spp,F,P)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
-     
+
   end if
 
   params%GC_coords=.FALSE.
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
@@ -2634,12 +2634,12 @@ subroutine BMC_radial(params,spp,F,P)
   CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
        spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
 
-  
+
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
   if (params%orbit_model(1:2).eq.'GC') call cart_to_cyl(spp%vars%X,spp%vars%Y)
-  
-  
+
+
   DEALLOCATE(R_samples)
   DEALLOCATE(X_samples)
   DEALLOCATE(Y_samples)
@@ -2647,18 +2647,18 @@ subroutine BMC_radial(params,spp,F,P)
   DEALLOCATE(PHI_samples)
   DEALLOCATE(r_a)
   DEALLOCATE(nRE)
-  
-  
+
+
 end subroutine BMC_radial
 
 subroutine intitial_spatial_distribution(params,spp,P,F)
-  !! @note Subroutine that contains calls to the different subroutines 
+  !! @note Subroutine that contains calls to the different subroutines
   !! for initializing the simulated particles with various
   !! spatial distribution functions. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 			  :: params
   !! Core KORC simulation parameters.
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: spp
-  !! An instance of the derived type SPECIES containing all the parameters and 
+  !! An instance of the derived type SPECIES containing all the parameters and
   !! simulation variables of the different species in the simulation.
   TYPE(PROFILES), INTENT(IN)                              :: P
   !! An instance of the KORC derived type PROFILES.
@@ -2707,7 +2707,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
         call get_Hollmann_distribution_1Dtransport(params,spp(ss),F)
      CASE('MH_psi')
 
-#if DBG_CHECK        
+#if DBG_CHECK
 #else
         if (spp(ss)%ppp*params%mpi_params%nmpi.lt.10) then
            if(params%mpi_params%rank.eq.0) then
@@ -2723,7 +2723,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
         spp(ss)%vars%X(:,1)=spp(ss)%Ro
         spp(ss)%vars%X(:,2)=0._rp
         spp(ss)%vars%X(:,3)=spp(ss)%Zo
-        
+
         call MH_psi(params,spp(ss),F)
      CASE('FIO_therm')
 
@@ -2735,7 +2735,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
            end if
            call korc_abort(19)
         end if
-        
+
         call FIO_therm(params,spp(ss),F,P)
      CASE('BMC_radial')
 
@@ -2747,7 +2747,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
            end if
            call korc_abort(19)
         end if
-        
+
         call BMC_radial(params,spp(ss),F,P)
      CASE DEFAULT
         call torus(params,spp(ss))
