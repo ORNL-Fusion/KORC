@@ -405,7 +405,7 @@ contains
     cparams_ss%Zeff = Zeff_sing
     cparams_ss%dTau = dTau_sing
     cparams_ss%p_therm = p_therm
-    cparams_ss%ConserveLA = ConserveLAp_crit
+    cparams_ss%ConserveLA = ConserveLA
     cparams_ss%sample_test = sample_test
     cparams_ss%always_aval = always_aval
     cparams_ss%Clog_model = Clog_model
