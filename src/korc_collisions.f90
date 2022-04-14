@@ -405,7 +405,7 @@ contains
     cparams_ss%Zeff = Zeff_sing
     cparams_ss%dTau = dTau_sing
     cparams_ss%p_therm = p_therm
-    cparams_ss%ConserveLA = ConserveLA
+    cparams_ss%ConserveLA = ConserveLAp_crit
     cparams_ss%sample_test = sample_test
     cparams_ss%always_aval = always_aval
     cparams_ss%Clog_model = Clog_model
@@ -508,8 +508,10 @@ contains
              CASE('HESSLOW')
                 call load_params_ms(params)
 
+                cparams_ms%Ec=cparams_ss%Ec
+
                 if (.not.(cparams_ms%lowKE_REs)) then
-                  cparams_ms%Ec=cparams_ss%Ec* &
+                  cparams_ms%Ec=cparams_ms%Ec* &
                         (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
                         cparams_ms%nz)/cparams_ss%ne)
                 end if
@@ -615,7 +617,8 @@ contains
              end if
 
              !write(6,*) 'maxEinterp',maxEinterp,'minEinterp',minEinterp, &
-             !     'E_c',cparams_ms%Ec_min,cparams_ss%avalanche
+             !      'E_c',cparams_ms%Ec,'E_c,min',cparams_ms%Ec_min, &
+             !      cparams_ss%avalanche
 
              if (cparams_ss%avalanche) then
 
