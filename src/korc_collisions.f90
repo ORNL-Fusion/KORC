@@ -10,7 +10,7 @@ module korc_collisions
 #ifdef FIO
   use korc_fio
 #endif
-  
+
 #ifdef PARALLEL_RANDOM
   use korc_random
 #endif
@@ -77,7 +77,7 @@ module korc_collisions
      REAL(rp) 			:: Ec,Ec_min
      ! Critical electric field
      LOGICAL  :: LargeCollisions
-     
+
   END TYPE PARAMS_MS
 
   TYPE, PRIVATE :: PARAMS_SS
@@ -123,7 +123,7 @@ module korc_collisions
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
      LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion,always_aval
      CHARACTER(30) :: Clog_model,min_secRE,LAC_gam_resolution
-     
+
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
      REAL(rp), DIMENSION(3) 	:: y = (/0.0_rp,1.0_rp,0.0_rp/)
      REAL(rp), DIMENSION(3) 	:: z = (/0.0_rp,0.0_rp,1.0_rp/)
@@ -142,7 +142,7 @@ module korc_collisions
        normalize_collisions_params,&
        collision_force,&
        deallocate_collisions_params,&
-       save_collision_params,&    
+       save_collision_params,&
        include_CoulombCollisions_GC_p,&
        include_CoulombCollisionsLA_GC_p,&
        include_CoulombCollisions_FO_p,&
@@ -225,7 +225,7 @@ contains
        params%num_impurity_species = num_impurity_species
     endif
 
-    
+
     ALLOCATE(cparams_ms%Zj(cparams_ms%num_impurity_species))
     ALLOCATE(cparams_ms%Zo(cparams_ms%num_impurity_species))
     ALLOCATE(cparams_ms%nz(cparams_ms%num_impurity_species))
@@ -241,7 +241,7 @@ contains
     if  (params%profile_model.eq.'M3D_C1') then
        do i=1,cparams_ms%num_impurity_species
           cparams_ms%Zj(i) = real(i)-1._rp
-          cparams_ms%Zo(i) = Zo_mult(1)       
+          cparams_ms%Zo(i) = Zo_mult(1)
        end do
        cparams_ms%nz(1) = nz_mult(1)
 
@@ -262,7 +262,7 @@ contains
 
        cparams_ms%nz(1) = nz_mult(1)
 
-       params%Zj=cparams_ms%Zj       
+       params%Zj=cparams_ms%Zj
     else
        cparams_ms%Zj = Zj_mult(1:cparams_ms%num_impurity_species)
        cparams_ms%Zo = Zo_mult(1:cparams_ms%num_impurity_species)
@@ -287,7 +287,7 @@ contains
              if (params%mpi_params%rank .EQ. 0) then
                 write(output_unit_write,'("Atomic number not defined!")')
              end if
-             exit             
+             exit
           end if
        end do
     else
@@ -313,12 +313,13 @@ contains
     cparams_ms%Ee_IZj = C_ME*C_C**2/cparams_ms%IZj
 
     cparams_ms%neut_prof=neut_prof
+    cparams_ms%lowKE_REs=lowKE_REs
 
     cparams_ms%Gammac_min = Gammac_wu(params,cparams_ss%P%n_ne,cparams_ss%Te)
     cparams_ms%LargeCollisions = LargeCollisions
-    
+
     if (params%mpi_params%rank .EQ. 0) then
-       write(output_unit_write,'("Number of impurity species: ",I16)')& 
+       write(output_unit_write,'("Number of impurity species: ",I16)')&
             cparams_ms%num_impurity_species
        do i=1,cparams_ms%num_impurity_species
           if (cparams_ms%Zo(i).eq.1) then
@@ -348,7 +349,7 @@ contains
           end if
        end do
     end if
-    
+
   end subroutine load_params_ms
 
 
@@ -419,19 +420,19 @@ contains
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
     cparams_ss%p_min = cparams_ss%p_therm
-    
+
     cparams_ss%rD = SQRT(C_E0*cparams_ss%Te/(cparams_ss%ne*C_E**2*(1.0_rp + &
          cparams_ss%Te/cparams_ss%Ti)))
 
     cparams_ss%re = C_E**2/(4.0_rp*C_PI*C_E0*C_ME*C_C**2)
     cparams_ss%CoulombLogee = CLogee_wu(params,cparams_ss%ne,cparams_ss%Te)
     cparams_ss%CoulombLogei = CLogei_wu(params,cparams_ss%ne,cparams_ss%Te)
-    
+
     cparams_ss%VTe = VTe_wu(cparams_ss%Te)
     cparams_ss%delta = cparams_ss%VTe/C_C
     cparams_ss%Gammaco = C_E**4/(4.0_rp*C_PI*C_E0**2)
     cparams_ss%Gammac = Gammac_wu(params,cparams_ss%ne,cparams_ss%Te)
-    
+
     cparams_ss%Tauc = C_ME**2*cparams_ss%VTe**3/cparams_ss%Gammac
     cparams_ss%Tau = C_ME**2*C_C**3/cparams_ss%Gammac
 
@@ -440,7 +441,7 @@ contains
          (4.0_rp*C_PI*C_E0**2*cparams_ss%Te)
 
     cparams_ss%taur=6*C_PI*C_E0*(C_ME*C_C)**3/(C_E**4*params%cpp%Bo**2)
-    
+
     !	ALLOCATE(cparams_ss%rnd_num(3,cparams_ss%rnd_dim))
     !	call RANDOM_NUMBER(cparams_ss%rnd_num)
     cparams_ss%rnd_num_count = 1_idef
@@ -502,20 +503,23 @@ contains
                    cparams_ms%Ec_min=cparams_ms%Ec* &
                         cparams_ms%Gammac_min/cparams_ss%Gammac
                 endif
-                
+
              CASE('HESSLOW')
                 call load_params_ms(params)
 
-                cparams_ms%Ec=cparams_ss%Ec* &
-                     (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
-                     cparams_ms%nz)/cparams_ss%ne)
+                if (.not.(cparams_ms%lowKE_REs)) then
+                  cparams_ms%Ec=cparams_ss%Ec* &
+                        (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
+                        cparams_ms%nz)/cparams_ss%ne)
+                end if
+
                 if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
                    cparams_ms%Ec_min=cparams_ms%Ec
                 else
                    cparams_ms%Ec_min=cparams_ms%Ec* &
                         cparams_ms%Gammac_min/cparams_ss%Gammac
                 end if
-                
+
              CASE('ROSENBLUTH')
                 call load_params_ms(params)
 
@@ -528,7 +532,7 @@ contains
                    cparams_ms%Ec_min=cparams_ms%Ec* &
                         cparams_ms%Gammac_min/cparams_ss%Gammac
                 end if
-                
+
              CASE DEFAULT
                 write(output_unit_write,'("Default case")')
              END SELECT
@@ -540,11 +544,11 @@ contains
              end do
 
 #ifdef FIO
-             if (TRIM(params%field_model) .eq. 'M3D_C1') then     
+             if (TRIM(params%field_model) .eq. 'M3D_C1') then
                 call initialize_m3d_c1_imp(params,F,P, &
-                     cparams_ms%num_impurity_species,.true.)        
+                     cparams_ms%num_impurity_species,.true.)
              endif
-#endif 
+#endif
 
           CASE (MODEL2)
              call load_params_ms(params)
@@ -565,7 +569,7 @@ contains
              !write(6,*) 'Eo',F%Eo
              !write(6,*) 'Ec',cparams_ss%Ec
              !write(6,*) 'Ec_min',cparams_ms%Ec_min
-             
+
              cparams_ss%avalanche=.TRUE.
              if (TRIM(params%collisions_model).eq.'NO_BOUND') then
                 if (abs(F%Eo).lt.cparams_ss%Ec) then
@@ -574,9 +578,9 @@ contains
              else
                 if (abs(F%Eo).lt.cparams_ms%Ec_min) then
                    cparams_ss%avalanche=.FALSE.
-                end if             
+                end if
              end if
-             
+
              if (cparams_ss%avalanche) then
 
                 if (TRIM(params%collisions_model).eq.'NO_BOUND') then
@@ -585,7 +589,7 @@ contains
                    p_crit=1/sqrt(abs(F%Eo)/cparams_ms%Ec_min-1._rp)
                 end if
              end if
-             
+
           else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI')) then
              if (F%ReInterp_2x1t) then
                 maxEinterp=maxval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
@@ -606,12 +610,12 @@ contains
              else
                 if ((abs(maxEinterp).lt.cparams_ms%Ec_min).and. &
                      (abs(minEinterp).lt.cparams_ms%Ec_min)) &
-                     cparams_ss%avalanche=.FALSE.                
+                     cparams_ss%avalanche=.FALSE.
              end if
 
              !write(6,*) 'maxEinterp',maxEinterp,'minEinterp',minEinterp, &
              !     'E_c',cparams_ms%Ec_min,cparams_ss%avalanche
-             
+
              if (cparams_ss%avalanche) then
 
                 if (abs(maxEinterp).gt.abs(minEinterp)) then
@@ -630,7 +634,7 @@ contains
                 end if
 
              end if
-             
+
           else
              write(6,*) 'Need to set p_crit!'
              call korc_abort(25)
@@ -644,7 +648,7 @@ contains
           if (cparams_ss%avalanche) then
 
              cparams_ss%p_crit=p_crit
-             
+
              gam_crit=sqrt(1+p_crit*p_crit)
 
              cparams_ss%gam_crit=gam_crit
@@ -659,7 +663,7 @@ contains
                 cparams_ss%p_min=p_crit
                 cparams_ss%gam_min=gam_crit
              end if
-             
+
              !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm,cparams_ss%p_min,cparams_ss%gam_min
 
 
@@ -706,7 +710,7 @@ contains
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min,'V/m'
                    end if
                    write(output_unit_write,*) 'tau_c,rel is: ',cparams_ss%Tau,'s'
-                end if                
+                end if
                 write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * * *",/)')
              end if
 
@@ -730,7 +734,7 @@ contains
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
                    end if
-                   
+
                 else
                    if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
                       write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo,'V/m'
@@ -752,10 +756,10 @@ contains
                 write(output_unit_write,*) 'No secondary REs will be calculated in this interval'
                 write(output_unit_write,*) 'p_min from initial or last time interval used'
                 write(output_unit_write,*) 'to calculate collision time scales'
-                
+
                 write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * * *",/)')
              end if
-             
+
           end if
 
        end if
@@ -765,14 +769,14 @@ contains
             cparams_ss%pmin_scale*cparams_ss%pmin_scale)
 
        !write(6,*) params%gam_min
-       
+
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
-       
+
     end if
 
-    
+
   end subroutine initialize_collision_params
 
 
@@ -825,7 +829,7 @@ contains
     cparams_ss%ED = cparams_ss%ED/params%cpp%Eo
 
     cparams_ss%taur=cparams_ss%taur/params%cpp%time
-    
+
     cparams_ss%P%a = cparams_ss%P%a/params%cpp%length
     cparams_ss%P%neo = cparams_ss%P%neo/params%cpp%density
     cparams_ss%P%n_ne = cparams_ss%P%n_ne/params%cpp%density
@@ -851,7 +855,7 @@ contains
           CASE DEFAULT
              write(output_unit_write,'("Default case")')
           END SELECT
-             
+
        CASE (MODEL2)
           call normalize_params_ms(params)
        CASE DEFAULT
@@ -933,7 +937,7 @@ contains
     if (params%collisions) then
        E = C_ME*C_C**2 + params%minimum_particle_energy*params%cpp%energy
 
-       
+
        E_min=sqrt((cparams_ss%p_min*cparams_ss%pmin_scale* &
             params%cpp%mass*params%cpp%velocity* &
             C_C)**2+(C_ME*C_C**2)**2)
@@ -950,7 +954,7 @@ contains
        !end if
 
 
-       
+
        if ((params%profile_model.eq.'M3D_C1').or. &
             (params%profile_model(10:10).eq.'H')) then
           nu = (/nu_S_FIO(params,v),nu_D_FIO(params,v),nu_par(v)/)
@@ -959,11 +963,11 @@ contains
        endif
        Tau = MINVAL( 1.0_rp/nu )
 
-       
+
        !write(output_unit_write,'("collision freqencies ",F25.12)') nu(3)
        !write(6,*) 'collision times',1/nu*params%cpp%time
        !write(6,*) 'p_min',cparams_ss%p_min
-       
+
        cparams_ss%subcycling_iterations = ceiling(cparams_ss%dTau*Tau/ &
             params%dt,ip)
        params%coll_cadence=cparams_ss%subcycling_iterations
@@ -975,7 +979,7 @@ contains
           !write(6,*) 'FLOOR(params%snapshot_frequency/cparams_ss%dTau*Tau)', &
           !     FLOOR(params%snapshot_frequency/ &
           !     (cparams_ss%dTau*Tau),ip)
-          
+
           params%coll_per_dump=ceiling(params%snapshot_frequency/ &
                (cparams_ss%dTau*Tau))
 
@@ -987,14 +991,14 @@ contains
              write(6,*) 'more collisional iterations than orbit iterations, decrease orbit timestep!'
              call korc_abort(26)
           endif
-          
+
           params%orbits_per_coll=ceiling(cparams_ss%coll_per_dump_dt/ &
                params%dt)
 
-          params%dt=cparams_ss%coll_per_dump_dt/float(params%orbits_per_coll)         
-          
+          params%dt=cparams_ss%coll_per_dump_dt/float(params%orbits_per_coll)
+
        end if
-       
+
        if (init) num_collisions_in_simulation = params%simulation_time/Tau
 
        if (params%mpi_params%rank .EQ. 0) then
@@ -1009,7 +1013,7 @@ contains
                nu(3)/params%cpp%time
 
 !          write(6,*) Tau
-          
+
           write(output_unit_write,'("The shorter collisional time in the simulations  &
                is: ",E17.10," s")') Tau*params%cpp%time
           write(output_unit_write,'("Number of KORC iterations per collision: ",I16)')  &
@@ -1028,10 +1032,10 @@ contains
              write(output_unit_write,'("Number of orbit steps per collision step: ",I16)') params%orbits_per_coll
 
              write(output_unit_write,'("Orbit time step: ",E17.10)') params%dt*params%cpp%time
-             
+
           end if
-          
-          
+
+
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * &
                * * * * * * * * * * * * * * *",/)')
        end if
@@ -1044,7 +1048,7 @@ contains
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * * * * * * * !
 
   ! *_wu functions have physical units!
-  
+
   function VTe_wu(Te)
     REAL(rp), INTENT(IN) 	:: Te
     !! In Joules
@@ -1092,7 +1096,7 @@ contains
     REAL(rp) 				:: CLog_wu
 
     CLog_wu = 25.3_rp - 1.15_rp*LOG10(1E-6_rp*ne) + 2.3_rp*LOG10(Te/C_E)
-    
+
   end function CLog_wu
 
   function CLog0_wu(ne,Te)
@@ -1103,11 +1107,11 @@ contains
     REAL(rp) 				:: CLog0_wu
 
     CLog0_wu = 14.9_rp - LOG(1E-20_rp*ne)/2._rp + LOG(1E-3_rp*Te/C_E)
-    
+
   end function CLog0_wu
 
   function CLogee_wu(params,ne,Te)
-    
+
     !! With units
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: ne
@@ -1129,11 +1133,11 @@ contains
             log(1+(2*(params%minimum_particle_g-1)/ &
             (VTe_wu(Te)/C_C)**2)**(k/2._rp))/k
     end if
-       
+
   end function CLogee_wu
 
   function CLogei_wu(params,ne,Te)
-    
+
     !! With units
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: ne
@@ -1152,7 +1156,7 @@ contains
             log(1+(2*p/(VTe_wu(Te)/C_C))**k)/k
     end if
   end function CLogei_wu
-  
+
   function CLog(ne,Te) ! Dimensionless ne and Te
     REAL(rp), INTENT(IN) 	:: ne
     REAL(rp), INTENT(IN) 	:: Te
@@ -1170,9 +1174,9 @@ contains
     CLog0 = 14.9_rp - LOG(ne)/2._rp + LOG(Te) + &
          cparams_ss%CLog0_1 + cparams_ss%CLog0_2
   end function CLog0
-  
+
   function CLogee(v,ne,Te)
-    
+
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     !! ne is in m^-3 and below is converted to cm^-3
@@ -1184,14 +1188,14 @@ contains
 
     gam=1/sqrt(1-v**2)
     gam_min=cparams_ss%gam_min
-    
+
     if (cparams_ss%Clog_model.eq.'HESSLOW') then
        CLogee = CLog0(ne,Te)+ &
             log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k
-       
+
     else if (cparams_ss%Clog_model.eq.'CONSTANT') then
        CLogee = cparams_ss%Clog_const
-       
+
     else if (cparams_ss%Clog_model.eq.'MCDEVITT') then
        CLogee = CLog0(ne,Te)+ &
             log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k+ &
@@ -1202,7 +1206,7 @@ contains
   end function CLogee
 
   function CLogei(v,ne,Te)
-    
+
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     !! ne is in m^-3 and below is converted to cm^-3
@@ -1216,12 +1220,12 @@ contains
 
     if (cparams_ss%Clog_model.eq.'CONSTANT') then
        CLogei = cparams_ss%Clog_const
-    else       
+    else
        CLogei = CLog0(ne,Te)+log(1+(2*p/VTe(Te))**k)/k
     end if
-       
+
   end function CLogei
-  
+
   function delta(Te)
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: delta
@@ -1261,19 +1265,19 @@ contains
     REAL(rp) 				:: x
 
  !   write(6,*) ne,Te
-    
+
     x = v/VTe(Te)
     CA_SD  = Gammacee(v,ne,Te)*psi(x)/v
 
 !    write(output_unit_write,'("ne, "E17.10)') ne
 !    write(output_unit_write,'("Te, "E17.10)') Te
-    
+
 !    write(output_unit_write,'("x, "E17.10)') x
 !    write(output_unit_write,'("psi, "E17.10)') psi(x)
 !    write(output_unit_write,'("Gammac, "E17.10)') Gammac(ne,Te)
-    
+
   end function CA_SD
-  
+
   function dCA_SD(v,me,ne,Te)
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: me
@@ -1324,7 +1328,7 @@ contains
           end if
        end do
        CF=CF_temp
-       
+
     else if (params%bound_electron_model.eq.'ROSENBLUTH') then
        CF_temp=CF
        do i=1,cparams_ms%num_impurity_species
@@ -1332,11 +1336,11 @@ contains
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/2._rp
        end do
        CF=CF_temp
-       
+
     end if
-    
+
   end function CF
-  
+
   function CF_FIO(params,v)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
@@ -1355,12 +1359,12 @@ contains
           CF_temp=CF_temp+CF_FIO*cparams_ms%nz(i)/cparams_ms%ne* &
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/ &
                CLogee(v,cparams_ss%ne,cparams_ss%Te)* &
-               (log(1+h_j(i,v)**k)/k-v**2) 
+               (log(1+h_j(i,v)**k)/k-v**2)
        end do
        CF_FIO=CF_temp
-       
+
     end if
-    
+
   end function CF_FIO
 
   function CF_SD(params,v,ne,Te)
@@ -1388,20 +1392,20 @@ contains
             (neut_prof.eq.'HOLLOW')) then
           CF_temp=CF_temp+CF_SD*max(cparams_ms%nz(1)-ne,0._rp)/ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
-               CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2) 
+               CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
        else
           CF_temp=CF_temp+CF_SD*cparams_ms%nz(1)/cparams_ms%ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
-               CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2) 
+               CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
        endif
-       
+
        do i=2,cparams_ms%num_impurity_species
           CF_temp=CF_temp+CF_SD*cparams_ms%nz(i)/cparams_ms%ne* &
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/ &
-               CLogee(v,ne,Te)*(log(1+h_j(i,v)**k)/k-v**2) 
+               CLogee(v,ne,Te)*(log(1+h_j(i,v)**k)/k-v**2)
        end do
        CF_SD=CF_temp
-       
+
     else if (params%bound_electron_model.eq.'ROSENBLUTH') then
        CF_temp=CF_SD
        do i=1,cparams_ms%num_impurity_species
@@ -1409,11 +1413,11 @@ contains
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/2._rp
        end do
        CF_SD=CF_temp
-       
+
     end if
-    
+
   end function CF_SD
-  
+
   function CF_SD_FIO(params,v,ne,Te,nimp)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
@@ -1434,11 +1438,11 @@ contains
        do i=1,cparams_ms%num_impurity_species
           CF_temp=CF_temp+CF_SD_FIO*nimp(i)/ne* &
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/ &
-               CLogee(v,ne,Te)*(log(1+h_j(i,v)**k)/k-v**2) 
+               CLogee(v,ne,Te)*(log(1+h_j(i,v)**k)/k-v**2)
        end do
        CF_SD_FIO=CF_temp
     end if
-    
+
   end function CF_SD_FIO
 
   function CB_ee(v)
@@ -1456,7 +1460,7 @@ contains
        CB_ee  = (0.5_rp*cparams_ms%Gammac_min/v)*(ERF(x) - &
             psi(x) + 0.5_rp*cparams_ss%delta**4*x**2 )
     endif
-    
+
 
   end function CB_ee
 
@@ -1496,7 +1500,7 @@ contains
           end if
        end do
        CB_ei=CB_ei_temp
-       
+
     else if (params%bound_electron_model.eq.'ROSENBLUTH') then
        CB_ei_temp=CB_ei
        do i=1,cparams_ms%num_impurity_species
@@ -1504,11 +1508,11 @@ contains
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/2._rp
        end do
        CB_ei=CB_ei_temp
-       
+
     end if
-    
+
   end function CB_ei
-  
+
   function CB_ei_FIO(params,v)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
@@ -1532,7 +1536,7 @@ contains
        end do
        CB_ei_FIO=CB_ei_temp
     end if
-    
+
   end function CB_ei_FIO
 
   function CB_ee_SD(v,ne,Te,Zeff)
@@ -1578,13 +1582,13 @@ contains
           CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)/(cparams_ms%ne* &
                Zeff*CLogei(v,ne,Te))*g_j(1,v)
        endif
-       
+
        do i=2,cparams_ms%num_impurity_species
           CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(i)/(cparams_ms%ne* &
                Zeff*CLogei(v,ne,Te))*g_j(i,v)
        end do
        CB_ei_SD=CB_ei_temp
-       
+
     else if (params%bound_electron_model.eq.'ROSENBLUTH') then
        CB_ei_temp=CB_ei_SD
        do i=1,cparams_ms%num_impurity_species
@@ -1592,11 +1596,11 @@ contains
                (cparams_ms%Zo(i)-cparams_ms%Zj(i))/2._rp
        end do
        CB_ei_SD=CB_ei_temp
-       
+
     end if
-    
+
   end function CB_ei_SD
-  
+
   function CB_ei_SD_FIO(params,v,ne,Te,nimp,Zeff)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
@@ -1622,7 +1626,7 @@ contains
        CB_ei_SD_FIO=CB_ei_temp
 
     end if
-    
+
   end function CB_ei_SD_FIO
 
   function nu_S(params,v)
@@ -1633,10 +1637,10 @@ contains
     REAL(rp) 				:: nu_S
     REAL(rp) 				:: nu_S_temp
     REAL(rp) 				:: p
-    
+
     p = v/SQRT(1.0_rp - v**2)
     nu_S = CF(params,v)/p
-        
+
   end function nu_S
 
   function nu_S_FIO(params,v)
@@ -1647,36 +1651,36 @@ contains
     REAL(rp) 				:: nu_S_FIO
     REAL(rp) 				:: nu_S_temp
     REAL(rp) 				:: p
-    
+
     p = v/SQRT(1.0_rp - v**2)
     nu_S_FIO = CF_FIO(params,v)/p
-        
+
   end function nu_S_FIO
 
   function h_j(i,v)
     INTEGER, INTENT(IN) 	:: i
-    REAL(rp), INTENT(IN) 	:: v   
+    REAL(rp), INTENT(IN) 	:: v
     REAL(rp)  :: gam
     REAL(rp)  :: p
     REAL(rp)  :: h_j
 
     gam=1/sqrt(1-v**2)
     p=v*gam
-    
+
     h_j=p*sqrt(gam-1)/cparams_ms%IZj(i)
-    
+
   end function h_j
 
   function g_j(i,v)
     INTEGER, INTENT(IN) 	:: i
-    REAL(rp), INTENT(IN) 	:: v   
+    REAL(rp), INTENT(IN) 	:: v
     REAL(rp)  :: gam
     REAL(rp)  :: p
     REAL(rp)  :: g_j
 
     gam=1/sqrt(1-v**2)
     p=v*gam
-    
+
     g_j=2._rp/3._rp*((cparams_ms%Zo(i)**2-cparams_ms%Zj(i)**2)* &
          log((p*cparams_ms%aZj(i))**(3._rp/2._rp)+1)- &
          (cparams_ms%Zo(i)-cparams_ms%Zj(i))**2* &
@@ -1684,7 +1688,7 @@ contains
          ((p*cparams_ms%aZj(i))**(3._rp/2._rp)+1))
 
 !    write(output_unit_write,'("g_j: ",E17.10)') g_j
-    
+
   end function g_j
 
   function nu_D(params,v)
@@ -1769,7 +1773,7 @@ contains
     REAL(rp), DIMENSION(pchunk) :: b2mag,b3mag
     integer(ip) :: cc
 
-    !$OMP SIMD 
+    !$OMP SIMD
 !    !$OMP& aligned(b1_X,b1_Y,b1_Z,b_unit_X,b_unit_Y,b_unit_Z, &
 !    !$OMP& b2_X,b2_Y,b2_Z,b2mag,b3_X,b3_Y,b3_Z,b3mag)
     do cc=1_idef,pchunk
@@ -1798,7 +1802,7 @@ contains
        b3_Z(cc) = b3_Z(cc)/b3mag(cc)
     end do
     !$OMP END SIMD
-    
+
   end subroutine unitVectors_p
 
   subroutine check_collisions_params(spp)
@@ -1860,7 +1864,7 @@ contains
     REAL(rp), DIMENSION(params%pchunk) 		:: b3_X,b3_Y,b3_Z
     REAL(rp), DIMENSION(params%pchunk) 		:: Bmag
 
-    
+
     REAL(rp), DIMENSION(params%pchunk,3) 			:: dW
     !! 3D Weiner process
     REAL(rp), DIMENSION(params%pchunk,3) 			:: rnd1
@@ -1885,7 +1889,7 @@ contains
     integer :: cc,pchunk
 
     pchunk=params%pchunk
-    
+
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
        dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
        time=params%init_time+(params%it-1+tt)*params%dt
@@ -1901,7 +1905,7 @@ contains
           call interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flagCon)
 #endif
        end if
-          
+
        !$OMP SIMD
 !       !$OMP& aligned(um,pm,vm,U_X,U_Y,U_Z,Bmag,B_X,B_Y,B_Z, &
 !       !$OMP& b_unit_X,b_unit_Y,b_unit_Z,xi)
@@ -1911,7 +1915,7 @@ contains
           pm(cc)=me*um(cc)
           vm(cc) = um(cc)/SQRT(1.0_rp + um(cc)*um(cc))
           ! um is gamma times v, this solves for v
-          
+
           Bmag(cc)= SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
 
           b_unit_X(cc)=B_X(cc)/Bmag(cc)
@@ -1920,14 +1924,14 @@ contains
 
           xi(cc)=(U_X(cc)*b_unit_X(cc)+U_Y(cc)*b_unit_Y(cc)+ &
                U_Z(cc)*b_unit_Z(cc))/um(cc)
-          
+
           ! pitch angle in b_unit reference frame
        end do
        !$OMP END SIMD
 
 !       write(output_unit_write,'("vm: ",E17.10)') vm
 !       write(output_unit_write,'("xi: ",E17.10)') xi
-       
+
        call unitVectors_p(pchunk,b_unit_X,b_unit_Y,b_unit_Z,b1_X,b1_Y,b1_Z, &
             b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
           ! b1=b_unit, (b1,b2,b3) is right-handed
@@ -1943,13 +1947,13 @@ contains
        !$OMP END SIMD
 
 !       write(output_unit_write,'("phi: ",E17.10)') phi
-       
+
        !$OMP SIMD
 !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,vm,ne,Te,Zeff,dpm, &
 !       !$OMP& flagCon,flagCol,dxi,xi,pm,dphi,um,Ub_X,Ub_Y,Ub_Z,U_X,U_Y,U_Z, &
 !       !$OMP& b1_X,b1_Y,b1_Z,b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
        do cc=1_idef,pchunk
-          
+
 #ifdef PARALLEL_RANDOM
           ! uses C library to generate normal_distribution random variables,
           ! preserving parallelization where Fortran random number generator
@@ -1961,10 +1965,10 @@ contains
           call RANDOM_NUMBER(rnd1)
 #endif
 
-          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))     
+          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
-          dW(cc,3) = SQRT(3*dt)*(-1+2*rnd1(cc,3)) 
-          ! 3D Weiner process 
+          dW(cc,3) = SQRT(3*dt)*(-1+2*rnd1(cc,3))
+          ! 3D Weiner process
 
           CAL(cc) = CA_SD(vm(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(vm(cc),me,ne(cc),Te(cc))
@@ -1993,16 +1997,16 @@ contains
           if (xi(cc)>1) then
              xi(cc)=1-mod(xi(cc),1._rp)
           else if (xi(cc)<-1) then
-             xi(cc)=-1-mod(xi(cc),-1._rp)             
+             xi(cc)=-1-mod(xi(cc),-1._rp)
           endif
 
           ! Keep phi between [0,pi]
 !          if (phi(cc)>C_PI) then
 !             phi(cc)=C_PI-mod(phi(cc),C_PI)
 !          else if (phi(cc)<0) then
-!             phi(cc)=mod(-phi(cc),C_PI)             
+!             phi(cc)=mod(-phi(cc),C_PI)
 !          endif
-          
+
           um(cc)=pm(cc)/me
 
           Ub_X(cc)=um(cc)*xi(cc)
@@ -2015,7 +2019,7 @@ contains
 
        end do
        !$OMP END SIMD
-       
+
 !       if (tt .EQ. 1_ip) then
 !          write(output_unit_write,'("CA: ",E17.10)') CAL(1)
 !          write(output_unit_write,'("dCA: ",E17.10)') dCAL(1)
@@ -2023,14 +2027,14 @@ contains
 !          write(output_unit_write,'("CB: ",E17.10)') CBL(1)
 !       end if
 
-       
+
        do cc=1_idef,pchunk
           if (pm(cc).lt.0) then
              write(output_unit_write,'("Momentum less than zero")')
              stop
           end if
        end do
-       
+
     end if
   end subroutine include_CoulombCollisions_FO_p
 
@@ -2070,7 +2074,7 @@ contains
     REAL(rp), DIMENSION(params%pchunk) 		:: b3_X,b3_Y,b3_Z
     REAL(rp), DIMENSION(params%pchunk) 		:: Bmag
 
-    
+
     REAL(rp), DIMENSION(params%pchunk,3) 			:: dW
     !! 3D Weiner process
     REAL(rp), DIMENSION(params%pchunk,3) 			:: rnd1
@@ -2095,7 +2099,7 @@ contains
     integer :: cc,pchunk
 
     pchunk=params%pchunk
-    
+
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
        dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
        time=params%init_time+(params%it-1+tt)*params%dt
@@ -2111,7 +2115,7 @@ contains
             ne,ni,nimp,Zeff,flagCon,hint)
 
        !write(6,*) ne,Te,nimp,Zeff
-       
+
        !$OMP SIMD
 !       !$OMP& aligned(um,pm,vm,U_X,U_Y,U_Z,Bmag,B_X,B_Y,B_Z, &
 !       !$OMP& b_unit_X,b_unit_Y,b_unit_Z,xi)
@@ -2121,7 +2125,7 @@ contains
           pm(cc)=me*um(cc)
           vm(cc) = um(cc)/SQRT(1.0_rp + um(cc)*um(cc))
           ! um is gamma times v, this solves for v
-          
+
           Bmag(cc)= SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
 
           b_unit_X(cc)=B_X(cc)/Bmag(cc)
@@ -2130,14 +2134,14 @@ contains
 
           xi(cc)=(U_X(cc)*b_unit_X(cc)+U_Y(cc)*b_unit_Y(cc)+ &
                U_Z(cc)*b_unit_Z(cc))/um(cc)
-          
+
           ! pitch angle in b_unit reference frame
        end do
        !$OMP END SIMD
 
 !       write(output_unit_write,'("vm: ",E17.10)') vm
 !       write(output_unit_write,'("xi: ",E17.10)') xi
-       
+
        call unitVectors_p(pchunk,b_unit_X,b_unit_Y,b_unit_Z,b1_X,b1_Y,b1_Z, &
             b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
           ! b1=b_unit, (b1,b2,b3) is right-handed
@@ -2153,13 +2157,13 @@ contains
        !$OMP END SIMD
 
 !       write(output_unit_write,'("phi: ",E17.10)') phi
-       
+
        !$OMP SIMD
 !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,vm,ne,Te,Zeff,nimp,dpm, &
 !       !$OMP& flagCon,flagCol,dxi,xi,pm,dphi,um,Ub_X,Ub_Y,Ub_Z,U_X,U_Y,U_Z, &
 !       !$OMP& b1_X,b1_Y,b1_Z,b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
        do cc=1_idef,pchunk
-          
+
 #ifdef PARALLEL_RANDOM
           ! uses C library to generate normal_distribution random variables,
           ! preserving parallelization where Fortran random number generator
@@ -2171,10 +2175,10 @@ contains
           call RANDOM_NUMBER(rnd1)
 #endif
 
-          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))     
+          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
-          dW(cc,3) = SQRT(3*dt)*(-1+2*rnd1(cc,3)) 
-          ! 3D Weiner process 
+          dW(cc,3) = SQRT(3*dt)*(-1+2*rnd1(cc,3))
+          ! 3D Weiner process
 
           CAL(cc) = CA_SD(vm(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(vm(cc),me,ne(cc),Te(cc))
@@ -2203,16 +2207,16 @@ contains
           if (xi(cc)>1) then
              xi(cc)=1-mod(xi(cc),1._rp)
           else if (xi(cc)<-1) then
-             xi(cc)=-1-mod(xi(cc),-1._rp)             
+             xi(cc)=-1-mod(xi(cc),-1._rp)
           endif
 
           ! Keep phi between [0,pi]
 !          if (phi(cc)>C_PI) then
 !             phi(cc)=C_PI-mod(phi(cc),C_PI)
 !          else if (phi(cc)<0) then
-!             phi(cc)=mod(-phi(cc),C_PI)             
+!             phi(cc)=mod(-phi(cc),C_PI)
 !          endif
-          
+
           um(cc)=pm(cc)/me
 
           Ub_X(cc)=um(cc)*xi(cc)
@@ -2225,7 +2229,7 @@ contains
 
        end do
        !$OMP END SIMD
-       
+
 !       if (tt .EQ. 1_ip) then
 !          write(output_unit_write,'("CA: ",E17.10)') CAL(1)
 !          write(output_unit_write,'("dCA: ",E17.10)') dCAL(1)
@@ -2233,18 +2237,18 @@ contains
 !          write(output_unit_write,'("CB: ",E17.10)') CBL(1)
 !       end if
 
-       
+
        do cc=1_idef,pchunk
           if (pm(cc).lt.0) then
              write(output_unit_write,'("Momentum less than zero")')
              stop
           end if
        end do
-       
+
     end if
   end subroutine include_CoulombCollisions_FOfio_p
 #endif
-  
+
   subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
        Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
@@ -2284,18 +2288,18 @@ contains
     integer :: cc,pchunk
     integer(ip),INTENT(IN) :: tt
     REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
-    
+
     pchunk=params%pchunk
-    
+
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
-       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt       
+       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
        time=params%init_time+(params%it-1+tt)*params%dt
 
 
        if (params%field_eval.eq.'eqn') then
           call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
                Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-               gradB_R,gradB_PHI,gradB_Z,PSIp)          
+               gradB_R,gradB_PHI,gradB_Z,PSIp)
        else if (params%field_eval.eq.'interp') then
 #ifdef PSPLINE
           if (F%axisymmetric_fields) then
@@ -2363,9 +2367,9 @@ contains
           endif
 #endif
        end if
-       
+
        if (.not.params%FokPlan) E_PHI=0._rp
-       
+
        !$OMP SIMD
 !       !$OMP& aligned (pm,xi,v,Ppll,Bmag,Pmu)
        do cc=1_idef,pchunk
@@ -2375,7 +2379,7 @@ contains
           xi(cc) = Ppll(cc)/pm(cc)
 
           gam(cc) = sqrt(1+pm(cc)*pm(cc))
-          
+
           v(cc) = pm(cc)/gam(cc)
           ! normalized speed (v_K=v_P/c)
        end do
@@ -2383,7 +2387,7 @@ contains
 
 !       write(output_unit_write,'("ne: "E17.10)') ne
 !       write(output_unit_write,'("Te: "E17.10)') Te
-!       write(output_unit_write,'("Bmag: "E17.10)') Bmag                
+!       write(output_unit_write,'("Bmag: "E17.10)') Bmag
 !       write(output_unit_write,'("v: ",E17.10)') v
 !       write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
@@ -2393,7 +2397,7 @@ contains
 !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
 !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
-       
+
 #ifdef PARALLEL_RANDOM
           rnd1(cc,1) = get_random()
           rnd1(cc,2) = get_random()
@@ -2402,9 +2406,9 @@ contains
 #else
           call RANDOM_NUMBER(rnd1)
 #endif
-          
-          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))     
-          dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))     
+
+          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
+          dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
 
 !          write(output_unit_write,'("dW1: ",E17.10)') dW(cc,1)
 !          write(output_unit_write,'("dW2: ",E17.10)') dW(cc,2)
@@ -2422,8 +2426,8 @@ contains
              CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
                   CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc)))
           endif
-          
-          
+
+
           dp(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
                ((-CFL(cc)+dCAL(cc)+E_PHI(cc)*xi(cc))*dt+ &
                sqrt(2.0_rp*CAL(cc))*dW(cc,1))
@@ -2438,7 +2442,7 @@ contains
 
        end do
        !$OMP END SIMD
-          
+
        if (params%FokPlan.and.params%radiation) then
           if(params%GC_rad_model.eq.'SDE') then
 
@@ -2467,14 +2471,14 @@ contains
        end if
 
        !$OMP SIMD
-       do cc=1_idef,pchunk  
+       do cc=1_idef,pchunk
 
           pm(cc)=pm(cc)+dp(cc)
           xi(cc)=xi(cc)+dxi(cc)
        end do
        !$OMP END SIMD
 
-       do cc=1_idef,pchunk 
+       do cc=1_idef,pchunk
 !          if (pm(cc)<0) pm(cc)=-pm(cc)
 
           ! Keep xi between [-1,1]
@@ -2491,7 +2495,7 @@ contains
        end do
 
        !$OMP SIMD
-       do cc=1_idef,pchunk  
+       do cc=1_idef,pchunk
           ! Transform P,xi to p_pll,mu
           Ppll(cc)=pm(cc)*xi(cc)
           Pmu(cc)=(pm(cc)*pm(cc)-Ppll(cc)*Ppll(cc))/(2*me*Bmag(cc))
@@ -2510,7 +2514,7 @@ contains
 !       write(output_unit_write,'("Ppll: ",E17.10)') Ppll
 !      write(output_unit_write,'("Pmu: ",E17.10)') Pmu
 !       write(output_unit_write,'("E_PHI_COL: ",E17.10)') E_PHI
-       
+
        do cc=1_idef,pchunk
           if ((pm(cc).lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
                p_therm)).and.flagCol(cc).eq.1_ip) then
@@ -2530,7 +2534,7 @@ contains
 !               xi(1)*(1-xi(1)*xi(1))/ &
 !               ((cparams_ss%taur/Bmag(1)**2)*gam(1))*dt
 !       end if
-       
+
 !       if (tt .EQ. 1_ip) then
 !          write(output_unit_write,'("CA: ",E17.10)') CAL(1)
 !          write(output_unit_write,'("dCA: ",E17.10)') dCAL(1)
@@ -2538,9 +2542,9 @@ contains
 !          write(output_unit_write,'("CB: ",E17.10)') CBL(1)
 !       end if
 
-       
+
     end if
-    
+
   end subroutine include_CoulombCollisions_GC_p
 
   subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
@@ -2584,19 +2588,19 @@ contains
     integer :: cc,ii
     integer(ip),INTENT(IN) :: tt
     REAL(rp), DIMENSION(achunk,params%num_impurity_species) 	:: nimp
-  
+
 
     dt=cparams_ss%coll_per_dump_dt
     time=params%init_time+(params%it-1)*params%dt+ &
          tt*cparams_ss%coll_per_dump_dt
 
 
-       
+
 
     if (params%field_eval.eq.'eqn') then
        call analytical_fields_GC_p(achunk,F,Y_R,Y_PHI, &
             Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-            gradB_R,gradB_PHI,gradB_Z,PSIp)          
+            gradB_R,gradB_PHI,gradB_Z,PSIp)
     else if (params%field_eval.eq.'interp') then
 #ifdef PSPLINE
        if (F%axisymmetric_fields) then
@@ -2678,7 +2682,7 @@ contains
        pm0(cc)=pm(cc)
        xi(cc) = Ppll(cc)/pm(cc)
        xi0(cc)=xi(cc)
-       
+
        gam(cc) = sqrt(1+pm(cc)*pm(cc))
 
        v(cc) = pm(cc)/gam(cc)
@@ -2688,7 +2692,7 @@ contains
 
     !       write(output_unit_write,'("ne: "E17.10)') ne
     !       write(output_unit_write,'("Te: "E17.10)') Te
-    !       write(output_unit_write,'("Bmag: "E17.10)') Bmag                
+    !       write(output_unit_write,'("Bmag: "E17.10)') Bmag
     !       write(output_unit_write,'("v: ",E17.10)') v
     !       write(output_unit_write,'("xi: ",E17.10)') xi
     !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
@@ -2708,8 +2712,8 @@ contains
        call RANDOM_NUMBER(rnd1)
 #endif
 
-       dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))     
-       dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))     
+       dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
+       dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
 
        !          write(output_unit_write,'("dW1: ",E17.10)') dW(cc,1)
        !          write(output_unit_write,'("dW2: ",E17.10)') dW(cc,2)
@@ -2759,14 +2763,14 @@ contains
        !          write(output_unit_write,'("dxi: ",E17.10)') dxi(cc)
 
        !write(6,*) 'gam,xi',gam(cc),xi(cc)
-       
+
        !write(6,*) 'dpE',E_PHI(cc)*xi(cc)*dt
        !write(6,*) 'dpCF',CFL(cc)*dt
        !write(6,*) 'dpCA',sqrt(2*CAL(cc)*dt)
 
        !write(6,*) 'dxiE',E_PHI(cc)*(1-xi(cc)*xi(cc))/pm(cc)*dt
        !write(6,*) 'dxiCB',2*xi(cc)*CBL(cc)/(pm(cc)*pm(cc))*dt
-       
+
     end do
     !$OMP END SIMD
 
@@ -2792,7 +2796,7 @@ contains
              !write(6,*) 'dxiR',SC_xi(cc)*dt
 
              if (.not.FP_bremsstrahlung) BREM_p(cc)=0._rp
-             
+
              dp(cc)=dp(cc)+(SC_p(cc)+BREM_p(cc))*dt* &
                   REAL(flagCol(cc))*REAL(flagCon(cc))
              dxi(cc)=dxi(cc)+(SC_xi(cc))*dt* &
@@ -2804,8 +2808,8 @@ contains
        end if
     end if
 
-#if DBG_CHECK    
-    do cc=1_idef,achunk  
+#if DBG_CHECK
+    do cc=1_idef,achunk
        if (dp(cc).gt.pm(cc)) then
           write(6,*) 'small angle collision'
           write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
@@ -2818,16 +2822,16 @@ contains
        endif
     end do
 #endif
-    
+
     !$OMP SIMD
-    do cc=1_idef,achunk  
+    do cc=1_idef,achunk
 
        pm(cc)=pm(cc)+dp(cc)
        xi(cc)=xi(cc)+dxi(cc)
     end do
     !$OMP END SIMD
 
-    do cc=1_idef,achunk  
+    do cc=1_idef,achunk
        !          if (pm(cc)<0) pm(cc)=-pm(cc)
 
        ! Keep xi between [-1,1]
@@ -2882,8 +2886,8 @@ contains
     !          write(output_unit_write,'("CB: ",E17.10)') CBL(1)
     !       end if
 
-#if DBG_CHECK    
-    do cc=1_idef,achunk  
+#if DBG_CHECK
+    do cc=1_idef,achunk
        if (ISNAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
           write(6,*) 'xi is NaN or >1 before LAC'
           write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
@@ -2896,13 +2900,13 @@ contains
        end if
     end do
 # endif
-    
-    if (cparams_ss%avalanche) then 
+
+    if (cparams_ss%avalanche) then
 
        !$OMP SIMD
        do cc=1_idef,achunk
           ntot(cc)=ne(cc)
-          if (params%bound_electron_model.eq.'HESSLOW') then          
+          if (params%bound_electron_model.eq.'HESSLOW') then
 
              if ((cparams_ms%Zj(1).eq.0.0).and. &
                   (neut_prof.eq.'UNIFORM')) then
@@ -2931,8 +2935,8 @@ contains
        call large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
             pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon,B_R,B_PHI,B_Z)
 
-#if DBG_CHECK    
-       do cc=1_idef,achunk  
+#if DBG_CHECK
+       do cc=1_idef,achunk
           if (abs(pm(cc)-pm0(cc)).gt.pm0(cc)) then
              write(6,*) 'large angle collision'
              write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
@@ -2945,11 +2949,11 @@ contains
           endif
        end do
 #endif
-       
+
     end if
 
-#if DBG_CHECK    
-    do cc=1_idef,achunk  
+#if DBG_CHECK
+    do cc=1_idef,achunk
        if (ISNAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
           write(6,*) 'xi is NaN or >1 after LAC'
           write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
@@ -2961,16 +2965,16 @@ contains
        end if
     end do
 # endif
-    
+
     !$OMP SIMD
-    do cc=1_idef,achunk  
+    do cc=1_idef,achunk
        ! Transform P,xi to p_pll,mu
        Ppll(cc)=pm(cc)*xi(cc)
        Pmu(cc)=(pm(cc)*pm(cc)-Ppll(cc)*Ppll(cc))/(2*me*Bmag(cc))
     end do
     !$OMP END SIMD
 
-#if DBG_CHECK    
+#if DBG_CHECK
     do cc=1_idef,achunk
        if (Pmu(cc).lt.0._rp) then
           write(6,*) 'mu is negative'
@@ -2982,7 +2986,7 @@ contains
 #endif
 
     E_PHI=E_PHI_LAC
-    
+
   end subroutine include_CoulombCollisionsLA_GC_p
 
 #ifdef FIO
@@ -3029,9 +3033,9 @@ contains
     integer(ip),INTENT(IN) :: tt
 
     pchunk=params%pchunk
-    
+
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
-       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt       
+       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
 
        call get_fio_GCmagnetic_fields_p(params,F,Y_R,Y_PHI,Y_Z, &
             B_R,B_PHI,B_Z,gradB_R,gradB_PHI,gradB_Z, &
@@ -3050,9 +3054,9 @@ contains
        call get_fio_ion_p(params,P,Y_R,Y_PHI,Y_Z, &
             ne,ni,nimp,Zeff,flagCon,hint)
 
-       
+
        !write(6,*) ne,Te,nimp,Zeff
-       
+
        !$OMP SIMD
 !       !$OMP& aligned (pm,xi,v,Ppll,Bmag,Pmu)
        do cc=1_idef,pchunk
@@ -3062,10 +3066,10 @@ contains
           xi(cc) = Ppll(cc)/pm(cc)
 
           gam(cc) = sqrt(1+pm(cc)*pm(cc))
-          
+
           v(cc) = pm(cc)/gam(cc)
           ! normalized speed (v_K=v_P/c)
-             
+
           E_PHI0(cc)=E_PHI(cc)
        end do
        !$OMP END SIMD
@@ -3077,12 +3081,12 @@ contains
        !write(6,*) 'ni',ni*params%cpp%density
        !write(6,*) 'nimp',nimp(:,1:2)*params%cpp%density
        !write(6,*) 'Zeff',Zeff
-       
+
        if (.not.params%FokPlan) E_PHI=0._rp
 
 !       write(output_unit_write,'("ne: "E17.10)') ne
 !       write(output_unit_write,'("Te: "E17.10)') Te
-!       write(output_unit_write,'("Bmag: "E17.10)') Bmag                
+!       write(output_unit_write,'("Bmag: "E17.10)') Bmag
 !       write(output_unit_write,'("v: ",E17.10)') v
 !       write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
@@ -3092,7 +3096,7 @@ contains
 !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
 !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
-       
+
 #ifdef PARALLEL_RANDOM
           rnd1(cc,1) = get_random()
           rnd1(cc,2) = get_random()
@@ -3101,20 +3105,20 @@ contains
 #else
           call RANDOM_NUMBER(rnd1)
 #endif
-          
-          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))     
-          dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))     
+
+          dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
+          dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
 
 !          write(output_unit_write,'("dW1: ",E17.10)') dW(cc,1)
 !          write(output_unit_write,'("dW2: ",E17.10)') dW(cc,2)
-          
+
           CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
           CFL(cc) = CF_SD_FIO(params,v(cc),ne(cc),Te(cc),nimp(cc,:))
           CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
                CB_ei_SD_FIO(params,v(cc),ne(cc),Te(cc),nimp(cc,:),Zeff(cc)))
-          
-          
+
+
           dp(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
                ((-CFL(cc)+dCAL(cc)+E_PHI(cc)*xi(cc))*dt+ &
                sqrt(2.0_rp*CAL(cc))*dW(cc,1))
@@ -3129,7 +3133,7 @@ contains
 
        end do
        !$OMP END SIMD
-          
+
        if (params%FokPlan.and.params%radiation) then
           if(params%GC_rad_model.eq.'SDE') then
 
@@ -3158,7 +3162,7 @@ contains
        end if
 
        !$OMP SIMD
-       do cc=1_idef,pchunk  
+       do cc=1_idef,pchunk
 
           pm(cc)=pm(cc)+dp(cc)
           xi(cc)=xi(cc)+dxi(cc)
@@ -3182,7 +3186,7 @@ contains
        end do
        !$OMP END SIMD
 
-#if DBG_CHECK    
+#if DBG_CHECK
        do cc=1_idef,pchunk
           if((isnan(Ppll(cc)).or.isnan(Pmu(cc))).and. &
              ((flagCol(cc).eq.1_is).and.(flagCon(cc).eq.1_is))) then
@@ -3206,12 +3210,12 @@ contains
              write(6,*) 'Y_R',Y_R(cc)
              write(6,*) 'Y_PHI',Y_PHI(cc)
              write(6,*) 'Y_Z',Y_Z(cc)
-             
+
              stop 'Ppll or Pmu is NaN'
           endif
        end do
 #endif
-       
+
 !       write(output_unit_write,'("rnd1: ",E17.10)') rnd1
 !       write(output_unit_write,'("flag: ",I16)') flag
 !       write(output_unit_write,'("CA: ",E17.10)') CAL
@@ -3223,7 +3227,7 @@ contains
 !       write(output_unit_write,'("Ppll: ",E17.10)') Ppll
 !      write(output_unit_write,'("Pmu: ",E17.10)') Pmu
 !       write(output_unit_write,'("E_PHI_COL: ",E17.10)') E_PHI
-       
+
        do cc=1_idef,pchunk
           if ((pm(cc).lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
                p_therm)).and.flagCol(cc).eq.1_ip) then
@@ -3243,7 +3247,7 @@ contains
 !               xi(1)*(1-xi(1)*xi(1))/ &
 !               ((cparams_ss%taur/Bmag(1)**2)*gam(1))*dt
 !       end if
-       
+
 !       if (tt .EQ. 1_ip) then
 !          write(output_unit_write,'("CA: ",E17.10)') CAL(1)
 !          write(output_unit_write,'("dCA: ",E17.10)') dCAL(1)
@@ -3252,9 +3256,9 @@ contains
 !       end if
 
        if (.not.params%FokPlan) E_PHI=E_PHI0
-       
+
     end if
-    
+
   end subroutine include_CoulombCollisions_GCfio_p
 #endif
 
@@ -3290,33 +3294,39 @@ contains
     ngam1=cparams_ss%ngrid1
     neta1=cparams_ss%ngrid1
 
-    
+
     !$OMP SIMD
     do cc=1_idef,achunk
        pm0(cc)=pm(cc)
        xi0(cc)=xi(cc)
-       
-       gam(cc) = sqrt(1+pm(cc)*pm(cc))       
+
+       gam(cc) = sqrt(1+pm(cc)*pm(cc))
        gam0(cc)=gam(cc)
-       
+
 #ifdef PARALLEL_RANDOM
        prob0(cc) = get_random()
 #else
        call RANDOM_NUMBER(prob0)
 #endif
-       
+
     end do
     !$OMP END SIMD
 
     vmin=1/sqrt(1+1/(cparams_ss%p_min*cparams_ss%pmin_scale)**2)
-    
+
     !! For each primary RE, calculating probability to generate a secondary RE
-    
+
     do cc=1_idef,achunk
 
        if ((flagCol(cc).lt.1).or.(flagCon(cc).lt.1)) cycle
-       
-       E_C=Gammacee(vmin,netot(cc),Te(cc))
+
+       if (.not.(cparams_ms%lowKE_REs)) then
+          E_C=Gammacee(vmin,netot(cc),Te(cc))
+       else
+          E_C=Gammacee(vmin,ne(cc),Te(cc))
+       end if
+
+
 
        !write(6,*) 'E',E_PHI*params%cpp%Eo
        !write(6,*) 'E_C',E_C*params%cpp%Eo
@@ -3327,7 +3337,7 @@ contains
        !write(6,*) 'Clog',CLogee_wu(params,ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature)
 
        if (E_C.gt.abs(E_PHI(cc))) cycle
-       
+
        p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI(cc))/E_C-1)
        gam_c=sqrt(1+p_c**2)
 
@@ -3344,13 +3354,13 @@ contains
        if (gam_min.eq.1._rp) then
           write(6,*) 'R',Y_R(cc)*params%cpp%length,'Z',Y_Z(cc)*params%cpp%length
           write(6,*) 'vmin',vmin,'netot',netot(cc)*params%cpp%density,'Te',Te(cc)*params%cpp%temperature/C_E
-          write(6,*) 'E',E_PHI*params%cpp%Eo,'E_c',E_C*params%cpp%Eo          
+          write(6,*) 'E',E_PHI*params%cpp%Eo,'E_c',E_C*params%cpp%Eo
           write(6,*) 'p_c',p_c,'gam_c',gam_c
           write(6,*) 'p_min',p_min,'gam_min',gam_min
           !write(6,*) 'LAC_gam_resolution: ',TRIM(cparams_ss%LAC_gam_resolution)
           !write(6,*) 'gam_min,gammax',gam_min,gammax
        end if
-       
+
        !! Generating 1D and 2D ranges for secondary RE distribution
 
        if (TRIM(cparams_ss%LAC_gam_resolution).eq.'LIN') then
@@ -3403,7 +3413,7 @@ contains
           eta11(ii,:)=eta1
        end do
 
-       
+
        tmpcosgam=sqrt(((gam(cc)+1)*(gam1-1))/((gam(cc)-1)*(gam1+1)))
        tmpdsigdgam=2*C_PI*C_RE**2/(gam(cc)**2-1)* &
             (((gam(cc)-1)**2*gam(cc)**2)/((gam1-1)**2*(gam(cc)-gam1)**2)- &
@@ -3414,8 +3424,8 @@ contains
        !write(6,*) 'tmpcosgam',tmpcosgam
        !write(6,*) 'tmpdsigdgam',tmpdsigdgam
        !write(6,*) 'tmpsecthreshgam',tmpsecthreshgam
-       
-       
+
+
        do ii=1,neta1
           cosgam(:,ii)=tmpcosgam
           dsigdgam(:,ii)=tmpdsigdgam
@@ -3425,7 +3435,7 @@ contains
        !if (cc.eq.1) then
           !write(6,*) cosgam
        !end if
-       
+
        tmpsinsq=(1-xi(cc)**2)*sin(eta1)**2
        tmpcossq=xi(cc)*cos(eta1)
 
@@ -3437,7 +3447,7 @@ contains
        !if (cc.eq.1) then
           !write(6,*) sinsq
        !end if
-       
+
        cossq=(cosgam-tmpcossq1)**2
 
        pitchrad=sinsq-cossq
@@ -3448,7 +3458,7 @@ contains
           !write(6,*) 'sinsq-cossq',sqrt(sinsq-cossq)
           !write(6,*) 'pitchrad',pitchrad
        !end if
-       
+
        pitchprob=1/(C_PI*sqrt(pitchrad))
 
        where(pitchprob.eq.1/(C_PI*sqrt(tiny(0._rp)))) pitchprob=0._rp
@@ -3456,19 +3466,19 @@ contains
        !if (cc.eq.1) then
           !write(6,*) 'pitchprob',pitchprob
        !end if
-       
+
        S_LA=netot(cc)*params%cpp%density*C_C/(2*C_PI)* &
             (pm11/gam11)*(pm(cc)/gam(cc))* &
             pitchprob*dsigdgam*secthreshgam
 
        !! Saving maximum secondary RE source for use in rejection-acceptance
-       !! sampling algorithm 
+       !! sampling algorithm
        S_LAmax=maxval(S_LA)
-       
+
        S_LA=S_LA*sin(eta11)
 
        !! Trapezoidal integration of secondary RE source to find probabilty
-       
+
        do ii=1,ngam1
           probtmp(ii)=S_LA(ii,1)*deta1(1)/2+S_LA(ii,neta1)*deta1(neta1-1)/2
           !intpitchprob(ii)=pitchprob(ii,1)*sin(eta1(1))*deta1(1)/2+ &
@@ -3486,9 +3496,9 @@ contains
        end do
 
        !write(6,*) 'prob1pre',prob1(cc),'flagCol',flagCol(cc),'flagCon',flagCon(cc),'dt',dt
-       
+
        !write(6,*) 'intpitchprob',intpitchprob
-       
+
        prob1(cc)=prob1(cc)*dt*2*C_PI
 
        if (ISNAN(prob1(cc))) then
@@ -3513,14 +3523,14 @@ contains
 
        !write(6,*) 'gam',gam(cc),'xi',xi(cc)
        !write(6,*) 'prob1',prob1(cc),'prob0',prob0(cc)
-       
+
        if (prob1(cc).gt.prob0(cc)) then
 
           !! If secondary RE generated, begin acceptance-rejection sampling
           !! algorithm
-          
+
           !write(6,*) 'secondary RE from ',prob1,prob0
-          
+
           accepted=.false.
 
           gamsecmax=(gam(cc)+1)/2
@@ -3533,7 +3543,7 @@ contains
              gamtrial=sqrt(1+ptrial*ptrial)
 
              cosgam1=sqrt(((gam(cc)+1)*(gamtrial-1))/((gam(cc)-1)*(gamtrial+1)))
-             
+
              !xirad=sqrt((cosgam1*xi(cc))**2-(xi(cc)**2+cosgam1**2-1))
 
              !if (isnan(xirad)) then
@@ -3551,7 +3561,7 @@ contains
              cossq1=(cosgam1-xi(cc)*xitrial)**2
 
              if ((sinsq1-cossq1).le.0._rp) cycle
-             
+
              pitchprob1=1/(C_PI*sqrt(sinsq1-cossq1))
 
              !if (isnan(pitchprob1)) cycle
@@ -3573,12 +3583,12 @@ contains
              !if (mod(seciter,100).eq.0) then
              !   write(6,*) 'iteration',seciter
              !end if
-             
+
           end do
 
           !! Write secondary RE degrees of freedom to particle derived type
 
-          
+
           !$OMP ATOMIC UPDATE
           spp%pRE=spp%pRE+1
           !$OMP ATOMIC WRITE
@@ -3610,12 +3620,12 @@ contains
           spp%vars%B(spp%pRE,2)=B_PHI(cc)
           !$OMP ATOMIC WRITE
           spp%vars%B(spp%pRE,3)=B_Z(cc)
-          
-          
+
+
           !! Write changes to primary RE degrees of freedom to temporary
           !! arrays for passing back out to particle derived type
 
-#if DBG_CHECK    
+#if DBG_CHECK
           if (spp%vars%V(spp%pRE,2).lt.0._rp) then
              write(6,*) 'mu is negative for secondary'
              write(6,*) 'ppll,mu',spp%vars%V(spp%pRE,1),spp%vars%V(spp%pRE,2)
@@ -3625,7 +3635,7 @@ contains
              call korc_abort(24)
           end if
 # endif
-          
+
           if (cparams_ss%ConserveLA) then
              tmppm=pm(cc)
              gamvth=1/sqrt(1-2*Te(cc))
@@ -3634,7 +3644,7 @@ contains
              xi(cc)=(tmppm*xi(cc)-ptrial*xitrial)/pm(cc)
           end if
 
-#if DBG_CHECK    
+#if DBG_CHECK
           if (abs(pm(cc)-pm0(cc)).gt.pm0(cc)) then
              write(6,*) 'Conservative update'
              write(6,*) 'p0,gam0,xi0',pm0(cc),gam0(cc),xi0(cc)
@@ -3645,24 +3655,24 @@ contains
           endif
 
 #endif
-          
+
           !$OMP ATOMIC READ
           pRE=spp%pRE
-          
+
           if (pRE.eq.spp%ppp) then
              write(6,*) 'All REs allocated on proc',params%mpi_params%rank
              call korc_abort(24)
           end if
-          
+
        end if
-       
+
     end do
 
 
-    
+
   end subroutine large_angle_source
 
-  
+
   subroutine save_params_ms(params)
     TYPE(KORC_PARAMS), INTENT(IN) 			:: params
     CHARACTER(MAX_STRING_LENGTH) 			:: filename
@@ -3750,7 +3760,7 @@ contains
        attr = "Critical electric field with impurities"
        units = params%cpp%Eo
        call save_to_hdf5(h5file_id,dset,units*cparams_ms%Ec_min,attr)
-       
+
        DEALLOCATE(attr_array)
 
        call h5gclose_f(group_id, h5error)
@@ -3823,7 +3833,7 @@ contains
        dset = TRIM(gname) // "/Clogei"
        attr = "Coulomb logarithm"
        call save_to_hdf5(h5file_id,dset,cparams_ss%CoulombLogei,attr)
-       
+
        dset = TRIM(gname) // "/VTe"
        attr = "Background electron temperature"
        units = params%cpp%velocity
@@ -3842,7 +3852,7 @@ contains
        attr = "Synchroton damping time in s"
        units = params%cpp%time
        call save_to_hdf5(h5file_id,dset,units*cparams_ss%taur,attr)
-       
+
        dset = TRIM(gname) // "/Tau"
        attr = "Relativistic collisional time in s"
        units = params%cpp%time
@@ -3900,7 +3910,7 @@ contains
              CASE DEFAULT
                 write(output_unit_write,'("Default case")')
              END SELECT
-             
+
           CASE (MODEL2)
              call save_params_ms(params)
           CASE DEFAULT
@@ -3940,7 +3950,7 @@ contains
           CASE DEFAULT
              write(output_unit_write,'("Default case")')
           END SELECT
-          
+
        CASE (MODEL2)
           call deallocate_params_ms()
        CASE DEFAULT
