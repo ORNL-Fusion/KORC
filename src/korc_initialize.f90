@@ -1,5 +1,5 @@
 module korc_initialize
-  !! @note Module with subroutines to load simulation parameters 
+  !! @note Module with subroutines to load simulation parameters
   !! and to define the time step in the simulation.@endnote
   use korc_types
   use korc_constants
@@ -29,7 +29,7 @@ CONTAINS
 
 
   subroutine load_korc_params(params)
-    !! @note Subroutine that loads the simulation parameters from the 
+    !! @note Subroutine that loads the simulation parameters from the
     !! file specified in params\%path_to_inputs @endnote
     TYPE (KORC_PARAMS), INTENT(INOUT) 	:: params
     !! Core KORC simulation parameters.
@@ -50,7 +50,7 @@ CONTAINS
     !REAL(rp) 				:: restart_overwrite_frequency
     !! Time between overwrites of restart file in time of the simulation.
     !REAL(rp) 				:: dt
-    !! Time step in the simulation as a fraction of the relativistic 
+    !! Time step in the simulation as a fraction of the relativistic
     !! electron gyro-period @f$\tau_e = 2\pi\gamma m_e/eB_0@f$
     !REAL(rp) 				:: minimum_particle_energy
     !! Minimum allowed relativistic factor @f$\gamma@f$ of simulated electrons.
@@ -122,7 +122,7 @@ CONTAINS
     params%reinit  = reinit
 
     params%load_balance = load_balance
-    
+
     params%simulation_time = simulation_time
     params%snapshot_frequency = snapshot_frequency
     params%restart_overwrite_frequency=restart_overwrite_frequency
@@ -259,13 +259,13 @@ CONTAINS
 
     if (params%restart) then
        call load_time_stepping_params(params)
-       
+
     else if (params%proceed.or.params%reinit) then
-       
+
        call load_prev_time(params)
 
        if (params%reinit) params%init_time=0._rp
-       
+
        params%ito = 1_ip
 
        params%dt = params%dt*(2.0_rp*C_PI*params%cpp%time_r)
@@ -282,7 +282,7 @@ CONTAINS
        if (params%t_steps.gt.params%output_cadence) then
           params%dt=params%snapshot_frequency/float(params%output_cadence)
        endif
-       
+
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
             params%dt,ip)
 
@@ -297,7 +297,7 @@ CONTAINS
        params%dt = params%dt*(2.0_rp*C_PI*params%cpp%time_r)
 
        params%t_steps = CEILING(params%simulation_time/params%dt,ip)
-       
+
        params%output_cadence = CEILING(params%snapshot_frequency/params%dt,ip)
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
@@ -321,7 +321,7 @@ CONTAINS
     if (params%mpi_params%rank .EQ. 0) then
        write(output_unit_write,'(/,"* * * * * TIME STEPPING PARAMETERS * * * * *")')
        write(output_unit_write,'("Simulation time: ",E17.10," s")') params%simulation_time
-       write(output_unit_write,'("Initial time: ",E17.10," s")') params%init_time     
+       write(output_unit_write,'("Initial time: ",E17.10," s")') params%init_time
        write(output_unit_write,'("Output frequency: ",E17.10," s")') params%snapshot_frequency
        write(output_unit_write,'("Relativistic gyro-period: ",E17.10)') 2.0_rp*C_PI* &
             params%cpp%time_r
@@ -340,32 +340,32 @@ CONTAINS
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * !
 
   subroutine initialize_particles(params,F,P,spp)
-    !! @note Subroutine that loads the information of the initial condition 
+    !! @note Subroutine that loads the information of the initial condition
     !! of the different particle species. This subroutine calls
-    !! the subroutine that generates the initial energy and pitch angle 
+    !! the subroutine that generates the initial energy and pitch angle
     !! distribution functions. @endnote
     TYPE(KORC_PARAMS), INTENT(IN) 				:: params
     !! Core KORC simulation parameters.
     TYPE(FIELDS), INTENT(IN) 					:: F
-    !! An instance of KORC's derived type FIELDS containing all the information 
+    !! An instance of KORC's derived type FIELDS containing all the information
     !! about the fields used in the simulation. See [[korc_types]]
     !!and [[korc_fields]].
     TYPE(PROFILES), INTENT(INOUT) 			:: P
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(OUT) 	:: spp
-    !! An instance of KORC's derived type SPECIES containing all the information 
+    !! An instance of KORC's derived type SPECIES containing all the information
     !! of different electron species. See [[korc_types]].
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: ppp
-    !! Number of computational particles per MPI process 
+    !! Number of computational particles per MPI process
     !! used to simulate each electron species.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: q
     !! Charge of each species.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: m
     !! Mass of each species.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: Eo
-    !! Initial energy of each electron species in case of 
+    !! Initial energy of each electron species in case of
     !! using an initial mono-energetic distribution.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: etao
-    !! Initial pitch-angle of each electron species in case of 
+    !! Initial pitch-angle of each electron species in case of
     !! using an initial mono-pitch-angle distribution.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: Eo_lims
     !! Minimum and maximum energy limits of a given initial
@@ -389,7 +389,7 @@ CONTAINS
     !! Radial position of the center of the electrons' initial
     !! spatial distribution.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: PHIo
-    !! Azimuthal position of the electrons' initial spatial distribution, 
+    !! Azimuthal position of the electrons' initial spatial distribution,
     !! in case of using a disk at a certain poloidal section.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: Zo
     !! Height of the center of the electrons' initial spatial distribution.
@@ -401,7 +401,7 @@ CONTAINS
     !! Exponential falloff or standard deviation of a non-uniform radial
     !! distribution of electrons.
     !REAL(rp), DIMENSION(:), ALLOCATABLE 				:: shear_factor
-    !! Shear factor used to generate an initial spatial 
+    !! Shear factor used to generate an initial spatial
     !! distribution with an elliptic poloidal cross section.
     !! See <em>Carbajal and del-Castillo-Negrete, Nuclear Fusion,
     !! submitted (2018)</em>.
@@ -533,7 +533,7 @@ CONTAINS
        ALLOCATE( spp(ii)%vars%mu(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%Prad(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%Pin(spp(ii)%ppp) )
-       ALLOCATE( spp(ii)%vars%flagCon(spp(ii)%ppp) )       
+       ALLOCATE( spp(ii)%vars%flagCon(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%flagCol(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%initLCFS(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%flagRE(spp(ii)%ppp) )
@@ -541,7 +541,7 @@ CONTAINS
 #ifdef FIO
        ALLOCATE( spp(ii)%vars%hint(spp(ii)%ppp))
 #endif
-       
+
        !     write(output_unit_write,'("0 size of PSI_P: ",I16)') size(spp(ii)%vars%PSI_P)
 
        spp(ii)%vars%X = 0.0_rp
@@ -567,7 +567,7 @@ CONTAINS
        spp(ii)%vars%initLCFS(1:spp(ii)%pinit) = 1_is
        if (spp(ii)%pinit.lt.spp(ii)%ppp) then
           spp(ii)%vars%flagCon(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
-          spp(ii)%vars%flagCol(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is          
+          spp(ii)%vars%flagCol(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
           spp(ii)%vars%flagRE(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
           spp(ii)%vars%initLCFS(spp(ii)%pinit+1:spp(ii)%ppp) = 0_is
        endif
@@ -619,7 +619,7 @@ CONTAINS
     P%R0_RE=spp(1)%Ro
     P%Z0_RE=spp(1)%Zo
     P%n_REr0=max(sqrt(spp(1)%psi_max*2*spp(1)%sigmaR**2), &
-         sqrt(spp(1)%psi_max*2*spp(1)%sigmaZ**2))  
+         sqrt(spp(1)%psi_max*2*spp(1)%sigmaZ**2))
 
     call initial_energy_pitch_dist(params,spp)
 
@@ -660,18 +660,18 @@ CONTAINS
 
 
   subroutine set_up_particles_ic(params,F,spp,P)
-    !! @note Subroutine with calls to subroutines to load particles' 
+    !! @note Subroutine with calls to subroutines to load particles'
     !! information if it is a restarting simulation, or to initialize the
-    !! spatial and velocity distribution of each species if it is a new  
+    !! spatial and velocity distribution of each species if it is a new
     !! simulation. @endnote
     TYPE(KORC_PARAMS), INTENT(INOUT) 				:: params
     !! Core KORC simulation parameters.
     TYPE(FIELDS), INTENT(INOUT) 					:: F
-    !! An instance of KORC's derived type FIELDS containing all 
-    !! the information about the fields used in the simulation. 
+    !! An instance of KORC's derived type FIELDS containing all
+    !! the information about the fields used in the simulation.
     !! See [[korc_types]] and [[korc_fields]].
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
-    !! An instance of KORC's derived type SPECIES containing all 
+    !! An instance of KORC's derived type SPECIES containing all
     !! the information of different electron species. See [[korc_types]].
     TYPE(PROFILES), INTENT(IN)                                 :: P
     !! An instance of the KORC derived type PROFILES.
@@ -687,10 +687,17 @@ CONTAINS
           end do
        end if
 
+       do ii=1_idef,params%num_species
+          if (TRIM(spp(ii)%spatial_distribution).eq.'BMC_radial') then
+             call load_data_from_hdf5_BMC(spp(ii)%BMC_Nra,spp(ii)%BMC_ra, &
+                  spp(ii)%BMC_nRE,params)
+          end if
+       end do
+
        !write(6,*) 'flagRE',spp(1)%vars%flagRE
        !write(6,*) 'pRE',spp(1)%pRE
-       
-       call init_random_seed()              
+
+       call init_random_seed()
     else
 
        if (params%mpi_params%rank .EQ. 0) then

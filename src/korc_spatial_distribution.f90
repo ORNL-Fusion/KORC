@@ -18,7 +18,8 @@ MODULE korc_spatial_distribution
 
   REAL(rp), PRIVATE, PARAMETER :: minmax_buffer_size = 10.0_rp
 
-  PUBLIC :: intitial_spatial_distribution
+  PUBLIC :: intitial_spatial_distribution,&
+            load_data_from_hdf5_BMC
   PRIVATE :: uniform,&
        disk,&
        torus,&
@@ -2192,9 +2193,9 @@ SUBROUTINE load_data_from_hdf5_BMC(BMC_Nra,BMC_ra,BMC_nRE,params,Nr_a,r_a,nRE)
   INTEGER(HID_T) :: subgroup_id
   REAL(rp) :: rdatum
   INTEGER :: h5error
-  INTEGER, intent(out) :: Nr_a
+  INTEGER, optional, intent(out) :: Nr_a
   INTEGER, intent(inout) :: BMC_Nra
-  REAL(rp), INTENT(out), ALLOCATABLE,DIMENSION(:) :: r_a,nRE
+  REAL(rp), optional, INTENT(out), ALLOCATABLE,DIMENSION(:) :: r_a,nRE
   REAL(rp), INTENT(inout), ALLOCATABLE,DIMENSION(:) :: BMC_ra,BMC_nRE
   INTEGER :: ii
 
@@ -2207,23 +2208,27 @@ SUBROUTINE load_data_from_hdf5_BMC(BMC_Nra,BMC_ra,BMC_nRE,params,Nr_a,r_a,nRE)
 
   dset = "/Nr_a"
   call load_from_hdf5(h5file_id,dset,rdatum)
-  Nr_a = INT(rdatum)
+  BMC_Nra=INT(rdatum)
 
-  ALLOCATE(r_a(Nr_a))
-  ALLOCATE(nRE(Nr_a))
+  if (present(NR_a)) then
+    Nr_a = BMC_Nra
+    ALLOCATE(r_a(BMC_Nra))
+    ALLOCATE(nRE(BMC_Nra))
+  endif
+
+  ALLOCATE(BMC_ra(BMC_Nra))
+  ALLOCATE(BMC_nRE(BMC_Nra))
 
   dset = "/r_a"
-  call load_array_from_hdf5(h5file_id,dset,r_a)
+  call load_array_from_hdf5(h5file_id,dset,BMC_ra)
 
   dset = "/nRE"
-  call load_array_from_hdf5(h5file_id,dset,nRE)
+  call load_array_from_hdf5(h5file_id,dset,BMC_nRE)
 
-  ALLOCATE(BMC_ra(Nr_a))
-  ALLOCATE(BMC_nRE(Nr_a))
-
-  BMC_Nra=Nr_a
-  BMC_ra=r_a
-  BMC_nRE=nRE
+  if (present(NR_a)) then
+    r_a = BMC_ra
+    nRE = BMC_nRE
+  endif
 
   call h5fclose_f(h5file_id, h5error)
   if (h5error .EQ. -1) then
