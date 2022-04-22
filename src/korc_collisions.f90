@@ -78,6 +78,7 @@ module korc_collisions
      ! Critical electric field
      LOGICAL  :: LargeCollisions
      LOGICAL :: lowKE_REs
+     REAL(rp)  :: lowKE_LAC_not_ionized
 
   END TYPE PARAMS_MS
 
@@ -315,6 +316,7 @@ contains
 
     cparams_ms%neut_prof=neut_prof
     cparams_ms%lowKE_REs=lowKE_REs
+    cparams_ms%lowKE_LAC_not_ionized=lowKE_LAC_not_ionized
 
     cparams_ms%Gammac_min = Gammac_wu(params,cparams_ss%P%n_ne,cparams_ss%Te)
     cparams_ms%LargeCollisions = LargeCollisions
@@ -2912,23 +2914,48 @@ contains
           ntot(cc)=ne(cc)
           if (params%bound_electron_model.eq.'HESSLOW') then
 
-             if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'UNIFORM')) then
-                ntot(cc)=ntot(cc)+cparams_ms%nz(1)* &
-                     (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-             else if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'HOLLOW')) then
-                ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
-                     (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-             else
-                ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
-                     (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-             endif
+             if (.not.cparams_ms%lowKE_REs) then
 
-             do ii=2,cparams_ms%num_impurity_species
-                ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(ii)/cparams_ms%ne* &
-                     (cparams_ms%Zo(ii)-cparams_ms%Zj(ii))
-             end do
+                if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'UNIFORM')) then
+                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'HOLLOW')) then
+                   ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                else
+                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                endif
+
+                do ii=2,cparams_ms%num_impurity_species
+                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(ii)/cparams_ms%ne* &
+                        (cparams_ms%Zo(ii)-cparams_ms%Zj(ii))
+                end do
+             else
+                if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'UNIFORM')) then
+                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
+                              -cparams_ms%lowKE_LAC_not_ionized)
+                else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'HOLLOW')) then
+                   ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
+                              -cparams_ms%lowKE_LAC_not_ionized)
+                else
+                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
+                              -cparams_ms%lowKE_LAC_not_ionized)
+                endif
+
+                do ii=2,cparams_ms%num_impurity_species
+                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(ii)/cparams_ms%ne* &
+                        (cparams_ms%Zo(ii)-cparams_ms%Zj(ii) &
+                              -cparams_ms%lowKE_LAC_not_ionized)
+                end do
+             endif
 
           end if
        end do
