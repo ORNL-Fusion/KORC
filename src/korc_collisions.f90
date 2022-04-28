@@ -2294,6 +2294,7 @@ contains
     integer :: cc,pchunk
     integer(ip),INTENT(IN) :: tt
     REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
+    REAL(rp), DIMENSION(params%pchunk) 	:: E_PHI_tmp
 
     pchunk=params%pchunk
 
@@ -2374,6 +2375,7 @@ contains
 #endif
        end if
 
+       E_PHI_tmp=E_PHI
        if (.not.params%FokPlan) E_PHI=0._rp
 
        !$OMP SIMD
@@ -2548,6 +2550,7 @@ contains
 !          write(output_unit_write,'("CB: ",E17.10)') CBL(1)
 !       end if
 
+       if (.not.params%FokPlan) E_PHI=E_PHI_tmp
 
     end if
 
