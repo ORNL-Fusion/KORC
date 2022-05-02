@@ -3355,7 +3355,7 @@ contains
        if ((flagCol(cc).lt.1).or.(flagCon(cc).lt.1)) cycle
 
        if (.not.(cparams_ms%lowKE_REs)) then
-          E_C=Gammacee(vmin,netot(cc),Te(cc))
+          E_C=netot(cc)/ne(cc)*Gammacee(vmin,ne(cc),Te(cc))
        else
           E_C=Gammacee(vmin,ne(cc),Te(cc))
        end if
@@ -3370,18 +3370,23 @@ contains
        !write(6,*) 'Te',Te(cc)*params%cpp%temperature
        !write(6,*) 'Clog',CLogee_wu(params,ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature)
 
-       if (E_C.gt.abs(E_PHI(cc))) cycle
+       if (.not.(cparams_ss%always_aval)) then
+          if (E_C.gt.abs(E_PHI(cc))) cycle
 
-       p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI(cc))/E_C-1)
-       gam_c=sqrt(1+p_c**2)
+          p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI(cc))/E_C-1)
+          gam_c=sqrt(1+p_c**2)
 
-       if(cparams_ss%min_secRE.eq.'THERM') then
-          gam_min=(gam_c+1)/2
-          p_min=sqrt(gam_min**2-1)
+          if(cparams_ss%min_secRE.eq.'THERM') then
+             gam_min=(gam_c+1)/2
+             p_min=sqrt(gam_min**2-1)
+          else
+             gam_min=gam_c
+             p_min=p_c
+          end if
        else
-          gam_min=gam_c
-          p_min=p_c
-       end if
+          p_min=cparams_ss%p_min*cparams_ss%pmin_scale
+          gam_min=sqrt(1+p_min**2)
+       endif
 
        gammax=(gam(cc)+1._rp)/2._rp
 
