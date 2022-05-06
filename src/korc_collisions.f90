@@ -74,6 +74,7 @@ module korc_collisions
           4838.2_rp,huge(1._rp)/)
 
      CHARACTER(30) :: neut_prof
+     REAL(rp)  :: neut_edge_fac
      REAL(rp) 			:: Ec,Ec_min
      ! Critical electric field
      LOGICAL  :: LargeCollisions
@@ -315,6 +316,7 @@ contains
     cparams_ms%Ee_IZj = C_ME*C_C**2/cparams_ms%IZj
 
     cparams_ms%neut_prof=neut_prof
+    cparams_ms%neut_edge_fac=neut_edge_fac
     cparams_ms%lowKE_REs=lowKE_REs
     cparams_ms%lowKE_LAC_not_ionized=lowKE_LAC_not_ionized
 
@@ -1373,7 +1375,7 @@ contains
 
   end function CF_FIO
 
-  function CF_SD(params,v,ne,Te)
+  function CF_SD(params,v,ne,Te,P,Y_R,Y_Z)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
@@ -1382,7 +1384,9 @@ contains
     REAL(rp) 				:: CF_temp
     REAL(rp) 				:: x
     INTEGER :: i
-    REAL(rp)  :: k=5._rp
+    REAL(rp)  :: k=5._rp,ra
+    TYPE(PROFILES), INTENT(IN)  :: P
+    REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
 
     x = v/VTe(Te)
     CF_SD  = Gammacee(v,ne,Te)*psi(x)/Te
@@ -1399,6 +1403,16 @@ contains
           CF_temp=CF_temp+CF_SD*max(cparams_ms%nz(1)-ne,0._rp)/ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
                CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
+       else if ((cparams_ms%Zj(1).eq.0.0).and. &
+            (neut_prof.eq.'EDGE')) then
+          ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
+          CF_temp=CF_temp+CF_SD*cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac/ne* &
+               (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
+               CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
+
+          !write(6,*) 'ra',ra,'nimp',cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
+         !     params%cpp%density
+
        else
           CF_temp=CF_temp+CF_SD*cparams_ms%nz(1)/cparams_ms%ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
@@ -1559,7 +1573,7 @@ contains
          0.5_rp*delta(Te)**4*x**2 )
   end function CB_ee_SD
 
-  function CB_ei_SD(params,v,ne,Te,Zeff)
+  function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
@@ -1567,8 +1581,10 @@ contains
     REAL(rp), INTENT(IN) 	:: Zeff
     REAL(rp) 				:: CB_ei_SD
     REAL(rp) 				:: CB_ei_temp
-    REAL(rp) 				:: x
+    REAL(rp) 				:: x,ra
     INTEGER :: i
+    TYPE(PROFILES), INTENT(IN)  :: P
+    REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
 
     x = v/VTe(Te)
     CB_ei_SD  = (0.5_rp*Gammacee(v,ne,Te)/v)* &
@@ -1583,6 +1599,11 @@ contains
        else if ((cparams_ms%Zj(1).eq.0.0).and. &
             (neut_prof.eq.'HOLLOW')) then
           CB_ei_temp=CB_ei_temp+CB_ei_SD*max(cparams_ms%nz(1)-ne,0._rp)/(ne* &
+               Zeff*CLogei(v,ne,Te))*g_j(1,v)
+      else if ((cparams_ms%Zj(1).eq.0.0).and. &
+            (neut_prof.eq.'EDGE')) then
+          ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
+          CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac/(ne* &
                Zeff*CLogei(v,ne,Te))*g_j(1,v)
        else
           CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)/(cparams_ms%ne* &
@@ -1978,9 +1999,9 @@ contains
 
           CAL(cc) = CA_SD(vm(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(vm(cc),me,ne(cc),Te(cc))
-          CFL(cc) = CF_SD(params,vm(cc),ne(cc),Te(cc))
+          CFL(cc) = CF_SD(params,vm(cc),ne(cc),Te(cc),P,Y_R(cc),Y_Z(cc))
           CBL(cc) = (CB_ee_SD(vm(cc),ne(cc),Te(cc),Zeff(cc))+ &
-               CB_ei_SD(params,vm(cc),ne(cc),Te(cc),Zeff(cc)))
+               CB_ei_SD(params,vm(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
 
 
           dpm(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
@@ -2188,9 +2209,9 @@ contains
 
           CAL(cc) = CA_SD(vm(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(vm(cc),me,ne(cc),Te(cc))
-          CFL(cc) = CF_SD(params,vm(cc),ne(cc),Te(cc))
+          CFL(cc) = CF_SD(params,vm(cc),ne(cc),Te(cc),P,Y_R(cc),Y_Z(cc))
           CBL(cc) = (CB_ee_SD(vm(cc),ne(cc),Te(cc),Zeff(cc))+ &
-               CB_ei_SD(params,vm(cc),ne(cc),Te(cc),Zeff(cc)))
+               CB_ei_SD(params,vm(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
 
 
           dpm(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
@@ -2430,9 +2451,9 @@ contains
           else
              CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
              dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
-             CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc))
+             CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc),P,Y_R(cc),Y_Z(cc))
              CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
-                  CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc)))
+                  CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
           endif
 
 
@@ -2593,7 +2614,7 @@ contains
     REAL(rp), DIMENSION(achunk) 					:: CFL
     REAL(rp), DIMENSION(achunk) 					:: CBL
     REAL(rp), DIMENSION(achunk) 	:: SC_p,SC_xi,BREM_p
-    REAL(rp) 					:: kappa
+    REAL(rp) 					:: kappa,ra
     integer :: cc,ii
     integer(ip),INTENT(IN) :: tt
     REAL(rp), DIMENSION(achunk,params%num_impurity_species) 	:: nimp
@@ -2738,9 +2759,9 @@ contains
        else
           CAL(cc) = CA_SD(v(cc),ne(cc),Te(cc))
           dCAL(cc)= dCA_SD(v(cc),me,ne(cc),Te(cc))
-          CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc))
+          CFL(cc) = CF_SD(params,v(cc),ne(cc),Te(cc),P,Y_R(cc),Y_Z(cc))
           CBL(cc) = (CB_ee_SD(v(cc),ne(cc),Te(cc),Zeff(cc))+ &
-               CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc)))
+               CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
        endif
 
        if (.not.energy_diffusion) then
@@ -2927,6 +2948,11 @@ contains
                      (neut_prof.eq.'HOLLOW')) then
                    ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
                         (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'EDGE')) then
+                   ra=sqrt((Y_R(cc)-P%R0)**2+(Y_Z(cc)-P%Z0)**2)/P%a
+                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
                 else
                    ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
                         (cparams_ms%Zo(1)-cparams_ms%Zj(1))
@@ -2947,6 +2973,11 @@ contains
                    ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
                         (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
                               -cparams_ms%lowKE_LAC_not_ionized)
+                else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'EDGE')) then
+                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
+                        -cparams_ms%lowKE_LAC_not_ionized)
                 else
                    ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
                         (cparams_ms%Zo(1)-cparams_ms%Zj(1) &

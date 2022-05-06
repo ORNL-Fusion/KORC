@@ -297,6 +297,7 @@ module korc_input
   REAL(rp), DIMENSION(10)  :: IZj_mult = 15.7596
     ! Ionization energy of impurity in eV
   CHARACTER(20) :: neut_prof = 'UNIFORM'
+  REAL(rp)  :: neut_edge_fac
   LOGICAL :: lowKE_REs = .FALSE.
   REAL(rp)  :: lowKE_LAC_not_ionized = 0.0
 
@@ -462,7 +463,7 @@ CONTAINS
          FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const,always_aval
     NAMELIST /CollisionParamsMultipleSpecies/ num_impurity_species,Te_mult, &
          ne_mult,Zo_mult,Zj_mult,nz_mult,IZj_mult,neut_prof,lowKE_REs, &
-         lowKE_LAC_not_ionized
+         lowKE_LAC_not_ionized,neut_edge_fac
     NAMELIST /AvalancheGenerationPDF/ max_pitch_angle_aval, &
          min_pitch_angle_aval,max_energy_aval,min_energy_aval,ne_aval, &
          Zeff_aval,Epar_aval,Te_aval,dth_aval,dp_aval,dR_aval,dZ_aval
