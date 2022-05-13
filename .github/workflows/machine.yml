@@ -23,11 +23,11 @@ jobs:
       - name: retrieve project
         uses: actions/checkout@v2
 
-      - name: grab cmfkit
-        uses: actions/checkout@v2
-        with: 
-          repository: ornl-fusion/cmfkit
-          path: ./.cmfkit_base
+#      - name: grab cmfkit
+#        uses: actions/checkout@v2
+#        with: 
+#          repository: ornl-fusion/cmfkit
+#          path: ./.cmfkit_base
 
       - name: launch build
         env:

@@ -1,0 +1,152 @@
+#!/bin/bash
+
+_readybake_isolate_buildpath() {
+
+  local readonly base_image="$1"
+  local path_dockerfile
+  local match_count
+  local rc
+
+  read match_count <<< $(
+    grep  --recursive \
+          --files-with-matches \
+        "^FROM ${base_image}" $CMFKIT_DUGOUT_DIR/platform/readybake* \
+      | wc -l
+  )
+
+  [[ ${match_count} -eq 1 ]] || return 1
+
+  read path_dockerfile <<< $(
+    grep  --recursive \
+          --files-with-matches \
+        "^FROM ${base_image}" $CMFKIT_DUGOUT_DIR/platform/readybake* \
+  )
+
+  CMFKIT_READYBAKE_BUILD_PATH="${path_dockerfile%/*}"
+}
+
+
+_readybake_yield_image() {
+
+  [[ -n "$CMFKIT_READYBAKE_BUILD_PATH" ]] || return 1
+
+  local readonly image_tag="localhost:5000/${CMFKIT_READYBAKE_BUILD_PATH##*/}"
+
+  cd $CMFKIT_READYBAKE_BUILD_PATH
+
+  DOCKER_BUILDKIT=1 docker build --tag "${image_tag}" .
+  rc="$?"
+
+  cd - >/dev/null
+
+  [[ ${rc} -eq 0 ]] || return "${rc}"
+
+  CMFKIT_READYBAKE_IMAGE="${image_tag}:latest"
+}
+
+
+_readybake_init() {
+
+  [[ -n "$CMFKIT_READYBAKE_IMAGE_SEED" ]] || return 1
+  [[ -n "$CMFKIT_READYBAKE_IMAGE"  ]] || return 1
+  [[ -n "$CMFKIT_DUGOUT_DIR"       ]] || return 1
+  [[ -n "$CMFKIT_OUTSET_DIR"       ]] || return 1
+  [[ -n "$CMFKIT_SOURCE_DIR"       ]] || return 1
+  [[ -n "$CMFKIT_PLATFORM"         ]] || return 1
+  [[ -n "$CMFKIT_SCENARIO"         ]] || return 1
+
+  local readonly readybake_image="$CMFKIT_READYBAKE_IMAGE"
+  local readonly scenario_phase="$CMFKIT_SCENARIO_PHASE_SELECT"
+  local readonly dugout_dir="$CMFKIT_DUGOUT_DIR"
+  local readonly outset_dir="$CMFKIT_OUTSET_DIR"
+  local readonly source_dir="$CMFKIT_SOURCE_DIR"
+
+  local container_id
+
+  _deflist_export_vars > ${dugout_dir}/readybake_env
+
+  read container_id <<< $(
+    docker create \
+        --interactive --tty \
+        --workdir /usr/local/src \
+        --env-file ${dugout_dir}/readybake_env \
+      ${readybake_image}
+  )
+
+  [[ -n ${container_id} ]] || return 1
+
+  cat > ${dugout_dir}/readybake_launch.sh <<-__EOF__
+
+	#!/bin/bash
+
+	cd /usr/local/cmfkit
+
+	. ./mod_common
+	. ./mod_deflist
+	. ./scenario/$CMFKIT_SCENARIO
+
+	cd - >/dev/null
+
+	cd /usr/local/src
+
+	cd \$(ls -1) || _error_fatal "unable to locate project dir"
+
+	__import || echo "cmfkit >> [Info] << scenario/$CMFKIT_SCENARIO __import() not present"
+
+	rc=1
+
+	[[ -z "\$1" ]] \\
+	  && ( __build || _error "build failure: 'scenario/$CMFKIT_SCENARIO' on '$CMFKIT_PLATFORM'" ) \\
+	  && ( __test  || _error  "test failure: 'scenario/$CMFKIT_SCENARIO' on '$CMFKIT_PLATFORM'" ) \\
+	  && rc=0
+
+	[[ "\$1" =~ build|test ]] \\
+	  && ( "__\$1"  || _error  "\$1 failure: 'scenario/$CMFKIT_SCENARIO' on '$CMFKIT_PLATFORM'" ) \\
+	  && rc=0
+
+	exit "\${rc}"
+
+	__EOF__
+
+  chmod +x ${dugout_dir}/readybake_launch.sh
+
+  rm -rf ${dugout_dir}/platform
+
+  docker cp ${outset_dir}/             ${container_id}:/usr/local/src
+  docker cp ${dugout_dir}/             ${container_id}:/usr/local/cmfkit
+  docker cp ${source_dir}/mod_common   ${container_id}:/usr/local/cmfkit
+  docker cp ${source_dir}/mod_deflist  ${container_id}:/usr/local/cmfkit
+
+  CMFKIT_READYBAKE_CONTAINER_ID="${container_id}"
+}
+
+
+_readybake_exec() {
+
+  local readonly scenario_phase="$CMFKIT_SCENARIO_PHASE_SELECT"
+  local rc
+
+  [[ -n "$CMFKIT_READYBAKE_CONTAINER_ID" ]] || return 1
+
+  docker start   $CMFKIT_READYBAKE_CONTAINER_ID
+
+  docker exec \
+      --interactive $CMFKIT_READYBAKE_CONTAINER_ID \
+    /bin/bash -c "/usr/local/cmfkit/readybake_launch.sh ${scenario_phase}"
+
+  rc="$?"
+
+  [[ $CMFKIT_READYBAKE_INTERACTIVE =~ true ]] \
+    && docker attach  $CMFKIT_READYBAKE_CONTAINER_ID
+
+  docker stop -t 1  $CMFKIT_READYBAKE_CONTAINER_ID
+  docker rm         $CMFKIT_READYBAKE_CONTAINER_ID
+
+  return "${rc}"
+}
+
+
+CMFKIT_READYBAKE_BUILD_PATH=''
+CMFKIT_READYBAKE_CONTAINER_ID=''
+CMFKIT_READYBAKE_INTERACTIVE="${CMFKIT_READYBAKE_INTERACTIVE:-false}"
+
