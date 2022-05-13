@@ -15,7 +15,7 @@ jobs:
           - Release
 
         scenario:
-          - basic
+          - ci_debug
 
     runs-on: ${{ matrix.os_env }}
 
@@ -37,6 +37,5 @@ jobs:
           CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
         run: |
-          ./.cmfkit_base/launch build || echo "command failed"
-          cat /home/runner/work/KORC/KORC/build/CMakeFiles/CMakeOutput.log
+          ./.cmfkit_base/launch build
 
