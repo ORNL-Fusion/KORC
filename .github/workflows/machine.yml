@@ -38,4 +38,5 @@ jobs:
 
         run: |
           ./.cmfkit_base/launch build
+          cat /home/runner/work/KORC/KORC/build/CMakeFiles/CMakeOutput.log
 
