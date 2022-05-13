@@ -37,6 +37,6 @@ jobs:
           CMAKE_BUILD_TYPE:  ${{ matrix.build_type }}
 
         run: |
-          ./.cmfkit_base/launch build
+          ./.cmfkit_base/launch build || echo "command failed"
           cat /home/runner/work/KORC/KORC/build/CMakeFiles/CMakeOutput.log
 
