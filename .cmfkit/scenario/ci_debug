@@ -10,6 +10,8 @@ __build() {
   # list of CMake definition variables to import from existing environment
   _deflist_uptake_outset CMAKE_BUILD_TYPE
 
+  CMAKE_PREFIX_PATH="/usr/lib/"
+
   # commit outstanding CMake def variables to the final roster
   _deflist_accrue_vars
 
