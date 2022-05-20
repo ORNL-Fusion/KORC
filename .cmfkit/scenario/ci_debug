@@ -28,6 +28,8 @@ __build() {
   _debug "$(pwd -P)"
 
   _debug_dumpvars
+  
+  _debug "$(cat /etc/os-release)"
 
   set -x
   cmake $CMFKIT_CMDLINE_CMAKE_DEFINITIONS .. && make
