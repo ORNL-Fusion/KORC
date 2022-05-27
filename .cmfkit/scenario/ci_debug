@@ -21,21 +21,11 @@ __build() {
   # output the final CMake cmdline definitions
   _deflist_print_cmdline
 
-  _debug "ci_debug __build()"
-
-  _debug "$(pwd -P)"
-
   mkdir -p ./build && cd $_
-
-  _debug "$(pwd -P)"
 
   _debug_dumpvars
   
-  _debug "$(cat /etc/os-release)"
-
-  set -x
   cmake $CMFKIT_CMDLINE_CMAKE_DEFINITIONS .. && make
-  set +x
 }
 
 
