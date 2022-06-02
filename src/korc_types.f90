@@ -10,41 +10,41 @@ module korc_types
   ! * * * Real and integer precisions * * * !
   ! * * * * * * * * * * * * * * * * * * * * !
 
-  INTEGER, PUBLIC, PARAMETER 	:: is = KIND(INT(1,1)) 
+  INTEGER, PUBLIC, PARAMETER 	:: is = KIND(INT(1,1))
   !! Definition of 1 Byte (8 bits) Fortran KORC integer type.
-  INTEGER, PUBLIC, PARAMETER 	:: ip = KIND(INT(1,8)) 
+  INTEGER, PUBLIC, PARAMETER 	:: ip = KIND(INT(1,8))
   !! Definition of 8 Bytes (64 bits) Fortran KORC integer type.
-  INTEGER, PUBLIC, PARAMETER 	:: idef = KIND(1) 
+  INTEGER, PUBLIC, PARAMETER 	:: idef = KIND(1)
   !! Definition of the default KORC integer type on the system where
   !! KORC is compiled.
-  INTEGER, PUBLIC, PARAMETER 	:: rdef = KIND(1.0) 
+  INTEGER, PUBLIC, PARAMETER 	:: rdef = KIND(1.0)
   !! Definition of the default KORC real type on the system where
   !! KORC is compiled.
 #ifdef DOUBLE_PRECISION
-  INTEGER, PUBLIC, PARAMETER 	:: rp = KIND(0.d0) 
+  INTEGER, PUBLIC, PARAMETER 	:: rp = KIND(0.d0)
   !! Definition of the KORC double precision real type.
 #elif SINGLE_PRECISION
-  INTEGER, PUBLIC, PARAMETER 	:: rp = KIND(1.0) 
+  INTEGER, PUBLIC, PARAMETER 	:: rp = KIND(1.0)
   !! Definition of the KORC single precision real type.
 #endif
-  REAL(rp), PUBLIC, PARAMETER :: korc_zero = 1.0E-15 
+  REAL(rp), PUBLIC, PARAMETER :: korc_zero = 1.0E-15
   !! Definition of the zero in KORC.
 
   ! * * * * * * * * * * * * * * * * * * * * !
   ! * * * Real and integer precisions * * * !
   ! * * * * * * * * * * * * * * * * * * * * !
 
-  INTEGER, PUBLIC, PARAMETER 	:: MAX_STRING_LENGTH = 1000 
+  INTEGER, PUBLIC, PARAMETER 	:: MAX_STRING_LENGTH = 1000
   !! Default length of a KORC_STRING variable.
-  INTEGER, PUBLIC, PARAMETER 	:: default_unit_open = 101 
+  INTEGER, PUBLIC, PARAMETER 	:: default_unit_open = 101
   !! Default file unit for opening and reading from an external text file.
-  INTEGER, PUBLIC, PARAMETER 	:: default_unit_write = 201 
+  INTEGER, PUBLIC, PARAMETER 	:: default_unit_write = 201
   !! Default file unit for opening and writing to external an external text file.
-  INTEGER, PUBLIC, PARAMETER 	:: output_unit_write = 202 
+  INTEGER, PUBLIC, PARAMETER 	:: output_unit_write = 202
   !! Default file unit for opening and writing to external an external text file.
 
   !> @note KORC string type of length MAX_STRING_LENGTH. @endnote
-  TYPE, PUBLIC :: KORC_STRING 
+  TYPE, PUBLIC :: KORC_STRING
      CHARACTER(MAX_STRING_LENGTH) :: str
   END TYPE KORC_STRING
 
@@ -62,11 +62,11 @@ module korc_types
      !! following index convention:
      !! (\(R\) index,\(\phi\) index, \(Z\) index)
 
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: R 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: R
      !! \(R\) component of the vector field variable.
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: PHI 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: PHI
      !! \(\phi\) component of the vector field variable.
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: Z 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: Z
      !! \(Z\) component of the vector field variable.
   END TYPE V_FIELD_3D
 
@@ -81,11 +81,11 @@ module korc_types
      !! following index convention:
      !! (\(X\) index,\(Y\) index, \(Z\) index)
 
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: X 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: X
      !! \(R\) component of the vector field variable.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Y 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Y
      !! \(\phi\) component of the vector field variable.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Z 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Z
      !! \(Z\) component of the vector field variable.
   END TYPE V_FIELD_2DX
 
@@ -99,11 +99,11 @@ module korc_types
      !! All the members (components) of the V_FIELD_2D type follow the
      !! following index convention:
      !! (\(R\) index,\(Z\) index).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: R 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: R
      !! \(R \) component of the vector field variable.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: PHI 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: PHI
      !! \(\phi \) component of the vector field variable.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Z 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE :: Z
      !! \(Z \) component of the vector field variable.
   END TYPE V_FIELD_2D
 
@@ -117,28 +117,28 @@ module korc_types
      !! All the members (components) of the V_FIELD_1D type follow the
      !! following index convention:
      !! (\(r\) index).
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: R 
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: R
      !! \(R \) component of the vector field variable.
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: PHI 
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: PHI
      !! \(\phi \) component of the vector field variable.
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: Z 
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: Z
      !! \(Z \) component of the vector field variable.
   END TYPE V_FIELD_1D
-  
+
   ! * * * * * * * * * * * * * * * * * * * * !
   ! * * * Basic korc array structures * * * !
   ! * * * * * * * * * * * * * * * * * * * * !
 
   TYPE, PRIVATE :: KORC_MPI
      !! @note KORC derived type to keep relevant MPI parameters. @endnote
-     INTEGER :: nmpi 
+     INTEGER :: nmpi
      !! Number of MPI processes.
-     INTEGER :: nmpi_prev 
-     INTEGER :: rank 
+     INTEGER :: nmpi_prev
+     INTEGER :: rank
      !! Rank in WORLD COMMON communicator.
-     INTEGER :: rank_topo 
+     INTEGER :: rank_topo
      !! Rank in mpi_topo communicator
-     INTEGER :: mpi_topo 
+     INTEGER :: mpi_topo
      !! MPI communicator for a certain topology.
   END TYPE KORC_MPI
 
@@ -154,25 +154,25 @@ module korc_types
      REAL(rp) :: time_r
      !! @note Characteristic relativistic time scale given by \(1/\omega_{ce}\), where \(\omega_{ce}=e B_0/\gamma m_e\) is the
      !! largest relativistic electron cyclotron frequency in the simulation. @endnote
-     REAL(rp) :: velocity 
+     REAL(rp) :: velocity
      !! Characteristic velocity. This is fixed to the speed of \(c\).
-     REAL(rp) :: length 
+     REAL(rp) :: length
      !! Characteristic length scale calculated as \(c\) times the relativistic time scale.
-     REAL(rp) :: mass 
+     REAL(rp) :: mass
      !! Characteristic particle mass. This is equal to the electron mass \(m_e\).
-     REAL(rp) :: charge 
+     REAL(rp) :: charge
      !! Characteristic particle charge. This is equal to the electron charge \(q_e\).
-     REAL(rp) :: density 
+     REAL(rp) :: density
      !! Characteristic particle density. This is equal to \(1/l^3\), with \(l\) the characteristic length.
-     REAL(rp) :: Eo 
+     REAL(rp) :: Eo
      !! Characteristic electric field \(E_0\). Usually \(E_0\) at the magnetic axis.
-     REAL(rp) :: Bo 
+     REAL(rp) :: Bo
      !! Characteristic magnetic field \(B_0\). Usually \(B_0\) at the magnetic axis.
-     REAL(rp) :: energy 
+     REAL(rp) :: energy
      !! Characteristic energy. This is equal to \(m_e c^2\).
-     REAL(rp) :: pressure 
+     REAL(rp) :: pressure
      !! Characteristic pressure. @todo This needs to be defined.
-     REAL(rp) :: temperature 
+     REAL(rp) :: temperature
      !! Characteristic plasma temperature (Joules). This is equal to \(m_e c^2\).
   END TYPE CHARCS_PARAMS
 
@@ -182,82 +182,82 @@ module korc_types
      !!  This KORC derived type contains the variables that control KORC's
      !! core behavior.
 
-     CHARACTER(MAX_STRING_LENGTH) :: path_to_inputs 
+     CHARACTER(MAX_STRING_LENGTH) :: path_to_inputs
      !! Absolute path to KORC's input file.
-     CHARACTER(MAX_STRING_LENGTH) :: path_to_outputs 
+     CHARACTER(MAX_STRING_LENGTH) :: path_to_outputs
      !! Absolute path to the outputs' folder.
-     INTEGER 			:: num_omp_threads 
+     INTEGER 			:: num_omp_threads
      !! Number of open MP threads per MPI process used in the simulation.
-     LOGICAL 			:: restart 
+     LOGICAL 			:: restart
      !! Flag to indicate if the simulations proceeds (restart=T) or not
      !! (restart=F). Restart simulation that exited before simulation_time
      !! reached.
-     LOGICAL 			:: proceed 
+     LOGICAL 			:: proceed
      !! Flag to indicate if the simulations continues (proceed=T) or not
      !! (proceed=F). Append simulation results after previous simulation_time
      !! reached.
      LOGICAL 			:: load_balance
      LOGICAL  :: reinit
      !! Flag to begin a new simulation, reinitializing from restart file state
-     REAL(rp) 			:: simulation_time 
+     REAL(rp) 			:: simulation_time
      !! Total simulation time in seconds.
-     REAL(rp) 			:: snapshot_frequency 
+     REAL(rp) 			:: snapshot_frequency
      !! Time between snapshots in time of the simulation.
-     REAL(rp) 			:: restart_overwrite_frequency 
+     REAL(rp) 			:: restart_overwrite_frequency
      !! Time between overwrites of restart file in time of the simulation.
-     REAL(rp) 			:: dt 
+     REAL(rp) 			:: dt
      !! Time step in the simulation as a fraction of the relativistic electron
      !! gyro-period \(\tau_e = 2\pi\gamma m_e/eB_0\).
-     REAL(rp) 			:: time = 0.0_rp 
+     REAL(rp) 			:: time = 0.0_rp
      !! Current physical time in the simulation.
-     INTEGER(ip) 			:: ito = 0_ip 
+     INTEGER(ip) 			:: ito = 0_ip
      !! Initial time iteration in the simulation, this is different from zero
      !! in case is a restarting simulation.
-     INTEGER(ip) 			:: it = 0_ip 
+     INTEGER(ip) 			:: it = 0_ip
      !! Current time iteration in the simulation, this is different from zero
      !! in case is a restarting simulation.
      REAL(rp)  :: init_time = 0.0_rp
-     !! Time at the beginning of a run with proceed=T     
+     !! Time at the beginning of a run with proceed=T
      INTEGER(ip) 			:: t_steps
-     INTEGER(ip) 			:: prev_iter_2x1t 
+     INTEGER(ip) 			:: prev_iter_2x1t
      !! Number of time steps needed for evolving the electrons up to
      !! "simulation_time".
      INTEGER(ip) 			:: t_skip
-     INTEGER(ip) 			:: t_it_SC=1_ip 
+     INTEGER(ip) 			:: t_it_SC=1_ip
      INTEGER(ip) 			:: output_cadence
      INTEGER(ip) 			:: coll_per_dump
      INTEGER(ip) 			:: orbits_per_coll
      REAL(rp) 			:: coll_per_dump_dt
      !! Time iteration offset used to decide when the outputs are generated.
-     INTEGER(ip) 			:: restart_output_cadence 
+     INTEGER(ip) 			:: restart_output_cadence
      !! Time iteration offset used to decide when the restart files are
      !! generated.
-     INTEGER(ip) 			:: coll_cadence 
-     INTEGER(ip) 			:: num_snapshots 
+     INTEGER(ip) 			:: coll_cadence
+     INTEGER(ip) 			:: num_snapshots
      !! Number of snapshots in time for generating the output files.
-     INTEGER 			:: num_species 
+     INTEGER 			:: num_species
      !! Number of different populations of simulated relativistic electrons
      !! in KORC.
-     REAL(rp) 			:: minimum_particle_energy 
-     !! Minimum allowed energy of simulated electrons. 
+     REAL(rp) 			:: minimum_particle_energy
+     !! Minimum allowed energy of simulated electrons.
      !! @todo To improve the criterium to decide when an electron will not
      !! be followed anymore in the simulation.
-     REAL(rp) 			:: minimum_particle_g 
+     REAL(rp) 			:: minimum_particle_g
      !! Minimum allowed relativistic factor \(\gamma\) of simulated electrons.
-     LOGICAL 			:: radiation 
+     LOGICAL 			:: radiation
      !! Flag to indicate if synchrotron radiation losses are included
      !! (radiation=T) or not (radiation=F).
-     LOGICAL 			:: collisions 
+     LOGICAL 			:: collisions
      !! Flag to indicate if collisionsare included (collisions=T) or not
      !! (collisions=F).
-     LOGICAL 			:: LargeCollisions 
+     LOGICAL 			:: LargeCollisions
      CHARACTER(MAX_STRING_LENGTH) :: GC_rad_model
-     CHARACTER(MAX_STRING_LENGTH) :: collisions_model 
+     CHARACTER(MAX_STRING_LENGTH) :: collisions_model
      !! String with the name of the collisions model to be used in the
      !! simulation.
-     CHARACTER(MAX_STRING_LENGTH) :: bound_electron_model 
+     CHARACTER(MAX_STRING_LENGTH) :: bound_electron_model
      CHARACTER(MAX_STRING_LENGTH) :: field_model
-     CHARACTER(MAX_STRING_LENGTH) :: profile_model 
+     CHARACTER(MAX_STRING_LENGTH) :: profile_model
      !! String with the name of the model for the fields and plasma profiles.
      CHARACTER(MAX_STRING_LENGTH) :: magnetic_field_filename
      CHARACTER(MAX_STRING_LENGTH) :: magnetic_field_directory
@@ -265,14 +265,14 @@ module korc_types
      CHARACTER(MAX_STRING_LENGTH), DIMENSION(:), ALLOCATABLE :: magnetic_field_filenames
      REAL(rp), DIMENSION(:), ALLOCATABLE :: time_of_filenames
      !! String with the name of the model for the fields and plasma profiles.
-     CHARACTER(MAX_STRING_LENGTH), DIMENSION(:), ALLOCATABLE :: outputs_list 
+     CHARACTER(MAX_STRING_LENGTH), DIMENSION(:), ALLOCATABLE :: outputs_list
      !! List of electron variables to include in the outputs.
-     INTEGER 			:: HDF5_error_handling 
-     !! Flag to indicate whether we allow HDF5 to show warnings 
+     INTEGER 			:: HDF5_error_handling
+     !! Flag to indicate whether we allow HDF5 to show warnings
      !! during runtime (HDF5_error_handling=1) or not (HDF5_error_handling=0)
-     TYPE(KORC_MPI) 		:: mpi_params 
+     TYPE(KORC_MPI) 		:: mpi_params
      !! An instance of the KORC_MPI derived type.
-     TYPE(CHARCS_PARAMS) 		:: cpp 
+     TYPE(CHARCS_PARAMS) 		:: cpp
      !! An instance of the CHARCS_PARAMS derived type.
      LOGICAL :: FO_GC_compare
      CHARACTER(MAX_STRING_LENGTH) :: orbit_model
@@ -307,14 +307,14 @@ module korc_types
      !!in the simulation. @endnote
 
 
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: X 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: X
      !! Cartesian coordinates of the electrons' position.
      !! dim(X) = (3,SPECIES::ppp).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: V 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: V
      !! Cartesian components of the electrons' velocity. dim(V) = dim(X).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Rgc 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Rgc
      !! Cartesian coordinates of the electrons' guiding-center position.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y
      !! Coordinates of the electrons' position in cylindrical or toroidal
      !! coordinates.
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Y0
@@ -322,28 +322,28 @@ module korc_types
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Yborn
      !! Placeholder coordinates of the electrons' position in cylindrical
      !! coordinates for GC orbit model.
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: V0 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: V0
      !! Placeholder of the electrons' parallel momentum for the GC orbit model
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: E 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: E
      !! Cartesian components of the electric field felt by each electron.
      !! dim(E) = dim(X).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: B 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: B
      !! Cartesian components of the magnetic field felt by each electron.
      !! dim(B) = dim(X).
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: PSI_P 
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: BR 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: PSI_P
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: BR
      !! Cartesian components of the gradient of the R-component of the
      !! magnetic field felt by each electron. dim(B) = dim(X).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: BPHI 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: BPHI
      !! Cartesian components of the gradient of the PHI-component of the
      !! magnetic field felt by each electron. dim(B) = dim(X).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: BZ 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: BZ
      !! Cartesian components of the gradient of the Z-component of the
      !! magnetic field felt by each electron. dim(B) = dim(X).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: gradB 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: gradB
      !! Cylindrical components of the gradient of magnitude of magnetic
      !! field felt by each electron. dim(B) = dim(X).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: curlb 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: curlb
      !! Cylindrical components of the curl of the magnetic field unit
      !! vector felt by each electron. dim(B) = dim(X).
      REAL(rp), DIMENSION(:,:), ALLOCATABLE      :: RHS
@@ -360,24 +360,24 @@ module korc_types
      !! Cash-Karp Runge-Kutta coefficient for GC orbit model
      REAL(rp), DIMENSION(:,:), ALLOCATABLE      :: k6
      !! Cash-Karp Runge-Kutta coefficient for GC orbit model
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: ne 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: ne
      !! Electron density seen by each electron. dim(ne) = (1,SPECIES::ppp).
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nimp
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: ni 
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Te 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: ni
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Te
      !! Electron temperature seen by each electron. dim(Te) = (1,SPECIES::ppp).
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Zeff 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Zeff
      !! Zeff seen by each electron. dim(Zeff) = (1,SPECIES::ppp).
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: g 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: g
      !! Instantaneous relativistic \(\gamma = 1/\sqrt{1 - v^2/c^2}\) factor
      !! of each electron in the simulation.
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: eta 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: eta
      !! Instantaneous pitch angle of each electron in the simulation.
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: mu 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: mu
      !! Magnetic moment of each electron in the simulation.
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Prad 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Prad
      !! Instantaneous radiated power by each electron in the simulation.
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Pin 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Pin
      !! Instantaneous input power of each electron due to the electric
      !! field acceleration.
      INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagCon
@@ -385,11 +385,11 @@ module korc_types
      INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagCol
      !! Flag for each particle to decide whether it is part of the high
      !! energy population
-     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagRE 
+     INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: flagRE
      !! Flag for each particle to decide whether it is initialized
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: AUX 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: AUX
      !! An auxiliary scalar variable for each electron.
-     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: wt 
+     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: wt
      !! Weight of each electron. This is used when sampling weighted
      !! PDFs and in the synthetic camera diagnostic.
      INTEGER(is), DIMENSION(:), ALLOCATABLE 	:: initLCFS
@@ -405,71 +405,71 @@ module korc_types
      !! @note Derived type containing the initial parameters of each electron
      !! ensemble followed in a KORC simulation. @endnote
 
-     TYPE(PARTICLES) 			:: vars 
+     TYPE(PARTICLES) 			:: vars
      !! An instance of the PARTICLES derived type.
-     LOGICAL 				:: runaway 
+     LOGICAL 				:: runaway
      !! Flag to decide whether a given electron is a runaway (runaway=T)
      !! or not (runaway=F).
-     CHARACTER(MAX_STRING_LENGTH) 	:: spatial_distribution 
+     CHARACTER(MAX_STRING_LENGTH) 	:: spatial_distribution
      !! String describing the type of initial spatial distribution for
      !! each electron species.
-     CHARACTER(MAX_STRING_LENGTH) 	:: energy_distribution 
+     CHARACTER(MAX_STRING_LENGTH) 	:: energy_distribution
      !! String describing the type of initial energy distribution for
      !! each electron species.
-     CHARACTER(MAX_STRING_LENGTH) 	:: pitch_distribution 
+     CHARACTER(MAX_STRING_LENGTH) 	:: pitch_distribution
      !! String describing the type of initial pitch-angle distribution for
      !! each electron species.
-     REAL(rp) 				:: Eo 
+     REAL(rp) 				:: Eo
      !! Initial energy of each electron species in case of using an initial
      !! mono-energetic distribution.
-     REAL(rp) 				:: go 
+     REAL(rp) 				:: go
      !! Corresponding relativisitc factor of each electron species in case
      !! of using an initial mono-energetic distribution.
-     REAL(rp) 				:: etao 
+     REAL(rp) 				:: etao
      !! Initial pitch-angle of each electron species in case of using an
      !! initial mono-pitch-angle distribution.
-     REAL(rp), DIMENSION(2) 		:: Eo_lims 
+     REAL(rp), DIMENSION(2) 		:: Eo_lims
      !! Minimum and maximum energy limits of a given initial
      !! non-mono-energetic distribution.
-     REAL(rp), DIMENSION(2) 		:: etao_lims 
+     REAL(rp), DIMENSION(2) 		:: etao_lims
      !! Minimum and maximum pitch-angle limits of a given initial
      !! non-mono-pitch-angle distribution.
-     REAL(rp) 				:: wc 
+     REAL(rp) 				:: wc
      !! The mean electron cyclotron frequency of each electron species.
-     REAL(rp) 				:: wc_r 
+     REAL(rp) 				:: wc_r
      !! The mean relativistic electron cyclotron frequency of each electron
      !! species.
-     REAL(rp) 				:: q 
-     !! Charge of each species. @note This was left explicit to allow 
+     REAL(rp) 				:: q
+     !! Charge of each species. @note This was left explicit to allow
      !! KORC to follow electrons and ions in the future. @endnote
-     REAL(rp) 				:: m 
-     !! Mass of each species. @note This was left explicit to allow KORC 
+     REAL(rp) 				:: m
+     !! Mass of each species. @note This was left explicit to allow KORC
      !! to follow electrons and ions in the future. @endnote
-     INTEGER 				:: ppp 
+     INTEGER 				:: ppp
      !! Number of computational particles used to simulate each electron
      !! species.
-     INTEGER 				:: pinit 
+     INTEGER 				:: pinit
      !! Number of computational particles initialized for each electron species
      !! to give room for sources of additional electrons
-     INTEGER 				:: pRE 
-     REAL(rp) 				:: Ro 
+     INTEGER 				:: pRE
+     REAL(rp) 				:: Ro
      !! Radial position of the center of the electrons' initial spatial
      !! distribution.
-     REAL(rp) 				:: PHIo 
-     !! Azimuthal position of the electrons' initial spatial 
+     REAL(rp) 				:: PHIo
+     !! Azimuthal position of the electrons' initial spatial
      !! distribution, in case of using a disk at a certain poloidal section.
-     REAL(rp) 				:: Zo 
+     REAL(rp) 				:: Zo
      !! Height of the center of the electrons' initial spatial distribution.
-     REAL(rp) 				:: r_inner 
+     REAL(rp) 				:: r_inner
      !! Minimum minor radius of the electrons' initial spatial distribution.
-     REAL(rp) 				:: r_outter 
+     REAL(rp) 				:: r_outter
      !! Maximum minor radius of the electrons' initial spatial distribution.
-     REAL(rp) 				:: falloff_rate 
+     REAL(rp) 				:: falloff_rate
      !! Exponential falloff or standard deviation of a non-uniform radial
      !! distribution of electrons.
-     REAL(rp) 				:: shear_factor 
+     REAL(rp) 				:: shear_factor
      !! Shear factor used to generate an initial spatial distribution with an
-     !! elliptic poloidal cross section. 
+     !! elliptic poloidal cross section.
      !! @note See <em>Carbajal and del-Castillo-Negrete, Nuclear Fusion,
      !! submitted (2018)</em>. @endnote
      REAL(rp)                            :: sigmaR
@@ -506,38 +506,38 @@ module korc_types
      !! $$\mathbf{B}(r,\vartheta) = \frac{1}{1 + \eta \cos{\vartheta}}
      !! \left[ B_0 \hat{e}_\zeta  + B_\vartheta(r) \hat{e}_\vartheta \right],$$
      !! where \(\eta = r/R_0\) is the aspect ratio, the constant \(B_0\)
-     !! denotes the magnitude of the toroidal magnetic field, 
+     !! denotes the magnitude of the toroidal magnetic field,
      !! and \(B_\vartheta(r) = \eta B_0/q(r)\) is the poloidal magnetic
-     !! field with safety factor 
+     !! field with safety factor
      !! \(q(r) = q_0\left( 1 + \frac{r^2}{\lambda^2} \right)\). The
-     !! constant \(q_0\) is the safety factor at 
+     !! constant \(q_0\) is the safety factor at
      !! the magnetic axis and the constant \(\lambda\) is obtained from
-     !! the values of \(q_0\) and \(q(r)\) 
+     !! the values of \(q_0\) and \(q(r)\)
      !! at the plasma edge \(r=r_{edge}\).
 
-     REAL(rp) 			:: Bo 
+     REAL(rp) 			:: Bo
      !! Magnitude of the toroidal magnetic field \(B_0\).
-     REAL(rp) 			:: a 
+     REAL(rp) 			:: a
      !! Plasma edge \(r_{edge}\) as measured from the magnetic axis.
-     REAL(rp) 			:: Ro 
+     REAL(rp) 			:: Ro
      !! Radial position of the magnetic axis \(R_0\)
-     REAL(rp) 			:: qa 
+     REAL(rp) 			:: qa
      !! Safety factor at the plasma edge.
-     REAL(rp) 			:: qo 
+     REAL(rp) 			:: qo
      !! Safety factor at the magnetic axis \(q_0\).
-     REAL(rp) 			:: lambda 
+     REAL(rp) 			:: lambda
      !! \(\lambda\) parameter of \(q(r)\).
-     REAL(rp) 			:: Bpo 
+     REAL(rp) 			:: Bpo
      !! @deprecated Parameter not used anymore. @todo Delete parameter.
-     REAL(rp) 			:: Bp_sign 
+     REAL(rp) 			:: Bp_sign
      !! Sign of \(B_\vartheta(r)\). This depends on current_direction,
-     !! Bp_sign=1 for 
+     !! Bp_sign=1 for
      !! current_direction='PARALLEL', and Bp_sign=-1 for
      !! current_direction='ANTI-PARALLEL'.
-     CHARACTER(MAX_STRING_LENGTH) :: current_direction 
+     CHARACTER(MAX_STRING_LENGTH) :: current_direction
      !! Direction of plasma current: PARALLEL or ANTI-PARALLEL to the
      !! toroidal magnetic field.
-     REAL(rp) 			:: Ero 
+     REAL(rp) 			:: Ero
      !! radial electric field amplitude.
      REAL(rp) 			:: rmn
      !! mode location rmn
@@ -546,32 +546,32 @@ module korc_types
   END TYPE A_FIELD
 
   TYPE, PRIVATE :: MESH
-     !! Derived type with the cylindrical coordinates of the grid nodes 
+     !! Derived type with the cylindrical coordinates of the grid nodes
      !! at which the pre-computed plasma profiles and fields are known.
 
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: R 
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: R
      !! Radial grid.
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: PHI 
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: PHI
      !! Azimuthal grid.
-     REAL(rp), DIMENSION(:), ALLOCATABLE :: Z 
+     REAL(rp), DIMENSION(:), ALLOCATABLE :: Z
      !! Z grid.
   END TYPE MESH
 
 
   TYPE, PUBLIC :: FIELDS
-     !! @note Derived type with all the variables and data of analytical 
+     !! @note Derived type with all the variables and data of analytical
      !! and pre-computed electric and magnetic fields. @endnote
 
-     TYPE(A_FIELD) 	 			:: AB 
+     TYPE(A_FIELD) 	 			:: AB
      !! An instance of the KORC derived data type A_FIELD.
-     TYPE(V_FIELD_3D) 				:: E_3D 
+     TYPE(V_FIELD_3D) 				:: E_3D
      !! KORC 3-D vector field of the pre-computed electric field.
      TYPE(V_FIELD_3D) 				:: B_3D
      TYPE(V_FIELD_3D) 				:: dBdR_3D
      TYPE(V_FIELD_3D) 				:: dBdPHI_3D
-     TYPE(V_FIELD_3D) 				:: dBdZ_3D 
+     TYPE(V_FIELD_3D) 				:: dBdZ_3D
      !! KORC 3-D vector field of the pre-computed magnetic field.
-     TYPE(V_FIELD_2D) 				:: E_2D 
+     TYPE(V_FIELD_2D) 				:: E_2D
      !! KORC 2-D vector field of the pre-computed electric field.
      TYPE(V_FIELD_2D) 				:: B_2D
      TYPE(V_FIELD_2D) 				:: B1Re_2D
@@ -582,14 +582,14 @@ module korc_types
      TYPE(V_FIELD_2DX) 				:: B1Im_2DX
      TYPE(V_FIELD_2D) 				:: dBdR_2D
      TYPE(V_FIELD_2D) 				:: dBdPHI_2D
-     TYPE(V_FIELD_2D) 				:: dBdZ_2D 
+     TYPE(V_FIELD_2D) 				:: dBdZ_2D
      !! KORC 3-D vector field of the pre-computed magnetic field.
      TYPE(V_FIELD_2D) 				:: gradB_2D
-     TYPE(V_FIELD_3D) 				:: gradB_3D 
+     TYPE(V_FIELD_3D) 				:: gradB_3D
      !! KORC 3-D vector field of the gradient of the magnitude of the
      !! pre-computed magnetic field.
      TYPE(V_FIELD_2D) 				:: curlb_2D
-     TYPE(V_FIELD_3D) 				:: curlb_3D 
+     TYPE(V_FIELD_3D) 				:: curlb_3D
      !! KORC 3-D vector field of the curl of the unit vector in the
      !! direction of the pre-computed magnetic field.
      TYPE(V_FIELD_1D) 				:: E_SC_1D
@@ -600,16 +600,17 @@ module korc_types
      TYPE(V_FIELD_1D) 				:: A1_SC_1D
      TYPE(V_FIELD_1D) 				:: A2_SC_1D
      TYPE(V_FIELD_1D) 				:: A3_SC_1D
-     
+
      REAL(rp), DIMENSION(:), ALLOCATABLE :: r_1D
      REAL(rp), DIMENSION(:), ALLOCATABLE :: PSIP_1D
      REAL(rp), DIMENSION(:), ALLOCATABLE :: dMagPsiSqdPsiP
      REAL(rp), DIMENSION(:), ALLOCATABLE :: ddMagPsiSqdPsiPSq
-     TYPE(MESH) 		 		:: X 
+     TYPE(MESH) 		 		:: X
      !! An instance of the KORC derived type MESH.
      CHARACTER(MAX_STRING_LENGTH) :: E_model
      !! Name for dynamical, analytic, electric field model to be added to
      REAL(rp)  :: E_dyn
+     REAL(rp)  :: E_edge
      REAL(rp)  :: E_pulse
      REAL(rp)  :: E_width
      CHARACTER(30) :: E_profile
@@ -625,35 +626,35 @@ module korc_types
      INTEGER :: ntiles
      REAL(rp) :: circumradius
      INTEGER 			:: res_double
-     INTEGER, DIMENSION(3) 			:: dims 
-     !! Dimensions of the KORC vector field. dims=(number of grid 
-     !! nodes along \(R\), number of grid nodes along \(\phi\), 
+     INTEGER, DIMENSION(3) 			:: dims
+     !! Dimensions of the KORC vector field. dims=(number of grid
+     !! nodes along \(R\), number of grid nodes along \(\phi\),
      !! number of grid nodes along \(Z\)).
      INTEGER 			:: dim_1D
      INTEGER 			:: subcycle_E_SC
      REAL(rp)  :: dt_E_SC,Ip_exp,Ip0
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: PSIp
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: PSIp_FS
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: PSIp3D 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: PSIp3D
      !! 2-D array for storing the data of the poloidal magnetic flux.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: FLAG2D 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: FLAG2D
      !! 2-D array defining the simulation domain where pre-computed data exist.
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: FLAG3D 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: FLAG3D
      !! 3-D array defining the simulation domain where pre-computed data exist.
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: LCFS2D
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE    :: LCFS3D 
-     REAL(rp) 					:: Eo 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE    :: LCFS3D
+     REAL(rp) 					:: Eo
      !! Characteristic electric field.
-     REAL(rp) 					:: Bo 
+     REAL(rp) 					:: Bo
      !! Characteristic magnetic field.
-     REAL(rp) 					:: Ro 
+     REAL(rp) 					:: Ro
      !! Radial position of the magnetic axis.
-     REAL(rp) 					:: Zo 
+     REAL(rp) 					:: Zo
      !! \(Z\) position of the magnetic axis.
-     LOGICAL 					:: Bfield 
+     LOGICAL 					:: Bfield
      !! Flag to indicate whether a pre-computed magnetic field will be
      !! used (Bfield=T) or not (Bfield=F).
-     LOGICAL 					:: dBfield 
+     LOGICAL 					:: dBfield
      !! Flag to indicate whether a pre-computed magnetic field will be
      !! used (Bfield=T) or not (Bfield=F).
      LOGICAL 					:: Bflux
@@ -662,21 +663,21 @@ module korc_types
      LOGICAL 					:: E1field
      !! Flag to indicate whether a pre-computed poloidal magnetic flux will
      !! be used (Bflux=T) or not (Bflux=F).
-     LOGICAL 					:: Efield 
+     LOGICAL 					:: Efield
      !! Flag to indicate whether a pre-computed electric field will be used
      !! (Efield=T) or not (Efield=F).
-     LOGICAL 					:: Bfield_in_file 
+     LOGICAL 					:: Bfield_in_file
      !! Flag to indicate if a pre-computed magnetic field is in the input file.
      LOGICAL 					:: dBfield_in_file
      LOGICAL 					:: B1field_in_file
-     LOGICAL 					:: E1field_in_file 
+     LOGICAL 					:: E1field_in_file
      !! Flag to indicate if a pre-computed magnetic field is in the input file.
-     LOGICAL 					:: Bflux_in_file 
+     LOGICAL 					:: Bflux_in_file
      !! Flag to indicate if a pre-computed poloidal magnetic flux is in the
      !! input file.
-     LOGICAL 					:: Efield_in_file 
+     LOGICAL 					:: Efield_in_file
      !! Flag to indicate if a pre-computed electric field is in the input file.
-     LOGICAL 					:: axisymmetric_fields 
+     LOGICAL 					:: axisymmetric_fields
      !! Flag to indicate if the pre-computed fields are axisymmetric.
      LOGICAL 					:: Dim2x1t
      LOGICAL 					:: E_2x1t,ReInterp_2x1t
@@ -694,55 +695,55 @@ module korc_types
 #endif
      REAL(rp)  :: psip_conv
      LOGICAL :: useLCFS
-     
+
   END TYPE FIELDS
 
 
   TYPE, PUBLIC :: PROFILES
      !! @note KORC derived data type having information about the plasma
-     !! profiles. 
+     !! profiles.
      !! See [[korc_profiles.f90("file")]] for more information. @endnote
-     !! KORC can run using either analytical and pre-computed plasma profiles. 
-     !! Pre-computed plasma profiles, 
+     !! KORC can run using either analytical and pre-computed plasma profiles.
+     !! Pre-computed plasma profiles,
      !! as in the case of pre-computed electric or magnetic fields, are
-     !! interpolated 
+     !! interpolated
      !! to electrons' position in [[korc_profiles]].
      !!
      !! There are two types of analytical plsama profiles that can be used
-     !! in KORC: 
+     !! in KORC:
      !! 3rd degree polynomial radial plasma profiles,
      !! $$f(r) = a_3r^3 + a_2r^2 +a_1r + a_0,$$
      !! and radial plasma profiles with a \(\tanh(r)\) dependency:
      !! $$f(r) = f_0\left[1 - \tanh^n\left(\frac{2r}{a}\right)\right],$$
      !! where \(f_0\) is a given plasma parameter at the magnetic axis,
-     !! and \(a\) is 
-     !! the plasma radius as measured 
-     !! from the magnetic axis to the last closed flux surface. Notice that the 
+     !! and \(a\) is
+     !! the plasma radius as measured
+     !! from the magnetic axis to the last closed flux surface. Notice that the
      !! larger \(n\) is, the more uniform the radial profiles are.
 
-     TYPE(MESH) 				        :: X 
+     TYPE(MESH) 				        :: X
      !! An instance of the KORC derived data type MESH.
-     REAL(rp) 				        :: a 
+     REAL(rp) 				        :: a
      !! Plasma radius as measured from the magnetic axis
      REAL(rp) 				        :: R0
      REAL(rp) 				        :: Z0
 
      REAL(rp) 				        :: R0_RE
      REAL(rp) 				        :: Z0_RE
-     
-     INTEGER, DIMENSION(3) 			:: dims 
-     !! Dimensions of the arrays containing the pre-computed profiles data. dims=(number of grid nodes along \(R\), 
+
+     INTEGER, DIMENSION(3) 			:: dims
+     !! Dimensions of the arrays containing the pre-computed profiles data. dims=(number of grid nodes along \(R\),
      !! number of grid nodes along \(\phi\), number of grid nodes along \(Z\)).
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: FLAG2D 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: FLAG2D
      !! 2-D array defining the simulation domain where pre-computed data exist.
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: FLAG3D 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: FLAG3D
      !! 3-D array defining the simulation domain where pre-computed data exist.
 
-     REAL(rp) 					:: n_ne 
+     REAL(rp) 					:: n_ne
      !! \(n\) used in \(\tanh^n(r)\) of the electron density profile.
-     REAL(rp) 					:: n_Te 
+     REAL(rp) 					:: n_Te
      !! \(n\) used in \(\tanh^n(r)\) of the electron temperature profile.
-     REAL(rp) 					:: n_Zeff 
+     REAL(rp) 					:: n_Zeff
      !! \(n\) used in \(\tanh^n(r)\) of the \(Z_{eff}\) profile.
 
      REAL(rp)  ::  n_REr0=0._rp
@@ -756,50 +757,50 @@ module korc_types
      REAL(rp)  ::  n_shelf=0._rp
      REAL(rp)  ::  psiN_0=1._rp
 
-     
-     REAL(rp), DIMENSION(4) 			:: a_ne 
-     !! Coefficients of the polynomial electron density profile. 
+
+     REAL(rp), DIMENSION(4) 			:: a_ne
+     !! Coefficients of the polynomial electron density profile.
      !! See detailed description above, a_ne=(\(a_{0}\),\(a_{2}\),\(a_{3}\),\(a_{4}\)).
-     REAL(rp), DIMENSION(4) 			:: a_Te 
-     !! Coefficients of the polynomial electron temperature profile. 
+     REAL(rp), DIMENSION(4) 			:: a_Te
+     !! Coefficients of the polynomial electron temperature profile.
      !! See detailed description above, a_ne=(\(a_{0}\),\(a_{2}\),\(a_{3}\),\(a_{4}\)).
-     REAL(rp), DIMENSION(4) 			:: a_Zeff 
-     !! Coefficients of the \(Z_{eff}\) profile. 
+     REAL(rp), DIMENSION(4) 			:: a_Zeff
+     !! Coefficients of the \(Z_{eff}\) profile.
      !! See detailed description above, a_ne=(\(a_{0}\),\(a_{2}\),\(a_{3}\),\(a_{4}\)).
 
      ! Zeff
-     CHARACTER(MAX_STRING_LENGTH) 		:: Zeff_profile 
+     CHARACTER(MAX_STRING_LENGTH) 		:: Zeff_profile
      !! String containing the type of \(Z_{eff}\) profile to be used in the simulation.
-     REAL(rp) 					:: Zeffo 
+     REAL(rp) 					:: Zeffo
      !! \(Z_{eff}\) at the magnetic axis.
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: Zeff_3D 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: Zeff_3D
      !! 3-D array for keeping the pre-computed data of the \(Z_{eff}\) profile.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Zeff_2D 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Zeff_2D
      !! 2-D array for keeping the pre-computed data of the \(Z_{eff}\) profile.
 
      ! Density
-     CHARACTER(MAX_STRING_LENGTH) 		:: ne_profile 
+     CHARACTER(MAX_STRING_LENGTH) 		:: ne_profile
      !! String containing the type of electron density profile to be used in the simulation.
-     REAL(rp) 					:: neo 
+     REAL(rp) 					:: neo
      !! Electron density at the magnetic axis
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: ne_3D 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: ne_3D
      !! 3-D array for keeping the pre-computed data of the electron density profile.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: ne_2D 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: ne_2D
      !! 2-D array for keeping the pre-computed data of the electron density profile.
 
      !Temperature
-     CHARACTER(MAX_STRING_LENGTH) 		:: Te_profile 
+     CHARACTER(MAX_STRING_LENGTH) 		:: Te_profile
      !! String containing the type of electron temperature profile to be used in the simulation.
-     REAL(rp) 					:: Teo 
+     REAL(rp) 					:: Teo
      !! Electron temperature at the magnetic axis
-     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: Te_3D 
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE      :: Te_3D
      !! 3-D array for keeping the pre-computed data of the electron density profile.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Te_2D 
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: Te_2D
      !! 2-D array for keeping the pre-computed data of the electron density profile.
 
-     CHARACTER(MAX_STRING_LENGTH) 		:: filename 
+     CHARACTER(MAX_STRING_LENGTH) 		:: filename
      !! Full path to the HDF5 file containing the pre-computed plasma profiles.
-     LOGICAL 					:: axisymmetric 
+     LOGICAL 					:: axisymmetric
      !! Flag to indicate if the plasma profiles are axisymmetric.
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: RHON
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nRE_2D
@@ -808,8 +809,8 @@ module korc_types
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr2_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr3_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD_2D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD1_2D 
-     
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD1_2D
+
 #ifdef FIO
      INTEGER (C_INT)                         :: FIO_ne
      INTEGER (C_INT)                         :: FIO_ni

@@ -173,6 +173,7 @@ module korc_input
   ! Mesh points in PHI for analytical interpolation mesh
   CHARACTER(30) :: E_profile = 'NONE'
   REAL(rp) :: E_dyn = 0.
+  REAL(rp) :: E_edge = 0.
   REAL(rp) :: E_pulse = 5.E-2
   REAL(rp) :: E_width = 2.5E-2
   REAL(rp) ::Ero=0
@@ -279,6 +280,7 @@ module korc_input
   LOGICAL :: pitch_diffusion = .TRUE.
   INTEGER :: ngrid1 = 100
   REAL(rp)  :: Clog_const = 20._rp
+  LOGICAL :: slowing_down = .TRUE.
 
   !! -----------------------------------------------
   !! CollisionParamsMultipleSpecies
@@ -446,7 +448,7 @@ CONTAINS
          pinit
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
-         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn
+         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn,E_edge
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
@@ -460,7 +462,8 @@ CONTAINS
     NAMELIST /CollisionParamsSingleSpecies/ Te_sing,Ti_sing,ne_sing, &
          Zeff_sing,dTau_sing,p_therm,ConserveLA,Clog_model,sample_test,&
          min_secRE,pmin_scale,energy_diffusion,LAC_gam_resolution, &
-         FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const,always_aval
+         FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const,always_aval, &
+         slowing_down
     NAMELIST /CollisionParamsMultipleSpecies/ num_impurity_species,Te_mult, &
          ne_mult,Zo_mult,Zj_mult,nz_mult,IZj_mult,neut_prof,lowKE_REs, &
          lowKE_LAC_not_ionized,neut_edge_fac

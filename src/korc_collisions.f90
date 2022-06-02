@@ -136,6 +136,9 @@ module korc_collisions
      REAL(rp), DIMENSION(:,:), ALLOCATABLE :: rnd_num
      INTEGER 				   :: rnd_num_count
      INTEGER 				   :: rnd_dim = 40000000_idef
+
+     LOGICAL :: slowing_down
+
   END TYPE PARAMS_SS
 
   TYPE(PARAMS_MS), PRIVATE :: cparams_ms
@@ -471,6 +474,9 @@ contains
     cparams_ss%P%Zeffo = Zeffo
     cparams_ss%P%n_Zeff = n_Zeff
     cparams_ss%P%a_Zeff = a_Zeff
+
+    cparams_ss%slowing_down = slowing_down
+
   end subroutine load_params_ss
 
 
@@ -969,6 +975,11 @@ contains
        else
           nu = (/nu_S(params,v),nu_D(params,v),nu_par(v)/)
        endif
+
+       if (.not.cparams_ss%slowing_down) nu(1)=tiny(0._rp)
+       if (.not.cparams_ss%pitch_diffusion) nu(2)=tiny(0._rp)
+       if (.not.cparams_ss%energy_diffusion) nu(3)=tiny(0._rp)
+
        Tau = MINVAL( 1.0_rp/nu )
 
 
@@ -2456,6 +2467,12 @@ contains
                   CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
           endif
 
+          if (.not.cparams_ss%slowing_down) CFL(cc)=0._rp
+          if (.not.cparams_ss%pitch_diffusion) CBL(cc)=0._rp
+          if (.not.cparams_ss%energy_diffusion) THEN
+             CAL(cc)=0._rp
+             dCAL(cc)=0._rp
+          ENDIF
 
           dp(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
                ((-CFL(cc)+dCAL(cc)+E_PHI(cc)*xi(cc))*dt+ &
@@ -2625,8 +2642,6 @@ contains
          tt*cparams_ss%coll_per_dump_dt
 
 
-
-
     if (params%field_eval.eq.'eqn') then
        call analytical_fields_GC_p(achunk,F,Y_R,Y_PHI, &
             Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
@@ -2764,15 +2779,12 @@ contains
                CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
        endif
 
-       if (.not.energy_diffusion) then
+       if (.not.cparams_ss%slowing_down) CFL(cc)=0._rp
+       if (.not.cparams_ss%pitch_diffusion) CBL(cc)=0._rp
+       if (.not.cparams_ss%energy_diffusion) THEN
           CAL(cc)=0._rp
           dCAL(cc)=0._rp
-       endif
-
-       if (.not.pitch_diffusion) then
-          CBL(cc)=0._rp
-       endif
-
+       ENDIF
 
        dp(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
             ((-CFL(cc)+dCAL(cc)+E_PHI(cc)*xi(cc))*dt+ &
@@ -2782,7 +2794,6 @@ contains
             ((-2*xi(cc)*CBL(cc)/(pm(cc)*pm(cc))+ &
             E_PHI(cc)*(1-xi(cc)*xi(cc))/pm(cc))*dt- &
             sqrt(2.0_rp*CBL(cc)*(1-xi(cc)*xi(cc)))/pm(cc)*dW(cc,2))
-
 
        if(cparams_ss%sample_test) then
           dp(cc)=0._rp
