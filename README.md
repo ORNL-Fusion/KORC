@@ -10,6 +10,9 @@
 1. Find your platform under the .cmfkit/platform directory
 1. Create a `cmfkit_vars` file at the base directory of the project
 
+```
+$ touch ./cmfkit_vars
+```
 
 1. configure cmfkit using environment vars
 1. run the launcher script
