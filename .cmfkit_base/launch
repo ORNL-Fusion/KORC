@@ -10,6 +10,9 @@ _preflight() {
   . $CMFKIT_SOURCE_DIR/mod_deflist
   . $CMFKIT_SOURCE_DIR/mod_platform
   . $CMFKIT_SOURCE_DIR/mod_readybake
+
+  [[ -f $CMFKIT_OUTSET_DIR/cmfkit_vars ]] \
+    && . $CMFKIT_OUTSET_DIR/cmfkit_vars
 }
 
 
