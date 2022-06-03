@@ -9,7 +9,8 @@
 
 1. Find your platform under the `.cmfkit/platform` directory
 ```bash
-]$ tree .cmfkit/platform/
+[user@localhost korc]$ tree .cmfkit/platform/
+
 .cmfkit/platform/
 ├── github-vm-macos-latest
 │   ├── match
@@ -35,7 +36,6 @@
     └── Dockerfile
 
 ```
-
 1. Create a `cmfkit_vars` file at the base directory of the project
 
 ```bash
