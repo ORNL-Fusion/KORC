@@ -7,11 +7,41 @@
 
 ## Quick-Start
 
-1. Find your platform under the _.cmfkit / platform_ directory
+1. Find your platform under the `.cmfkit/platform` directory
+```bash
+]$ tree .cmfkit/platform/
+.cmfkit/platform/
+├── github-vm-macos-latest
+│   ├── match
+│   └── setup
+├── github-vm-ubuntu-latest
+│   ├── match
+│   └── setup
+├── github-vm-windows-latest
+│   ├── match
+│   └── setup
+├── metal-macos-12
+│   ├── match
+│   └── setup
+├── readybake
+│   └── Dockerfile
+├── readybake-alpine
+│   └── Dockerfile
+├── readybake-centos
+│   └── Dockerfile
+├── readybake-debian
+│   └── Dockerfile
+└── readybake-ubuntu
+    └── Dockerfile
+
+```
+
 1. Create a `cmfkit_vars` file at the base directory of the project
 
 ```bash
-$ touch ./cmfkit_vars
+#!/bin/bash
+
+CMFKIT_PLATFORM='metal-macos-12'
 ```
 
 1. configure cmfkit using environment vars
