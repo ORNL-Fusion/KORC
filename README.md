@@ -36,7 +36,8 @@
     └── Dockerfile
 
 ```
-1. Create a `cmfkit_vars` file at the base directory of the project
+
+2. Create a `cmfkit_vars` file at the base directory of the project
 
 ```bash
 #!/bin/bash
