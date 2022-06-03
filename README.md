@@ -5,14 +5,23 @@
  the Kinetic Orbit Runaway electrons Code (KORC) follows relativistic electrons in general electric and magnetic fields under the full Lorentz force, collisions, and radiation losses.
 
 
- ## Required Dependencies
+## Quick-Start
+
+1. Find your platform under the .cmfkit/platform directory
+1. Create a `cmfkit_vars` file at the base directory of the project
+
+
+1. configure cmfkit using environment vars
+1. run the launcher script
+
+
+## Required Dependencies
 
 - GFortran compiler
 - CMake >= 3.13
 - MPI
 
 
-## Quick-Start Install
 
 differentiate by:
 - compute_env:   [ nersc github docker ]
@@ -36,3 +45,4 @@ CMFKIT_READYBAKE_INTERACTIVE='true' \
 ## More Info
 
 http://ornl-fusion.github.io/KORC
+
