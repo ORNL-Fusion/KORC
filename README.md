@@ -10,7 +10,7 @@
 1. Find your platform under the _.cmfkit / platform_ directory
 1. Create a `cmfkit_vars` file at the base directory of the project
 
-```
+```bash
 $ touch ./cmfkit_vars
 ```
 
