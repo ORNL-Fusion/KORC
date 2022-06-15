@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>advance_GCeqn_vars &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>advance_GCeqn_vars
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.6% of total for procedures.">147 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_ppusher.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_ppusher.f90.html'>korc_ppusher.f90</a></li>
+    
+     <li><a href='../module/korc_ppusher.html'>korc_ppusher</a></li>
+    
+  
+     <li class="active">advance_GCeqn_vars</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/advance_gceqn_vars.html#src">advance_GCeqn_vars</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine advance_GCeqn_vars(vars, pp, tt, params, Y_R, Y_PHI, Y_Z, V_PLL, V_MU, flagCon, flagCol, q_cache, m_cache, B_R, B_PHI, B_Z, F, P, PSIp, E_PHI)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subroutine to advance GC variables <script type="math/tex">({\bf X},p_\parallel)</script>
+ </p></div>
+<p>Comment this section further with evolution equations, numerical
+ methods, and descriptions of both.</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-vars~4"></span>type(PARTICLES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>vars</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pp~2"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tt~9"></span>integer(kind=ip),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>tt</strong></td><td><p>time iterator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~89"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_r~6"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_phi~5"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_z~6"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_pll"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_PLL</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v_mu"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>V_MU</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcon~13"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>flagCon</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagcol~13"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>flagCol</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-q_cache~5"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>q_cache</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-m_cache~7"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m_cache</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_r"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_phi"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_z~9"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~39"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type PROFILES.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p~38"></span>type(PROFILES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip~13"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_phi~5"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~advance_gceqn_vars~~CallsGraph Pages: 1 -->
+<svg id="procadvance_gceqn_varsCallsGraph" width="407pt" height="179pt"
+ viewBox="0.00 0.00 407.00 179.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~advance_gceqn_vars~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 175)">
+<title>proc~~advance_gceqn_vars~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-175 403,-175 403,4 -4,4"/>
+<!-- proc~advance_gceqn_vars -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node1" class="node">
+<title>proc~advance_gceqn_vars</title>
+<polygon fill="none" stroke="#000000" points="117,-108 0,-108 0,-84 117,-84 117,-108"/>
+<text text-anchor="middle" x="58.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">advance_GCeqn_vars</text>
+</g>
+<!-- proc~analytical_fields_gc_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node2" class="node">
+<title>proc~analytical_fields_gc_p</title>
+<g id="a_proc~~advance_gceqn_vars~~CallsGraph_node2"><a xlink:href=".././proc/analytical_fields_gc_p.html" xlink:title="analytical_fields_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="276.5,-171 156.5,-171 156.5,-147 276.5,-147 276.5,-171"/>
+<text text-anchor="middle" x="216.5" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">analytical_fields_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gceqn_vars&#45;&gt;proc~analytical_fields_gc_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_edge1" class="edge">
+<title>proc~advance_gceqn_vars&#45;&gt;proc~analytical_fields_gc_p</title>
+<path fill="none" stroke="#000000" d="M83.8821,-108.1008C102.7454,-116.8921 129.2201,-128.8093 153,-138 157.884,-139.8876 163.0176,-141.7618 168.1615,-143.5688"/>
+<polygon fill="#000000" stroke="#000000" points="167.4083,-147.0106 178.0029,-146.9466 169.6808,-140.3897 167.4083,-147.0106"/>
+</g>
+<!-- proc~gceom_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node3" class="node">
+<title>proc~gceom_p</title>
+<g id="a_proc~~advance_gceqn_vars~~CallsGraph_node3"><a xlink:href=".././proc/gceom_p.html" xlink:title="GCEoM_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="247.5,-129 185.5,-129 185.5,-105 247.5,-105 247.5,-129"/>
+<text text-anchor="middle" x="216.5" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">GCEoM_p</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gceqn_vars&#45;&gt;proc~gceom_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_edge2" class="edge">
+<title>proc~advance_gceqn_vars&#45;&gt;proc~gceom_p</title>
+<path fill="none" stroke="#000000" d="M117.3334,-103.8196C136.5493,-106.3736 157.4712,-109.1544 175.1234,-111.5006"/>
+<polygon fill="#000000" stroke="#000000" points="174.7273,-114.9786 185.1013,-112.8268 175.6496,-108.0397 174.7273,-114.9786"/>
+</g>
+<!-- cyl_check_if_confined_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node4" class="node">
+<title>cyl_check_if_confined_p</title>
+<polygon fill="#777777" stroke="#777777" points="280,-87 153,-87 153,-63 280,-63 280,-87"/>
+<text text-anchor="middle" x="216.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">cyl_check_if_confined_p</text>
+</g>
+<!-- proc~advance_gceqn_vars&#45;&gt;cyl_check_if_confined_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_edge3" class="edge">
+<title>proc~advance_gceqn_vars&#45;&gt;cyl_check_if_confined_p</title>
+<path fill="none" stroke="#000000" d="M117.3334,-88.1804C125.6575,-87.074 134.3017,-85.9251 142.8616,-84.7874"/>
+<polygon fill="#000000" stroke="#000000" points="143.3956,-88.2473 152.8472,-83.4602 142.4732,-81.3083 143.3956,-88.2473"/>
+</g>
+<!-- proc~add_interp_sce_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node5" class="node">
+<title>proc~add_interp_sce_p</title>
+<g id="a_proc~~advance_gceqn_vars~~CallsGraph_node5"><a xlink:href=".././proc/add_interp_sce_p.html" xlink:title="add_interp_SCE_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="267,-45 166,-45 166,-21 267,-21 267,-45"/>
+<text text-anchor="middle" x="216.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">add_interp_SCE_p</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gceqn_vars&#45;&gt;proc~add_interp_sce_p -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_edge4" class="edge">
+<title>proc~advance_gceqn_vars&#45;&gt;proc~add_interp_sce_p</title>
+<path fill="none" stroke="#000000" d="M83.8821,-83.8992C102.7454,-75.1079 129.2201,-63.1907 153,-54 157.884,-52.1124 163.0176,-50.2382 168.1615,-48.4312"/>
+<polygon fill="#000000" stroke="#000000" points="169.6808,-51.6103 178.0029,-45.0534 167.4083,-44.9894 169.6808,-51.6103"/>
+</g>
+<!-- ezspline_interp -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node6" class="node">
+<title>ezspline_interp</title>
+<polygon fill="#777777" stroke="#777777" points="399,-66 316,-66 316,-42 399,-42 399,-66"/>
+<text text-anchor="middle" x="357.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_interp</text>
+</g>
+<!-- proc~add_interp_sce_p&#45;&gt;ezspline_interp -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_edge5" class="edge">
+<title>proc~add_interp_sce_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M267.006,-40.5222C279.6011,-42.398 293.1244,-44.4121 305.7773,-46.2966"/>
+<polygon fill="#000000" stroke="#000000" points="305.2971,-49.7636 315.7037,-47.775 306.3284,-42.84 305.2971,-49.7636"/>
+</g>
+<!-- ezspline_error -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_node7" class="node">
+<title>ezspline_error</title>
+<polygon fill="#777777" stroke="#777777" points="397,-24 318,-24 318,0 397,0 397,-24"/>
+<text text-anchor="middle" x="357.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_error</text>
+</g>
+<!-- proc~add_interp_sce_p&#45;&gt;ezspline_error -->
+<g id="proc~~advance_gceqn_vars~~CallsGraph_edge6" class="edge">
+<title>proc~add_interp_sce_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M267.006,-25.4778C280.3555,-23.4896 294.7477,-21.3461 308.0411,-19.3662"/>
+<polygon fill="#000000" stroke="#000000" points="308.5817,-22.8244 317.957,-17.8894 307.5505,-15.9008 308.5817,-22.8244"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/advance_gceqn_vars.html#src">advance_GCeqn_vars</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">advance_GCeqn_vars</span><span class="p">(</span><span class="n">vars</span><span class="p">,</span><span class="n">pp</span><span class="p">,</span><span class="n">tt</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">PSIp</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+    <span class="c">!! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)</span>
+    <span class="c">!! @endnote</span>
+    <span class="c">!! Comment this section further with evolution equations, numerical</span>
+    <span class="c">!! methods, and descriptions of both.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PARTICLES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">vars</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">P</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">F</span>
+    <span class="c">!! An instance of the KORC derived type PROFILES.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">dt</span>
+    <span class="c">!! Time step used in the leapfrog step (\(\Delta t\)).</span>
+
+    <span class="kt">INTEGER</span>                                                    <span class="kd">::</span> <span class="n">cc</span><span class="p">,</span><span class="n">pchunk</span>
+    <span class="c">!! Chunk iterator.</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">ip</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">tt</span>
+    <span class="c">!! time iterator.</span>
+    <span class="kt">INTEGER</span><span class="p">,</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">pp</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a1</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">5._rp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a21</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._rp</span><span class="p">,</span><span class="n">a22</span><span class="o">=</span><span class="mf">9.</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._rp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a31</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">/</span><span class="mi">1</span><span class="mf">0._rp</span><span class="p">,</span><span class="n">a32</span><span class="o">=-</span><span class="mf">9.</span><span class="o">/</span><span class="mi">1</span><span class="mf">0._rp</span><span class="p">,</span><span class="n">a33</span><span class="o">=</span><span class="mf">6.</span><span class="o">/</span><span class="mf">5._rp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a41</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="mf">1.</span><span class="o">/</span><span class="mi">5</span><span class="mf">4._rp</span><span class="p">,</span><span class="n">a42</span><span class="o">=</span><span class="mf">5.</span><span class="o">/</span><span class="mf">2._rp</span><span class="p">,</span><span class="n">a43</span><span class="o">=-</span><span class="mi">7</span><span class="mf">0.</span><span class="o">/</span><span class="mi">2</span><span class="mf">7._rp</span><span class="p">,</span><span class="n">a44</span><span class="o">=</span><span class="mi">3</span><span class="mf">5.</span><span class="o">/</span><span class="mi">2</span><span class="mf">7._rp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a51</span> <span class="o">=</span> <span class="mi">163</span><span class="mf">1.</span><span class="o">/</span><span class="mi">5529</span><span class="mf">6._rp</span><span class="p">,</span><span class="n">a52</span><span class="o">=</span><span class="mi">17</span><span class="mf">5.</span><span class="o">/</span><span class="mi">51</span><span class="mf">2._rp</span><span class="p">,</span><span class="n">a53</span><span class="o">=</span><span class="mi">57</span><span class="mf">5.</span><span class="o">/</span><span class="mi">1382</span><span class="mf">4._rp</span><span class="p">,</span><span class="n">a54</span><span class="o">=</span><span class="mi">4427</span><span class="mf">5.</span><span class="o">/</span><span class="mi">11059</span><span class="mf">2._rp</span><span class="p">,</span><span class="n">a55</span><span class="o">=</span><span class="mi">25</span><span class="mf">3.</span><span class="o">/</span><span class="mi">409</span><span class="mf">6._rp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">b1</span><span class="o">=</span><span class="mi">3</span><span class="mf">7.</span><span class="o">/</span><span class="mi">37</span><span class="mf">8._rp</span><span class="p">,</span><span class="n">b2</span><span class="o">=</span><span class="mf">0._rp</span><span class="p">,</span><span class="n">b3</span><span class="o">=</span><span class="mi">25</span><span class="mf">0.</span><span class="o">/</span><span class="mi">62</span><span class="mf">1._rp</span><span class="p">,</span><span class="n">b4</span><span class="o">=</span><span class="mi">12</span><span class="mf">5.</span><span class="o">/</span><span class="mi">59</span><span class="mf">4._rp</span><span class="p">,</span><span class="n">b5</span><span class="o">=</span><span class="mf">0._rp</span><span class="p">,</span><span class="n">b6</span><span class="o">=</span><span class="mi">51</span><span class="mf">2.</span><span class="o">/</span><span class="mi">177</span><span class="mf">1._rp</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k1_R</span><span class="p">,</span><span class="n">k1_PHI</span><span class="p">,</span><span class="n">k1_Z</span><span class="p">,</span><span class="n">k1_PLL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k2_R</span><span class="p">,</span><span class="n">k2_PHI</span><span class="p">,</span><span class="n">k2_Z</span><span class="p">,</span><span class="n">k2_PLL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k3_R</span><span class="p">,</span><span class="n">k3_PHI</span><span class="p">,</span><span class="n">k3_Z</span><span class="p">,</span><span class="n">k3_PLL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k4_R</span><span class="p">,</span><span class="n">k4_PHI</span><span class="p">,</span><span class="n">k4_Z</span><span class="p">,</span><span class="n">k4_PLL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k5_R</span><span class="p">,</span><span class="n">k5_PHI</span><span class="p">,</span><span class="n">k5_Z</span><span class="p">,</span><span class="n">k5_PLL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k6_R</span><span class="p">,</span><span class="n">k6_PHI</span><span class="p">,</span><span class="n">k6_Z</span><span class="p">,</span><span class="n">k6_PLL</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Y0_R</span><span class="p">,</span><span class="n">Y0_PHI</span><span class="p">,</span><span class="n">Y0_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">PSIp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">V0</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">E_R</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">E_PHI</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Bmag</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">,</span><span class="n">Zeff</span>
+    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">flagCon</span><span class="p">,</span><span class="n">flagCol</span>
+
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ar</span><span class="p">,</span><span class="n">R0</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span>
+
+    <span class="n">ar</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span>
+    <span class="n">R0</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span>
+
+    <span class="n">pchunk</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">pchunk</span>
+    <span class="n">dt</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">dt</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 0: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 0: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 0: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;ER:&quot;,E17.10)&#39;) E_R</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;EPHI:&quot;,E17.10)&#39;) E_PHI</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;EZ:&quot;,E17.10)&#39;) E_Z</span>
+
+
+    <span class="k">call </span><span class="n">GCEoM_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">)</span> 
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL, &amp;</span>
+    <span class="c">!    !$OMP&amp; RHS_R,RHS_PHI,RHS_Z,RHS_PLL,k1_R,k1_PHI,k1_Z,k1_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>              
+       <span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+
+       <span class="c">!       vars%RHS(pp-1+cc,1)=RHS_R(cc)</span>
+       <span class="c">!       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)</span>
+       <span class="c">!       vars%RHS(pp-1+cc,3)=RHS_Z(cc)</span>
+       <span class="c">!       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)</span>
+
+       <span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a1</span><span class="o">*</span><span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a1</span><span class="o">*</span><span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a1</span><span class="o">*</span><span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   <span class="o">+</span><span class="n">a1</span><span class="o">*</span><span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 1: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 1: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 1: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;k1R: &quot;,E17.10)&#39;) k1_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;k1PHI: &quot;,E17.10)&#39;) k1_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;k1Z: &quot;,E17.10)&#39;) k1_Z(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;k1PLL: &quot;,E17.10)&#39;) k1_PLL(1) </span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">GCEoM_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">)</span> 
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL, &amp;</span>
+    <span class="c">!    !$OMP&amp; RHS_R,RHS_PHI,RHS_Z,RHS_PLL,k2_R,k2_PHI,k2_Z,k2_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">k2_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k2_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PHI</span> <span class="p">(</span><span class="n">cc</span><span class="p">)</span>   
+       <span class="n">k2_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   
+       <span class="n">k2_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a21</span><span class="o">*</span><span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a22</span><span class="o">*</span><span class="n">k2_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a21</span><span class="o">*</span><span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a22</span><span class="o">*</span><span class="n">k2_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a21</span><span class="o">*</span><span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a22</span><span class="o">*</span><span class="n">k2_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   <span class="o">+</span><span class="n">a21</span><span class="o">*</span><span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a22</span><span class="o">*</span><span class="n">k2_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 2: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 2: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 2: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">GCEoM_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">)</span>
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL, &amp;</span>
+    <span class="c">!    !$OMP&amp; RHS_R,RHS_PHI,RHS_Z,RHS_PLL,k3_R,k3_PHI,k3_Z,k3_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">k3_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   
+       <span class="n">k3_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k3_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k3_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a31</span><span class="o">*</span><span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a32</span><span class="o">*</span><span class="n">k2_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a33</span><span class="o">*</span><span class="n">k3_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a31</span><span class="o">*</span><span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a32</span><span class="o">*</span><span class="n">k2_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a33</span><span class="o">*</span><span class="n">k3_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a31</span><span class="o">*</span><span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a32</span><span class="o">*</span><span class="n">k2_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a33</span><span class="o">*</span><span class="n">k3_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   <span class="o">+</span><span class="n">a31</span><span class="o">*</span><span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a32</span><span class="o">*</span><span class="n">k2_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a33</span><span class="o">*</span><span class="n">k3_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 3: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 3: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 3: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">GCEoM_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">)</span>     
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL, &amp;</span>
+    <span class="c">!    !$OMP&amp; RHS_R,RHS_PHI,RHS_Z,RHS_PLL,k4_R,k4_PHI,k4_Z,k4_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">k4_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   
+       <span class="n">k4_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k4_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k4_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a41</span><span class="o">*</span><span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a42</span><span class="o">*</span><span class="n">k2_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a43</span><span class="o">*</span><span class="n">k3_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a44</span><span class="o">*</span><span class="n">k4_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a41</span><span class="o">*</span><span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a42</span><span class="o">*</span><span class="n">k2_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a43</span><span class="o">*</span><span class="n">k3_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a44</span><span class="o">*</span><span class="n">k4_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a41</span><span class="o">*</span><span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a42</span><span class="o">*</span><span class="n">k2_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a43</span><span class="o">*</span><span class="n">k3_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a44</span><span class="o">*</span><span class="n">k4_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   <span class="o">+</span><span class="n">a41</span><span class="o">*</span><span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a42</span><span class="o">*</span><span class="n">k2_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a43</span><span class="o">*</span><span class="n">k3_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a44</span><span class="o">*</span><span class="n">k4_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 4: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 4: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 4: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">GCEoM_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">)</span>   
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL, &amp;</span>
+    <span class="c">!    !$OMP&amp; RHS_R,RHS_PHI,RHS_Z,RHS_PLL,k5_R,k5_PHI,k5_Z,k5_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">k5_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k5_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k5_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k5_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a51</span><span class="o">*</span><span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a52</span><span class="o">*</span><span class="n">k2_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a53</span><span class="o">*</span><span class="n">k3_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a54</span><span class="o">*</span><span class="n">k4_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a55</span><span class="o">*</span><span class="n">k5_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a51</span><span class="o">*</span><span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a52</span><span class="o">*</span><span class="n">k2_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a53</span><span class="o">*</span><span class="n">k3_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a54</span><span class="o">*</span><span class="n">k4_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a55</span><span class="o">*</span><span class="n">k5_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a51</span><span class="o">*</span><span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a52</span><span class="o">*</span><span class="n">k2_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a53</span><span class="o">*</span><span class="n">k3_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a54</span><span class="o">*</span><span class="n">k4_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a55</span><span class="o">*</span><span class="n">k5_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>   <span class="o">+</span><span class="n">a51</span><span class="o">*</span><span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a52</span><span class="o">*</span><span class="n">k2_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">a53</span><span class="o">*</span><span class="n">k3_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a54</span><span class="o">*</span><span class="n">k4_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">a55</span><span class="o">*</span><span class="n">k5_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 5: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 5: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 5: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+<span class="k">    call </span><span class="n">GCEoM_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">RHS_R</span><span class="p">,</span><span class="n">RHS_PHI</span><span class="p">,</span><span class="n">RHS_Z</span><span class="p">,</span><span class="n">RHS_PLL</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">V_PLL</span><span class="p">,</span><span class="n">V_MU</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">q_cache</span><span class="p">,</span><span class="n">m_cache</span><span class="p">)</span>         
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y0_R,Y0_PHI,Y0_Z,V0,Y_R,Y_PHI,Y_Z,V_PLL, &amp;</span>
+    <span class="c">!    !$OMP&amp; RHS_R,RHS_PHI,RHS_Z,RHS_PLL,k6_R,k6_PHI,k6_Z,k6_PLL)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+       <span class="n">k6_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k6_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k6_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>    
+       <span class="n">k6_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">RHS_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b1</span><span class="o">*</span><span class="n">k1_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b2</span><span class="o">*</span><span class="n">k2_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">b3</span><span class="o">*</span><span class="n">k3_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b4</span><span class="o">*</span><span class="n">k4_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b5</span><span class="o">*</span><span class="n">k5_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b6</span><span class="o">*</span><span class="n">k6_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b1</span><span class="o">*</span><span class="n">k1_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b2</span><span class="o">*</span><span class="n">k2_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">b3</span><span class="o">*</span><span class="n">k3_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b4</span><span class="o">*</span><span class="n">k4_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b5</span><span class="o">*</span><span class="n">k5_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b6</span><span class="o">*</span><span class="n">k6_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b1</span><span class="o">*</span><span class="n">k1_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b2</span><span class="o">*</span><span class="n">k2_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">b3</span><span class="o">*</span><span class="n">k3_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b4</span><span class="o">*</span><span class="n">k4_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b5</span><span class="o">*</span><span class="n">k5_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b6</span><span class="o">*</span><span class="n">k6_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b1</span><span class="o">*</span><span class="n">k1_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b2</span><span class="o">*</span><span class="n">k2_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span> <span class="p">&amp;</span>
+            <span class="n">b3</span><span class="o">*</span><span class="n">k3_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b4</span><span class="o">*</span><span class="n">k4_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b5</span><span class="o">*</span><span class="n">k5_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">b6</span><span class="o">*</span><span class="n">k6_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> 
+    <span class="k">end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_R 6: &quot;,E17.10)&#39;) Y_R(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_PHI 6: &quot;,E17.10)&#39;) Y_PHI(1)</span>
+    <span class="c">!    write(output_unit_write,&#39;(&quot;Y_Z 6: &quot;,E17.10)&#39;) Y_Z(1)</span>
+
+    <span class="k">call </span><span class="n">cyl_check_if_confined_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">flagCon</span><span class="p">)</span>
+
+    <span class="c">!$OMP SIMD</span>
+    <span class="c">!    !$OMP&amp; aligned(Y_R,Y_PHI,Y_Z,V_PLL,Y0_R,Y0_PHI,Y0_Z,V0)</span>
+    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+
+       <span class="k">if</span> <span class="p">((</span><span class="n">flagCon</span><span class="p">(</span><span class="n">cc</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0_is</span><span class="p">).</span><span class="nb">or</span><span class="p">.(</span><span class="n">flagCol</span><span class="p">(</span><span class="n">cc</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0_is</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">Y_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">Y_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_PHI</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">Y_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">Y0_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+          <span class="n">V_PLL</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="n">V0</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">    end do</span>
+    <span class="c">!$OMP END SIMD</span>
+
+    <span class="k">call </span><span class="n">analytical_fields_GC_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">PSIp</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E_add</span><span class="p">)</span> <span class="k">then</span>
+<span class="cp">#ifdef PSPLINE</span>
+       <span class="k">call </span><span class="n">add_interp_SCE_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="k">end if</span>
+
+<span class="k">  end subroutine </span><span class="n">advance_GCeqn_vars</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

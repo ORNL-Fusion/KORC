@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_constants.f90 &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_constants.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.1% of total for source files.">17 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_constants.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">korc_constants.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_constants.html">korc_constants</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_constants.f90.html#src">korc_constants.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_constants.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_constantsf90EfferentGraph" width="226pt" height="32pt"
+ viewBox="0.00 0.00 226.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_constants.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>sourcefile~~korc_constants.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 222,-28 222,4 -4,4"/>
+<!-- sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~korc_constants.f90</title>
+<polygon fill="none" stroke="#000000" points="218,-24 117,-24 117,0 218,0 218,-24"/>
+<text text-anchor="middle" x="167.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_constants.f90</text>
+</g>
+<!-- sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_constants.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~korc_types.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/korc_types.f90.html" xlink:title="korc_types.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="81,-24 0,-24 0,0 81,0 81,-24"/>
+<text text-anchor="middle" x="40.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_constants.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M116.9413,-12C108.4828,-12 99.7044,-12 91.2414,-12"/>
+<polygon fill="#000000" stroke="#000000" points="91.1175,-8.5001 81.1174,-12 91.1174,-15.5001 91.1175,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_constants.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_constantsf90AfferentGraph" width="641pt" height="465pt"
+ viewBox="0.00 0.00 641.00 464.66" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph" class="graph" transform="scale(.5149 .5149) rotate(0) translate(4 898.5033)">
+<title>sourcefile~~korc_constants.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-898.5033 1241,-898.5033 1241,4 -4,4"/>
+<!-- sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~korc_constants.f90</title>
+<polygon fill="none" stroke="#000000" points="101,-436.5033 0,-436.5033 0,-412.5033 101,-412.5033 101,-436.5033"/>
+<text text-anchor="middle" x="50.5" y="-422.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_constants.f90</text>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~korc_velocity_distribution.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/korc_velocity_distribution.f90.html" xlink:title="korc_velocity_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1018,-659.5033 871,-659.5033 871,-635.5033 1018,-635.5033 1018,-659.5033"/>
+<text text-anchor="middle" x="944.5" y="-645.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-804.5033C562.8918,-818.2283 550.6024,-826.8872 496,-842.5033"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~korc_experimental_pdf.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/korc_experimental_pdf.f90.html" xlink:title="korc_experimental_pdf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="835,-679.5033 699,-679.5033 699,-655.5033 835,-655.5033 835,-679.5033"/>
+<text text-anchor="middle" x="767" y="-665.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M870.7661,-655.8114C862.2769,-656.7679 853.599,-657.7457 845.0552,-658.7084"/>
+<polygon fill="#000000" stroke="#000000" points="844.6518,-655.2316 835.1066,-659.8294 845.4356,-662.1876 844.6518,-655.2316"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~korc_energy_pdfs.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/korc_energy_pdfs.f90.html" xlink:title="korc_energy_pdfs.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="394,-742.5033 281,-742.5033 281,-718.5033 394,-718.5033 394,-742.5033"/>
+<text text-anchor="middle" x="337.5" y="-728.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_energy_pdfs.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_energy_pdfs.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_energy_pdfs.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-710.5033C641.3034,-740.0194 489.3896,-738.7802 404.0688,-734.8713"/>
+<polygon fill="#000000" stroke="#000000" points="404.1579,-731.3716 394.0002,-734.3833 403.819,-738.3634 404.1579,-731.3716"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~korc_hdf5.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/korc_hdf5.f90.html" xlink:title="korc_HDF5.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="220,-436.5033 137,-436.5033 137,-412.5033 220,-412.5033 220,-436.5033"/>
+<text text-anchor="middle" x="178.5" y="-422.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M919.0774,-659.6204C885.2666,-675.0057 823.2165,-700.7256 767,-710.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-710.5033C672.1138,-727.0069 420.0783,-702.0674 337.5,-652.5033"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~korc_avalanche.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/korc_avalanche.f90.html" xlink:title="korc_avalanche.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="819,-637.5033 715,-637.5033 715,-613.5033 819,-613.5033 819,-637.5033"/>
+<text text-anchor="middle" x="767" y="-623.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge39" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M870.7661,-638.3645C856.9519,-636.6523 842.6378,-634.8782 829.2154,-633.2145"/>
+<polygon fill="#000000" stroke="#000000" points="829.5027,-629.7235 819.1481,-631.9668 828.6416,-636.6703 829.5027,-629.7235"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node13"><a xlink:href=".././sourcefile/korc_simple_equilibrium_pdf.f90.html" xlink:title="korc_simple_equilibrium_pdf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="419,-784.5033 256,-784.5033 256,-760.5033 419,-760.5033 419,-784.5033"/>
+<text text-anchor="middle" x="337.5" y="-770.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_simple_equilibrium_pdf.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge43" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M929.7341,-659.6508C885.6764,-694.7204 750.0031,-794.286 618,-804.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-804.5033C536.8566,-824.026 439.5599,-803.4208 383.4973,-787.432"/>
+<polygon fill="#000000" stroke="#000000" points="384.4379,-784.0605 373.8574,-784.6116 382.4723,-790.7789 384.4379,-784.0605"/>
+</g>
+<!-- sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~korc_fields.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node18"><a xlink:href=".././sourcefile/korc_fields.f90.html" xlink:title="korc_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="658,-510.5033 578,-510.5033 578,-486.5033 658,-486.5033 658,-510.5033"/>
+<text text-anchor="middle" x="618" y="-496.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge59" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M918.0577,-635.4363C859.7448,-608.8249 720.0475,-545.0733 653.8969,-514.8851"/>
+<polygon fill="#000000" stroke="#000000" points="655.2397,-511.6507 644.6891,-510.6831 652.3335,-518.0189 655.2397,-511.6507"/>
+</g>
+<!-- sourcefile~korc_units.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~korc_units.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/korc_units.f90.html" xlink:title="korc_units.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="535,-894.5033 457,-894.5033 457,-870.5033 535,-870.5033 535,-894.5033"/>
+<text text-anchor="middle" x="496" y="-880.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_units.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_units.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_units.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M456.7512,-877.0183C423.7488,-871.3861 375.9388,-860.7975 337.5,-842.5033"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M337.5,-842.5033C299.3368,-824.3404 287.395,-821.7996 256,-793.5033 213.445,-755.1485 226.4362,-721.8744 178.5,-690.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-652.5033C521.572,-680.2983 592.4855,-814.9087 496,-842.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-842.5033C428.2711,-861.8737 401.1079,-872.7763 337.5,-842.5033"/>
+</g>
+<!-- sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~korc_coords.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/korc_coords.f90.html" xlink:title="korc_coords.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381,-624.5033 294,-624.5033 294,-600.5033 381,-600.5033 381,-624.5033"/>
+<text text-anchor="middle" x="337.5" y="-610.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_coords.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M727.0527,-655.448C696.6215,-648.1763 653.9737,-642.1341 618,-652.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-652.5033C565.899,-667.5212 550.1155,-655.9041 496,-652.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-652.5033C475.1994,-651.1962 426.0938,-638.2223 388.0089,-627.399"/>
+<polygon fill="#000000" stroke="#000000" points="388.6681,-623.9472 378.091,-624.5589 386.741,-630.6767 388.6681,-623.9472"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-652.5033C425.6942,-648.0852 397.9001,-688.7559 337.5,-652.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M337.5,-652.5033C305.6097,-633.3626 283.9041,-658.0944 256,-633.5033 199.7644,-583.9447 184.2601,-489.7359 180.0442,-446.8123"/>
+<polygon fill="#000000" stroke="#000000" points="183.5101,-446.2644 179.1634,-436.6022 176.536,-446.8661 183.5101,-446.2644"/>
+</g>
+<!-- sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~korc_interp.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node17"><a xlink:href=".././sourcefile/korc_interp.f90.html" xlink:title="korc_interp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="537,-396.5033 455,-396.5033 455,-372.5033 537,-372.5033 537,-396.5033"/>
+<text text-anchor="middle" x="496" y="-382.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge54" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M715.6521,-655.401C709.7822,-652.9441 704.0878,-650.0076 699,-646.5033 677.6196,-631.7774 680.7153,-619.4808 663,-600.5033 626.2781,-561.1651 602.4236,-564.5617 573,-519.5033 545.1053,-476.7863 568.3736,-450.7347 537,-410.5033 534.8085,-407.6931 532.2225,-405.1019 529.432,-402.7341"/>
+<polygon fill="#000000" stroke="#000000" points="531.3111,-399.7711 521.1846,-396.6559 527.1582,-405.4062 531.3111,-399.7711"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge60" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M712.3133,-655.4624C707.4906,-653.0096 702.9494,-650.0571 699,-646.5033 668.8067,-619.3346 682.788,-597.9747 663,-562.5033 654.4803,-547.2312 643.148,-531.1326 633.9871,-518.9018"/>
+<polygon fill="#000000" stroke="#000000" points="636.617,-516.5784 627.7716,-510.7466 631.0496,-520.8216 636.617,-516.5784"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M280.8097,-725.5504C248.6629,-720.566 208.9129,-710.566 178.5,-690.5033"/>
+</g>
+<!-- sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~korc_energy_pdfs.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M315.4413,-718.2925C297.0757,-707.067 271.5069,-688.8083 256,-666.5033 206.784,-595.7117 187.545,-491.9658 181.1966,-446.8409"/>
+<polygon fill="#000000" stroke="#000000" points="184.6345,-446.1402 179.85,-436.6872 177.6952,-447.0606 184.6345,-446.1402"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~korc_ppusher.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/korc_ppusher.f90.html" xlink:title="korc_ppusher.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="991.5,-327.5033 897.5,-327.5033 897.5,-303.5033 991.5,-303.5033 991.5,-327.5033"/>
+<text text-anchor="middle" x="944.5" y="-313.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M928.5609,-303.3051C886.5151,-271.4124 768.5685,-183.7829 663,-122.5033 476.1657,-14.0513 331.7548,68.7526 178.5,-83.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M178.5,-83.5033C84.9332,-175.1753 58.9804,-341.7654 52.4827,-402.0057"/>
+<polygon fill="#000000" stroke="#000000" points="48.9678,-401.9807 51.4559,-412.2792 55.9331,-402.6769 48.9678,-401.9807"/>
+</g>
+<!-- sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~korc_collisions.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node12"><a xlink:href=".././sourcefile/korc_collisions.f90.html" xlink:title="korc_collisions.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="816,-287.5033 718,-287.5033 718,-263.5033 816,-263.5033 816,-287.5033"/>
+<text text-anchor="middle" x="767" y="-273.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge41" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M897.3993,-304.8891C875.5695,-299.9697 849.392,-294.0706 826.2385,-288.8529"/>
+<polygon fill="#000000" stroke="#000000" points="826.707,-285.3707 816.1822,-286.5866 825.1681,-292.1995 826.707,-285.3707"/>
+</g>
+<!-- sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~korc_profiles.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node14"><a xlink:href=".././sourcefile/korc_profiles.f90.html" xlink:title="korc_profiles.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="663,-436.5033 573,-436.5033 573,-412.5033 663,-412.5033 663,-436.5033"/>
+<text text-anchor="middle" x="618" y="-422.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge44" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-315.5033C736.1051,-324.0279 723.8983,-319.3232 699,-339.5033 675.1359,-358.8453 684.9795,-377.0439 663,-398.5033 659.9495,-401.4816 656.4922,-404.2462 652.882,-406.7745"/>
+<polygon fill="#000000" stroke="#000000" points="650.8587,-403.9135 644.3005,-412.2346 654.6164,-409.8194 650.8587,-403.9135"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge55" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M897.2444,-308.7629C860.9446,-305.1862 809.9251,-303.6594 767,-315.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-315.5033C736.1051,-324.0279 728.222,-326.3414 699,-339.5033 661.4505,-356.416 657.6991,-373.5496 618,-384.5033"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge61" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-471.5033C734.5537,-480.3426 697.3306,-487.0897 668.2057,-491.6283"/>
+<polygon fill="#000000" stroke="#000000" points="667.6223,-488.1767 658.2627,-493.1414 668.6755,-495.0971 667.6223,-488.1767"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M936.2931,-327.5984C915.5878,-357.7907 861.0288,-435.2829 835,-452.5033 808.8293,-469.8177 797.2764,-463.2552 767,-471.5033"/>
+</g>
+<!-- sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~korc_initialize.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/korc_initialize.f90.html" xlink:title="korc_initialize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1147,-597.5033 1054,-597.5033 1054,-573.5033 1147,-573.5033 1147,-597.5033"/>
+<text text-anchor="middle" x="1100.5" y="-583.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-799.5033C770.1273,-897.9572 688.5282,-787.4406 496,-842.5033"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1070.0513,-597.6047C1045.5702,-607.3344 1010.9832,-621.0805 984.3082,-631.6821"/>
+<polygon fill="#000000" stroke="#000000" points="982.8722,-628.4865 974.8719,-635.4325 985.4576,-634.9916 982.8722,-628.4865"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~korc_spatial_distribution.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/korc_spatial_distribution.f90.html" xlink:title="korc_spatial_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1016,-597.5033 873,-597.5033 873,-573.5033 1016,-573.5033 1016,-597.5033"/>
+<text text-anchor="middle" x="944.5" y="-583.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1053.6949,-585.5033C1044.9949,-585.5033 1035.6751,-585.5033 1026.282,-585.5033"/>
+<polygon fill="#000000" stroke="#000000" points="1026.0866,-582.0034 1016.0866,-585.5033 1026.0865,-589.0034 1026.0866,-582.0034"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1096.2738,-597.5807C1082.0957,-635.9684 1032.1213,-755.2559 944.5,-799.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-799.5033C843.8803,-850.3148 555.8451,-716.866 455,-666.5033 436.8658,-657.447 436.9329,-647.952 419,-638.5033 410.2293,-633.8822 400.4915,-629.9032 390.8872,-626.5457"/>
+<polygon fill="#000000" stroke="#000000" points="391.9615,-623.2146 381.3682,-623.3947 389.7617,-629.86 391.9615,-623.2146"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1098.7168,-573.2438C1091.1792,-523.0953 1060.3593,-334.352 1018,-294.5033 957.3612,-237.4586 917.7721,-263.4439 835,-254.5033 577.2919,-226.6671 478.31,-191.2119 256,-324.5033 224.6819,-343.2809 201.3559,-379.8435 188.8496,-403.1722"/>
+<polygon fill="#000000" stroke="#000000" points="185.6311,-401.7773 184.1605,-412.2696 191.8532,-404.9844 185.6311,-401.7773"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge62" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1085.0907,-573.2834C1038.0432,-537.4892 891.8632,-437.487 767,-471.5033"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M900.4198,-573.4406C786.5986,-544.8148 476.3659,-482.9637 256,-591.5033 205.872,-616.1935 225.2561,-721.1021 178.5,-690.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M178.5,-690.5033C92.5266,-632.2941 62.4647,-499.6291 53.6632,-446.8061"/>
+<polygon fill="#000000" stroke="#000000" points="57.1014,-446.1391 52.0952,-436.8017 50.1859,-447.223 57.1014,-446.1391"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M922.7453,-597.6407C890.977,-615.3623 835.5706,-646.2595 835,-646.5033 830.3613,-648.4859 825.4726,-650.3702 820.5316,-652.1372"/>
+<polygon fill="#000000" stroke="#000000" points="819.3501,-648.8422 811.0174,-655.3856 821.6119,-655.4667 819.3501,-648.8422"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M938.5202,-573.4746C920.4635,-537.6081 865.8441,-432.5274 835,-410.5033 696.5065,-311.6127 620.3215,-323.1472 455,-363.5033 397.8382,-377.4569 396.2864,-421.9859 337.5,-424.5033"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge40" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M891.2441,-597.5047C871.6744,-601.9147 849.3481,-606.946 829.0703,-611.5157"/>
+<polygon fill="#000000" stroke="#000000" points="828.2873,-608.1043 819.3014,-613.7171 829.8263,-614.933 828.2873,-608.1043"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge45" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M920.8972,-573.4177C898.9353,-562.3834 865.154,-545.945 835,-533.5033 805.3734,-521.2793 797.0163,-520.7365 767,-509.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-509.5033C720.9421,-492.2668 672.3077,-461.9007 643.584,-442.5146"/>
+<polygon fill="#000000" stroke="#000000" points="645.2168,-439.3912 634.9862,-436.6368 641.2662,-445.1699 645.2168,-439.3912"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge63" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-509.5033C735.5989,-497.7519 697.9211,-495.0632 668.3107,-495.2812"/>
+<polygon fill="#000000" stroke="#000000" points="668.1301,-491.7839 658.197,-495.4695 668.2605,-498.7827 668.1301,-491.7839"/>
+</g>
+<!-- sourcefile~korc_coords.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~korc_coords.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M321.4251,-624.6923C286.3618,-650.5884 204.1012,-707.3919 178.5,-690.5033"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M136.9421,-424.5033C128.7571,-424.5033 120.0115,-424.5033 111.3432,-424.5033"/>
+<polygon fill="#000000" stroke="#000000" points="111.2413,-421.0034 101.2412,-424.5033 111.2412,-428.0034 111.2413,-421.0034"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-614.5033C454.9761,-619.2281 457.3454,-651.1764 419,-666.5033 369.1266,-686.4381 223.3334,-720.0789 178.5,-690.5033"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-614.5033C564.7314,-604.379 549.8661,-608.2995 496,-614.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-614.5033C461.2444,-618.5062 421.9204,-618.0402 391.1363,-616.5567"/>
+<polygon fill="#000000" stroke="#000000" points="391.2147,-613.056 381.0428,-616.0195 390.8427,-620.0461 391.2147,-613.056"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M714.9039,-624.5659C686.1238,-623.3218 649.8529,-620.5573 618,-614.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-614.5033C470.0737,-586.3882 487.9774,-419.0988 337.5,-424.5033"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge47" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M759.0046,-613.3419C742.0307,-587.7041 700.845,-526.4434 663,-477.5033 654.3469,-466.3134 644.1864,-454.2622 635.7116,-444.483"/>
+<polygon fill="#000000" stroke="#000000" points="638.2756,-442.098 629.0595,-436.8716 633.0049,-446.7045 638.2756,-442.098"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge65" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M752.7133,-613.326C726.6364,-591.0994 671.1621,-543.816 640.1514,-517.3841"/>
+<polygon fill="#000000" stroke="#000000" points="642.3434,-514.6536 632.4624,-510.8304 637.8026,-519.981 642.3434,-514.6536"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M754.0125,-263.2958C685.4917,-200.33 362.2069,78.6463 178.5,-83.5033"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-306.5033C476.0859,-313.5215 471.7128,-317.5995 455,-330.5033 402.065,-371.3743 404.334,-422.1029 337.5,-424.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M337.5,-424.5033C301.6862,-425.7896 261.3055,-425.7713 230.2004,-425.4408"/>
+<polygon fill="#000000" stroke="#000000" points="230.0688,-421.939 220.0273,-425.3181 229.9844,-428.9385 230.0688,-421.939"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge48" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M719.5787,-287.5773C712.0095,-291.1163 704.7806,-295.6657 699,-301.5033 666.6442,-334.1786 692.6636,-363.3659 663,-398.5033 660.4536,-401.5197 657.4632,-404.2644 654.2551,-406.7422"/>
+<polygon fill="#000000" stroke="#000000" points="652.2814,-403.8517 645.9605,-412.3545 656.2041,-409.6493 652.2814,-403.8517"/>
+</g>
+<!-- sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~korc_fio_interface.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node15"><a xlink:href=".././sourcefile/korc_fio_interface.f90.html" xlink:title="korc_fio_interface.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="394,-357.5033 281,-357.5033 281,-333.5033 394,-333.5033 394,-357.5033"/>
+<text text-anchor="middle" x="337.5" y="-343.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fio_interface.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge50" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-306.5033C466.7328,-317.9695 433.0712,-326.8212 404.318,-333.1714"/>
+<polygon fill="#000000" stroke="#000000" points="403.407,-329.7872 394.3676,-335.3134 404.8802,-336.6305 403.407,-329.7872"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M717.9604,-273.6765C662.2454,-273.266 569.524,-277.6984 496,-306.5033"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge56" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M618,-384.5033C595.3504,-390.7528 569.422,-391.5862 547.3093,-390.5238"/>
+<polygon fill="#000000" stroke="#000000" points="547.3164,-387.0176 537.1186,-389.8904 546.8821,-394.0041 547.3164,-387.0176"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M726.7532,-287.5991C717.2593,-291.3289 707.4499,-295.9503 699,-301.5033 655.9248,-329.8109 667.6874,-370.7936 618,-384.5033"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge66" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M717.9892,-287.5644C710.867,-291.0908 704.1982,-295.6394 699,-301.5033 655.239,-350.8691 693.1389,-386.8208 663,-445.5033 656.7099,-457.7506 647.0916,-469.6057 638.3595,-478.9869"/>
+<polygon fill="#000000" stroke="#000000" points="635.7752,-476.6243 631.3256,-486.2394 640.8001,-481.4977 635.7752,-476.6243"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M278.5581,-760.4486C270.7864,-757.9601 263.0718,-755.0027 256,-751.5033 216.7126,-732.0628 215.0898,-714.6408 178.5,-690.5033"/>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.3992,-760.2969C263.2362,-757.8499 259.3762,-754.9459 256,-751.5033 212.8451,-707.4998 188.1348,-513.4013 180.8182,-446.927"/>
+<polygon fill="#000000" stroke="#000000" points="184.2705,-446.2945 179.7228,-436.7253 177.3105,-447.0419 184.2705,-446.2945"/>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-424.5033C414.6435,-446.8138 364.4458,-546.6983 345.7789,-591.1041"/>
+<polygon fill="#000000" stroke="#000000" points="342.5201,-589.8266 341.9908,-600.4082 349.0033,-592.4662 342.5201,-589.8266"/>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496,-424.5033C428.0637,-443.1335 407.9148,-422.4615 337.5,-424.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M572.9095,-418.8674C549.5594,-417.3519 520.8181,-417.6975 496,-424.5033"/>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge53" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M581.396,-412.502C569.2031,-408.5044 555.4534,-403.9963 542.6069,-399.7843"/>
+<polygon fill="#000000" stroke="#000000" points="543.5926,-396.4242 532.9999,-396.6344 541.4117,-403.0758 543.5926,-396.4242"/>
+</g>
+<!-- sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~korc_fio_interface.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M313.0047,-357.674C285.9649,-371.1088 242.2738,-392.817 212.0601,-407.8288"/>
+<polygon fill="#000000" stroke="#000000" points="210.1604,-404.8645 202.7622,-412.4485 213.2751,-411.1333 210.1604,-404.8645"/>
+</g>
+<!-- sourcefile~main.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~main.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node16"><a xlink:href=".././sourcefile/main.f90.html" xlink:title="main.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1237,-597.5033 1183,-597.5033 1183,-573.5033 1237,-573.5033 1237,-597.5033"/>
+<text text-anchor="middle" x="1210" y="-583.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_units.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_units.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1205.9691,-597.8452C1186.8209,-653.8655 1099.4774,-881.5033 944.5,-881.5033 944.5,-881.5033 944.5,-881.5033 767,-881.5033 689.4285,-881.5033 599.3681,-881.9181 545.081,-882.2134"/>
+<polygon fill="#000000" stroke="#000000" points="545.0239,-878.7136 535.0434,-882.2689 545.0627,-885.7135 545.0239,-878.7136"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1100.5,-275.5033C1090.8326,-269.9402 1032.6064,-286.8535 990.1129,-300.3846"/>
+<polygon fill="#000000" stroke="#000000" points="988.9499,-297.082 980.4996,-303.4728 991.0909,-303.7465 988.9499,-297.082"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1182.9326,-585.5033C1175.1101,-585.5033 1166.2644,-585.5033 1157.3445,-585.5033"/>
+<polygon fill="#000000" stroke="#000000" points="1157.2927,-582.0034 1147.2927,-585.5033 1157.2927,-589.0034 1157.2927,-582.0034"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-197.5033C892.4845,-180.0502 886.0285,-160.6607 835,-140.5033 805.8148,-128.9746 796.8411,-131.2089 767,-121.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1100.5,-275.5033C1034.2362,-235.279 1017.9904,-222.1621 944.5,-197.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1207.79,-573.3834C1197.8064,-520.1926 1155.0253,-308.6019 1100.5,-275.5033"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-121.5033C544.8563,-49.2533 422.1189,-80.2706 256,-244.5033 210.6359,-289.3524 190.1496,-365.0588 182.4337,-402.3663"/>
+<polygon fill="#000000" stroke="#000000" points="178.9899,-401.7402 180.5104,-412.2254 185.8604,-403.0806 178.9899,-401.7402"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge42" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1100.5,-275.5033C1011.5343,-224.3074 885.8527,-244.0184 816.9717,-260.9811"/>
+<polygon fill="#000000" stroke="#000000" points="816.0627,-257.6008 807.2322,-263.4551 817.7862,-264.3853 816.0627,-257.6008"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge49" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-431.5033C898.0722,-448.8242 884.3313,-415.191 835,-410.5033 774.8266,-404.7854 759.2233,-405.3372 699,-410.5033 690.6198,-411.2222 681.805,-412.3521 673.1999,-413.6657"/>
+<polygon fill="#000000" stroke="#000000" points="672.5456,-410.226 663.2331,-415.2785 673.6638,-417.1361 672.5456,-410.226"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1100.5,-275.5033C1058.5911,-250.0633 989.5073,-412.0637 944.5,-431.5033"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge51" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767,-121.5033C595.8952,-63.4436 409.4674,-260.62 353.9591,-325.5036"/>
+<polygon fill="#000000" stroke="#000000" points="351.0629,-323.5086 347.2875,-333.408 356.4122,-328.0237 351.0629,-323.5086"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge57" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-197.5033C775.3626,-138.1914 578.0519,-306.1296 515.8292,-364.9693"/>
+<polygon fill="#000000" stroke="#000000" points="513.0779,-362.7582 508.2799,-372.2044 517.9214,-367.812 513.0779,-362.7582"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge67" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-431.5033C868.7337,-459.7696 845.4691,-451.9558 767,-471.5033"/>
+</g>
+<!-- sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~korc_finalize.f90</title>
+<g id="a_sourcefile~~korc_constants.f90~~AfferentGraph_node19"><a xlink:href=".././sourcefile/korc_finalize.f90.html" xlink:title="korc_finalize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="811,-443.5033 723,-443.5033 723,-419.5033 811,-419.5033 811,-443.5033"/>
+<text text-anchor="middle" x="767" y="-429.1033" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge68" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M944.5,-431.5033C905.2141,-446.1598 857.5449,-445.2359 821.5028,-441.1536"/>
+<polygon fill="#000000" stroke="#000000" points="821.5454,-437.6317 811.1885,-439.8642 820.6771,-444.5777 821.5454,-437.6317"/>
+</g>
+<!-- sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M472.4219,-396.7627C466.3028,-400.6326 460.0264,-405.2806 455,-410.5033 401.2831,-466.3185 362.3314,-551.2451 346.0019,-590.8082"/>
+<polygon fill="#000000" stroke="#000000" points="342.678,-589.6918 342.1718,-600.2745 349.167,-592.3173 342.678,-589.6918"/>
+</g>
+<!-- sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_fio_interface.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge52" class="edge">
+<title>sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_fio_interface.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M454.7698,-374.3584C436.9609,-369.9764 415.7952,-364.7684 396.3794,-359.991"/>
+<polygon fill="#000000" stroke="#000000" points="396.9594,-356.5294 386.4128,-357.5387 395.2868,-363.3267 396.9594,-356.5294"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M588.2471,-510.5954C537.3321,-531.2882 433.5062,-573.4848 376.7316,-596.5589"/>
+<polygon fill="#000000" stroke="#000000" points="375.3163,-593.3561 367.37,-600.3637 377.9519,-599.841 375.3163,-593.3561"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M592.2953,-486.4153C543.6104,-464.7269 434.1584,-421.7005 337.5,-424.5033"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge58" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M607.6432,-486.4938C589.424,-465.4986 552.1386,-423.1505 537,-410.5033 533.6526,-407.7068 529.9831,-404.9785 526.2586,-402.405"/>
+<polygon fill="#000000" stroke="#000000" points="527.8751,-399.2797 517.5936,-396.7221 524.0362,-405.1331 527.8751,-399.2797"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge46" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M722.6985,-429.4221C707.2876,-428.6981 689.8015,-427.8766 673.5938,-427.1151"/>
+<polygon fill="#000000" stroke="#000000" points="673.3155,-423.5983 663.1622,-426.6251 672.9869,-430.5906 673.3155,-423.5983"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_constants.f90~~AfferentGraph_edge64" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M733.5168,-443.5193C722.4304,-447.7058 710.0943,-452.5903 699,-457.5033 682.4493,-464.8327 664.447,-473.8373 649.6263,-481.539"/>
+<polygon fill="#000000" stroke="#000000" points="647.6239,-478.637 640.3936,-486.3813 650.8752,-484.8361 647.6239,-478.637"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilekorc_constantsf90AfferentGraph = svgPanZoom('#sourcefilekorc_constantsf90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_constants.html">korc_constants</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_constants.f90.html#src">korc_constants.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&gt; @brief Module containing physical and mathematical constants to be used in KORC.</span>
+<a name="ln-2"></a><span class="c">!! @details In this module we define the constant parameters to be used in KORC. Notice that the numerical precision of these quantities is &#39;_rp&#39;, see korc_types.f90.</span>
+<a name="ln-3"></a><span class="c">!! Any new constant needs to be compliant with the numerical precision used in KORC.</span>
+<a name="ln-4"></a><span class="k">module </span><span class="n">korc_constants</span>
+<a name="ln-5"></a>  <span class="k">USE </span><span class="n">korc_types</span>
+<a name="ln-6"></a>
+<a name="ln-7"></a>  <span class="k">IMPLICIT NONE</span>
+<a name="ln-8"></a>
+<a name="ln-9"></a><span class="k">  </span><span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_PI</span> <span class="o">=</span> <span class="mf">4.0_rp</span><span class="o">*</span><span class="nb">ATAN</span><span class="p">(</span><span class="mf">1.0_rp</span><span class="p">)</span> <span class="c">!&lt; Definition of @f$\pi@f$</span>
+<a name="ln-10"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_E</span> <span class="o">=</span> <span class="mf">1.602176E-19_rp</span> <span class="c">!&lt; Absolute value of electron charge in Coulombs (C).</span>
+<a name="ln-11"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_ME</span> <span class="o">=</span> <span class="mf">9.109382E-31_rp</span> <span class="c">!&lt; Electron mass in kg</span>
+<a name="ln-12"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_MP</span> <span class="o">=</span> <span class="mf">1.672621E-27_rp</span> <span class="c">!&lt; Proton mass in kg</span>
+<a name="ln-13"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_U</span> <span class="o">=</span> <span class="mf">1.660538E-27_rp</span> <span class="c">!&lt; Atomic mass unit in kg</span>
+<a name="ln-14"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_KB</span> <span class="o">=</span> <span class="mf">1.380650E-23_rp</span> <span class="c">!&lt; Boltzmann constant in Joules/Kelvin</span>
+<a name="ln-15"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_C</span> <span class="o">=</span> <span class="mi">29979245</span><span class="mf">8.0_rp</span> <span class="c">!&lt; Light speed in m/s</span>
+<a name="ln-16"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_MU</span> <span class="o">=</span> <span class="mf">4.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="mf">1E-7_rp</span> <span class="c">!&lt; Vacuum permeability in N/A^2</span>
+<a name="ln-17"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_E0</span> <span class="o">=</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="p">(</span><span class="n">C_MU</span><span class="o">*</span><span class="n">C_C</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Vacuum permittivity in C^2/(N*m^2)</span>
+<a name="ln-18"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_Ke</span> <span class="o">=</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="p">(</span><span class="mf">4.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">C_E0</span><span class="p">)</span> <span class="c">!&lt; Coulomb constant in N*m^2/C^2</span>
+<a name="ln-19"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_RE</span> <span class="o">=</span> <span class="n">C_E</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span> <span class="mf">4.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">C_E0</span><span class="o">*</span><span class="n">C_ME</span><span class="o">*</span><span class="n">C_C</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="c">!&lt; Classical electron radius</span>
+<a name="ln-20"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_h</span> <span class="o">=</span> <span class="mf">6.6261E-34_rp</span> <span class="c">!&lt; Planck constant in Joules*s</span>
+<a name="ln-21"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">C_a</span> <span class="o">=</span> <span class="mf">1._rp</span><span class="o">/</span><span class="mi">13</span><span class="mf">7._rp</span> <span class="c">!&lt; Fine-structure constant</span>
+<a name="ln-22"></a>  
+<a name="ln-23"></a>  
+<a name="ln-24"></a><span class="k">end module </span><span class="n">korc_constants</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

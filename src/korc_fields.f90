@@ -60,7 +60,7 @@ CONTAINS
     !! where \(\eta = r/R_0\) is the aspect ratio, the constant \(B_0\)
     !! denotes the magnitude of the toroidal magnetic field,
     !! and \(B_\vartheta(r) = \eta B_0/q(r)\) is the poloidal magnetic
-    !! field with 
+    !! field with
     !! safety factor \(q(r) = q_0\left( 1 + \frac{r^2}{\lambda^2} \right)\).
     !! The constant \(q_0\) is the safety factor at the magnetic axis and
     !! the constant \(\lambda\) is obtained from the values of \(q_0\)
@@ -74,13 +74,13 @@ CONTAINS
     TYPE(FIELDS), INTENT(IN)                               :: F
     !! An instance of the KORC derived type FIELDS.
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)      :: Y
-    !! Toroidal coordinates of each particle in the simulation; 
+    !! Toroidal coordinates of each particle in the simulation;
     !! Y(1,:) = \(r\), Y(2,:) = \(\theta\), Y(3,:) = \(\zeta\).
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: B
-    !! Magnetic field components in Cartesian coordinates; 
+    !! Magnetic field components in Cartesian coordinates;
     !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: E
-    !! Electric field components in Cartesian coordinates; 
+    !! Electric field components in Cartesian coordinates;
     !! E(1,:) = \(E_x\), E(2,:) = \(E_y\), E(3,:) = \(E_z\)
     INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(IN)     :: flag
     !! Flag for each particle to decide whether it is being followed (flag=T)
@@ -156,7 +156,7 @@ CONTAINS
     INTEGER                                      :: cc
     !! Particle chunk iterator.
     REAL(rp) :: Er0,rrmn,sigmaamn
-    
+
     B0=F%Bo
     E0=F%Eo
     lam=F%AB%lambda
@@ -167,7 +167,7 @@ CONTAINS
     Er0=F%AB%Ero
     rrmn=F%AB%rmn
     sigmaamn=F%AB%sigmamn
-    
+
     call cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
          T_R,T_T,T_Z,flag_cache)
 
@@ -195,7 +195,7 @@ CONTAINS
        !write(6,*) 'rmn ',rmn,'rrmn ',rrmn
        !write(6,*) 'sigmamn ',sigmamn,'sigmaamn ',sigmaamn
        !write(6,*) 'T_R ',T_R(cc)*params%cpp%length
-       
+
        Ezeta(cc) = -E0/( 1.0_rp + eta(cc)*cT(cc))
        Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
 
@@ -215,22 +215,22 @@ CONTAINS
     TYPE(FIELDS), INTENT(IN)                               :: F
     !! An instance of the KORC derived type FIELDS.
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)      :: Y
-    !! Cylindrical coordinates of each particle in the simulation; 
+    !! Cylindrical coordinates of each particle in the simulation;
     !! Y(1,:) = \(r\), Y(2,:) = \(\theta\), Y(3,:) = \(\zeta\).
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: B
-    !! Magnetic field components in cylindrical coordinates; 
+    !! Magnetic field components in cylindrical coordinates;
     !! B(1,:) = \(B_R\), B(2,:) = \(B_\phi\), B(3,:) = \(B_Z\)
     REAL(rp), DIMENSION(3)   :: Btmp
-    !! Placeholder for magnetic field components in cylindrical coordinates; 
+    !! Placeholder for magnetic field components in cylindrical coordinates;
     !! B(1,:) = \(B_R\), B(2,:) = \(B_\phi\), B(3,:) = \(B_Z\)
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: gradB
-    !! Gradient of magnitude of magnetic field in cylindrical coordinates; 
+    !! Gradient of magnitude of magnetic field in cylindrical coordinates;
     !! gradB(1,:) = \(\nabla_R B\), B(2,:) = \(\nabla_\phi B_\),
     !! B(3,:) = \(\nabla_Z B\)
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: curlB
-    !! Curl of magnetic field unit vector in cylindrical coordinates 
+    !! Curl of magnetic field unit vector in cylindrical coordinates
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: E
-    !! Electric field components in cylindricalcoordinates; 
+    !! Electric field components in cylindricalcoordinates;
     !! E(1,:) = \(E_R\), E(2,:) = \(E_\phi\), E(3,:) = \(E_Z\)
     REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)   :: PSIp
     INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(IN)     :: flag
@@ -283,11 +283,11 @@ CONTAINS
 !       write(output_unit_write,*) 'R0: ',F%AB%Ro
 !       write(output_unit_write,*) 'Y_R: ',Y(pp,1)
 !       write(output_unit_write,*) 'theta: ',theta
-       
+
        PSIp(pp)=Y(pp,1)*F%AB%lambda**2*F%Bo/ &
             (2*F%AB%qo*(F%AB%Ro+rm*cos(theta)))* &
             log(1+(rm/F%AB%lambda)**2)
-       
+
        Btmp(1)=F%AB%Bo*Y(pp,3)/(F%AB%qo*qprof*Y(pp,1))
        Btmp(2)=-F%AB%Bo*F%AB%Ro/Y(pp,1)
        Btmp(3)=-F%AB%Bo*(Y(pp,1)-F%AB%Ro)/(F%AB%qo*qprof*Y(pp,1))
@@ -321,10 +321,10 @@ CONTAINS
 
        curlb(pp,1)=-dZbhatPHI
        curlb(pp,2)=dZbhatR-dRbhatZ
-       curlb(pp,3)=B(pp,2)/(Bmag*Y(pp,1))+dRbhatPHI          
+       curlb(pp,3)=B(pp,2)/(Bmag*Y(pp,1))+dRbhatPHI
 
 
-       
+
        !          if (abs(F%Eo) > 0) then
        E(pp,1) = 0.0_rp
        E(pp,2) = F%Eo*F%AB%Ro/Y(pp,1)
@@ -335,7 +335,7 @@ CONTAINS
     !$OMP END PARALLEL DO
 
     !write(output_unit_write,'("B: ",E17.10)') B
-    
+
   end subroutine analytical_fields_GC_init
 
   subroutine analytical_fields_GC(params,F,Y,E,B,gradB,curlb,flag,PSIp)
@@ -344,22 +344,22 @@ CONTAINS
     TYPE(FIELDS), INTENT(IN)                               :: F
     !! An instance of the KORC derived type FIELDS.
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)      :: Y
-    !! Cylindrical coordinates of each particle in the simulation; 
+    !! Cylindrical coordinates of each particle in the simulation;
     !! Y(1,:) = \(r\), Y(2,:) = \(\theta\), Y(3,:) = \(\zeta\).
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: B
-    !! Magnetic field components in cylindrical coordinates; 
+    !! Magnetic field components in cylindrical coordinates;
     !! B(1,:) = \(B_R\), B(2,:) = \(B_\phi\), B(3,:) = \(B_Z\)
     REAL(rp), DIMENSION(3)   :: Btmp
-    !! Placeholder for magnetic field components in cylindrical coordinates; 
+    !! Placeholder for magnetic field components in cylindrical coordinates;
     !! B(1,:) = \(B_R\), B(2,:) = \(B_\phi\), B(3,:) = \(B_Z\)
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: gradB
-    !! Gradient of magnitude of magnetic field in cylindrical coordinates; 
+    !! Gradient of magnitude of magnetic field in cylindrical coordinates;
     !! gradB(1,:) = \(\nabla_R B\), B(2,:) = \(\nabla_\phi B_\),
     !! B(3,:) = \(\nabla_Z B\)
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: curlB
-    !! Curl of magnetic field unit vector in cylindrical coordinates 
+    !! Curl of magnetic field unit vector in cylindrical coordinates
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: E
-    !! Electric field components in cylindricalcoordinates; 
+    !! Electric field components in cylindricalcoordinates;
     !! E(1,:) = \(E_R\), E(2,:) = \(E_\phi\), E(3,:) = \(E_Z\)
     REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)   :: PSIp
     INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(IN)     :: flag
@@ -412,13 +412,13 @@ CONTAINS
        !write(6,*) 'R0: ',F%AB%Ro*params%cpp%length
        !write(6,*) 'Y_R: ',Y(pp,1)*params%cpp%length
        !write(6,*) 'theta: ',theta
-       
+
        PSIp(pp)=Y(pp,1)*F%AB%lambda**2*F%Bo/ &
             (2*F%AB%qo*(F%AB%Ro+rm*cos(theta)))* &
             log(1+(rm/F%AB%lambda)**2)
 
 !       write(output_unit_write,*) 'PSIp: ',PSIp(pp)
-       
+
        Btmp(1)=F%AB%Bo*Y(pp,3)/(F%AB%qo*qprof*Y(pp,1))
        Btmp(2)=-F%AB%Bo*F%AB%Ro/Y(pp,1)
        Btmp(3)=-F%AB%Bo*(Y(pp,1)-F%AB%Ro)/(F%AB%qo*qprof*Y(pp,1))
@@ -442,7 +442,7 @@ CONTAINS
 
 !       write(6,*) pp,B(pp,:),Bmag,dRBR,dRBPHI,dRBZ
 !       write(6,*) gradB(pp,:)
-       
+
        gradB(pp,1)=(B(pp,1)*dRBR+B(pp,2)*dRBPHI+B(pp,3)*dRBZ)/Bmag
        gradB(pp,2)=0._rp
        gradB(pp,3)=(B(pp,1)*dZBR+B(pp,2)*dZBPHI+B(pp,3)*dZBZ)/Bmag
@@ -454,7 +454,7 @@ CONTAINS
 
        curlb(pp,1)=-dZbhatPHI
        curlb(pp,2)=dZbhatR-dRbhatZ
-       curlb(pp,3)=B(pp,2)/(Bmag*Y(pp,1))+dRbhatPHI          
+       curlb(pp,3)=B(pp,2)/(Bmag*Y(pp,1))+dRbhatPHI
 
        !          if (abs(F%Eo) > 0) then
        E(pp,1) = 0.0_rp
@@ -467,7 +467,7 @@ CONTAINS
 
 !    write(output_unit_write,*) 'PSIp: ',PSIp(:)
 !    write(output_unit_write,*) 'B_PHI: ',B(:,2)
-    
+
   end subroutine analytical_fields_GC
 
   subroutine analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z,Bmag,E_PHI)
@@ -479,7 +479,7 @@ CONTAINS
     REAL(rp),DIMENSION(pchunk),INTENT(OUT) :: Bmag,E_PHI
     integer(ip) :: cc
 
-    
+
     B0=F%Bo
     EF0=F%Eo
     lam=F%AB%lambda
@@ -498,18 +498,18 @@ CONTAINS
 
        Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
-       E_PHI(cc)=EF0*R0/Y_R(cc)       
+       E_PHI(cc)=EF0*R0/Y_R(cc)
     end do
     !$OMP END SIMD
 
   end subroutine analytical_fields_Bmag_p
-  
+
   subroutine add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     TYPE(FIELDS), INTENT(IN)                                   :: F
     INTEGER(ip),INTENT(IN)  :: tt
-    REAL(rp)  :: E_dyn,E_pulse,E_width,time,arg,arg1,R0,Z0,a
+    REAL(rp)  :: E_dyn,E_pulse,E_width,time,arg,arg1,R0,Z0,a,E_edge
     REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: E_PHI
     REAL(rp),DIMENSION(params%pchunk),INTENT(IN) :: Y_R,Y_Z
     REAL(rp),DIMENSION(params%pchunk) :: rm,r_a
@@ -545,24 +545,45 @@ CONTAINS
        Z0=F%Zo
        a=F%AB%a
        E_dyn=F%E_dyn
-       
+
        !$OMP SIMD
        do cc=1_idef,pchunk
 
           !write(6,*) 'E_dyn',E_dyn,'E_PHI_in',E_PHI(cc)
-          
+
           rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
           E_PHI(cc) = E_PHI(cc)+E_dyn-sign((2._rp*r_a(cc)**3._rp- &
                3._rp*r_a(cc)**2._rp+1._rp)*0.05/params%cpp%Eo,E_dyn)
 
           !write(6,*) 'r/a',r_a,'E_PHI_out',E_PHI(cc)
-          
+
+       end do
+       !$OMP END SIMD
+    CASE('MST_FSA1')
+
+       R0=F%AB%Ro
+       Z0=F%Zo
+       a=F%AB%a
+       E_dyn=F%E_dyn
+       E_edge=F%E_edge
+
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+
+          !write(6,*) 'E_dyn',E_dyn*params%cpp%Eo,'E_edge',E_edge*params%cpp%Eo,'E_PHI_in',E_PHI(cc)*params%cpp%Eo
+
+          rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
+          r_a(cc)=rm(cc)/a
+          E_PHI(cc) = E_PHI(cc)+(E_dyn-E_edge)*(1._rp-r_a(cc)**4._rp)**4._rp+E_edge
+
+          !write(6,*) 'r/a',r_a,'E_PHI_out',E_PHI(cc)*params%cpp%Eo
+
        end do
        !$OMP END SIMD
     CASE('NONE')
        !$OMP SIMD
-       do cc=1_idef,pchunk         
+       do cc=1_idef,pchunk
           E_PHI(cc) = E_PHI(cc)
        end do
        !$OMP END SIMD
@@ -573,7 +594,7 @@ CONTAINS
        end do
        !$OMP END SIMD
     END SELECT
-    
+
     !write(output_unit_write,*) arg,arg1
 
   end subroutine add_analytical_E_p
@@ -611,7 +632,7 @@ CONTAINS
        PSIp(cc)=Y_R(cc)*lam**2*B0/ &
             (2*q0*(R0+rm(cc)*cos(theta(cc))))* &
             log(1+(rm(cc)/lam)**2)
-       
+
        B_R(cc)=B0*Y_Z(cc)/(q0*qprof(cc)*Y_R(cc))
        B_PHI(cc)=-B0*R0/Y_R(cc)
        B_Z(cc)=-B0*(Y_R(cc)-R0)/(q0*qprof(cc)*Y_R(cc))
@@ -644,15 +665,15 @@ CONTAINS
 
        curlb_R(cc)=-dZbhatPHI(cc)
        curlb_PHI(cc)=dZbhatR(cc)-dRbhatZ(cc)
-       curlb_Z(cc)=B_PHI(cc)/(Bmag(cc)*Y_R(cc))+dRbhatPHI(cc)         
+       curlb_Z(cc)=B_PHI(cc)/(Bmag(cc)*Y_R(cc))+dRbhatPHI(cc)
 
-       
+
        E_R(cc) = 0.0_rp
        E_PHI(cc) = E0*R0/Y_R(cc)
        E_Z(cc) = 0.0_rp
 
 
-       
+
     end do
     !$OMP END SIMD
 
@@ -667,7 +688,7 @@ CONTAINS
     TYPE(FIELDS), INTENT(IN)                               :: F
     !! An instance of the KORC derived type FIELDS.
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: B
-    !! Magnetic field components in Cartesian coordinates; 
+    !! Magnetic field components in Cartesian coordinates;
     !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
     B(:,1) = F%Bo
     B(:,2:3) = 0.0_rp
@@ -684,7 +705,7 @@ CONTAINS
     !! An instance of the KORC derived type FIELDS.
     REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: B_X,B_Y,B_Z
     REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: E_X,E_Y,E_Z
-    !! Magnetic field components in Cartesian coordinates; 
+    !! Magnetic field components in Cartesian coordinates;
     !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
     integer(ip) :: cc
 
@@ -693,13 +714,13 @@ CONTAINS
        B_X(cc) = F%Bo
        B_Y(cc) = 0._rp
        B_Z(cc) = 0._rp
-       
+
        E_X(cc) = F%Eo
        E_Y(cc) = 0._rp
        E_Z(cc) = 0._rp
     end do
     !$OMP END SIMD
-    
+
   end subroutine uniform_fields_p
 
 
@@ -712,7 +733,7 @@ CONTAINS
     TYPE(FIELDS), INTENT(IN)                               :: F
     !! An instance of the KORC derived type FIELDS.
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: E
-    !! Electric field components in Cartesian coordinates; 
+    !! Electric field components in Cartesian coordinates;
     !! E(1,:) = \(E_x\), E(2,:) = \(E_y\), E(3,:) = \(E_z\)
 
     E(:,1) = F%Eo
@@ -822,7 +843,7 @@ CONTAINS
                vars%gradB,vars%curlb, vars%flagCon, vars%PSI_P)
 
        else
-          
+
           call cyl_check_if_confined(F,vars%Y,vars%flagCon)
 
           call analytical_fields_GC(params,F,vars%Y, vars%E, vars%B, &
@@ -866,7 +887,7 @@ CONTAINS
 
 
   subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint)
-    !! @note Subrotuine that calculates an orthonormal basis using information 
+    !! @note Subrotuine that calculates an orthonormal basis using information
     !! of the (local) magnetic field at position \(\mathbf{X}_0\). @endnote
     TYPE(KORC_PARAMS), INTENT(IN)                                      :: params
     !! Core KORC simulation parameters.
@@ -875,17 +896,17 @@ CONTAINS
     TYPE(FIELDS), INTENT(IN)                                           :: F
     !! F An instance of the KORC derived type FIELDS.
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)               :: b1
-    !! Basis vector pointing along the local magnetic field, 
+    !! Basis vector pointing along the local magnetic field,
     !! that is, along \(\mathbf{b} = \mathbf{B}/B\).
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)               :: b2
     !!  Basis vector perpendicular to b1
     REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)               :: b3
     !! Basis vector perpendicular to b1 and b2.
     INTEGER(is), DIMENSION(:), ALLOCATABLE, OPTIONAL, INTENT(INOUT)    :: flag
-    !! Flag for each particle to decide whether it is being 
+    !! Flag for each particle to decide whether it is being
     !! followed (flag=T) or not (flag=F).
     TYPE(C_PTR), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: hint
-    !! Flag for each particle to decide whether it is being 
+    !! Flag for each particle to decide whether it is being
     !! followed (flag=T) or not (flag=F).
     TYPE(PARTICLES)                                                    :: vars
     !! A temporary instance of the KORC derived type PARTICLES.
@@ -897,7 +918,7 @@ CONTAINS
     REAL(rp), DIMENSION(3) ::b1tmp,b2tmp,b3tmp,tmpvec
 
 !    write(output_unit_write,*) 'in unitVector'
-    
+
     ppp = SIZE(Xo,1) ! Number of particles
 
     ALLOCATE( vars%X(ppp,3) )
@@ -913,7 +934,7 @@ CONTAINS
 #ifdef FIO
     ALLOCATE( vars%hint(ppp) )
 #endif
-    
+
     vars%X = Xo
 #ifdef FIO
     vars%hint = hint
@@ -923,9 +944,9 @@ CONTAINS
     vars%B=0._rp
     vars%PSI_P=0._rp
     vars%cart=.false.
-    
+
     !write(output_unit_write,*) 'before init_random_seed'
-    
+
     call init_random_seed()
 
    ! write(output_unit_write,*) 'before get_fields'
@@ -941,7 +962,7 @@ CONTAINS
         !write(output_unit_write,*) 'before b1,b2,b3 calculation'
 
     tmpvec=(/1.0_rp,1.0_rp,1.0_rp/)
-    
+
     do ii=1_idef,ppp
        !write(6,*) 'ii',ii
        if ( vars%flagCon(ii) .EQ. 1_idef ) then
@@ -965,7 +986,7 @@ CONTAINS
 #ifdef FIO
     hint = vars%hint
 #endif
-    
+
     if (PRESENT(flag)) then
        flag = vars%flagCon
     end if
@@ -981,14 +1002,14 @@ CONTAINS
 #ifdef FIO
     DEALLOCATE( vars%hint)
 #endif
-    
+
     !write(output_unit_write,*) 'out unitVectors'
-    
+
   end subroutine unitVectors
 
 
   subroutine get_fields(params,vars,F)
-    !! @note Inferface with calls to subroutines for calculating the electric 
+    !! @note Inferface with calls to subroutines for calculating the electric
     !! and magnetic field for each particle in the simulation. @endnote
     TYPE(KORC_PARAMS), INTENT(IN)      :: params
     !! Core KORC simulation parameters.
@@ -998,26 +1019,26 @@ CONTAINS
     !! An instance of the KORC derived type FIELDS.
 
     !write(6,*) params%field_model
-    
+
     if (params%field_model(1:10).eq.'ANALYTICAL') then
     !SELECT CASE (TRIM(params%field_model))
     !CASE('ANALYTICAL')
        if (params%field_eval.eq.'eqn') then
           call get_analytical_fields(params,vars, F)
        else
-          call interp_fields(params,vars, F)          
+          call interp_fields(params,vars, F)
        end if
     else if (params%field_model(1:8).eq.'EXTERNAL') then
 
        !       write(output_unit_write,'("2 size of PSI_P: ",I16)') size(vars%PSI_P)
 
        call interp_fields(params,vars, F)
-       
+
 !       write(output_unit_write,'("get_fields")')
 !       write(output_unit_write,'("B_X: ",E17.10)') vars%B(:,1)
 !       write(output_unit_write,'("B_Z: ",E17.10)') vars%B(:,2)
 !       write(output_unit_write,'("B_Y: ",E17.10)') vars%B(:,3)
-       
+
        !if (F%Efield.AND..NOT.F%Efield_in_file) then
        !   call analytical_electric_field_cyl(F,vars%Y,vars%E,vars%flagCon)
        !end if
@@ -1048,33 +1069,33 @@ CONTAINS
 !    if (params%mpi_params%rank .EQ. 0) then
 !       write(output_unit_write,*) 'Calculating SC_E1D'
 !    end if
-    
+
     dr=F%r_1D(2)-F%r_1D(1)
-    
+
     Jsamone=C_E*Vden
 
     ! Add sampled current densities from all MPI processes Jsamone,
     ! and output of total sampled current density Jsamall to each
     ! MPI process.
-    
+
     call MPI_ALLREDUCE(Jsamone,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
          MPI_COMM_WORLD,mpierr)
 
     !write(output_unit_write,*) 'Jsam: ',Jsamall(1:5)
-    
+
     Jexp=Jsamall*F%Ip0
 
     F%J3_SC_1D%PHI=F%J2_SC_1D%PHI
     F%J2_SC_1D%PHI=F%J1_SC_1D%PHI
-    F%J1_SC_1D%PHI=Jexp    
-    
+    F%J1_SC_1D%PHI=Jexp
+
     ! Calculating time-derivative of E_phi
-    
+
     dJdt=(3*F%J1_SC_1D%PHI-4*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
          (2*F%dt_E_SC)
-    
+
 !    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-    
+
     ! Solving 1D Poisson equation with tridiagonal matrix solve
 
     a=0._rp
@@ -1096,7 +1117,7 @@ CONTAINS
        gam(ii)=c(ii-1)/bet
        bet=b(ii)-a(ii)*gam(ii)
        if (bet.eq.0) then
-          stop 'tridiag failed'         
+          stop 'tridiag failed'
        end if
        u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
     end do
@@ -1108,20 +1129,20 @@ CONTAINS
     u(1)=(4*u(2)-u(3))/3._rp
 
     ! Writing over F%A* data
-    
+
 !    F%A3_SC_1D%PHI=F%A2_SC_1D%PHI
 !    F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
 !    F%A1_SC_1D%PHI=u
-    
+
 !    if (init) then
 !       F%A3_SC_1D%PHI=F%A1_SC_1D%PHI
-!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI 
+!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
 !    end if
 
 !    write(output_unit_write,*) params%mpi_params%rank,'A1(1)',F%A1_SC_1D%PHI(1)
 !    write(output_unit_write,*) params%mpi_params%rank,'A2(1)',F%A2_SC_1D%PHI(1)
 !    write(output_unit_write,*) params%mpi_params%rank,'A3(1)',F%A3_SC_1D%PHI(1)
-    
+
     ! Calculating inductive E_phi
 
 !    F%E_SC_1D%PHI=-(3*F%A1_SC_1D%PHI-4*F%A2_SC_1D%PHI+F%A3_SC_1D%PHI)/ &
@@ -1133,20 +1154,20 @@ CONTAINS
        write(output_unit_write,*) 'J1(2)',F%J1_SC_1D%PHI(2)
        write(output_unit_write,*) 'J2(2)',F%J2_SC_1D%PHI(2)
        write(output_unit_write,*) 'J3(2)',F%J3_SC_1D%PHI(2)
-       
+
        write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
     end if
-       
+
     ! Normalizing inductive E_phi
-    
+
     F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
 
 #ifdef PSPLINE
     call initialize_SC1D_field_interpolant(params,F)
 #endif
-    
+
   end subroutine calculate_SC_E1D
-  
+
   subroutine calculate_SC_E1D_FS(params,F,dintJphidPSIP)
 
     TYPE(FIELDS), INTENT(INOUT)                 :: F
@@ -1163,41 +1184,41 @@ CONTAINS
 !    end if
 
     !write(output_unit_write,*) 'dintJphidPSIP',dintJphidPSIP(F%dim_1D)
-    
+
     dPSIP=F%PSIP_1D(2)-F%PSIP_1D(1)
-    
+
 
     ! Add sampled current densities from all MPI processes Jsamone,
     ! and output of total sampled current density Jsamall to each
     ! MPI process.
-    
+
     call MPI_ALLREDUCE(dintJphidPSIP,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
          MPI_COMM_WORLD,mpierr)
 
     !write(output_unit_write,*) 'JSamAll',Jsamall(F%dim_1D)
-    
+
     !write(output_unit_write,*) 'Jsam: ',Jsamall(1:5)
-    
+
     Jexp=Jsamall*F%Ip0
-    
+
     F%J3_SC_1D%PHI=F%J2_SC_1D%PHI
     F%J2_SC_1D%PHI=F%J1_SC_1D%PHI
-    F%J1_SC_1D%PHI=Jexp    
-    
+    F%J1_SC_1D%PHI=Jexp
+
     ! Calculating time-derivative of E_phi
-    
+
     dJdt=(3*F%J1_SC_1D%PHI-4*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
          (2*F%dt_E_SC)
-    
+
 !    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-    
+
     ! Solving 1D Poisson equation with tridiagonal matrix solve
 
     alpha=F%ddMagPsiSqdPsiPSq
     beta=F%dMagPsiSqdPsiP
     gamma=C_MU*dJdt
-   
-    
+
+
     a=-alpha*dPSIP/2._rp+beta
     b=-2._rp*beta
     c=alpha*dPSIP/2._rp+beta
@@ -1209,14 +1230,14 @@ CONTAINS
     c(2)=c(2)-a(2)*a(1)/c(1)
     b(2)=b(2)-a(2)*b(1)/c(1)
     r(2)=r(2)-a(2)*r(1)/c(1)
-    
+
     bet=b(2)
     u(2)=r(2)/bet
     do ii=3_idef,F%dim_1D-1
        gam(ii)=c(ii-1)/bet
        bet=b(ii)-a(ii)*gam(ii)
        if (bet.eq.0) then
-          stop 'tridiag failed'         
+          stop 'tridiag failed'
        end if
        u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
     end do
@@ -1233,18 +1254,18 @@ CONTAINS
        write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
        write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
        write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-       
+
        write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
     end if
-       
+
     ! Normalizing inductive E_phi
-    
+
     F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
 
 #ifdef PSPLINE
     call initialize_SC1D_field_interpolant_FS(params,F)
 #endif
-    
+
   end subroutine calculate_SC_E1D_FS
 
   subroutine calculate_SC_p(params,F,B_R,B_PHI,B_Z,Y_R,Y_Z, &
@@ -1288,8 +1309,8 @@ CONTAINS
             B_Z(cc)*B_Z(cc))
        gam(cc)=sqrt(1+V_PLL(cc)**2+ &
             2*V_MU(cc)*Bmag(cc)*m_cache)
-       vpll(cc)=V_PLL(cc)/gam(cc)    
-       
+       vpll(cc)=V_PLL(cc)/gam(cc)
+
 
        ! Weighting parallel velocity
 
@@ -1308,17 +1329,17 @@ CONTAINS
 !            vpll(cc)*(rm(cc)-r_1D(rind))/dr
 
        ! Gaussian weighting
-       
+
 !       do ii=1_idef,F%dim_1D
 !          arg=MIN((r_1D(ii)-rm(cc))**2._rp/(2._rp*sigr**2._rp),100._rp)
 !          Vpart(ii)=Vpart(ii)+1/sqrt(2._rp*C_PI*sigr**2._rp)* &
-!               exp(-arg)*vpll(cc)           
+!               exp(-arg)*vpll(cc)
 !       end do
 
     end do
 
     ar=F%AB%a
-    ! Calculating density of minor radial annulus    
+    ! Calculating density of minor radial annulus
     do ii=1_idef,F%dim_1D
        ! NGP weighting
        if(ii.eq.1) then
@@ -1345,9 +1366,9 @@ CONTAINS
 !       Vden(ii)=Vpart(ii)/Ai(ii)
 
     end do
-    
+
   end subroutine calculate_SC_p
-  
+
   subroutine calculate_SC_p_FS(params,F,B_R,B_PHI,B_Z,PSIp, &
        V_PLL,V_MU,m_cache,flagCon,flagCol,dintJphidPSIP)
 
@@ -1371,12 +1392,12 @@ CONTAINS
     PSIp_cache=PSIp*(params%cpp%Bo*params%cpp%length**2)
 
     sigPSIP=dPSIP
-    
+
     dintJphidPSIP=0._rp
-    
+
     do cc=1_idef,pchunk
 
-       ! 1D Riemann sum 
+       ! 1D Riemann sum
 
        !write (output_unit_write,*) 'rm',rm(cc)
 
@@ -1384,16 +1405,16 @@ CONTAINS
             B_Z(cc)*B_Z(cc))
        gam(cc)=sqrt(1+V_PLL(cc)**2+ &
             2*V_MU(cc)*Bmag(cc)*m_cache)
-       vpll(cc)=V_PLL(cc)/gam(cc)    
+       vpll(cc)=V_PLL(cc)/gam(cc)
 
 !       write(output_unit_write,*) PSIp_cache(cc)
-       
+
        if (PSIp_cache(cc).lt.0._rp) PSIp_cache(cc)=0._rp
-       
+
        PSIPind=FLOOR(PSIp_cache(cc)/dPSIP)+1_ip
 
-       ! NGP weighting       
-!       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+vpll(cc)    
+       ! NGP weighting
+!       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+vpll(cc)
 
        ! First-order weighting
 !       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+ &
@@ -1402,34 +1423,34 @@ CONTAINS
 !            vpll(cc)*(PSIP_cache(cc)-PSIP_1D(PSIPind))/dPSIP
 
        ! Gaussian weighting
-       
+
        do ii=1_idef,F%dim_1D
           arg=MIN((PSIP_1D(ii)-PSIP_cache(cc))**2._rp/ &
                (2._rp*sigPSIP**2._rp),100._rp)
           dintJphidPSIP(ii)=dintJphidPSIP(ii)+ &
-               exp(-arg)*vpll(cc)*real(flagCon(cc))*real(flagCol(cc))         
+               exp(-arg)*vpll(cc)*real(flagCon(cc))*real(flagCol(cc))
        end do
 
-       
+
     end do
-    
+
     ! First-order weighting
 !    dintJphidPSIP(1)=2*dintJphidPSIP(1)
 
     ! Gaussian weighting
     PSIP_lim=PSIP_1D(F%dim_1D)
-    
+
     do ii=1_idef,F%dim_1D
        arg=MIN((PSIP_lim-PSIP_1D(ii))/(sqrt(2._rp)*sigPSIP),10._rp)
        arg1=MIN(PSIP_1D(ii)/(sqrt(2._rp)*sigPSIP),10._rp)
        dintJphidPSIP(ii)=dintJphidPSIP(ii)/ &
-            (erf(arg)-erf(-arg1))           
+            (erf(arg)-erf(-arg1))
     end do
-    
+
   end subroutine calculate_SC_p_FS
 
   subroutine init_SC_E1D(params,F,spp)
- 
+
     TYPE(FIELDS), INTENT(INOUT)                 :: F
     TYPE(KORC_PARAMS), INTENT(IN) 		:: params
     TYPE(SPECIES), INTENT(IN)    :: spp
@@ -1446,7 +1467,7 @@ CONTAINS
 !    end if
 
     ! 1D nearest grid point weighting in minor radius
-    
+
     RR=spp%vars%Y(:,1)
     ZZ=spp%vars%Y(:,3)
     rm=sqrt((RR-F%Ro)**2._rp+(ZZ-F%Zo)**2._rp)*params%cpp%length
@@ -1454,8 +1475,8 @@ CONTAINS
 !    write (output_unit_write,*) params%mpi_params%rank,'RR',RR
 !    write (output_unit_write,*) params%mpi_params%rank,'ZZ',spp%vars%Y(:,3)
     write (output_unit_write,*) 'rm',rm
-    
-    
+
+
     dr=F%r_1D(2)-F%r_1D(1)
 
     vpll=spp%vars%V(:,1)/spp%vars%g
@@ -1463,11 +1484,11 @@ CONTAINS
     ! Weighting parallel velocity
 
 !    write (output_unit_write,*) 'vpll',vpll
-    
+
     Vpart=0._rp
     r_1D=F%r_1D
     sigr=dr
-    
+
     do pp=1_idef,spp%ppp
        ! NGP weighting
        rind=FLOOR((rm(pp)-dr/2)/dr)+2_ip
@@ -1480,17 +1501,17 @@ CONTAINS
 
        ! Gaussian weighting
 !       do ii=1_idef,F%dim_1D
-!          arg=MIN((r_1D(ii)-rm(pp))**2._rp/(2._rp*sigr**2._rp),100._rp)          
+!          arg=MIN((r_1D(ii)-rm(pp))**2._rp/(2._rp*sigr**2._rp),100._rp)
 !          Vpart(ii)=Vpart(ii)+1/sqrt(2._rp*C_PI*sigr**2._rp)* &
-!               exp(-arg) 
+!               exp(-arg)
 !       end do
-       
+
     end do
 
     ! Calculating density of minor radial annulus
 
     ar=F%AB%a
-    
+
     do ii=1_idef,F%dim_1D
        ! NGP weighting
        if(ii.eq.1) then
@@ -1511,23 +1532,23 @@ CONTAINS
 !       arg1=MIN((ar-r_1D(ii))**2._rp/(2._rp*sigr**2._rp),100._rp)
 !       arg2=MIN((ar-r_1D(ii))/(sqrt(2._rp)*sigr),10._rp)
 !       arg3=MIN((r_1D(ii))/(sqrt(2._rp)*sigr),10._rp)
-       
+
 !       Ai(ii)=sqrt(C_PI*sigr)*(sqrt(2._rp)*sigr*(exp(-arg)- &
 !            exp(-arg1))+r_1D(ii)*sqrt(C_PI)* &
 !            (erf(arg2)-erf(-arg3)))
 !       Vden(ii)=Vpart(ii)/Ai(ii)
-       
+
     end do
-    
+
     Jsamone=C_E*Vden
 
     ! Add sampled current densities from all MPI processes Jsamone,
     ! and output of total sampled current density Jsamall to each
     ! MPI process.
-    
+
     call MPI_ALLREDUCE(Jsamone,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
          MPI_COMM_WORLD,mpierr)
-    
+
 !    write(output_unit_write,*) 'Jsam: ',Jsamall(1:10)
 
     ! Integrating current density to scale total current to
@@ -1538,7 +1559,7 @@ CONTAINS
     do ii=1_idef,F%dim_1D
        if ((ii.eq.1).or.(ii.eq.F%dim_1D)) then
           Isam=Isam+Jsamall(ii)*r_1D(ii)/2._rp
-       else 
+       else
           Isam=Isam+Jsamall(ii)*r_1D(ii)
        end if
     end do
@@ -1547,20 +1568,20 @@ CONTAINS
 
     F%Ip0=F%Ip_exp/Isam
 
-    
+
     Jexp=Jsamall*F%Ip0
 
-    F%J3_SC_1D%PHI=Jexp 
+    F%J3_SC_1D%PHI=Jexp
     F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp        
-    
+    F%J1_SC_1D%PHI=Jexp
+
     ! Calculating time-derivative of E_phi
-    
+
     dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
          (2._rp*F%dt_E_SC)
-    
+
 !    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-    
+
     ! Solving 1D Poisson equation with tridiagonal matrix solve
 
     a=0._rp
@@ -1582,7 +1603,7 @@ CONTAINS
        gam(ii)=c(ii-1)/bet
        bet=b(ii)-a(ii)*gam(ii)
        if (bet.eq.0) then
-          stop 'tridiag failed'         
+          stop 'tridiag failed'
        end if
        u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
     end do
@@ -1594,20 +1615,20 @@ CONTAINS
     u(1)=(4._rp*u(2)-u(3))/3._rp
 
     ! Writing over F%A* data
-    
+
 !    F%A3_SC_1D%PHI=F%A2_SC_1D%PHI
 !    F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
 !    F%A1_SC_1D%PHI=u
-    
+
 !    if (init) then
 !       F%A3_SC_1D%PHI=F%A1_SC_1D%PHI
-!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI 
+!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
 !    end if
 
 !    write(output_unit_write,*) params%mpi_params%rank,'A1(1)',F%A1_SC_1D%PHI(1)
 !    write(output_unit_write,*) params%mpi_params%rank,'A2(1)',F%A2_SC_1D%PHI(1)
 !    write(output_unit_write,*) params%mpi_params%rank,'A3(1)',F%A3_SC_1D%PHI(1)
-    
+
     ! Calculating inductive E_phi
 
 !    F%E_SC_1D%PHI=-(3*F%A1_SC_1D%PHI-4*F%A2_SC_1D%PHI+F%A3_SC_1D%PHI)/ &
@@ -1619,22 +1640,22 @@ CONTAINS
        write(output_unit_write,*) 'J1(2)',F%J1_SC_1D%PHI(2)
        write(output_unit_write,*) 'J2(2)',F%J2_SC_1D%PHI(2)
        write(output_unit_write,*) 'J3(2)',F%J3_SC_1D%PHI(2)
-       
+
        write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
     end if
-       
+
     ! Normalizing inductive E_phi
-    
+
     F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
 
 #ifdef PSPLINE
     call initialize_SC1D_field_interpolant(params,F)
 #endif
-    
+
   end subroutine init_SC_E1D
-  
+
   subroutine init_SC_E1D_FS(params,F,spp)
- 
+
     TYPE(FIELDS), INTENT(INOUT)                 :: F
     TYPE(KORC_PARAMS), INTENT(IN) 		:: params
     TYPE(SPECIES), INTENT(IN)    :: spp
@@ -1654,12 +1675,12 @@ CONTAINS
     sigPSIP=dPSIP
 
     vpll=spp%vars%V(:,1)/spp%vars%g
-    
+
     dintJphidPSIP=0._rp
 
     do pp=1_idef,spp%ppp
        if (PSIP(pp).lt.0._rp) PSIP(pp)=0._rp
-       
+
        PSIPind=FLOOR(PSIP(pp)/dPSIP)+1_ip
 
        ! NGP weighting
@@ -1670,18 +1691,18 @@ CONTAINS
 !            vpll(pp)*(PSIP_1D(PSIPind+1)-PSIP(pp))/dPSIP
 !       dintJphidPSIP(PSIPind+1)=dintJphidPSIP(PSIPind+1)+ &
 !            vpll(pp)*(PSIP(pp)-PSIP_1D(PSIPind))/dPSIP
-       
+
 !       write(output_unit_write,*) PSIP(pp),PSIP_1D(PSIPind),dPSIP
 
        ! Gaussian weighting
-       
+
        do ii=1_idef,F%dim_1D
           arg=MIN((PSIP_1D(ii)-PSIP(pp))**2._rp/ &
                (2._rp*sigPSIP**2._rp),100._rp)
           dintJphidPSIP(ii)=dintJphidPSIP(ii)+ &
-               vpll(pp)*exp(-arg)           
+               vpll(pp)*exp(-arg)
        end do
-       
+
     end do
 
     ! First-order weighting
@@ -1689,21 +1710,21 @@ CONTAINS
 
     ! Gaussian weighting
     PSIP_lim=PSIP_1D(F%dim_1D)
-    
+
     do ii=1_idef,F%dim_1D
        arg=MIN((PSIP_lim-PSIP_1D(ii))/(sqrt(2._rp)*sigPSIP),10._rp)
        arg1=MIN(PSIP_1D(ii)/(sqrt(2._rp)*sigPSIP),10._rp)
        dintJphidPSIP(ii)=dintJphidPSIP(ii)/ &
-            (erf(arg)-erf(-arg1))           
+            (erf(arg)-erf(-arg1))
     end do
-    
+
     ! Add sampled current densities from all MPI processes Jsamone,
     ! and output of total sampled current density Jsamall to each
     ! MPI process.
-    
+
     call MPI_ALLREDUCE(dintJphidPSIP,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
          MPI_COMM_WORLD,mpierr)
-    
+
 !    write(output_unit_write,*) 'Jsam: ',Jsamall(1:10)
 
     ! Integrating current density to scale total current to
@@ -1713,7 +1734,7 @@ CONTAINS
     do ii=1_idef,F%dim_1D
        if ((ii.eq.1).or.(ii.eq.F%dim_1D)) then
           Isam=Isam+Jsamall(ii)/2._rp
-       else 
+       else
           Isam=Isam+Jsamall(ii)
        end if
     end do
@@ -1722,27 +1743,27 @@ CONTAINS
 
     F%Ip0=F%Ip_exp/Isam
 
-    
+
     Jexp=Jsamall*F%Ip0
 
-    F%J3_SC_1D%PHI=Jexp 
+    F%J3_SC_1D%PHI=Jexp
     F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp        
-    
+    F%J1_SC_1D%PHI=Jexp
+
     ! Calculating time-derivative of E_phi
-    
+
     dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
          (2._rp*F%dt_E_SC)
-    
+
 !    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-    
+
     ! Solving 1D Poisson equation with tridiagonal matrix solve
 
     alpha=F%ddMagPsiSqdPsiPSq
     beta=F%dMagPsiSqdPsiP
     gamma=C_MU*dJdt
-    
-    
+
+
     a=-alpha*dPSIP/2._rp+beta
     b=-2._rp*beta
     c=alpha*dPSIP/2._rp+beta
@@ -1754,14 +1775,14 @@ CONTAINS
     c(2)=c(2)-a(2)*a(1)/c(1)
     b(2)=b(2)-a(2)*b(1)/c(1)
     r(2)=r(2)-a(2)*r(1)/c(1)
-    
+
     bet=b(2)
     u(2)=r(2)/bet
     do ii=3_idef,F%dim_1D-1
        gam(ii)=c(ii-1)/bet
        bet=b(ii)-a(ii)*gam(ii)
        if (bet.eq.0) then
-          stop 'tridiag failed'         
+          stop 'tridiag failed'
        end if
        u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
     end do
@@ -1779,22 +1800,22 @@ CONTAINS
        write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
        write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
        write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-       
+
        write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
     end if
-       
+
     ! Normalizing inductive E_phi
-    
+
     F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
 
 #ifdef PSPLINE
     call initialize_SC1D_field_interpolant_FS(params,F)
 #endif
-    
+
   end subroutine init_SC_E1D_FS
 
   subroutine reinit_SC_E1D(params,F)
- 
+
     TYPE(FIELDS), INTENT(INOUT)                 :: F
     TYPE(KORC_PARAMS), INTENT(IN) 		:: params
 
@@ -1813,7 +1834,7 @@ CONTAINS
     Jsamall=F%J0_SC_1D%PHI
 
 !    write(output_unit_write,*) Jsamall
-    
+
     Isam=0._rp
     do ii=1_idef,F%dim_1D
 !       write(output_unit_write,*) Isam
@@ -1822,7 +1843,7 @@ CONTAINS
 !       write(output_unit_write,*) (ii)
        if ((ii.eq.1_idef).or.(ii.eq.F%dim_1D)) then
           Isam=Isam+Jsamall(ii)*r_1D(ii)/2._rp
-       else 
+       else
           Isam=Isam+Jsamall(ii)*r_1D(ii)
        end if
     end do
@@ -1831,20 +1852,20 @@ CONTAINS
 
     F%Ip0=F%Ip_exp/Isam
 
-    
+
     Jexp=Jsamall*F%Ip0
 
-    F%J3_SC_1D%PHI=Jexp 
+    F%J3_SC_1D%PHI=Jexp
     F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp        
-    
+    F%J1_SC_1D%PHI=Jexp
+
     ! Calculating time-derivative of E_phi
-    
+
     dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
          (2._rp*F%dt_E_SC)
-    
+
 !    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-    
+
     ! Solving 1D Poisson equation with tridiagonal matrix solve
 
     a=0._rp
@@ -1866,7 +1887,7 @@ CONTAINS
        gam(ii)=c(ii-1)/bet
        bet=b(ii)-a(ii)*gam(ii)
        if (bet.eq.0) then
-          stop 'tridiag failed'         
+          stop 'tridiag failed'
        end if
        u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
     end do
@@ -1878,20 +1899,20 @@ CONTAINS
     u(1)=(4._rp*u(2)-u(3))/3._rp
 
     ! Writing over F%A* data
-    
+
 !    F%A3_SC_1D%PHI=F%A2_SC_1D%PHI
 !    F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
 !    F%A1_SC_1D%PHI=u
-    
+
 !    if (init) then
 !       F%A3_SC_1D%PHI=F%A1_SC_1D%PHI
-!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI 
+!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
 !    end if
 
 !    write(output_unit_write,*) params%mpi_params%rank,'A1(1)',F%A1_SC_1D%PHI(1)
 !    write(output_unit_write,*) params%mpi_params%rank,'A2(1)',F%A2_SC_1D%PHI(1)
 !    write(output_unit_write,*) params%mpi_params%rank,'A3(1)',F%A3_SC_1D%PHI(1)
-    
+
     ! Calculating inductive E_phi
 
 !    F%E_SC_1D%PHI=-(3*F%A1_SC_1D%PHI-4*F%A2_SC_1D%PHI+F%A3_SC_1D%PHI)/ &
@@ -1903,22 +1924,22 @@ CONTAINS
 !       write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
 !       write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
 !       write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-       
+
 !       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
 !    end if
-       
+
     ! Normalizing inductive E_phi
-    
+
     F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
 
 #ifdef PSPLINE
     call initialize_SC1D_field_interpolant(params,F)
 #endif
-    
+
   end subroutine reinit_SC_E1D
-  
+
   subroutine reinit_SC_E1D_FS(params,F)
- 
+
     TYPE(FIELDS), INTENT(INOUT)                 :: F
     TYPE(KORC_PARAMS), INTENT(IN) 		:: params
     real(rp),dimension(F%dim_1D) :: Jsamall,Jexp,dJdt,PSIP_1D
@@ -1939,7 +1960,7 @@ CONTAINS
     do ii=1_idef,F%dim_1D
        if ((ii.eq.1).or.(ii.eq.F%dim_1D)) then
           Isam=Isam+Jsamall(ii)/2._rp
-       else 
+       else
           Isam=Isam+Jsamall(ii)
        end if
     end do
@@ -1947,27 +1968,27 @@ CONTAINS
 !    write(output_unit_write,*) params%mpi_params%rank,'Isam: ',Isam
 
     F%Ip0=F%Ip_exp/Isam
-    
+
     Jexp=Jsamall*F%Ip0
 
-    F%J3_SC_1D%PHI=Jexp 
+    F%J3_SC_1D%PHI=Jexp
     F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp        
-    
+    F%J1_SC_1D%PHI=Jexp
+
     ! Calculating time-derivative of E_phi
-    
+
     dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
          (2._rp*F%dt_E_SC)
-    
+
 !    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-    
+
     ! Solving 1D Poisson equation with tridiagonal matrix solve
 
     alpha=F%ddMagPsiSqdPsiPSq
     beta=F%dMagPsiSqdPsiP
     gamma=C_MU*dJdt
-    
-    
+
+
     a=-alpha*dPSIP/2._rp+beta
     b=-2._rp*beta
     c=alpha*dPSIP/2._rp+beta
@@ -1979,14 +2000,14 @@ CONTAINS
     c(2)=c(2)-a(2)*a(1)/c(1)
     b(2)=b(2)-a(2)*b(1)/c(1)
     r(2)=r(2)-a(2)*r(1)/c(1)
-    
+
     bet=b(2)
     u(2)=r(2)/bet
     do ii=3_idef,F%dim_1D-1
        gam(ii)=c(ii-1)/bet
        bet=b(ii)-a(ii)*gam(ii)
        if (bet.eq.0) then
-          stop 'tridiag failed'         
+          stop 'tridiag failed'
        end if
        u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
     end do
@@ -2004,20 +2025,20 @@ CONTAINS
        write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
        write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
        write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-       
+
        write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
     end if
-       
+
     ! Normalizing inductive E_phi
-    
+
     F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
 
 #ifdef PSPLINE
     call initialize_SC1D_field_interpolant_FS(params,F)
 #endif
-    
+
   end subroutine reinit_SC_E1D_FS
-  
+
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * !
   ! * * *  SUBROUTINES FOR INITIALIZING FIELDS   * * * !
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * !
@@ -2044,23 +2065,23 @@ CONTAINS
     !REAL(rp)                       :: qo
     !! Safety factor at the magnetic axis \(q_0\).
     !CHARACTER(MAX_STRING_LENGTH)   :: current_direction
-    !! String with information about the direction of the plasma current, 
+    !! String with information about the direction of the plasma current,
     !! 'PARALLEL'  or 'ANTI-PARALLEL' to the toroidal magnetic field.
     !CHARACTER(MAX_STRING_LENGTH)   :: E_model
-    !REAL(rp)                       :: Eo,E_dyn,E_pulse,E_width   
+    !REAL(rp)                       :: Eo,E_dyn,E_pulse,E_width
     !! Electric field at the magnetic axis.
     !LOGICAL                        :: Efield
-    !! Logical variable that specifies if the electric field is 
+    !! Logical variable that specifies if the electric field is
     !! going to be used on in a given simulation.
     !LOGICAL                        :: dBfield
     !LOGICAL                        :: Bfield
-    !! Logical variable that specifies if the magnetic field is 
+    !! Logical variable that specifies if the magnetic field is
     !! going to be used on in a given simulation.
     !LOGICAL                        :: Bflux
     !LOGICAL                        :: Bflux3D
     !LOGICAL                        :: Dim2x1t
     !LOGICAL                        :: E_2x1t,ReInterp_2x1t
-    !! Logical variable that specifies if the poloidal magnetic 
+    !! Logical variable that specifies if the poloidal magnetic
     !! flux is going to be used on in a given simulation.
     !LOGICAL                        :: axisymmetric_fields
     !! Logical variable that specifies if the plasma is axisymmetric.
@@ -2087,7 +2108,7 @@ CONTAINS
     !integer :: dim_1D,ind0_2x1t
     !real(rp) :: dt_E_SC,Ip_exp,PSIp_lim,PSIp_0
     !real(rp) :: t0_2x1t
-    
+
 
     !NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
     !     qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
@@ -2101,7 +2122,7 @@ CONTAINS
     F%FIO_B = -1
     F%FIO_E = -1
 #endif
-    
+
     if (params%mpi_params%rank .EQ. 0) then
        write(output_unit_write,'(/,"* * * * * * * * INITIALIZING FIELDS * * * * * * * *")')
     end if
@@ -2136,6 +2157,7 @@ CONTAINS
        F%Bo = F%AB%Bo
 
        F%E_dyn = E_dyn
+       F%E_edge = E_edge
        F%E_pulse = E_pulse
        F%E_width = E_width
 
@@ -2144,11 +2166,11 @@ CONTAINS
        F%AB%Ero=Ero
        F%AB%rmn=rmn
        F%AB%sigmamn=sigmamn
-       
+
        !write(output_unit_write,*) E_dyn,E_pulse,E_width
 
        F%res_double=res_double
-       
+
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("ANALYTIC")')
           write(output_unit_write,'("Magnetic field: ",E17.10)') F%Bo
@@ -2168,7 +2190,7 @@ CONTAINS
              F%Bfield=.TRUE.
              F%Efield=.TRUE.
              F%Bflux=.TRUE.
-             
+
              call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield,F%Bflux, &
                   .false.,F%Efield,.FALSE.,.FALSE.)
 
@@ -2181,7 +2203,7 @@ CONTAINS
 
              !write(6,*) F%X%R
              !write(6,*) F%X%Z
-             
+
              do ii=1_idef,F%dims(1)
                 do kk=1_idef,F%dims(3)
                    rm=sqrt((F%X%R(ii)-F%Ro)**2+(F%X%Z(kk)-F%Zo)**2)
@@ -2211,16 +2233,16 @@ CONTAINS
              F%FLAG2D(:,1:2)=0.
              F%FLAG2D(:,F%dims(3)-1:F%dims(3))=0.
 
-             if (F%Bflux) F%PSIP_min=minval(F%PSIp)  
-             
+             if (F%Bflux) F%PSIP_min=minval(F%PSIp)
+
              F%Bfield=.FALSE.
-             
+
           else if (params%field_model(12:13).eq.'3D') then
-             
+
              F%axisymmetric_fields = .FALSE.
              F%Bfield=.TRUE.
              F%Efield=.TRUE.
-             
+
              call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,.false.)
 
              do ii=1_idef,F%dims(1)
@@ -2228,18 +2250,18 @@ CONTAINS
              end do
              do ii=1_idef,F%dims(2)
                 F%X%PHI(ii)=0._rp+(ii-1)*2*C_PI/(F%dims(1)-1)
-             end do             
+             end do
              do ii=1_idef,F%dims(3)
                 F%X%Z(ii)=(F%Zo-F%AB%a)+(ii-1)*2*F%AB%a/(F%dims(3)-1)
              end do
 
              !write(output_unit_write,*) size(F%B_3D%R)
-             
+
              do ii=1_idef,F%dims(1)
                 do kk=1_idef,F%dims(3)
 
                    !write(output_unit_write,*) ii,kk
-                   
+
                    rm=sqrt((F%X%R(ii)-F%Ro)**2+(F%X%Z(kk)-F%Zo)**2)
                    qr=F%AB%qo*(1+(rm/F%AB%lambda)**2)
                    theta=atan2(F%X%Z(kk)-F%Zo,F%X%R(ii)-F%Ro)
@@ -2248,7 +2270,7 @@ CONTAINS
                    F%B_3D%PHI(ii,:,kk)=-(F%Ro/F%X%R(ii))*F%AB%Bo
 
                    !write(output_unit_write,*) F%B_3D%PHI(ii,1,kk)
-                   
+
                    F%B_3D%Z(ii,:,kk)=-(rm/F%X%R(ii))* &
                         (F%AB%Bo/qr)*cos(theta)
                    F%E_3D%R(ii,:,kk)=0.0_rp
@@ -2269,9 +2291,9 @@ CONTAINS
 
 
 
-             
+
           end if
-         
+
 
           if (params%orbit_model(3:5).eq.'pre') then
              if (params%mpi_params%rank .EQ. 0) then
@@ -2282,7 +2304,7 @@ CONTAINS
                 call initialize_GC_fields(F)
              else if (params%field_model(12:13).eq.'3D') then
                 call initialize_GC_fields_3D(F)
-             end if             
+             end if
 
           end if
 
@@ -2290,7 +2312,7 @@ CONTAINS
           !F%axisymmetric_fields = .TRUE.
           !F%Bflux=.TRUE.
           !F%Efield=.FALSE.
-          
+
        end if
 
        if (params%SC_E) then
@@ -2305,7 +2327,7 @@ CONTAINS
           ALLOCATE(F%A3_SC_1D%PHI(F%dim_1D))
           ALLOCATE(F%J1_SC_1D%PHI(F%dim_1D))
           ALLOCATE(F%J2_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%J3_SC_1D%PHI(F%dim_1D))          
+          ALLOCATE(F%J3_SC_1D%PHI(F%dim_1D))
           ALLOCATE(F%r_1D(F%dim_1D))
 
           F%E_SC_1D%PHI=0._rp
@@ -2314,15 +2336,15 @@ CONTAINS
           F%A3_SC_1D%PHI=0._rp
           F%J1_SC_1D%PHI=0._rp
           F%J2_SC_1D%PHI=0._rp
-          F%J3_SC_1D%PHI=0._rp          
+          F%J3_SC_1D%PHI=0._rp
           F%r_1D=0._rp
-                    
+
           do ii=1_idef,F%dim_1D
              F%r_1D(ii)=(ii-1)*F%AB%a/(F%dim_1D-1)
           end do
-          
+
        end if
-       
+
 !    CASE('EXTERNAL')
     else if (params%field_model(1:8).eq.'EXTERNAL') then
        ! Load the magnetic field from an external HDF5 file
@@ -2359,35 +2381,36 @@ CONTAINS
        else
           F%ind_2x1t=F%ind0_2x1t
        end if
-          
+
 
        F%E_2x1t = E_2x1t
 
        F%E_profile = E_profile
        F%E_dyn = E_dyn
+       F%E_edge = E_edge
        F%E_pulse = E_pulse
        F%E_width = E_width
        F%AB%a = minor_radius
        F%AB%Ro = major_radius
 
        F%PSIp_lim=PSIp_lim
-       
+
        F%res_double=res_double
-       
+
        !write(output_unit_write,'("E_dyn: ",E17.10)') E_dyn
 !       write(output_unit_write,'("E_pulse: ",E17.10)') E_pulse
 !       write(output_unit_write,'("E_width: ",E17.10)') E_width
-       
+
        call load_dim_data_from_hdf5(params,F)
        !sets F%dims for 2D or 3D data
 
        !write(6,*) F%dims
-              
+
        call which_fields_in_file(params,F%Bfield_in_file,F%Efield_in_file, &
             F%Bflux_in_file,F%dBfield_in_file,F%B1field_in_file, &
             F%E1field_in_file)
 
-       
+
        if (F%Bflux.AND..NOT.F%Bflux_in_file) then
           write(output_unit_write,'("ERROR: Magnetic flux to be used but no data in file!")')
           call KORC_ABORT(18)
@@ -2413,7 +2436,7 @@ CONTAINS
                but no data in file!")')
           call KORC_ABORT(18)
        end if
-       
+
        if (F%Efield.AND..NOT.F%Efield_in_file) then
           if (params%mpi_params%rank.EQ.0_idef) then
              write(output_unit_write,'(/,"* * * * * * * * * *  FIELDS  * * * * * * * * * *")')
@@ -2432,56 +2455,56 @@ CONTAINS
              call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
                   F%Bflux,F%dBfield,F%Efield.AND.F%Efield_in_file,F%B1field, &
                   F%E1field)
-             
+
              call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield, &
                   F%Efield,F%dBfield)
 
           else if (params%orbit_model(1:2).eq.'FO') then
-                
+
              call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-                  .TRUE.,F%dBfield,F%Efield,F%B1field,F%E1field) 
-             
+                  .TRUE.,F%dBfield,F%Efield,F%B1field,F%E1field)
+
           else
 
              call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-                  F%Bflux,F%dBfield,F%Efield,F%B1field,F%E1field)             
-             
+                  F%Bflux,F%dBfield,F%Efield,F%B1field,F%E1field)
+
           end if
 
        else if ((params%field_model(10:13).eq.'MARS').OR. &
             (params%field_model(10:14).eq.'AORSA')) then
-          
+
           call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-               F%Bflux,F%dBfield,F%Efield,F%B1field,F%E1field)   
-          
+               F%Bflux,F%dBfield,F%Efield,F%B1field,F%E1field)
+
        else
           call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%dBfield)
-          
+
        end if
 
-              
+
        !allocates 2D or 3D data arrays (fields and spatial)
-       
-       
+
+
        call load_field_data_from_hdf5(params,F)
-            
+
               !write(output_unit_write,*) F%PSIp
 
        !write(output_unit_write,*) F%E_3D%PHI(:,F%ind0_2x1t,:)
 
        !write(6,*) F%B1Re_2D%R(:,200)
        !flush(6)
-              
+
 !       end if
 
        if (F%Bflux.and..not.(params%field_model(10:13).eq.'MARS')) then
-          F%PSIP_min=minval(F%PSIp)          
+          F%PSIP_min=minval(F%PSIp)
 
        else if(F%Bflux3D) then
           F%PSIP_min=minval(F%PSIp3D(:,1,:))
        end if
 
-          
+
        if ((.not.F%Efield_in_file).and.(.not.F%Dim2x1t).and.F%Efield) then
 
           if (F%Eo.eq.0) F%Eo = Eo
@@ -2527,9 +2550,9 @@ CONTAINS
              F%dBdZ_3D%R=0._rp
              F%dBdZ_3D%PHI=0._rp
              F%dBdZ_3D%Z=0._rp
-          end if         
+          end if
        end if
-       
+
        if (params%mpi_params%rank .EQ. 0) then
 
           write(output_unit_write,'("EXTERNAL")')
@@ -2545,16 +2568,16 @@ CONTAINS
           F%Ip_exp=Ip_exp
 
           write(output_unit_write,*) 'dt_E_SC',F%dt_E_SC,'Ip_exp',Ip_exp
-          
+
           call allocate_1D_FS_arrays(params,F)
           call load_1D_FS_from_hdf5(params,F)
 
 !          write(output_unit_write,*) F%PSIP_1D
-          
+
        end if
-       
+
 !       test=.true.
-       
+
 !       if (F%Bflux.and.(.not.test)) then
 
 !          call initialize_fields_interpolant(params,F)
@@ -2580,7 +2603,7 @@ CONTAINS
 !             DEALLOCATE(F%X%Z)
 !             DEALLOCATE(F%PSIp)
 !          end if
-          
+
 !          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
 !               F%Bflux,F%Efield.AND.F%Efield_in_file)
 
@@ -2590,30 +2613,30 @@ CONTAINS
 
 !          do ii=1_idef,F%dims(3)
 !             F%X%Z(ii)=ZMIN+REAL(ii-1)/REAL(F%dims(3)-1)*(ZMAX-ZMIN)
-!          end do            
-          
+!          end do
+
 !          call calculate_initial_magnetic_field(F)
-          
+
 !          F%E_2D%R=0._rp
 !          do ii=1_idef,F%dims(1)
 !             F%E_2D%PHI(ii,:)=F%Eo*F%Ro/F%X%R(ii)
 !          end do
 !          F%E_2D%Z=0._rp
-          
+
 !       end if
 
-       
+
 !       if (F%Bflux.and.test) then
 
 !          F%Bfield=.TRUE.
 !          F%Efield=.TRUE.
 !          F%Efield_in_file=.TRUE.
-            
-          
+
+
 !          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
 !               F%Bflux,F%Efield.AND.F%Efield_in_file)
 
-          
+
           ! B
           ! edge nodes at minimum R,Z
 !          F%B_2D%Z(1,:)=-(F%PSIp(2,:)-F%PSIp(1,:))/(F%X%R(2)-F%X%R(1))/F%X%R(1)
@@ -2637,7 +2660,7 @@ CONTAINS
 !                  (F%X%Z(ii+1)-F%X%Z(ii-1))/F%X%R(:)
 !          end do
 
-!          do ii=1_idef,F%dims(1)             
+!          do ii=1_idef,F%dims(1)
 !             F%B_2D%PHI(ii,:)=-F%Bo*F%Ro/F%X%R(ii)
 !          end do
 
@@ -2648,9 +2671,9 @@ CONTAINS
 !          F%E_2D%Z=0._rp
 
 !          F%Bfield=.FALSE.
-          
 
-       
+
+
        if (params%mpi_params%rank.EQ.0) then
 
           if (F%axisymmetric_fields) then
@@ -2680,8 +2703,8 @@ CONTAINS
 
           if (params%field_model(10:12).eq.'2DB') then
              if (F%axisymmetric_fields) then
-                call initialize_GC_fields(F)             
-             else             
+                call initialize_GC_fields(F)
+             else
                 call initialize_GC_fields_3D(F)
              end if
           end if
@@ -2705,7 +2728,7 @@ CONTAINS
     if (params%mpi_params%rank.eq.0) then
        write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * *",/)')
     end if
-       
+
   end subroutine initialize_fields
 
   subroutine initialize_GC_fields(F)
@@ -2756,7 +2779,7 @@ CONTAINS
 
     ! PHI component has differentials over R and Z
     F%curlb_2D%PHI(1,:)=-(bhat(2,:,3)-bhat(1,:,3))/ &
-         (F%X%R(2)-F%X%R(1))         
+         (F%X%R(2)-F%X%R(1))
 
     F%curlb_2D%PHI(:,1)=F%curlb_2D%PHI(:,1)+ &
          ((bhat(:,2,1)-bhat(:,1,1))/(F%X%Z(2)-F%X%Z(1)))
@@ -2774,7 +2797,7 @@ CONTAINS
     ! PHI component has differentials over R and Z
     F%curlb_2D%PHI(F%dims(1),:)=F%curlb_2D%PHI(F%dims(1),:)- &
          (bhat(F%dims(1),:,3)-bhat(F%dims(1)-1,:,3))/ &
-         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))         
+         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))
 
     F%curlb_2D%PHI(:,F%dims(3))=F%curlb_2D%PHI(:,F%dims(3))+ &
          ((bhat(:,F%dims(3),1)-bhat(:,F%dims(3)-1,1))/ &
@@ -2807,10 +2830,10 @@ CONTAINS
     end do
 
     DEALLOCATE(Bmag)
-    DEALLOCATE(bhat) 
+    DEALLOCATE(bhat)
 
   end subroutine initialize_GC_fields
-  
+
   subroutine initialize_GC_fields_3D(F)
     !! Computes the auxiliary fields \(\nabla|{\bf B}|\) and
     !! \(\nabla\times\hat{b}\) that are used in the RHS of the
@@ -2843,7 +2866,7 @@ CONTAINS
     F%curlb_3D%R=0._rp
     F%curlb_3D%PHI=0._rp
     F%curlb_3D%Z=0._rp
-    
+
     ! gradB
     ! edge nodes at minimum R,Z
     F%gradB_3D%R(1,:,:)=F%gradB_3D%R(1,:,:)+ &
@@ -2864,7 +2887,7 @@ CONTAINS
        F%gradB_3D%PHI(ii,F%dims(2),:)=F%gradB_3D%PHI(ii,F%dims(2),:)+ &
             (Bmag(ii,1,:)-Bmag(ii,F%dims(2)-1,:))/ &
             (F%X%R(ii)*(F%X%PHI(1)-F%X%PHI(F%dims(2)-1)))
-    end do       
+    end do
     F%gradB_3D%Z(:,:,F%dims(3))=F%gradB_3D%Z(:,:,F%dims(3))+ &
          (Bmag(:,:,F%dims(3))-Bmag(:,:,F%dims(3)-1))/ &
          (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))
@@ -2883,7 +2906,7 @@ CONTAINS
     ! PHI component has differentials over R and Z
     F%curlb_3D%PHI(1,:,:)=F%curlb_3D%PHI(1,:,:)- &
          (bhat(2,:,:,3)-bhat(1,:,:,3))/ &
-         (F%X%R(2)-F%X%R(1))         
+         (F%X%R(2)-F%X%R(1))
 
     F%curlb_3D%PHI(:,:,1)=F%curlb_3D%PHI(:,:,1)+ &
          ((bhat(:,:,2,1)-bhat(:,:,1,1))/(F%X%Z(2)-F%X%Z(1)))
@@ -2913,7 +2936,7 @@ CONTAINS
     ! PHI component has differentials over R and Z
     F%curlb_3D%PHI(F%dims(1),:,:)=F%curlb_3D%PHI(F%dims(1),:,:)- &
          (bhat(F%dims(1),:,:,3)-bhat(F%dims(1)-1,:,:,3))/ &
-         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))         
+         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))
 
     F%curlb_3D%PHI(:,:,F%dims(3))=F%curlb_3D%PHI(:,:,F%dims(3))+ &
          ((bhat(:,:,F%dims(3),1)-bhat(:,:,F%dims(3)-1,1))/ &
@@ -2930,13 +2953,13 @@ CONTAINS
             (bhat(ii,1,:,1)-bhat(ii,F%dims(2)-1,:,1))/ &
             (F%X%R(ii)*(F%X%PHI(1)-F%X%PHI(F%dims(2)-1)))
     end do
-    
+
     do ii=2_idef,F%dims(1)-1
        ! central difference over R for interior nodes
        F%gradB_3D%R(ii,:,:)=F%gradB_3D%R(ii,:,:)+ &
             (Bmag(ii+1,:,:)-Bmag(ii-1,:,:))/ &
             (F%X%R(ii+1)-F%X%R(ii-1))
-       
+
        F%curlb_3D%Z(ii,:,:)=F%curlb_3D%Z(ii,:,:)+ &
             ((bhat(ii+1,:,:,2)*F%X%R(ii+1)- &
             bhat(ii-1,:,:,2)*F%X%R(ii-1))/(F%X%R(ii+1)-F%X%R(ii-1)))/ &
@@ -2946,12 +2969,12 @@ CONTAINS
             (F%X%R(ii+1)-F%X%R(ii-1))
     end do
     do ii=2_idef,F%dims(2)-1
-       ! central difference over PHI for interior nodes       
+       ! central difference over PHI for interior nodes
        do jj=1_idef,F%dims(1)
           F%gradB_3D%PHI(jj,ii,:)=F%gradB_3D%PHI(jj,ii,:)+ &
                (Bmag(jj,ii+1,:)-Bmag(jj,ii-1,:))/ &
                (F%X%R(jj)*(F%X%PHI(ii+1)-F%X%PHI(ii-1)))
-          
+
           F%curlb_3D%Z(jj,ii,:)=F%curlb_3D%Z(jj,ii,:)-&
                (bhat(jj,ii+1,:,1)-bhat(jj,ii-1,:,1))/ &
                (F%X%R(jj)*(F%X%PHI(ii+1)-F%X%PHI(ii-1)))
@@ -2965,7 +2988,7 @@ CONTAINS
        F%gradB_3D%Z(:,:,ii)=F%gradB_3D%Z(:,:,ii)+ &
             (Bmag(:,:,ii+1)-Bmag(:,:,ii-1))/ &
             (F%X%Z(ii+1)-F%X%Z(ii-1))
-       
+
        F%curlb_3D%R(:,:,ii)=F%curlb_3D%R(:,:,ii)- &
             (bhat(:,:,ii+1,2)-bhat(:,:,ii-1,2))/ &
             (F%X%Z(ii+1)-F%X%Z(ii-1))
@@ -2974,7 +2997,7 @@ CONTAINS
     end do
 
     DEALLOCATE(Bmag)
-    DEALLOCATE(bhat) 
+    DEALLOCATE(bhat)
 
   end subroutine initialize_GC_fields_3D
 
@@ -2986,7 +3009,7 @@ CONTAINS
     F%subcycle_E_SC = FLOOR(F%dt_E_SC/params%dt,ip)
 
     sub_E_SC=F%subcycle_E_SC
-    
+
     params%t_it_SC = params%t_skip/F%subcycle_E_SC
     params%t_skip=F%subcycle_E_SC
 
@@ -2995,7 +3018,7 @@ CONTAINS
 !    write(output_unit_write,*) 'dt_E_SC',F%dt_E_SC,'dt',params%dt,'subcycle_E_SC', &
 !         F%subcycle_E_SC,'t_skip',params%t_skip, &
 !         't_it_SC',params%t_it_SC
-    
+
     if (params%mpi_params%rank.EQ.0) then
 
      write(output_unit_write,'(/,"* * * * * SC_E1D SUBCYCLING * * * * *")')
@@ -3005,11 +3028,11 @@ CONTAINS
 
      write(output_unit_write,'("* * * * * * * * * * * * * * * * * * *",/)')
     end if
-    
 
-    
+
+
   end subroutine define_SC_time_step
-  
+
   ! * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   ! Subroutines for getting the fields data from HDF5 files
   ! * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -3081,7 +3104,7 @@ CONTAINS
           F%dims(2) = INT(rdatum)
 
        end if
-       
+
     else
        dset = "/NR"
        call load_from_hdf5(h5file_id,dset,rdatum)
@@ -3147,7 +3170,7 @@ CONTAINS
 
     gname = "dBRdR"
     call h5lexists_f(h5file_id,TRIM(gname),dBfield,h5error)
-    
+
     gname = "ER"
     call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
@@ -3199,7 +3222,7 @@ CONTAINS
        write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fopen_f")')
     end if
 
-    
+
     if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
          F%Dim2x1t) then
        dset = "/PHI"
@@ -3233,7 +3256,7 @@ CONTAINS
 
        call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
-       if (Efield) then       
+       if (Efield) then
           call load_from_hdf5(h5file_id,dset,F%Eo)
        else
           F%Eo = 0.0_rp
@@ -3254,7 +3277,7 @@ CONTAINS
        call load_from_hdf5(h5file_id,dset,F%AMP)
 
        F%AMP=F%AMP*F%MARS_AMP_Scale
-       
+
     end if
 
     if (params%field_model(10:14).eq.'AORSA') then
@@ -3266,9 +3289,9 @@ CONTAINS
        call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
        F%AMP=F%AORSA_AMP_Scale
-       
+
     end if
-    
+
     dset = '/Ro'
     call load_from_hdf5(h5file_id,dset,F%Ro)
 
@@ -3293,33 +3316,33 @@ CONTAINS
           else
              F%LCFS2D = 0._rp
           end if
-             
+
        end if
 
-       
+
     else
        dset = "/FLAG"
        call load_array_from_hdf5(h5file_id,dset,F%FLAG3D)
 
        if (F%useLCFS) then
-          dset = "/LCFS"       
+          dset = "/LCFS"
           call load_array_from_hdf5(h5file_id,dset,F%LCFS3D)
        else
           F%LCFS3D = 0._rp
        end if
     end if
-    
+
     if (F%Bflux) then
 
        !write(6,*) 'SC_E: ',params%SC_E
-       !write(6,*) size(F%PSIp) 
+       !write(6,*) size(F%PSIp)
        !flush(6)
-       
+
        if (.not.params%SC_E) then
 
           dset = "/PSIp"
           gname = 'PSIp'
-          
+
           call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
           if (Efield) then
@@ -3334,15 +3357,15 @@ CONTAINS
 
        !write(6,*) 'SC_E: ',params%SC_E
        !flush(6)
-          
+
           dset = "/OSPSIp"
           gname = 'OSPSIp'
-       
+
           call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
           write(6,*) params%SC_E
           flush(6)
-          
+
           if (Efield) then
              call load_array_from_hdf5(h5file_id,dset,F%PSIp)
           else
@@ -3350,7 +3373,7 @@ CONTAINS
           end if
 
        end if
-       
+
     end if
 
     if (F%Bflux3D) then
@@ -3366,13 +3389,13 @@ CONTAINS
        end if
 
 !       F%PSIp3D=2*C_PI*(F%PSIp3D-minval(F%PSIp3D))
-       
+
     end if
-    
-    if (F%B1field) then      
+
+    if (F%B1field) then
 
        if (params%field_model(10:13).eq.'MARS') then
-       
+
           dset = "/ReBR"
           call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
 
@@ -3415,8 +3438,8 @@ CONTAINS
 
     end if
 
-    if (F%E1field) then      
-       
+    if (F%E1field) then
+
        dset = "/ReEX"
        call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
 
@@ -3436,7 +3459,7 @@ CONTAINS
        call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
 
     end if
-    
+
     if (F%Bfield) then
        if (F%axisymmetric_fields) then
           dset = "/BR"
@@ -3506,8 +3529,8 @@ CONTAINS
           call load_array_from_hdf5(h5file_id,dset,F%dBdZ_3D%Z)
        end if
     end if
-    
-    if (F%Efield.AND.F%Efield_in_file) then       
+
+    if (F%Efield.AND.F%Efield_in_file) then
        if (F%axisymmetric_fields.and.(.not.F%ReInterp_2x1t)) then
           dset = "/ER"
           call load_array_from_hdf5(h5file_id,dset,F%E_2D%R)
@@ -3518,7 +3541,7 @@ CONTAINS
           dset = "/EZ"
           call load_array_from_hdf5(h5file_id,dset,F%E_2D%Z)
        else
-          
+
           dset = "/ER"
           call load_array_from_hdf5(h5file_id,dset,F%E_3D%R)
 
@@ -3558,7 +3581,7 @@ CONTAINS
     call load_array_from_hdf5(h5file_id,dset,F%dMagPsiSqdPsiP)
 
     dset = "/ddMagPsiSqdPsiPSq"
-    call load_array_from_hdf5(h5file_id,dset,F%ddMagPsiSqdPsiPSq)  
+    call load_array_from_hdf5(h5file_id,dset,F%ddMagPsiSqdPsiPSq)
 
     call h5fclose_f(h5file_id, h5error)
     if (h5error .EQ. -1) then
@@ -3585,10 +3608,10 @@ CONTAINS
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fopen_f")')
     end if
-    
+
     dset = "/N1D"
     call load_from_hdf5(h5file_id,dset,F%dim_1D)
-        
+
     ALLOCATE(F%PSIP_1D(F%dim_1D))
     ALLOCATE(F%dMagPsiSqdPsiP(F%dim_1D))
     ALLOCATE(F%ddMagPsiSqdPsiPSq(F%dim_1D))
@@ -3597,7 +3620,7 @@ CONTAINS
     if (h5error .EQ. -1) then
        write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fclose_f")')
     end if
-    
+
   end subroutine ALLOCATE_1D_FS_ARRAYS
 
 
@@ -3650,7 +3673,7 @@ CONTAINS
           call ALLOCATE_V_FIELD_2D(F%B1Re_2D,F%dims)
           call ALLOCATE_V_FIELD_2D(F%B1Im_2D,F%dims)
        end if
-       
+
     else if (params%field_model(10:14).eq.'AORSA') then
 
        if (B1field.and.(.not.ALLOCATED(F%B1Re_2DX%X))) then
@@ -3662,11 +3685,11 @@ CONTAINS
           call ALLOCATE_V_FIELD_2DX(F%E1Re_2DX,F%dims)
           call ALLOCATE_V_FIELD_2DX(F%E1Im_2DX,F%dims)
        end if
-       
-    endif
-    
 
-    
+    endif
+
+
+
     if (efield.and.(.not.ALLOCATED(F%E_2D%R))) then
        call ALLOCATE_V_FIELD_2D(F%E_2D,F%dims)
 
@@ -3699,19 +3722,19 @@ CONTAINS
           call ALLOCATE_V_FIELD_3D(F%curlb_3D,F%dims)
           call ALLOCATE_V_FIELD_3D(F%gradB_3D,F%dims)
        end if
-       
+
     end if
 
     if (F%Bflux3D.and.(.not.ALLOCATED(F%PSIp3D))) then
        ALLOCATE(F%PSIp3D(F%dims(1),F%dims(2),F%dims(3)))
     end if
-    
+
     if (dbfield.and.(.not.ALLOCATED(F%dBdR_3D%R))) then
        call ALLOCATE_V_FIELD_3D(F%dBdR_3D,F%dims)
        call ALLOCATE_V_FIELD_3D(F%dBdPHI_3D,F%dims)
        call ALLOCATE_V_FIELD_3D(F%dBdZ_3D,F%dims)
     end if
-    
+
     if (efield) then
        call ALLOCATE_V_FIELD_3D(F%E_3D,F%dims)
     end if

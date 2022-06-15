@@ -46,6 +46,7 @@ CONTAINS
        DEALLOCATE(spp(ii)%vars%V)
        DEALLOCATE(spp(ii)%vars%Rgc)
        DEALLOCATE(spp(ii)%vars%Y)
+       DEALLOCATE(spp(ii)%vars%Yborn)
        DEALLOCATE(spp(ii)%vars%E)
        DEALLOCATE(spp(ii)%vars%B)
        DEALLOCATE(spp(ii)%vars%PSI_P)
@@ -66,6 +67,7 @@ CONTAINS
 
        if (params%orbit_model(1:2).eq.'GC') then
           DEALLOCATE(spp(ii)%vars%Y0)
+          DEALLOCATE(spp(ii)%vars%Y1)
           DEALLOCATE(spp(ii)%vars%V0)
           DEALLOCATE(spp(ii)%vars%k1)
           DEALLOCATE(spp(ii)%vars%k2)
@@ -73,7 +75,9 @@ CONTAINS
           DEALLOCATE(spp(ii)%vars%k4)
           DEALLOCATE(spp(ii)%vars%RHS)
        end if
-       
+
+       if (ALLOCATED(spp(ii)%BMC_ra)) DEALLOCATE(spp(ii)%BMC_ra)
+       if (ALLOCATED(spp(ii)%BMC_nRE)) DEALLOCATE(spp(ii)%BMC_nRE)
     end do
 
     DEALLOCATE(spp)

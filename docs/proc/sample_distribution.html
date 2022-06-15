@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>sample_distribution &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>sample_distribution
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.4% of total for procedures.">103 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_simple_equilibrium_pdf.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_simple_equilibrium_pdf.f90.html'>korc_simple_equilibrium_pdf.f90</a></li>
+    
+     <li><a href='../module/korc_simple_equilibrium_pdf.html'>korc_simple_equilibrium_pdf</a></li>
+    
+  
+     <li class="active">sample_distribution</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/sample_distribution.html#src">sample_distribution</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+private subroutine sample_distribution(params, eta, etao)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <ul>
+<li>
+<ul>
+<li>Transient * <em> </em>!</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Transient * <em> </em>!</li>
+</ul>
+</li>
+</ul>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~10"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-eta~5"></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>eta</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-etao~3"></span>real(kind=rp),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>etao</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~sample_distribution~~CallsGraph Pages: 1 -->
+<svg id="procsample_distributionCallsGraph" width="315pt" height="200pt"
+ viewBox="0.00 0.00 315.00 200.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~sample_distribution~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 196)">
+<title>proc~~sample_distribution~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-196 311,-196 311,4 -4,4"/>
+<!-- proc~sample_distribution -->
+<g id="proc~~sample_distribution~~CallsGraph_node1" class="node">
+<title>proc~sample_distribution</title>
+<polygon fill="none" stroke="#000000" points="103,-108 0,-108 0,-84 103,-84 103,-108"/>
+<text text-anchor="middle" x="51.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">sample_distribution</text>
+</g>
+<!-- mpi_bcast -->
+<g id="proc~~sample_distribution~~CallsGraph_node2" class="node">
+<title>mpi_bcast</title>
+<polygon fill="#777777" stroke="#777777" points="208,-192 148,-192 148,-168 208,-168 208,-192"/>
+<text text-anchor="middle" x="178" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_bcast</text>
+</g>
+<!-- proc~sample_distribution&#45;&gt;mpi_bcast -->
+<g id="proc~~sample_distribution~~CallsGraph_edge1" class="edge">
+<title>proc~sample_distribution&#45;&gt;mpi_bcast</title>
+<path fill="none" stroke="#000000" d="M66.8825,-108.0131C84.0348,-121.1836 112.8149,-142.6204 139,-159 140.9599,-160.226 142.9974,-161.4537 145.0671,-162.6657"/>
+<polygon fill="#000000" stroke="#000000" points="143.7787,-165.9575 154.2076,-167.8256 147.2199,-159.8617 143.7787,-165.9575"/>
+</g>
+<!-- mpi_barrier -->
+<g id="proc~~sample_distribution~~CallsGraph_node3" class="node">
+<title>mpi_barrier</title>
+<polygon fill="#777777" stroke="#777777" points="211,-150 145,-150 145,-126 211,-126 211,-150"/>
+<text text-anchor="middle" x="178" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
+</g>
+<!-- proc~sample_distribution&#45;&gt;mpi_barrier -->
+<g id="proc~~sample_distribution~~CallsGraph_edge2" class="edge">
+<title>proc~sample_distribution&#45;&gt;mpi_barrier</title>
+<path fill="none" stroke="#000000" d="M87.7498,-108.0355C102.4828,-112.9271 119.6218,-118.6175 134.9817,-123.7172"/>
+<polygon fill="#000000" stroke="#000000" points="134.1818,-127.1395 144.7752,-126.9689 136.3875,-120.4961 134.1818,-127.1395"/>
+</g>
+<!-- proc~random_norm~3 -->
+<g id="proc~~sample_distribution~~CallsGraph_node4" class="node">
+<title>proc~random_norm~3</title>
+<g id="a_proc~~sample_distribution~~CallsGraph_node4"><a xlink:href=".././proc/random_norm~3.html" xlink:title="random_norm">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="217,-108 139,-108 139,-84 217,-84 217,-108"/>
+<text text-anchor="middle" x="178" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_norm</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_distribution&#45;&gt;proc~random_norm~3 -->
+<g id="proc~~sample_distribution~~CallsGraph_edge3" class="edge">
+<title>proc~sample_distribution&#45;&gt;proc~random_norm~3</title>
+<path fill="none" stroke="#000000" d="M103.3174,-96C111.6651,-96 120.2877,-96 128.5771,-96"/>
+<polygon fill="#000000" stroke="#000000" points="128.8531,-99.5001 138.8531,-96 128.853,-92.5001 128.8531,-99.5001"/>
+</g>
+<!-- mpi_scatter -->
+<g id="proc~~sample_distribution~~CallsGraph_node5" class="node">
+<title>mpi_scatter</title>
+<polygon fill="#777777" stroke="#777777" points="211.5,-66 144.5,-66 144.5,-42 211.5,-42 211.5,-66"/>
+<text text-anchor="middle" x="178" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
+</g>
+<!-- proc~sample_distribution&#45;&gt;mpi_scatter -->
+<g id="proc~~sample_distribution~~CallsGraph_edge4" class="edge">
+<title>proc~sample_distribution&#45;&gt;mpi_scatter</title>
+<path fill="none" stroke="#000000" d="M87.7498,-83.9645C102.363,-79.1127 119.3433,-73.4749 134.6067,-68.4073"/>
+<polygon fill="#000000" stroke="#000000" points="135.9592,-71.6462 144.3469,-65.1734 133.7534,-65.0027 135.9592,-71.6462"/>
+</g>
+<!-- proc~fre~2 -->
+<g id="proc~~sample_distribution~~CallsGraph_node6" class="node">
+<title>proc~fre~2</title>
+<g id="a_proc~~sample_distribution~~CallsGraph_node6"><a xlink:href=".././proc/fre~2.html" xlink:title="fRE">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="205,-24 151,-24 151,0 205,0 205,-24"/>
+<text text-anchor="middle" x="178" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fRE</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_distribution&#45;&gt;proc~fre~2 -->
+<g id="proc~~sample_distribution~~CallsGraph_edge5" class="edge">
+<title>proc~sample_distribution&#45;&gt;proc~fre~2</title>
+<path fill="none" stroke="#000000" d="M66.8825,-83.9869C84.0348,-70.8164 112.8149,-49.3796 139,-33 140.9599,-31.774 142.9974,-30.5463 145.0671,-29.3343"/>
+<polygon fill="#000000" stroke="#000000" points="147.2199,-32.1383 154.2076,-24.1744 143.7787,-26.0425 147.2199,-32.1383"/>
+</g>
+<!-- proc~deg2rad~2 -->
+<g id="proc~~sample_distribution~~CallsGraph_node7" class="node">
+<title>proc~deg2rad~2</title>
+<g id="a_proc~~sample_distribution~~CallsGraph_node7"><a xlink:href=".././proc/deg2rad~2.html" xlink:title="deg2rad">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="307,-24 253,-24 253,0 307,0 307,-24"/>
+<text text-anchor="middle" x="280" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">deg2rad</text>
+</a>
+</g>
+</g>
+<!-- proc~fre~2&#45;&gt;proc~deg2rad~2 -->
+<g id="proc~~sample_distribution~~CallsGraph_edge6" class="edge">
+<title>proc~fre~2&#45;&gt;proc~deg2rad~2</title>
+<path fill="none" stroke="#000000" d="M205.0663,-12C216.5936,-12 230.2305,-12 242.6902,-12"/>
+<polygon fill="#000000" stroke="#000000" points="242.8072,-15.5001 252.8072,-12 242.8071,-8.5001 242.8072,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~sample_distribution~~CalledByGraph Pages: 1 -->
+<svg id="procsample_distributionCalledByGraph" width="287pt" height="32pt"
+ viewBox="0.00 0.00 287.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~sample_distribution~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~sample_distribution~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 283,-28 283,4 -4,4"/>
+<!-- proc~sample_distribution -->
+<g id="proc~~sample_distribution~~CalledByGraph_node1" class="node">
+<title>proc~sample_distribution</title>
+<polygon fill="none" stroke="#000000" points="279,-24 176,-24 176,0 279,0 279,-24"/>
+<text text-anchor="middle" x="227.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">sample_distribution</text>
+</g>
+<!-- proc~get_equilibrium_distribution -->
+<g id="proc~~sample_distribution~~CalledByGraph_node2" class="node">
+<title>proc~get_equilibrium_distribution</title>
+<g id="a_proc~~sample_distribution~~CalledByGraph_node2"><a xlink:href=".././proc/get_equilibrium_distribution.html" xlink:title="get_equilibrium_distribution">
+<polygon fill="#d9534f" stroke="#d9534f" points="140,-24 0,-24 0,0 140,0 140,-24"/>
+<text text-anchor="middle" x="70" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">get_equilibrium_distribution</text>
+</a>
+</g>
+</g>
+<!-- proc~get_equilibrium_distribution&#45;&gt;proc~sample_distribution -->
+<g id="proc~~sample_distribution~~CalledByGraph_edge1" class="edge">
+<title>proc~get_equilibrium_distribution&#45;&gt;proc~sample_distribution</title>
+<path fill="none" stroke="#000000" d="M140.458,-12C148.9595,-12 157.5913,-12 165.9512,-12"/>
+<polygon fill="#000000" stroke="#000000" points="165.9866,-15.5001 175.9865,-12 165.9865,-8.5001 165.9866,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/sample_distribution.html#src">sample_distribution</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">SUBROUTINE </span><span class="n">sample_distribution</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">etao</span><span class="p">)</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">params</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">etao</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">go_root</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">etao_root</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta_buffer</span><span class="p">,</span> <span class="n">eta_test</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">rand_unif</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">eta_samples</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">eta_tmp</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">minmax</span><span class="p">,</span> <span class="n">min_pitch_angle</span><span class="p">,</span> <span class="n">max_pitch_angle</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">deta</span>
+    <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">leta</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">num_accepted</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">ii</span><span class="p">,</span><span class="n">jj</span><span class="p">,</span><span class="n">ppp</span><span class="p">,</span><span class="n">nsamples</span>
+    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">mpierr</span>
+
+    <span class="n">ppp</span> <span class="o">=</span> <span class="n">SIZE</span><span class="p">(</span><span class="n">eta</span><span class="p">)</span>
+    <span class="n">nsamples</span> <span class="o">=</span> <span class="n">ppp</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span>
+
+    <span class="n">deta</span> <span class="o">=</span> <span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">-</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="mf">0.0_rp</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">.</span><span class="n">GE</span><span class="p">.</span><span class="n">korc_zero</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+          <span class="n">minmax</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> <span class="o">-</span>  <span class="kt">REAL</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">deta</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="mf">0.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">minmax</span>
+          <span class="k">end if</span>
+<span class="k">       end do</span>
+<span class="k">    else</span>
+<span class="k">       </span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span>
+    <span class="k">end if</span>
+
+<span class="k">    do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+       <span class="n">minmax</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">+</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">deta</span>
+       <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">LE</span><span class="p">.</span><span class="mi">9</span><span class="mf">0.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">max_pitch_angle</span> <span class="o">=</span> <span class="n">minmax</span>
+       <span class="k">end if</span>
+<span class="k">    end do</span>
+
+    <span class="c">!	write(output_unit_write,*) min_pitch_angle,max_pitch_angle</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       ALLOCATE</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span><span class="c">! Number of samples to distribute among all MPI processes</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span><span class="c">! Number of samples to distribute among all MPI processes</span>
+
+       <span class="c">!* * * Transient * * *!</span>
+       <span class="k">call </span><span class="nb">RANDOM_SEED</span><span class="p">()</span>
+       <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+       <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> <span class="o">+</span> <span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">-</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span><span class="o">*</span><span class="n">rand_unif</span>
+
+       <span class="n">ii</span><span class="o">=</span><span class="mi">2_idef</span>
+       <span class="k">do while</span> <span class="p">(</span><span class="n">ii</span> <span class="p">.</span><span class="n">LE</span><span class="p">.</span> <span class="mi">1000_idef</span><span class="p">)</span>
+          <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+          <span class="k">do while</span> <span class="p">((</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">))</span>
+             <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+          <span class="k">end do</span>
+
+<span class="k">          </span><span class="n">ratio</span> <span class="o">=</span> <span class="n">fRE</span><span class="p">(</span><span class="n">eta_test</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span><span class="o">/</span><span class="n">fRE</span><span class="p">(</span><span class="n">eta_buffer</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">1.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+             <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+          <span class="k">else</span>
+<span class="k">             call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">rand_unif</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">ratio</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span><span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+                <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+             <span class="k">end if</span>
+<span class="k">          end if</span>
+<span class="k">       end do</span>
+       <span class="c">!* * * Transient * * *!</span>
+
+
+       <span class="n">eta_tmp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_buffer</span>
+
+       <span class="k">call </span><span class="nb">RANDOM_SEED</span><span class="p">()</span>
+       <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+
+       <span class="n">num_accepted</span> <span class="o">=</span> <span class="mi">0_idef</span>
+       <span class="k">do while</span><span class="p">(</span><span class="n">num_accepted</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">nsamples</span><span class="p">)</span>
+          <span class="n">ii</span><span class="o">=</span><span class="mi">2_idef</span>
+          <span class="k">do while</span> <span class="p">(</span><span class="n">ii</span> <span class="p">.</span><span class="n">LE</span><span class="p">.</span> <span class="n">nsamples</span><span class="p">)</span>
+             <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+             <span class="k">do while</span> <span class="p">((</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">min_pitch_angle</span><span class="p">))</span>
+                <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+             <span class="k">end do</span>
+
+<span class="k">             </span><span class="n">ratio</span> <span class="o">=</span> <span class="n">fRE</span><span class="p">(</span><span class="n">eta_test</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span><span class="o">/</span><span class="n">fRE</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span>
+
+             <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">1.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_test</span>
+                <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+             <span class="k">else</span>
+<span class="k">                call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">rand_unif</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">ratio</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                   </span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_test</span>
+                   <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+                <span class="k">end if</span>
+<span class="k">             end if</span>
+<span class="k">          end do</span>
+
+<span class="k">          </span><span class="n">eta_tmp</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">)</span>
+
+          <span class="n">ii</span> <span class="o">=</span> <span class="mi">1_idef</span>
+          <span class="k">do while</span> <span class="p">(</span> <span class="p">(</span><span class="n">ii</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">nsamples</span><span class="p">).</span><span class="nb">AND</span><span class="p">.(</span><span class="n">num_accepted</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">nsamples</span><span class="p">)</span> <span class="p">)</span>
+             <span class="n">leta</span> <span class="o">=</span> <span class="p">(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">).</span><span class="n">LE</span><span class="p">.</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">AND</span><span class="p">.(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">).</span><span class="n">GE</span><span class="p">.</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">leta</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span><span class="n">num_accepted</span> <span class="o">=</span> <span class="n">num_accepted</span> <span class="o">+</span> <span class="mi">1_idef</span>
+                <span class="n">eta_samples</span><span class="p">(</span><span class="n">num_accepted</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end if</span>
+<span class="k">             </span><span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+          <span class="k">end do</span>
+<span class="k">       end do</span>
+
+<span class="k">       </span><span class="n">etao</span> <span class="o">=</span> <span class="nb">SUM</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">)</span><span class="o">/</span><span class="n">nsamples</span>
+    <span class="k">end if</span>
+
+<span class="k">    CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">,</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+    <span class="k">CALL </span><span class="n">MPI_BCAST</span><span class="p">(</span><span class="n">etao</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       DEALLOCATE</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">)</span>
+       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">)</span>
+    <span class="k">end if</span>
+
+<span class="k">  END SUBROUTINE </span><span class="n">sample_distribution</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

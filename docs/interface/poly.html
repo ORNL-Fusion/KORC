@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>poly &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>poly
+   <small>Interface</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title="<p> 0.0% of total for procedures.</p>Including implementation: 177 statements,  0.7% of total for procedures.">3 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/special_fun_modules.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/special_fun_modules.f90.html'>special_fun_modules.f90</a></li>
+    
+     <li><a href='../module/nrutil.html'>nrutil</a></li>
+    
+  
+     <li class="active">poly</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#modprocs-0">Module Procedures</a></h3></div>
+  <div id="modprocs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_rr~2">poly_rr</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_rrv~2">poly_rrv</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_dd~2">poly_dd</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_ddv~2">poly_ddv</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_rc~2">poly_rc</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_cc~2">poly_cc</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_msk_rrv~2">poly_msk_rrv</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_msk_ddv~2">poly_msk_ddv</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      <h2>public interface poly</h2>
+   
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: interface~~poly~~CallsGraph Pages: 1 -->
+<svg id="interfacepolyCallsGraph" width="359pt" height="292pt"
+ viewBox="0.00 0.00 359.00 292.13" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="interface~~poly~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 288.1281)">
+<title>interface~~poly~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-288.1281 355,-288.1281 355,4 -4,4"/>
+<!-- interface~poly -->
+<g id="interface~~poly~~CallsGraph_node1" class="node">
+<title>interface~poly</title>
+<polygon fill="none" stroke="#000000" points="54,-166 0,-166 0,-142 54,-142 54,-166"/>
+<text text-anchor="middle" x="27" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">poly</text>
+</g>
+<!-- proc~poly_ddv -->
+<g id="interface~~poly~~CallsGraph_node2" class="node">
+<title>proc~poly_ddv</title>
+<g id="a_interface~~poly~~CallsGraph_node2"><a xlink:href=".././proc/poly_ddv.html" xlink:title="poly_ddv">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="261,-264 206,-264 206,-240 261,-240 261,-264"/>
+<text text-anchor="middle" x="233.5" y="-249.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_ddv</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_ddv -->
+<g id="interface~~poly~~CallsGraph_edge1" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_ddv</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M29.2098,-166.2638C34.5076,-191.5819 50.5475,-249.2464 90,-273 123.8675,-293.391 170.1701,-280.8707 200.9152,-268.1388"/>
+<polygon fill="#000000" stroke="#000000" points="202.5483,-271.2451 210.3153,-264.0391 199.7499,-264.8287 202.5483,-271.2451"/>
+</g>
+<!-- proc~poly_msk_ddv -->
+<g id="interface~~poly~~CallsGraph_node3" class="node">
+<title>proc~poly_msk_ddv</title>
+<g id="a_interface~~poly~~CallsGraph_node3"><a xlink:href=".././proc/poly_msk_ddv.html" xlink:title="poly_msk_ddv">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="170,-264 90,-264 90,-240 170,-240 170,-264"/>
+<text text-anchor="middle" x="130" y="-249.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_msk_ddv</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_msk_ddv -->
+<g id="interface~~poly~~CallsGraph_edge3" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_msk_ddv</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M35.9249,-166.1247C47.394,-181.2182 68.4126,-207.2879 90,-226 93.2388,-228.8074 96.8028,-231.5423 100.428,-234.1192"/>
+<polygon fill="#000000" stroke="#000000" points="98.6241,-237.124 108.8741,-239.8051 102.5333,-231.3172 98.6241,-237.124"/>
+</g>
+<!-- proc~poly_rr -->
+<g id="interface~~poly~~CallsGraph_node4" class="node">
+<title>proc~poly_rr</title>
+<g id="a_interface~~poly~~CallsGraph_node4"><a xlink:href=".././proc/poly_rr.html" xlink:title="poly_rr">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="351,-105 297,-105 297,-81 351,-81 351,-105"/>
+<text text-anchor="middle" x="324" y="-90.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_rr</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_rr -->
+<g id="interface~~poly~~CallsGraph_edge2" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_rr</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.9323,-141.8222C40.4714,-122.5995 60.0227,-85.8809 90,-71 153.6369,-39.4102 238.9555,-60.9682 287.0251,-77.9913"/>
+<polygon fill="#000000" stroke="#000000" points="286.1023,-81.3807 296.6961,-81.5343 288.5103,-74.8079 286.1023,-81.3807"/>
+</g>
+<!-- proc~poly_rrv -->
+<g id="interface~~poly~~CallsGraph_node5" class="node">
+<title>proc~poly_rrv</title>
+<g id="a_interface~~poly~~CallsGraph_node5"><a xlink:href=".././proc/poly_rrv.html" xlink:title="poly_rrv">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="260.5,-146 206.5,-146 206.5,-122 260.5,-122 260.5,-146"/>
+<text text-anchor="middle" x="233.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_rrv</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_rrv -->
+<g id="interface~~poly~~CallsGraph_edge4" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_rrv</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M54.0865,-156.8478C82.9978,-159.27 130.0469,-161.435 170,-155 178.9122,-153.5646 188.2676,-151.0643 196.975,-148.2783"/>
+<polygon fill="#000000" stroke="#000000" points="198.1292,-151.5828 206.4726,-145.053 195.8782,-144.9545 198.1292,-151.5828"/>
+</g>
+<!-- proc~poly_dd -->
+<g id="interface~~poly~~CallsGraph_node6" class="node">
+<title>proc~poly_dd</title>
+<g id="a_interface~~poly~~CallsGraph_node6"><a xlink:href=".././proc/poly_dd.html" xlink:title="poly_dd">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="351,-244 297,-244 297,-220 351,-220 351,-244"/>
+<text text-anchor="middle" x="324" y="-229.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_dd</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_dd -->
+<g id="interface~~poly~~CallsGraph_edge5" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_dd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M54.2751,-161.4145C65.3553,-164.4124 78.2835,-167.8921 90,-171 159.6046,-189.4631 240.9867,-210.5699 287.1155,-222.4888"/>
+<polygon fill="#000000" stroke="#000000" points="286.3989,-225.9185 296.9564,-225.0303 288.1493,-219.1409 286.3989,-225.9185"/>
+</g>
+<!-- proc~poly_cc -->
+<g id="interface~~poly~~CallsGraph_node7" class="node">
+<title>proc~poly_cc</title>
+<g id="a_interface~~poly~~CallsGraph_node7"><a xlink:href=".././proc/poly_cc.html" xlink:title="poly_cc">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="157,-104 103,-104 103,-80 157,-80 157,-104"/>
+<text text-anchor="middle" x="130" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_cc</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_cc -->
+<g id="interface~~poly~~CallsGraph_edge6" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_cc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M44.6434,-141.8841C57.1226,-133.472 74.3512,-122.1729 90,-113 92.3302,-111.6341 94.7573,-110.2557 97.2131,-108.8928"/>
+<polygon fill="#000000" stroke="#000000" points="98.9828,-111.9147 106.1102,-104.0756 95.6499,-105.7591 98.9828,-111.9147"/>
+</g>
+<!-- proc~poly_msk_rrv -->
+<g id="interface~~poly~~CallsGraph_node8" class="node">
+<title>proc~poly_msk_rrv</title>
+<g id="a_interface~~poly~~CallsGraph_node8"><a xlink:href=".././proc/poly_msk_rrv.html" xlink:title="poly_msk_rrv">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="167.5,-146 92.5,-146 92.5,-122 167.5,-122 167.5,-146"/>
+<text text-anchor="middle" x="130" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_msk_rrv</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_msk_rrv -->
+<g id="interface~~poly~~CallsGraph_edge7" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_msk_rrv</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M54.062,-148.7452C62.7325,-147.0616 72.6061,-145.1444 82.2992,-143.2623"/>
+<polygon fill="#000000" stroke="#000000" points="83.1276,-146.6669 92.2771,-141.3248 81.7933,-139.7952 83.1276,-146.6669"/>
+</g>
+<!-- proc~poly_rc -->
+<g id="interface~~poly~~CallsGraph_node9" class="node">
+<title>proc~poly_rc</title>
+<g id="a_interface~~poly~~CallsGraph_node9"><a xlink:href=".././proc/poly_rc.html" xlink:title="poly_rc">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="157,-24 103,-24 103,0 157,0 157,-24"/>
+<text text-anchor="middle" x="130" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">poly_rc</text>
+</a>
+</g>
+</g>
+<!-- interface~poly&#45;&gt;proc~poly_rc -->
+<g id="interface~~poly~~CallsGraph_edge8" class="edge">
+<title>interface~poly&#45;&gt;proc~poly_rc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.2444,-141.9342C39.6309,-119.4078 60.1368,-70.3156 90,-38 92.5682,-35.2209 95.4938,-32.6056 98.5673,-30.1842"/>
+<polygon fill="#000000" stroke="#000000" points="100.7886,-32.8992 106.905,-24.2481 96.7287,-27.1968 100.7886,-32.8992"/>
+</g>
+<!-- proc~poly_ddv&#45;&gt;proc~poly_dd -->
+<g id="interface~~poly~~CallsGraph_edge9" class="edge">
+<title>proc~poly_ddv&#45;&gt;proc~poly_dd</title>
+<path fill="none" stroke="#000000" d="M261.1447,-245.8907C269.2895,-244.0907 278.3359,-242.0915 286.9692,-240.1836"/>
+<polygon fill="#000000" stroke="#000000" points="287.8264,-243.5787 296.8355,-238.0032 286.3158,-236.7436 287.8264,-243.5787"/>
+</g>
+<!-- proc~poly_msk_ddv&#45;&gt;proc~poly_ddv -->
+<g id="interface~~poly~~CallsGraph_edge10" class="edge">
+<title>proc~poly_msk_ddv&#45;&gt;proc~poly_ddv</title>
+<path fill="none" stroke="#000000" d="M170.0158,-252C178.4152,-252 187.2499,-252 195.5702,-252"/>
+<polygon fill="#000000" stroke="#000000" points="195.7629,-255.5001 205.7628,-252 195.7628,-248.5001 195.7629,-255.5001"/>
+</g>
+<!-- proc~poly_rrv&#45;&gt;proc~poly_rr -->
+<g id="interface~~poly~~CallsGraph_edge11" class="edge">
+<title>proc~poly_rrv&#45;&gt;proc~poly_rr</title>
+<path fill="none" stroke="#000000" d="M260.1635,-121.9204C268.8316,-117.9934 278.6011,-113.5674 287.8429,-109.3806"/>
+<polygon fill="#000000" stroke="#000000" points="289.5499,-112.4497 297.2143,-105.1349 286.6612,-106.0736 289.5499,-112.4497"/>
+</g>
+<!-- proc~poly_msk_rrv&#45;&gt;proc~poly_rrv -->
+<g id="interface~~poly~~CallsGraph_edge12" class="edge">
+<title>proc~poly_msk_rrv&#45;&gt;proc~poly_rrv</title>
+<path fill="none" stroke="#000000" d="M167.6587,-134C176.9815,-134 186.9648,-134 196.2672,-134"/>
+<polygon fill="#000000" stroke="#000000" points="196.4091,-137.5001 206.4091,-134 196.409,-130.5001 196.4091,-137.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <br>
+
+     <section class="visible-xs visible-sm hidden-md">
+       
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#modprocs-1">Module Procedures</a></h3></div>
+  <div id="modprocs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_rr~2">poly_rr</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_rrv~2">poly_rrv</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_dd~2">poly_dd</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_ddv~2">poly_ddv</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_rc~2">poly_rc</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_cc~2">poly_cc</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_msk_rrv~2">poly_msk_rrv</a>
+      
+      <a class="list-group-item" href="../interface/poly.html#moduleprocedure-poly_msk_ddv~2">poly_msk_ddv</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+     </section>
+     <br class="visible-xs visible-sm hidden-md">
+     
+  
+
+  
+
+  
+   <h2>Module Procedures</h2>
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_rr"></span><h3>
+public function <a href='../proc/poly_rr.html'>poly_rr</a>(x, coeffs)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=SP)
+  </small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_rrv"></span><h3>
+public function <a href='../proc/poly_rrv.html'>poly_rrv</a>(x, coeffs)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=SP),
+  DIMENSION(size(x))</small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_dd"></span><h3>
+public function <a href='../proc/poly_dd.html'>poly_dd</a>(x, coeffs)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=DP),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=DP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=DP)
+  </small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_ddv"></span><h3>
+public function <a href='../proc/poly_ddv.html'>poly_ddv</a>(x, coeffs)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=DP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=DP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=DP),
+  DIMENSION(size(x))</small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_rc"></span><h3>
+public function <a href='../proc/poly_rc.html'>poly_rc</a>(x, coeffs)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>complex(kind=SPC),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>complex(kind=SPC)
+  </small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_cc"></span><h3>
+public function <a href='../proc/poly_cc.html'>poly_cc</a>(x, coeffs)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>complex(kind=SPC),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>complex(kind=SPC),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>complex(kind=SPC)
+  </small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_msk_rrv"></span><h3>
+public function <a href='../proc/poly_msk_rrv.html'>poly_msk_rrv</a>(x, coeffs, mask)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=SP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical(kind=LGT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>mask</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=SP),
+  DIMENSION(size(x))</small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-poly_msk_ddv"></span><h3>
+public function <a href='../proc/poly_msk_ddv.html'>poly_msk_ddv</a>(x, coeffs, mask)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=DP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>x</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=DP),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>coeffs</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical(kind=LGT),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:)</td><td>::</td>
+  <td><strong>mask</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=DP),
+  DIMENSION(size(x))</small></h4>
+  
+    
+
+  </div>
+  </div>
+
+   
+     
+
+ </div>
+</div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

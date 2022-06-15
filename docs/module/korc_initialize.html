@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_initialize &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_initialize 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.4% of total for modules and submodules.">366 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_initialize.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_initialize.f90.html'>korc_initialize.f90</a></li>
+    
+  
+     <li class="active">korc_initialize</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-load_korc_params">load_korc_params</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-initialize_korc_parameters">initialize_korc_parameters</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-define_time_step">define_time_step</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-initialize_particles">initialize_particles</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-set_up_particles_ic">set_up_particles_ic</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Module with subroutines to load simulation parameters 
+ and to define the time step in the simulation.</p></div>
+<p>
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href='../module/korc_types.html'>korc_types</a></li>
+    
+    <li><a href='../module/korc_constants.html'>korc_constants</a></li>
+    
+    <li><a href='../module/korc_hpc.html'>korc_hpc</a></li>
+    
+    <li><a href='../module/korc_hdf5.html'>korc_HDF5</a></li>
+    
+    <li><a href='../module/korc_fields.html'>korc_fields</a></li>
+    
+    <li><a href='../module/korc_rnd_numbers.html'>korc_rnd_numbers</a></li>
+    
+    <li><a href='../module/korc_spatial_distribution.html'>korc_spatial_distribution</a></li>
+    
+    <li><a href='../module/korc_velocity_distribution.html'>korc_velocity_distribution</a></li>
+    
+    <li><a href='../module/korc_coords.html'>korc_coords</a></li>
+    
+    <li><a href='../module/korc_input.html'>korc_input</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_initialize~~UsesGraph Pages: 1 -->
+<svg id="modulekorc_initializeUsesGraph" width="641pt" height="690pt"
+ viewBox="0.00 0.00 641.00 690.19" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_initialize~~UsesGraph" class="graph" transform="scale(.4961 .4961) rotate(0) translate(4 1387.1432)">
+<title>module~~korc_initialize~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-1387.1432 1288,-1387.1432 1288,4 -4,4"/>
+<!-- module~korc_initialize -->
+<g id="module~~korc_initialize~~UsesGraph_node1" class="node">
+<title>module~korc_initialize</title>
+<polygon fill="none" stroke="#000000" points="1284,-758 1208,-758 1208,-734 1284,-734 1284,-758"/>
+<text text-anchor="middle" x="1246" y="-743.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_initialize</text>
+</g>
+<!-- module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_node2" class="node">
+<title>module~korc_input</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node2"><a xlink:href=".././module/korc_input.html" xlink:title="korc_input">
+<polygon fill="#337ab7" stroke="#337ab7" points="408,-359 347,-359 347,-335 408,-335 408,-359"/>
+<text text-anchor="middle" x="377.5" y="-344.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_input</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge1" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1107,-114C1011.8879,-8.859 929.7778,-114 788,-114 788,-114 788,-114 679,-114 540.8254,-114 427.4163,-269.1089 390.3434,-326.218"/>
+<polygon fill="#000000" stroke="#000000" points="387.2959,-324.4875 384.8704,-334.801 393.1981,-328.251 387.2959,-324.4875"/>
+</g>
+<!-- module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_node3" class="node">
+<title>module~korc_hpc</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node3"><a xlink:href=".././module/korc_hpc.html" xlink:title="korc_hpc">
+<polygon fill="#337ab7" stroke="#337ab7" points="281,-359 226,-359 226,-335 281,-335 281,-359"/>
+<text text-anchor="middle" x="253.5" y="-344.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hpc</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge2" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1244.8527,-733.7826C1237.196,-654.5805 1191.2189,-214.0021 1107,-114"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1107,-114C1082.1503,-84.4933 895.6832,0 788,0 788,0 788,0 679,0 577.7193,0 544.8942,-7.7664 460,-63 385.1609,-111.6915 374.9965,-139.3079 331,-217 306.8973,-259.5623 325.4579,-282.7271 295,-321 292.6937,-323.898 289.9707,-326.5626 287.0394,-328.9893"/>
+<polygon fill="#000000" stroke="#000000" points="284.9855,-326.1553 278.9374,-334.8543 289.0901,-331.8256 284.9855,-326.1553"/>
+</g>
+<!-- module~korc_rnd_numbers -->
+<g id="module~~korc_initialize~~UsesGraph_node4" class="node">
+<title>module~korc_rnd_numbers</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node4"><a xlink:href=".././module/korc_rnd_numbers.html" xlink:title="korc_rnd_numbers">
+<polygon fill="#337ab7" stroke="#337ab7" points="583,-1140 483,-1140 483,-1116 583,-1116 583,-1140"/>
+<text text-anchor="middle" x="533" y="-1125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_rnd_numbers</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_rnd_numbers -->
+<g id="module~~korc_initialize~~UsesGraph_edge3" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_rnd_numbers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1107,-1205C985.7177,-1310.6766 947.662,-1356.3791 788,-1376"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-1376C658.6946,-1375.3816 570.3194,-1209.8658 542.4232,-1149.611"/>
+<polygon fill="#000000" stroke="#000000" points="545.5043,-1147.9302 538.1927,-1140.2627 539.1269,-1150.8163 545.5043,-1147.9302"/>
+</g>
+<!-- module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_node5" class="node">
+<title>module~korc_constants</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node5"><a xlink:href=".././module/korc_constants.html" xlink:title="korc_constants">
+<polygon fill="#337ab7" stroke="#337ab7" points="295,-866 212,-866 212,-842 295,-842 295,-866"/>
+<text text-anchor="middle" x="253.5" y="-851.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_constants</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge6" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-1376C674.8354,-1382.1825 646.124,-1382.8855 533,-1376"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-1376C303.9949,-1358.9105 261.829,-974.1615 254.8026,-876.4199"/>
+<polygon fill="#000000" stroke="#000000" points="258.2945,-876.1809 254.1381,-866.4355 251.31,-876.6459 258.2945,-876.1809"/>
+</g>
+<!-- module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_node6" class="node">
+<title>module~korc_types</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node6"><a xlink:href=".././module/korc_types.html" xlink:title="korc_types">
+<polygon fill="#337ab7" stroke="#337ab7" points="176,-475 113,-475 113,-451 176,-451 176,-475"/>
+<text text-anchor="middle" x="144.5" y="-460.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge10" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-1376C465.0156,-1363.5717 443.331,-1397.0387 377.5,-1376"/>
+</g>
+<!-- module~korc_spatial_distribution -->
+<g id="module~~korc_initialize~~UsesGraph_node7" class="node">
+<title>module~korc_spatial_distribution</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node7"><a xlink:href=".././module/korc_spatial_distribution.html" xlink:title="korc_spatial_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="1169.5,-718 1044.5,-718 1044.5,-694 1169.5,-694 1169.5,-718"/>
+<text text-anchor="middle" x="1107" y="-703.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_spatial_distribution -->
+<g id="module~~korc_initialize~~UsesGraph_edge5" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_spatial_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1207.6497,-734.9639C1192.6102,-730.636 1175.1171,-725.602 1158.9736,-720.9564"/>
+<polygon fill="#000000" stroke="#000000" points="1159.7084,-717.5259 1149.1305,-718.1239 1157.7726,-724.2529 1159.7084,-717.5259"/>
+</g>
+<!-- module~korc_velocity_distribution -->
+<g id="module~~korc_initialize~~UsesGraph_node8" class="node">
+<title>module~korc_velocity_distribution</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node8"><a xlink:href=".././module/korc_velocity_distribution.html" xlink:title="korc_velocity_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="1172,-798 1042,-798 1042,-774 1172,-774 1172,-798"/>
+<text text-anchor="middle" x="1107" y="-783.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_velocity_distribution -->
+<g id="module~~korc_initialize~~UsesGraph_edge7" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_velocity_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1207.6497,-757.0361C1192.6102,-761.364 1175.1171,-766.398 1158.9736,-771.0436"/>
+<polygon fill="#000000" stroke="#000000" points="1157.7726,-767.7471 1149.1305,-773.8761 1159.7084,-774.4741 1157.7726,-767.7471"/>
+</g>
+<!-- module~korc_fields -->
+<g id="module~~korc_initialize~~UsesGraph_node9" class="node">
+<title>module~korc_fields</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node9"><a xlink:href=".././module/korc_fields.html" xlink:title="korc_fields">
+<polygon fill="#337ab7" stroke="#337ab7" points="819.5,-588 756.5,-588 756.5,-564 819.5,-564 819.5,-588"/>
+<text text-anchor="middle" x="788" y="-573.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_initialize~~UsesGraph_edge8" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1107,-746C1068.1424,-748.2259 967.9032,-743.223 933,-726"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1207.9136,-744.828C1179.9619,-744.2531 1141.0908,-744.0472 1107,-746"/>
+</g>
+<!-- module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_node10" class="node">
+<title>module~korc_coords</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node10"><a xlink:href=".././module/korc_coords.html" xlink:title="korc_coords">
+<polygon fill="#337ab7" stroke="#337ab7" points="568,-827 498,-827 498,-803 568,-803 568,-827"/>
+<text text-anchor="middle" x="533" y="-812.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_coords</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_edge9" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1244.2425,-758.3445C1234.3752,-825.7315 1183.5598,-1148.1914 1107,-1205"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1107,-1205C885.9704,-1369.0074 849.46,-969.3734 606,-841 597.0747,-836.2938 587.1134,-832.1135 577.4892,-828.555"/>
+<polygon fill="#000000" stroke="#000000" points="578.6231,-825.2436 568.0283,-825.2072 576.2879,-831.8426 578.6231,-825.2436"/>
+</g>
+<!-- module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_node11" class="node">
+<title>module~korc_hdf5</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node11"><a xlink:href=".././module/korc_hdf5.html" xlink:title="korc_HDF5">
+<polygon fill="#337ab7" stroke="#337ab7" points="410.5,-748 344.5,-748 344.5,-724 410.5,-724 410.5,-748"/>
+<text text-anchor="middle" x="377.5" y="-733.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge4" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1107,-746C1076.9515,-747.7213 1069.5251,-752.8245 1042,-765 1024.8516,-772.5854 1023.642,-780.6467 1006,-787 956.0448,-804.9902 584.2853,-868.7473 533,-855"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-855C501.2653,-844.1898 488.2646,-854.0295 460,-836 443.4506,-825.4434 411.151,-782.8449 392.2485,-756.7712"/>
+<polygon fill="#000000" stroke="#000000" points="394.849,-754.3926 386.169,-748.3174 389.166,-758.4795 394.849,-754.3926"/>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge11" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M346.8483,-347C330.0617,-347 309.1144,-347 291.3188,-347"/>
+<polygon fill="#000000" stroke="#000000" points="291.2605,-343.5001 281.2605,-347 291.2604,-350.5001 291.2605,-343.5001"/>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge12" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M360.9513,-359.1232C337.8131,-375.6662 294.0643,-405.4816 253.5,-425"/>
+</g>
+<!-- module~korc_hpc&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge15" class="edge">
+<title>module~korc_hpc&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.8351,-359.414C222.9864,-379.4732 185.6717,-419.1843 163.1164,-443.1881"/>
+<polygon fill="#000000" stroke="#000000" points="160.3782,-440.9909 156.081,-450.6752 165.4795,-445.7844 160.3782,-440.9909"/>
+</g>
+<!-- omp_lib -->
+<g id="module~~korc_initialize~~UsesGraph_node15" class="node">
+<title>omp_lib</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node15"><a xlink:href="https://gcc.gnu.org/onlinedocs/gcc-4.4.3/libgomp/Runtime-Library-Routines.html" xlink:title="omp_lib">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-353 117.5,-353 117.5,-329 171.5,-329 171.5,-353"/>
+<text text-anchor="middle" x="144.5" y="-338.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_lib</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;omp_lib -->
+<g id="module~~korc_initialize~~UsesGraph_edge13" class="edge">
+<title>module~korc_hpc&#45;&gt;omp_lib</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.9947,-345.4859C212.5969,-344.7485 196.2872,-343.8507 181.7886,-343.0526"/>
+<polygon fill="#000000" stroke="#000000" points="181.7962,-339.5478 171.6189,-342.4928 181.4114,-346.5372 181.7962,-339.5478"/>
+</g>
+<!-- mpi -->
+<g id="module~~korc_initialize~~UsesGraph_node21" class="node">
+<title>mpi</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node21"><a xlink:href="http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm" xlink:title="mpi">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-395 117.5,-395 117.5,-371 171.5,-371 171.5,-395"/>
+<text text-anchor="middle" x="144.5" y="-380.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;mpi -->
+<g id="module~~korc_initialize~~UsesGraph_edge14" class="edge">
+<title>module~korc_hpc&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.9947,-356.0843C212.4668,-360.5522 195.9703,-366.0007 181.3668,-370.8238"/>
+<polygon fill="#000000" stroke="#000000" points="180.0168,-367.5837 171.6189,-374.0433 182.2121,-374.2305 180.0168,-367.5837"/>
+</g>
+<!-- module~korc_rnd_numbers&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge17" class="edge">
+<title>module~korc_rnd_numbers&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-1262C195.7904,-1206.208 154.0006,-609.1292 145.9225,-485.3755"/>
+<polygon fill="#000000" stroke="#000000" points="149.4027,-484.9535 145.2651,-475.2001 142.4172,-485.4049 149.4027,-484.9535"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M513.3125,-1140.0134C453.0687,-1176.4229 274.0534,-1281.8704 253.5,-1262"/>
+</g>
+<!-- ifport -->
+<g id="module~~korc_initialize~~UsesGraph_node23" class="node">
+<title>ifport</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="404.5,-1140 350.5,-1140 350.5,-1116 404.5,-1116 404.5,-1140"/>
+<text text-anchor="middle" x="377.5" y="-1125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ifport</text>
+</g>
+<!-- module~korc_rnd_numbers&#45;&gt;ifport -->
+<g id="module~~korc_initialize~~UsesGraph_edge16" class="edge">
+<title>module~korc_rnd_numbers&#45;&gt;ifport</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M482.9429,-1128C460.8661,-1128 435.3628,-1128 414.9682,-1128"/>
+<polygon fill="#000000" stroke="#000000" points="414.8141,-1124.5001 404.8141,-1128 414.8141,-1131.5001 414.8141,-1124.5001"/>
+</g>
+<!-- module~korc_constants&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge18" class="edge">
+<title>module~korc_constants&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M226.6172,-841.7249C221.0369,-838.0407 215.728,-833.4846 212,-828 173.3941,-771.2039 152.2837,-555.9793 146.2965,-485.4962"/>
+<polygon fill="#000000" stroke="#000000" points="149.7509,-484.7996 145.4368,-475.1229 142.7748,-485.3778 149.7509,-484.7996"/>
+</g>
+<!-- iso_c_binding -->
+<g id="module~~korc_initialize~~UsesGraph_node12" class="node">
+<title>iso_c_binding</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node12"><a xlink:href="http://fortranwiki.org/fortran/show/ISO_C_BINDING" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="77,-435 0,-435 0,-411 77,-411 77,-435"/>
+<text text-anchor="middle" x="38.5" y="-420.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iso_c_binding</text>
+</a>
+</g>
+</g>
+<!-- module~korc_types&#45;&gt;iso_c_binding -->
+<g id="module~~korc_initialize~~UsesGraph_edge19" class="edge">
+<title>module~korc_types&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M112.9835,-451.107C102.5993,-447.1884 90.8907,-442.7701 79.8849,-438.6169"/>
+<polygon fill="#000000" stroke="#000000" points="81.0367,-435.3107 70.445,-435.0547 78.5653,-441.86 81.0367,-435.3107"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge22" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-345C494.4396,-351.185 449.8097,-351.019 418.2801,-349.7045"/>
+<polygon fill="#000000" stroke="#000000" points="418.2721,-346.2003 408.1174,-349.2222 417.9402,-353.1924 418.2721,-346.2003"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M933,-152C931.5306,-151.5321 534.5226,-344.7558 533,-345"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge21" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-231C332.9374,-261.9615 336.7022,-286.2816 295,-321 291.5247,-323.8933 287.7021,-326.7067 283.8265,-329.3484"/>
+<polygon fill="#000000" stroke="#000000" points="281.8642,-326.4493 275.3719,-334.8219 285.6685,-332.3254 281.8642,-326.4493"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1106.7052,-693.5891C1104.6382,-617.812 1089.8279,-218.0831 1006,-138 918.0549,-53.9837 566.4808,-41.2213 460,-100 399.7623,-133.2519 434.0061,-191.7403 377.5,-231"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_rnd_numbers -->
+<g id="module~~korc_initialize~~UsesGraph_edge23" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_rnd_numbers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-1110C650.8403,-1107.2304 619.7086,-1110.2295 593.4517,-1114.5229"/>
+<polygon fill="#000000" stroke="#000000" points="592.5253,-1111.1313 583.2715,-1116.2906 593.7229,-1118.0281 592.5253,-1111.1313"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge27" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-1110C606.1973,-1102.8395 606.1097,-1036.5449 533,-1034"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1065.7074,-718.1012C1057.3277,-721.7281 1048.9602,-726.3037 1042,-732 1019.3912,-750.5034 1024.1975,-764.1443 1006,-787 947.6542,-860.2809 908.7836,-859.0345 860,-939 834.3074,-981.115 856.7584,-1007.1128 824,-1044 776.9831,-1096.9428 749.4663,-1116.9307 679,-1110"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge25" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M933,-152C758.0597,-92.2676 717.8568,-38 533,-38 533,-38 533,-38 377.5,-38 191.8104,-38 248.6544,-233.1141 176,-404 170.5183,-416.8931 163.2065,-430.7389 157.0074,-441.7753"/>
+<polygon fill="#000000" stroke="#000000" points="153.8537,-440.2393 151.9201,-450.6562 159.9278,-443.7187 153.8537,-440.2393"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1106.4671,-693.9002C1103.0407,-621.6915 1081.797,-248.1196 1006,-169 982.955,-144.9448 964.6134,-162.5034 933,-152"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_initialize~~UsesGraph_edge29" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1079.4835,-718.0478C1043.7791,-731.7591 980.4466,-749.4124 933,-726"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M933,-726C872.4336,-696.1136 823.1688,-630.1817 800.8755,-596.5714"/>
+<polygon fill="#000000" stroke="#000000" points="803.6959,-594.4882 795.3158,-588.0055 797.8243,-598.2991 803.6959,-594.4882"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge31" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-536C662.6798,-544.6821 658.3968,-546.4634 642,-555 625.9529,-563.3545 622.3856,-566.3306 606,-574 542.461,-603.74 516.2579,-592.0866 460,-634 429.6609,-656.6033 403.9585,-692.8195 389.6495,-715.4654"/>
+<polygon fill="#000000" stroke="#000000" points="386.668,-713.6322 384.4017,-723.9818 392.6275,-717.3044 386.668,-713.6322"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M933,-152C809.4576,-111.1398 859.9059,-338.2031 824,-403 781.6147,-479.4898 757.4028,-497.2674 679,-536"/>
+</g>
+<!-- module~korc_avalanche -->
+<g id="module~~korc_initialize~~UsesGraph_node13" class="node">
+<title>module~korc_avalanche</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node13"><a xlink:href=".././module/korc_avalanche.html" xlink:title="korc_avalanche">
+<polygon fill="#337ab7" stroke="#337ab7" points="976,-242 890,-242 890,-218 976,-218 976,-242"/>
+<text text-anchor="middle" x="933" y="-227.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche</text>
+</a>
+</g>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_initialize~~UsesGraph_edge20" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1102.524,-693.7553C1079.1607,-629.8419 971.1301,-334.3098 940.8873,-251.5766"/>
+<polygon fill="#000000" stroke="#000000" points="944.167,-250.3542 937.4464,-242.1637 937.5925,-252.7576 944.167,-250.3542"/>
+</g>
+<!-- module~korc_profiles -->
+<g id="module~~korc_initialize~~UsesGraph_node16" class="node">
+<title>module~korc_profiles</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node16"><a xlink:href=".././module/korc_profiles.html" xlink:title="korc_profiles">
+<polygon fill="#337ab7" stroke="#337ab7" points="824,-394 752,-394 752,-370 824,-370 824,-394"/>
+<text text-anchor="middle" x="788" y="-379.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles</text>
+</a>
+</g>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_initialize~~UsesGraph_edge24" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M933,-152C893.8497,-139.2847 884.9482,-176.2585 860,-209 840.955,-233.9943 809.6528,-319.782 795.4378,-360.3777"/>
+<polygon fill="#000000" stroke="#000000" points="792.1115,-359.2871 792.1333,-369.8819 798.7233,-361.5859 792.1115,-359.2871"/>
+</g>
+<!-- module~korc_experimental_pdf -->
+<g id="module~~korc_initialize~~UsesGraph_node20" class="node">
+<title>module~korc_experimental_pdf</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node20"><a xlink:href=".././module/korc_experimental_pdf.html" xlink:title="korc_experimental_pdf">
+<polygon fill="#337ab7" stroke="#337ab7" points="992.5,-778 873.5,-778 873.5,-754 992.5,-754 992.5,-778"/>
+<text text-anchor="middle" x="933" y="-763.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf</text>
+</a>
+</g>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_initialize~~UsesGraph_edge26" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1071.7885,-718.1419C1044.5771,-727.5252 1006.7381,-740.5731 977.4419,-750.6752"/>
+<polygon fill="#000000" stroke="#000000" points="976.1745,-747.4099 967.8618,-753.9787 978.4565,-754.0275 976.1745,-747.4099"/>
+</g>
+<!-- module~korc_hammersley_generator -->
+<g id="module~~korc_initialize~~UsesGraph_node22" class="node">
+<title>module~korc_hammersley_generator</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node22"><a xlink:href=".././module/korc_hammersley_generator.html" xlink:title="korc_hammersley_generator">
+<polygon fill="#337ab7" stroke="#337ab7" points="1006,-972 860,-972 860,-948 1006,-948 1006,-972"/>
+<text text-anchor="middle" x="933" y="-957.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hammersley_generator</text>
+</a>
+</g>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_hammersley_generator -->
+<g id="module~~korc_initialize~~UsesGraph_edge28" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_hammersley_generator</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1060.3149,-718.0921C1053.4024,-721.6188 1046.9514,-726.1593 1042,-732 993.744,-788.9223 1043.9529,-831.7476 1006,-896 995.0064,-914.6116 976.7065,-930.6378 961.1801,-941.998"/>
+<polygon fill="#000000" stroke="#000000" points="959.0718,-939.2018 952.9036,-947.8159 963.0974,-944.9284 959.0718,-939.2018"/>
+</g>
+<!-- module~korc_random -->
+<g id="module~~korc_initialize~~UsesGraph_node24" class="node">
+<title>module~korc_random</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node24"><a xlink:href=".././module/korc_random.html" xlink:title="korc_random">
+<polygon fill="#337ab7" stroke="#337ab7" points="716,-166 642,-166 642,-142 716,-142 716,-166"/>
+<text text-anchor="middle" x="679" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_random</text>
+</a>
+</g>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_random -->
+<g id="module~~korc_initialize~~UsesGraph_edge30" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_random</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M933,-152C863.7958,-129.5238 778.2833,-136.8517 726.2338,-144.9014"/>
+<polygon fill="#000000" stroke="#000000" points="725.5968,-141.4588 716.2848,-146.5123 726.7157,-148.3688 725.5968,-141.4588"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge33" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-190C739.584,-187.5678 727.1364,-199.7365 679,-194"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1058.57,-773.9942C1052.1291,-770.4657 1046.2831,-765.902 1042,-760 969.9303,-660.6894 1091.8197,-296.7019 1006,-209 937.9795,-139.4876 885.1337,-194.8795 788,-190"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-194C612.5302,-186.0787 599.9049,-233.1744 533,-231"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-231C463.9254,-228.7551 434.664,-192.159 377.5,-231"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_rnd_numbers -->
+<g id="module~~korc_initialize~~UsesGraph_edge34" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_rnd_numbers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-1148C654.6462,-1130.3499 621.8703,-1124.6929 593.5435,-1123.736"/>
+<polygon fill="#000000" stroke="#000000" points="593.384,-1120.2333 583.3325,-1123.5826 593.2788,-1127.2325 593.384,-1120.2333"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge39" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-1243C585.896,-1289.4054 481.5363,-1291.6125 331,-1149 290.83,-1110.9445 264.5963,-938.4157 256.3164,-876.3379"/>
+<polygon fill="#000000" stroke="#000000" points="259.7437,-875.5528 254.98,-866.0893 252.8025,-876.458 259.7437,-875.5528"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge37" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-1376C306.2271,-1353.0977 305.155,-1316.1859 253.5,-1262"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-1243C741.9922,-1256.4922 423.1466,-1390.6677 377.5,-1376"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_initialize~~UsesGraph_edge41" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1076.5411,-773.9206C1065.6318,-769.5667 1053.2522,-764.5944 1042,-760 1025.9528,-753.4478 1022.4276,-750.5299 1006,-745 974.2265,-734.3043 963.0644,-740.8352 933,-726"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge42" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1077.4863,-798.1247C1057.6275,-805.7342 1030.6642,-815.0186 1006,-820 902.6876,-840.8661 631.8641,-891.5339 533,-855"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_initialize~~UsesGraph_edge32" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1060.2487,-773.9636C1053.3439,-770.4305 1046.9126,-765.8733 1042,-760 975.3877,-680.3608 942.5431,-343.1032 934.8158,-252.49"/>
+<polygon fill="#000000" stroke="#000000" points="938.2813,-251.9306 933.9615,-242.2565 931.3056,-252.513 938.2813,-251.9306"/>
+</g>
+<!-- module~korc_energy_pdfs -->
+<g id="module~~korc_initialize~~UsesGraph_node17" class="node">
+<title>module~korc_energy_pdfs</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node17"><a xlink:href=".././module/korc_energy_pdfs.html" xlink:title="korc_energy_pdfs">
+<polygon fill="#337ab7" stroke="#337ab7" points="581,-1006 485,-1006 485,-982 581,-982 581,-1006"/>
+<text text-anchor="middle" x="533" y="-991.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_energy_pdfs</text>
+</a>
+</g>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_energy_pdfs -->
+<g id="module~~korc_initialize~~UsesGraph_edge35" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_energy_pdfs</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-1243C723.7652,-1241.1354 731.0336,-1185.7106 679,-1148"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1104.8595,-798.4092C1091.3735,-872.1662 1011.416,-1249.4852 788,-1243"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-1148C663.1289,-1136.4976 654.0843,-1139.4327 642,-1124 611.8444,-1085.4886 640.4323,-1054.7406 606,-1020 601.5252,-1015.4851 596.2153,-1011.7511 590.5312,-1008.6636"/>
+<polygon fill="#000000" stroke="#000000" points="591.8934,-1005.4362 581.3571,-1004.3245 588.9005,-1011.7641 591.8934,-1005.4362"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf -->
+<g id="module~~korc_initialize~~UsesGraph_node18" class="node">
+<title>module~korc_simple_equilibrium_pdf</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node18"><a xlink:href=".././module/korc_simple_equilibrium_pdf.html" xlink:title="korc_simple_equilibrium_pdf">
+<polygon fill="#337ab7" stroke="#337ab7" points="606,-907 460,-907 460,-883 606,-883 606,-907"/>
+<text text-anchor="middle" x="533" y="-892.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_simple_equilibrium_pdf</text>
+</a>
+</g>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_simple_equilibrium_pdf -->
+<g id="module~~korc_initialize~~UsesGraph_edge36" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_simple_equilibrium_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1105.1059,-798.0826C1098.7761,-833.8327 1074.7306,-939.1962 1006,-981 857.6446,-1071.2337 638.0336,-958.0104 560.9595,-912.4231"/>
+<polygon fill="#000000" stroke="#000000" points="562.6571,-909.3601 552.2812,-907.2172 559.0561,-915.3628 562.6571,-909.3601"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_initialize~~UsesGraph_edge38" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1041.7138,-778.4958C1029.0066,-777.0352 1015.6392,-775.4988 1002.7931,-774.0222"/>
+<polygon fill="#000000" stroke="#000000" points="1002.9594,-770.5184 992.6251,-772.8535 1002.16,-777.4726 1002.9594,-770.5184"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_hammersley_generator -->
+<g id="module~~korc_initialize~~UsesGraph_edge40" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_hammersley_generator</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1101.8728,-798.2704C1089.5363,-826.3526 1055.5076,-895.8099 1006,-934 1001.2231,-937.6849 995.8797,-940.8767 990.315,-943.6349"/>
+<polygon fill="#000000" stroke="#000000" points="988.5087,-940.6082 980.8017,-947.8782 991.3602,-947.0011 988.5087,-940.6082"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge43" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-421C490.2811,-402.3743 441.9336,-378.9955 410.6496,-363.5571"/>
+<polygon fill="#000000" stroke="#000000" points="412.0285,-360.3344 401.5137,-359.0349 408.9231,-366.6079 412.0285,-360.3344"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-460C627.5901,-416.7792 594.5666,-447.8434 533,-421"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge44" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-460C628.5755,-417.6076 662.4471,-364.9628 606,-331 505.687,-270.6442 358.7095,-309.3144 290.6359,-332.7999"/>
+<polygon fill="#000000" stroke="#000000" points="289.4423,-329.5095 281.1797,-336.1412 291.7745,-336.1095 289.4423,-329.5095"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M768.0064,-563.9477C762.3987,-559.9648 756.5874,-555.2058 752,-550 729.9094,-524.9311 738.7111,-508.5082 716,-484 702.6771,-469.623 694.1095,-472.486 679,-460"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge46" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M757.8563,-588.2105C755.7535,-589.6573 753.7696,-591.2508 752,-593 702.9321,-641.502 732.3486,-686.2504 679,-730"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-730C642.1829,-760.1926 592.3709,-753.1066 331,-800 296.5482,-806.1811 280.999,-835.655 253.5,-814"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_edge47" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-730C663.8437,-742.4292 657.3226,-741.7764 642,-754 624.5555,-767.9164 624.9454,-777.2082 606,-789 597.348,-794.3851 587.4246,-798.8598 577.7399,-802.4913"/>
+<polygon fill="#000000" stroke="#000000" points="576.4662,-799.2289 568.1905,-805.8443 578.7853,-805.8336 576.4662,-799.2289"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge48" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767.5749,-588.1835C738.326,-606.08 683.4681,-641.343 642,-678 624.0802,-693.8408 626.4364,-705.5741 606,-718 577.3542,-735.4175 565.4392,-728.5353 533,-737"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-737C495.7485,-744.9035 452.3387,-743.7938 420.8664,-741.2039"/>
+<polygon fill="#000000" stroke="#000000" points="420.9522,-737.6974 410.6769,-740.2798 420.3199,-744.6688 420.9522,-737.6974"/>
+</g>
+<!-- module~korc_interp -->
+<g id="module~~korc_initialize~~UsesGraph_node14" class="node">
+<title>module~korc_interp</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node14"><a xlink:href=".././module/korc_interp.html" xlink:title="korc_interp">
+<polygon fill="#337ab7" stroke="#337ab7" points="711,-588 647,-588 647,-564 711,-564 711,-588"/>
+<text text-anchor="middle" x="679" y="-573.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_interp -->
+<g id="module~~korc_initialize~~UsesGraph_edge45" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M756.4727,-576C745.4824,-576 732.9665,-576 721.2477,-576"/>
+<polygon fill="#000000" stroke="#000000" points="721.2129,-572.5001 711.2129,-576 721.2128,-579.5001 721.2129,-572.5001"/>
+</g>
+<!-- module~korc_coords&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge49" class="edge">
+<title>module~korc_coords&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-814C346.3787,-816.393 312.7804,-827.8278 288.4173,-837.8618"/>
+<polygon fill="#000000" stroke="#000000" points="286.7399,-834.7715 278.9038,-841.9021 289.4763,-841.2146 286.7399,-834.7715"/>
+</g>
+<!-- module~korc_coords&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge50" class="edge">
+<title>module~korc_coords&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-814C322.5511,-818.2251 296.7976,-848.0962 253.5,-814"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M497.7393,-813.1067C466.1837,-811.809 418.684,-810.8333 377.5,-814"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge52" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M375.8608,-723.7294C369.6883,-679.7886 345.5775,-526.7553 295,-411 288.1735,-395.3764 277.7166,-379.2799 269.0076,-367.138"/>
+<polygon fill="#000000" stroke="#000000" points="271.803,-365.0314 263.0519,-359.059 266.1685,-369.1851 271.803,-365.0314"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge51" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M368.5273,-748.0084C354.2867,-766.568 325.0345,-802.7159 295,-828 291.5406,-830.9123 287.7273,-833.7367 283.8564,-836.3841"/>
+<polygon fill="#000000" stroke="#000000" points="281.893,-833.4858 275.4057,-841.8623 285.7008,-839.3596 281.893,-833.4858"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge53" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M355.0543,-748.069C347.3506,-752.3378 338.7255,-757.2591 331,-762 295.6465,-783.695 286.088,-839.6625 253.5,-814"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-814C228.8807,-794.6127 224.992,-785.5164 212,-757 168.5,-661.521 151.7448,-535.4195 146.5157,-485.1049"/>
+<polygon fill="#000000" stroke="#000000" points="149.9872,-484.6427 145.5205,-475.0355 143.0211,-485.3313 149.9872,-484.6427"/>
+</g>
+<!-- HDF5 -->
+<g id="module~~korc_initialize~~UsesGraph_node19" class="node">
+<title>HDF5</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="280.5,-748 226.5,-748 226.5,-724 280.5,-724 280.5,-748"/>
+<text text-anchor="middle" x="253.5" y="-733.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">HDF5</text>
+</g>
+<!-- module~korc_hdf5&#45;&gt;HDF5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge54" class="edge">
+<title>module~korc_hdf5&#45;&gt;HDF5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M344.2703,-736C327.7546,-736 307.7393,-736 290.7107,-736"/>
+<polygon fill="#000000" stroke="#000000" points="290.552,-732.5001 280.5519,-736 290.5519,-739.5001 290.552,-732.5001"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge55" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M910.1872,-242.1815C888.522,-253.3329 854.7792,-269.6318 824,-280 698.4134,-322.3048 663.6016,-322.53 533,-345"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge56" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M896.5897,-217.9987C860.9332,-206.6037 808.9952,-191.0547 788,-190"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge59" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M533,-1034C436.0173,-1047.568 407.087,-1007.6482 331,-946 305.2494,-925.136 281.6429,-894.7856 267.4176,-874.7276"/>
+<polygon fill="#000000" stroke="#000000" points="270.1477,-872.5229 261.5678,-866.3071 264.3988,-876.5168 270.1477,-872.5229"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M931.982,-242.1934C927.1314,-295.4867 903.2116,-512.2396 824,-668 801.4034,-712.4335 780.2917,-712.9571 752,-754 733.1411,-781.3588 632.2974,-994.6872 606,-1015 579.468,-1035.494 566.5147,-1034.8463 533,-1034"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge58" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M929.7524,-242.3559C914.9242,-297.4918 851.6341,-519.0922 788,-536"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-536C738.4928,-549.1542 761.654,-469.2317 716,-446 532.611,-352.6797 442.4573,-343.5423 253.5,-425"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_fields -->
+<g id="module~~korc_initialize~~UsesGraph_edge60" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M931.5369,-242.2595C925.6284,-287.4105 900.0795,-447.1328 824,-550 822.0287,-552.6654 819.704,-555.1689 817.2002,-557.4897"/>
+<polygon fill="#000000" stroke="#000000" points="814.8828,-554.8629 809.3257,-563.8834 819.2951,-560.2971 814.8828,-554.8629"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_edge61" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M932.4987,-242.1998C929.8766,-291.7752 914.1261,-481.0088 824,-597 801.1311,-626.4321 775.5187,-611.0845 752,-640 721.1361,-677.9462 746.1556,-705.4886 716,-744 703.9157,-759.4327 696.5621,-759.2954 679,-768"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-768C646.6172,-783.9256 607.6044,-796.1612 578.0563,-804.1507"/>
+<polygon fill="#000000" stroke="#000000" points="576.8013,-800.862 568.0259,-806.7986 578.5881,-807.6301 576.8013,-800.862"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge62" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-536C741.1801,-548.4402 721.7691,-513.2476 679,-536"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_initialize~~UsesGraph_edge57" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M923.9245,-242.2862C906.2142,-265.8267 865.1659,-318.2947 824,-356 821.0774,-358.6769 817.877,-361.3271 814.6281,-363.8534"/>
+<polygon fill="#000000" stroke="#000000" points="812.5283,-361.0531 806.583,-369.8226 816.6994,-366.6747 812.5283,-361.0531"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge64" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M673.2115,-563.7557C662.755,-542.9643 638.726,-500.7996 606,-478 550.4969,-439.332 523.6671,-457.8539 460,-435 398.5386,-412.9379 329.0635,-382.0545 288.3982,-363.3503"/>
+<polygon fill="#000000" stroke="#000000" points="289.7383,-360.114 279.1924,-359.0974 286.8026,-366.4687 289.7383,-360.114"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_rnd_numbers -->
+<g id="module~~korc_initialize~~UsesGraph_edge65" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_rnd_numbers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M675.1039,-588.219C667.5519,-612.3723 650.8848,-668.0444 642,-716 614.9619,-861.9369 667.0406,-912.7126 606,-1048 594.9688,-1072.4491 573.5633,-1094.4919 556.7712,-1109.2181"/>
+<polygon fill="#000000" stroke="#000000" points="554.3276,-1106.7012 548.964,-1115.8381 558.8548,-1112.0402 554.3276,-1106.7012"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge69" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M646.7683,-569.1858C554.4663,-549.672 289.1747,-493.586 186.1285,-471.8008"/>
+<polygon fill="#000000" stroke="#000000" points="186.607,-468.3247 176.0993,-469.6805 185.1591,-475.1733 186.607,-468.3247"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_edge68" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M670.8168,-588.3359C662.7176,-600.9305 650.3527,-621.2406 642,-640 620.9044,-687.3788 634.5223,-707.6842 606,-751 593.9558,-769.2911 575.3314,-785.5023 559.9096,-797.0327"/>
+<polygon fill="#000000" stroke="#000000" points="557.7891,-794.2467 551.7335,-802.9404 561.8888,-799.9206 557.7891,-794.2467"/>
+</g>
+<!-- EZspline_obj -->
+<g id="module~~korc_initialize~~UsesGraph_node26" class="node">
+<title>EZspline_obj</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="569.5,-709 496.5,-709 496.5,-685 569.5,-685 569.5,-709"/>
+<text text-anchor="middle" x="533" y="-694.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">EZspline_obj</text>
+</g>
+<!-- module~korc_interp&#45;&gt;EZspline_obj -->
+<g id="module~~korc_initialize~~UsesGraph_edge63" class="edge">
+<title>module~korc_interp&#45;&gt;EZspline_obj</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M657.8984,-588.1001C652.2519,-592.0246 646.4799,-596.7404 642,-602 618.2842,-629.8431 633.9956,-652.4644 606,-676 598.4332,-682.3614 589.0386,-686.7979 579.5355,-689.8913"/>
+<polygon fill="#000000" stroke="#000000" points="578.3519,-686.588 569.665,-692.6533 580.2382,-693.3291 578.3519,-686.588"/>
+</g>
+<!-- EZspline -->
+<g id="module~~korc_initialize~~UsesGraph_node27" class="node">
+<title>EZspline</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="560,-667 506,-667 506,-643 560,-643 560,-667"/>
+<text text-anchor="middle" x="533" y="-652.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">EZspline</text>
+</g>
+<!-- module~korc_interp&#45;&gt;EZspline -->
+<g id="module~~korc_initialize~~UsesGraph_edge67" class="edge">
+<title>module~korc_interp&#45;&gt;EZspline</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.6038,-588.0589C655.3884,-592.4109 648.353,-597.3872 642,-602 625.8161,-613.7509 623.62,-619.5376 606,-629 594.7031,-635.0667 581.6991,-640.2201 569.8251,-644.2992"/>
+<polygon fill="#000000" stroke="#000000" points="568.5862,-641.0221 560.179,-647.4695 570.7719,-647.6722 568.5862,-641.0221"/>
+</g>
+<!-- module~korc_fio -->
+<g id="module~~korc_initialize~~UsesGraph_node28" class="node">
+<title>module~korc_fio</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node28"><a xlink:href=".././module/korc_fio.html" xlink:title="korc_fio">
+<polygon fill="#337ab7" stroke="#337ab7" points="560,-511 506,-511 506,-487 560,-487 560,-511"/>
+<text text-anchor="middle" x="533" y="-496.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fio</text>
+</a>
+</g>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_fio -->
+<g id="module~~korc_initialize~~UsesGraph_edge66" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M656.1875,-563.9688C631.6888,-551.0482 592.5738,-530.4191 565.0036,-515.8786"/>
+<polygon fill="#000000" stroke="#000000" points="566.6121,-512.77 556.1341,-511.2009 563.3466,-518.9617 566.6121,-512.77"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge70" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-346C616.8194,-327.4437 596.9508,-333.9973 533,-345"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge71" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M777.4274,-369.9321C744.8837,-334.1961 641.817,-231.3727 533,-231"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge73" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679,-346C530.5476,-301.6979 470.2754,-258.1534 331,-326 280.7649,-350.4715 303.8528,-400.7717 253.5,-425"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-425C231.6747,-434.4087 206.6787,-443.2551 186.1335,-450.0411"/>
+<polygon fill="#000000" stroke="#000000" points="184.8622,-446.7742 176.4387,-453.2004 187.031,-453.4298 184.8622,-446.7742"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M756.4742,-369.9172C734.9357,-362.0783 705.5884,-352.2044 679,-346"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_edge74" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M785.2794,-394.1489C777.483,-427.7155 753.2047,-524.0644 716,-597 677.7798,-671.9265 662.4431,-688.6386 606,-751 590.8266,-767.7644 571.5086,-784.5342 556.5571,-796.6998"/>
+<polygon fill="#000000" stroke="#000000" points="554.3669,-793.9697 548.7539,-802.9555 558.7454,-799.4313 554.3669,-793.9697"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge75" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M751.8847,-390.2311C719.6237,-399.1938 672.8285,-416.3703 642,-446 615.6305,-471.3442 631.1578,-493.4526 606,-520 554.9569,-573.8625 513.5628,-549.6425 460,-601 425.2141,-634.3536 399.358,-685.4012 386.5311,-714.2221"/>
+<polygon fill="#000000" stroke="#000000" points="383.1627,-713.1933 382.4025,-723.7608 389.5868,-715.9738 383.1627,-713.1933"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_interp -->
+<g id="module~~korc_initialize~~UsesGraph_edge72" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M785.2381,-394.1883C778.0777,-423.6483 756.5837,-499.9752 716,-550 713.8731,-552.6217 711.4168,-555.0962 708.8018,-557.399"/>
+<polygon fill="#000000" stroke="#000000" points="706.3759,-554.8527 700.6512,-563.7678 710.6859,-560.3685 706.3759,-554.8527"/>
+</g>
+<!-- module~korc_energy_pdfs&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge76" class="edge">
+<title>module~korc_energy_pdfs&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M516.24,-981.806C498.7663,-968.0213 472.2533,-943.8401 460,-916 376.1404,-725.4668 475.9733,-650.579 424,-449 416.4003,-419.5247 400.7296,-387.9919 389.6868,-367.9182"/>
+<polygon fill="#000000" stroke="#000000" points="392.6474,-366.0423 384.6932,-359.0436 386.5468,-369.475 392.6474,-366.0423"/>
+</g>
+<!-- module~korc_energy_pdfs&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge77" class="edge">
+<title>module~korc_energy_pdfs&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M484.8,-984.5756C451.2271,-975.8674 407.2986,-959.9186 377.5,-932"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-932C361.2081,-916.7359 344.1031,-931.0757 331,-913 265.3582,-822.4473 330.5461,-517.043 295,-411 289.6489,-395.0362 279.3768,-379.1432 270.3916,-367.1881"/>
+<polygon fill="#000000" stroke="#000000" points="273.0853,-364.9511 264.1651,-359.2343 267.5733,-369.266 273.0853,-364.9511"/>
+</g>
+<!-- module~korc_energy_pdfs&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge79" class="edge">
+<title>module~korc_energy_pdfs&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-932C361.2081,-916.7359 350.3822,-924.0793 331,-913 310.6853,-901.3876 289.6888,-885.0908 274.6828,-872.5665"/>
+<polygon fill="#000000" stroke="#000000" points="276.894,-869.8526 267.0049,-866.0504 272.3645,-875.1896 276.894,-869.8526"/>
+</g>
+<!-- module~korc_energy_pdfs&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge78" class="edge">
+<title>module~korc_energy_pdfs&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-932C361.2081,-916.7359 347.0599,-928.5081 331,-913 302.9525,-885.9161 322.4802,-860.6593 295,-833 280.7026,-818.6094 269.4372,-826.5503 253.5,-814"/>
+</g>
+<!-- module~korc_energy_pdfs&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge80" class="edge">
+<title>module~korc_energy_pdfs&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518.3101,-981.982C501.8896,-967.8117 475.5676,-942.7773 460,-916 432.8688,-869.3323 448.1884,-848.2587 424,-800 416.1756,-784.3894 404.6536,-768.4987 395.0368,-756.4565"/>
+<polygon fill="#000000" stroke="#000000" points="397.499,-753.9395 388.451,-748.4272 392.0867,-758.3787 397.499,-753.9395"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge81" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M509.6721,-882.8791C492.7952,-872.7657 471.083,-856.6832 460,-836 378.4119,-683.7391 468.4498,-615.9258 424,-449 416.1674,-419.5857 400.5484,-388.0394 389.5811,-367.9459"/>
+<polygon fill="#000000" stroke="#000000" points="392.5534,-366.0896 384.6253,-359.0614 386.4401,-369.4996 392.5534,-366.0896"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge82" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M473.5658,-882.9815C436.5608,-874.6662 393.1255,-863.1342 377.5,-852"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-852C358.5596,-838.5037 343.9436,-847.3223 331,-828 279.2349,-750.7246 325.201,-498.9717 295,-411 289.5331,-395.0755 279.2602,-379.1827 270.3035,-367.218"/>
+<polygon fill="#000000" stroke="#000000" points="273.008,-364.9943 264.1018,-359.2558 267.4855,-369.2958 273.008,-364.9943"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge84" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-852C356.5573,-837.077 328.1651,-836.5141 303.8332,-840.1601"/>
+<polygon fill="#000000" stroke="#000000" points="302.9268,-836.7659 293.6874,-841.9507 304.1435,-843.6593 302.9268,-836.7659"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge83" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-852C330.5575,-818.5505 298.7851,-849.6613 253.5,-814"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge86" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M483.1242,-882.9248C474.7955,-879.3796 466.6987,-874.8283 460,-869 433.905,-846.2955 442.2153,-829.4049 424,-800 414.688,-784.9677 402.981,-768.8678 393.6433,-756.5763"/>
+<polygon fill="#000000" stroke="#000000" points="396.2018,-754.1619 387.3309,-748.369 390.6532,-758.4295 396.2018,-754.1619"/>
+</g>
+<!-- module~special_functions -->
+<g id="module~~korc_initialize~~UsesGraph_node25" class="node">
+<title>module~special_functions</title>
+<g id="a_module~~korc_initialize~~UsesGraph_node25"><a xlink:href=".././module/special_functions.html" xlink:title="special_functions">
+<polygon fill="#337ab7" stroke="#337ab7" points="424,-904 331,-904 331,-880 424,-880 424,-904"/>
+<text text-anchor="middle" x="377.5" y="-889.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">special_functions</text>
+</a>
+</g>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~special_functions -->
+<g id="module~~korc_initialize~~UsesGraph_edge85" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~special_functions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M459.8033,-893.5878C451.2737,-893.4233 442.6707,-893.2573 434.4069,-893.0979"/>
+<polygon fill="#000000" stroke="#000000" points="434.2175,-889.5937 424.1518,-892.9 434.0824,-896.5924 434.2175,-889.5937"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge87" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-654C765.8579,-633.8132 766.5073,-623.2167 752,-597 734.098,-564.6484 740.4206,-549.7623 716,-522 690.1083,-492.5652 671.9732,-499.2666 642,-474 623.9642,-458.7963 626.6168,-446.4627 606,-435 577.1269,-418.9469 563.2825,-434.2034 533,-421"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M887.1633,-753.8841C877.7187,-750.2581 868.1716,-745.6866 860,-740 819.0832,-711.5262 824.8377,-687.5846 788,-654"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_initialize~~UsesGraph_edge88" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M931.7222,-753.6739C926.0192,-702.5727 899.7556,-503.3856 824,-361 812.4576,-339.3056 703.4457,-196.5068 679,-194"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_rnd_numbers -->
+<g id="module~~korc_initialize~~UsesGraph_edge90" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_rnd_numbers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M921.8835,-778.2317C905.8921,-796.4642 876.5086,-832.4488 860,-868 832.5787,-927.0515 866.7803,-960.9199 824,-1010 791.6036,-1047.1671 659.7128,-1090.7212 585.0978,-1113.0821"/>
+<polygon fill="#000000" stroke="#000000" points="583.9958,-1109.7582 575.4082,-1115.9633 585.991,-1116.4679 583.9958,-1109.7582"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_constants -->
+<g id="module~~korc_initialize~~UsesGraph_edge93" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M923.4909,-778.0837C882.9162,-828.2311 717.8866,-1018.0786 533,-1034"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge91" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M927.5763,-778.0484C915.0469,-806.0484 883.3765,-877.7875 860,-939 842.3998,-985.087 849.1835,-1001.5787 824,-1044 787.708,-1105.1335 776.2942,-1124.33 716,-1162 649.4795,-1203.56 455.3735,-1252.6229 377.5,-1262"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-1262C322.4754,-1265.0865 291.5267,-1301.8899 253.5,-1262"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_fields -->
+<g id="module~~korc_initialize~~UsesGraph_edge94" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M880.9501,-753.9805C873.2363,-750.4491 865.9081,-745.888 860,-740 826.5419,-706.6554 843.6475,-682.9568 824,-640 817.2393,-625.2186 808.2831,-609.2857 800.9953,-597.0147"/>
+<polygon fill="#000000" stroke="#000000" points="803.9749,-595.178 795.8114,-588.4246 797.9816,-598.7948 803.9749,-595.178"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_coords -->
+<g id="module~~korc_initialize~~UsesGraph_edge96" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-768C740.1807,-760.2423 722.4053,-746.4863 679,-768"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge97" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M873.3969,-771.4726C847.0663,-772.697 815.8332,-772.5154 788,-768"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-768C749.0363,-761.679 753.5584,-728.1447 716,-716 684.7064,-705.8811 674.7401,-712.8749 642,-716 592.8879,-720.6879 581.2611,-726.7607 533,-737"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_interp -->
+<g id="module~~korc_initialize~~UsesGraph_edge89" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M788,-654C762.6481,-630.8869 730.3457,-608.526 707.5065,-593.7166"/>
+<polygon fill="#000000" stroke="#000000" points="709.2581,-590.6821 698.9499,-588.2342 705.4816,-596.5761 709.2581,-590.6821"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_random -->
+<g id="module~~korc_initialize~~UsesGraph_edge92" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_random</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M932.6048,-753.7368C930.3089,-697.1556 915.3587,-456.9662 824,-290 795.6372,-238.1644 740.3612,-194.8358 706.8534,-171.8185"/>
+<polygon fill="#000000" stroke="#000000" points="708.6761,-168.8263 698.4266,-166.1429 704.7656,-174.6322 708.6761,-168.8263"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~special_functions -->
+<g id="module~~korc_initialize~~UsesGraph_edge95" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~special_functions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M914.4849,-778.0109C866.1859,-808.537 731.3965,-888.6114 606,-916 542.6056,-929.8464 524.2399,-925.1542 460,-916 446.9492,-914.1403 433.0773,-910.7044 420.5065,-907.0022"/>
+<polygon fill="#000000" stroke="#000000" points="421.3314,-903.5942 410.7444,-904.0011 419.2744,-910.2852 421.3314,-903.5942"/>
+</g>
+<!-- module~korc_hammersley_generator&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge98" class="edge">
+<title>module~korc_hammersley_generator&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M925.134,-972.3373C908.3164,-998.2371 866.8885,-1059.5489 824,-1104 781.0085,-1148.5579 768.7405,-1159.5637 716,-1192 585.1403,-1272.4809 530.8865,-1253.3961 377.5,-1262"/>
+</g>
+<!-- module~korc_random&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge100" class="edge">
+<title>module~korc_random&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-307C237.6381,-319.6454 226.366,-311.6779 212,-326 184.9608,-352.9566 192.9983,-369.8118 176,-404 169.6827,-416.7058 162.2187,-430.7255 156.1424,-441.9094"/>
+<polygon fill="#000000" stroke="#000000" points="152.9511,-440.4504 151.2234,-450.9034 159.0926,-443.8093 152.9511,-440.4504"/>
+</g>
+<!-- module~korc_random&#45;&gt;iso_c_binding -->
+<g id="module~~korc_initialize~~UsesGraph_edge99" class="edge">
+<title>module~korc_random&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M641.9911,-152.8568C575.2844,-152.418 432.4004,-159.0105 331,-217 285.1775,-243.2053 294.7754,-274.0946 253.5,-307"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-307C204.0315,-345.543 167.4707,-288.9254 113,-320 80.6518,-338.4541 58.5786,-377.3344 47.2901,-401.6932"/>
+<polygon fill="#000000" stroke="#000000" points="44.0871,-400.2822 43.2397,-410.8431 50.488,-403.1158 44.0871,-400.2822"/>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_input -->
+<g id="module~~korc_initialize~~UsesGraph_edge102" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M518.3607,-486.8947C503.3498,-474.3151 479.5053,-453.8653 460,-435 436.6339,-412.4005 411.2717,-384.8531 394.925,-366.6671"/>
+<polygon fill="#000000" stroke="#000000" points="397.3631,-364.143 388.0883,-359.0216 392.145,-368.809 397.3631,-364.143"/>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_types -->
+<g id="module~~korc_initialize~~UsesGraph_edge103" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-463C231.3533,-460.985 206.5705,-460.82 186.2386,-461.231"/>
+<polygon fill="#000000" stroke="#000000" points="185.9567,-457.737 176.0496,-461.4918 186.1359,-464.7347 185.9567,-457.737"/>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_initialize~~UsesGraph_edge105" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M505.771,-503.0081C490.6113,-506.5108 472.3613,-513.0108 460,-525 405.4427,-577.9148 386.2427,-671.164 380.1074,-713.7097"/>
+<polygon fill="#000000" stroke="#000000" points="376.6096,-713.4616 378.7597,-723.836 383.5484,-714.3851 376.6096,-713.4616"/>
+</g>
+<!-- module~korc_fio&#45;&gt;iso_c_binding -->
+<g id="module~~korc_initialize~~UsesGraph_edge101" class="edge">
+<title>module~korc_fio&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-463C323.9442,-449.9997 308.3844,-467.9936 253.5,-463"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-463C217.9602,-459.7665 210.9684,-449.1235 176,-442 146.8154,-436.0547 113.7616,-431.4215 87.3772,-428.2191"/>
+<polygon fill="#000000" stroke="#000000" points="87.5895,-424.7199 77.2473,-427.0198 86.7664,-431.6713 87.5895,-424.7199"/>
+</g>
+<!-- module~korc_fio&#45;&gt;mpi -->
+<g id="module~~korc_initialize~~UsesGraph_edge104" class="edge">
+<title>module~korc_fio&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M377.5,-463C335.6415,-451.7556 335.3594,-426.8015 295,-411 257.98,-396.506 212.8363,-389.3902 181.7032,-385.9788"/>
+<polygon fill="#000000" stroke="#000000" points="182.018,-382.4928 171.7141,-384.9586 181.3068,-389.4566 182.018,-382.4928"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M505.9907,-492.9302C474.9421,-485.9101 422.4707,-473.9163 377.5,-463"/>
+</g>
+</g>
+</svg>
+</div><script>var panmodulekorc_initializeUsesGraph = svgPanZoom('#modulekorc_initializeUsesGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  
+  
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_initialize~~UsedByGraph Pages: 1 -->
+<svg id="modulekorc_initializeUsedByGraph" width="174pt" height="32pt"
+ viewBox="0.00 0.00 174.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_initialize~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>module~~korc_initialize~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 170,-28 170,4 -4,4"/>
+<!-- module~korc_initialize -->
+<g id="module~~korc_initialize~~UsedByGraph_node1" class="node">
+<title>module~korc_initialize</title>
+<polygon fill="none" stroke="#000000" points="76,-24 0,-24 0,0 76,0 76,-24"/>
+<text text-anchor="middle" x="38" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_initialize</text>
+</g>
+<!-- program~main -->
+<g id="module~~korc_initialize~~UsedByGraph_node2" class="node">
+<title>program~main</title>
+<g id="a_module~~korc_initialize~~UsedByGraph_node2"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="166,-24 112,-24 112,0 166,0 166,-24"/>
+<text text-anchor="middle" x="139" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_initialize -->
+<g id="module~~korc_initialize~~UsedByGraph_edge1" class="edge">
+<title>program~main&#45;&gt;module~korc_initialize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M111.9339,-12C104.0382,-12 95.1605,-12 86.369,-12"/>
+<polygon fill="#000000" stroke="#000000" points="86.1523,-8.5001 76.1523,-12 86.1522,-15.5001 86.1523,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+  </li>
+  
+      </ul>
+    </div>
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-load_korc_params">load_korc_params</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-initialize_korc_parameters">initialize_korc_parameters</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-define_time_step">define_time_step</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-initialize_particles">initialize_particles</a>
+      
+      <a class="list-group-item" href="../module/korc_initialize.html#proc-set_up_particles_ic">set_up_particles_ic</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-load_korc_params"></span><h3>
+private subroutine <a href='../proc/load_korc_params.html'>load_korc_params</a>(params)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/load_korc_params.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p><a href="None" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_korc_parameters"></span><h3>
+public subroutine <a href='../proc/initialize_korc_parameters.html'>initialize_korc_parameters</a>(params)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/initialize_korc_parameters.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-define_time_step"></span><h3>
+public subroutine <a href='../proc/define_time_step.html'>define_time_step</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/define_time_step.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_particles"></span><h3>
+public subroutine <a href='../proc/initialize_particles.html'>initialize_particles</a>(params, F, P, spp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/initialize_particles.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of KORC's derived type FIELDS containing all the information 
+ about the fields used in the simulation. See <a href="../module/korc_types.html">korc_types</a>
+and <a href="../module/korc_fields.html">korc_fields</a>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PROFILES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(SPECIES),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>spp</strong></td><td><p>An instance of KORC's derived type SPECIES containing all the information 
+ of different electron species. See <a href="../module/korc_types.html">korc_types</a>.</p><a href="None" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-set_up_particles_ic"></span><h3>
+public subroutine <a href='../proc/set_up_particles_ic.html'>set_up_particles_ic</a>(params, F, spp, P)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/set_up_particles_ic.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of KORC's derived type FIELDS containing all 
+ the information about the fields used in the simulation. 
+ See <a href="../module/korc_types.html">korc_types</a> and <a href="../module/korc_fields.html">korc_fields</a>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(SPECIES),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>spp</strong></td><td><p>An instance of KORC's derived type SPECIES containing all 
+ the information of different electron species. See <a href="../module/korc_types.html">korc_types</a>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PROFILES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>P</strong></td><td><p>An instance of the KORC derived type PROFILES.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

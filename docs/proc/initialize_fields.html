@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>initialize_fields &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>initialize_fields
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.3% of total for procedures.">333 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_fields.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_fields.f90.html'>korc_fields.f90</a></li>
+    
+     <li><a href='../module/korc_fields.html'>korc_fields</a></li>
+    
+  
+     <li class="active">initialize_fields</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/initialize_fields.html#src">initialize_fields</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine initialize_fields(params, F)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Subroutine that initializes the analytical or externally
+ calculated electric and magnetic fields. </p></div>
+<p>In this subroutine we load the parameters of the electric and
+ magnetic fields from the namelists 'analytical_fields_params' and
+ 'externalPlasmaModel' in the input file.
+ Sign convention in analytical fields corresponds to
+ DIII-D fields with <script type="math/tex">B_\phi<0</script> and <script type="math/tex">B_\theta<0</script>.
+ Sign convention in analytical fields corresponds to
+ DIII-D fields with <script type="math/tex">B_\phi<0</script> and <script type="math/tex">B_\theta<0</script>.</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-params~201"></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~140"></span>type(FIELDS),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p>
+<p>Magnetic field at magnetic axis for an 'ANALYTICAL' magnetic field,
+ or the magnitude of the magnetic field for a 'UNFIROM' plasma.</p>
+<p>Plasma edge <script type="math/tex">r_{edge}</script> as measured from the magnetic axis.</p>
+<p>Radial position of the magnetic axis <script type="math/tex">R_0</script>
+</p>
+<p>Safety factor at the plasma edge.</p>
+<p>Safety factor at the magnetic axis <script type="math/tex">q_0</script>.</p>
+<p>String with information about the direction of the plasma current, 
+ 'PARALLEL'  or 'ANTI-PARALLEL' to the toroidal magnetic field.</p>
+<p>Electric field at the magnetic axis.</p>
+<p>Logical variable that specifies if the electric field is 
+ going to be used on in a given simulation.</p>
+<p>Logical variable that specifies if the magnetic field is 
+ going to be used on in a given simulation.</p>
+<p>Logical variable that specifies if the poloidal magnetic 
+ flux is going to be used on in a given simulation.</p>
+<p>Logical variable that specifies if the plasma is axisymmetric.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~initialize_fields~~CallsGraph Pages: 1 -->
+<svg id="procinitialize_fieldsCallsGraph" width="641pt" height="371pt"
+ viewBox="0.00 0.00 641.00 371.26" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_fields~~CallsGraph" class="graph" transform="scale(.7577 .7577) rotate(0) translate(4 486)">
+<title>proc~~initialize_fields~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-486 842,-486 842,4 -4,4"/>
+<!-- proc~initialize_fields -->
+<g id="proc~~initialize_fields~~CallsGraph_node1" class="node">
+<title>proc~initialize_fields</title>
+<polygon fill="none" stroke="#000000" points="80,-234 0,-234 0,-210 80,-210 80,-234"/>
+<text text-anchor="middle" x="40" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_fields</text>
+</g>
+<!-- proc~allocate_2d_fields_arrays -->
+<g id="proc~~initialize_fields~~CallsGraph_node2" class="node">
+<title>proc~allocate_2d_fields_arrays</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node2"><a xlink:href=".././proc/allocate_2d_fields_arrays.html" xlink:title="ALLOCATE_2D_FIELDS_ARRAYS">
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-440 116,-440 116,-416 294,-416 294,-440"/>
+<text text-anchor="middle" x="205" y="-425.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALLOCATE_2D_FIELDS_ARRAYS</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~allocate_2d_fields_arrays -->
+<g id="proc~~initialize_fields~~CallsGraph_edge1" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~allocate_2d_fields_arrays</title>
+<path fill="none" stroke="#000000" d="M41.219,-234.1286C45.2248,-267.2919 61.0578,-360.1222 116,-407 117.5398,-408.3138 119.147,-409.5489 120.8111,-410.7097"/>
+<polygon fill="#000000" stroke="#000000" points="119.1736,-413.8081 129.5564,-415.9169 122.7549,-407.7936 119.1736,-413.8081"/>
+</g>
+<!-- proc~allocate_3d_fields_arrays -->
+<g id="proc~~initialize_fields~~CallsGraph_node3" class="node">
+<title>proc~allocate_3d_fields_arrays</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node3"><a xlink:href=".././proc/allocate_3d_fields_arrays.html" xlink:title="ALLOCATE_3D_FIELDS_ARRAYS">
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-398 116,-398 116,-374 294,-374 294,-398"/>
+<text text-anchor="middle" x="205" y="-383.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALLOCATE_3D_FIELDS_ARRAYS</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~allocate_3d_fields_arrays -->
+<g id="proc~~initialize_fields~~CallsGraph_edge2" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~allocate_3d_fields_arrays</title>
+<path fill="none" stroke="#000000" d="M43.1923,-234.0093C50.9412,-260.801 73.321,-325.7818 116,-360 120.6665,-363.7414 125.8532,-366.9444 131.3109,-369.6866"/>
+<polygon fill="#000000" stroke="#000000" points="130.1493,-373.0008 140.7076,-373.88 133.002,-366.6085 130.1493,-373.0008"/>
+</g>
+<!-- proc~load_prev_iter -->
+<g id="proc~~initialize_fields~~CallsGraph_node4" class="node">
+<title>proc~load_prev_iter</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node4"><a xlink:href=".././proc/load_prev_iter.html" xlink:title="load_prev_iter">
+<polygon fill="#d9534f" stroke="#d9534f" points="244.5,-318 165.5,-318 165.5,-294 244.5,-294 244.5,-318"/>
+<text text-anchor="middle" x="205" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_prev_iter</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~load_prev_iter -->
+<g id="proc~~initialize_fields~~CallsGraph_edge3" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~load_prev_iter</title>
+<path fill="none" stroke="#000000" d="M51.1379,-234.1563C64.962,-248.4941 89.9184,-272.0151 116,-285 128.1178,-291.0329 142.0367,-295.3767 155.2126,-298.4873"/>
+<polygon fill="#000000" stroke="#000000" points="154.5865,-301.9328 165.1013,-300.6332 156.071,-295.092 154.5865,-301.9328"/>
+</g>
+<!-- proc~allocate_1d_fs_arrays -->
+<g id="proc~~initialize_fields~~CallsGraph_node5" class="node">
+<title>proc~allocate_1d_fs_arrays</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node5"><a xlink:href=".././proc/allocate_1d_fs_arrays.html" xlink:title="allocate_1D_FS_arrays">
+<polygon fill="#d9534f" stroke="#d9534f" points="266,-234 144,-234 144,-210 266,-210 266,-234"/>
+<text text-anchor="middle" x="205" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">allocate_1D_FS_arrays</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~allocate_1d_fs_arrays -->
+<g id="proc~~initialize_fields~~CallsGraph_edge4" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~allocate_1d_fs_arrays</title>
+<path fill="none" stroke="#000000" d="M80.3635,-222C96.4634,-222 115.4897,-222 133.7645,-222"/>
+<polygon fill="#000000" stroke="#000000" points="133.8166,-225.5001 143.8165,-222 133.8165,-218.5001 133.8166,-225.5001"/>
+</g>
+<!-- proc~load_1d_fs_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node6" class="node">
+<title>proc~load_1d_fs_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node6"><a xlink:href=".././proc/load_1d_fs_from_hdf5.html" xlink:title="load_1D_FS_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="267,-108 143,-108 143,-84 267,-84 267,-108"/>
+<text text-anchor="middle" x="205" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_1D_FS_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~load_1d_fs_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge5" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~load_1d_fs_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M45.294,-209.741C55.5334,-187.5558 80.2373,-140.8413 116,-117 121.2879,-113.4748 127.0983,-110.5386 133.1385,-108.0934"/>
+<polygon fill="#000000" stroke="#000000" points="134.5432,-111.308 142.7773,-104.6409 132.1827,-104.718 134.5432,-111.308"/>
+</g>
+<!-- proc~load_dim_data_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node7" class="node">
+<title>proc~load_dim_data_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node7"><a xlink:href=".././proc/load_dim_data_from_hdf5.html" xlink:title="load_dim_data_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="272.5,-276 137.5,-276 137.5,-252 272.5,-252 272.5,-276"/>
+<text text-anchor="middle" x="205" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_dim_data_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~load_dim_data_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge6" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~load_dim_data_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M80.1554,-233.4013C91.7029,-236.5969 104.3302,-240.0121 116,-243 124.4924,-245.1744 133.462,-247.3878 142.3078,-249.5222"/>
+<polygon fill="#000000" stroke="#000000" points="141.6704,-252.9684 152.2104,-251.8922 143.2998,-246.1607 141.6704,-252.9684"/>
+</g>
+<!-- proc~which_fields_in_file -->
+<g id="proc~~initialize_fields~~CallsGraph_node8" class="node">
+<title>proc~which_fields_in_file</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node8"><a xlink:href=".././proc/which_fields_in_file.html" xlink:title="which_fields_in_file">
+<polygon fill="#d9534f" stroke="#d9534f" points="256.5,-192 153.5,-192 153.5,-168 256.5,-168 256.5,-192"/>
+<text text-anchor="middle" x="205" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">which_fields_in_file</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~which_fields_in_file -->
+<g id="proc~~initialize_fields~~CallsGraph_edge7" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~which_fields_in_file</title>
+<path fill="none" stroke="#000000" d="M80.1554,-210.5987C91.7029,-207.4031 104.3302,-203.9879 116,-201 124.8096,-198.7444 134.1327,-196.4468 143.2985,-194.239"/>
+<polygon fill="#000000" stroke="#000000" points="144.2381,-197.6131 153.1508,-191.8847 142.6112,-190.8047 144.2381,-197.6131"/>
+</g>
+<!-- proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_node9" class="node">
+<title>proc~korc_abort</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node9"><a xlink:href=".././proc/korc_abort.html" xlink:title="korc_abort">
+<polygon fill="#d9534f" stroke="#d9534f" points="742.5,-238 680.5,-238 680.5,-214 742.5,-214 742.5,-238"/>
+<text text-anchor="middle" x="711.5" y="-223.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_abort</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge8" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M44.5576,-234.2767C53.8806,-257.3773 77.5535,-306.7975 116,-327 256.0764,-400.6058 313.8747,-337.9672 472,-332 548.608,-329.1091 577.0633,-356.3713 644,-319 672.399,-303.1446 692.0024,-269.7663 702.4954,-247.6141"/>
+<polygon fill="#000000" stroke="#000000" points="705.7616,-248.8847 706.6743,-238.3293 699.3783,-246.0117 705.7616,-248.8847"/>
+</g>
+<!-- proc~load_field_data_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node10" class="node">
+<title>proc~load_field_data_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node10"><a xlink:href=".././proc/load_field_data_from_hdf5.html" xlink:title="load_field_data_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="273.5,-150 136.5,-150 136.5,-126 273.5,-126 273.5,-150"/>
+<text text-anchor="middle" x="205" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_field_data_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~load_field_data_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge9" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~load_field_data_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M51.1379,-209.8437C64.962,-195.5059 89.9184,-171.9849 116,-159 120.2191,-156.8995 124.6566,-155.0037 129.205,-153.2935"/>
+<polygon fill="#000000" stroke="#000000" points="130.3468,-156.6021 138.6627,-150.0374 128.068,-149.9834 130.3468,-156.6021"/>
+</g>
+<!-- proc~initialize_gc_fields -->
+<g id="proc~~initialize_fields~~CallsGraph_node11" class="node">
+<title>proc~initialize_gc_fields</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node11"><a xlink:href=".././proc/initialize_gc_fields.html" xlink:title="initialize_GC_fields">
+<polygon fill="#d9534f" stroke="#d9534f" points="256,-66 154,-66 154,-42 256,-42 256,-66"/>
+<text text-anchor="middle" x="205" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">initialize_GC_fields</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~initialize_gc_fields -->
+<g id="proc~~initialize_fields~~CallsGraph_edge10" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~initialize_gc_fields</title>
+<path fill="none" stroke="#000000" d="M42.6111,-209.9032C49.3796,-181.5879 70.2487,-110.7044 116,-75 124.1566,-68.6345 133.9283,-64.1491 143.9642,-60.999"/>
+<polygon fill="#000000" stroke="#000000" points="144.8932,-64.3735 153.623,-58.3701 143.0548,-57.6192 144.8932,-64.3735"/>
+</g>
+<!-- proc~initialize_gc_fields_3d -->
+<g id="proc~~initialize_fields~~CallsGraph_node12" class="node">
+<title>proc~initialize_gc_fields_3d</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node12"><a xlink:href=".././proc/initialize_gc_fields_3d.html" xlink:title="initialize_GC_fields_3D">
+<polygon fill="#d9534f" stroke="#d9534f" points="265.5,-24 144.5,-24 144.5,0 265.5,0 265.5,-24"/>
+<text text-anchor="middle" x="205" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">initialize_GC_fields_3D</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_fields&#45;&gt;proc~initialize_gc_fields_3d -->
+<g id="proc~~initialize_fields~~CallsGraph_edge11" class="edge">
+<title>proc~initialize_fields&#45;&gt;proc~initialize_gc_fields_3d</title>
+<path fill="none" stroke="#000000" d="M41.1305,-209.6158C44.91,-175.7526 60.2183,-80.9548 116,-33 121.5453,-28.2328 127.9764,-24.5013 134.7951,-21.587"/>
+<polygon fill="#000000" stroke="#000000" points="136.1076,-24.8336 144.2867,-18.0991 133.6931,-18.2632 136.1076,-24.8336"/>
+</g>
+<!-- proc~allocate_v_field_2d -->
+<g id="proc~~initialize_fields~~CallsGraph_node15" class="node">
+<title>proc~allocate_v_field_2d</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node15"><a xlink:href=".././proc/allocate_v_field_2d.html" xlink:title="ALLOCATE_V_FIELD_2D">
+<polygon fill="#d9534f" stroke="#d9534f" points="468.5,-482 333.5,-482 333.5,-458 468.5,-458 468.5,-482"/>
+<text text-anchor="middle" x="401" y="-467.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALLOCATE_V_FIELD_2D</text>
+</a>
+</g>
+</g>
+<!-- proc~allocate_2d_fields_arrays&#45;&gt;proc~allocate_v_field_2d -->
+<g id="proc~~initialize_fields~~CallsGraph_edge13" class="edge">
+<title>proc~allocate_2d_fields_arrays&#45;&gt;proc~allocate_v_field_2d</title>
+<path fill="none" stroke="#000000" d="M261.1657,-440.0355C284.1292,-444.9563 310.8652,-450.6854 334.7725,-455.8084"/>
+<polygon fill="#000000" stroke="#000000" points="334.3147,-459.2897 344.8261,-457.9627 335.7814,-452.4451 334.3147,-459.2897"/>
+</g>
+<!-- proc~allocate_v_field_2dx -->
+<g id="proc~~initialize_fields~~CallsGraph_node17" class="node">
+<title>proc~allocate_v_field_2dx</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node17"><a xlink:href=".././proc/allocate_v_field_2dx.html" xlink:title="ALLOCATE_V_FIELD_2DX">
+<polygon fill="#d9534f" stroke="#d9534f" points="472,-440 330,-440 330,-416 472,-416 472,-440"/>
+<text text-anchor="middle" x="401" y="-425.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALLOCATE_V_FIELD_2DX</text>
+</a>
+</g>
+</g>
+<!-- proc~allocate_2d_fields_arrays&#45;&gt;proc~allocate_v_field_2dx -->
+<g id="proc~~initialize_fields~~CallsGraph_edge12" class="edge">
+<title>proc~allocate_2d_fields_arrays&#45;&gt;proc~allocate_v_field_2dx</title>
+<path fill="none" stroke="#000000" d="M294.1105,-428C302.594,-428 311.167,-428 319.5726,-428"/>
+<polygon fill="#000000" stroke="#000000" points="319.7252,-431.5001 329.7251,-428 319.7251,-424.5001 319.7252,-431.5001"/>
+</g>
+<!-- proc~allocate_v_field_3d -->
+<g id="proc~~initialize_fields~~CallsGraph_node21" class="node">
+<title>proc~allocate_v_field_3d</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node21"><a xlink:href=".././proc/allocate_v_field_3d.html" xlink:title="ALLOCATE_V_FIELD_3D">
+<polygon fill="#d9534f" stroke="#d9534f" points="468.5,-398 333.5,-398 333.5,-374 468.5,-374 468.5,-398"/>
+<text text-anchor="middle" x="401" y="-383.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALLOCATE_V_FIELD_3D</text>
+</a>
+</g>
+</g>
+<!-- proc~allocate_3d_fields_arrays&#45;&gt;proc~allocate_v_field_3d -->
+<g id="proc~~initialize_fields~~CallsGraph_edge14" class="edge">
+<title>proc~allocate_3d_fields_arrays&#45;&gt;proc~allocate_v_field_3d</title>
+<path fill="none" stroke="#000000" d="M294.1105,-386C303.7648,-386 313.5352,-386 323.0426,-386"/>
+<polygon fill="#000000" stroke="#000000" points="323.2381,-389.5001 333.2381,-386 323.238,-382.5001 323.2381,-389.5001"/>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge17" class="edge">
+<title>proc~load_prev_iter&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M244.5131,-313.3088C323.8587,-326.1268 506.7112,-346.2079 644,-289 665.3985,-280.0833 684.1614,-261.136 696.4377,-246.3365"/>
+<polygon fill="#000000" stroke="#000000" points="699.4126,-248.2182 702.8871,-238.2093 693.9293,-243.8669 699.4126,-248.2182"/>
+</g>
+<!-- mpi_bcast -->
+<g id="proc~~initialize_fields~~CallsGraph_node14" class="node">
+<title>mpi_bcast</title>
+<polygon fill="#777777" stroke="#777777" points="431,-280 371,-280 371,-256 431,-256 431,-280"/>
+<text text-anchor="middle" x="401" y="-265.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_bcast</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;mpi_bcast -->
+<g id="proc~~initialize_fields~~CallsGraph_edge15" class="edge">
+<title>proc~load_prev_iter&#45;&gt;mpi_bcast</title>
+<path fill="none" stroke="#000000" d="M244.6635,-298.3101C278.5218,-291.7458 326.9868,-282.3495 360.9544,-275.7639"/>
+<polygon fill="#000000" stroke="#000000" points="361.8474,-279.1561 370.9984,-273.8166 360.515,-272.284 361.8474,-279.1561"/>
+</g>
+<!-- h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_node16" class="node">
+<title>h5fclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="431,-154 371,-154 371,-130 431,-130 431,-154"/>
+<text text-anchor="middle" x="401" y="-139.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fclose_f</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge16" class="edge">
+<title>proc~load_prev_iter&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M244.6376,-305.2661C261.7673,-302.9641 280.8542,-297.4392 294,-285 335.0637,-246.1436 290.0374,-202.988 330,-163 338.2928,-154.7019 349.6966,-149.6514 360.9392,-146.5876"/>
+<polygon fill="#000000" stroke="#000000" points="361.7172,-150.0002 370.6954,-144.3749 360.1689,-143.1735 361.7172,-150.0002"/>
+</g>
+<!-- h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_node19" class="node">
+<title>h5fopen_f</title>
+<polygon fill="#777777" stroke="#777777" points="430.5,-196 371.5,-196 371.5,-172 430.5,-172 430.5,-196"/>
+<text text-anchor="middle" x="401" y="-181.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5fopen_f</text>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge18" class="edge">
+<title>proc~load_prev_iter&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M244.7815,-304.2827C261.5352,-301.7498 280.2847,-296.3158 294,-285 324.0749,-260.1867 300.6298,-230.6435 330,-205 338.7479,-197.3621 350.1639,-192.4998 361.2754,-189.4052"/>
+<polygon fill="#000000" stroke="#000000" points="362.3835,-192.7397 371.3089,-187.0312 360.7717,-185.9278 362.3835,-192.7397"/>
+</g>
+<!-- interface~load_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node20" class="node">
+<title>interface~load_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node20"><a xlink:href=".././interface/load_from_hdf5.html" xlink:title="load_from_hdf5">
+<polygon fill="#a7506f" stroke="#a7506f" points="443.5,-238 358.5,-238 358.5,-214 443.5,-214 443.5,-238"/>
+<text text-anchor="middle" x="401" y="-223.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~load_prev_iter&#45;&gt;interface~load_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge19" class="edge">
+<title>proc~load_prev_iter&#45;&gt;interface~load_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M244.9431,-301.6322C260.976,-298.6236 279.1382,-293.5501 294,-285 314.1654,-273.3986 310.1665,-259.16 330,-247 335.743,-243.479 342.1101,-240.5195 348.605,-238.0392"/>
+<polygon fill="#000000" stroke="#000000" points="349.8466,-241.3133 358.1546,-234.7386 347.5598,-234.6973 349.8466,-241.3133"/>
+</g>
+<!-- proc~allocate_1d_fs_arrays&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge20" class="edge">
+<title>proc~allocate_1d_fs_arrays&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M266.1689,-212.555C275.8488,-209.6711 285.4682,-205.9084 294,-201 314.1654,-189.3986 310.1665,-175.16 330,-163 339.3841,-157.2466 350.4346,-152.9925 360.9866,-149.8784"/>
+<polygon fill="#000000" stroke="#000000" points="362.125,-153.197 370.88,-147.2304 360.3151,-146.435 362.125,-153.197"/>
+</g>
+<!-- proc~allocate_1d_fs_arrays&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge21" class="edge">
+<title>proc~allocate_1d_fs_arrays&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M266.2094,-210.1329C297.2839,-204.1082 334.1316,-196.9643 361.4406,-191.6697"/>
+<polygon fill="#000000" stroke="#000000" points="362.2571,-195.0766 371.4081,-189.7372 360.9247,-188.2046 362.2571,-195.0766"/>
+</g>
+<!-- proc~allocate_1d_fs_arrays&#45;&gt;interface~load_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge22" class="edge">
+<title>proc~allocate_1d_fs_arrays&#45;&gt;interface~load_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M266.2094,-223.2492C292.469,-223.7851 322.8513,-224.4051 348.1161,-224.9207"/>
+<polygon fill="#000000" stroke="#000000" points="348.174,-228.4226 358.2433,-225.1274 348.3169,-221.424 348.174,-228.4226"/>
+</g>
+<!-- proc~load_1d_fs_from_hdf5&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge24" class="edge">
+<title>proc~load_1d_fs_from_hdf5&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M256.2407,-108.0259C288.952,-115.703 330.7417,-125.5108 361.0038,-132.6131"/>
+<polygon fill="#000000" stroke="#000000" points="360.2597,-136.0335 370.7949,-134.9111 361.8592,-129.2187 360.2597,-136.0335"/>
+</g>
+<!-- interface~load_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node18" class="node">
+<title>interface~load_array_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node18"><a xlink:href=".././interface/load_array_from_hdf5.html" xlink:title="load_array_from_hdf5">
+<polygon fill="#a7506f" stroke="#a7506f" points="458.5,-112 343.5,-112 343.5,-88 458.5,-88 458.5,-112"/>
+<text text-anchor="middle" x="401" y="-97.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">load_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- proc~load_1d_fs_from_hdf5&#45;&gt;interface~load_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge23" class="edge">
+<title>proc~load_1d_fs_from_hdf5&#45;&gt;interface~load_array_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M267.0156,-97.2656C288.1221,-97.6964 311.8147,-98.1799 333.3405,-98.6192"/>
+<polygon fill="#000000" stroke="#000000" points="333.3164,-102.1193 343.3858,-98.8242 333.4593,-95.1208 333.3164,-102.1193"/>
+</g>
+<!-- proc~load_1d_fs_from_hdf5&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge25" class="edge">
+<title>proc~load_1d_fs_from_hdf5&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M267.0498,-104.9057C276.5199,-107.8559 285.8429,-111.7804 294,-117 315.8674,-130.9926 308.5319,-148.4021 330,-163 339.3591,-169.364 350.6789,-173.8345 361.5037,-176.9612"/>
+<polygon fill="#000000" stroke="#000000" points="360.6781,-180.3627 371.2353,-179.4706 362.426,-173.5844 360.6781,-180.3627"/>
+</g>
+<!-- proc~load_dim_data_from_hdf5&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge26" class="edge">
+<title>proc~load_dim_data_from_hdf5&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M272.7961,-255.0808C280.4654,-252.0859 287.7547,-248.1527 294,-243 324.0749,-218.1867 300.6298,-188.6435 330,-163 338.6737,-155.4269 349.9706,-150.5824 360.9928,-147.4842"/>
+<polygon fill="#000000" stroke="#000000" points="362.0433,-150.8318 370.9549,-145.1017 360.4151,-144.0238 362.0433,-150.8318"/>
+</g>
+<!-- proc~load_dim_data_from_hdf5&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge27" class="edge">
+<title>proc~load_dim_data_from_hdf5&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M272.7052,-252.4639C280.1376,-249.9134 287.3948,-246.8001 294,-243 314.1654,-231.3986 310.1665,-217.16 330,-205 339.4672,-199.1957 350.6303,-194.9173 361.2666,-191.796"/>
+<polygon fill="#000000" stroke="#000000" points="362.4659,-195.0988 371.2303,-189.1459 360.6666,-188.334 362.4659,-195.0988"/>
+</g>
+<!-- proc~load_dim_data_from_hdf5&#45;&gt;interface~load_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge28" class="edge">
+<title>proc~load_dim_data_from_hdf5&#45;&gt;interface~load_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M267.0156,-251.9766C293.137,-246.9122 323.2192,-241.0799 348.2533,-236.2264"/>
+<polygon fill="#000000" stroke="#000000" points="349.1386,-239.62 358.2896,-234.2806 347.8063,-232.748 349.1386,-239.62"/>
+</g>
+<!-- proc~which_fields_in_file&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge29" class="edge">
+<title>proc~which_fields_in_file&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M256.7531,-169.9662C289.3199,-163.6523 330.7278,-155.6242 360.8168,-149.7906"/>
+<polygon fill="#000000" stroke="#000000" points="361.8036,-153.1646 370.9546,-147.8251 360.4712,-146.2925 361.8036,-153.1646"/>
+</g>
+<!-- proc~which_fields_in_file&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge30" class="edge">
+<title>proc~which_fields_in_file&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M256.7531,-181.0562C289.4214,-181.7229 330.9858,-182.5711 361.0977,-183.1857"/>
+<polygon fill="#000000" stroke="#000000" points="361.1683,-186.6877 371.2376,-183.3926 361.3112,-179.6892 361.1683,-186.6877"/>
+</g>
+<!-- mpi_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_node13" class="node">
+<title>mpi_abort</title>
+<polygon fill="#777777" stroke="#777777" points="838,-238 779,-238 779,-214 838,-214 838,-238"/>
+<text text-anchor="middle" x="808.5" y="-223.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_abort</text>
+</g>
+<!-- proc~korc_abort&#45;&gt;mpi_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge31" class="edge">
+<title>proc~korc_abort&#45;&gt;mpi_abort</title>
+<path fill="none" stroke="#000000" d="M742.7253,-226C751.0847,-226 760.2317,-226 768.9754,-226"/>
+<polygon fill="#000000" stroke="#000000" points="768.9832,-229.5001 778.9832,-226 768.9831,-222.5001 768.9832,-229.5001"/>
+</g>
+<!-- proc~load_field_data_from_hdf5&#45;&gt;h5fclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge33" class="edge">
+<title>proc~load_field_data_from_hdf5&#45;&gt;h5fclose_f</title>
+<path fill="none" stroke="#000000" d="M273.5513,-139.399C302.6258,-139.9924 335.5126,-140.6635 360.5962,-141.1754"/>
+<polygon fill="#000000" stroke="#000000" points="360.7653,-144.6795 370.8347,-141.3844 360.9082,-137.681 360.7653,-144.6795"/>
+</g>
+<!-- proc~load_field_data_from_hdf5&#45;&gt;interface~load_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge32" class="edge">
+<title>proc~load_field_data_from_hdf5&#45;&gt;interface~load_array_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M267.0156,-125.9766C288.1221,-121.8845 311.8147,-117.291 333.3405,-113.1177"/>
+<polygon fill="#000000" stroke="#000000" points="334.2348,-116.5095 343.3858,-111.1701 332.9024,-109.6375 334.2348,-116.5095"/>
+</g>
+<!-- proc~load_field_data_from_hdf5&#45;&gt;h5fopen_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge34" class="edge">
+<title>proc~load_field_data_from_hdf5&#45;&gt;h5fopen_f</title>
+<path fill="none" stroke="#000000" d="M256.2407,-150.0259C289.1558,-157.7508 331.2628,-167.6331 361.5681,-174.7456"/>
+<polygon fill="#000000" stroke="#000000" points="360.8276,-178.1668 371.3628,-177.0443 362.4271,-171.352 360.8276,-178.1668"/>
+</g>
+<!-- proc~load_field_data_from_hdf5&#45;&gt;interface~load_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge35" class="edge">
+<title>proc~load_field_data_from_hdf5&#45;&gt;interface~load_from_hdf5</title>
+<path fill="none" stroke="#000000" d="M273.5346,-149.0948C280.7379,-151.7255 287.715,-154.9783 294,-159 315.8674,-172.9926 308.5319,-190.4021 330,-205 335.642,-208.8365 341.9966,-211.9848 348.5258,-214.5654"/>
+<polygon fill="#000000" stroke="#000000" points="347.5591,-217.9356 358.154,-217.9542 349.8832,-211.3327 347.5591,-217.9356"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node24" class="node">
+<title>proc~rload_1d_array_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node24"><a xlink:href=".././proc/rload_1d_array_from_hdf5.html" xlink:title="rload_1d_array_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="644,-196 508,-196 508,-172 644,-172 644,-196"/>
+<text text-anchor="middle" x="576" y="-181.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_1d_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_array_from_hdf5&#45;&gt;proc~rload_1d_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge37" class="edge">
+<title>interface~load_array_from_hdf5&#45;&gt;proc~rload_1d_array_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M454.4544,-112.1212C460.6105,-114.5748 466.606,-117.5054 472,-121 492.6336,-134.3678 487.4467,-149.5091 508,-163 510.6017,-164.7077 513.3497,-166.2827 516.19,-167.7345"/>
+<polygon fill="#000000" stroke="#000000" points="514.957,-171.0184 525.5096,-171.9637 517.8497,-164.6441 514.957,-171.0184"/>
+</g>
+<!-- proc~rload_2d_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node25" class="node">
+<title>proc~rload_2d_array_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node25"><a xlink:href=".././proc/rload_2d_array_from_hdf5.html" xlink:title="rload_2d_array_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="644,-154 508,-154 508,-130 644,-130 644,-154"/>
+<text text-anchor="middle" x="576" y="-139.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_2d_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_array_from_hdf5&#45;&gt;proc~rload_2d_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge36" class="edge">
+<title>interface~load_array_from_hdf5&#45;&gt;proc~rload_2d_array_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M451.148,-112.0355C471.3764,-116.8903 494.8837,-122.5321 516.0093,-127.6022"/>
+<polygon fill="#000000" stroke="#000000" points="515.304,-131.0323 525.8447,-129.9627 516.9377,-124.2256 515.304,-131.0323"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node26" class="node">
+<title>proc~rload_3d_array_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node26"><a xlink:href=".././proc/rload_3d_array_from_hdf5.html" xlink:title="rload_3d_array_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="644,-112 508,-112 508,-88 644,-88 644,-112"/>
+<text text-anchor="middle" x="576" y="-97.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_3d_array_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_array_from_hdf5&#45;&gt;proc~rload_3d_array_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge38" class="edge">
+<title>interface~load_array_from_hdf5&#45;&gt;proc~rload_3d_array_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M458.7865,-100C471.1986,-100 484.5158,-100 497.5615,-100"/>
+<polygon fill="#000000" stroke="#000000" points="497.9432,-103.5001 507.9431,-100 497.9431,-96.5001 497.9432,-103.5001"/>
+</g>
+<!-- proc~iload_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node22" class="node">
+<title>proc~iload_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node22"><a xlink:href=".././proc/iload_from_hdf5.html" xlink:title="iload_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="620,-238 532,-238 532,-214 620,-214 620,-238"/>
+<text text-anchor="middle" x="576" y="-223.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iload_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_from_hdf5&#45;&gt;proc~iload_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge40" class="edge">
+<title>interface~load_from_hdf5&#45;&gt;proc~iload_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M443.8098,-226C467.2887,-226 496.6359,-226 521.7105,-226"/>
+<polygon fill="#000000" stroke="#000000" points="521.8048,-229.5001 531.8048,-226 521.8048,-222.5001 521.8048,-229.5001"/>
+</g>
+<!-- proc~rload_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_node23" class="node">
+<title>proc~rload_from_hdf5</title>
+<g id="a_proc~~initialize_fields~~CallsGraph_node23"><a xlink:href=".././proc/rload_from_hdf5.html" xlink:title="rload_from_hdf5">
+<polygon fill="#d9534f" stroke="#d9534f" points="620.5,-280 531.5,-280 531.5,-256 620.5,-256 620.5,-280"/>
+<text text-anchor="middle" x="576" y="-265.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">rload_from_hdf5</text>
+</a>
+</g>
+</g>
+<!-- interface~load_from_hdf5&#45;&gt;proc~rload_from_hdf5 -->
+<g id="proc~~initialize_fields~~CallsGraph_edge39" class="edge">
+<title>interface~load_from_hdf5&#45;&gt;proc~rload_from_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M443.8098,-236.2744C467.3037,-241.9129 496.6734,-248.9616 521.7586,-254.9821"/>
+<polygon fill="#000000" stroke="#000000" points="520.9573,-258.3891 531.498,-257.3195 522.5909,-251.5824 520.9573,-258.3891"/>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge41" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M620.3678,-226C636.4495,-226 654.5346,-226 670.3293,-226"/>
+<polygon fill="#000000" stroke="#000000" points="670.3339,-229.5001 680.3338,-226 670.3338,-222.5001 670.3339,-229.5001"/>
+</g>
+<!-- h5dclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_node27" class="node">
+<title>h5dclose_f</title>
+<polygon fill="#777777" stroke="#777777" points="743,-154 680,-154 680,-130 743,-130 743,-154"/>
+<text text-anchor="middle" x="711.5" y="-139.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dclose_f</text>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge42" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M620.0769,-216.3679C628.4089,-213.4667 636.7695,-209.746 644,-205 664.5533,-191.5091 661.5992,-179.3051 680,-163 681.1068,-162.0192 682.2624,-161.0486 683.4497,-160.094"/>
+<polygon fill="#000000" stroke="#000000" points="685.6086,-162.8505 691.5627,-154.087 681.4431,-157.2248 685.6086,-162.8505"/>
+</g>
+<!-- h5dread_f -->
+<g id="proc~~initialize_fields~~CallsGraph_node28" class="node">
+<title>h5dread_f</title>
+<polygon fill="#777777" stroke="#777777" points="741.5,-196 681.5,-196 681.5,-172 741.5,-172 741.5,-196"/>
+<text text-anchor="middle" x="711.5" y="-181.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">h5dread_f</text>
+</g>
+<!-- proc~iload_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge43" class="edge">
+<title>proc~iload_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M615.1988,-213.9098C624.6319,-210.9961 634.6766,-207.8899 644,-205 652.9531,-202.2248 662.572,-199.2364 671.6626,-196.409"/>
+<polygon fill="#000000" stroke="#000000" points="672.7543,-199.7349 681.2629,-193.4218 670.6746,-193.051 672.7543,-199.7349"/>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge44" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M615.1988,-255.9098C624.6319,-252.9961 634.6766,-249.8899 644,-247 652.6023,-244.3336 661.8193,-241.4702 670.5918,-238.742"/>
+<polygon fill="#000000" stroke="#000000" points="671.742,-242.0497 680.2508,-235.7369 669.6625,-235.3657 671.742,-242.0497"/>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge45" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M620.6401,-260.2712C629.1149,-257.215 637.387,-252.9505 644,-247 674.1933,-219.8313 654.0253,-194.2265 680,-163 680.6935,-162.1663 681.4285,-161.3527 682.1967,-160.5603"/>
+<polygon fill="#000000" stroke="#000000" points="684.4948,-163.2003 689.7858,-154.0211 679.9255,-157.8973 684.4948,-163.2003"/>
+</g>
+<!-- proc~rload_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge46" class="edge">
+<title>proc~rload_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M620.7911,-258.1172C628.8857,-255.2532 636.9761,-251.6104 644,-247 664.5533,-233.5091 661.5992,-221.3051 680,-205 681.1068,-204.0192 682.2624,-203.0486 683.4497,-202.094"/>
+<polygon fill="#000000" stroke="#000000" points="685.6086,-204.8505 691.5627,-196.087 681.4431,-199.2248 685.6086,-204.8505"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge47" class="edge">
+<title>proc~rload_1d_array_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M615.1988,-196.0902C624.6319,-199.0039 634.6766,-202.1101 644,-205 652.6023,-207.6664 661.8193,-210.5298 670.5918,-213.258"/>
+<polygon fill="#000000" stroke="#000000" points="669.6625,-216.6343 680.2508,-216.2631 671.742,-209.9503 669.6625,-216.6343"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge48" class="edge">
+<title>proc~rload_1d_array_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M615.1988,-171.9098C624.6319,-168.9961 634.6766,-165.8899 644,-163 652.5172,-160.36 661.6369,-157.5269 670.3311,-154.8231"/>
+<polygon fill="#000000" stroke="#000000" points="671.4027,-158.1553 679.9115,-151.8425 669.3232,-151.4713 671.4027,-158.1553"/>
+</g>
+<!-- proc~rload_1d_array_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge49" class="edge">
+<title>proc~rload_1d_array_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M644.147,-184C653.4238,-184 662.6907,-184 671.2519,-184"/>
+<polygon fill="#000000" stroke="#000000" points="671.298,-187.5001 681.298,-184 671.2979,-180.5001 671.298,-187.5001"/>
+</g>
+<!-- proc~rload_2d_array_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge50" class="edge">
+<title>proc~rload_2d_array_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M626.4904,-154.0363C632.6339,-156.5146 638.6288,-159.4744 644,-163 664.5533,-176.4909 661.5992,-188.6949 680,-205 681.1068,-205.9808 682.2624,-206.9514 683.4497,-207.906"/>
+<polygon fill="#000000" stroke="#000000" points="681.4431,-210.7752 691.5627,-213.913 685.6086,-205.1495 681.4431,-210.7752"/>
+</g>
+<!-- proc~rload_2d_array_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge51" class="edge">
+<title>proc~rload_2d_array_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M644.147,-142C652.9512,-142 661.7464,-142 669.938,-142"/>
+<polygon fill="#000000" stroke="#000000" points="669.9464,-145.5001 679.9463,-142 669.9463,-138.5001 669.9464,-145.5001"/>
+</g>
+<!-- proc~rload_2d_array_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge52" class="edge">
+<title>proc~rload_2d_array_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M615.1988,-154.0902C624.6319,-157.0039 634.6766,-160.1101 644,-163 652.9531,-165.7752 662.572,-168.7636 671.6626,-171.591"/>
+<polygon fill="#000000" stroke="#000000" points="670.6746,-174.949 681.2629,-174.5782 672.7543,-168.2651 670.6746,-174.949"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5&#45;&gt;proc~korc_abort -->
+<g id="proc~~initialize_fields~~CallsGraph_edge53" class="edge">
+<title>proc~rload_3d_array_from_hdf5&#45;&gt;proc~korc_abort</title>
+<path fill="none" stroke="#000000" d="M630.6867,-112.041C635.5094,-114.4938 640.0506,-117.4462 644,-121 674.1933,-148.1687 654.0253,-173.7735 680,-205 680.6935,-205.8337 681.4285,-206.6473 682.1967,-207.4397"/>
+<polygon fill="#000000" stroke="#000000" points="679.9255,-210.1027 689.7858,-213.9789 684.4948,-204.7997 679.9255,-210.1027"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5&#45;&gt;h5dclose_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge54" class="edge">
+<title>proc~rload_3d_array_from_hdf5&#45;&gt;h5dclose_f</title>
+<path fill="none" stroke="#000000" d="M615.1988,-112.0902C624.6319,-115.0039 634.6766,-118.1101 644,-121 652.5172,-123.64 661.6369,-126.4731 670.3311,-129.1769"/>
+<polygon fill="#000000" stroke="#000000" points="669.3232,-132.5287 679.9115,-132.1575 671.4027,-125.8447 669.3232,-132.5287"/>
+</g>
+<!-- proc~rload_3d_array_from_hdf5&#45;&gt;h5dread_f -->
+<g id="proc~~initialize_fields~~CallsGraph_edge55" class="edge">
+<title>proc~rload_3d_array_from_hdf5&#45;&gt;h5dread_f</title>
+<path fill="none" stroke="#000000" d="M626.4904,-112.0363C632.6339,-114.5146 638.6288,-117.4744 644,-121 664.5533,-134.4909 661.5992,-146.6949 680,-163 681.1068,-163.9808 682.2624,-164.9514 683.4497,-165.906"/>
+<polygon fill="#000000" stroke="#000000" points="681.4431,-168.7752 691.5627,-171.913 685.6086,-163.1495 681.4431,-168.7752"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocinitialize_fieldsCallsGraph = svgPanZoom('#procinitialize_fieldsCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~initialize_fields~~CalledByGraph Pages: 1 -->
+<svg id="procinitialize_fieldsCalledByGraph" width="178pt" height="32pt"
+ viewBox="0.00 0.00 178.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_fields~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~initialize_fields~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 174,-28 174,4 -4,4"/>
+<!-- proc~initialize_fields -->
+<g id="proc~~initialize_fields~~CalledByGraph_node1" class="node">
+<title>proc~initialize_fields</title>
+<polygon fill="none" stroke="#000000" points="170,-24 90,-24 90,0 170,0 170,-24"/>
+<text text-anchor="middle" x="130" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_fields</text>
+</g>
+<!-- program~main -->
+<g id="proc~~initialize_fields~~CalledByGraph_node2" class="node">
+<title>program~main</title>
+<g id="a_proc~~initialize_fields~~CalledByGraph_node2"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~initialize_fields -->
+<g id="proc~~initialize_fields~~CalledByGraph_edge1" class="edge">
+<title>program~main&#45;&gt;proc~initialize_fields</title>
+<path fill="none" stroke="#000000" d="M54.062,-12C61.9446,-12 70.8216,-12 79.6533,-12"/>
+<polygon fill="#000000" stroke="#000000" points="79.9379,-15.5001 89.9379,-12 79.9379,-8.5001 79.9379,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/initialize_fields.html#src">initialize_fields</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">initialize_fields</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+    <span class="c">!! @note Subroutine that initializes the analytical or externally</span>
+    <span class="c">!! calculated electric and magnetic fields. @endnote</span>
+    <span class="c">!! In this subroutine we load the parameters of the electric and</span>
+    <span class="c">!! magnetic fields from the namelists &#39;analytical_fields_params&#39; and</span>
+    <span class="c">!! &#39;externalPlasmaModel&#39; in the input file.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">F</span>
+    <span class="c">!! An instance of the KORC derived type FIELDS.</span>
+    <span class="c">!REAL(rp)                       :: Bo</span>
+    <span class="c">!! Magnetic field at magnetic axis for an &#39;ANALYTICAL&#39; magnetic field,</span>
+    <span class="c">!! or the magnitude of the magnetic field for a &#39;UNFIROM&#39; plasma.</span>
+    <span class="c">!REAL(rp)                       :: minor_radius</span>
+    <span class="c">!! Plasma edge \(r_{edge}\) as measured from the magnetic axis.</span>
+    <span class="c">!REAL(rp)                       :: major_radius</span>
+    <span class="c">!! Radial position of the magnetic axis \(R_0\)</span>
+    <span class="c">!REAL(rp)                       :: qa</span>
+    <span class="c">!! Safety factor at the plasma edge.</span>
+    <span class="c">!REAL(rp)                       :: qo</span>
+    <span class="c">!! Safety factor at the magnetic axis \(q_0\).</span>
+    <span class="c">!CHARACTER(MAX_STRING_LENGTH)   :: current_direction</span>
+    <span class="c">!! String with information about the direction of the plasma current, </span>
+    <span class="c">!! &#39;PARALLEL&#39;  or &#39;ANTI-PARALLEL&#39; to the toroidal magnetic field.</span>
+    <span class="c">!CHARACTER(MAX_STRING_LENGTH)   :: E_model</span>
+    <span class="c">!REAL(rp)                       :: Eo,E_dyn,E_pulse,E_width   </span>
+    <span class="c">!! Electric field at the magnetic axis.</span>
+    <span class="c">!LOGICAL                        :: Efield</span>
+    <span class="c">!! Logical variable that specifies if the electric field is </span>
+    <span class="c">!! going to be used on in a given simulation.</span>
+    <span class="c">!LOGICAL                        :: dBfield</span>
+    <span class="c">!LOGICAL                        :: Bfield</span>
+    <span class="c">!! Logical variable that specifies if the magnetic field is </span>
+    <span class="c">!! going to be used on in a given simulation.</span>
+    <span class="c">!LOGICAL                        :: Bflux</span>
+    <span class="c">!LOGICAL                        :: Bflux3D</span>
+    <span class="c">!LOGICAL                        :: Dim2x1t</span>
+    <span class="c">!LOGICAL                        :: E_2x1t,ReInterp_2x1t</span>
+    <span class="c">!! Logical variable that specifies if the poloidal magnetic </span>
+    <span class="c">!! flux is going to be used on in a given simulation.</span>
+    <span class="c">!LOGICAL                        :: axisymmetric_fields</span>
+    <span class="c">!! Logical variable that specifies if the plasma is axisymmetric.</span>
+    <span class="kt">INTEGER</span>                        <span class="kd">::</span> <span class="n">ii</span>
+    <span class="c">!! Iterators for creating mesh for GC model with analytic fields</span>
+    <span class="kt">INTEGER</span>                        <span class="kd">::</span> <span class="n">kk</span>
+    <span class="c">!! Iterators for creating mesh for GC model with analytic fields</span>
+    <span class="c">!INTEGER                        :: nR</span>
+    <span class="c">!! Number of mesh points in R for grid in GC model of analytical field</span>
+    <span class="c">!INTEGER                        :: nZ,nPHI</span>
+    <span class="c">!! Number of mesh points in Z for grid in GC model of analytical field</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">rm</span>
+    <span class="c">!! Minor radius at each position in the grid for</span>
+    <span class="c">!! GC model of analytical field</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">qr</span>
+    <span class="c">!! Safety factor at each position in the grid for</span>
+    <span class="c">!! GC model of analytical field</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">theta</span>
+    <span class="c">!! Poloidal angle at each position in the grid for</span>
+    <span class="c">!! GC model of analytical field</span>
+    <span class="kt">logical</span> <span class="kd">::</span> <span class="n">test</span>
+    <span class="c">!integer :: res_double</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">RMAX</span><span class="p">,</span><span class="n">RMIN</span><span class="p">,</span><span class="n">ZMAX</span><span class="p">,</span><span class="n">ZMIN</span>
+    <span class="c">!integer :: dim_1D,ind0_2x1t</span>
+    <span class="c">!real(rp) :: dt_E_SC,Ip_exp,PSIp_lim,PSIp_0</span>
+    <span class="c">!real(rp) :: t0_2x1t</span>
+    
+
+    <span class="c">!NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&amp;</span>
+    <span class="c">!     qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &amp;</span>
+    <span class="c">!     E_dyn,E_pulse,E_width</span>
+    <span class="c">!NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &amp;</span>
+    <span class="c">!     axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &amp;</span>
+    <span class="c">!     dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &amp;</span>
+    <span class="c">!     ind0_2x1t,PSIp_0</span>
+
+<span class="cp">#ifdef FIO</span>
+    <span class="n">F</span><span class="p">%</span><span class="n">FIO_B</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">F</span><span class="p">%</span><span class="n">FIO_E</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="cp">#endif</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * INITIALIZING FIELDS * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+    <span class="k">end if</span>
+
+<span class="c">!    SELECT CASE (TRIM(params%field_model))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;ANALYTICAL&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="c">!    CASE(&#39;ANALYTICAL&#39;)</span>
+       <span class="c">! Load the parameters of the analytical magnetic field</span>
+       <span class="c">!open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &amp;</span>
+       <span class="c">!     status=&#39;OLD&#39;,form=&#39;formatted&#39;)</span>
+       <span class="c">!read(default_unit_open,nml=analytical_fields_params)</span>
+       <span class="c">!close(default_unit_open)</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Bo</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span> <span class="o">=</span> <span class="n">minor_radius</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="n">major_radius</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="n">major_radius</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Zo</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qa</span> <span class="o">=</span> <span class="n">qa</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qo</span> <span class="o">=</span> <span class="n">qo</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="o">/</span><span class="nb">SQRT</span><span class="p">(</span><span class="n">qa</span><span class="o">/</span><span class="n">qo</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="p">)</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bpo</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qo</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span><span class="p">)</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">current_direction</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">current_direction</span><span class="p">)</span>
+       <span class="k">SELECT CASE</span> <span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">current_direction</span><span class="p">))</span>
+       <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;PARALLEL&#39;</span><span class="p">)</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bp_sign</span> <span class="o">=</span> <span class="mf">1.0_rp</span>
+       <span class="k">CASE</span><span class="p">(</span><span class="s1">&#39;ANTI-PARALLEL&#39;</span><span class="p">)</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bp_sign</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0_rp</span>
+       <span class="k">CASE </span><span class="n">DEFAULT</span>
+       <span class="k">END SELECT</span>
+<span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="n">Eo</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">E_dyn</span> <span class="o">=</span> <span class="n">E_dyn</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">E_pulse</span> <span class="o">=</span> <span class="n">E_pulse</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">E_width</span> <span class="o">=</span> <span class="n">E_width</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_lim</span><span class="o">=</span><span class="n">PSIp_lim</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ero</span><span class="o">=</span><span class="n">Ero</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">rmn</span><span class="o">=</span><span class="n">rmn</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">sigmamn</span><span class="o">=</span><span class="n">sigmamn</span>
+       
+       <span class="c">!write(output_unit_write,*) E_dyn,E_pulse,E_width</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">res_double</span><span class="o">=</span><span class="n">res_double</span>
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ANALYTIC&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Magnetic field: &quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Bo</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Electric field: &quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+
+       <span class="k">end if</span>
+
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_eval</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;interp&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">nR</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">nPHI</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">nZ</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">12</span><span class="p">:</span><span class="mi">14</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;PSI&#39;</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span> <span class="o">=</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="o">=</span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="o">=</span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="o">=</span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+             
+             <span class="k">call </span><span class="n">ALLOCATE_2D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="p">.</span><span class="n">false</span><span class="p">.,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,.</span><span class="n">FALSE</span><span class="p">.,.</span><span class="n">FALSE</span><span class="p">.)</span>
+
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Zo</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+             <span class="k">end do</span>
+
+             <span class="c">!write(6,*) F%X%R</span>
+             <span class="c">!write(6,*) F%X%Z</span>
+             
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">do </span><span class="n">kk</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                   <span class="n">rm</span><span class="o">=</span><span class="nb">sqrt</span><span class="p">((</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                   <span class="n">qr</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qo</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                   <span class="n">theta</span><span class="o">=</span><span class="n">atan2</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Zo</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="p">)</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">B_2D</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span><span class="o">/</span><span class="n">qr</span><span class="p">)</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">B_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=-</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">B_2D</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=-</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span><span class="o">/</span><span class="n">qr</span><span class="p">)</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="mf">0.0_rp</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=-</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="mf">0.0_rp</span>
+
+                   <span class="n">F</span><span class="p">%</span><span class="n">PSIp</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">Bo</span><span class="o">/</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qo</span><span class="o">*</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">+</span><span class="n">rm</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span><span class="o">*</span> <span class="p">&amp;</span>
+                        <span class="nb">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+                   <span class="c">!! Sign convention in analytical fields corresponds to</span>
+                   <span class="c">!! DIII-D fields with \(B_\phi&lt;0\) and \(B_\theta&lt;0\).</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span><span class="o">=</span><span class="mf">1.</span>
+                <span class="k">end do</span>
+<span class="k">             end do</span>
+
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,:)</span><span class="o">=</span><span class="mf">0.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),:)</span><span class="o">=</span><span class="mf">0.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(:,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">=</span><span class="mf">0.</span>
+
+             <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">PSIP_min</span><span class="o">=</span><span class="nb">minval</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">PSIp</span><span class="p">)</span>  
+             
+             <span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="o">=</span><span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+             
+          <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">12</span><span class="p">:</span><span class="mi">13</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;3D&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="o">=</span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="o">=</span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+             
+             <span class="k">call </span><span class="n">ALLOCATE_3D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,.</span><span class="n">false</span><span class="p">.)</span>
+
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="mf">0._rp</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">C_PI</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+             <span class="k">end do             </span>
+<span class="k">             do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Zo</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+             <span class="k">end do</span>
+
+             <span class="c">!write(output_unit_write,*) size(F%B_3D%R)</span>
+             
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">do </span><span class="n">kk</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+                   <span class="c">!write(output_unit_write,*) ii,kk</span>
+                   
+                   <span class="n">rm</span><span class="o">=</span><span class="nb">sqrt</span><span class="p">((</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Zo</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                   <span class="n">qr</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qo</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                   <span class="n">theta</span><span class="o">=</span><span class="n">atan2</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">kk</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Zo</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="p">)</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">B_3D</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span><span class="o">/</span><span class="n">qr</span><span class="p">)</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">B_3D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,</span><span class="n">kk</span><span class="p">)</span><span class="o">=-</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span>
+
+                   <span class="c">!write(output_unit_write,*) F%B_3D%PHI(ii,1,kk)</span>
+                   
+                   <span class="n">F</span><span class="p">%</span><span class="n">B_3D</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,</span><span class="n">kk</span><span class="p">)</span><span class="o">=-</span><span class="p">(</span><span class="n">rm</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span> <span class="p">&amp;</span>
+                        <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Bo</span><span class="o">/</span><span class="n">qr</span><span class="p">)</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">E_3D</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="mf">0.0_rp</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">E_3D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,</span><span class="n">kk</span><span class="p">)</span><span class="o">=-</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">E_3D</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,</span><span class="n">kk</span><span class="p">)</span><span class="o">=</span><span class="mf">0.0_rp</span>
+
+
+                   <span class="c">!! Sign convention in analytical fields corresponds to</span>
+                   <span class="c">!! DIII-D fields with \(B_\phi&lt;0\) and \(B_\theta&lt;0\).</span>
+                   <span class="n">F</span><span class="p">%</span><span class="n">FLAG3D</span><span class="o">=</span><span class="mf">1.</span>
+                <span class="k">end do</span>
+<span class="k">             end do</span>
+
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,:,:)</span><span class="o">=</span><span class="mf">0.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),:,:)</span><span class="o">=</span><span class="mf">0.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(:,:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(:,:,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">=</span><span class="mf">0.</span>
+
+
+
+             
+          <span class="k">end if</span>
+<span class="k">         </span>
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;pre&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Initializing GC fields from analytic EM fields&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">end if</span>
+
+<span class="k">             if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">12</span><span class="p">:</span><span class="mi">13</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;2D&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">initialize_GC_fields</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+             <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">12</span><span class="p">:</span><span class="mi">13</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;3D&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">initialize_GC_fields_3D</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+             <span class="k">end if             </span>
+
+<span class="k">          end if</span>
+
+          <span class="c">!F%Bfield= .FALSE.</span>
+          <span class="c">!F%axisymmetric_fields = .TRUE.</span>
+          <span class="c">!F%Bflux=.TRUE.</span>
+          <span class="c">!F%Efield=.FALSE.</span>
+          
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="o">=</span><span class="n">dim_1D</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">dt_E_SC</span><span class="o">=</span><span class="n">dt_E_SC</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Ip_exp</span><span class="o">=</span><span class="n">Ip_exp</span>
+
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">E_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">A1_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">A2_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">A3_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">J1_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">J2_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">J3_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>          
+          <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">r_1D</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="p">))</span>
+
+          <span class="n">F</span><span class="p">%</span><span class="n">E_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">A1_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">A2_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">A3_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">J1_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">J2_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">J3_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>          
+          <span class="n">F</span><span class="p">%</span><span class="n">r_1D</span><span class="o">=</span><span class="mf">0._rp</span>
+                    
+          <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">r_1D</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">=</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+          <span class="k">end do</span>
+<span class="k">          </span>
+<span class="k">       end if</span>
+       
+<span class="c">!    CASE(&#39;EXTERNAL&#39;)</span>
+    <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;EXTERNAL&#39;</span><span class="p">)</span> <span class="k">then</span>
+       <span class="c">! Load the magnetic field from an external HDF5 file</span>
+       <span class="c">!open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &amp;</span>
+       <span class="c">!     status=&#39;OLD&#39;,form=&#39;formatted&#39;)</span>
+       <span class="c">!read(default_unit_open,nml=externalPlasmaModel)</span>
+       <span class="c">!close(default_unit_open)</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">Bfield</span> <span class="o">=</span> <span class="n">Bfield</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">B1field</span> <span class="o">=</span> <span class="n">B1field</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">dBfield</span> <span class="o">=</span> <span class="n">dBfield</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Bflux</span> <span class="o">=</span> <span class="n">Bflux</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Bflux3D</span> <span class="o">=</span> <span class="n">Bflux3D</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Efield</span> <span class="o">=</span> <span class="n">Efield</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">E1field</span> <span class="o">=</span> <span class="n">E1field</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span> <span class="o">=</span> <span class="n">axisymmetric_fields</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Dim2x1t</span> <span class="o">=</span> <span class="n">Dim2x1t</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span> <span class="o">=</span> <span class="n">ReInterp_2x1t</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">t0_2x1t</span> <span class="o">=</span> <span class="n">t0_2x1t</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span> <span class="o">=</span> <span class="n">ind0_2x1t</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">psip_conv</span> <span class="o">=</span> <span class="n">psip_conv</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">MARS_AMP_Scale</span> <span class="o">=</span> <span class="n">MARS_AMP_Scale</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Analytic_IWL</span><span class="o">=</span><span class="n">Analytic_IWL</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">ntiles</span><span class="o">=</span><span class="n">ntiles</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">circumradius</span><span class="o">=</span><span class="n">circumradius</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AORSA_AMP_Scale</span><span class="o">=</span><span class="n">AORSA_AMP_Scale</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AORSA_freq</span><span class="o">=</span><span class="n">AORSA_freq</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AORSA_nmode</span><span class="o">=</span><span class="n">AORSA_nmode</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">useLCFS</span> <span class="o">=</span> <span class="n">useLCFS</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">proceed</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          call </span><span class="n">load_prev_iter</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">=</span><span class="n">params</span><span class="p">%</span><span class="n">prev_iter_2x1t</span>
+       <span class="k">else</span>
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">ind0_2x1t</span>
+       <span class="k">end if</span>
+<span class="k">          </span>
+
+<span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">E_2x1t</span> <span class="o">=</span> <span class="n">E_2x1t</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">E_profile</span> <span class="o">=</span> <span class="n">E_profile</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">E_dyn</span> <span class="o">=</span> <span class="n">E_dyn</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">E_pulse</span> <span class="o">=</span> <span class="n">E_pulse</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">E_width</span> <span class="o">=</span> <span class="n">E_width</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span> <span class="o">=</span> <span class="n">minor_radius</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span> <span class="o">=</span> <span class="n">major_radius</span>
+
+       <span class="n">F</span><span class="p">%</span><span class="n">PSIp_lim</span><span class="o">=</span><span class="n">PSIp_lim</span>
+       
+       <span class="n">F</span><span class="p">%</span><span class="n">res_double</span><span class="o">=</span><span class="n">res_double</span>
+       
+       <span class="c">!write(output_unit_write,&#39;(&quot;E_dyn: &quot;,E17.10)&#39;) E_dyn</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;E_pulse: &quot;,E17.10)&#39;) E_pulse</span>
+<span class="c">!       write(output_unit_write,&#39;(&quot;E_width: &quot;,E17.10)&#39;) E_width</span>
+       
+       <span class="k">call </span><span class="n">load_dim_data_from_hdf5</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+       <span class="c">!sets F%dims for 2D or 3D data</span>
+
+       <span class="c">!write(6,*) F%dims</span>
+              
+       <span class="k">call </span><span class="n">which_fields_in_file</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield_in_file</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield_in_file</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">F</span><span class="p">%</span><span class="n">Bflux_in_file</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield_in_file</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">B1field_in_file</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">F</span><span class="p">%</span><span class="n">E1field_in_file</span><span class="p">)</span>
+
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">.</span><span class="nb">AND</span><span class="p">..</span><span class="nb">NOT</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ERROR: Magnetic flux to be used but no data in file!&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">.</span><span class="nb">AND</span><span class="p">..</span><span class="nb">NOT</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ERROR: Magnetic field to be used but no data in file!&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">B1field</span><span class="p">.</span><span class="nb">AND</span><span class="p">..</span><span class="nb">NOT</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">B1field_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ERROR: Magnetic perturbation field to be used but no data in file!&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">E1field</span><span class="p">.</span><span class="nb">AND</span><span class="p">..</span><span class="nb">NOT</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">E1field_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ERROR: Electric perturbation field to be used but no data in file!&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">.</span><span class="nb">AND</span><span class="p">..</span><span class="nb">NOT</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;ERROR: differential Magnetic field to be used &amp;</span>
+<span class="s1">               but no data in file!&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">KORC_ABORT</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+       <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">.</span><span class="nb">AND</span><span class="p">..</span><span class="nb">NOT</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(/,&quot;* * * * * * * * * *  FIELDS  * * * * * * * * * *&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;MESSAGE: Analytical electric field will be used.&quot;)&#39;</span><span class="p">)</span>
+             <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * * * * * * * * * ** * * * * * * * * * * *&quot;,/)&#39;</span><span class="p">)</span>
+             <span class="nb">flush</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">)</span>
+          <span class="k">end if</span>
+<span class="k">       end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+
+
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Dim2x1t</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">             call </span><span class="n">ALLOCATE_2D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">.</span><span class="nb">AND</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield_in_file</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">B1field</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">F</span><span class="p">%</span><span class="n">E1field</span><span class="p">)</span>
+             
+             <span class="k">call </span><span class="n">ALLOCATE_3D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">)</span>
+
+          <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;FO&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span>
+<span class="k">             call </span><span class="n">ALLOCATE_2D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="p">.</span><span class="n">TRUE</span><span class="p">.,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">B1field</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">E1field</span><span class="p">)</span> 
+             
+          <span class="k">else</span>
+
+<span class="k">             call </span><span class="n">ALLOCATE_2D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">B1field</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">E1field</span><span class="p">)</span>             
+             
+          <span class="k">end if</span>
+
+<span class="k">       else if</span> <span class="p">((</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;MARS&#39;</span><span class="p">).</span><span class="nb">OR</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">14</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;AORSA&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span>
+<span class="k">          call </span><span class="n">ALLOCATE_2D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">B1field</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">E1field</span><span class="p">)</span>   
+          
+       <span class="k">else</span>
+<span class="k">          call </span><span class="n">ALLOCATE_3D_FIELDS_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">)</span>
+          
+       <span class="k">end if</span>
+
+              
+       <span class="c">!allocates 2D or 3D data arrays (fields and spatial)</span>
+       
+       
+       <span class="k">call </span><span class="n">load_field_data_from_hdf5</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+            
+              <span class="c">!write(output_unit_write,*) F%PSIp</span>
+
+       <span class="c">!write(output_unit_write,*) F%E_3D%PHI(:,F%ind0_2x1t,:)</span>
+
+       <span class="c">!write(6,*) F%B1Re_2D%R(:,200)</span>
+       <span class="c">!flush(6)</span>
+              
+<span class="c">!       end if</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">.</span><span class="nb">and</span><span class="p">..</span><span class="nb">not</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;MARS&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">PSIP_min</span><span class="o">=</span><span class="nb">minval</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">PSIp</span><span class="p">)</span>          
+
+       <span class="k">else if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux3D</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">PSIP_min</span><span class="o">=</span><span class="nb">minval</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">PSIp3D</span><span class="p">(:,</span><span class="mi">1</span><span class="p">,:))</span>
+       <span class="k">end if</span>
+
+<span class="k">          </span>
+<span class="k">       if</span> <span class="p">((.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield_in_file</span><span class="p">).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Dim2x1t</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Eo</span> <span class="o">=</span> <span class="n">Eo</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">,:)</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+
+          <span class="k">else</span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">E_3D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="k">do </span><span class="n">ii</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">F</span><span class="p">%</span><span class="n">E_3D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">ii</span><span class="p">,:,:)</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+             <span class="k">end do</span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">E_3D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="k">end if</span>
+<span class="k">       end if</span>
+
+<span class="k">       if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">.</span><span class="nb">and</span><span class="p">..</span><span class="nb">not</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield_in_file</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">dBdR_2D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdR_2D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdR_2D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdPHI_2D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdPHI_2D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdPHI_2D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_2D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_2D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_2D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="k">else</span>
+<span class="k">             </span><span class="n">F</span><span class="p">%</span><span class="n">dBdR_3D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdR_3D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdR_3D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdPHI_3D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdPHI_3D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdPHI_3D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_3D</span><span class="p">%</span><span class="n">R</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_3D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="mf">0._rp</span>
+             <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_3D</span><span class="p">%</span><span class="n">Z</span><span class="o">=</span><span class="mf">0._rp</span>
+          <span class="k">end if         </span>
+<span class="k">       end if</span>
+<span class="k">       </span>
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;EXTERNAL&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Magnetic field: &quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Bo</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Electric field: &quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+
+       <span class="k">end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">SC_E</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          </span><span class="n">F</span><span class="p">%</span><span class="n">dim_1D</span><span class="o">=</span><span class="n">dim_1D</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">dt_E_SC</span><span class="o">=</span><span class="n">dt_E_SC</span>
+          <span class="n">F</span><span class="p">%</span><span class="n">Ip_exp</span><span class="o">=</span><span class="n">Ip_exp</span>
+
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;dt_E_SC&#39;</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dt_E_SC</span><span class="p">,</span><span class="s1">&#39;Ip_exp&#39;</span><span class="p">,</span><span class="n">Ip_exp</span>
+          
+          <span class="k">call </span><span class="n">allocate_1D_FS_arrays</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+          <span class="k">call </span><span class="n">load_1D_FS_from_hdf5</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+
+<span class="c">!          write(output_unit_write,*) F%PSIP_1D</span>
+          
+       <span class="k">end if</span>
+       
+<span class="c">!       test=.true.</span>
+       
+<span class="c">!       if (F%Bflux.and.(.not.test)) then</span>
+
+<span class="c">!          call initialize_fields_interpolant(params,F)</span>
+
+<span class="c">!          F%Bfield=.TRUE.</span>
+<span class="c">!          F%Efield=.TRUE.</span>
+<span class="c">!          F%Efield_in_file=.TRUE.</span>
+
+
+<span class="c">!          RMIN=F%X%R(1)</span>
+<span class="c">!          RMAX=F%X%R(F%dims(1))</span>
+
+<span class="c">!          ZMIN=F%X%Z(1)</span>
+<span class="c">!          ZMAX=F%X%Z(F%dims(3))</span>
+
+<span class="c">!          do ii=1_idef,res_double</span>
+<span class="c">!             F%dims(1)=2*F%dims(1)-1</span>
+<span class="c">!             F%dims(3)=2*F%dims(3)-1</span>
+<span class="c">!          end do</span>
+
+<span class="c">!          if (res_double&gt;0) then</span>
+<span class="c">!             DEALLOCATE(F%X%R)</span>
+<span class="c">!             DEALLOCATE(F%X%Z)</span>
+<span class="c">!             DEALLOCATE(F%PSIp)</span>
+<span class="c">!          end if</span>
+          
+<span class="c">!          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &amp;</span>
+<span class="c">!               F%Bflux,F%Efield.AND.F%Efield_in_file)</span>
+
+<span class="c">!          do ii=1_idef,F%dims(1)</span>
+<span class="c">!             F%X%R(ii)=RMIN+REAL(ii-1)/REAL(F%dims(1)-1)*(RMAX-RMIN)</span>
+<span class="c">!          end do</span>
+
+<span class="c">!          do ii=1_idef,F%dims(3)</span>
+<span class="c">!             F%X%Z(ii)=ZMIN+REAL(ii-1)/REAL(F%dims(3)-1)*(ZMAX-ZMIN)</span>
+<span class="c">!          end do            </span>
+          
+<span class="c">!          call calculate_initial_magnetic_field(F)</span>
+          
+<span class="c">!          F%E_2D%R=0._rp</span>
+<span class="c">!          do ii=1_idef,F%dims(1)</span>
+<span class="c">!             F%E_2D%PHI(ii,:)=F%Eo*F%Ro/F%X%R(ii)</span>
+<span class="c">!          end do</span>
+<span class="c">!          F%E_2D%Z=0._rp</span>
+          
+<span class="c">!       end if</span>
+
+       
+<span class="c">!       if (F%Bflux.and.test) then</span>
+
+<span class="c">!          F%Bfield=.TRUE.</span>
+<span class="c">!          F%Efield=.TRUE.</span>
+<span class="c">!          F%Efield_in_file=.TRUE.</span>
+            
+          
+<span class="c">!          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &amp;</span>
+<span class="c">!               F%Bflux,F%Efield.AND.F%Efield_in_file)</span>
+
+          
+          <span class="c">! B</span>
+          <span class="c">! edge nodes at minimum R,Z</span>
+<span class="c">!          F%B_2D%Z(1,:)=-(F%PSIp(2,:)-F%PSIp(1,:))/(F%X%R(2)-F%X%R(1))/F%X%R(1)</span>
+<span class="c">!          F%B_2D%R(:,1)=(F%PSIp(:,2)-F%PSIp(:,1))/(F%X%Z(2)-F%X%Z(1))/F%X%R(:)</span>
+
+          <span class="c">! edge nodes at maximum R,Z</span>
+<span class="c">!          F%B_2D%Z(F%dims(1),:)=-(F%PSIp(F%dims(1),:)-F%PSIp(F%dims(1)-1,:))/ &amp;</span>
+<span class="c">!               (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))/F%X%R(F%dims(1))</span>
+<span class="c">!          F%B_2D%R(:,F%dims(3))=(F%PSIp(:,F%dims(3))-F%PSIp(:,F%dims(3)-1))/ &amp;</span>
+<span class="c">!               (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))/F%X%R(:)</span>
+
+<span class="c">!          do ii=2_idef,F%dims(1)-1</span>
+             <span class="c">! central difference over R for interior nodes for BZ</span>
+<span class="c">!             F%B_2D%Z(ii,:)=-(F%PSIp(ii+1,:)-F%PSIp(ii-1,:))/ &amp;</span>
+<span class="c">!                  (F%X%R(ii+1)-F%X%R(ii-1))/F%X%R(ii)</span>
+
+<span class="c">!          end do</span>
+<span class="c">!          do ii=2_idef,F%dims(3)-1</span>
+             <span class="c">! central difference over Z for interior nodes for BR</span>
+<span class="c">!             F%B_2D%R(:,ii)=(F%PSIp(:,ii+1)-F%PSIp(:,ii-1))/ &amp;</span>
+<span class="c">!                  (F%X%Z(ii+1)-F%X%Z(ii-1))/F%X%R(:)</span>
+<span class="c">!          end do</span>
+
+<span class="c">!          do ii=1_idef,F%dims(1)             </span>
+<span class="c">!             F%B_2D%PHI(ii,:)=-F%Bo*F%Ro/F%X%R(ii)</span>
+<span class="c">!          end do</span>
+
+<span class="c">!          F%E_2D%R=0._rp</span>
+<span class="c">!          do ii=1_idef,F%dims(1)</span>
+<span class="c">!             F%E_2D%PHI(ii,:)=F%Eo*F%Ro/F%X%R(ii)</span>
+<span class="c">!          end do</span>
+<span class="c">!          F%E_2D%Z=0._rp</span>
+
+<span class="c">!          F%Bfield=.FALSE.</span>
+          
+
+       
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;PSIp(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">PSIp</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;BPHI(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Bo</span>
+                <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;EPHI(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+             <span class="k">else if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux3D</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;PSIp(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">PSIp3D</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+             <span class="k">else</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;BR(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">B_2D</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;BPHI(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="p">&amp;</span>
+                     <span class="n">F</span><span class="p">%</span><span class="n">B_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;BZ(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">B_2D</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;EPHI(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="p">&amp;</span>
+                     <span class="n">F</span><span class="p">%</span><span class="n">E_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+             <span class="k">end if</span>
+<span class="k">          end if</span>
+
+
+<span class="k">       end if</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">).</span><span class="n">EQ</span><span class="p">.</span><span class="s1">&#39;pre&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;Initializing GC fields from external EM fields&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">end if</span>
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;2DB&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                call </span><span class="n">initialize_GC_fields</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>             
+             <span class="k">else             </span>
+<span class="k">                call </span><span class="n">initialize_GC_fields_3D</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+             <span class="k">end if</span>
+<span class="k">          end if</span>
+<span class="k">       end if</span>
+
+       <span class="c">!       write(output_unit_write,&#39;(&quot;gradBR&quot;,E17.10)&#39;) F%gradB_2D%R(F%dims(1)/2,F%dims(3)/2)</span>
+       <span class="c">!       write(output_unit_write,&#39;(&quot;gradBPHI&quot;,E17.10)&#39;) F%gradB_2D%PHI(F%dims(1)/2,F%dims(3)/2)</span>
+       <span class="c">!       write(output_unit_write,&#39;(&quot;gradBZ&quot;,E17.10)&#39;) F%gradB_2D%Z(F%dims(1)/2,F%dims(3)/2)</span>
+
+    <span class="k">else</span>
+<span class="k">       </span><span class="n">F</span><span class="p">%</span><span class="n">Bo</span><span class="o">=</span><span class="n">Bo</span>
+       <span class="n">F</span><span class="p">%</span><span class="n">Eo</span><span class="o">=</span><span class="n">Eo</span>
+
+       <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;UNIFORM&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;BPHI(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Bo</span>
+          <span class="k">write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;EPHI(r=0)&quot;,E17.10)&#39;</span><span class="p">)</span> <span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+       <span class="k">end if</span>
+<span class="k">    end if</span>
+
+<span class="k">    if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * * * * * * * * * * * * * * * * * * * * * *&quot;,/)&#39;</span><span class="p">)</span>
+    <span class="k">end if</span>
+<span class="k">       </span>
+<span class="k">  end subroutine </span><span class="n">initialize_fields</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>main_documentation_page.f90 &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>main_documentation_page.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.0% of total for source files.">0 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/main_documentation_page.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">main_documentation_page.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/main_documentation_page.f90.html#src">main_documentation_page.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+      
+      
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/main_documentation_page.f90.html#src">main_documentation_page.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&gt; @mainpage KORC documentation</span>
+<a name="ln-2"></a><span class="c">!! @author Leopoldo Carbajal @note KORC and its documentation are in</span>
+<a name="ln-3"></a><span class="c">!! constant evolution. This makes it possible that there are issues</span>
+<a name="ln-4"></a><span class="c">!! that need to be solved.  If you find an issue please report it</span>
+<a name="ln-5"></a><span class="c">!! immediatly through the &quot;issues&quot; section of the github repository.</span>
+<a name="ln-6"></a><span class="c">!!</span>
+<a name="ln-7"></a><span class="c">!! @section s1 Introduction The Kinetic Orbit Runaway electrons Code</span>
+<a name="ln-8"></a><span class="c">!! (KORC) is a full-orbit particle tracer that evolves relativistic</span>
+<a name="ln-9"></a><span class="c">!! electrons in both analytical and grid-based pre-computed electric</span>
+<a name="ln-10"></a><span class="c">!! and magnetic fields. KORC includes the effects of: the acceleration</span>
+<a name="ln-11"></a><span class="c">!! of the electrons due to the electric field, synchrotron radiation</span>
+<a name="ln-12"></a><span class="c">!! energy losses, and collisions with the background plasma containing</span>
+<a name="ln-13"></a><span class="c">!! high-Z impurities.</span>
+<a name="ln-14"></a><span class="c">!!</span>
+<a name="ln-15"></a><span class="c">!! For details about the equations of motion of the relativistic</span>
+<a name="ln-16"></a><span class="c">!! electrons followed by KOqRC we refer the user to &lt;em&gt;Carbajal et</span>
+<a name="ln-17"></a><span class="c">!! al. Phys. Plasmas &lt;b&gt;24&lt;/b&gt;, 042512 (2017)&lt;/em&gt; and &lt;em&gt;Carbajal</span>
+<a name="ln-18"></a><span class="c">!! and del-Castillo-Negrete, Nuclear Fusion, submitted</span>
+<a name="ln-19"></a><span class="c">!! (2018)&lt;/em&gt;. Also, for details about the KORC&#39;s synchrotron</span>
+<a name="ln-20"></a><span class="c">!! radiation synthetic diagnostic we refer the user to &lt;em&gt;Carbajal</span>
+<a name="ln-21"></a><span class="c">!! and del-Castillo-Negrete, Plasma Phys. Controll. Fusion &lt;b&gt;59&lt;/b&gt;,</span>
+<a name="ln-22"></a><span class="c">!! 124001 (2017)&lt;/em&gt;.</span>
+<a name="ln-23"></a><span class="c">!!</span>
+<a name="ln-24"></a><span class="c">!! KORC is a modular Fortran 95 code that uses a hybrid MPI + open MP</span>
+<a name="ln-25"></a><span class="c">!! parallelization paradigm to exploit multi-core nodes systems, such</span>
+<a name="ln-26"></a><span class="c">!! as Cori and Edison NERSC systems (&lt;a</span>
+<a name="ln-27"></a><span class="c">!! href=&quot;https://www.nersc.gov&quot;&gt;www.nersc.gov&lt;/a&gt;).</span>
+<a name="ln-28"></a><span class="c">!!</span>
+<a name="ln-29"></a><span class="c">!!</span>
+<a name="ln-30"></a><span class="c">!! @section s2 Installation @warning KORC has been installed and</span>
+<a name="ln-31"></a><span class="c">!! tested in systems with OS 10.6 and higher, Ubuntu 14.04, and SuSe</span>
+<a name="ln-32"></a><span class="c">!! 12. Though we have paid special attention to portability when</span>
+<a name="ln-33"></a><span class="c">!! developing KORC, there is no guarantee that KORC can be compiled,</span>
+<a name="ln-34"></a><span class="c">!! ran, and is accurate in other systems not listed above. As a rule</span>
+<a name="ln-35"></a><span class="c">!! of thumb, we recommend to perform any convenient benchmark tests</span>
+<a name="ln-36"></a><span class="c">!! when compiling and running KORC in a new system, this to make sure</span>
+<a name="ln-37"></a><span class="c">!! that the external libraries and compilers do not modify the</span>
+<a name="ln-38"></a><span class="c">!! simulation results.</span>
+<a name="ln-39"></a><span class="c">!!</span>
+<a name="ln-40"></a><span class="c">!! @subsection s1s2 Getting started To compile and run KORC you will</span>
+<a name="ln-41"></a><span class="c">!! need the following: &lt;ol&gt; &lt;li&gt;The &lt;a</span>
+<a name="ln-42"></a><span class="c">!! href=&quot;https://support.hdfgroup.org/downloads/index.html&quot;&gt;HDF5&lt;/a&gt;</span>
+<a name="ln-43"></a><span class="c">!! library for I/O.&lt;/li&gt; &lt;li&gt;The &lt;a</span>
+<a name="ln-44"></a><span class="c">!! href=&quot;https://w3.pppl.gov/ntcc/PSPLINE/&quot;&gt;PSPLINES&lt;/a&gt; library for</span>
+<a name="ln-45"></a><span class="c">!! interpolating the pre-computed electric and magnetic fields as well</span>
+<a name="ln-46"></a><span class="c">!! aqs the plasma profiles.&lt;/li&gt; &lt;li&gt;The GNU compilers suite, or&lt;/li&gt;</span>
+<a name="ln-47"></a><span class="c">!! &lt;li&gt;The INTEL compilers suite.&lt;/li&gt; &lt;li&gt;The corresponding open MP</span>
+<a name="ln-48"></a><span class="c">!! library&lt;/li&gt; &lt;li&gt;The MPI or open MPI library&lt;/li&gt; &lt;li&gt;&lt;a</span>
+<a name="ln-49"></a><span class="c">!! href=&quot;https://git-scm.com/&quot;&gt; Git, for obtaining the latest version</span>
+<a name="ln-50"></a><span class="c">!! of KORC. &lt;/a&gt; &lt;/ol&gt;</span>
+<a name="ln-51"></a><span class="c">!!</span>
+<a name="ln-52"></a><span class="c">!! The HDF5 and PSPLINES libraries need to be installed BEFORE</span>
+<a name="ln-53"></a><span class="c">!! compiling KORC, or if these are already present in the system, they</span>
+<a name="ln-54"></a><span class="c">!! need to be loaded to your environment and their installation paths</span>
+<a name="ln-55"></a><span class="c">!! need to be added to the Makefile accordingly. We refer the user to</span>
+<a name="ln-56"></a><span class="c">!! the documentation of HDF5 and PSPLINES for the specifics about</span>
+<a name="ln-57"></a><span class="c">!! their installation.</span>
+<a name="ln-58"></a><span class="c">!!</span>
+<a name="ln-59"></a><span class="c">!! If you are installing the HDF5 and PSPLINES libraries in your</span>
+<a name="ln-60"></a><span class="c">!! system, we recommend to perform a local installation. Then enter</span>
+<a name="ln-61"></a><span class="c">!! the absolute path of the folder containing the &lt;em&gt;&quot;lib&quot;&lt;/em&gt; and</span>
+<a name="ln-62"></a><span class="c">!! &lt;em&gt;&quot;bin&quot;&lt;/em&gt; folders of each library to the PSPLINE_INSTALL and</span>
+<a name="ln-63"></a><span class="c">!! HDF5_INSTALL variables of the Makefile.</span>
+<a name="ln-64"></a><span class="c">!!</span>
+<a name="ln-65"></a><span class="c">!!</span>
+<a name="ln-66"></a><span class="c">!! @note PSPLINES is known for having precision issues sometimes when</span>
+<a name="ln-67"></a><span class="c">!! compiled using the INTEL compilers suite in Linux systems.  Please,</span>
+<a name="ln-68"></a><span class="c">!! double-check that the interpolations are giving the correct</span>
+<a name="ln-69"></a><span class="c">!! numbers.</span>
+<a name="ln-70"></a><span class="c">!!</span>
+<a name="ln-71"></a><span class="c">!! @subsection s2s2 Cloning and compiling KORC To obtain the latest</span>
+<a name="ln-72"></a><span class="c">!! version of KORC you will need to clone the Github repository to the</span>
+<a name="ln-73"></a><span class="c">!! system where you want to run KORC.  This can be done as follows:</span>
+<a name="ln-74"></a><span class="c">!! &lt;ol&gt; &lt;li&gt; Make sure you have all the needed external libraries and</span>
+<a name="ln-75"></a><span class="c">!! compilers in place.  &lt;li&gt;Using the terminal of your system,</span>
+<a name="ln-76"></a><span class="c">!! &lt;em&gt;cd&lt;/em&gt; to the directory where you want to save KORC.&lt;/li&gt;</span>
+<a name="ln-77"></a><span class="c">!! &lt;li&gt;Type the following in the terminal &lt;em&gt;&quot;git</span>
+<a name="ln-78"></a><span class="c">!! https://github.com/ORNL-Fusion/KORC.git&quot;&lt;/em&gt;. This will copy all</span>
+<a name="ln-79"></a><span class="c">!! the KORC files from the Github repository to your local system.</span>
+<a name="ln-80"></a><span class="c">!! &lt;li&gt;&lt;em&gt;cd&lt;/em&gt; to the KORC-FO folder.  &lt;li&gt;In the terminal type:</span>
+<a name="ln-81"></a><span class="c">!! &lt;em&gt;&quot;./compile.sh GNU&quot;&lt;/em&gt; if you are using GNU compilers, or</span>
+<a name="ln-82"></a><span class="c">!! &lt;em&gt;&quot;./compile.sh INTEL&quot;&lt;/em&gt; if you are using INTEL compilers.</span>
+<a name="ln-83"></a><span class="c">!! &lt;/ol&gt;</span>
+<a name="ln-84"></a><span class="c">!!</span>
+<a name="ln-85"></a><span class="c">!! @section s3 Running KORC If you are running KORC in a system that</span>
+<a name="ln-86"></a><span class="c">!! uses a resource manager such as TORQUE or SLURM, you will need to</span>
+<a name="ln-87"></a><span class="c">!! request the number of nodes and cores per node that you will need,</span>
+<a name="ln-88"></a><span class="c">!! this along with any other resources such as wall time, memory per</span>
+<a name="ln-89"></a><span class="c">!! node, etc. Decide the number of MPI processes (nmpi) and the number</span>
+<a name="ln-90"></a><span class="c">!! of open MP threads per MPI process (nomp) that you will use in your</span>
+<a name="ln-91"></a><span class="c">!! simulation.  Then, on the terminal or in your batch file type the</span>
+<a name="ln-92"></a><span class="c">!! following:</span>
+<a name="ln-93"></a><span class="c">!!</span>
+<a name="ln-94"></a><span class="c">!! &lt;em&gt; mpirun -np nmpi -x OMP_NUM_THREADS=nomp ./bin/KORC</span>
+<a name="ln-95"></a><span class="c">!! &quot;full_path_to_input_file.korc&quot; &quot;full_path_to_the_outputs_folder&quot;</span>
+<a name="ln-96"></a><span class="c">!! &lt;/em&gt;</span>
+<a name="ln-97"></a><span class="c">!!</span>
+<a name="ln-98"></a><span class="c">!! The above example assumes that you are using the open MPI wrapper</span>
+<a name="ln-99"></a><span class="c">!! mpirun to execute the binary &lt;em&gt;&quot;KORC&quot;&lt;/em&gt; generated after</span>
+<a name="ln-100"></a><span class="c">!! compiling KORC. This wrapper can be replaced by any other wrapper</span>
+<a name="ln-101"></a><span class="c">!! that you might want to use. Notice that when using a different MPI</span>
+<a name="ln-102"></a><span class="c">!! wrapper the way to pass the number of MPI processes (nmpi) and the</span>
+<a name="ln-103"></a><span class="c">!! number of open MP threads per MPI (nomp) to KORC might vary.</span>
+<a name="ln-104"></a><span class="c">!!</span>
+<a name="ln-105"></a><span class="c">!! @section s4 Generating the KORC&#39;s input file.</span>
+<a name="ln-106"></a><span class="c">!! KORC uses...</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_coords.f90 &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_coords.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.7% of total for source files.">176 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_coords.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">korc_coords.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_coords.html">korc_coords</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_coords.f90.html#src">korc_coords.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_coords.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_coordsf90EfferentGraph" width="349pt" height="52pt"
+ viewBox="0.00 0.00 349.00 52.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 48)">
+<title>sourcefile~~korc_coords.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-48 345,-48 345,4 -4,4"/>
+<!-- sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~korc_coords.f90</title>
+<polygon fill="none" stroke="#000000" points="341,-24 254,-24 254,0 341,0 341,-24"/>
+<text text-anchor="middle" x="297.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_coords.f90</text>
+</g>
+<!-- sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~korc_constants.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/korc_constants.f90.html" xlink:title="korc_constants.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="218,-44 117,-44 117,-20 218,-20 218,-44"/>
+<text text-anchor="middle" x="167.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_constants.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_coords.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_coords.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.8502,-18.7153C245.6857,-19.9714 237.0155,-21.3053 228.44,-22.6246"/>
+<polygon fill="#000000" stroke="#000000" points="227.8039,-19.1812 218.4524,-24.1612 228.8684,-26.0998 227.8039,-19.1812"/>
+</g>
+<!-- sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~korc_types.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/korc_types.f90.html" xlink:title="korc_types.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="81,-24 0,-24 0,0 81,0 81,-24"/>
+<text text-anchor="middle" x="40.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_coords.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_coords.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.763,-11.3511C242.1395,-11.2056 229.5944,-11.0729 218,-11 173.112,-10.7177 161.8879,-10.7066 117,-11 108.7848,-11.0537 100.0737,-11.1398 91.5859,-11.2396"/>
+<polygon fill="#000000" stroke="#000000" points="91.3472,-7.7422 81.3916,-11.3667 91.4345,-14.7416 91.3472,-7.7422"/>
+</g>
+<!-- sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_coords.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M116.9413,-24.038C108.4828,-22.706 99.7044,-21.3235 91.2414,-19.9908"/>
+<polygon fill="#000000" stroke="#000000" points="91.5402,-16.4948 81.1174,-18.3964 90.4512,-23.4096 91.5402,-16.4948"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_coords.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_coordsf90AfferentGraph" width="641pt" height="252pt"
+ viewBox="0.00 0.00 641.00 252.10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph" class="graph" transform="scale(.7021 .7021) rotate(0) translate(4 355.0788)">
+<title>sourcefile~~korc_coords.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-355.0788 909,-355.0788 909,4 -4,4"/>
+<!-- sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~korc_coords.f90</title>
+<polygon fill="none" stroke="#000000" points="87,-293.5681 0,-293.5681 0,-269.5681 87,-269.5681 87,-293.5681"/>
+<text text-anchor="middle" x="43.5" y="-279.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_coords.f90</text>
+</g>
+<!-- sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~korc_profiles.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/korc_profiles.f90.html" xlink:title="korc_profiles.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="331,-75.5681 241,-75.5681 241,-51.5681 331,-51.5681 331,-75.5681"/>
+<text text-anchor="middle" x="286" y="-61.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M164,-320.5681C131.7273,-323.6302 96.6614,-310.2308 72.7229,-298.3145"/>
+<polygon fill="#000000" stroke="#000000" points="74.2989,-295.1891 63.8107,-293.6895 71.0745,-301.4023 74.2989,-295.1891"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M283.0038,-75.6897C270.243,-125.9249 218.5779,-315.3895 164,-320.5681"/>
+</g>
+<!-- sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~korc_interp.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/korc_interp.f90.html" xlink:title="korc_interp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="205,-254.5681 123,-254.5681 123,-230.5681 205,-230.5681 205,-254.5681"/>
+<text text-anchor="middle" x="164" y="-240.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~korc_profiles.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M277.8058,-75.5907C257.4156,-105.5075 204.1873,-183.6047 178.4073,-221.4294"/>
+<polygon fill="#000000" stroke="#000000" points="175.221,-219.8899 172.4812,-230.1244 181.0053,-223.8323 175.221,-219.8899"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~korc_experimental_pdf.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/korc_experimental_pdf.f90.html" xlink:title="korc_experimental_pdf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="503,-334.5681 367,-334.5681 367,-310.5681 503,-310.5681 503,-334.5681"/>
+<text text-anchor="middle" x="435" y="-320.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M286,-320.5681C232.4826,-311.8538 218.0019,-315.6854 164,-320.5681"/>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M286,-320.5681C244.6753,-313.8391 205.4841,-282.8523 183.1409,-262.0187"/>
+<polygon fill="#000000" stroke="#000000" points="185.3341,-259.2721 175.6987,-254.8663 180.4835,-264.3192 185.3341,-259.2721"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M366.7613,-325.8698C341.2731,-325.9994 312.1725,-324.8297 286,-320.5681"/>
+</g>
+<!-- sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~korc_fields.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/korc_fields.f90.html" xlink:title="korc_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="326,-254.5681 246,-254.5681 246,-230.5681 326,-230.5681 326,-254.5681"/>
+<text text-anchor="middle" x="286" y="-240.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~korc_experimental_pdf.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M399.0539,-310.5318C388.5127,-306.5493 377.1075,-301.7866 367,-296.5681 346.853,-286.1662 325.5773,-271.8367 309.8887,-260.5527"/>
+<polygon fill="#000000" stroke="#000000" points="311.931,-257.7102 301.7903,-254.6414 307.8039,-263.3642 311.931,-257.7102"/>
+</g>
+<!-- sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~korc_initialize.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/korc_initialize.f90.html" xlink:title="korc_initialize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="815,-256.5681 722,-256.5681 722,-232.5681 815,-232.5681 815,-256.5681"/>
+<text text-anchor="middle" x="768.5" y="-242.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M753.5847,-256.5886C737.7121,-268.8195 711.4295,-287.5053 686,-298.5681 609.1968,-331.9803 586.1483,-333.4949 503,-343.5681 387.3326,-357.5807 356.5956,-349.1614 241,-334.5681 206.4906,-330.2114 198.642,-317.4359 164,-320.5681"/>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M612.5,-284.5681C533.7393,-289.1509 513.6377,-288.9204 435,-282.5681"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M736.5123,-256.6403C705.3781,-267.4591 656.4618,-282.0101 612.5,-284.5681"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~korc_velocity_distribution.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/korc_velocity_distribution.f90.html" xlink:title="korc_velocity_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="686,-256.5681 539,-256.5681 539,-232.5681 686,-232.5681 686,-256.5681"/>
+<text text-anchor="middle" x="612.5" y="-242.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M721.6949,-244.5681C713.6316,-244.5681 705.0358,-244.5681 696.3428,-244.5681"/>
+<polygon fill="#000000" stroke="#000000" points="696.1192,-241.0682 686.1192,-244.5681 696.1192,-248.0682 696.1192,-241.0682"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~korc_spatial_distribution.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/korc_spatial_distribution.f90.html" xlink:title="korc_spatial_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="684,-214.5681 541,-214.5681 541,-190.5681 684,-190.5681 684,-214.5681"/>
+<text text-anchor="middle" x="612.5" y="-200.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_spatial_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M723.7967,-232.5326C706.0908,-227.7656 685.567,-222.2399 667.002,-217.2417"/>
+<polygon fill="#000000" stroke="#000000" points="667.776,-213.8255 657.2099,-214.6053 665.9561,-220.5848 667.776,-213.8255"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~korc_avalanche.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/korc_avalanche.f90.html" xlink:title="korc_avalanche.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="487,-254.5681 383,-254.5681 383,-230.5681 487,-230.5681 487,-254.5681"/>
+<text text-anchor="middle" x="435" y="-240.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M399.4827,-254.5721C337.1531,-275.337 210.3027,-316.1747 164,-320.5681"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M418.8183,-230.5135C404.3263,-219.2763 382.9607,-201.5852 367,-183.5681 338.8964,-151.8434 312.6737,-109.8502 298.0465,-84.8787"/>
+<polygon fill="#000000" stroke="#000000" points="300.8908,-82.8053 292.8572,-75.898 294.8298,-86.3075 300.8908,-82.8053"/>
+</g>
+<!-- sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~korc_avalanche.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M382.887,-242.5681C367.7499,-242.5681 351.2534,-242.5681 336.234,-242.5681"/>
+<polygon fill="#000000" stroke="#000000" points="336.1069,-239.0682 326.1069,-242.5681 336.1068,-246.0682 336.1069,-239.0682"/>
+</g>
+<!-- sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~korc_interp.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M126.8628,-254.5876C115.295,-258.3315 102.3874,-262.5091 90.2502,-266.4373"/>
+<polygon fill="#000000" stroke="#000000" points="89.1584,-263.1118 80.722,-269.5211 91.3139,-269.7717 89.1584,-263.1118"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_coords.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_coords.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M264.3016,-254.6963C256.8482,-258.9699 248.4966,-263.879 241,-268.5681 205.9894,-290.4666 205.1104,-316.6673 164,-320.5681"/>
+</g>
+<!-- sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~korc_fields.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.7145,-242.5681C235.9283,-242.5681 225.3349,-242.5681 215.1211,-242.5681"/>
+<polygon fill="#000000" stroke="#000000" points="215.0778,-239.0682 205.0778,-242.5681 215.0777,-246.0682 215.0778,-239.0682"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M588.3932,-256.6836C566.3699,-267.5915 532.7968,-283.8196 503,-296.5681 494.8105,-300.0719 485.9764,-303.6171 477.4733,-306.9153"/>
+<polygon fill="#000000" stroke="#000000" points="476.1522,-303.6733 468.0658,-310.5187 478.6561,-310.2101 476.1522,-303.6733"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M538.7661,-243.7373C524.9519,-243.5816 510.6378,-243.4203 497.2154,-243.2691"/>
+<polygon fill="#000000" stroke="#000000" points="497.1869,-239.7686 487.1481,-243.1556 497.108,-246.7682 497.1869,-239.7686"/>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M582.3916,-256.5762C547.3668,-269.2387 487.615,-286.8183 435,-282.5681"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M435,-282.5681C397.5825,-279.5455 356.4747,-267.8429 326.933,-257.8707"/>
+<polygon fill="#000000" stroke="#000000" points="327.9747,-254.5277 317.38,-254.5702 325.6888,-261.1439 327.9747,-254.5277"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~korc_ppusher.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/korc_ppusher.f90.html" xlink:title="korc_ppusher.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="659.5,-134.5681 565.5,-134.5681 565.5,-110.5681 659.5,-110.5681 659.5,-134.5681"/>
+<text text-anchor="middle" x="612.5" y="-120.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M565.4078,-129.9998C528.9704,-133.9946 477.6962,-135.7447 435,-122.5681"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M435,-122.5681C405.0156,-113.3145 396.3061,-114.7861 367,-103.5681 350.0584,-97.083 331.8907,-88.2926 317.0633,-80.6039"/>
+<polygon fill="#000000" stroke="#000000" points="318.3265,-77.3133 307.8483,-75.7457 315.0619,-83.5055 318.3265,-77.3133"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M568.7061,-110.5571C558.5611,-106.8438 548.0841,-102.2086 539,-96.5681 520.0419,-84.7966 522.872,-71.7208 503,-61.5681 459.4043,-39.2947 329.7436,-1.5866 286,-23.5681"/>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M435,-202.5681C401.8528,-210.7487 364.7732,-220.7 335.8957,-228.6303"/>
+<polygon fill="#000000" stroke="#000000" points="334.7544,-225.3143 326.0433,-231.3449 336.6138,-232.0628 334.7544,-225.3143"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M593.8012,-134.7882C572.5302,-148.2543 536.4061,-169.8222 503,-183.5681 473.9809,-195.5088 465.4657,-195.0492 435,-202.5681"/>
+</g>
+<!-- sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~korc_collisions.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node12"><a xlink:href=".././sourcefile/korc_collisions.f90.html" xlink:title="korc_collisions.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="484,-94.5681 386,-94.5681 386,-70.5681 484,-70.5681 484,-94.5681"/>
+<text text-anchor="middle" x="435" y="-80.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~korc_ppusher.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M565.3993,-111.9538C543.5695,-107.0344 517.392,-101.1353 494.2385,-95.9176"/>
+<polygon fill="#000000" stroke="#000000" points="494.707,-92.4355 484.1822,-93.6514 493.1681,-99.2642 494.707,-92.4355"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M593.8012,-190.3479C572.5302,-176.8819 536.4061,-155.3139 503,-141.5681 473.9809,-129.6273 464.9844,-131.8216 435,-122.5681"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_experimental_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M553.257,-214.5708C548.1329,-217.0319 543.2793,-219.9966 539,-223.5681 511.2265,-246.7472 529.7405,-272.2044 503,-296.5681 499.1286,-300.0954 494.7289,-303.162 490.0733,-305.8246"/>
+<polygon fill="#000000" stroke="#000000" points="488.2297,-302.8344 480.8766,-310.462 491.3815,-309.0847 488.2297,-302.8344"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_avalanche.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M559.2441,-214.5694C539.6744,-218.9795 517.3481,-224.0108 497.0703,-228.5804"/>
+<polygon fill="#000000" stroke="#000000" points="496.2873,-225.169 487.3014,-230.7818 497.8263,-231.9977 496.2873,-225.169"/>
+</g>
+<!-- sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~korc_spatial_distribution.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M540.7293,-194.7985C508.0361,-193.23 469.1069,-194.1506 435,-202.5681"/>
+</g>
+<!-- sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~korc_finalize.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/korc_finalize.f90.html" xlink:title="korc_finalize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="479,-174.5681 391,-174.5681 391,-150.5681 479,-150.5681 479,-174.5681"/>
+<text text-anchor="middle" x="435" y="-160.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M396.0666,-150.4993C386.2403,-146.7042 375.9469,-142.0455 367,-136.5681 342.7188,-121.7029 319.0121,-99.11 303.5846,-82.999"/>
+<polygon fill="#000000" stroke="#000000" points="306.1051,-80.5701 296.71,-75.6729 301.0006,-85.3601 306.1051,-80.5701"/>
+</g>
+<!-- sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~korc_finalize.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M399.0539,-174.6044C388.5127,-178.5868 377.1075,-183.3496 367,-188.5681 346.853,-198.9699 325.5773,-213.2995 309.8887,-224.5835"/>
+<polygon fill="#000000" stroke="#000000" points="307.8039,-221.7719 301.7903,-230.4947 311.931,-227.426 307.8039,-221.7719"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M385.7989,-76.2941C371.4734,-74.4674 355.7317,-72.46 341.0695,-70.5904"/>
+<polygon fill="#000000" stroke="#000000" points="341.4843,-67.115 331.1219,-69.3219 340.5988,-74.0588 341.4843,-67.115"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M403.118,-70.5412C391.7035,-66.1923 378.7559,-61.2096 367,-56.5681 330.8432,-42.2924 320.7342,-6.1139 286,-23.5681"/>
+</g>
+<!-- sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~korc_collisions.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M419.4413,-94.7199C405.1812,-106.163 383.7958,-124.1093 367,-141.5681 341.7747,-167.789 316.064,-201.2329 300.5677,-222.2812"/>
+<polygon fill="#000000" stroke="#000000" points="297.6485,-220.3442 294.583,-230.4858 303.3038,-224.4694 297.6485,-220.3442"/>
+</g>
+<!-- sourcefile~main.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~main.f90</title>
+<g id="a_sourcefile~~korc_coords.f90~~AfferentGraph_node13"><a xlink:href=".././sourcefile/main.f90.html" xlink:title="main.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="905,-256.5681 851,-256.5681 851,-232.5681 905,-232.5681 905,-256.5681"/>
+<text text-anchor="middle" x="878" y="-242.1681" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_profiles.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M435,-4.5681C411.6402,-2.7184 354.5107,-28.8475 318.1661,-46.9364"/>
+<polygon fill="#000000" stroke="#000000" points="316.3202,-43.947 308.9595,-51.5674 319.4658,-50.2004 316.3202,-43.947"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M850.9326,-244.5681C843.1101,-244.5681 834.2644,-244.5681 825.3445,-244.5681"/>
+<polygon fill="#000000" stroke="#000000" points="825.2927,-241.0682 815.2927,-244.5681 825.2927,-248.0682 825.2927,-241.0682"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_interp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M435,-4.5681C368.4498,.7015 345.6176,6.4724 286,-23.5681"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M286,-23.5681C266.6125,-33.3371 256.1034,-26.9733 241,-42.5681 191.5501,-93.6266 173.0238,-179.8574 166.8057,-220.3324"/>
+<polygon fill="#000000" stroke="#000000" points="163.3072,-220.0743 165.3627,-230.4679 170.2373,-221.061 163.3072,-220.0743"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M768.5,-142.5681C731.6917,-124.6336 724.3621,-115.8805 686,-101.5681 654.388,-89.774 644.8149,-92.2721 612.5,-82.5681"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M612.5,-82.5681C558.5121,-66.3558 555.6363,-38.741 503,-18.5681 474.1875,-7.5256 465.7598,-7.0037 435,-4.5681"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M869.0346,-232.3837C852.1069,-210.3844 813.1091,-164.3034 768.5,-142.5681"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_fields.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M850.7756,-255.1534C839.8149,-259.0151 826.9584,-263.0486 815,-265.5681 726.5466,-284.2042 702.7427,-279.3171 612.5,-284.5681"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_ppusher.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M768.5,-142.5681C737.8523,-128.1872 700.2995,-123.0449 669.7187,-121.5655"/>
+<polygon fill="#000000" stroke="#000000" points="669.7566,-118.0646 659.6352,-121.1962 669.5003,-125.06 669.7566,-118.0646"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_finalize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M768.5,-142.5681C756.1125,-136.7555 580.7378,-150.3828 489.4209,-157.9463"/>
+<polygon fill="#000000" stroke="#000000" points="488.927,-154.4752 479.2517,-158.7923 489.5074,-161.4511 488.927,-154.4752"/>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90 -->
+<g id="sourcefile~~korc_coords.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_collisions.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M612.5,-82.5681C574.3555,-71.1135 529.4852,-71.2246 494.4023,-74.143"/>
+<polygon fill="#000000" stroke="#000000" points="493.948,-70.6701 484.315,-75.0809 494.5961,-77.64 493.948,-70.6701"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilekorc_coordsf90AfferentGraph = svgPanZoom('#sourcefilekorc_coordsf90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_coords.html">korc_coords</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_coords.f90.html#src">korc_coords.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="k">module </span><span class="n">korc_coords</span>
+<a name="ln-2"></a>  <span class="c">!! @note Module containing subroutines to calculate the position of</span>
+<a name="ln-3"></a>  <span class="c">!! the simulated particles in toroidal and cylindrical coordinates. @endnote</span>
+<a name="ln-4"></a>  <span class="k">use </span><span class="n">korc_types</span>
+<a name="ln-5"></a>  <span class="k">use </span><span class="n">korc_constants</span>
+<a name="ln-6"></a>
+<a name="ln-7"></a>  <span class="k">IMPLICIT NONE</span>
+<a name="ln-8"></a>
+<a name="ln-9"></a><span class="k">  PUBLIC</span> <span class="kd">::</span> <span class="n">cart_to_cyl</span><span class="p">,&amp;</span>
+<a name="ln-10"></a>       <span class="n">cart_to_cyl_p</span><span class="p">,&amp;</span>
+<a name="ln-11"></a>       <span class="n">cart_to_tor_check_if_confined</span><span class="p">,&amp;</span>
+<a name="ln-12"></a>       <span class="n">cart_to_tor_p</span><span class="p">,&amp;</span>
+<a name="ln-13"></a>       <span class="n">cyl_to_cart</span><span class="p">,&amp;</span>
+<a name="ln-14"></a>       <span class="n">cyl_check_if_confined</span><span class="p">,&amp;</span>
+<a name="ln-15"></a>       <span class="n">cyl_check_if_confined_p</span>
+<a name="ln-16"></a>
+<a name="ln-17"></a><span class="k">CONTAINS</span>
+<a name="ln-18"></a>
+<a name="ln-19"></a>
+<a name="ln-20"></a><span class="k">  subroutine </span><span class="n">cart_to_cyl</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Xcyl</span><span class="p">)</span>
+<a name="ln-21"></a>    <span class="c">!! @note  Subroutine that converts the position of simulated particles</span>
+<a name="ln-22"></a>    <span class="c">!! from Cartesian \((x,y,z)\) to cylindrical \((R,\phi,Z)\) coordinates.</span>
+<a name="ln-23"></a>    <span class="c">!! @endnote</span>
+<a name="ln-24"></a>    <span class="c">!! Here, the coordinate transformation is:</span>
+<a name="ln-25"></a>    <span class="c">!!</span>
+<a name="ln-26"></a>    <span class="c">!! $$R = \sqrt{x^2 + y^2},$$</span>
+<a name="ln-27"></a>    <span class="c">!! $$\phi = \arctan{\left( \frac{y}{x} \right)},$$</span>
+<a name="ln-28"></a>    <span class="c">!! $$Z = z.$$</span>
+<a name="ln-29"></a>    <span class="k">implicit none</span>
+<a name="ln-30"></a><span class="k">    </span><span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X</span>
+<a name="ln-31"></a>    <span class="c">!! Particles&#39; position in Cartesian coordinates. X(1,:) = \(x\), X(2,:)</span>
+<a name="ln-32"></a>    <span class="c">!! = \(y\), X(3,:) = \(z\)</span>
+<a name="ln-33"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Xcyl</span>
+<a name="ln-34"></a>    <span class="c">!! Particles&#39; position in cylindrical coordinates. Xcyl(1,:) = \(R\),</span>
+<a name="ln-35"></a>    <span class="c">!! Xcyl(2,:) = \(\phi\), Xcyl(3,:) = \(Z\)</span>
+<a name="ln-36"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-37"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-38"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">ss</span>
+<a name="ln-39"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-40"></a>
+<a name="ln-41"></a><span class="c">!    write(output_unit_write,&#39;(&quot;X_X: &quot;,E17.10)&#39;) X(1:10,1)</span>
+<a name="ln-42"></a><span class="c">!    write(output_unit_write,&#39;(&quot;X_Y: &quot;,E17.10)&#39;) X(1:10,2)</span>
+<a name="ln-43"></a><span class="c">!    write(output_unit_write,&#39;(&quot;X_Z: &quot;,E17.10)&#39;) X(1:10,3)</span>
+<a name="ln-44"></a>
+<a name="ln-45"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-46"></a><span class="k">       </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-47"></a>    <span class="k">else</span>
+<a name="ln-48"></a><span class="k">       if</span> <span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-49"></a><span class="k">          </span><span class="n">ss</span><span class="o">=</span><span class="mi">1_idef</span>
+<a name="ln-50"></a>       <span class="k">else</span>
+<a name="ln-51"></a><span class="k">          </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-52"></a>       <span class="k">end if</span>
+<a name="ln-53"></a><span class="k">    </span><span class="n">endif</span>
+<a name="ln-54"></a>    
+<a name="ln-55"></a>
+<a name="ln-56"></a><span class="c">!    write(output_unit_write,*) &#39;varX&#39;,X(:,1)</span>
+<a name="ln-57"></a><span class="c">!    write(output_unit_write,*) &#39;varY&#39;,X(:,2)</span>
+<a name="ln-58"></a><span class="c">!    write(output_unit_write,*) &#39;varR&#39;,Xcyl(:,1)</span>
+<a name="ln-59"></a><span class="c">!    write(output_unit_write,*) &#39;varPHI&#39;,Xcyl(:,2)</span>
+<a name="ln-60"></a>
+<a name="ln-61"></a><span class="c">!    !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp) SHARED(X,Xcyl)</span>
+<a name="ln-62"></a>    <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">ss</span>
+<a name="ln-63"></a><span class="c">!       write(output_unit_write,*) &#39;pp&#39;,pp</span>
+<a name="ln-64"></a>       <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-65"></a>       <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<a name="ln-66"></a>       <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-67"></a>       <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-68"></a>    <span class="k">end do</span>
+<a name="ln-69"></a><span class="c">!    !$OMP END PARALLEL DO</span>
+<a name="ln-70"></a>
+<a name="ln-71"></a><span class="c">!    write(output_unit_write,*) &#39;varX&#39;,X(:,1)</span>
+<a name="ln-72"></a><span class="c">!    write(output_unit_write,*) &#39;varY&#39;,X(:,2)</span>
+<a name="ln-73"></a><span class="c">!    write(output_unit_write,*) &#39;varR&#39;,Xcyl(:,1)</span>
+<a name="ln-74"></a><span class="c">!    write(output_unit_write,*) &#39;varPHI&#39;,Xcyl(:,2)</span>
+<a name="ln-75"></a>
+<a name="ln-76"></a>
+<a name="ln-77"></a>    
+<a name="ln-78"></a>  <span class="k">end subroutine </span><span class="n">cart_to_cyl</span>
+<a name="ln-79"></a>
+<a name="ln-80"></a>  <span class="k">subroutine </span><span class="n">cart_to_cyl_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">)</span>
+<a name="ln-81"></a>    <span class="k">implicit none</span>
+<a name="ln-82"></a><span class="k">    </span><span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+<a name="ln-83"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X_X</span>
+<a name="ln-84"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X_Y</span>
+<a name="ln-85"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X_Z</span>
+<a name="ln-86"></a>
+<a name="ln-87"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Y_R</span>
+<a name="ln-88"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Y_PHI</span>
+<a name="ln-89"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Y_Z</span>
+<a name="ln-90"></a>
+<a name="ln-91"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-92"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-93"></a>
+<a name="ln-94"></a>    <span class="c">!$OMP SIMD</span>
+<a name="ln-95"></a><span class="c">!    !$OMP&amp; aligned(Y_R,Y_PHI,Y_Z,X_X,X_Y,X_Z)</span>
+<a name="ln-96"></a>    <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+<a name="ln-97"></a>       <span class="n">Y_R</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">X_X</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span><span class="o">*</span><span class="n">X_X</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">+</span> <span class="n">X_Y</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span><span class="o">*</span><span class="n">X_Y</span><span class="p">(</span><span class="n">pp</span><span class="p">))</span>
+<a name="ln-98"></a>       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X_Y</span><span class="p">(</span><span class="n">pp</span><span class="p">),</span> <span class="n">X_X</span><span class="p">(</span><span class="n">pp</span><span class="p">))</span>
+<a name="ln-99"></a>       <span class="n">Y_PHI</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">Y_PHI</span><span class="p">(</span><span class="n">pp</span><span class="p">),</span> <span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-100"></a>       <span class="n">Y_Z</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="n">X_Z</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+<a name="ln-101"></a>    <span class="k">end do</span>
+<a name="ln-102"></a>    <span class="c">!$OMP END SIMD</span>
+<a name="ln-103"></a>
+<a name="ln-104"></a>  <span class="k">end subroutine </span><span class="n">cart_to_cyl_p</span>
+<a name="ln-105"></a>
+<a name="ln-106"></a>  <span class="k">subroutine </span><span class="n">cyl_to_cart</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="n">X</span><span class="p">)</span>
+<a name="ln-107"></a>    <span class="c">!! @note  Subroutine that converts the position of simulated particles</span>
+<a name="ln-108"></a>    <span class="c">!! from cylindrical \((R,\phi,Z)\) to Cartesian \((x,y,z)\ coordinates.</span>
+<a name="ln-109"></a>    <span class="c">!! @endnote</span>
+<a name="ln-110"></a>    <span class="c">!! Here, the coordinate transformation is:</span>
+<a name="ln-111"></a>    <span class="c">!!</span>
+<a name="ln-112"></a>    <span class="c">!! $$x=R\cos(\phi),$$</span>
+<a name="ln-113"></a>    <span class="c">!! $$y=R\sin(\phi),,$$</span>
+<a name="ln-114"></a>    <span class="c">!! $$Z = z.$$</span>
+<a name="ln-115"></a>    <span class="k">implicit none</span>
+<a name="ln-116"></a><span class="k">    </span><span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span><span class="kd">::</span> <span class="n">X</span>
+<a name="ln-117"></a>    <span class="c">!! Particles&#39; position in Cartesian coordinates. X(1,:) = \(x\), X(2,:)</span>
+<a name="ln-118"></a>    <span class="c">!! = \(y\), X(3,:) = \(z\)</span>
+<a name="ln-119"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Xcyl</span>
+<a name="ln-120"></a>    <span class="c">!! Particles&#39; position in cylindrical coordinates. Xcyl(1,:) = \(R\),</span>
+<a name="ln-121"></a>    <span class="c">!! Xcyl(2,:) = \(\phi\), Xcyl(3,:) = \(Z\)</span>
+<a name="ln-122"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-123"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-124"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">ss</span>
+<a name="ln-125"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-126"></a>    
+<a name="ln-127"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-128"></a><span class="k">       </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-129"></a>    <span class="k">else</span>
+<a name="ln-130"></a><span class="k">       if</span> <span class="p">(</span><span class="n">Xcyl</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-131"></a><span class="k">          </span><span class="n">ss</span><span class="o">=</span><span class="mi">1_idef</span>
+<a name="ln-132"></a>       <span class="k">else</span>
+<a name="ln-133"></a><span class="k">          </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-134"></a>       <span class="k">end if</span>
+<a name="ln-135"></a><span class="k">    </span><span class="n">endif</span>
+<a name="ln-136"></a>    
+<a name="ln-137"></a>
+<a name="ln-138"></a>    <span class="c">!$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp) SHARED(X,Xcyl)</span>
+<a name="ln-139"></a>    <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">ss</span>
+<a name="ln-140"></a>       <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="nb">cos</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<a name="ln-141"></a>       <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="nb">sin</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<a name="ln-142"></a>       <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-143"></a>    <span class="k">end do</span>
+<a name="ln-144"></a>    <span class="c">!$OMP END PARALLEL DO</span>
+<a name="ln-145"></a>  <span class="k">end subroutine </span><span class="n">cyl_to_cart</span>
+<a name="ln-146"></a>
+<a name="ln-147"></a>  <span class="k">subroutine </span><span class="n">cyl_check_if_confined</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="n">Xcyl</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span>
+<a name="ln-148"></a>    <span class="k">implicit none</span>
+<a name="ln-149"></a><span class="k">    TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">F</span>
+<a name="ln-150"></a>    <span class="c">!! An instance of the KORC derived type FIELDS.</span>
+<a name="ln-151"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">Xcyl</span>
+<a name="ln-152"></a>    <span class="c">!! Particles&#39; position in cylindrical coordinates. Xcyl(1,:) = \(R\),</span>
+<a name="ln-153"></a>    <span class="c">!! Xcyl(2,:) = \(\phi\), Xcyl(3,:) = \(Z\)</span>
+<a name="ln-154"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">flag</span>
+<a name="ln-155"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                                               <span class="kd">::</span> <span class="n">a</span>
+<a name="ln-156"></a>    <span class="c">!! Distance to plasma edge as measured from the magnetic axis.</span>
+<a name="ln-157"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                                               <span class="kd">::</span> <span class="n">Ro</span>
+<a name="ln-158"></a>    <span class="c">!! Radial position of the magnetic axis.</span>
+<a name="ln-159"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-160"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-161"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">ss</span>
+<a name="ln-162"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-163"></a> 
+<a name="ln-164"></a>
+<a name="ln-165"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-166"></a><span class="k">       </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-167"></a>    <span class="k">else</span>
+<a name="ln-168"></a><span class="k">       if</span> <span class="p">(</span><span class="n">Xcyl</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-169"></a><span class="k">          </span><span class="n">ss</span><span class="o">=</span><span class="mi">1_idef</span>
+<a name="ln-170"></a>       <span class="k">else</span>
+<a name="ln-171"></a><span class="k">          </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">Xcyl</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-172"></a>       <span class="k">end if</span>
+<a name="ln-173"></a><span class="k">    </span><span class="n">endif</span>
+<a name="ln-174"></a>
+<a name="ln-175"></a>    
+<a name="ln-176"></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span>
+<a name="ln-177"></a>    <span class="n">Ro</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span>
+<a name="ln-178"></a>    
+<a name="ln-179"></a>    <span class="c">!$OMP PARALLEL DO FIRSTPRIVATE(ss,a,Ro) PRIVATE(pp) SHARED(Xcyl,flag)</span>
+<a name="ln-180"></a>    <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">ss</span>
+<a name="ln-181"></a>       <span class="k">if</span> <span class="p">(</span><span class="nb">sqrt</span><span class="p">((</span><span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">Ro</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">Xcyl</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">.</span><span class="n">gt</span><span class="p">.</span> <span class="n">a</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-182"></a><span class="k">          </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span><span class="o">=</span><span class="mi">0_is</span>
+<a name="ln-183"></a>       <span class="n">endif</span>       
+<a name="ln-184"></a>    <span class="k">end do</span>
+<a name="ln-185"></a>    <span class="c">!$OMP END PARALLEL DO</span>
+<a name="ln-186"></a>  <span class="k">end subroutine </span><span class="n">cyl_check_if_confined</span>
+<a name="ln-187"></a>
+<a name="ln-188"></a>  <span class="k">subroutine </span><span class="n">cyl_check_if_confined_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">Xcyl_R</span><span class="p">,</span><span class="n">Xcyl_Z</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span>
+<a name="ln-189"></a>    <span class="k">implicit none</span>
+<a name="ln-190"></a><span class="k">    </span><span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+<a name="ln-191"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">Xcyl_R</span>
+<a name="ln-192"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">Xcyl_Z</span>
+<a name="ln-193"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">flag</span>
+<a name="ln-194"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">a</span><span class="p">,</span><span class="n">R0</span>
+<a name="ln-195"></a>    <span class="c">!! Distance to plasma edge as measured from the magnetic axis.</span>
+<a name="ln-196"></a>    <span class="kt">INTEGER</span>                                  <span class="kd">::</span> <span class="n">cc</span>
+<a name="ln-197"></a>    
+<a name="ln-198"></a>    <span class="c">!$OMP SIMD</span>
+<a name="ln-199"></a><span class="c">!    !$OMP&amp; aligned(Xcyl_R,Xcyl_Z,flag)</span>
+<a name="ln-200"></a>    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+<a name="ln-201"></a>       <span class="k">if</span> <span class="p">(</span><span class="nb">sqrt</span><span class="p">((</span><span class="n">Xcyl_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">R0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">Xcyl_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">.</span><span class="n">gt</span><span class="p">.</span> <span class="n">a</span><span class="p">)</span> <span class="n">flag</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="mi">0_is</span>
+<a name="ln-202"></a>    <span class="k">end do</span>
+<a name="ln-203"></a>    <span class="c">!$OMP END SIMD</span>
+<a name="ln-204"></a>
+<a name="ln-205"></a>  <span class="k">end subroutine </span><span class="n">cyl_check_if_confined_p</span>
+<a name="ln-206"></a>
+<a name="ln-207"></a>  <span class="k">subroutine </span><span class="n">cart_to_tor_check_if_confined</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Xtor</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span>
+<a name="ln-208"></a>    <span class="c">!! @note Subroutine that converts the position of simulated particles</span>
+<a name="ln-209"></a>    <span class="c">!! from Cartesian \((x,y,z)\) to toroidal \((r,\theta, \zeta)\) coordinates.</span>
+<a name="ln-210"></a>    <span class="c">!! In addition to performing the coordinate transformation, this</span>
+<a name="ln-211"></a>    <span class="c">!! subroutine checks whether a given particle is within the plasma or not.</span>
+<a name="ln-212"></a>    <span class="c">!! A particle is not longer considered to be within the plasma if its</span>
+<a name="ln-213"></a>    <span class="c">!! minor radius \(r &gt; r_{edge}\), where \(r_{edge}\) is the radial</span>
+<a name="ln-214"></a>    <span class="c">!! distance to the plasma edge as measured from the magnetic axis. For</span>
+<a name="ln-215"></a>    <span class="c">!! more details see the analytical model of the magnetic field in</span>
+<a name="ln-216"></a>    <span class="c">!! [[korc_types]] and [[korc_fields]].</span>
+<a name="ln-217"></a>    <span class="c">!!</span>
+<a name="ln-218"></a>    <span class="c">!! The coordinate transformation is given by:</span>
+<a name="ln-219"></a>    <span class="c">!!</span>
+<a name="ln-220"></a>    <span class="c">!! $$r = \sqrt{ \left[\sqrt{x^2 + y^2}-R_0\right]^2 + z^2 },$$</span>
+<a name="ln-221"></a>    <span class="c">!! $$\theta = \arctan{\left( \frac{z}{\sqrt{x^2 + y^2}-Ro} \right)}.$$</span>
+<a name="ln-222"></a>    <span class="c">!! $$\zeta = \arctan{\left( \frac{x}{y} \right)},$$</span>
+<a name="ln-223"></a>    <span class="c">!!</span>
+<a name="ln-224"></a>    <span class="c">!! where \(R_0\) is the radial position of the magnetic axis.</span>
+<a name="ln-225"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X</span>
+<a name="ln-226"></a>    <span class="c">!! Particles&#39; position in Cartesian coordinates. X(1,:) = \(x\), X(2,:)</span>
+<a name="ln-227"></a>    <span class="c">!! = \(y\), X(3,:) = \(z\)</span>
+<a name="ln-228"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">F</span>
+<a name="ln-229"></a>    <span class="c">!! An instance of the KORC derived type FIELDS.</span>
+<a name="ln-230"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:,:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Xtor</span>
+<a name="ln-231"></a>    <span class="c">!! Particles&#39; position in cylindrical coordinates. Xtor(1,:) =</span>
+<a name="ln-232"></a>    <span class="c">!! \(r\), Xtor(2,:) = \(\theta\), Xtor(3,:) = \(\zeta\)</span>
+<a name="ln-233"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">flag</span>
+<a name="ln-234"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                                               <span class="kd">::</span> <span class="n">a</span>
+<a name="ln-235"></a>    <span class="c">!! Distance to plasma edge as measured from the magnetic axis.</span>
+<a name="ln-236"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>                                               <span class="kd">::</span> <span class="n">Ro</span>
+<a name="ln-237"></a>    <span class="c">!! Radial position of the magnetic axis.</span>
+<a name="ln-238"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">pp</span>
+<a name="ln-239"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-240"></a>    <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">ss</span>
+<a name="ln-241"></a>    <span class="c">!! Iterator.</span>
+<a name="ln-242"></a>
+<a name="ln-243"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-244"></a><span class="k">       </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-245"></a>    <span class="k">else</span>
+<a name="ln-246"></a><span class="k">       if</span> <span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-247"></a><span class="k">          </span><span class="n">ss</span><span class="o">=</span><span class="mi">1_idef</span>
+<a name="ln-248"></a>       <span class="k">else</span>
+<a name="ln-249"></a><span class="k">          </span><span class="n">ss</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-250"></a>       <span class="k">end if</span>
+<a name="ln-251"></a><span class="k">    </span><span class="n">endif</span>
+<a name="ln-252"></a>    
+<a name="ln-253"></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span>
+<a name="ln-254"></a>    <span class="n">Ro</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span>
+<a name="ln-255"></a>
+<a name="ln-256"></a><span class="c">!    write(output_unit_write,&#39;(&quot;X c2tor: &quot;,E17.10)&#39;) X(1,:)</span>
+<a name="ln-257"></a>    
+<a name="ln-258"></a>    <span class="c">!$OMP PARALLEL DO FIRSTPRIVATE(ss,a,Ro) PRIVATE(pp) SHARED(X,Xtor,flag)</span>
+<a name="ln-259"></a>    <span class="k">do </span><span class="n">pp</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">ss</span>
+<a name="ln-260"></a>       <span class="k">if</span> <span class="p">(</span> <span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">1_is</span> <span class="p">)</span> <span class="k">then</span>
+<a name="ln-261"></a><span class="k">          </span><span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span> <span class="p">(</span><span class="nb">SQRT</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">Ro</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">&amp;</span>
+<a name="ln-262"></a>               <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+<a name="ln-263"></a>          <span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">Ro</span><span class="p">)</span>
+<a name="ln-264"></a>          <span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-265"></a>          <span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">X</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<a name="ln-266"></a>          <span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-267"></a>
+<a name="ln-268"></a><span class="c">!          write(output_unit_write,&#39;(&quot;r: &quot;,E17.10)&#39;) Xtor(1,1)</span>
+<a name="ln-269"></a><span class="c">!          write(output_unit_write,&#39;(&quot;a: &quot;,E17.10)&#39;) a</span>
+<a name="ln-270"></a><span class="c">!          write(output_unit_write,&#39;(&quot;Ro: &quot;,E17.10)&#39;) Ro</span>
+<a name="ln-271"></a>          
+<a name="ln-272"></a>          <span class="k">if</span> <span class="p">(</span><span class="n">Xtor</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-273"></a><span class="k">             </span><span class="n">flag</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+<a name="ln-274"></a>
+<a name="ln-275"></a><span class="c">!             stop &#39;error in dist init&#39;</span>
+<a name="ln-276"></a>          <span class="k">end if</span>
+<a name="ln-277"></a><span class="k">       end if</span>
+<a name="ln-278"></a><span class="k">    end do</span>
+<a name="ln-279"></a>    <span class="c">!$OMP END PARALLEL DO</span>
+<a name="ln-280"></a>  <span class="k">end subroutine </span><span class="n">cart_to_tor_check_if_confined</span>
+<a name="ln-281"></a>
+<a name="ln-282"></a>  <span class="k">subroutine </span><span class="n">cart_to_tor_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span><span class="n">T_R</span><span class="p">,</span><span class="n">T_T</span><span class="p">,</span><span class="n">T_Z</span><span class="p">)</span>
+<a name="ln-283"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+<a name="ln-284"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">R0</span>
+<a name="ln-285"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span>
+<a name="ln-286"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">T_R</span><span class="p">,</span><span class="n">T_T</span><span class="p">,</span><span class="n">T_Z</span>
+<a name="ln-287"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">RR</span>
+<a name="ln-288"></a>    <span class="kt">INTEGER</span>                                      <span class="kd">::</span> <span class="n">cc</span>
+<a name="ln-289"></a>    <span class="c">!! Particle chunk iterator.</span>
+<a name="ln-290"></a>
+<a name="ln-291"></a>    <span class="c">!$OMP SIMD</span>
+<a name="ln-292"></a><span class="c">!    !$OMP&amp; aligned(RR,X_X,X_Y,T_R,T_T,T_Z,X_Z)</span>
+<a name="ln-293"></a>    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+<a name="ln-294"></a>       <span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="nb">SQRT</span><span class="p">(</span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span> <span class="o">-</span> <span class="n">R0</span>
+<a name="ln-295"></a>
+<a name="ln-296"></a>
+<a name="ln-297"></a>       <span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span> <span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="p">)</span>
+<a name="ln-298"></a>       <span class="n">T_T</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span> <span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+<a name="ln-299"></a>       <span class="n">T_T</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">T_T</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-300"></a>       <span class="n">T_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+<a name="ln-301"></a>       <span class="n">T_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">T_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-302"></a>    <span class="k">end do</span>
+<a name="ln-303"></a>    <span class="c">!$OMP END SIMD</span>
+<a name="ln-304"></a>
+<a name="ln-305"></a>  <span class="k">end subroutine </span><span class="n">cart_to_tor_p</span>
+<a name="ln-306"></a>
+<a name="ln-307"></a>  <span class="k">subroutine </span><span class="n">cart_to_tor_check_if_confined_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-308"></a>       <span class="n">T_R</span><span class="p">,</span><span class="n">T_T</span><span class="p">,</span><span class="n">T_Z</span><span class="p">,</span><span class="n">flag_cache</span><span class="p">)</span>
+<a name="ln-309"></a>    <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+<a name="ln-310"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">R0</span><span class="p">,</span><span class="n">ar</span>
+<a name="ln-311"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span>
+<a name="ln-312"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">T_R</span><span class="p">,</span><span class="n">T_T</span><span class="p">,</span><span class="n">T_Z</span>
+<a name="ln-313"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">flag_cache</span>
+<a name="ln-314"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">RR</span>
+<a name="ln-315"></a>    <span class="kt">INTEGER</span>                                      <span class="kd">::</span> <span class="n">cc</span>
+<a name="ln-316"></a>    <span class="c">!! Particle chunk iterator.</span>
+<a name="ln-317"></a>
+<a name="ln-318"></a>    <span class="c">!$OMP SIMD</span>
+<a name="ln-319"></a><span class="c">!    !$OMP&amp; aligned(RR,X_X,X_Y,T_R,T_T,T_Z,X_Z)</span>
+<a name="ln-320"></a>    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+<a name="ln-321"></a>       <span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">=</span><span class="nb">SQRT</span><span class="p">(</span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span> <span class="o">-</span> <span class="n">R0</span>
+<a name="ln-322"></a>
+<a name="ln-323"></a>
+<a name="ln-324"></a>       <span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span> <span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">+</span> <span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="p">)</span>
+<a name="ln-325"></a>       <span class="n">T_T</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span> <span class="n">RR</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+<a name="ln-326"></a>       <span class="n">T_T</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">T_T</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-327"></a>       <span class="n">T_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">ATAN2</span><span class="p">(</span><span class="n">X_X</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="n">X_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+<a name="ln-328"></a>       <span class="n">T_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="nb">MODULO</span><span class="p">(</span><span class="n">T_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">),</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="p">)</span>
+<a name="ln-329"></a>    <span class="k">end do</span>
+<a name="ln-330"></a>    <span class="c">!$OMP END SIMD</span>
+<a name="ln-331"></a>
+<a name="ln-332"></a>    <span class="c">!$OMP SIMD</span>
+<a name="ln-333"></a>    <span class="k">do </span><span class="n">cc</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">pchunk</span>
+<a name="ln-334"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">ar</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-335"></a><span class="k">          </span><span class="n">flag_cache</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0_is</span>
+<a name="ln-336"></a>       <span class="k">end if</span>
+<a name="ln-337"></a><span class="k">    end do</span>
+<a name="ln-338"></a>    <span class="c">!$OMP END SIMD</span>
+<a name="ln-339"></a>    
+<a name="ln-340"></a>  <span class="k">end subroutine </span><span class="n">cart_to_tor_check_if_confined_p</span>
+<a name="ln-341"></a>  
+<a name="ln-342"></a><span class="k">end module </span><span class="n">korc_coords</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>interp_fields_p &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>interp_fields_p
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.1% of total for procedures.">13 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_interp.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_interp.f90.html'>korc_interp.f90</a></li>
+    
+     <li><a href='../module/korc_interp.html'>korc_interp</a></li>
+    
+  
+     <li class="active">interp_fields_p</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/interp_fields_p.html#src">interp_fields_p</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine interp_fields_p(pchunk, F, Y_R, Y_PHI, Y_Z, B_R, B_PHI, B_Z, E_R, E_PHI, E_Z, curlB_R, curlB_PHI, curlB_Z, gradB_R, gradB_PHI, gradB_Z, flag_cache)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pchunk~16"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f~77"></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_r~30"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_phi~28"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-y_z~29"></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_r~15"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_phi~15"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b_z~28"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_r~5"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_phi~20"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_z~15"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-curlb_r"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>curlB_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-curlb_phi"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>curlB_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-curlb_z"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>curlB_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gradb_r~14"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>gradB_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gradb_phi~14"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>gradB_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gradb_z~14"></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>gradB_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flag_cache~8"></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>flag_cache</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~interp_fields_p~~CallsGraph Pages: 1 -->
+<svg id="procinterp_fields_pCallsGraph" width="272pt" height="116pt"
+ viewBox="0.00 0.00 272.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~interp_fields_p~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>proc~~interp_fields_p~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 268,-112 268,4 -4,4"/>
+<!-- proc~interp_fields_p -->
+<g id="proc~~interp_fields_p~~CallsGraph_node1" class="node">
+<title>proc~interp_fields_p</title>
+<polygon fill="none" stroke="#000000" points="81,-66 0,-66 0,-42 81,-42 81,-66"/>
+<text text-anchor="middle" x="40.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">interp_fields_p</text>
+</g>
+<!-- ezspline_interp -->
+<g id="proc~~interp_fields_p~~CallsGraph_node2" class="node">
+<title>ezspline_interp</title>
+<polygon fill="#777777" stroke="#777777" points="232,-108 149,-108 149,-84 232,-84 232,-108"/>
+<text text-anchor="middle" x="190.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_interp</text>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;ezspline_interp -->
+<g id="proc~~interp_fields_p~~CallsGraph_edge1" class="edge">
+<title>proc~interp_fields_p&#45;&gt;ezspline_interp</title>
+<path fill="none" stroke="#000000" d="M81.0922,-65.3658C98.9723,-70.3722 120.1835,-76.3114 139.1476,-81.6213"/>
+<polygon fill="#000000" stroke="#000000" points="138.2569,-85.0065 148.8303,-84.3325 140.1444,-78.2657 138.2569,-85.0065"/>
+</g>
+<!-- proc~check_if_in_fields_domain_p -->
+<g id="proc~~interp_fields_p~~CallsGraph_node3" class="node">
+<title>proc~check_if_in_fields_domain_p</title>
+<g id="a_proc~~interp_fields_p~~CallsGraph_node3"><a xlink:href=".././proc/check_if_in_fields_domain_p.html" xlink:title="check_if_in_fields_domain_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="264,-66 117,-66 117,-42 264,-42 264,-66"/>
+<text text-anchor="middle" x="190.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">check_if_in_fields_domain_p</text>
+</a>
+</g>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;proc~check_if_in_fields_domain_p -->
+<g id="proc~~interp_fields_p~~CallsGraph_edge2" class="edge">
+<title>proc~interp_fields_p&#45;&gt;proc~check_if_in_fields_domain_p</title>
+<path fill="none" stroke="#000000" d="M81.0922,-54C89.1612,-54 97.9086,-54 106.8218,-54"/>
+<polygon fill="#000000" stroke="#000000" points="106.9282,-57.5001 116.9281,-54 106.9281,-50.5001 106.9282,-57.5001"/>
+</g>
+<!-- ezspline_error -->
+<g id="proc~~interp_fields_p~~CallsGraph_node4" class="node">
+<title>ezspline_error</title>
+<polygon fill="#777777" stroke="#777777" points="230,-24 151,-24 151,0 230,0 230,-24"/>
+<text text-anchor="middle" x="190.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_error</text>
+</g>
+<!-- proc~interp_fields_p&#45;&gt;ezspline_error -->
+<g id="proc~~interp_fields_p~~CallsGraph_edge3" class="edge">
+<title>proc~interp_fields_p&#45;&gt;ezspline_error</title>
+<path fill="none" stroke="#000000" d="M81.0922,-42.6342C99.5634,-37.4623 121.5895,-31.2949 141.0208,-25.8542"/>
+<polygon fill="#000000" stroke="#000000" points="142.2271,-29.1511 150.913,-23.0844 140.3396,-22.4104 142.2271,-29.1511"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~interp_fields_p~~CalledByGraph Pages: 1 -->
+<svg id="procinterp_fields_pCalledByGraph" width="641pt" height="396pt"
+ viewBox="0.00 0.00 641.00 396.34" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~interp_fields_p~~CalledByGraph" class="graph" transform="scale(.8155 .8155) rotate(0) translate(4 482)">
+<title>proc~~interp_fields_p~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-482 782,-482 782,4 -4,4"/>
+<!-- proc~interp_fields_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node1" class="node">
+<title>proc~interp_fields_p</title>
+<polygon fill="none" stroke="#000000" points="778,-274 697,-274 697,-250 778,-250 778,-274"/>
+<text text-anchor="middle" x="737.5" y="-259.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">interp_fields_p</text>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node2" class="node">
+<title>proc~advance_gcinterp_b2d_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node2"><a xlink:href=".././proc/advance_gcinterp_b2d_vars.html" xlink:title="advance_GCinterp_B2D_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="430.5,-478 278.5,-478 278.5,-454 430.5,-454 430.5,-478"/>
+<text text-anchor="middle" x="354.5" y="-463.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B2D_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge1" class="edge">
+<title>proc~advance_gcinterp_b2d_vars&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M414.1448,-453.8846C422.9599,-451.3696 431.8213,-448.4209 440,-445 549.2413,-399.3076 664.9273,-316.8435 713.6633,-280.2925"/>
+<polygon fill="#000000" stroke="#000000" points="715.8301,-283.0422 721.7019,-274.2233 711.6122,-277.4556 715.8301,-283.0422"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node4" class="node">
+<title>proc~include_coulombcollisions_gc_p</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node4"><a xlink:href=".././proc/include_coulombcollisions_gc_p.html" xlink:title="include_CoulombCollisions_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="654.5,-274 482.5,-274 482.5,-250 654.5,-250 654.5,-274"/>
+<text text-anchor="middle" x="568.5" y="-259.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge11" class="edge">
+<title>proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M425.9393,-453.8144C430.9675,-451.3773 435.7285,-448.4688 440,-445 468.7023,-421.6915 455.8026,-400.9706 476,-370 497.8827,-336.4451 529.1891,-302.036 549.1804,-281.3374"/>
+<polygon fill="#000000" stroke="#000000" points="551.7604,-283.7051 556.245,-274.1062 546.7533,-278.8133 551.7604,-283.7051"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node3" class="node">
+<title>proc~include_coulombcollisionsla_gc_p</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node3"><a xlink:href=".././proc/include_coulombcollisionsla_gc_p.html" xlink:title="include_CoulombCollisionsLA_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="661,-232 476,-232 476,-208 661,-208 661,-232"/>
+<text text-anchor="middle" x="568.5" y="-217.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisionsLA_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge2" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M623.3777,-232.0336C635.7757,-234.8704 648.8601,-237.9573 661,-241 669.3538,-243.0938 678.1908,-245.4176 686.7767,-247.7342"/>
+<polygon fill="#000000" stroke="#000000" points="686.1279,-251.185 696.6963,-250.4362 687.9676,-244.431 686.1279,-251.185"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge3" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~interp_fields_p</title>
+<path fill="none" stroke="#000000" d="M654.9803,-262C665.8295,-262 676.6351,-262 686.6813,-262"/>
+<polygon fill="#000000" stroke="#000000" points="686.8456,-265.5001 696.8456,-262 686.8455,-258.5001 686.8456,-265.5001"/>
+</g>
+<!-- proc~advance_fpeqn_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node5" class="node">
+<title>proc~advance_fpeqn_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node5"><a xlink:href=".././proc/advance_fpeqn_vars.html" xlink:title="advance_FPeqn_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="412,-394 297,-394 297,-370 412,-370 412,-394"/>
+<text text-anchor="middle" x="354.5" y="-379.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPeqn_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge4" class="edge">
+<title>proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M412.2199,-371.3114C421.7394,-368.5696 431.3235,-365.1768 440,-361 483.088,-340.258 525.5511,-303.4757 549.2611,-281.0579"/>
+<polygon fill="#000000" stroke="#000000" points="551.7695,-283.5015 556.5568,-274.0499 546.9203,-278.4532 551.7695,-283.5015"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node6" class="node">
+<title>proc~adv_gcinterp_psi_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node6"><a xlink:href=".././proc/adv_gcinterp_psi_top.html" xlink:title="adv_GCinterp_psi_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-318 103,-318 103,-294 220,-294 220,-318"/>
+<text text-anchor="middle" x="161.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge5" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M219.9051,-293.9922C235.7795,-291.0411 253.0043,-288.123 269,-286 336.7014,-277.0144 413.4909,-270.9423 472.3648,-267.154"/>
+<polygon fill="#000000" stroke="#000000" points="472.6385,-270.6438 482.3975,-266.5193 472.1965,-263.6577 472.6385,-270.6438"/>
+</g>
+<!-- proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node13" class="node">
+<title>proc~advance_fpinterp_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node13"><a xlink:href=".././proc/advance_fpinterp_vars.html" xlink:title="advance_FPinterp_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="416,-234 293,-234 293,-210 416,-210 416,-234"/>
+<text text-anchor="middle" x="354.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPinterp_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge19" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M214.3715,-293.8628C220.8668,-291.4009 227.238,-288.4726 233,-285 252.6509,-273.1569 249.4057,-259.9367 269,-248 275.6146,-243.9704 282.9008,-240.5237 290.3451,-237.5858"/>
+<polygon fill="#000000" stroke="#000000" points="291.6244,-240.8448 299.8205,-234.131 289.2265,-234.2683 291.6244,-240.8448"/>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node7" class="node">
+<title>proc~adv_gcinterp_psiwe_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node7"><a xlink:href=".././proc/adv_gcinterp_psiwe_top.html" xlink:title="adv_GCinterp_psiwE_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="420.5,-352 288.5,-352 288.5,-328 420.5,-328 420.5,-352"/>
+<text text-anchor="middle" x="354.5" y="-337.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psiwE_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge15" class="edge">
+<title>proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M396.9273,-327.9142C410.7471,-323.7607 426.1039,-318.9135 440,-314 471.1852,-302.9733 505.9239,-288.7981 531.4116,-278.0335"/>
+<polygon fill="#000000" stroke="#000000" points="532.8643,-281.2192 540.7004,-274.0886 530.1279,-274.7762 532.8643,-281.2192"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node8" class="node">
+<title>proc~advance_gcinterp_3dbdb1_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node8"><a xlink:href=".././proc/advance_gcinterp_3dbdb1_vars.html" xlink:title="advance_GCinterp_3DBdB1_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="440,-192 269,-192 269,-168 440,-168 440,-192"/>
+<text text-anchor="middle" x="354.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB1_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge8" class="edge">
+<title>proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M420.9757,-192.0814C427.6297,-194.5274 434.0984,-197.4671 440,-201 460.5215,-213.2848 455.3712,-228.8963 476,-241 479.0759,-242.8048 482.2934,-244.4545 485.6064,-245.9624"/>
+<polygon fill="#000000" stroke="#000000" points="484.5763,-249.3218 495.1581,-249.8479 487.214,-242.8378 484.5763,-249.3218"/>
+</g>
+<!-- proc~advance_gcinterp_b_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node9" class="node">
+<title>proc~advance_gcinterp_b_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node9"><a xlink:href=".././proc/advance_gcinterp_b_vars.html" xlink:title="advance_GCinterp_B_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="424,-150 285,-150 285,-126 424,-126 424,-150"/>
+<text text-anchor="middle" x="354.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge9" class="edge">
+<title>proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M424.3943,-149.2202C430.0147,-151.8488 435.3197,-155.0661 440,-159 470.4685,-184.61 445.3073,-215.6592 476,-241 477.5715,-242.2975 479.2072,-243.5186 480.8972,-244.6676"/>
+<polygon fill="#000000" stroke="#000000" points="479.3528,-247.8187 489.7544,-249.833 482.8793,-241.7718 479.3528,-247.8187"/>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node10" class="node">
+<title>proc~advance_gcinterp_psi_vars_fs</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node10"><a xlink:href=".././proc/advance_gcinterp_psi_vars_fs.html" xlink:title="advance_GCinterp_psi_vars_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="436.5,-108 272.5,-108 272.5,-84 436.5,-84 436.5,-108"/>
+<text text-anchor="middle" x="354.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi_vars_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge10" class="edge">
+<title>proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M427.8173,-108.095C432.2372,-110.5682 436.3597,-113.5085 440,-117 481.4159,-156.7235 434.2361,-201.6425 476,-241 477.2771,-242.2035 478.6082,-243.3432 479.9865,-244.4224"/>
+<polygon fill="#000000" stroke="#000000" points="478.0807,-247.3582 488.3504,-249.9629 481.9465,-241.5224 478.0807,-247.3582"/>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node11" class="node">
+<title>proc~advance_gcinterp_psi2x1t_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node11"><a xlink:href=".././proc/advance_gcinterp_psi2x1t_vars.html" xlink:title="advance_GCinterp_psi2x1t_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-66 272,-66 272,-42 437,-42 437,-66"/>
+<text text-anchor="middle" x="354.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi2x1t_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge12" class="edge">
+<title>proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M428.4914,-66.0461C432.6947,-68.5373 436.5889,-71.4946 440,-75 492.6482,-129.1048 422.8776,-187.3607 476,-241 476.9451,-241.9543 477.9239,-242.8692 478.9333,-243.7461"/>
+<polygon fill="#000000" stroke="#000000" points="477.0679,-246.7167 487.2189,-249.7513 481.1759,-241.0488 477.0679,-246.7167"/>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node12" class="node">
+<title>proc~advance_gcinterp_2dbdb_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node12"><a xlink:href=".././proc/advance_gcinterp_2dbdb_vars.html" xlink:title="advance_GCinterp_2DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-24 272,-24 272,0 437,0 437,-24"/>
+<text text-anchor="middle" x="354.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_2DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge13" class="edge">
+<title>proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M429.0522,-24.1213C433.0648,-26.6015 436.7679,-29.5352 440,-33 503.9962,-101.6037 411.4025,-172.9622 476,-241 476.9248,-241.9741 477.8846,-242.9074 478.8761,-243.8015"/>
+<polygon fill="#000000" stroke="#000000" points="476.9448,-246.7277 487.0483,-249.9167 481.1387,-241.1231 476.9448,-246.7277"/>
+</g>
+<!-- proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge6" class="edge">
+<title>proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M416.1106,-233.516C440.419,-238.0596 468.564,-243.3204 494.0012,-248.075"/>
+<polygon fill="#000000" stroke="#000000" points="493.4998,-251.5418 503.9727,-249.9388 494.786,-244.661 493.4998,-251.5418"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node14" class="node">
+<title>proc~advance_gcinterp_3dbdb_vars</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node14"><a xlink:href=".././proc/advance_gcinterp_3dbdb_vars.html" xlink:title="advance_GCinterp_3DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-436 272,-436 272,-412 437,-412 437,-436"/>
+<text text-anchor="middle" x="354.5" y="-421.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge7" class="edge">
+<title>proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M420.9533,-411.881C427.6116,-409.4423 434.0874,-406.5145 440,-403 453.7635,-394.8189 520.0541,-318.5448 551.6637,-281.7167"/>
+<polygon fill="#000000" stroke="#000000" points="554.3545,-283.9554 558.2028,-274.0841 549.0387,-279.4011 554.3545,-283.9554"/>
+</g>
+<!-- proc~adv_gceqn_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node15" class="node">
+<title>proc~adv_gceqn_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node15"><a xlink:href=".././proc/adv_gceqn_top.html" xlink:title="adv_GCeqn_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="206,-360 117,-360 117,-336 206,-336 206,-360"/>
+<text text-anchor="middle" x="161.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCeqn_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge14" class="edge">
+<title>proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M203.1786,-335.9708C223.0249,-330.4448 247.1459,-324.0198 269,-319 280.0098,-316.4711 409.5587,-291.9605 494.6295,-275.9146"/>
+<polygon fill="#000000" stroke="#000000" points="495.3369,-279.3429 504.515,-274.0503 494.0396,-272.4642 495.3369,-279.3429"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node16" class="node">
+<title>proc~adv_gcinterp_psi_top_fs</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node16"><a xlink:href=".././proc/adv_gcinterp_psi_top_fs.html" xlink:title="adv_GCinterp_psi_top_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="229.5,-150 93.5,-150 93.5,-126 229.5,-126 229.5,-150"/>
+<text text-anchor="middle" x="161.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge18" class="edge">
+<title>proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M215.3303,-150.0872C221.5298,-152.5467 227.5677,-155.4879 233,-159 253.6463,-172.3482 248.0597,-188.1179 269,-201 273.4426,-203.733 278.2201,-206.1106 283.1642,-208.1789"/>
+<polygon fill="#000000" stroke="#000000" points="282.2406,-211.5699 292.8332,-211.7872 284.6881,-205.0117 282.2406,-211.5699"/>
+</g>
+<!-- program~main -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node17" class="node">
+<title>program~main</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node17"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-213 0,-213 0,-189 54,-189 54,-213"/>
+<text text-anchor="middle" x="27" y="-198.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge16" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top</title>
+<path fill="none" stroke="#000000" d="M32.9156,-213.2584C42.398,-231.6112 62.7398,-266.0897 90,-285 92.3918,-286.6592 94.9155,-288.1889 97.5294,-289.5992"/>
+<polygon fill="#000000" stroke="#000000" points="96.1683,-292.8273 106.7037,-293.948 99.1667,-286.5019 96.1683,-292.8273"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge17" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psiwe_top</title>
+<path fill="none" stroke="#000000" d="M29.6517,-213.013C37.7057,-248.2907 62.9888,-350.2813 90,-369 142.2379,-405.2009 169.8801,-376.4285 233,-369 236.4105,-368.5986 266.1973,-361.4933 295.421,-354.4171"/>
+<polygon fill="#000000" stroke="#000000" points="296.3778,-357.7866 305.2711,-352.0282 294.7279,-350.9838 296.3778,-357.7866"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gceqn_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge26" class="edge">
+<title>program~main&#45;&gt;proc~adv_gceqn_top</title>
+<path fill="none" stroke="#000000" d="M29.6067,-213.0681C35.6558,-238.1397 53.0385,-296.0939 90,-327 95.0152,-331.1936 100.8364,-334.5499 106.9498,-337.236"/>
+<polygon fill="#000000" stroke="#000000" points="106.1319,-340.6684 116.7235,-340.9294 108.6064,-334.1203 106.1319,-340.6684"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge27" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs</title>
+<path fill="none" stroke="#000000" d="M42.2672,-188.8979C54.5645,-179.6386 72.6102,-167.1197 90,-159 94.3154,-156.985 98.8682,-155.1153 103.5008,-153.3908"/>
+<polygon fill="#000000" stroke="#000000" points="104.7809,-156.6512 113.0717,-150.0547 102.4769,-150.0412 104.7809,-156.6512"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node18" class="node">
+<title>proc~adv_gcinterp_psi2x1t_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node18"><a xlink:href=".././proc/adv_gcinterp_psi2x1t_top.html" xlink:title="adv_GCinterp_psi2x1t_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-108 93,-108 93,-84 230,-84 230,-108"/>
+<text text-anchor="middle" x="161.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi2x1t_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge28" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top</title>
+<path fill="none" stroke="#000000" d="M32.9156,-188.7416C42.398,-170.3888 62.7398,-135.9103 90,-117 92.3918,-115.3408 94.9155,-113.8111 97.5294,-112.4008"/>
+<polygon fill="#000000" stroke="#000000" points="99.1667,-115.4981 106.7037,-108.052 96.1683,-109.1727 99.1667,-115.4981"/>
+</g>
+<!-- proc~adv_gcinterp_b_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node19" class="node">
+<title>proc~adv_gcinterp_b_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node19"><a xlink:href=".././proc/adv_gcinterp_b_top.html" xlink:title="adv_GCinterp_B_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="217,-66 106,-66 106,-42 217,-42 217,-66"/>
+<text text-anchor="middle" x="161.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge29" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b_top</title>
+<path fill="none" stroke="#000000" d="M29.6067,-188.9319C35.6558,-163.8603 53.0385,-105.9061 90,-75 92.0408,-73.2935 94.2151,-71.7257 96.4882,-70.2852"/>
+<polygon fill="#000000" stroke="#000000" points="98.5291,-73.1614 105.6726,-65.337 95.2089,-66.9989 98.5291,-73.1614"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node20" class="node">
+<title>proc~adv_gcinterp_3dbdb_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node20"><a xlink:href=".././proc/adv_gcinterp_3dbdb_top.html" xlink:title="adv_GCinterp_3DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-24 93,-24 93,0 230,0 230,-24"/>
+<text text-anchor="middle" x="161.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge30" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top</title>
+<path fill="none" stroke="#000000" d="M27.9357,-188.83C30.9647,-158.0518 43.2261,-76.474 90,-33 91.303,-31.7889 92.6723,-30.6474 94.097,-29.5713"/>
+<polygon fill="#000000" stroke="#000000" points="96.191,-32.3889 102.787,-24.0976 92.4602,-26.4659 96.191,-32.3889"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node21" class="node">
+<title>proc~adv_gcinterp_3dbdb1_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node21"><a xlink:href=".././proc/adv_gcinterp_3dbdb1_top.html" xlink:title="adv_GCinterp_3DBdB1_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="233,-276 90,-276 90,-252 233,-252 233,-276"/>
+<text text-anchor="middle" x="161.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB1_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge31" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top</title>
+<path fill="none" stroke="#000000" d="M42.2672,-213.1021C54.5645,-222.3614 72.6102,-234.8803 90,-243 94.3154,-245.015 98.8682,-246.8847 103.5008,-248.6092"/>
+<polygon fill="#000000" stroke="#000000" points="102.4769,-251.9588 113.0717,-251.9453 104.7809,-245.3488 102.4769,-251.9588"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node22" class="node">
+<title>proc~adv_gcinterp_2dbdb_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node22"><a xlink:href=".././proc/adv_gcinterp_2dbdb_top.html" xlink:title="adv_GCinterp_2DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-234 93,-234 93,-210 230,-210 230,-234"/>
+<text text-anchor="middle" x="161.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_2DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge32" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-205.2497C62.7691,-206.5848 72.6777,-208.1318 82.9484,-209.7354"/>
+<polygon fill="#000000" stroke="#000000" points="82.4538,-213.2005 92.874,-211.2852 83.5337,-206.2843 82.4538,-213.2005"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_node23" class="node">
+<title>proc~adv_gcinterp_b2d_top</title>
+<g id="a_proc~~interp_fields_p~~CalledByGraph_node23"><a xlink:href=".././proc/adv_gcinterp_b2d_top.html" xlink:title="adv_GCinterp_B2D_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="223.5,-192 99.5,-192 99.5,-168 223.5,-168 223.5,-192"/>
+<text text-anchor="middle" x="161.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B2D_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b2d_top -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge33" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b2d_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-196.7503C64.5148,-195.1427 76.78,-193.2277 89.2755,-191.2767"/>
+<polygon fill="#000000" stroke="#000000" points="89.9725,-194.7103 99.3129,-189.7095 88.8926,-187.7941 89.9725,-194.7103"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge20" class="edge">
+<title>proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M219.6901,-108.1068C224.5018,-110.5477 229.0324,-113.4793 233,-117 263.3809,-143.9588 238.0226,-174.7288 269,-201 273.2986,-204.6455 278.1328,-207.6766 283.2592,-210.1945"/>
+<polygon fill="#000000" stroke="#000000" points="282.1752,-213.5357 292.7495,-214.1945 284.894,-207.0853 282.1752,-213.5357"/>
+</g>
+<!-- proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge21" class="edge">
+<title>proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M217.0302,-63.9915C222.9382,-66.8104 228.4428,-70.4091 233,-75 274.0304,-116.3341 227.0535,-160.5959 269,-201 273.3019,-205.1438 278.2828,-208.5118 283.6351,-211.2443"/>
+<polygon fill="#000000" stroke="#000000" points="282.3711,-214.5109 292.9389,-215.2678 285.1497,-208.086 282.3711,-214.5109"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge22" class="edge">
+<title>proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M221.8019,-24.1076C225.9351,-26.5582 229.7437,-29.4913 233,-33 284.9453,-88.9714 215.8133,-146.2068 269,-201 273.2285,-205.3562 278.203,-208.8662 283.5903,-211.6877"/>
+<polygon fill="#000000" stroke="#000000" points="282.4242,-214.9981 292.9876,-215.8138 285.2385,-208.5887 282.4242,-214.9981"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge23" class="edge">
+<title>proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M216.8061,-251.9645C239.418,-247.0437 265.7449,-241.3146 289.2862,-236.1916"/>
+<polygon fill="#000000" stroke="#000000" points="290.1588,-239.5837 299.1859,-234.0373 288.6703,-232.7438 290.1588,-239.5837"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge24" class="edge">
+<title>proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M230.088,-222C247.206,-222 265.6061,-222 282.8671,-222"/>
+<polygon fill="#000000" stroke="#000000" points="282.8802,-225.5001 292.8801,-222 282.8801,-218.5001 282.8802,-225.5001"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~interp_fields_p~~CalledByGraph_edge25" class="edge">
+<title>proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M216.8061,-192.0355C239.418,-196.9563 265.7449,-202.6854 289.2862,-207.8084"/>
+<polygon fill="#000000" stroke="#000000" points="288.6703,-211.2562 299.1859,-209.9627 290.1588,-204.4163 288.6703,-211.2562"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocinterp_fields_pCalledByGraph = svgPanZoom('#procinterp_fields_pCalledByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/interp_fields_p.html#src">interp_fields_p</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">interp_fields_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+     <span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">flag_cache</span><span class="p">)</span>
+  <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
+  <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">F</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">curlB_R</span><span class="p">,</span><span class="n">curlB_PHI</span><span class="p">,</span><span class="n">curlB_Z</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span>
+  <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">),</span><span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">flag_cache</span>
+
+  <span class="c">!write(output_unit_write,*) Y_R,Y_Z,flag_cache</span>
+  
+  <span class="k">call </span><span class="n">check_if_in_fields_domain_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_PHI</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">flag_cache</span><span class="p">)</span>
+  
+  <span class="k">call </span><span class="n">EZspline_interp</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">efield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">efield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span><span class="n">efield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">gradB_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span><span class="n">gradB_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span><span class="n">gradB_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">curlb_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span><span class="n">curlb_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span><span class="n">curlb_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">pchunk</span><span class="p">,</span><span class="n">Y_R</span><span class="p">,</span><span class="n">Y_Z</span><span class="p">,</span><span class="n">B_R</span><span class="p">,</span><span class="n">B_PHI</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">E_R</span><span class="p">,</span><span class="n">E_PHI</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">gradB_R</span><span class="p">,</span><span class="n">gradB_PHI</span><span class="p">,</span><span class="n">gradB_Z</span><span class="p">,</span><span class="n">curlb_R</span><span class="p">,</span><span class="n">curlb_PHI</span><span class="p">,</span><span class="n">curlb_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">ezerr</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+<span class="k">end subroutine </span><span class="n">interp_fields_p</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

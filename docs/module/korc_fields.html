@@ -1,0 +1,5747 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_fields &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_fields 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 7.4% of total for modules and submodules.">1937 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_fields.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_fields.f90.html'>korc_fields.f90</a></li>
+    
+  
+     <li class="active">korc_fields</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-0">Functions</a></h3></div>
+  <div id="funcs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-cross~2">cross</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields">analytical_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_p">analytical_fields_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_gc_init">analytical_fields_GC_init</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_gc">analytical_fields_GC</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_bmag_p">analytical_fields_Bmag_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-add_analytical_e_p">add_analytical_E_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_gc_p">analytical_fields_GC_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_magnetic_field">uniform_magnetic_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_fields_p">uniform_fields_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_electric_field">uniform_electric_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_electric_field_cyl">analytical_electric_field_cyl</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-mean_f_field">mean_F_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-get_analytical_fields">get_analytical_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_fields">uniform_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-unitvectors">unitVectors</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-get_fields">get_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_e1d">calculate_SC_E1D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_e1d_fs">calculate_SC_E1D_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_p">calculate_SC_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_p_fs">calculate_SC_p_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-init_sc_e1d">init_SC_E1D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-init_sc_e1d_fs">init_SC_E1D_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-reinit_sc_e1d">reinit_SC_E1D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-reinit_sc_e1d_fs">reinit_SC_E1D_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-initialize_fields">initialize_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-initialize_gc_fields">initialize_GC_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-initialize_gc_fields_3d">initialize_GC_fields_3D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-define_sc_time_step">define_SC_time_step</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-load_dim_data_from_hdf5">load_dim_data_from_hdf5</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-which_fields_in_file">which_fields_in_file</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-load_field_data_from_hdf5">load_field_data_from_hdf5</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-load_1d_fs_from_hdf5">load_1D_FS_from_hdf5</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_1d_fs_arrays">allocate_1D_FS_arrays</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_2d_fields_arrays">ALLOCATE_2D_FIELDS_ARRAYS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_3d_fields_arrays">ALLOCATE_3D_FIELDS_ARRAYS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_v_field_2d">ALLOCATE_V_FIELD_2D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_v_field_2dx">ALLOCATE_V_FIELD_2DX</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_v_field_3d">ALLOCATE_V_FIELD_3D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-deallocate_fields_arrays">DEALLOCATE_FIELDS_ARRAYS</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Module containing subroutines to initialize externally
+ generated fields, and to calculate the electric and magnetic
+ fields when using an analytical model. </p></div>
+<p>
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href='../module/korc_types.html'>korc_types</a></li>
+    
+    <li><a href='../module/korc_hpc.html'>korc_hpc</a></li>
+    
+    <li><a href='../module/korc_coords.html'>korc_coords</a></li>
+    
+    <li><a href='../module/korc_interp.html'>korc_interp</a></li>
+    
+    <li><a href='../module/korc_hdf5.html'>korc_HDF5</a></li>
+    
+    <li><a href='../module/korc_input.html'>korc_input</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_fields~~UsesGraph Pages: 1 -->
+<svg id="modulekorc_fieldsUsesGraph" width="641pt" height="332pt"
+ viewBox="0.00 0.00 641.00 331.79" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_fields~~UsesGraph" class="graph" transform="scale(.8616 .8616) rotate(0) translate(4 381.1022)">
+<title>module~~korc_fields~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-381.1022 740,-381.1022 740,4 -4,4"/>
+<!-- module~korc_fields -->
+<g id="module~~korc_fields~~UsesGraph_node1" class="node">
+<title>module~korc_fields</title>
+<polygon fill="none" stroke="#000000" points="736,-205 673,-205 673,-181 736,-181 736,-205"/>
+<text text-anchor="middle" x="704.5" y="-190.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_fields</text>
+</g>
+<!-- module~korc_input -->
+<g id="module~~korc_fields~~UsesGraph_node2" class="node">
+<title>module~korc_input</title>
+<g id="a_module~~korc_fields~~UsesGraph_node2"><a xlink:href=".././module/korc_input.html" xlink:title="korc_input">
+<polygon fill="#337ab7" stroke="#337ab7" points="396.5,-66 335.5,-66 335.5,-42 396.5,-42 396.5,-66"/>
+<text text-anchor="middle" x="366" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_input</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_input -->
+<g id="module~~korc_fields~~UsesGraph_edge1" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487,-14C453.7518,-3.3205 415.506,-21.015 391.0638,-36.1553"/>
+<polygon fill="#000000" stroke="#000000" points="388.8957,-33.3898 382.4111,-41.7685 392.7053,-39.2624 388.8957,-33.3898"/>
+</g>
+<!-- module~korc_hpc -->
+<g id="module~~korc_fields~~UsesGraph_node3" class="node">
+<title>module~korc_hpc</title>
+<g id="a_module~~korc_fields~~UsesGraph_node3"><a xlink:href=".././module/korc_hpc.html" xlink:title="korc_hpc">
+<polygon fill="#337ab7" stroke="#337ab7" points="281,-28 226,-28 226,-4 281,-4 281,-28"/>
+<text text-anchor="middle" x="253.5" y="-13.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hpc</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_fields~~UsesGraph_edge2" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685.6268,-180.9657C665.7621,-168.409 633.4829,-148.3152 605,-132"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487,-14C435.7987,2.4461 419.6644,-17.4904 366,-14"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M605,-132C557.0791,-104.5506 581.5468,-60.6414 537,-28 518.3854,-14.3603 508.9713,-21.0573 487,-14"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M366,-14C341.2072,-12.3874 313.2807,-12.8709 291.4541,-13.7656"/>
+<polygon fill="#000000" stroke="#000000" points="291.0997,-10.2781 281.2697,-14.2306 291.419,-17.2708 291.0997,-10.2781"/>
+</g>
+<!-- module~korc_interp -->
+<g id="module~~korc_fields~~UsesGraph_node4" class="node">
+<title>module~korc_interp</title>
+<g id="a_module~~korc_fields~~UsesGraph_node4"><a xlink:href=".././module/korc_interp.html" xlink:title="korc_interp">
+<polygon fill="#337ab7" stroke="#337ab7" points="637,-205 573,-205 573,-181 637,-181 637,-205"/>
+<text text-anchor="middle" x="605" y="-190.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_interp -->
+<g id="module~~korc_fields~~UsesGraph_edge3" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M672.744,-193C664.6573,-193 655.8375,-193 647.3154,-193"/>
+<polygon fill="#000000" stroke="#000000" points="647.1374,-189.5001 637.1374,-193 647.1373,-196.5001 647.1374,-189.5001"/>
+</g>
+<!-- module~korc_hdf5 -->
+<g id="module~~korc_fields~~UsesGraph_node5" class="node">
+<title>module~korc_hdf5</title>
+<g id="a_module~~korc_fields~~UsesGraph_node5"><a xlink:href=".././module/korc_hdf5.html" xlink:title="korc_HDF5">
+<polygon fill="#337ab7" stroke="#337ab7" points="399,-146 333,-146 333,-122 399,-122 399,-146"/>
+<text text-anchor="middle" x="366" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_fields~~UsesGraph_edge6" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M605,-132C572.573,-113.9973 468.8898,-122.1127 409.2803,-128.648"/>
+<polygon fill="#000000" stroke="#000000" points="408.5896,-125.2036 399.0448,-129.8021 409.374,-132.1595 408.5896,-125.2036"/>
+</g>
+<!-- module~korc_coords -->
+<g id="module~~korc_fields~~UsesGraph_node6" class="node">
+<title>module~korc_coords</title>
+<g id="a_module~~korc_fields~~UsesGraph_node6"><a xlink:href=".././module/korc_coords.html" xlink:title="korc_coords">
+<polygon fill="#337ab7" stroke="#337ab7" points="401,-344 331,-344 331,-320 401,-320 401,-344"/>
+<text text-anchor="middle" x="366" y="-329.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_coords</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_coords -->
+<g id="module~~korc_fields~~UsesGraph_edge5" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M698.1002,-205.0882C675.1224,-246.6498 592.522,-380.6621 487,-372"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487,-372C454.0423,-376.0434 418.1417,-361.5987 394.0756,-348.9534"/>
+<polygon fill="#000000" stroke="#000000" points="395.603,-345.7993 385.1519,-344.0602 392.2374,-351.9371 395.603,-345.7993"/>
+</g>
+<!-- module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_node7" class="node">
+<title>module~korc_types</title>
+<g id="a_module~~korc_fields~~UsesGraph_node7"><a xlink:href=".././module/korc_types.html" xlink:title="korc_types">
+<polygon fill="#337ab7" stroke="#337ab7" points="176,-166 113,-166 113,-142 176,-142 176,-166"/>
+<text text-anchor="middle" x="144.5" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge4" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487,-372C417.6741,-380.5052 395.4939,-379.8134 331,-353 290.5246,-336.1723 291.5727,-313.7234 253.5,-292"/>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_fields~~UsesGraph_edge7" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M335.2589,-43.6163C321.5156,-38.9742 305.1948,-33.4614 290.7631,-28.5867"/>
+<polygon fill="#000000" stroke="#000000" points="291.7228,-25.2166 281.1286,-25.3323 289.4827,-31.8485 291.7228,-25.2166"/>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge8" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M335.456,-53.4168C302.943,-54.0555 250.9205,-58.7741 212,-80 188.943,-92.5745 169.5977,-116.0684 157.6097,-133.2208"/>
+<polygon fill="#000000" stroke="#000000" points="154.3931,-131.7333 151.7298,-141.9879 160.2067,-135.6323 154.3931,-131.7333"/>
+</g>
+<!-- module~korc_hpc&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge11" class="edge">
+<title>module~korc_hpc&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M230.1159,-28.0013C223.7872,-31.9242 217.2445,-36.664 212,-42 185.404,-69.06 164.7656,-108.522 153.6412,-132.6604"/>
+<polygon fill="#000000" stroke="#000000" points="150.3577,-131.4292 149.4664,-141.9865 156.7468,-134.2893 150.3577,-131.4292"/>
+</g>
+<!-- omp_lib -->
+<g id="module~~korc_fields~~UsesGraph_node10" class="node">
+<title>omp_lib</title>
+<g id="a_module~~korc_fields~~UsesGraph_node10"><a xlink:href="https://gcc.gnu.org/onlinedocs/gcc-4.4.3/libgomp/Runtime-Library-Routines.html" xlink:title="omp_lib">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-24 117.5,-24 117.5,0 171.5,0 171.5,-24"/>
+<text text-anchor="middle" x="144.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_lib</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;omp_lib -->
+<g id="module~~korc_fields~~UsesGraph_edge9" class="edge">
+<title>module~korc_hpc&#45;&gt;omp_lib</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.9947,-14.9906C212.5969,-14.499 196.2872,-13.9004 181.7886,-13.3684"/>
+<polygon fill="#000000" stroke="#000000" points="181.7406,-9.8644 171.6189,-12.9952 181.4838,-16.8597 181.7406,-9.8644"/>
+</g>
+<!-- mpi -->
+<g id="module~~korc_fields~~UsesGraph_node16" class="node">
+<title>mpi</title>
+<g id="a_module~~korc_fields~~UsesGraph_node16"><a xlink:href="http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm" xlink:title="mpi">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-66 117.5,-66 117.5,-42 171.5,-42 171.5,-66"/>
+<text text-anchor="middle" x="144.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;mpi -->
+<g id="module~~korc_fields~~UsesGraph_edge10" class="edge">
+<title>module~korc_hpc&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.9947,-25.589C212.4668,-30.3052 195.9703,-36.0562 181.3668,-41.1474"/>
+<polygon fill="#000000" stroke="#000000" points="179.9094,-37.9488 171.6189,-44.5457 182.2137,-44.5586 179.9094,-37.9488"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_fields~~UsesGraph_edge13" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M596.0588,-180.9561C589.3337,-171.6487 580.0956,-158.3173 573,-146 554.5435,-113.9614 564.7362,-95.4502 537,-71 506.9525,-44.5124 405.9602,-16.7612 366,-14"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_coords -->
+<g id="module~~korc_fields~~UsesGraph_edge17" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_coords</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487,-296C462.7314,-306.9704 434.2387,-315.6375 411.0003,-321.716"/>
+<polygon fill="#000000" stroke="#000000" points="409.8887,-318.3872 401.0595,-324.2436 411.6137,-325.1714 409.8887,-318.3872"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge18" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487,-296C463.3553,-306.6883 276.177,-304.6121 253.5,-292"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M597.9932,-205.2763C587.1101,-223.3386 564.5069,-257.0826 537,-277 517.7451,-290.9422 508.4601,-285.7726 487,-296"/>
+</g>
+<!-- EZspline_obj -->
+<g id="module~~korc_fields~~UsesGraph_node9" class="node">
+<title>EZspline_obj</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="523.5,-184 450.5,-184 450.5,-160 523.5,-160 523.5,-184"/>
+<text text-anchor="middle" x="487" y="-169.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">EZspline_obj</text>
+</g>
+<!-- module~korc_interp&#45;&gt;EZspline_obj -->
+<g id="module~~korc_fields~~UsesGraph_edge12" class="edge">
+<title>module~korc_interp&#45;&gt;EZspline_obj</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M572.756,-187.2617C560.8027,-185.1344 546.9905,-182.6763 533.9905,-180.3627"/>
+<polygon fill="#000000" stroke="#000000" points="534.2486,-176.8537 523.79,-178.5474 533.022,-183.7454 534.2486,-176.8537"/>
+</g>
+<!-- module~korc_rnd_numbers -->
+<g id="module~~korc_fields~~UsesGraph_node11" class="node">
+<title>module~korc_rnd_numbers</title>
+<g id="a_module~~korc_fields~~UsesGraph_node11"><a xlink:href=".././module/korc_rnd_numbers.html" xlink:title="korc_rnd_numbers">
+<polygon fill="#337ab7" stroke="#337ab7" points="537,-226 437,-226 437,-202 537,-202 537,-226"/>
+<text text-anchor="middle" x="487" y="-211.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_rnd_numbers</text>
+</a>
+</g>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_rnd_numbers -->
+<g id="module~~korc_fields~~UsesGraph_edge14" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_rnd_numbers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M572.756,-198.7383C564.8234,-200.1501 556.0721,-201.7075 547.2828,-203.2717"/>
+<polygon fill="#000000" stroke="#000000" points="546.6169,-199.8351 537.3849,-205.0332 547.8435,-206.7268 546.6169,-199.8351"/>
+</g>
+<!-- module~korc_fio -->
+<g id="module~~korc_fields~~UsesGraph_node12" class="node">
+<title>module~korc_fio</title>
+<g id="a_module~~korc_fields~~UsesGraph_node12"><a xlink:href=".././module/korc_fio.html" xlink:title="korc_fio">
+<polygon fill="#337ab7" stroke="#337ab7" points="514,-104 460,-104 460,-80 514,-80 514,-104"/>
+<text text-anchor="middle" x="487" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fio</text>
+</a>
+</g>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_fio -->
+<g id="module~~korc_fields~~UsesGraph_edge15" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M590.5309,-180.6154C570.162,-163.181 532.8638,-131.2563 509.0356,-110.861"/>
+<polygon fill="#000000" stroke="#000000" points="511.0919,-108.014 501.2189,-104.1704 506.5401,-113.332 511.0919,-108.014"/>
+</g>
+<!-- EZspline -->
+<g id="module~~korc_fields~~UsesGraph_node15" class="node">
+<title>EZspline</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="514,-268 460,-268 460,-244 514,-244 514,-268"/>
+<text text-anchor="middle" x="487" y="-253.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">EZspline</text>
+</g>
+<!-- module~korc_interp&#45;&gt;EZspline -->
+<g id="module~~korc_fields~~UsesGraph_edge16" class="edge">
+<title>module~korc_interp&#45;&gt;EZspline</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M587.261,-205.0164C573.792,-213.8764 554.6416,-225.9171 537,-235 532.676,-237.2263 528.0611,-239.4091 523.449,-241.4754"/>
+<polygon fill="#000000" stroke="#000000" points="521.8672,-238.3462 514.0795,-245.5298 524.6471,-244.7706 521.8672,-238.3462"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_fields~~UsesGraph_edge20" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M354.3843,-121.8164C334.9318,-101.4129 295.6035,-60.1619 272.2108,-35.6255"/>
+<polygon fill="#000000" stroke="#000000" points="274.6547,-33.1167 265.2211,-28.2941 269.5883,-37.947 274.6547,-33.1167"/>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge21" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M345.6237,-146.0383C323.658,-157.8514 287.2883,-174.0934 253.5,-174"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-174C230.9515,-173.9377 206.2036,-169.7406 185.996,-165.2077"/>
+<polygon fill="#000000" stroke="#000000" points="186.7106,-161.7804 176.1751,-162.8998 185.1092,-168.5948 186.7106,-161.7804"/>
+</g>
+<!-- module~korc_constants -->
+<g id="module~~korc_fields~~UsesGraph_node13" class="node">
+<title>module~korc_constants</title>
+<g id="a_module~~korc_fields~~UsesGraph_node13"><a xlink:href=".././module/korc_constants.html" xlink:title="korc_constants">
+<polygon fill="#337ab7" stroke="#337ab7" points="295,-226 212,-226 212,-202 295,-202 295,-226"/>
+<text text-anchor="middle" x="253.5" y="-211.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_constants</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hdf5&#45;&gt;module~korc_constants -->
+<g id="module~~korc_fields~~UsesGraph_edge19" class="edge">
+<title>module~korc_hdf5&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M350.7856,-146.2089C336.6073,-157.432 314.744,-174.3483 295,-188 290.9308,-190.8136 286.5675,-193.6913 282.2538,-196.4588"/>
+<polygon fill="#000000" stroke="#000000" points="280.1715,-193.6341 273.5796,-201.9285 283.9052,-199.5552 280.1715,-193.6341"/>
+</g>
+<!-- HDF5 -->
+<g id="module~~korc_fields~~UsesGraph_node14" class="node">
+<title>HDF5</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="280.5,-146 226.5,-146 226.5,-122 280.5,-122 280.5,-146"/>
+<text text-anchor="middle" x="253.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">HDF5</text>
+</g>
+<!-- module~korc_hdf5&#45;&gt;HDF5 -->
+<g id="module~~korc_fields~~UsesGraph_edge22" class="edge">
+<title>module~korc_hdf5&#45;&gt;HDF5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M332.8548,-134C319.6327,-134 304.3492,-134 290.746,-134"/>
+<polygon fill="#000000" stroke="#000000" points="290.7331,-130.5001 280.7331,-134 290.7331,-137.5001 290.7331,-130.5001"/>
+</g>
+<!-- module~korc_coords&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge24" class="edge">
+<title>module~korc_coords&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M330.8597,-322.556C308.058,-315.7009 278.1191,-305.3048 253.5,-292"/>
+</g>
+<!-- module~korc_coords&#45;&gt;module~korc_constants -->
+<g id="module~~korc_fields~~UsesGraph_edge23" class="edge">
+<title>module~korc_coords&#45;&gt;module~korc_constants</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M354.3843,-319.8164C334.9318,-299.4129 295.6035,-258.1619 272.2108,-233.6255"/>
+<polygon fill="#000000" stroke="#000000" points="274.6547,-231.1167 265.2211,-226.2941 269.5883,-235.947 274.6547,-231.1167"/>
+</g>
+<!-- iso_c_binding -->
+<g id="module~~korc_fields~~UsesGraph_node8" class="node">
+<title>iso_c_binding</title>
+<g id="a_module~~korc_fields~~UsesGraph_node8"><a xlink:href="http://fortranwiki.org/fortran/show/ISO_C_BINDING" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="77,-136 0,-136 0,-112 77,-112 77,-136"/>
+<text text-anchor="middle" x="38.5" y="-121.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iso_c_binding</text>
+</a>
+</g>
+</g>
+<!-- module~korc_types&#45;&gt;iso_c_binding -->
+<g id="module~~korc_fields~~UsesGraph_edge25" class="edge">
+<title>module~korc_types&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M112.9835,-145.0802C104.8249,-142.7712 95.8488,-140.2308 87.0383,-137.7372"/>
+<polygon fill="#000000" stroke="#000000" points="87.7889,-134.3123 77.2137,-134.9567 85.8826,-141.0477 87.7889,-134.3123"/>
+</g>
+<!-- module~korc_rnd_numbers&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge27" class="edge">
+<title>module~korc_rnd_numbers&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-292C204.7854,-265.6733 170.3855,-207.3821 154.469,-175.6334"/>
+<polygon fill="#000000" stroke="#000000" points="157.4703,-173.8013 149.956,-166.3322 151.1725,-176.857 157.4703,-173.8013"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M436.7996,-212.5155C405.3411,-213.2484 364.545,-217.3018 331,-231 290.4189,-247.5713 292.063,-312.8405 253.5,-292"/>
+</g>
+<!-- ifport -->
+<g id="module~~korc_fields~~UsesGraph_node17" class="node">
+<title>ifport</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="393,-264 339,-264 339,-240 393,-240 393,-264"/>
+<text text-anchor="middle" x="366" y="-249.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ifport</text>
+</g>
+<!-- module~korc_rnd_numbers&#45;&gt;ifport -->
+<g id="module~~korc_fields~~UsesGraph_edge26" class="edge">
+<title>module~korc_rnd_numbers&#45;&gt;ifport</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M448.7148,-226.0234C434.0886,-230.6168 417.4507,-235.8419 402.9512,-240.3955"/>
+<polygon fill="#000000" stroke="#000000" points="401.7975,-237.0892 393.3056,-243.4247 403.8949,-243.7676 401.7975,-237.0892"/>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_input -->
+<g id="module~~korc_fields~~UsesGraph_edge29" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M459.8452,-83.4721C444.2353,-78.5698 424.3184,-72.3149 406.8523,-66.8297"/>
+<polygon fill="#000000" stroke="#000000" points="407.4921,-63.3621 396.9028,-63.705 405.3947,-70.0405 407.4921,-63.3621"/>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_hdf5 -->
+<g id="module~~korc_fields~~UsesGraph_edge32" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_hdf5</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M459.8452,-101.4256C444.8178,-106.6418 425.7988,-113.2434 408.8174,-119.1378"/>
+<polygon fill="#000000" stroke="#000000" points="407.3994,-115.925 399.1,-122.5107 409.6948,-122.538 407.3994,-115.925"/>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge30" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M474.8467,-104.082C459.2212,-118.8085 430.561,-143.1869 401,-155 339.6222,-179.5276 319.5969,-174.1827 253.5,-174"/>
+</g>
+<!-- module~korc_fio&#45;&gt;iso_c_binding -->
+<g id="module~~korc_fields~~UsesGraph_edge28" class="edge">
+<title>module~korc_fio&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-94C196.1479,-87.7525 130.5106,-99.7029 87.0027,-110.322"/>
+<polygon fill="#000000" stroke="#000000" points="86.0993,-106.9401 77.2527,-112.77 87.804,-113.7293 86.0993,-106.9401"/>
+</g>
+<!-- module~korc_fio&#45;&gt;mpi -->
+<g id="module~~korc_fields~~UsesGraph_edge31" class="edge">
+<title>module~korc_fio&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M459.9625,-93.9669C416.3915,-96.7469 327.988,-100.7772 253.5,-94"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.5,-94C226.5647,-91.0659 197.865,-80.1856 176.6793,-70.5124"/>
+<polygon fill="#000000" stroke="#000000" points="178.0449,-67.2867 167.5074,-66.1858 175.0584,-73.6177 178.0449,-67.2867"/>
+</g>
+<!-- module~korc_constants&#45;&gt;module~korc_types -->
+<g id="module~~korc_fields~~UsesGraph_edge33" class="edge">
+<title>module~korc_constants&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M231.4422,-201.8581C215.3383,-192.9936 193.2927,-180.8584 175.4307,-171.0261"/>
+<polygon fill="#000000" stroke="#000000" points="176.9733,-167.88 166.525,-166.1238 173.5976,-174.0123 176.9733,-167.88"/>
+</g>
+</g>
+</svg>
+</div><script>var panmodulekorc_fieldsUsesGraph = svgPanZoom('#modulekorc_fieldsUsesGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  
+  
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_fields~~UsedByGraph Pages: 1 -->
+<svg id="modulekorc_fieldsUsedByGraph" width="594pt" height="194pt"
+ viewBox="0.00 0.00 594.00 194.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_fields~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 190)">
+<title>module~~korc_fields~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-190 590,-190 590,4 -4,4"/>
+<!-- module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_node1" class="node">
+<title>module~korc_fields</title>
+<polygon fill="none" stroke="#000000" points="63,-104 0,-104 0,-80 63,-80 63,-104"/>
+<text text-anchor="middle" x="31.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_fields</text>
+</g>
+<!-- module~korc_initialize -->
+<g id="module~~korc_fields~~UsedByGraph_node2" class="node">
+<title>module~korc_initialize</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node2"><a xlink:href=".././module/korc_initialize.html" xlink:title="korc_initialize">
+<polygon fill="#337ab7" stroke="#337ab7" points="496,-106 420,-106 420,-82 496,-82 496,-106"/>
+<text text-anchor="middle" x="458" y="-91.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge1" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M419.9192,-94.2679C391.9702,-94.2659 353.1001,-93.85 319,-92"/>
+</g>
+<!-- module~korc_spatial_distribution -->
+<g id="module~~korc_fields~~UsedByGraph_node8" class="node">
+<title>module~korc_spatial_distribution</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node8"><a xlink:href=".././module/korc_spatial_distribution.html" xlink:title="korc_spatial_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="381.5,-186 256.5,-186 256.5,-162 381.5,-162 381.5,-186"/>
+<text text-anchor="middle" x="319" y="-171.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_spatial_distribution -->
+<g id="module~~korc_fields~~UsedByGraph_edge18" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_spatial_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M445.6503,-106.2033C431.7219,-119.3719 407.8851,-140.1742 384,-153 380.5146,-154.8716 376.8338,-156.612 373.0678,-158.2236"/>
+<polygon fill="#000000" stroke="#000000" points="371.6084,-155.0368 363.5934,-161.9658 374.18,-161.5474 371.6084,-155.0368"/>
+</g>
+<!-- module~korc_velocity_distribution -->
+<g id="module~~korc_fields~~UsedByGraph_node9" class="node">
+<title>module~korc_velocity_distribution</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node9"><a xlink:href=".././module/korc_velocity_distribution.html" xlink:title="korc_velocity_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="384,-144 254,-144 254,-120 384,-120 384,-144"/>
+<text text-anchor="middle" x="319" y="-129.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_velocity_distribution -->
+<g id="module~~korc_fields~~UsedByGraph_edge19" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_velocity_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M419.6497,-104.4843C405.2795,-108.4128 388.669,-112.9538 373.1364,-117.2001"/>
+<polygon fill="#000000" stroke="#000000" points="371.8423,-113.9254 363.1192,-119.9386 373.6882,-120.6776 371.8423,-113.9254"/>
+</g>
+<!-- module~korc_avalanche -->
+<g id="module~~korc_fields~~UsedByGraph_node3" class="node">
+<title>module~korc_avalanche</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node3"><a xlink:href=".././module/korc_avalanche.html" xlink:title="korc_avalanche">
+<polygon fill="#337ab7" stroke="#337ab7" points="201.5,-146 115.5,-146 115.5,-122 201.5,-122 201.5,-146"/>
+<text text-anchor="middle" x="158.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche</text>
+</a>
+</g>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge2" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M122.1069,-121.9645C106.6893,-116.8657 88.647,-110.899 72.7389,-105.6381"/>
+<polygon fill="#000000" stroke="#000000" points="73.7454,-102.2846 63.1522,-102.4676 71.5475,-108.9306 73.7454,-102.2846"/>
+</g>
+<!-- module~korc_ppusher -->
+<g id="module~~korc_fields~~UsedByGraph_node4" class="node">
+<title>module~korc_ppusher</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node4"><a xlink:href=".././module/korc_ppusher.html" xlink:title="korc_ppusher">
+<polygon fill="#337ab7" stroke="#337ab7" points="496,-64 420,-64 420,-40 496,-40 496,-64"/>
+<text text-anchor="middle" x="458" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher</text>
+</a>
+</g>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge9" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M319,-92C245.5927,-88.0175 231.7139,-45.3503 158.5,-52"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M433.9735,-64.1927C406.712,-76.7689 360.6235,-94.2581 319,-92"/>
+</g>
+<!-- module~korc_collisions -->
+<g id="module~~korc_fields~~UsedByGraph_node6" class="node">
+<title>module~korc_collisions</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node6"><a xlink:href=".././module/korc_collisions.html" xlink:title="korc_collisions">
+<polygon fill="#337ab7" stroke="#337ab7" points="359.5,-64 278.5,-64 278.5,-40 359.5,-40 359.5,-64"/>
+<text text-anchor="middle" x="319" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions</text>
+</a>
+</g>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_fields~~UsedByGraph_edge15" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M419.6497,-52C404.211,-52 386.1865,-52 369.6908,-52"/>
+<polygon fill="#000000" stroke="#000000" points="369.6543,-48.5001 359.6542,-52 369.6542,-55.5001 369.6543,-48.5001"/>
+</g>
+<!-- program~main -->
+<g id="module~~korc_fields~~UsedByGraph_node5" class="node">
+<title>program~main</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node5"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="586,-64 532,-64 532,-40 586,-40 586,-64"/>
+<text text-anchor="middle" x="559" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge4" class="edge">
+<title>program~main&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M158.5,-52C126.7949,-54.8796 92.4478,-66.2372 67.4768,-76.1177"/>
+<polygon fill="#000000" stroke="#000000" points="65.9997,-72.94 58.0564,-79.951 68.6381,-79.4237 65.9997,-72.94"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M319,-12C245.6259,-16.554 231.7139,-45.3503 158.5,-52"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_initialize -->
+<g id="module~~korc_fields~~UsedByGraph_edge10" class="edge">
+<title>program~main&#45;&gt;module~korc_initialize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M531.9339,-63.2552C520.9604,-67.8184 508.0902,-73.1704 496.1909,-78.1186"/>
+<polygon fill="#000000" stroke="#000000" points="494.8004,-74.9062 486.9109,-81.9777 497.4882,-81.3697 494.8004,-74.9062"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_ppusher -->
+<g id="module~~korc_fields~~UsedByGraph_edge13" class="edge">
+<title>program~main&#45;&gt;module~korc_ppusher</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M531.9339,-52C524.0382,-52 515.1605,-52 506.369,-52"/>
+<polygon fill="#000000" stroke="#000000" points="506.1523,-48.5001 496.1523,-52 506.1522,-55.5001 506.1523,-48.5001"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_fields~~UsedByGraph_edge14" class="edge">
+<title>program~main&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M458,-12C439.0466,-9.7705 393.5994,-24.2893 359.8004,-36.4543"/>
+<polygon fill="#000000" stroke="#000000" points="358.3624,-33.2532 350.1685,-39.9696 360.7624,-39.8289 358.3624,-33.2532"/>
+</g>
+<!-- module~korc_finalize -->
+<g id="module~~korc_fields~~UsedByGraph_node10" class="node">
+<title>module~korc_finalize</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node10"><a xlink:href=".././module/korc_finalize.html" xlink:title="korc_finalize">
+<polygon fill="#337ab7" stroke="#337ab7" points="194,-24 123,-24 123,0 194,0 194,-24"/>
+<text text-anchor="middle" x="158.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_finalize -->
+<g id="module~~korc_fields~~UsedByGraph_edge20" class="edge">
+<title>program~main&#45;&gt;module~korc_finalize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M458,-12C396.6452,-4.7829 380.6591,-8.1731 319,-12"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M537.7987,-39.829C517.9343,-29.3584 487.0325,-15.4151 458,-12"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M319,-12C280.5208,-14.3882 236.7523,-14.1949 204.6519,-13.513"/>
+<polygon fill="#000000" stroke="#000000" points="204.3177,-10.0042 194.2375,-13.266 204.1516,-17.0022 204.3177,-10.0042"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge5" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M278.3407,-49.9733C245.8403,-48.8412 199.1543,-48.3076 158.5,-52"/>
+</g>
+<!-- module~korc_experimental_pdf -->
+<g id="module~~korc_fields~~UsedByGraph_node7" class="node">
+<title>module~korc_experimental_pdf</title>
+<g id="a_module~~korc_fields~~UsedByGraph_node7"><a xlink:href=".././module/korc_experimental_pdf.html" xlink:title="korc_experimental_pdf">
+<polygon fill="#337ab7" stroke="#337ab7" points="218,-104 99,-104 99,-80 218,-80 218,-104"/>
+<text text-anchor="middle" x="158.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf</text>
+</a>
+</g>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge6" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M98.7188,-92C90.2195,-92 81.631,-92 73.5652,-92"/>
+<polygon fill="#000000" stroke="#000000" points="73.3145,-88.5001 63.3145,-92 73.3144,-95.5001 73.3145,-88.5001"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge7" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M256.0831,-179.2287C210.5499,-180.5266 148.564,-177.0471 99,-155 77.819,-145.5782 59.0279,-126.6965 46.6858,-112.0497"/>
+<polygon fill="#000000" stroke="#000000" points="49.203,-109.596 40.195,-104.0187 43.7588,-113.9962 49.203,-109.596"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_fields~~UsedByGraph_edge11" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M270.8447,-161.9987C252.1307,-157.3348 230.6288,-151.976 211.4785,-147.2034"/>
+<polygon fill="#000000" stroke="#000000" points="212.2553,-143.79 201.7057,-144.7678 210.5625,-150.5822 212.2553,-143.79"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_fields~~UsedByGraph_edge16" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M271.4928,-161.9165C265.3718,-159.4325 259.3733,-156.4839 254,-153 233.9316,-139.9881 237.8922,-126.2797 218,-113 215.5657,-111.3749 212.9914,-109.8603 210.3329,-108.4508"/>
+<polygon fill="#000000" stroke="#000000" points="211.5862,-105.1717 201.0503,-104.0557 208.5906,-111.4984 211.5862,-105.1717"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge8" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M281.6588,-119.9537C272.2677,-116.1583 262.4606,-111.4938 254,-106 235.2842,-93.8471 237.1377,-82.477 218,-71 194.1929,-56.7227 186.1462,-49.489 158.5,-52"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_fields~~UsedByGraph_edge12" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M253.7185,-132.8135C239.7484,-132.9876 225.1508,-133.1695 211.7012,-133.3371"/>
+<polygon fill="#000000" stroke="#000000" points="211.625,-129.8376 201.6694,-133.4621 211.7122,-136.8371 211.625,-129.8376"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_fields~~UsedByGraph_edge17" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M270.8447,-119.9987C253.9406,-115.7858 234.7619,-111.0061 217.0962,-106.6034"/>
+<polygon fill="#000000" stroke="#000000" points="217.4481,-103.0841 206.8985,-104.0619 215.7553,-109.8764 217.4481,-103.0841"/>
+</g>
+<!-- module~korc_finalize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_fields~~UsedByGraph_edge3" class="edge">
+<title>module~korc_finalize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M126.8459,-24.0023C117.6167,-27.9838 107.6845,-32.7545 99,-38 82.2451,-48.12 65.0414,-61.9453 52.1955,-73.0732"/>
+<polygon fill="#000000" stroke="#000000" points="49.6099,-70.6872 44.4317,-79.9304 54.2438,-75.9338 49.6099,-70.6872"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+  </li>
+  
+      </ul>
+    </div>
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-1">Functions</a></h3></div>
+  <div id="funcs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-cross~2">cross</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields">analytical_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_p">analytical_fields_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_gc_init">analytical_fields_GC_init</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_gc">analytical_fields_GC</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_bmag_p">analytical_fields_Bmag_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-add_analytical_e_p">add_analytical_E_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_fields_gc_p">analytical_fields_GC_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_magnetic_field">uniform_magnetic_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_fields_p">uniform_fields_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_electric_field">uniform_electric_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-analytical_electric_field_cyl">analytical_electric_field_cyl</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-mean_f_field">mean_F_field</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-get_analytical_fields">get_analytical_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-uniform_fields">uniform_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-unitvectors">unitVectors</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-get_fields">get_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_e1d">calculate_SC_E1D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_e1d_fs">calculate_SC_E1D_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_p">calculate_SC_p</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-calculate_sc_p_fs">calculate_SC_p_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-init_sc_e1d">init_SC_E1D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-init_sc_e1d_fs">init_SC_E1D_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-reinit_sc_e1d">reinit_SC_E1D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-reinit_sc_e1d_fs">reinit_SC_E1D_FS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-initialize_fields">initialize_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-initialize_gc_fields">initialize_GC_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-initialize_gc_fields_3d">initialize_GC_fields_3D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-define_sc_time_step">define_SC_time_step</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-load_dim_data_from_hdf5">load_dim_data_from_hdf5</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-which_fields_in_file">which_fields_in_file</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-load_field_data_from_hdf5">load_field_data_from_hdf5</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-load_1d_fs_from_hdf5">load_1D_FS_from_hdf5</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_1d_fs_arrays">allocate_1D_FS_arrays</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_2d_fields_arrays">ALLOCATE_2D_FIELDS_ARRAYS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_3d_fields_arrays">ALLOCATE_3D_FIELDS_ARRAYS</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_v_field_2d">ALLOCATE_V_FIELD_2D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_v_field_2dx">ALLOCATE_V_FIELD_2DX</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-allocate_v_field_3d">ALLOCATE_V_FIELD_3D</a>
+      
+      <a class="list-group-item" href="../module/korc_fields.html#proc-deallocate_fields_arrays">DEALLOCATE_FIELDS_ARRAYS</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+     
+    <section>
+    <h2>Functions</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-cross~2"></span><h3>
+private pure function <a href='../proc/cross~2.html'>cross</a>(a, b)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/cross~2.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(3)</td><td>::</td>
+  <td><strong>a</strong></td><td><p>Vector <script type="math/tex">\mathbf{a}</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(3)</td><td>::</td>
+  <td><strong>b</strong></td><td><p>Vector <script type="math/tex">\mathbf{b}</script>.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=rp),
+  DIMENSION(3)</small></h4>
+  <p>Cross product <script type="math/tex">\mathbf{a}\times \mathbf{b}</script>
+</p>
+    
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_fields"></span><h3>
+private subroutine <a href='../proc/analytical_fields.html'>analytical_fields</a>(F, Y, E, B, flag)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/analytical_fields.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Y</strong></td><td><p>Toroidal coordinates of each particle in the simulation; 
+ Y(1,:) = <script type="math/tex">r</script>, Y(2,:) = <script type="math/tex">\theta</script>, Y(3,:) = <script type="math/tex">\zeta</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>E</strong></td><td><p>Electric field components in Cartesian coordinates; 
+ E(1,:) = <script type="math/tex">E_x</script>, E(2,:) = <script type="math/tex">E_y</script>, E(3,:) = <script type="math/tex">E_z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>B</strong></td><td><p>Magnetic field components in Cartesian coordinates; 
+ B(1,:) = <script type="math/tex">B_x</script>, B(2,:) = <script type="math/tex">B_y</script>, B(3,:) = <script type="math/tex">B_z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag for each particle to decide whether it is being followed (flag=T)
+ or not (flag=F).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_fields_p"></span><h3>
+public subroutine <a href='../proc/analytical_fields_p.html'>analytical_fields_p</a>(params, pchunk, F, X_X, X_Y, X_Z, B_X, B_Y, B_Z, E_X, E_Y, E_Z, flag_cache)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>X_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>X_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>X_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>flag_cache</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_fields_gc_init"></span><h3>
+private subroutine <a href='../proc/analytical_fields_gc_init.html'>analytical_fields_GC_init</a>(params, F, Y, E, B, gradB, curlB, flag, PSIp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Y</strong></td><td><p>Cylindrical coordinates of each particle in the simulation; 
+ Y(1,:) = <script type="math/tex">r</script>, Y(2,:) = <script type="math/tex">\theta</script>, Y(3,:) = <script type="math/tex">\zeta</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>E</strong></td><td><p>Electric field components in cylindricalcoordinates; 
+ E(1,:) = <script type="math/tex">E_R</script>, E(2,:) = <script type="math/tex">E_\phi</script>, E(3,:) = <script type="math/tex">E_Z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>B</strong></td><td><p>Magnetic field components in cylindrical coordinates; 
+ B(1,:) = <script type="math/tex">B_R</script>, B(2,:) = <script type="math/tex">B_\phi</script>, B(3,:) = <script type="math/tex">B_Z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>gradB</strong></td><td><p>Gradient of magnitude of magnetic field in cylindrical coordinates; 
+ gradB(1,:) = <script type="math/tex">\nabla_R B</script>, B(2,:) = <script type="math/tex">\nabla_\phi B_</script>,
+ B(3,:) = <script type="math/tex">\nabla_Z B</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>curlB</strong></td><td><p>Curl of magnetic field unit vector in cylindrical coordinates </p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag for each particle to decide whether it is being followed (flag=T)
+ or not (flag=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_fields_gc"></span><h3>
+private subroutine <a href='../proc/analytical_fields_gc.html'>analytical_fields_GC</a>(params, F, Y, E, B, gradB, curlB, flag, PSIp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Y</strong></td><td><p>Cylindrical coordinates of each particle in the simulation; 
+ Y(1,:) = <script type="math/tex">r</script>, Y(2,:) = <script type="math/tex">\theta</script>, Y(3,:) = <script type="math/tex">\zeta</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>E</strong></td><td><p>Electric field components in cylindricalcoordinates; 
+ E(1,:) = <script type="math/tex">E_R</script>, E(2,:) = <script type="math/tex">E_\phi</script>, E(3,:) = <script type="math/tex">E_Z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>B</strong></td><td><p>Magnetic field components in cylindrical coordinates; 
+ B(1,:) = <script type="math/tex">B_R</script>, B(2,:) = <script type="math/tex">B_\phi</script>, B(3,:) = <script type="math/tex">B_Z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>gradB</strong></td><td><p>Gradient of magnitude of magnetic field in cylindrical coordinates; 
+ gradB(1,:) = <script type="math/tex">\nabla_R B</script>, B(2,:) = <script type="math/tex">\nabla_\phi B_</script>,
+ B(3,:) = <script type="math/tex">\nabla_Z B</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>curlB</strong></td><td><p>Curl of magnetic field unit vector in cylindrical coordinates </p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag for each particle to decide whether it is being followed (flag=T)
+ or not (flag=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_fields_bmag_p"></span><h3>
+public subroutine <a href='../proc/analytical_fields_bmag_p.html'>analytical_fields_Bmag_p</a>(pchunk, F, Y_R, Y_PHI, Y_Z, Bmag, E_PHI)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Bmag</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-add_analytical_e_p"></span><h3>
+public subroutine <a href='../proc/add_analytical_e_p.html'>add_analytical_E_p</a>(params, tt, F, E_PHI, Y_R, Y_Z)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=ip),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>tt</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(params%pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_fields_gc_p"></span><h3>
+public subroutine <a href='../proc/analytical_fields_gc_p.html'>analytical_fields_GC_p</a>(pchunk, F, Y_R, Y_PHI, Y_Z, B_R, B_PHI, B_Z, E_R, E_PHI, E_Z, curlB_R, curlB_PHI, curlB_Z, gradB_R, gradB_PHI, gradB_Z, PSIp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>curlB_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>curlB_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>curlB_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>gradB_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>gradB_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>gradB_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-uniform_magnetic_field"></span><h3>
+private subroutine <a href='../proc/uniform_magnetic_field.html'>uniform_magnetic_field</a>(F, B)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/uniform_magnetic_field.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>B</strong></td><td><p>Magnetic field components in Cartesian coordinates; 
+ B(1,:) = <script type="math/tex">B_x</script>, B(2,:) = <script type="math/tex">B_y</script>, B(3,:) = <script type="math/tex">B_z</script>
+</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-uniform_fields_p"></span><h3>
+public subroutine <a href='../proc/uniform_fields_p.html'>uniform_fields_p</a>(pchunk, F, B_X, B_Y, B_Z, E_X, E_Y, E_Z)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td><p></p><a href="None" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_X</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_Y</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_X</strong></td><td><p>Magnetic field components in Cartesian coordinates; 
+ B(1,:) = <script type="math/tex">B_x</script>, B(2,:) = <script type="math/tex">B_y</script>, B(3,:) = <script type="math/tex">B_z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_Y</strong></td><td><p>Magnetic field components in Cartesian coordinates; 
+ B(1,:) = <script type="math/tex">B_x</script>, B(2,:) = <script type="math/tex">B_y</script>, B(3,:) = <script type="math/tex">B_z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>DIMENSION(pchunk)</td><td>::</td>
+  <td><strong>E_Z</strong></td><td><p>Magnetic field components in Cartesian coordinates; 
+ B(1,:) = <script type="math/tex">B_x</script>, B(2,:) = <script type="math/tex">B_y</script>, B(3,:) = <script type="math/tex">B_z</script>
+</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-uniform_electric_field"></span><h3>
+private subroutine <a href='../proc/uniform_electric_field.html'>uniform_electric_field</a>(F, E)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/uniform_electric_field.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>E</strong></td><td><p>Electric field components in Cartesian coordinates; 
+ E(1,:) = <script type="math/tex">E_x</script>, E(2,:) = <script type="math/tex">E_y</script>, E(3,:) = <script type="math/tex">E_z</script>
+</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-analytical_electric_field_cyl"></span><h3>
+private subroutine <a href='../proc/analytical_electric_field_cyl.html'>analytical_electric_field_cyl</a>(F, Y, E, flag)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/analytical_electric_field_cyl.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Y</strong></td><td><p>Cylindrical coordinates of each particle in the simulation;
+ Y(1,:) = <script type="math/tex">R</script>, Y(2,:) = <script type="math/tex">\phi</script>, Y(3,:) = <script type="math/tex">Z</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>E</strong></td><td><p>Electric field components in Cartesian coordinates;
+  E(1,:) = <script type="math/tex">E_x</script>, E(2,:) = <script type="math/tex">E_y</script>, E(3,:) = <script type="math/tex">E_z</script>
+</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag for each particle to decide whether it is being followed (flag=T)
+ or not (flag=F).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-mean_f_field"></span><h3>
+public subroutine <a href='../proc/mean_f_field.html'>mean_F_field</a>(F, Fo, op_field)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/mean_f_field.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Fo</strong></td><td><p>Mean electric or magnetic field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_STRING),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>op_field</strong></td><td><p>String that specifies what mean field will be calculated.
+ Its value can be 'B' or 'E'.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-get_analytical_fields"></span><h3>
+private subroutine <a href='../proc/get_analytical_fields.html'>get_analytical_fields</a>(params, vars, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/get_analytical_fields.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PARTICLES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>vars</strong></td><td><p>An instance of the KORC derived type PARTICLES.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-uniform_fields"></span><h3>
+private subroutine <a href='../proc/uniform_fields.html'>uniform_fields</a>(vars, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/uniform_fields.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PARTICLES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>vars</strong></td><td><p>An instance of the KORC derived type PARTICLES.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-unitvectors"></span><h3>
+public subroutine <a href='../proc/unitvectors.html'>unitVectors</a>(params, Xo, F, b1, b2, b3, flag, cart, hint)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/unitvectors.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Xo</strong></td><td><p>Array with the position of the simulated particles.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>F An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>b1</strong></td><td><p>Basis vector pointing along the local magnetic field, 
+ that is, along <script type="math/tex">\mathbf{b} = \mathbf{B}/B</script>.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>b2</strong></td><td><p>Basis vector perpendicular to b1</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
+  <td><strong>b3</strong></td><td><p>Basis vector perpendicular to b1 and b2.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(inout),</td>
+  <td>optional</td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flag</strong></td><td><p>Flag for each particle to decide whether it is being 
+ followed (flag=T) or not (flag=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical</td>
+  <td></td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cart</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(C_PTR),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>hint</strong></td><td><p>Flag for each particle to decide whether it is being 
+ followed (flag=T) or not (flag=F).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-get_fields"></span><h3>
+public subroutine <a href='../proc/get_fields.html'>get_fields</a>(params, vars, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/get_fields.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(PARTICLES),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>vars</strong></td><td><p>An instance of the KORC derived type PARTICLES.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-calculate_sc_e1d"></span><h3>
+public subroutine <a href='../proc/calculate_sc_e1d.html'>calculate_SC_E1D</a>(params, F, Vden)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(F%dim_1D)</td><td>::</td>
+  <td><strong>Vden</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-calculate_sc_e1d_fs"></span><h3>
+public subroutine <a href='../proc/calculate_sc_e1d_fs.html'>calculate_SC_E1D_FS</a>(params, F, dintJphidPSIP)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(F%dim_1D)</td><td>::</td>
+  <td><strong>dintJphidPSIP</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-calculate_sc_p"></span><h3>
+public subroutine <a href='../proc/calculate_sc_p.html'>calculate_SC_p</a>(params, F, B_R, B_PHI, B_Z, Y_R, Y_Z, V_PLL, V_MU, m_cache, flagCon, flagCol, Vden)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>B_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>B_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>Y_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>Y_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>V_PLL</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>V_MU</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m_cache</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>flagCon</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>flagCol</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>dimension(F%dim_1D)</td><td>::</td>
+  <td><strong>Vden</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-calculate_sc_p_fs"></span><h3>
+public subroutine <a href='../proc/calculate_sc_p_fs.html'>calculate_SC_p_FS</a>(params, F, B_R, B_PHI, B_Z, PSIp, V_PLL, V_MU, m_cache, flagCon, flagCol, dintJphidPSIP)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>B_R</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>B_PHI</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>B_Z</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>PSIp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>V_PLL</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>V_MU</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m_cache</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>flagCon</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=is),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(params%pchunk)</td><td>::</td>
+  <td><strong>flagCol</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=rp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>dimension(F%dim_1D)</td><td>::</td>
+  <td><strong>dintJphidPSIP</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init_sc_e1d"></span><h3>
+public subroutine <a href='../proc/init_sc_e1d.html'>init_SC_E1D</a>(params, F, spp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(SPECIES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>spp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init_sc_e1d_fs"></span><h3>
+public subroutine <a href='../proc/init_sc_e1d_fs.html'>init_SC_E1D_FS</a>(params, F, spp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(SPECIES),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>spp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-reinit_sc_e1d"></span><h3>
+public subroutine <a href='../proc/reinit_sc_e1d.html'>reinit_SC_E1D</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-reinit_sc_e1d_fs"></span><h3>
+public subroutine <a href='../proc/reinit_sc_e1d_fs.html'>reinit_SC_E1D_FS</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_fields"></span><h3>
+public subroutine <a href='../proc/initialize_fields.html'>initialize_fields</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/initialize_fields.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p><a href="None" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_gc_fields"></span><h3>
+private subroutine <a href='../proc/initialize_gc_fields.html'>initialize_GC_fields</a>(F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Computes the auxiliary fields <script type="math/tex">\nabla|{\bf B}|</script> and
+ <script type="math/tex">\nabla\times\hat{b}</script> that are used in the RHS of the
+ evolution equations for the GC orbit model.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize_gc_fields_3d"></span><h3>
+private subroutine <a href='../proc/initialize_gc_fields_3d.html'>initialize_GC_fields_3D</a>(F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Computes the auxiliary fields <script type="math/tex">\nabla|{\bf B}|</script> and
+ <script type="math/tex">\nabla\times\hat{b}</script> that are used in the RHS of the
+ evolution equations for the GC orbit model.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-define_sc_time_step"></span><h3>
+public subroutine <a href='../proc/define_sc_time_step.html'>define_SC_time_step</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-load_dim_data_from_hdf5"></span><h3>
+public subroutine <a href='../proc/load_dim_data_from_hdf5.html'>load_dim_data_from_hdf5</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that loads the size of the arrays having the electric and magnetic field data.
+ @details All the information of externally calculated fields must be given in a rectangular, equally spaced mesh in the <script type="math/tex">(R,\phi,Z)</script> space of cylindrical coordinates.
+ If the fields are axisymmetric, then the fields must be in a rectangular mesh on the <script type="math/tex">RZ</script>-plane.</p><a href="../proc/load_dim_data_from_hdf5.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-which_fields_in_file"></span><h3>
+public subroutine <a href='../proc/which_fields_in_file.html'>which_fields_in_file</a>(params, Bfield, Efield, Bflux, dBfield, B1field, E1field)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that queries the HDF5 file what data are present in the HDF5 input file (sanity check).</p><a href="../proc/which_fields_in_file.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Bfield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Efield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Bflux</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>dBfield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>B1field</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>E1field</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-load_field_data_from_hdf5"></span><h3>
+public subroutine <a href='../proc/load_field_data_from_hdf5.html'>load_field_data_from_hdf5</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that loads the fields data from the HDF5 input file.</p><a href="../proc/load_field_data_from_hdf5.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-load_1d_fs_from_hdf5"></span><h3>
+public subroutine <a href='../proc/load_1d_fs_from_hdf5.html'>load_1D_FS_from_hdf5</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-allocate_1d_fs_arrays"></span><h3>
+public subroutine <a href='../proc/allocate_1d_fs_arrays.html'>allocate_1D_FS_arrays</a>(params, F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/allocate_1d_fs_arrays.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS. In this variable we keep
+ the loaded data.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-allocate_2d_fields_arrays"></span><h3>
+public subroutine <a href='../proc/allocate_2d_fields_arrays.html'>ALLOCATE_2D_FIELDS_ARRAYS</a>(params, F, bfield, bflux, dbfield, efield, b1field, e1field)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p></p><a href="../proc/allocate_2d_fields_arrays.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td><p>An instance of the KORC derived type FIELDS. In this variable we keep
+ the loaded data.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bfield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bflux</strong></td><td><p>Logical variable that specifies if the variables that keep the poloidal
+ magnetic flux data is allocated (bflux=T) or not (bflux=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>dbfield</strong></td><td><p>Logical variable that specifies if the variables that keep the magnetic
+ field data is allocated (bfield=T) or not (bfield=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>efield</strong></td><td><p>Logical variable that specifies if the variables that keep the electric
+ field data is allocated (efield=T) or not (efield=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>b1field</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>e1field</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-allocate_3d_fields_arrays"></span><h3>
+public subroutine <a href='../proc/allocate_3d_fields_arrays.html'>ALLOCATE_3D_FIELDS_ARRAYS</a>(params, F, bfield, efield, dbfield)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that allocates the variables keeping the 3-D fields data.</p><a href="../proc/allocate_3d_fields_arrays.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>bfield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>efield</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>dbfield</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-allocate_v_field_2d"></span><h3>
+private subroutine <a href='../proc/allocate_v_field_2d.html'>ALLOCATE_V_FIELD_2D</a>(F, dims)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that allocates the cylindrical components of an axisymmetric field.</p><a href="../proc/allocate_v_field_2d.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(V_FIELD_2D),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(3)</td><td>::</td>
+  <td><strong>dims</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-allocate_v_field_2dx"></span><h3>
+public subroutine <a href='../proc/allocate_v_field_2dx.html'>ALLOCATE_V_FIELD_2DX</a>(F, dims)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that allocates the cartesian components of an axisymmetric field.</p><a href="../proc/allocate_v_field_2dx.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(V_FIELD_2DX),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(3)</td><td>::</td>
+  <td><strong>dims</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-allocate_v_field_3d"></span><h3>
+private subroutine <a href='../proc/allocate_v_field_3d.html'>ALLOCATE_V_FIELD_3D</a>(F, dims)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that allocates the cylindrical components of a 3-D field.</p><a href="../proc/allocate_v_field_3d.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(V_FIELD_3D),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>DIMENSION(3)</td><td>::</td>
+  <td><strong>dims</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-deallocate_fields_arrays"></span><h3>
+public subroutine <a href='../proc/deallocate_fields_arrays.html'>DEALLOCATE_FIELDS_ARRAYS</a>(F)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>@brief Subroutine that deallocates all the variables of the electric and magnetic fields.</p><a href="../proc/deallocate_fields_arrays.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(FIELDS),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>F</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

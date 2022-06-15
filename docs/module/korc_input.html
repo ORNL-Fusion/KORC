@@ -1,0 +1,5129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_input &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_input 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.7% of total for modules and submodules.">450 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_input.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_input.f90.html'>korc_input.f90</a></li>
+    
+  
+     <li class="active">korc_input</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-restart~2">restart</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-proceed~2">proceed</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-load_balance~2">load_balance</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-reinit~2">reinit</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-simulation_time~2">simulation_time</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-snapshot_frequency~2">snapshot_frequency</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-restart_overwrite_frequency~2">restart_overwrite_frequency</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dt~2">dt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-num_species~2">num_species</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-minimum_particle_energy~2">minimum_particle_energy</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-radiation~2">radiation</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-gc_rad_model~2">GC_rad_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-collisions~2">collisions</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-largecollisions~3">LargeCollisions</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-collisions_model~2">collisions_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bound_electron_model~2">bound_electron_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-field_model~2">field_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-profile_model~2">profile_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-magnetic_field_filename~2">magnetic_field_filename</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-magnetic_field_directory~2">magnetic_field_directory</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-magnetic_field_list~2">magnetic_field_list</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-time_slice~2">time_slice</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rmax~2">rmax</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rmin~2">rmin</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zmax~2">zmax</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zmin~2">zmin</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-outputs_list~2">outputs_list</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-hdf5_error_handling~2">HDF5_error_handling</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-fo_gc_compare~2">FO_GC_compare</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-orbit_model~2">orbit_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-field_eval~2">field_eval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-fokplan~2">FokPlan</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-samerandseed~2">SameRandSeed</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sc_e~2">SC_E</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sc_e_add~2">SC_E_add</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pchunk~37">pchunk</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-runaway~2">runaway</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ppp~2">ppp</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pinit~2">pinit</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-q~7">q</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-m~17">m</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spatial_distribution~2">spatial_distribution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ro~5">Ro</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-phio~2">PHIo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zo~5">Zo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-r_inner~2">r_inner</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-r_outter~2">r_outter</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-shear_factor~2">shear_factor</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigmar~2">sigmaR</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigmaz~2">sigmaZ</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-theta_gauss~2">theta_gauss</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psi_max~5">psi_max</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-falloff_rate~2">falloff_rate</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-energy_distribution~2">energy_distribution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pitch_distribution~2">pitch_distribution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eno">Eno</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-etao~8">etao</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eo_lims~2">Eo_lims</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-etao_lims~2">etao_lims</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-xtrace~2">Xtrace</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spong_b~2">Spong_b</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spong_w~2">Spong_w</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spong_dlam~2">Spong_dlam</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dth~3">dth</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dgam~2">dgam</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dr~3">dR</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dz~3">dZ</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eo~5">Eo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-current_direction~3">current_direction</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo~9">Bo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-minor_radius">minor_radius</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-major_radius">major_radius</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-qa~2">qa</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-qo~2">qo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nr">nR</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nz">nZ</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nphi">nPHI</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_profile~2">E_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_dyn~2">E_dyn</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_pulse~2">E_pulse</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_width~2">E_width</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ero~2">Ero</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rmn~2">rmn</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigmamn~2">sigmamn</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bfield~3">Bfield</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-b1field~3">B1field</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e1field~3">E1field</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dbfield~3">dBfield</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-axisymmetric_fields~2">axisymmetric_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bflux~3">Bflux</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bflux3d~2">Bflux3D</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-efield~3">Efield</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dim2x1t~2">Dim2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_2x1t~2">E_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-t0_2x1t~2">t0_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ind0_2x1t~2">ind0_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-reinterp_2x1t~2">ReInterp_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-res_double~2">res_double</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dim_1d~2">dim_1D</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dt_e_sc~2">dt_E_SC</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ip_exp~2">Ip_exp</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psip_lim~2">PSIp_lim</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psip_0~2">PSIp_0</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psip_conv~2">psip_conv</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-mars_amp_scale~2">MARS_AMP_Scale</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-aorsa_amp_scale~2">AORSA_AMP_Scale</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-aorsa_freq~2">AORSA_freq</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-aorsa_nmode~2">AORSA_nmode</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-analytic_iwl~2">Analytic_IWL</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ntiles~2">ntiles</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-circumradius~2">circumradius</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-uselcfs~2">useLCFS</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-axisymmetric~2">axisymmetric</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-filename~4">filename</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-radius_profile">radius_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_profile~2">ne_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-neo~2">neo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_ne~2">n_ne</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_shelf~2">n_shelf</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_ne~2">a_ne</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_rer0~2">n_REr0</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_tauion~2">n_tauion</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_tauin~2">n_tauin</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_tauout~2">n_tauout</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_shelfdelay~2">n_shelfdelay</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_lamfront~2">n_lamfront</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_lamback~2">n_lamback</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_lamshelf~2">n_lamshelf</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psin_0~2">psiN_0</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_profile~2">Te_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-teo~2">Teo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_te~2">n_Te</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_te~2">a_Te</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_profile~2">Zeff_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeffo~2">Zeffo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_zeff~2">n_Zeff</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_zeff~2">a_Zeff</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_sing">Te_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ti_sing">Ti_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_sing">ne_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_sing">Zeff_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dtau_sing">dTau_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-p_therm~2">p_therm</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-conservela~2">ConserveLA</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-clog_model~2">Clog_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_secre~2">min_secRE</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sample_test~2">sample_test</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pmin_scale~2">pmin_scale</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-energy_diffusion~2">energy_diffusion</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lac_gam_resolution~2">LAC_gam_resolution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-fp_bremsstrahlung~2">FP_bremsstrahlung</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pitch_diffusion~2">pitch_diffusion</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ngrid1~2">ngrid1</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-clog_const~2">Clog_const</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-num_impurity_species~3">num_impurity_species</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_mult">Te_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_mult">ne_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zo_mult">Zo_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zj_mult">Zj_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nz_mult">nz_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-izj_mult">IZj_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-neut_prof~2">neut_prof</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_aval">max_pitch_angle_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_aval">min_pitch_angle_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dth_aval">dth_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dp_aval">dp_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dr_aval">dR_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dz_aval">dZ_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_aval">max_energy_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_aval">min_energy_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_aval">ne_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_aval">Zeff_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-epar_aval">Epar_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_aval">Te_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_expt">E_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_expt">Zeff_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_expt">max_pitch_angle_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_expt">min_pitch_angle_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_expt">min_energy_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_expt">max_energy_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-k_expt">k_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-t_expt">t_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo_expt">Bo_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lambda_expt">lambda_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_fact_expt">A_fact_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-filename_exp">filename_exp</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-filename_hollmann">filename_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rho_ind~3">rho_ind</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eo_hollmann">Eo_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_hollmann">E_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigma_e_hollmann">sigma_E_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_hollmann">Zeff_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigma_z_hollmann">sigma_Z_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_hollmann">max_pitch_angle_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_hollmann">min_pitch_angle_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_hollmann">min_energy_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_hollmann">max_energy_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-current_direction_hollmann">current_direction_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo_hollmann">Bo_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lambda_hollmann">lambda_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_fact_hollmann">A_fact_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-gam_min_from_col~2">gam_min_from_col</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_gamma">min_energy_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_gamma">max_energy_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-k_gamma">k_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-t_gamma">t_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_simple">E_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_simple">Zeff_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_simple">max_pitch_angle_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_simple">min_pitch_angle_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo_simple">Bo_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lambda_simple">lambda_simple</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_input.html#proc-read_namelist">read_namelist</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#proc-rmcoment">rmcoment</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>Module with subroutines to read in all namelists in supplied
+ input file and broadcast to all mpi processes.
+ Default values for all inputs</p></div>
+<hr>
+<p>input_parameters</p>
+<hr>
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href='../module/korc_types.html'>korc_types</a></li>
+    
+    <li><a href='../module/korc_hpc.html'>korc_hpc</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_input~~UsesGraph Pages: 1 -->
+<svg id="modulekorc_inputUsesGraph" width="372pt" height="116pt"
+ viewBox="0.00 0.00 372.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_input~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>module~~korc_input~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 368,-112 368,4 -4,4"/>
+<!-- module~korc_input -->
+<g id="module~~korc_input~~UsesGraph_node1" class="node">
+<title>module~korc_input</title>
+<polygon fill="none" stroke="#000000" points="364,-86 303,-86 303,-62 364,-62 364,-86"/>
+<text text-anchor="middle" x="333.5" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_input</text>
+</g>
+<!-- module~korc_hpc -->
+<g id="module~~korc_input~~UsesGraph_node2" class="node">
+<title>module~korc_hpc</title>
+<g id="a_module~~korc_input~~UsesGraph_node2"><a xlink:href=".././module/korc_hpc.html" xlink:title="korc_hpc">
+<polygon fill="#337ab7" stroke="#337ab7" points="267,-66 212,-66 212,-42 267,-42 267,-66"/>
+<text text-anchor="middle" x="239.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hpc</text>
+</a>
+</g>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_hpc -->
+<g id="module~~korc_input~~UsesGraph_edge1" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_hpc</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M302.9809,-67.5066C294.6582,-65.7358 285.5461,-63.797 276.8885,-61.955"/>
+<polygon fill="#000000" stroke="#000000" points="277.5181,-58.5107 267.0086,-59.8529 276.0613,-65.3574 277.5181,-58.5107"/>
+</g>
+<!-- module~korc_types -->
+<g id="module~~korc_input~~UsesGraph_node3" class="node">
+<title>module~korc_types</title>
+<g id="a_module~~korc_input~~UsesGraph_node3"><a xlink:href=".././module/korc_types.html" xlink:title="korc_types">
+<polygon fill="#337ab7" stroke="#337ab7" points="176,-108 113,-108 113,-84 176,-84 176,-108"/>
+<text text-anchor="middle" x="144.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types</text>
+</a>
+</g>
+</g>
+<!-- module~korc_input&#45;&gt;module~korc_types -->
+<g id="module~~korc_input~~UsesGraph_edge2" class="edge">
+<title>module~korc_input&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M302.7132,-77.5836C271.0108,-81.2739 221.4013,-87.0485 186.1941,-91.1467"/>
+<polygon fill="#000000" stroke="#000000" points="185.7483,-87.6749 176.2201,-92.3077 186.5577,-94.6279 185.7483,-87.6749"/>
+</g>
+<!-- module~korc_hpc&#45;&gt;module~korc_types -->
+<g id="module~~korc_input~~UsesGraph_edge5" class="edge">
+<title>module~korc_hpc&#45;&gt;module~korc_types</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.2768,-66.0355C202.5379,-70.3412 191.3989,-75.2658 181.0035,-79.8616"/>
+<polygon fill="#000000" stroke="#000000" points="179.458,-76.718 171.7272,-83.9627 182.2885,-83.1203 179.458,-76.718"/>
+</g>
+<!-- omp_lib -->
+<g id="module~~korc_input~~UsesGraph_node4" class="node">
+<title>omp_lib</title>
+<g id="a_module~~korc_input~~UsesGraph_node4"><a xlink:href="https://gcc.gnu.org/onlinedocs/gcc-4.4.3/libgomp/Runtime-Library-Routines.html" xlink:title="omp_lib">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-66 117.5,-66 117.5,-42 171.5,-42 171.5,-66"/>
+<text text-anchor="middle" x="144.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">omp_lib</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;omp_lib -->
+<g id="module~~korc_input~~UsesGraph_edge3" class="edge">
+<title>module~korc_hpc&#45;&gt;omp_lib</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M211.7667,-54C202.4178,-54 191.8256,-54 181.8583,-54"/>
+<polygon fill="#000000" stroke="#000000" points="181.7759,-50.5001 171.7759,-54 181.7758,-57.5001 181.7759,-50.5001"/>
+</g>
+<!-- mpi -->
+<g id="module~~korc_input~~UsesGraph_node5" class="node">
+<title>mpi</title>
+<g id="a_module~~korc_input~~UsesGraph_node5"><a xlink:href="http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm" xlink:title="mpi">
+<polygon fill="#337ab7" stroke="#337ab7" points="171.5,-24 117.5,-24 117.5,0 171.5,0 171.5,-24"/>
+<text text-anchor="middle" x="144.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi</text>
+</a>
+</g>
+</g>
+<!-- module~korc_hpc&#45;&gt;mpi -->
+<g id="module~~korc_input~~UsesGraph_edge4" class="edge">
+<title>module~korc_hpc&#45;&gt;mpi</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.2768,-41.9645C202.5379,-37.6588 191.3989,-32.7342 181.0035,-28.1384"/>
+<polygon fill="#000000" stroke="#000000" points="182.2885,-24.8797 171.7272,-24.0373 179.458,-31.282 182.2885,-24.8797"/>
+</g>
+<!-- iso_c_binding -->
+<g id="module~~korc_input~~UsesGraph_node6" class="node">
+<title>iso_c_binding</title>
+<g id="a_module~~korc_input~~UsesGraph_node6"><a xlink:href="http://fortranwiki.org/fortran/show/ISO_C_BINDING" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="77,-108 0,-108 0,-84 77,-84 77,-108"/>
+<text text-anchor="middle" x="38.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iso_c_binding</text>
+</a>
+</g>
+</g>
+<!-- module~korc_types&#45;&gt;iso_c_binding -->
+<g id="module~~korc_input~~UsesGraph_edge6" class="edge">
+<title>module~korc_types&#45;&gt;iso_c_binding</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M112.9835,-96C104.9127,-96 96.0417,-96 87.3225,-96"/>
+<polygon fill="#000000" stroke="#000000" points="87.2137,-92.5001 77.2137,-96 87.2137,-99.5001 87.2137,-92.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  
+  
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~korc_input~~UsedByGraph Pages: 1 -->
+<svg id="modulekorc_inputUsedByGraph" width="641pt" height="383pt"
+ viewBox="0.00 0.00 641.00 383.32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~korc_input~~UsedByGraph" class="graph" transform="scale(.6372 .6372) rotate(0) translate(4 597.5894)">
+<title>module~~korc_input~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-597.5894 1002,-597.5894 1002,4 -4,4"/>
+<!-- module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_node1" class="node">
+<title>module~korc_input</title>
+<polygon fill="none" stroke="#000000" points="61,-353.9616 0,-353.9616 0,-329.9616 61,-329.9616 61,-353.9616"/>
+<text text-anchor="middle" x="30.5" y="-339.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_input</text>
+</g>
+<!-- module~korc_initialize -->
+<g id="module~~korc_input~~UsedByGraph_node2" class="node">
+<title>module~korc_initialize</title>
+<g id="a_module~~korc_input~~UsedByGraph_node2"><a xlink:href=".././module/korc_initialize.html" xlink:title="korc_initialize">
+<polygon fill="#337ab7" stroke="#337ab7" points="908,-389.9616 832,-389.9616 832,-365.9616 908,-365.9616 908,-389.9616"/>
+<text text-anchor="middle" x="870" y="-375.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge1" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M858.506,-390.2366C826.32,-423.6215 731.0201,-515.8464 630,-549.9616 474.2358,-602.5643 423.2706,-602.3772 261,-575.9616"/>
+</g>
+<!-- module~korc_spatial_distribution -->
+<g id="module~~korc_input~~UsedByGraph_node12" class="node">
+<title>module~korc_spatial_distribution</title>
+<g id="a_module~~korc_input~~UsedByGraph_node12"><a xlink:href=".././module/korc_spatial_distribution.html" xlink:title="korc_spatial_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="793.5,-389.9616 668.5,-389.9616 668.5,-365.9616 793.5,-365.9616 793.5,-389.9616"/>
+<text text-anchor="middle" x="731" y="-375.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_spatial_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_spatial_distribution -->
+<g id="module~~korc_input~~UsedByGraph_edge32" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_spatial_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M831.6497,-377.9616C822.8825,-377.9616 813.2815,-377.9616 803.6002,-377.9616"/>
+<polygon fill="#000000" stroke="#000000" points="803.5137,-374.4617 793.5137,-377.9616 803.5137,-381.4617 803.5137,-374.4617"/>
+</g>
+<!-- module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_node13" class="node">
+<title>module~korc_fields</title>
+<g id="a_module~~korc_input~~UsedByGraph_node13"><a xlink:href=".././module/korc_fields.html" xlink:title="korc_fields">
+<polygon fill="#337ab7" stroke="#337ab7" points="433.5,-313.9616 370.5,-313.9616 370.5,-289.9616 433.5,-289.9616 433.5,-313.9616"/>
+<text text-anchor="middle" x="402" y="-299.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fields</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge33" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M832.6838,-365.8611C821.0436,-362.4964 808.087,-359.1647 796,-356.9616 697.0528,-338.927 670.5209,-348.5271 570.5,-337.9616"/>
+</g>
+<!-- module~korc_velocity_distribution -->
+<g id="module~~korc_input~~UsedByGraph_node14" class="node">
+<title>module~korc_velocity_distribution</title>
+<g id="a_module~~korc_input~~UsedByGraph_node14"><a xlink:href=".././module/korc_velocity_distribution.html" xlink:title="korc_velocity_distribution">
+<polygon fill="#337ab7" stroke="#337ab7" points="796,-431.9616 666,-431.9616 666,-407.9616 796,-407.9616 796,-431.9616"/>
+<text text-anchor="middle" x="731" y="-417.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution</text>
+</a>
+</g>
+</g>
+<!-- module~korc_initialize&#45;&gt;module~korc_velocity_distribution -->
+<g id="module~~korc_input~~UsedByGraph_edge42" class="edge">
+<title>module~korc_initialize&#45;&gt;module~korc_velocity_distribution</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M831.6497,-389.5495C815.931,-394.299 797.5319,-399.8585 780.7948,-404.9157"/>
+<polygon fill="#000000" stroke="#000000" points="779.7254,-401.5825 771.1652,-407.8254 781.7501,-408.2833 779.7254,-401.5825"/>
+</g>
+<!-- module~korc_avalanche -->
+<g id="module~~korc_input~~UsedByGraph_node3" class="node">
+<title>module~korc_avalanche</title>
+<g id="a_module~~korc_input~~UsedByGraph_node3"><a xlink:href=".././module/korc_avalanche.html" xlink:title="korc_avalanche">
+<polygon fill="#337ab7" stroke="#337ab7" points="613.5,-389.9616 527.5,-389.9616 527.5,-365.9616 613.5,-365.9616 613.5,-389.9616"/>
+<text text-anchor="middle" x="570.5" y="-375.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_avalanche</text>
+</a>
+</g>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge2" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M527.3707,-369.5916C467.7333,-358.7867 356.6112,-341.4192 261,-341.9616"/>
+</g>
+<!-- module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_node4" class="node">
+<title>module~korc_profiles</title>
+<g id="a_module~~korc_input~~UsedByGraph_node4"><a xlink:href=".././module/korc_profiles.html" xlink:title="korc_profiles">
+<polygon fill="#337ab7" stroke="#337ab7" points="438,-271.9616 366,-271.9616 366,-247.9616 438,-247.9616 438,-271.9616"/>
+<text text-anchor="middle" x="402" y="-257.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_profiles</text>
+</a>
+</g>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_edge16" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M558.0808,-365.8691C545.9656,-354.0205 527.0664,-335.3986 511,-318.9616 494.7382,-302.3247 494.8788,-293.0474 475,-280.9616 466.7204,-275.9278 457.1798,-272.0536 447.7843,-269.088"/>
+<polygon fill="#000000" stroke="#000000" points="448.6817,-265.7044 438.1046,-266.316 446.7545,-272.4339 448.6817,-265.7044"/>
+</g>
+<!-- module~korc_avalanche&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge34" class="edge">
+<title>module~korc_avalanche&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M540.042,-365.8754C530.5688,-361.7934 520.2006,-356.9877 511,-351.9616 494.1243,-342.7427 492.1872,-336.586 475,-327.9616 464.9652,-322.9262 453.7152,-318.4108 443.1087,-314.6115"/>
+<polygon fill="#000000" stroke="#000000" points="444.1971,-311.2845 433.6023,-311.3292 441.9125,-317.9013 444.1971,-311.2845"/>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge3" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M365.8236,-266.9318C353.6543,-270.157 340.3066,-274.7016 329,-280.9616 293.4803,-300.6274 301.5998,-341.7313 261,-341.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M261,-341.9616C209.4453,-342.2541 194.2243,-326.6336 145,-341.9616"/>
+</g>
+<!-- module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_node17" class="node">
+<title>module~korc_interp</title>
+<g id="a_module~~korc_input~~UsedByGraph_node17"><a xlink:href=".././module/korc_interp.html" xlink:title="korc_interp">
+<polygon fill="#337ab7" stroke="#337ab7" points="293,-233.9616 229,-233.9616 229,-209.9616 293,-209.9616 293,-233.9616"/>
+<text text-anchor="middle" x="261" y="-219.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_interp</text>
+</a>
+</g>
+</g>
+<!-- module~korc_profiles&#45;&gt;module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_edge45" class="edge">
+<title>module~korc_profiles&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M365.689,-250.1757C346.563,-245.0211 323.0074,-238.6728 303.0866,-233.3041"/>
+<polygon fill="#000000" stroke="#000000" points="303.9062,-229.9002 293.34,-230.6773 302.0847,-236.659 303.9062,-229.9002"/>
+</g>
+<!-- module~korc_fio -->
+<g id="module~~korc_input~~UsedByGraph_node5" class="node">
+<title>module~korc_fio</title>
+<g id="a_module~~korc_input~~UsedByGraph_node5"><a xlink:href=".././module/korc_fio.html" xlink:title="korc_fio">
+<polygon fill="#337ab7" stroke="#337ab7" points="172,-233.9616 118,-233.9616 118,-209.9616 172,-209.9616 172,-233.9616"/>
+<text text-anchor="middle" x="145" y="-219.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_fio</text>
+</a>
+</g>
+</g>
+<!-- module~korc_fio&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge4" class="edge">
+<title>module~korc_fio&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M133.1777,-234.3517C113.2764,-255.2091 72.9345,-297.4888 49.1727,-322.3919"/>
+<polygon fill="#000000" stroke="#000000" points="46.4585,-320.1665 42.0874,-329.8176 51.523,-324.9988 46.4585,-320.1665"/>
+</g>
+<!-- module~korc_energy_pdfs -->
+<g id="module~~korc_input~~UsedByGraph_node6" class="node">
+<title>module~korc_energy_pdfs</title>
+<g id="a_module~~korc_input~~UsedByGraph_node6"><a xlink:href=".././module/korc_energy_pdfs.html" xlink:title="korc_energy_pdfs">
+<polygon fill="#337ab7" stroke="#337ab7" points="193,-450.9616 97,-450.9616 97,-426.9616 193,-426.9616 193,-450.9616"/>
+<text text-anchor="middle" x="145" y="-436.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_energy_pdfs</text>
+</a>
+</g>
+</g>
+<!-- module~korc_energy_pdfs&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge5" class="edge">
+<title>module~korc_energy_pdfs&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M130.4985,-426.6765C110.8829,-410.0589 75.7114,-380.263 52.7425,-360.8046"/>
+<polygon fill="#000000" stroke="#000000" points="54.7762,-357.9404 44.8838,-354.147 50.2515,-363.2814 54.7762,-357.9404"/>
+</g>
+<!-- module~korc_units -->
+<g id="module~~korc_input~~UsedByGraph_node7" class="node">
+<title>module~korc_units</title>
+<g id="a_module~~korc_input~~UsedByGraph_node7"><a xlink:href=".././module/korc_units.html" xlink:title="korc_units">
+<polygon fill="#337ab7" stroke="#337ab7" points="291,-73.9616 231,-73.9616 231,-49.9616 291,-49.9616 291,-73.9616"/>
+<text text-anchor="middle" x="261" y="-59.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_units</text>
+</a>
+</g>
+</g>
+<!-- module~korc_units&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge6" class="edge">
+<title>module~korc_units&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M247.0359,-49.8545C224.4596,-31.8334 179.0384,-2.0991 145,-21.9616"/>
+</g>
+<!-- program~main -->
+<g id="module~~korc_input~~UsedByGraph_node8" class="node">
+<title>program~main</title>
+<g id="a_module~~korc_input~~UsedByGraph_node8"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="998,-310.9616 944,-310.9616 944,-286.9616 998,-286.9616 998,-310.9616"/>
+<text text-anchor="middle" x="971" y="-296.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge7" class="edge">
+<title>program~main&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M731,-179.9616C661.2259,-156.8086 642.1933,-156.2272 570.5,-139.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-63.9616C289.0257,-38.8228 244.963,36.3699 145,-21.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M945.4068,-286.8877C925.3201,-277.8907 896.4276,-265.9918 870,-258.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145,-21.9616C91.6084,-54.6442 48.0628,-252.9899 34.7216,-319.9234"/>
+<polygon fill="#000000" stroke="#000000" points="31.269,-319.3421 32.7779,-329.8289 38.138,-320.69 31.269,-319.3421"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-139.9616C490.3821,-121.7846 481.9763,-82.7518 402,-63.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M870,-258.9616C801.3299,-240.6942 798.4422,-202.3408 731,-179.9616"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_initialize -->
+<g id="module~~korc_input~~UsedByGraph_edge13" class="edge">
+<title>program~main&#45;&gt;module~korc_initialize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M955.2188,-311.3054C938.6902,-324.2336 912.5443,-344.6844 893.569,-359.5265"/>
+<polygon fill="#000000" stroke="#000000" points="891.3908,-356.7867 885.6704,-365.7045 895.7035,-362.3004 891.3908,-356.7867"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_edge18" class="edge">
+<title>program~main&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-257.9616C529.9265,-248.664 482.4041,-250.3191 448.19,-253.6243"/>
+<polygon fill="#000000" stroke="#000000" points="447.601,-250.1668 438.0215,-254.6927 448.3325,-257.1285 447.601,-250.1668"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M870,-258.9616C807.9931,-242.4667 794.5642,-289.2132 731,-297.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M731,-297.9616C694.5856,-302.9733 606.3289,-266.172 570.5,-257.9616"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_fio -->
+<g id="module~~korc_input~~UsedByGraph_edge22" class="edge">
+<title>program~main&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-63.9616C338.6469,-49.8644 319.8151,-74.5183 261,-101.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M261,-101.9616C214.5252,-123.6469 176.8654,-172.7069 158.0467,-200.9236"/>
+<polygon fill="#000000" stroke="#000000" points="154.9085,-199.33 152.4015,-209.624 160.7807,-203.1402 154.9085,-199.33"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_units -->
+<g id="module~~korc_input~~UsedByGraph_edge26" class="edge">
+<title>program~main&#45;&gt;module~korc_units</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-63.9616C368.5851,-56.5262 329.6071,-56.6166 301.1122,-58.2298"/>
+<polygon fill="#000000" stroke="#000000" points="300.869,-54.7382 291.1181,-58.882 301.3248,-61.7233 300.869,-54.7382"/>
+</g>
+<!-- module~korc_collisions -->
+<g id="module~~korc_input~~UsedByGraph_node10" class="node">
+<title>module~korc_collisions</title>
+<g id="a_module~~korc_input~~UsedByGraph_node10"><a xlink:href=".././module/korc_collisions.html" xlink:title="korc_collisions">
+<polygon fill="#337ab7" stroke="#337ab7" points="611,-191.9616 530,-191.9616 530,-167.9616 611,-167.9616 611,-191.9616"/>
+<text text-anchor="middle" x="570.5" y="-177.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_collisions</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_input~~UsedByGraph_edge28" class="edge">
+<title>program~main&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M731,-179.9616C695.6814,-168.2419 653.534,-168.7498 621.2939,-171.9171"/>
+<polygon fill="#000000" stroke="#000000" points="620.7536,-168.4554 611.1957,-173.0268 621.5182,-175.4135 620.7536,-168.4554"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge36" class="edge">
+<title>program~main&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-337.9616C526.7522,-332.7885 477.5768,-321.654 443.6954,-313.1287"/>
+<polygon fill="#000000" stroke="#000000" points="444.2493,-309.6579 433.6944,-310.5761 442.5182,-316.4405 444.2493,-309.6579"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M731,-297.9616C658.1713,-307.9851 643.5066,-346.5945 570.5,-337.9616"/>
+</g>
+<!-- module~korc_ppusher -->
+<g id="module~~korc_input~~UsedByGraph_node15" class="node">
+<title>module~korc_ppusher</title>
+<g id="a_module~~korc_input~~UsedByGraph_node15"><a xlink:href=".././module/korc_ppusher.html" xlink:title="korc_ppusher">
+<polygon fill="#337ab7" stroke="#337ab7" points="769,-250.9616 693,-250.9616 693,-226.9616 769,-226.9616 769,-250.9616"/>
+<text text-anchor="middle" x="731" y="-236.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_ppusher</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_ppusher -->
+<g id="module~~korc_input~~UsedByGraph_edge43" class="edge">
+<title>program~main&#45;&gt;module~korc_ppusher</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M870,-258.9616C840.3333,-251.0698 806.2232,-246.1028 779.2176,-243.0927"/>
+<polygon fill="#000000" stroke="#000000" points="779.5532,-239.6087 769.2394,-242.0328 778.8138,-246.5695 779.5532,-239.6087"/>
+</g>
+<!-- module~korc_finalize -->
+<g id="module~~korc_input~~UsedByGraph_node16" class="node">
+<title>module~korc_finalize</title>
+<g id="a_module~~korc_input~~UsedByGraph_node16"><a xlink:href=".././module/korc_finalize.html" xlink:title="korc_finalize">
+<polygon fill="#337ab7" stroke="#337ab7" points="606,-309.9616 535,-309.9616 535,-285.9616 606,-285.9616 606,-309.9616"/>
+<text text-anchor="middle" x="570.5" y="-295.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_finalize</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;module~korc_finalize -->
+<g id="module~~korc_input~~UsedByGraph_edge44" class="edge">
+<title>program~main&#45;&gt;module~korc_finalize</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M731,-297.9616C692.5162,-303.2582 648.3485,-302.7859 616.1005,-301.2573"/>
+<polygon fill="#000000" stroke="#000000" points="616.2416,-297.7599 606.0715,-300.7298 615.8739,-304.7503 616.2416,-297.7599"/>
+</g>
+<!-- program~main&#45;&gt;module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_edge46" class="edge">
+<title>program~main&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-139.9616C465.3681,-115.0097 428.8031,-126.5533 329,-167.9616 310.0891,-175.8078 292.1048,-190.5271 279.3864,-202.6187"/>
+<polygon fill="#000000" stroke="#000000" points="276.8465,-200.2078 272.1867,-209.7228 281.7631,-205.1905 276.8465,-200.2078"/>
+</g>
+<!-- module~korc_simple_equilibrium_pdf -->
+<g id="module~~korc_input~~UsedByGraph_node9" class="node">
+<title>module~korc_simple_equilibrium_pdf</title>
+<g id="a_module~~korc_input~~UsedByGraph_node9"><a xlink:href=".././module/korc_simple_equilibrium_pdf.html" xlink:title="korc_simple_equilibrium_pdf">
+<polygon fill="#337ab7" stroke="#337ab7" points="475,-547.9616 329,-547.9616 329,-523.9616 475,-523.9616 475,-547.9616"/>
+<text text-anchor="middle" x="402" y="-533.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_simple_equilibrium_pdf</text>
+</a>
+</g>
+</g>
+<!-- module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge8" class="edge">
+<title>module~korc_simple_equilibrium_pdf&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M365.9531,-548.0133C331.3073,-559.2619 281.3056,-574.5287 261,-575.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M261,-575.9616C142.1408,-584.3494 63.7486,-423.1475 38.95,-363.6151"/>
+<polygon fill="#000000" stroke="#000000" points="42.0711,-361.9984 35.0656,-354.0502 35.5855,-364.6322 42.0711,-361.9984"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge9" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-181.9616C324.8743,-187.8644 294.0615,-159.126 229,-200.9616 167.6452,-240.4138 214.6459,-320.2745 145,-341.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M529.8971,-178.7047C495.713,-178.0629 445.5658,-178.0956 402,-181.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145,-341.9616C121.3311,-349.0636 93.6498,-349.2682 71.434,-347.5994"/>
+<polygon fill="#000000" stroke="#000000" points="71.6026,-344.1004 61.328,-346.6855 70.9721,-351.072 71.6026,-344.1004"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_edge19" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.2274,-191.9862C532.3067,-196.2926 521.1164,-201.2487 511,-205.9616 485.153,-218.0029 456.2497,-232.3638 434.704,-243.248"/>
+<polygon fill="#000000" stroke="#000000" points="432.9941,-240.1907 425.6559,-247.8328 436.1581,-246.4348 432.9941,-240.1907"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_fio -->
+<g id="module~~korc_input~~UsedByGraph_edge23" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M542.1582,-167.8486C475.5831,-140.1851 311.0688,-76.6451 261,-101.9616"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge37" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M531.833,-192.0643C524.3041,-195.6773 516.9215,-200.247 511,-205.9616 484.3945,-231.6377 503.2393,-257.0942 475,-280.9616 466.0414,-288.5333 454.4957,-293.3786 443.2421,-296.4779"/>
+<polygon fill="#000000" stroke="#000000" points="442.4289,-293.0736 433.5001,-298.7769 444.0367,-299.8865 442.4289,-293.0736"/>
+</g>
+<!-- module~korc_collisions&#45;&gt;module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_edge47" class="edge">
+<title>module~korc_collisions&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-181.9616C366.4822,-184.68 327.6447,-196.3871 299.7398,-206.4391"/>
+<polygon fill="#000000" stroke="#000000" points="298.5164,-203.1598 290.3488,-209.9081 300.942,-209.7261 298.5164,-203.1598"/>
+</g>
+<!-- module~korc_experimental_pdf -->
+<g id="module~~korc_input~~UsedByGraph_node11" class="node">
+<title>module~korc_experimental_pdf</title>
+<g id="a_module~~korc_input~~UsedByGraph_node11"><a xlink:href=".././module/korc_experimental_pdf.html" xlink:title="korc_experimental_pdf">
+<polygon fill="#337ab7" stroke="#337ab7" points="630,-469.9616 511,-469.9616 511,-445.9616 630,-445.9616 630,-469.9616"/>
+<text text-anchor="middle" x="570.5" y="-455.5616" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_experimental_pdf</text>
+</a>
+</g>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge10" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-379.9616C373.3386,-363.5336 360.8878,-374.5944 329,-365.9616 298.0643,-357.5866 293.0493,-342.0071 261,-341.9616"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge38" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M532.6772,-445.9144C524.9219,-442.2698 517.2338,-437.6732 511,-431.9616 486.3639,-409.3893 495.8843,-392.044 475,-365.9616 461.0449,-348.5331 441.9855,-332.0049 426.841,-320.1119"/>
+<polygon fill="#000000" stroke="#000000" points="428.9508,-317.3191 418.8875,-314.0053 424.6878,-322.8713 428.9508,-317.3191"/>
+</g>
+<!-- module~korc_experimental_pdf&#45;&gt;module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_edge48" class="edge">
+<title>module~korc_experimental_pdf&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M548.3961,-445.8511C537.1643,-439.6597 523.3205,-431.9706 511,-424.9616 494.8997,-415.8023 491.8918,-411.5629 475,-403.9616 443.8553,-389.9464 431.6307,-396.9452 402,-379.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M402,-379.9616C366.2871,-359.4919 357.0648,-353.0745 329,-322.9616 305.7538,-298.0189 284.806,-264.412 272.4887,-242.9608"/>
+<polygon fill="#000000" stroke="#000000" points="275.4177,-241.0291 267.4594,-234.035 269.3191,-244.4653 275.4177,-241.0291"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge11" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M679.4222,-389.9885C674.5625,-392.4449 669.9759,-395.4019 666,-398.9616 636.9515,-424.969 662.7417,-457.7913 630,-478.9616 585.5865,-507.6787 562.6318,-490.4242 511,-478.9616 423.8461,-459.6128 405.3474,-440.2352 329,-393.9616 296.4635,-374.2415 299.0461,-342.0156 261,-341.9616"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_input~~UsedByGraph_edge14" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M668.4869,-377.9616C653.7548,-377.9616 638.1831,-377.9616 623.8952,-377.9616"/>
+<polygon fill="#000000" stroke="#000000" points="623.7486,-374.4617 613.7486,-377.9616 623.7486,-381.4617 623.7486,-374.4617"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_edge20" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M718.9954,-365.8086C692.8036,-339.3128 632.647,-278.5745 630,-276.9616 606.294,-262.5171 597.5586,-264.1622 570.5,-257.9616"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_input~~UsedByGraph_edge30" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M688.4743,-390.0673C680.8666,-392.6914 673.1048,-395.6778 666,-398.9616 640.954,-410.5377 614.4019,-427.3551 595.67,-440.0758"/>
+<polygon fill="#000000" stroke="#000000" points="593.6463,-437.2197 587.3957,-445.7743 597.6167,-442.9848 593.6463,-437.2197"/>
+</g>
+<!-- module~korc_spatial_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge39" class="edge">
+<title>module~korc_spatial_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M694.8651,-365.8896C662.6704,-355.876 614.051,-342.562 570.5,-337.9616"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_input -->
+<g id="module~~korc_input~~UsedByGraph_edge12" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_input</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M370.4274,-313.0601C335.7757,-324.8557 282.2463,-341.8411 261,-341.9616"/>
+</g>
+<!-- module~korc_fields&#45;&gt;module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_edge49" class="edge">
+<title>module~korc_fields&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M370.2913,-296.015C357.0196,-292.7335 341.7487,-287.8829 329,-280.9616 310.1172,-270.7101 291.9059,-254.4555 279.0899,-241.601"/>
+<polygon fill="#000000" stroke="#000000" points="281.3193,-238.8719 271.8495,-234.1208 276.2896,-243.7404 281.3193,-238.8719"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_avalanche -->
+<g id="module~~korc_input~~UsedByGraph_edge15" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_avalanche</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685.0071,-407.9261C665.8302,-402.9078 643.4403,-397.0488 623.5709,-391.8493"/>
+<polygon fill="#000000" stroke="#000000" points="624.304,-388.4234 613.7436,-389.2777 622.5318,-395.1953 624.304,-388.4234"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_energy_pdfs -->
+<g id="module~~korc_input~~UsedByGraph_edge25" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_energy_pdfs</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M720.2948,-432.1892C702.9616,-451.3714 666.9508,-488.7387 630,-511.9616 605.8575,-527.1348 598.1009,-528.8009 570.5,-535.9616"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-535.9616C568.248,-536.5459 318.7024,-479.0701 202.8676,-452.3313"/>
+<polygon fill="#000000" stroke="#000000" points="203.6205,-448.9131 193.0895,-450.0738 202.0458,-455.7337 203.6205,-448.9131"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_simple_equilibrium_pdf -->
+<g id="module~~korc_input~~UsedByGraph_edge27" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_simple_equilibrium_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-535.9616C543.2635,-543.0278 512.7063,-544.784 485.1689,-544.2229"/>
+<polygon fill="#000000" stroke="#000000" points="485.2744,-540.7246 475.172,-543.9169 485.0601,-547.7213 485.2744,-540.7246"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf -->
+<g id="module~~korc_input~~UsedByGraph_edge31" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_experimental_pdf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M680.2168,-431.985C664.6257,-435.6764 647.3114,-439.7757 631.1308,-443.6067"/>
+<polygon fill="#000000" stroke="#000000" points="630.1527,-440.2414 621.2281,-445.9512 631.7655,-447.0531 630.1527,-440.2414"/>
+</g>
+<!-- module~korc_velocity_distribution&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge40" class="edge">
+<title>module~korc_velocity_distribution&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M665.6792,-424.3948C620.3996,-424.9661 559.7278,-420.6378 511,-398.9616 491.1686,-390.1397 491.1614,-380.4502 475,-365.9616 458.0048,-350.7256 438.5625,-333.6998 424.0179,-321.0413"/>
+<polygon fill="#000000" stroke="#000000" points="425.9196,-318.057 416.0757,-314.1393 421.328,-323.3406 425.9196,-318.057"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_edge17" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-219.9616C527.7968,-222.5051 480.5119,-234.5773 446.9292,-244.8006"/>
+<polygon fill="#000000" stroke="#000000" points="445.4751,-241.5875 436.9671,-247.9014 447.5555,-248.2712 445.4751,-241.5875"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_collisions -->
+<g id="module~~korc_input~~UsedByGraph_edge29" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_collisions</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M698.1331,-226.8797C673.4656,-217.8119 639.4921,-205.3232 612.7977,-195.5103"/>
+<polygon fill="#000000" stroke="#000000" points="613.9165,-192.1926 603.3229,-192.0274 611.5012,-198.7628 613.9165,-192.1926"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge41" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-219.9616C520.225,-222.9561 520.8989,-260.2292 475,-280.9616 465.0726,-285.4458 453.9515,-289.2225 443.4406,-292.2815"/>
+<polygon fill="#000000" stroke="#000000" points="442.3178,-288.9605 433.6089,-294.9941 444.1797,-295.7083 442.3178,-288.9605"/>
+</g>
+<!-- module~korc_ppusher&#45;&gt;module~korc_interp -->
+<g id="module~~korc_input~~UsedByGraph_edge50" class="edge">
+<title>module~korc_ppusher&#45;&gt;module~korc_interp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M570.5,-219.9616C475.1179,-225.6428 362.9112,-224.3964 303.2751,-223.1054"/>
+<polygon fill="#000000" stroke="#000000" points="303.194,-219.6027 293.1168,-222.8739 303.0344,-226.6009 303.194,-219.6027"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M692.8418,-230.5391C660.3904,-224.315 612.5071,-217.3415 570.5,-219.9616"/>
+</g>
+<!-- module~korc_finalize&#45;&gt;module~korc_profiles -->
+<g id="module~~korc_input~~UsedByGraph_edge21" class="edge">
+<title>module~korc_finalize&#45;&gt;module~korc_profiles</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M534.7655,-289.9028C509.5811,-284.2232 475.6229,-276.565 448.3548,-270.4155"/>
+<polygon fill="#000000" stroke="#000000" points="448.7889,-266.9256 438.2639,-268.1398 447.2489,-273.7541 448.7889,-266.9256"/>
+</g>
+<!-- module~korc_finalize&#45;&gt;module~korc_fields -->
+<g id="module~~korc_input~~UsedByGraph_edge35" class="edge">
+<title>module~korc_finalize&#45;&gt;module~korc_fields</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M534.7655,-298.8099C508.2105,-299.4403 471.9008,-300.3022 443.9649,-300.9654"/>
+<polygon fill="#000000" stroke="#000000" points="443.62,-297.4725 433.7059,-301.2089 443.7862,-304.4705 443.62,-297.4725"/>
+</g>
+<!-- module~korc_interp&#45;&gt;module~korc_fio -->
+<g id="module~~korc_input~~UsedByGraph_edge24" class="edge">
+<title>module~korc_interp&#45;&gt;module~korc_fio</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M228.9954,-221.9616C214.5018,-221.9616 197.2776,-221.9616 182.2106,-221.9616"/>
+<polygon fill="#000000" stroke="#000000" points="182.1843,-218.4617 172.1843,-221.9616 182.1842,-225.4617 182.1843,-218.4617"/>
+</g>
+</g>
+</svg>
+</div><script>var panmodulekorc_inputUsedByGraph = svgPanZoom('#modulekorc_inputUsedByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="32pt"
+ viewBox="0.00 0.00 486.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 482,-28 482,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-24 72,-24 72,0 138,0 138,-24"/>
+<text text-anchor="middle" x="105" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="219.5,-24 156.5,-24 156.5,0 219.5,0 219.5,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-24 238,-24 238,0 292,0 292,-24"/>
+<text text-anchor="middle" x="265" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-24 310,-24 310,0 364,0 364,-24"/>
+<text text-anchor="middle" x="337" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="478,-24 382,-24 382,0 478,0 478,-24"/>
+<text text-anchor="middle" x="430" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses.
+    </p>
+    </div></div></div></div>
+  </li>
+  
+      </ul>
+    </div>
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-restart~2">restart</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-proceed~2">proceed</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-load_balance~2">load_balance</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-reinit~2">reinit</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-simulation_time~2">simulation_time</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-snapshot_frequency~2">snapshot_frequency</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-restart_overwrite_frequency~2">restart_overwrite_frequency</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dt~2">dt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-num_species~2">num_species</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-minimum_particle_energy~2">minimum_particle_energy</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-radiation~2">radiation</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-gc_rad_model~2">GC_rad_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-collisions~2">collisions</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-largecollisions~3">LargeCollisions</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-collisions_model~2">collisions_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bound_electron_model~2">bound_electron_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-field_model~2">field_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-profile_model~2">profile_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-magnetic_field_filename~2">magnetic_field_filename</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-magnetic_field_directory~2">magnetic_field_directory</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-magnetic_field_list~2">magnetic_field_list</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-time_slice~2">time_slice</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rmax~2">rmax</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rmin~2">rmin</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zmax~2">zmax</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zmin~2">zmin</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-outputs_list~2">outputs_list</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-hdf5_error_handling~2">HDF5_error_handling</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-fo_gc_compare~2">FO_GC_compare</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-orbit_model~2">orbit_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-field_eval~2">field_eval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-fokplan~2">FokPlan</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-samerandseed~2">SameRandSeed</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sc_e~2">SC_E</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sc_e_add~2">SC_E_add</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pchunk~37">pchunk</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-runaway~2">runaway</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ppp~2">ppp</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pinit~2">pinit</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-q~7">q</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-m~17">m</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spatial_distribution~2">spatial_distribution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ro~5">Ro</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-phio~2">PHIo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zo~5">Zo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-r_inner~2">r_inner</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-r_outter~2">r_outter</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-shear_factor~2">shear_factor</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigmar~2">sigmaR</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigmaz~2">sigmaZ</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-theta_gauss~2">theta_gauss</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psi_max~5">psi_max</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-falloff_rate~2">falloff_rate</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-energy_distribution~2">energy_distribution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pitch_distribution~2">pitch_distribution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eno">Eno</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-etao~8">etao</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eo_lims~2">Eo_lims</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-etao_lims~2">etao_lims</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-xtrace~2">Xtrace</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spong_b~2">Spong_b</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spong_w~2">Spong_w</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-spong_dlam~2">Spong_dlam</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dth~3">dth</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dgam~2">dgam</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dr~3">dR</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dz~3">dZ</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eo~5">Eo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-current_direction~3">current_direction</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo~9">Bo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-minor_radius">minor_radius</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-major_radius">major_radius</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-qa~2">qa</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-qo~2">qo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nr">nR</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nz">nZ</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nphi">nPHI</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_profile~2">E_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_dyn~2">E_dyn</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_pulse~2">E_pulse</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_width~2">E_width</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ero~2">Ero</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rmn~2">rmn</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigmamn~2">sigmamn</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bfield~3">Bfield</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-b1field~3">B1field</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e1field~3">E1field</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dbfield~3">dBfield</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-axisymmetric_fields~2">axisymmetric_fields</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bflux~3">Bflux</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bflux3d~2">Bflux3D</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-efield~3">Efield</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dim2x1t~2">Dim2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_2x1t~2">E_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-t0_2x1t~2">t0_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ind0_2x1t~2">ind0_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-reinterp_2x1t~2">ReInterp_2x1t</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-res_double~2">res_double</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dim_1d~2">dim_1D</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dt_e_sc~2">dt_E_SC</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ip_exp~2">Ip_exp</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psip_lim~2">PSIp_lim</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psip_0~2">PSIp_0</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psip_conv~2">psip_conv</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-mars_amp_scale~2">MARS_AMP_Scale</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-aorsa_amp_scale~2">AORSA_AMP_Scale</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-aorsa_freq~2">AORSA_freq</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-aorsa_nmode~2">AORSA_nmode</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-analytic_iwl~2">Analytic_IWL</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ntiles~2">ntiles</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-circumradius~2">circumradius</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-uselcfs~2">useLCFS</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-axisymmetric~2">axisymmetric</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-filename~4">filename</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-radius_profile">radius_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_profile~2">ne_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-neo~2">neo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_ne~2">n_ne</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_shelf~2">n_shelf</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_ne~2">a_ne</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_rer0~2">n_REr0</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_tauion~2">n_tauion</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_tauin~2">n_tauin</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_tauout~2">n_tauout</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_shelfdelay~2">n_shelfdelay</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_lamfront~2">n_lamfront</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_lamback~2">n_lamback</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_lamshelf~2">n_lamshelf</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-psin_0~2">psiN_0</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_profile~2">Te_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-teo~2">Teo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_te~2">n_Te</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_te~2">a_Te</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_profile~2">Zeff_profile</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeffo~2">Zeffo</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-n_zeff~2">n_Zeff</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_zeff~2">a_Zeff</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_sing">Te_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ti_sing">Ti_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_sing">ne_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_sing">Zeff_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dtau_sing">dTau_sing</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-p_therm~2">p_therm</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-conservela~2">ConserveLA</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-clog_model~2">Clog_model</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_secre~2">min_secRE</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sample_test~2">sample_test</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pmin_scale~2">pmin_scale</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-energy_diffusion~2">energy_diffusion</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lac_gam_resolution~2">LAC_gam_resolution</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-fp_bremsstrahlung~2">FP_bremsstrahlung</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-pitch_diffusion~2">pitch_diffusion</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ngrid1~2">ngrid1</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-clog_const~2">Clog_const</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-num_impurity_species~3">num_impurity_species</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_mult">Te_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_mult">ne_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zo_mult">Zo_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zj_mult">Zj_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-nz_mult">nz_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-izj_mult">IZj_mult</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-neut_prof~2">neut_prof</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_aval">max_pitch_angle_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_aval">min_pitch_angle_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dth_aval">dth_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dp_aval">dp_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dr_aval">dR_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-dz_aval">dZ_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_aval">max_energy_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_aval">min_energy_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-ne_aval">ne_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_aval">Zeff_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-epar_aval">Epar_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-te_aval">Te_aval</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_expt">E_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_expt">Zeff_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_expt">max_pitch_angle_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_expt">min_pitch_angle_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_expt">min_energy_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_expt">max_energy_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-k_expt">k_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-t_expt">t_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo_expt">Bo_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lambda_expt">lambda_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_fact_expt">A_fact_expt</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-filename_exp">filename_exp</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-filename_hollmann">filename_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-rho_ind~3">rho_ind</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-eo_hollmann">Eo_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_hollmann">E_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigma_e_hollmann">sigma_E_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_hollmann">Zeff_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-sigma_z_hollmann">sigma_Z_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_hollmann">max_pitch_angle_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_hollmann">min_pitch_angle_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_hollmann">min_energy_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_hollmann">max_energy_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-current_direction_hollmann">current_direction_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo_hollmann">Bo_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lambda_hollmann">lambda_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-a_fact_hollmann">A_fact_Hollmann</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-gam_min_from_col~2">gam_min_from_col</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_energy_gamma">min_energy_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_energy_gamma">max_energy_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-k_gamma">k_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-t_gamma">t_gamma</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-e_simple">E_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-zeff_simple">Zeff_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-max_pitch_angle_simple">max_pitch_angle_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-min_pitch_angle_simple">min_pitch_angle_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-bo_simple">Bo_simple</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#variable-lambda_simple">lambda_simple</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/korc_input.html#proc-read_namelist">read_namelist</a>
+      
+      <a class="list-group-item" href="../module/korc_input.html#proc-rmcoment">rmcoment</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-restart~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>restart</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-proceed~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>proceed</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-load_balance~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>load_balance</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-reinit~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>reinit</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-simulation_time~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>simulation_time</strong></td><td> =</td><td>1.E-3</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-snapshot_frequency~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>snapshot_frequency</strong></td><td> =</td><td>1.E-5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-restart_overwrite_frequency~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>restart_overwrite_frequency</strong></td><td> =</td><td>1.E-1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dt</strong></td><td> =</td><td>1.E0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-num_species~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>num_species</strong></td><td> =</td><td>1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-minimum_particle_energy~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>minimum_particle_energy</strong></td><td> =</td><td>1.0E5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-radiation~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>radiation</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gc_rad_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>GC_rad_model</strong></td><td> =</td><td>'SDE'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-collisions~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>collisions</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-largecollisions~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>LargeCollisions</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-collisions_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>collisions_model</strong></td><td> =</td><td>'SINGLE_SPECIES'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bound_electron_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>bound_electron_model</strong></td><td> =</td><td>'HESSLOW'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-field_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>field_model</strong></td><td> =</td><td>'M3D_C1'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-profile_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>profile_model</strong></td><td> =</td><td>'M3D_C1'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_filename~2"></span>character(len=150),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>magnetic_field_filename</strong></td><td> =</td><td>'C1.h5'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_directory~2"></span>character(len=150),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>magnetic_field_directory</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-magnetic_field_list~2"></span>character(len=150),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>magnetic_field_list</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time_slice~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>time_slice</strong></td><td> =</td><td>000</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rmax~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rmax</strong></td><td> =</td><td>1.60</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rmin~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rmin</strong></td><td> =</td><td>0.15</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zmax~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>zmax</strong></td><td> =</td><td>1.65</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zmin~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>zmin</strong></td><td> =</td><td>-1.65</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-outputs_list~2"></span>character(len=75),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>outputs_list</strong></td><td> =</td><td>'{X,Y,V,B,E,g,eta,flagCon,flagCol,PSIp,ne}'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-hdf5_error_handling~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>HDF5_error_handling</strong></td><td> =</td><td>.TRUE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fo_gc_compare~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>FO_GC_compare</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-orbit_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>orbit_model</strong></td><td> =</td><td>'GC'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-field_eval~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>field_eval</strong></td><td> =</td><td>'interp'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fokplan~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>FokPlan</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-samerandseed~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>SameRandSeed</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sc_e~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>SC_E</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sc_e_add~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>SC_E_add</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pchunk~37"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pchunk</strong></td><td> =</td><td>1</td><td><hr>
+<p>plasma_species
+ As these inputs are vectors with dimension given by the number of species
+ indicate default values for num_species=1 below, after the input_parameter
+ namelist is read</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-runaway~2"></span>logical,</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>runaway</strong></td><td></td><td></td><td><p>Flag to decide whether a given electron is a runaway (runaway=T)
+ or not (runaway=F).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ppp~2"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>ppp</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pinit~2"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>pinit</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-q~7"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>q</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-m~17"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>m</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spatial_distribution~2"></span>character(len=30),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>spatial_distribution</strong></td><td></td><td></td><td><p>String describing the type of initial spatial distribution for
+ each electron species.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ro~5"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Ro</strong></td><td></td><td></td><td><p>Radial position of the center of the electrons' initial
+ spatial distribution.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-phio~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>PHIo</strong></td><td></td><td></td><td><p>Azimuthal position of the electrons' initial spatial distribution, 
+ in case of using a disk at a certain poloidal section.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zo~5"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Zo</strong></td><td></td><td></td><td><p>Height of the center of the electrons' initial spatial distribution.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-r_inner~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>r_inner</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-r_outter~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>r_outter</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-shear_factor~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>shear_factor</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigmar~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>sigmaR</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigmaz~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>sigmaZ</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-theta_gauss~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>theta_gauss</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psi_max~5"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>psi_max</strong></td><td></td><td></td><td><p>Maximum value of the argument of the 2D gaussian exponential, used for an
+ indicator function that limits the region of MH sampling</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-falloff_rate~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>falloff_rate</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-energy_distribution~2"></span>character(len=30),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>energy_distribution</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pitch_distribution~2"></span>character(len=30),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>pitch_distribution</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-eno"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Eno</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-etao~8"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>etao</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-eo_lims~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Eo_lims</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-etao_lims~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>etao_lims</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xtrace~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Xtrace</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spong_b~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Spong_b</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spong_w~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Spong_w</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-spong_dlam~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>Spong_dlam</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dth~3"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>dth</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dgam~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>dgam</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dr~3"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>dR</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dz~3"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>dZ</strong></td><td></td><td></td><td><hr>
+<p>analytical_fields_params</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-eo~5"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Eo</strong></td><td> =</td><td>0.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-current_direction~3"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>current_direction</strong></td><td> =</td><td>'ANTI-PARALLEL'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bo~9"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bo</strong></td><td> =</td><td>2.2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-minor_radius"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>minor_radius</strong></td><td> =</td><td>0.7</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-major_radius"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>major_radius</strong></td><td> =</td><td>1.7</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-qa~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>qa</strong></td><td> =</td><td>5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-qo~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>qo</strong></td><td> =</td><td>1.5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nr"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>nR</strong></td><td> =</td><td>50</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nz"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>nZ</strong></td><td> =</td><td>50</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nphi"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>nPHI</strong></td><td> =</td><td>50</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_profile~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_profile</strong></td><td> =</td><td>''</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_dyn~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_dyn</strong></td><td> =</td><td>0.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_pulse~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_pulse</strong></td><td> =</td><td>5.E-2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_width~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_width</strong></td><td> =</td><td>2.5E-2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ero~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ero</strong></td><td> =</td><td>0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rmn~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rmn</strong></td><td> =</td><td>0.6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigmamn~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>sigmamn</strong></td><td> =</td><td>1.E-2</td><td><hr>
+<p>externalPlasmaModel</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bfield~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bfield</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b1field~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>B1field</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e1field~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E1field</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dbfield~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dBfield</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-axisymmetric_fields~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>axisymmetric_fields</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bflux~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bflux</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bflux3d~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bflux3D</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-efield~3"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Efield</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dim2x1t~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Dim2x1t</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_2x1t~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_2x1t</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t0_2x1t~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t0_2x1t</strong></td><td> =</td><td>1.405</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ind0_2x1t~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ind0_2x1t</strong></td><td> =</td><td>11</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-reinterp_2x1t~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ReInterp_2x1t</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-res_double~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>res_double</strong></td><td> =</td><td>0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dim_1d~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dim_1D</strong></td><td> =</td><td>50</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt_e_sc~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dt_E_SC</strong></td><td> =</td><td>1.E-7</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ip_exp~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ip_exp</strong></td><td> =</td><td>2E5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip_lim~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>PSIp_lim</strong></td><td> =</td><td>0.8446</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip_0~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>PSIp_0</strong></td><td> =</td><td>0.6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psip_conv~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>psip_conv</strong></td><td> =</td><td>1.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-mars_amp_scale~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>MARS_AMP_Scale</strong></td><td> =</td><td>1.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-aorsa_amp_scale~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>AORSA_AMP_Scale</strong></td><td> =</td><td>1.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-aorsa_freq~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>AORSA_freq</strong></td><td> =</td><td>0.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-aorsa_nmode~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>AORSA_nmode</strong></td><td> =</td><td>0.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-analytic_iwl~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Analytic_IWL</strong></td><td> =</td><td>'NONE'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ntiles~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ntiles</strong></td><td> =</td><td>42</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-circumradius~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>circumradius</strong></td><td> =</td><td>1.016</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-uselcfs~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>useLCFS</strong></td><td> =</td><td>.FALSE.</td><td><hr>
+<p>plasmaProfiles</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-axisymmetric~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>axisymmetric</strong></td><td> =</td><td>.TRUE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filename~4"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>filename</strong></td><td> =</td><td>'JFIT_D3D_157576_t1580_1.h5'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-radius_profile"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>radius_profile</strong></td><td> =</td><td>0.6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne_profile~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ne_profile</strong></td><td> =</td><td>'RE-EVO-PSIP-G'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-neo~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>neo</strong></td><td> =</td><td>4.E20</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_ne~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_ne</strong></td><td> =</td><td>2.5E19</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_shelf~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_shelf</strong></td><td> =</td><td>2.5E19</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a_ne~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(4)</td><td>::</td>
+  <td><strong>a_ne</strong></td><td> =</td><td>(/0.99713, 0.047037, 0.40023, -1.0466/)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_rer0~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_REr0</strong></td><td> =</td><td>0.4</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_tauion~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_tauion</strong></td><td> =</td><td>1.5e-2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_tauin~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_tauin</strong></td><td> =</td><td>7.5e-3</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_tauout~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_tauout</strong></td><td> =</td><td>1.25e-2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_shelfdelay~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_shelfdelay</strong></td><td> =</td><td>4.e-2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_lamfront~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_lamfront</strong></td><td> =</td><td>0.005</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_lamback~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_lamback</strong></td><td> =</td><td>0.005</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_lamshelf~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_lamshelf</strong></td><td> =</td><td>0.225</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-psin_0~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>psiN_0</strong></td><td> =</td><td>0.8</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te_profile~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Te_profile</strong></td><td> =</td><td>'FLAT'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-teo~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Teo</strong></td><td> =</td><td>1.5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_te~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_Te</strong></td><td> =</td><td>0.1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a_te~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(4)</td><td>::</td>
+  <td><strong>a_Te</strong></td><td> =</td><td>(/1.0046, -0.076652, -2.6429, 1.7415/)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff_profile~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff_profile</strong></td><td> =</td><td>'FLAT'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeffo~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeffo</strong></td><td> =</td><td>1.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n_zeff~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>n_Zeff</strong></td><td> =</td><td>3.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a_zeff~2"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(4)</td><td>::</td>
+  <td><strong>a_Zeff</strong></td><td> =</td><td>(/1.0065, -0.12081, 0.02834, -0.11796/)</td><td><hr>
+<p>CollisionParamsSingleSpecies</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te_sing"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Te_sing</strong></td><td> =</td><td>2.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ti_sing"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ti_sing</strong></td><td> =</td><td>2.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne_sing"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ne_sing</strong></td><td> =</td><td>4.E20</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff_sing"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff_sing</strong></td><td> =</td><td>1.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dtau_sing"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dTau_sing</strong></td><td> =</td><td>5.E-2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p_therm~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>p_therm</strong></td><td> =</td><td>1._rp</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-conservela~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ConserveLA</strong></td><td> =</td><td>.TRUE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-clog_model~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Clog_model</strong></td><td> =</td><td>'HESSLOW'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_secre~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_secRE</strong></td><td> =</td><td>'CRIT'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sample_test~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>sample_test</strong></td><td> =</td><td>.FALSE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pmin_scale~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pmin_scale</strong></td><td> =</td><td>1._rp</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-energy_diffusion~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>energy_diffusion</strong></td><td> =</td><td>.TRUE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lac_gam_resolution~2"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>LAC_gam_resolution</strong></td><td> =</td><td>'2EXP'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fp_bremsstrahlung~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>FP_bremsstrahlung</strong></td><td> =</td><td>.TRUE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pitch_diffusion~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pitch_diffusion</strong></td><td> =</td><td>.TRUE.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ngrid1~2"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ngrid1</strong></td><td> =</td><td>100</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-clog_const~2"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Clog_const</strong></td><td> =</td><td>20._rp</td><td><hr>
+<p>CollisionParamsMultipleSpecies</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-num_impurity_species~3"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>num_impurity_species</strong></td><td> =</td><td>1</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te_mult"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Te_mult</strong></td><td> =</td><td>2.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne_mult"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ne_mult</strong></td><td> =</td><td>4.E20</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zo_mult"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(10)</td><td>::</td>
+  <td><strong>Zo_mult</strong></td><td> =</td><td>10.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zj_mult"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(10)</td><td>::</td>
+  <td><strong>Zj_mult</strong></td><td> =</td><td>1.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nz_mult"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(10)</td><td>::</td>
+  <td><strong>nz_mult</strong></td><td> =</td><td>4.E20</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-izj_mult"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(10)</td><td>::</td>
+  <td><strong>IZj_mult</strong></td><td> =</td><td>15.7596</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-neut_prof~2"></span>character(len=20),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>neut_prof</strong></td><td> =</td><td>'UNIFORM'</td><td><hr>
+<p>AvalancheGenerationPDF</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_pitch_angle_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_pitch_angle_aval</strong></td><td> =</td><td>10.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_pitch_angle_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_pitch_angle_aval</strong></td><td> =</td><td>0.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dth_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dth_aval</strong></td><td> =</td><td>1.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dp_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dp_aval</strong></td><td> =</td><td>10.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dr_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dR_aval</strong></td><td> =</td><td>0.05</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dz_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dZ_aval</strong></td><td> =</td><td>0.05</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_energy_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_energy_aval</strong></td><td> =</td><td>60E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_energy_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_energy_aval</strong></td><td> =</td><td>7.0E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ne_aval</strong></td><td> =</td><td>8.5E18</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff_aval</strong></td><td> =</td><td>1.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-epar_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Epar_aval</strong></td><td> =</td><td>0.7427</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te_aval"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Te_aval</strong></td><td> =</td><td>1.0</td><td><hr>
+<p>ExperimentalPDF</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_expt</strong></td><td> =</td><td>7.67042</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff_expt</strong></td><td> =</td><td>1.36632</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_pitch_angle_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_pitch_angle_expt</strong></td><td> =</td><td>176.257</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_pitch_angle_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_pitch_angle_expt</strong></td><td> =</td><td>158.25</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_energy_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_energy_expt</strong></td><td> =</td><td>9.54997E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_energy_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_energy_expt</strong></td><td> =</td><td>44.3241E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-k_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>k_expt</strong></td><td> =</td><td>11.89</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t_expt</strong></td><td> =</td><td>0.65</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bo_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bo_expt</strong></td><td> =</td><td>2.2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lambda_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lambda_expt</strong></td><td> =</td><td>4.0E-6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a_fact_expt"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>A_fact_expt</strong></td><td> =</td><td>1.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filename_exp"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>filename_exp</strong></td><td> =</td><td>'Exp_PDF.h5'</td><td><hr>
+<p>HollmannPDF</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filename_hollmann"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>filename_Hollmann</strong></td><td> =</td><td>'Hollmann_PDF_HR.h5'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rho_ind~3"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rho_ind</strong></td><td> =</td><td>7</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-eo_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Eo_Hollmann</strong></td><td> =</td><td>24.56</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_Hollmann</strong></td><td> =</td><td>11.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigma_e_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>sigma_E_Hollmann</strong></td><td> =</td><td>.2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff_Hollmann</strong></td><td> =</td><td>5.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigma_z_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>sigma_Z_Hollmann</strong></td><td> =</td><td>10.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_pitch_angle_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_pitch_angle_Hollmann</strong></td><td> =</td><td>40.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_pitch_angle_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_pitch_angle_Hollmann</strong></td><td> =</td><td>0.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_energy_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_energy_Hollmann</strong></td><td> =</td><td>1.E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_energy_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_energy_Hollmann</strong></td><td> =</td><td>60.E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-current_direction_hollmann"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>current_direction_Hollmann</strong></td><td> =</td><td>'ANTICLOCKWISE'</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bo_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bo_Hollmann</strong></td><td> =</td><td>2.2</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lambda_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lambda_Hollmann</strong></td><td> =</td><td>4.0E-6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a_fact_hollmann"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>A_fact_Hollmann</strong></td><td> =</td><td>1.</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gam_min_from_col~2"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>gam_min_from_col</strong></td><td> =</td><td>.FALSE.</td><td><hr>
+<p>EnergyGammaPDF</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_energy_gamma"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_energy_gamma</strong></td><td> =</td><td>1.0E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_energy_gamma"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_energy_gamma</strong></td><td> =</td><td>30.0E6</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-k_gamma"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>k_gamma</strong></td><td> =</td><td>11.89</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t_gamma"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t_gamma</strong></td><td> =</td><td>0.65</td><td><hr>
+<p>SimpleEquilibriumPDF</p>
+<hr></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-e_simple"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>E_simple</strong></td><td> =</td><td>4.5</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zeff_simple"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Zeff_simple</strong></td><td> =</td><td>4.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_pitch_angle_simple"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>max_pitch_angle_simple</strong></td><td> =</td><td>60.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_pitch_angle_simple"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>min_pitch_angle_simple</strong></td><td> =</td><td>0.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bo_simple"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Bo_simple</strong></td><td> =</td><td>2.0</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lambda_simple"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lambda_simple</strong></td><td> =</td><td>890.0E-9</td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-read_namelist"></span><h3>
+public subroutine <a href='../proc/read_namelist.html'>read_namelist</a>(params, infile, echo_in, outdir)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<a href="../proc/read_namelist.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>infile</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>echo_in</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>outdir</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-rmcoment"></span><h3>
+public subroutine <a href='../proc/rmcoment.html'>rmcoment</a>(fileold, filenew)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<a href="../proc/rmcoment.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fileold</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>filenew</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

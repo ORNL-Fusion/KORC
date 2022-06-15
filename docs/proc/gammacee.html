@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>Gammacee &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>Gammacee
+      <small>Function</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.0% of total for procedures.">7 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_collisions.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/korc_collisions.f90.html'>korc_collisions.f90</a></li>
+    
+     <li><a href='../module/korc_collisions.html'>korc_collisions</a></li>
+    
+  
+     <li class="active">Gammacee</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/gammacee.html#src">Gammacee</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+private function Gammacee(v, ne, Te)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p>Dimensionless ne and Te</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-v~4"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>v</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ne~10"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ne</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-te~12"></span>real(kind=rp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Te</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    
+    
+    
+    
+   <h3>Return Value <small><span class="anchor" id="variable-gammacee"></span>real(kind=rp)
+  </small></h3>
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gammacee~~CallsGraph Pages: 1 -->
+<svg id="procgammaceeCallsGraph" width="255pt" height="74pt"
+ viewBox="0.00 0.00 255.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gammacee~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~gammacee~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-70 251,-70 251,4 -4,4"/>
+<!-- proc~gammacee -->
+<g id="proc~~gammacee~~CallsGraph_node1" class="node">
+<title>proc~gammacee</title>
+<polygon fill="none" stroke="#000000" points="67,-45 0,-45 0,-21 67,-21 67,-45"/>
+<text text-anchor="middle" x="33.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">Gammacee</text>
+</g>
+<!-- proc~clogee -->
+<g id="proc~~gammacee~~CallsGraph_node2" class="node">
+<title>proc~clogee</title>
+<g id="a_proc~~gammacee~~CallsGraph_node2"><a xlink:href=".././proc/clogee.html" xlink:title="CLogee">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="157,-45 103,-45 103,-21 157,-21 157,-45"/>
+<text text-anchor="middle" x="130" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLogee</text>
+</a>
+</g>
+</g>
+<!-- proc~gammacee&#45;&gt;proc~clogee -->
+<g id="proc~~gammacee~~CallsGraph_edge1" class="edge">
+<title>proc~gammacee&#45;&gt;proc~clogee</title>
+<path fill="none" stroke="#000000" d="M67.251,-33C75.4292,-33 84.22,-33 92.557,-33"/>
+<polygon fill="#000000" stroke="#000000" points="92.7943,-36.5001 102.7942,-33 92.7942,-29.5001 92.7943,-36.5001"/>
+</g>
+<!-- proc~clog0 -->
+<g id="proc~~gammacee~~CallsGraph_node3" class="node">
+<title>proc~clog0</title>
+<g id="a_proc~~gammacee~~CallsGraph_node3"><a xlink:href=".././proc/clog0.html" xlink:title="CLog0">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="247,-66 193,-66 193,-42 247,-42 247,-66"/>
+<text text-anchor="middle" x="220" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CLog0</text>
+</a>
+</g>
+</g>
+<!-- proc~clogee&#45;&gt;proc~clog0 -->
+<g id="proc~~gammacee~~CallsGraph_edge2" class="edge">
+<title>proc~clogee&#45;&gt;proc~clog0</title>
+<path fill="none" stroke="#000000" d="M157.003,-39.3007C165.1158,-41.1937 174.1631,-43.3047 182.8131,-45.323"/>
+<polygon fill="#000000" stroke="#000000" points="182.1713,-48.7672 192.705,-47.6312 183.7619,-41.9504 182.1713,-48.7672"/>
+</g>
+<!-- proc~vte -->
+<g id="proc~~gammacee~~CallsGraph_node4" class="node">
+<title>proc~vte</title>
+<g id="a_proc~~gammacee~~CallsGraph_node4"><a xlink:href=".././proc/vte.html" xlink:title="VTe">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="247,-24 193,-24 193,0 247,0 247,-24"/>
+<text text-anchor="middle" x="220" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">VTe</text>
+</a>
+</g>
+</g>
+<!-- proc~clogee&#45;&gt;proc~vte -->
+<g id="proc~~gammacee~~CallsGraph_edge3" class="edge">
+<title>proc~clogee&#45;&gt;proc~vte</title>
+<path fill="none" stroke="#000000" d="M157.003,-26.6993C165.1158,-24.8063 174.1631,-22.6953 182.8131,-20.677"/>
+<polygon fill="#000000" stroke="#000000" points="183.7619,-24.0496 192.705,-18.3688 182.1713,-17.2328 183.7619,-24.0496"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~gammacee~~CalledByGraph Pages: 1 -->
+<svg id="procgammaceeCalledByGraph" width="641pt" height="515pt"
+ viewBox="0.00 0.00 641.00 515.33" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~gammacee~~CalledByGraph" class="graph" transform="scale(.7021 .7021) rotate(0) translate(4 730)">
+<title>proc~~gammacee~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-730 909,-730 909,4 -4,4"/>
+<!-- proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_node1" class="node">
+<title>proc~gammacee</title>
+<polygon fill="none" stroke="#000000" points="905,-398 838,-398 838,-374 905,-374 905,-398"/>
+<text text-anchor="middle" x="871.5" y="-383.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">Gammacee</text>
+</g>
+<!-- proc~cf_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_node2" class="node">
+<title>proc~cf_sd_fio</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node2"><a xlink:href=".././proc/cf_sd_fio.html" xlink:title="CF_SD_FIO">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="784.5,-461 714.5,-461 714.5,-437 784.5,-437 784.5,-461"/>
+<text text-anchor="middle" x="749.5" y="-446.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CF_SD_FIO</text>
+</a>
+</g>
+</g>
+<!-- proc~cf_sd_fio&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge2" class="edge">
+<title>proc~cf_sd_fio&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M782.072,-436.9321C788.7523,-434.1904 795.6731,-431.1508 802,-428 816.5216,-420.7682 832.0306,-411.5519 844.7053,-403.5962"/>
+<polygon fill="#000000" stroke="#000000" points="846.8242,-406.3963 853.3788,-398.0724 843.064,-400.4919 846.8242,-406.3963"/>
+</g>
+<!-- proc~ca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_node3" class="node">
+<title>proc~ca_sd</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node3"><a xlink:href=".././proc/ca_sd.html" xlink:title="CA_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="776.5,-419 722.5,-419 722.5,-395 776.5,-395 776.5,-419"/>
+<text text-anchor="middle" x="749.5" y="-404.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CA_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~ca_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge3" class="edge">
+<title>proc~ca_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M776.5758,-402.3394C791.5743,-399.7577 810.585,-396.4854 827.6475,-393.5484"/>
+<polygon fill="#000000" stroke="#000000" points="828.705,-396.9179 837.9663,-391.7722 827.5174,-390.0194 828.705,-396.9179"/>
+</g>
+<!-- proc~dca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_node4" class="node">
+<title>proc~dca_sd</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node4"><a xlink:href=".././proc/dca_sd.html" xlink:title="dCA_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="776.5,-377 722.5,-377 722.5,-353 776.5,-353 776.5,-377"/>
+<text text-anchor="middle" x="749.5" y="-362.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">dCA_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~dca_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge4" class="edge">
+<title>proc~dca_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M776.5758,-369.6606C791.5743,-372.2423 810.585,-375.5146 827.6475,-378.4516"/>
+<polygon fill="#000000" stroke="#000000" points="827.5174,-381.9806 837.9663,-380.2278 828.705,-375.0821 827.5174,-381.9806"/>
+</g>
+<!-- proc~large_angle_source -->
+<g id="proc~~gammacee~~CalledByGraph_node5" class="node">
+<title>proc~large_angle_source</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node5"><a xlink:href=".././proc/large_angle_source.html" xlink:title="large_angle_source">
+<polygon fill="#d9534f" stroke="#d9534f" points="802,-503 697,-503 697,-479 802,-479 802,-503"/>
+<text text-anchor="middle" x="749.5" y="-488.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">large_angle_source</text>
+</a>
+</g>
+</g>
+<!-- proc~large_angle_source&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge5" class="edge">
+<title>proc~large_angle_source&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M786.6057,-478.8945C792.0089,-476.3674 797.3202,-473.4124 802,-470 825.7889,-452.6536 846.3275,-425.3753 858.7832,-406.6384"/>
+<polygon fill="#000000" stroke="#000000" points="861.743,-408.5069 864.2273,-398.2074 855.8624,-404.7096 861.743,-408.5069"/>
+</g>
+<!-- proc~cf_sd -->
+<g id="proc~~gammacee~~CalledByGraph_node6" class="node">
+<title>proc~cf_sd</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node6"><a xlink:href=".././proc/cf_sd.html" xlink:title="CF_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="776.5,-293 722.5,-293 722.5,-269 776.5,-269 776.5,-293"/>
+<text text-anchor="middle" x="749.5" y="-278.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CF_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~cf_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge6" class="edge">
+<title>proc~cf_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M776.7353,-288.9508C785.2922,-292.1969 794.4647,-296.5054 802,-302 825.7889,-319.3464 846.3275,-346.6247 858.7832,-365.3616"/>
+<polygon fill="#000000" stroke="#000000" points="855.8624,-367.2904 864.2273,-373.7926 861.743,-363.4931 855.8624,-367.2904"/>
+</g>
+<!-- proc~cb_ei_sd -->
+<g id="proc~~gammacee~~CalledByGraph_node7" class="node">
+<title>proc~cb_ei_sd</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node7"><a xlink:href=".././proc/cb_ei_sd.html" xlink:title="CB_ei_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="780.5,-251 718.5,-251 718.5,-227 780.5,-227 780.5,-251"/>
+<text text-anchor="middle" x="749.5" y="-236.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ei_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge7" class="edge">
+<title>proc~cb_ei_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M780.6568,-247.418C788.2285,-250.5012 795.8939,-254.6053 802,-260 834.5381,-288.7472 854.9287,-336.5348 864.6688,-364.2605"/>
+<polygon fill="#000000" stroke="#000000" points="861.3793,-365.4594 867.8835,-373.8228 868.0144,-363.2288 861.3793,-365.4594"/>
+</g>
+<!-- proc~cb_ei_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_node8" class="node">
+<title>proc~cb_ei_sd_fio</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node8"><a xlink:href=".././proc/cb_ei_sd_fio.html" xlink:title="CB_ei_SD_FIO">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="792,-545 707,-545 707,-521 792,-521 792,-545"/>
+<text text-anchor="middle" x="749.5" y="-530.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ei_SD_FIO</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ei_sd_fio&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge1" class="edge">
+<title>proc~cb_ei_sd_fio&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M788.5572,-520.9648C793.3947,-518.4733 798.0273,-515.5098 802,-512 834.5381,-483.2528 854.9287,-435.4652 864.6688,-407.7395"/>
+<polygon fill="#000000" stroke="#000000" points="868.0144,-408.7712 867.8835,-398.1772 861.3793,-406.5406 868.0144,-408.7712"/>
+</g>
+<!-- proc~cb_ee_sd -->
+<g id="proc~~gammacee~~CalledByGraph_node9" class="node">
+<title>proc~cb_ee_sd</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node9"><a xlink:href=".././proc/cb_ee_sd.html" xlink:title="CB_ee_SD">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="782,-335 717,-335 717,-311 782,-311 782,-335"/>
+<text text-anchor="middle" x="749.5" y="-320.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">CB_ee_SD</text>
+</a>
+</g>
+</g>
+<!-- proc~cb_ee_sd&#45;&gt;proc~gammacee -->
+<g id="proc~~gammacee~~CalledByGraph_edge8" class="edge">
+<title>proc~cb_ee_sd&#45;&gt;proc~gammacee</title>
+<path fill="none" stroke="#000000" d="M782.072,-335.0679C788.7523,-337.8096 795.6731,-340.8492 802,-344 816.5216,-351.2318 832.0306,-360.4481 844.7053,-368.4038"/>
+<polygon fill="#000000" stroke="#000000" points="843.064,-371.5081 853.3788,-373.9276 846.8242,-365.6037 843.064,-371.5081"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_node10" class="node">
+<title>proc~include_coulombcollisions_gc_p</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node10"><a xlink:href=".././proc/include_coulombcollisions_gc_p.html" xlink:title="include_CoulombCollisions_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="654.5,-377 482.5,-377 482.5,-353 654.5,-353 654.5,-377"/>
+<text text-anchor="middle" x="568.5" y="-362.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_edge11" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd_fio</title>
+<path fill="none" stroke="#000000" d="M641.9316,-377.0014C648.6083,-379.4628 655.0774,-382.428 661,-386 682.0529,-398.6973 677.0096,-413.6882 697,-428 699.634,-429.8858 702.4614,-431.6344 705.3884,-433.2497"/>
+<polygon fill="#000000" stroke="#000000" points="703.8604,-436.3987 714.375,-437.7004 706.9671,-430.1258 703.8604,-436.3987"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge12" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M621.8364,-377.0157C634.6676,-379.932 648.3275,-383.0581 661,-386 677.9083,-389.9253 696.6131,-394.3514 712.4541,-398.1246"/>
+<polygon fill="#000000" stroke="#000000" points="711.8635,-401.5819 722.4028,-400.498 713.488,-394.773 711.8635,-401.5819"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge17" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M654.7592,-365C674.9257,-365 695.3737,-365 712.0858,-365"/>
+<polygon fill="#000000" stroke="#000000" points="712.4881,-368.5001 722.488,-365 712.488,-361.5001 712.4881,-368.5001"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge24" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cf_sd</title>
+<path fill="none" stroke="#000000" d="M591.932,-352.8499C617.5,-339.7484 659.7637,-318.5471 697,-302 702.1022,-299.7327 707.5286,-297.4363 712.8833,-295.2357"/>
+<polygon fill="#000000" stroke="#000000" points="714.3998,-298.3979 722.359,-291.4049 711.7761,-291.9081 714.3998,-298.3979"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge28" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd</title>
+<path fill="none" stroke="#000000" d="M589.4773,-352.9244C609.006,-341.1866 638.4141,-322.2142 661,-302 679.3197,-285.6039 677.0096,-274.3118 697,-260 700.6917,-257.357 704.763,-254.9836 708.9563,-252.8686"/>
+<polygon fill="#000000" stroke="#000000" points="710.5795,-255.9753 718.2311,-248.647 707.6796,-249.6043 710.5795,-255.9753"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_edge33" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ei_sd_fio</title>
+<path fill="none" stroke="#000000" d="M648.6669,-377.0188C653.1261,-379.5238 657.2922,-382.491 661,-386 703.3005,-426.0334 657.9749,-468.7676 697,-512 697.888,-512.9837 698.8284,-513.9221 699.8131,-514.8172"/>
+<polygon fill="#000000" stroke="#000000" points="697.9575,-517.796 708.098,-520.8652 702.0847,-512.1421 697.9575,-517.796"/>
+</g>
+<!-- proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge34" class="edge">
+<title>proc~include_coulombcollisions_gc_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M620.3673,-352.9645C647.8493,-346.5875 681.1825,-338.8527 707.0982,-332.8391"/>
+<polygon fill="#000000" stroke="#000000" points="708.0455,-336.2124 716.9955,-330.5425 706.4632,-329.3935 708.0455,-336.2124"/>
+</g>
+<!-- proc~include_coulombcollisions_fo_p -->
+<g id="proc~~gammacee~~CalledByGraph_node11" class="node">
+<title>proc~include_coulombcollisions_fo_p</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node11"><a xlink:href=".././proc/include_coulombcollisions_fo_p.html" xlink:title="include_CoulombCollisions_FO_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="654,-293 483,-293 483,-269 654,-269 654,-293"/>
+<text text-anchor="middle" x="568.5" y="-278.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_FO_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fo_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge13" class="edge">
+<title>proc~include_coulombcollisions_fo_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M589.4773,-293.0756C609.006,-304.8134 638.4141,-323.7858 661,-344 679.3197,-360.3961 677.0096,-371.6882 697,-386 701.8578,-389.4778 707.373,-392.4889 712.9585,-395.0586"/>
+<polygon fill="#000000" stroke="#000000" points="711.7448,-398.3448 722.3211,-398.9711 714.4438,-391.886 711.7448,-398.3448"/>
+</g>
+<!-- proc~include_coulombcollisions_fo_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge18" class="edge">
+<title>proc~include_coulombcollisions_fo_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M591.932,-293.1501C617.5,-306.2516 659.7637,-327.4529 697,-344 702.1022,-346.2673 707.5286,-348.5637 712.8833,-350.7643"/>
+<polygon fill="#000000" stroke="#000000" points="711.7761,-354.0919 722.359,-354.5951 714.3998,-347.6021 711.7761,-354.0919"/>
+</g>
+<!-- proc~include_coulombcollisions_fo_p&#45;&gt;proc~cf_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge26" class="edge">
+<title>proc~include_coulombcollisions_fo_p&#45;&gt;proc~cf_sd</title>
+<path fill="none" stroke="#000000" d="M654.2295,-281C674.4672,-281 695.0238,-281 711.8364,-281"/>
+<polygon fill="#000000" stroke="#000000" points="712.3031,-284.5001 722.303,-281 712.303,-277.5001 712.3031,-284.5001"/>
+</g>
+<!-- proc~include_coulombcollisions_fo_p&#45;&gt;proc~cb_ei_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge30" class="edge">
+<title>proc~include_coulombcollisions_fo_p&#45;&gt;proc~cb_ei_sd</title>
+<path fill="none" stroke="#000000" d="M621.8364,-268.9843C634.6676,-266.068 648.3275,-262.9419 661,-260 676.4975,-256.4022 693.5041,-252.3837 708.4317,-248.8328"/>
+<polygon fill="#000000" stroke="#000000" points="709.4734,-252.1827 718.3899,-246.4602 707.851,-245.3733 709.4734,-252.1827"/>
+</g>
+<!-- proc~include_coulombcollisions_fo_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge35" class="edge">
+<title>proc~include_coulombcollisions_fo_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M620.3673,-293.0355C647.8493,-299.4125 681.1825,-307.1473 707.0982,-313.1609"/>
+<polygon fill="#000000" stroke="#000000" points="706.4632,-316.6065 716.9955,-315.4575 708.0455,-309.7876 706.4632,-316.6065"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_node12" class="node">
+<title>proc~include_coulombcollisionsla_gc_p</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node12"><a xlink:href=".././proc/include_coulombcollisionsla_gc_p.html" xlink:title="include_CoulombCollisionsLA_GC_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="661,-419 476,-419 476,-395 661,-395 661,-419"/>
+<text text-anchor="middle" x="568.5" y="-404.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisionsLA_GC_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cf_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_edge9" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cf_sd_fio</title>
+<path fill="none" stroke="#000000" d="M621.8364,-419.0157C634.6676,-421.932 648.3275,-425.0581 661,-428 675.1107,-431.2758 690.4725,-434.9005 704.3769,-438.2033"/>
+<polygon fill="#000000" stroke="#000000" points="703.6666,-441.6319 714.2052,-440.5418 705.287,-434.822 703.6666,-441.6319"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge14" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M661.1209,-407C679.1781,-407 697.1227,-407 712.0769,-407"/>
+<polygon fill="#000000" stroke="#000000" points="712.3964,-410.5001 722.3964,-407 712.3963,-403.5001 712.3964,-410.5001"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge19" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M621.8364,-394.9843C634.6676,-392.068 648.3275,-388.9419 661,-386 677.9083,-382.0747 696.6131,-377.6486 712.4541,-373.8754"/>
+<polygon fill="#000000" stroke="#000000" points="713.488,-377.227 722.4028,-371.502 711.8635,-370.4181 713.488,-377.227"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~large_angle_source -->
+<g id="proc~~gammacee~~CalledByGraph_edge22" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~large_angle_source</title>
+<path fill="none" stroke="#000000" d="M641.9316,-419.0014C648.6083,-421.4628 655.0774,-424.428 661,-428 682.0529,-440.6973 677.0096,-455.6882 697,-470 699.0953,-471.5001 701.3128,-472.9133 703.6056,-474.2417"/>
+<polygon fill="#000000" stroke="#000000" points="702.2307,-477.4709 712.7219,-478.9495 705.4427,-471.2512 702.2307,-477.4709"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cf_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge23" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cf_sd</title>
+<path fill="none" stroke="#000000" d="M647.2803,-394.8749C652.1887,-392.4088 656.8247,-389.4783 661,-386 692.2075,-360.0025 667.9311,-330.3686 697,-302 701.5644,-297.5455 707.1934,-293.9995 713.0527,-291.1877"/>
+<polygon fill="#000000" stroke="#000000" points="714.4281,-294.4064 722.3297,-287.3484 711.7513,-287.9384 714.4281,-294.4064"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cb_ei_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge27" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cb_ei_sd</title>
+<path fill="none" stroke="#000000" d="M648.6669,-394.9812C653.1261,-392.4762 657.2922,-389.509 661,-386 703.3005,-345.9666 657.9749,-303.2324 697,-260 700.4472,-256.1812 704.6831,-253.0458 709.2404,-250.4741"/>
+<polygon fill="#000000" stroke="#000000" points="710.7395,-253.6369 718.2775,-246.1919 707.742,-247.3112 710.7395,-253.6369"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cb_ei_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_edge31" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cb_ei_sd_fio</title>
+<path fill="none" stroke="#000000" d="M647.2803,-419.1251C652.1887,-421.5912 656.8247,-424.5217 661,-428 692.2075,-453.9975 667.9311,-483.6314 697,-512 698.2317,-513.202 699.5409,-514.3378 700.9112,-515.411"/>
+<polygon fill="#000000" stroke="#000000" points="699.0264,-518.3603 709.3136,-520.8951 702.8524,-512.4984 699.0264,-518.3603"/>
+</g>
+<!-- proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge36" class="edge">
+<title>proc~include_coulombcollisionsla_gc_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M641.9316,-394.9986C648.6083,-392.5372 655.0774,-389.572 661,-386 682.0529,-373.3027 677.0096,-358.3118 697,-344 700.2739,-341.6561 703.8463,-339.5243 707.5376,-337.5966"/>
+<polygon fill="#000000" stroke="#000000" points="709.2916,-340.6398 716.8558,-333.2213 706.3164,-334.3035 709.2916,-340.6398"/>
+</g>
+<!-- proc~include_coulombcollisions_gcfio_p -->
+<g id="proc~~gammacee~~CalledByGraph_node13" class="node">
+<title>proc~include_coulombcollisions_gcfio_p</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node13"><a xlink:href=".././proc/include_coulombcollisions_gcfio_p.html" xlink:title="include_CoulombCollisions_GCfio_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="660,-461 477,-461 477,-437 660,-437 660,-461"/>
+<text text-anchor="middle" x="568.5" y="-446.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_GCfio_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~cf_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_edge10" class="edge">
+<title>proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~cf_sd_fio</title>
+<path fill="none" stroke="#000000" d="M660.0605,-449C675.2818,-449 690.463,-449 703.8816,-449"/>
+<polygon fill="#000000" stroke="#000000" points="704.2323,-452.5001 714.2322,-449 704.2322,-445.5001 704.2323,-452.5001"/>
+</g>
+<!-- proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge15" class="edge">
+<title>proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M621.8364,-436.9843C634.6676,-434.068 648.3275,-430.9419 661,-428 677.9083,-424.0747 696.6131,-419.6486 712.4541,-415.8754"/>
+<polygon fill="#000000" stroke="#000000" points="713.488,-419.227 722.4028,-413.502 711.8635,-412.4181 713.488,-419.227"/>
+</g>
+<!-- proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge20" class="edge">
+<title>proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M641.9316,-436.9986C648.6083,-434.5372 655.0774,-431.572 661,-428 682.0529,-415.3027 677.0096,-400.3118 697,-386 701.8578,-382.5222 707.373,-379.5111 712.9585,-376.9414"/>
+<polygon fill="#000000" stroke="#000000" points="714.4438,-380.114 722.3211,-373.0289 711.7448,-373.6552 714.4438,-380.114"/>
+</g>
+<!-- proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~cb_ei_sd_fio -->
+<g id="proc~~gammacee~~CalledByGraph_edge32" class="edge">
+<title>proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~cb_ei_sd_fio</title>
+<path fill="none" stroke="#000000" d="M591.932,-461.1501C617.5,-474.2516 659.7637,-495.4529 697,-512 700.835,-513.7042 704.8533,-515.4249 708.8865,-517.1089"/>
+<polygon fill="#000000" stroke="#000000" points="707.6656,-520.391 718.2458,-520.9471 710.3216,-513.9145 707.6656,-520.391"/>
+</g>
+<!-- proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge37" class="edge">
+<title>proc~include_coulombcollisions_gcfio_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M647.2803,-436.8749C652.1887,-434.4088 656.8247,-431.4783 661,-428 692.2075,-402.0025 667.9311,-372.3686 697,-344 700.122,-340.9532 703.742,-338.3314 707.5931,-336.0789"/>
+<polygon fill="#000000" stroke="#000000" points="709.4755,-339.0518 716.8728,-331.4668 706.36,-332.7833 709.4755,-339.0518"/>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p -->
+<g id="proc~~gammacee~~CalledByGraph_node14" class="node">
+<title>proc~include_coulombcollisions_fofio_p</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node14"><a xlink:href=".././proc/include_coulombcollisions_fofio_p.html" xlink:title="include_CoulombCollisions_FOfio_p">
+<polygon fill="#d9534f" stroke="#d9534f" points="659.5,-251 477.5,-251 477.5,-227 659.5,-227 659.5,-251"/>
+<text text-anchor="middle" x="568.5" y="-236.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">include_CoulombCollisions_FOfio_p</text>
+</a>
+</g>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~ca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge16" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~ca_sd</title>
+<path fill="none" stroke="#000000" d="M648.6669,-251.0188C653.1261,-253.5238 657.2922,-256.491 661,-260 703.3005,-300.0334 657.9749,-342.7676 697,-386 701.3599,-390.8299 706.9814,-394.5665 712.9191,-397.4522"/>
+<polygon fill="#000000" stroke="#000000" points="711.7933,-400.7732 722.374,-401.3212 714.4445,-394.2946 711.7933,-400.7732"/>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~dca_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge21" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~dca_sd</title>
+<path fill="none" stroke="#000000" d="M647.2803,-251.1251C652.1887,-253.5912 656.8247,-256.5217 661,-260 692.2075,-285.9975 667.9311,-315.6314 697,-344 701.5644,-348.4545 707.1934,-352.0005 713.0527,-354.8123"/>
+<polygon fill="#000000" stroke="#000000" points="711.7513,-358.0616 722.3297,-358.6516 714.4281,-351.5936 711.7513,-358.0616"/>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cf_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge25" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cf_sd</title>
+<path fill="none" stroke="#000000" d="M621.8364,-251.0157C634.6676,-253.932 648.3275,-257.0581 661,-260 677.9083,-263.9253 696.6131,-268.3514 712.4541,-272.1246"/>
+<polygon fill="#000000" stroke="#000000" points="711.8635,-275.5819 722.4028,-274.498 713.488,-268.773 711.8635,-275.5819"/>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ei_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge29" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ei_sd</title>
+<path fill="none" stroke="#000000" d="M659.5303,-239C676.5315,-239 693.5078,-239 708.0591,-239"/>
+<polygon fill="#000000" stroke="#000000" points="708.1918,-242.5001 718.1917,-239 708.1917,-235.5001 708.1918,-242.5001"/>
+</g>
+<!-- proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ee_sd -->
+<g id="proc~~gammacee~~CalledByGraph_edge38" class="edge">
+<title>proc~include_coulombcollisions_fofio_p&#45;&gt;proc~cb_ee_sd</title>
+<path fill="none" stroke="#000000" d="M641.9316,-251.0014C648.6083,-253.4628 655.0774,-256.428 661,-260 682.0529,-272.6973 677.0096,-287.6882 697,-302 700.2739,-304.3439 703.8463,-306.4757 707.5376,-308.4034"/>
+<polygon fill="#000000" stroke="#000000" points="706.3164,-311.6965 716.8558,-312.7787 709.2916,-305.3602 706.3164,-311.6965"/>
+</g>
+<!-- proc~advance_fpeqn_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node15" class="node">
+<title>proc~advance_fpeqn_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node15"><a xlink:href=".././proc/advance_fpeqn_vars.html" xlink:title="advance_FPeqn_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="412,-234 297,-234 297,-210 412,-210 412,-234"/>
+<text text-anchor="middle" x="354.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPeqn_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge39" class="edge">
+<title>proc~advance_fpeqn_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M412.2986,-233.6147C422.1163,-237.2068 431.7806,-241.893 440,-248 463.1532,-265.2026 455.7053,-281.5031 476,-302 493.9749,-320.154 517.8867,-336.2789 536.8952,-347.6702"/>
+<polygon fill="#000000" stroke="#000000" points="535.3863,-350.8423 545.7853,-352.8702 538.9206,-344.8001 535.3863,-350.8423"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top -->
+<g id="proc~~gammacee~~CalledByGraph_node16" class="node">
+<title>proc~adv_gcinterp_psi_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node16"><a xlink:href=".././proc/adv_gcinterp_psi_top.html" xlink:title="adv_GCinterp_psi_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-234 103,-234 103,-210 220,-210 220,-234"/>
+<text text-anchor="middle" x="161.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge40" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M220.1488,-233.8514C298.8012,-249.8287 429.8309,-276.7739 440,-281 450.8446,-285.5068 507.6657,-323.624 542.0155,-346.9354"/>
+<polygon fill="#000000" stroke="#000000" points="540.399,-350.0686 550.637,-352.7955 544.3341,-344.2794 540.399,-350.0686"/>
+</g>
+<!-- proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node30" class="node">
+<title>proc~advance_fpinterp_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node30"><a xlink:href=".././proc/advance_fpinterp_vars.html" xlink:title="advance_FPinterp_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="416,-356 293,-356 293,-332 416,-332 416,-356"/>
+<text text-anchor="middle" x="354.5" y="-341.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FPinterp_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge68" class="edge">
+<title>proc~adv_gcinterp_psi_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M219.27,-234.0059C224.2266,-236.4664 228.9035,-239.4301 233,-243 262.3946,-268.6155 239.0387,-298.0497 269,-323 273.3312,-326.6068 278.1886,-329.6102 283.3308,-332.1093"/>
+<polygon fill="#000000" stroke="#000000" points="282.2658,-335.4576 292.8421,-336.0843 284.9651,-328.9989 282.2658,-335.4576"/>
+</g>
+<!-- proc~advance_foeqn_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node17" class="node">
+<title>proc~advance_foeqn_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node17"><a xlink:href=".././proc/advance_foeqn_vars.html" xlink:title="advance_FOeqn_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="412.5,-192 296.5,-192 296.5,-168 412.5,-168 412.5,-192"/>
+<text text-anchor="middle" x="354.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FOeqn_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_foeqn_vars&#45;&gt;proc~include_coulombcollisions_fo_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge51" class="edge">
+<title>proc~advance_foeqn_vars&#45;&gt;proc~include_coulombcollisions_fo_p</title>
+<path fill="none" stroke="#000000" d="M412.8751,-187.8259C422.5253,-190.8894 431.9832,-195.1316 440,-201 464.7869,-219.1443 451.0544,-242.0746 476,-260 478.2421,-261.6111 480.5872,-263.1013 483.0123,-264.4794"/>
+<polygon fill="#000000" stroke="#000000" points="481.5887,-267.6802 492.1016,-268.9954 484.7034,-261.4114 481.5887,-267.6802"/>
+</g>
+<!-- proc~advance_gcinterp_fio_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node18" class="node">
+<title>proc~advance_gcinterp_fio_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node18"><a xlink:href=".././proc/advance_gcinterp_fio_vars.html" xlink:title="advance_GCinterp_fio_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="426,-726 283,-726 283,-702 426,-702 426,-726"/>
+<text text-anchor="middle" x="354.5" y="-711.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_fio_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_fio_vars&#45;&gt;proc~include_coulombcollisions_gcfio_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge55" class="edge">
+<title>proc~advance_gcinterp_fio_vars&#45;&gt;proc~include_coulombcollisions_gcfio_p</title>
+<path fill="none" stroke="#000000" d="M415.4481,-701.9892C424.2767,-698.4614 432.7989,-693.8992 440,-688 512.352,-628.7287 549.7675,-517.6455 562.9193,-470.7619"/>
+<polygon fill="#000000" stroke="#000000" points="566.3193,-471.5967 565.5561,-461.0293 559.5628,-469.7661 566.3193,-471.5967"/>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~gammacee~~CalledByGraph_node19" class="node">
+<title>proc~adv_gcinterp_psiwe_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node19"><a xlink:href=".././proc/adv_gcinterp_psiwe_top.html" xlink:title="adv_GCinterp_psiwE_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="227.5,-607 95.5,-607 95.5,-583 227.5,-583 227.5,-607"/>
+<text text-anchor="middle" x="161.5" y="-592.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psiwE_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge50" class="edge">
+<title>proc~adv_gcinterp_psiwe_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M185.8683,-607.1225C239.0647,-631.6603 366.6852,-679.7741 440,-617 518.927,-549.4206 405.0918,-461.9505 476,-386 476.9166,-385.0182 477.8687,-384.0777 478.8531,-383.1768"/>
+<polygon fill="#000000" stroke="#000000" points="481.1233,-385.8478 486.9795,-377.0185 476.8955,-380.2688 481.1233,-385.8478"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node20" class="node">
+<title>proc~advance_gcinterp_3dbdb1_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node20"><a xlink:href=".././proc/advance_gcinterp_3dbdb1_vars.html" xlink:title="advance_GCinterp_3DBdB1_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="440,-608 269,-608 269,-584 440,-584 440,-608"/>
+<text text-anchor="middle" x="354.5" y="-593.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB1_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge43" class="edge">
+<title>proc~advance_gcinterp_3dbdb1_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M428.9848,-583.8154C433.0137,-581.3504 436.7388,-578.4375 440,-575 498.8531,-512.9653 416.6031,-447.5143 476,-386 476.933,-385.0338 477.9004,-384.1078 478.8991,-383.2205"/>
+<polygon fill="#000000" stroke="#000000" points="481.1538,-385.9064 487.1168,-377.1489 476.9941,-380.2763 481.1538,-385.9064"/>
+</g>
+<!-- proc~advance_gcinterp_b_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node21" class="node">
+<title>proc~advance_gcinterp_b_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node21"><a xlink:href=".././proc/advance_gcinterp_b_vars.html" xlink:title="advance_GCinterp_B_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="424,-566 285,-566 285,-542 424,-542 424,-566"/>
+<text text-anchor="middle" x="354.5" y="-551.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge44" class="edge">
+<title>proc~advance_gcinterp_b_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M424.338,-544.0297C430.1119,-541.1571 435.4621,-537.5409 440,-533 487.5468,-485.4211 428.0363,-433.1586 476,-386 477.1009,-384.9176 478.2452,-383.8863 479.4282,-382.9039"/>
+<polygon fill="#000000" stroke="#000000" points="481.5469,-385.6935 487.7496,-377.1042 477.5443,-379.9507 481.5469,-385.6935"/>
+</g>
+<!-- proc~advance_fp3dinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node22" class="node">
+<title>proc~advance_fp3dinterp_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node22"><a xlink:href=".././proc/advance_fp3dinterp_vars.html" xlink:title="advance_FP3Dinterp_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="423,-66 286,-66 286,-42 423,-42 423,-66"/>
+<text text-anchor="middle" x="354.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FP3Dinterp_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fp3dinterp_vars&#45;&gt;proc~include_coulombcollisions_fo_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge53" class="edge">
+<title>proc~advance_fp3dinterp_vars&#45;&gt;proc~include_coulombcollisions_fo_p</title>
+<path fill="none" stroke="#000000" d="M423.3351,-63.1312C429.5381,-66.1411 435.2561,-70.0195 440,-75 497.7722,-135.6537 417.6962,-199.8572 476,-260 476.9349,-260.9644 477.9041,-261.8886 478.9045,-262.7743"/>
+<polygon fill="#000000" stroke="#000000" points="477.0057,-265.7227 487.1329,-268.8355 481.1573,-260.0866 477.0057,-265.7227"/>
+</g>
+<!-- proc~advance_fointerp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node23" class="node">
+<title>proc~advance_fointerp_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node23"><a xlink:href=".././proc/advance_fointerp_vars.html" xlink:title="advance_FOinterp_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="417,-108 292,-108 292,-84 417,-84 417,-108"/>
+<text text-anchor="middle" x="354.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FOinterp_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fointerp_vars&#45;&gt;proc~include_coulombcollisions_fo_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge54" class="edge">
+<title>proc~advance_fointerp_vars&#45;&gt;proc~include_coulombcollisions_fo_p</title>
+<path fill="none" stroke="#000000" d="M417.1079,-102.8721C425.616,-106.0987 433.6048,-110.6417 440,-117 486.4765,-163.2087 429.1186,-214.2021 476,-260 477.1044,-261.0788 478.2519,-262.1068 479.4379,-263.0862"/>
+<polygon fill="#000000" stroke="#000000" points="477.564,-266.0459 487.7757,-268.8692 481.5534,-260.294 477.564,-266.0459"/>
+</g>
+<!-- proc~advance_fofio_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node24" class="node">
+<title>proc~advance_fofio_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node24"><a xlink:href=".././proc/advance_fofio_vars.html" xlink:title="advance_FOfio_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="409,-24 300,-24 300,0 409,0 409,-24"/>
+<text text-anchor="middle" x="354.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FOfio_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fofio_vars&#45;&gt;proc~include_coulombcollisions_fofio_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge56" class="edge">
+<title>proc~advance_fofio_vars&#45;&gt;proc~include_coulombcollisions_fofio_p</title>
+<path fill="none" stroke="#000000" d="M409.2558,-18.8157C420.1291,-21.9334 430.9641,-26.4538 440,-33 506.3978,-81.103 546.0817,-175.0374 561.3137,-217.3838"/>
+<polygon fill="#000000" stroke="#000000" points="558.0624,-218.6898 564.6608,-226.979 564.6718,-216.3842 558.0624,-218.6898"/>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs -->
+<g id="proc~~gammacee~~CalledByGraph_node25" class="node">
+<title>proc~advance_gcinterp_psi_vars_fs</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node25"><a xlink:href=".././proc/advance_gcinterp_psi_vars_fs.html" xlink:title="advance_GCinterp_psi_vars_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="436.5,-524 272.5,-524 272.5,-500 436.5,-500 436.5,-524"/>
+<text text-anchor="middle" x="354.5" y="-509.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi_vars_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge45" class="edge">
+<title>proc~advance_gcinterp_psi_vars_fs&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M427.2234,-499.9243C431.8399,-497.4525 436.1646,-494.5068 440,-491 476.4087,-457.7106 439.2997,-418.9676 476,-386 477.3476,-384.7895 478.7501,-383.6442 480.2005,-382.5608"/>
+<polygon fill="#000000" stroke="#000000" points="482.398,-385.3123 488.9789,-377.0092 478.6564,-379.3961 482.398,-385.3123"/>
+</g>
+<!-- proc~advance_fp3deqn_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node26" class="node">
+<title>proc~advance_fp3deqn_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node26"><a xlink:href=".././proc/advance_fp3deqn_vars.html" xlink:title="advance_FP3Deqn_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="418.5,-150 290.5,-150 290.5,-126 418.5,-126 418.5,-150"/>
+<text text-anchor="middle" x="354.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_FP3Deqn_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_fp3deqn_vars&#45;&gt;proc~include_coulombcollisions_fo_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge52" class="edge">
+<title>proc~advance_fp3deqn_vars&#45;&gt;proc~include_coulombcollisions_fo_p</title>
+<path fill="none" stroke="#000000" d="M418.7513,-146.2569C426.5296,-149.3344 433.8749,-153.4674 440,-159 475.3641,-190.9436 440.3561,-228.3689 476,-260 477.3549,-261.2023 478.7641,-262.3401 480.2205,-263.4167"/>
+<polygon fill="#000000" stroke="#000000" points="478.6955,-266.5915 489.0277,-268.9362 482.4128,-260.6601 478.6955,-266.5915"/>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node27" class="node">
+<title>proc~advance_gcinterp_b2d_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node27"><a xlink:href=".././proc/advance_gcinterp_b2d_vars.html" xlink:title="advance_GCinterp_B2D_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="430.5,-482 278.5,-482 278.5,-458 430.5,-458 430.5,-482"/>
+<text text-anchor="middle" x="354.5" y="-467.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_B2D_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge46" class="edge">
+<title>proc~advance_gcinterp_b2d_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M424.8199,-457.86C430.2187,-455.4198 435.363,-452.4977 440,-449 465.746,-429.5798 450.0841,-405.1929 476,-386 478.0843,-384.4564 480.2623,-383.0232 482.5145,-381.6928"/>
+<polygon fill="#000000" stroke="#000000" points="484.2385,-384.7419 491.5285,-377.0539 481.0353,-378.5178 484.2385,-384.7419"/>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node28" class="node">
+<title>proc~advance_gcinterp_psi2x1t_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node28"><a xlink:href=".././proc/advance_gcinterp_psi2x1t_vars.html" xlink:title="advance_GCinterp_psi2x1t_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-440 272,-440 272,-416 437,-416 437,-440"/>
+<text text-anchor="middle" x="354.5" y="-425.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_psi2x1t_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge47" class="edge">
+<title>proc~advance_gcinterp_psi2x1t_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M413.1613,-415.9687C422.2854,-413.4205 431.4985,-410.4397 440,-407 457.1711,-400.0527 458.7684,-392.7959 476,-386 481.7304,-383.74 487.7611,-381.6921 493.8819,-379.8426"/>
+<polygon fill="#000000" stroke="#000000" points="494.8817,-383.1971 503.5445,-377.0975 492.9686,-376.4636 494.8817,-383.1971"/>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node29" class="node">
+<title>proc~advance_gcinterp_2dbdb_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node29"><a xlink:href=".././proc/advance_gcinterp_2dbdb_vars.html" xlink:title="advance_GCinterp_2DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-398 272,-398 272,-374 437,-374 437,-398"/>
+<text text-anchor="middle" x="354.5" y="-383.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_2DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge48" class="edge">
+<title>proc~advance_gcinterp_2dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M437.238,-377.8809C448.7001,-376.7561 460.5542,-375.5928 472.236,-374.4465"/>
+<polygon fill="#000000" stroke="#000000" points="472.8329,-377.9048 482.4432,-373.4448 472.1492,-370.9383 472.8329,-377.9048"/>
+</g>
+<!-- proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge41" class="edge">
+<title>proc~advance_fpinterp_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M416.1106,-350.0459C433.5897,-351.7611 453.0525,-353.671 472.0659,-355.5368"/>
+<polygon fill="#000000" stroke="#000000" points="471.9656,-359.0437 482.2597,-356.5372 472.6493,-352.0772 471.9656,-359.0437"/>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars -->
+<g id="proc~~gammacee~~CalledByGraph_node31" class="node">
+<title>proc~advance_gcinterp_3dbdb_vars</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node31"><a xlink:href=".././proc/advance_gcinterp_3dbdb_vars.html" xlink:title="advance_GCinterp_3DBdB_vars">
+<polygon fill="#d9534f" stroke="#d9534f" points="437,-314 272,-314 272,-290 437,-290 437,-314"/>
+<text text-anchor="middle" x="354.5" y="-299.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">advance_GCinterp_3DBdB_vars</text>
+</a>
+</g>
+</g>
+<!-- proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge42" class="edge">
+<title>proc~advance_gcinterp_3dbdb_vars&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M406.2074,-314.0375C417.3924,-316.8259 429.1246,-319.8919 440,-323 468.2637,-331.0776 499.6288,-341.3043 524.2958,-349.6438"/>
+<polygon fill="#000000" stroke="#000000" points="523.4899,-353.0666 534.0843,-352.9728 525.7438,-346.4393 523.4899,-353.0666"/>
+</g>
+<!-- proc~adv_gceqn_top -->
+<g id="proc~~gammacee~~CalledByGraph_node32" class="node">
+<title>proc~adv_gceqn_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node32"><a xlink:href=".././proc/adv_gceqn_top.html" xlink:title="adv_GCeqn_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="206,-667 117,-667 117,-643 206,-643 206,-667"/>
+<text text-anchor="middle" x="161.5" y="-652.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCeqn_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p -->
+<g id="proc~~gammacee~~CalledByGraph_edge49" class="edge">
+<title>proc~adv_gceqn_top&#45;&gt;proc~include_coulombcollisions_gc_p</title>
+<path fill="none" stroke="#000000" d="M198.5325,-667.1216C257.6578,-683.9067 373.4751,-705.8655 440,-646 526.7157,-567.9649 397.1178,-471.9458 476,-386 476.7795,-385.1507 477.5855,-384.3322 478.416,-383.5434"/>
+<polygon fill="#000000" stroke="#000000" points="480.7801,-386.1376 486.497,-377.2176 476.4652,-380.6256 480.7801,-386.1376"/>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~gammacee~~CalledByGraph_node33" class="node">
+<title>proc~adv_gcinterp_psi_top_fs</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node33"><a xlink:href=".././proc/adv_gcinterp_psi_top_fs.html" xlink:title="adv_GCinterp_psi_top_FS">
+<polygon fill="#d9534f" stroke="#d9534f" points="229.5,-528 93.5,-528 93.5,-504 229.5,-504 229.5,-528"/>
+<text text-anchor="middle" x="161.5" y="-513.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi_top_FS</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge67" class="edge">
+<title>proc~adv_gcinterp_psi_top_fs&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M221.2377,-503.8719C225.5501,-501.4291 229.5508,-498.5032 233,-495 275.0624,-452.2797 225.9907,-406.7669 269,-365 273.285,-360.8387 278.2541,-357.4586 283.5986,-354.718"/>
+<polygon fill="#000000" stroke="#000000" points="285.1128,-357.8763 292.8929,-350.6846 282.3261,-351.4549 285.1128,-357.8763"/>
+</g>
+<!-- proc~adv_fointerp_top -->
+<g id="proc~~gammacee~~CalledByGraph_node34" class="node">
+<title>proc~adv_fointerp_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node34"><a xlink:href=".././proc/adv_fointerp_top.html" xlink:title="adv_FOinterp_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="210,-66 113,-66 113,-42 210,-42 210,-66"/>
+<text text-anchor="middle" x="161.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fointerp_top&#45;&gt;proc~advance_fp3dinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge60" class="edge">
+<title>proc~adv_fointerp_top&#45;&gt;proc~advance_fp3dinterp_vars</title>
+<path fill="none" stroke="#000000" d="M210.202,-54C230.0539,-54 253.5162,-54 275.6886,-54"/>
+<polygon fill="#000000" stroke="#000000" points="275.7675,-57.5001 285.7675,-54 275.7675,-50.5001 275.7675,-57.5001"/>
+</g>
+<!-- proc~adv_fointerp_top&#45;&gt;proc~advance_fointerp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge63" class="edge">
+<title>proc~adv_fointerp_top&#45;&gt;proc~advance_fointerp_vars</title>
+<path fill="none" stroke="#000000" d="M210.202,-64.5984C234.1577,-69.8115 263.371,-76.1688 289.2306,-81.7963"/>
+<polygon fill="#000000" stroke="#000000" points="288.8156,-85.2878 299.3312,-83.9944 290.3042,-78.4479 288.8156,-85.2878"/>
+</g>
+<!-- proc~adv_fofio_top -->
+<g id="proc~~gammacee~~CalledByGraph_node35" class="node">
+<title>proc~adv_fofio_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node35"><a xlink:href=".././proc/adv_fofio_top.html" xlink:title="adv_FOfio_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="202,-24 121,-24 121,0 202,0 202,-24"/>
+<text text-anchor="middle" x="161.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOfio_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fofio_top&#45;&gt;proc~advance_fp3dinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge61" class="edge">
+<title>proc~adv_fofio_top&#45;&gt;proc~advance_fp3dinterp_vars</title>
+<path fill="none" stroke="#000000" d="M202.4303,-20.9071C227.6705,-26.3998 260.6045,-33.5668 289.3671,-39.826"/>
+<polygon fill="#000000" stroke="#000000" points="288.8318,-43.2914 299.3473,-41.9979 290.3203,-36.4514 288.8318,-43.2914"/>
+</g>
+<!-- proc~adv_fofio_top&#45;&gt;proc~advance_fofio_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge65" class="edge">
+<title>proc~adv_fofio_top&#45;&gt;proc~advance_fofio_vars</title>
+<path fill="none" stroke="#000000" d="M202.4303,-12C227.7695,-12 260.863,-12 289.7053,-12"/>
+<polygon fill="#000000" stroke="#000000" points="289.7102,-15.5001 299.7102,-12 289.7102,-8.5001 289.7102,-15.5001"/>
+</g>
+<!-- proc~adv_fointerp_mars_top -->
+<g id="proc~~gammacee~~CalledByGraph_node36" class="node">
+<title>proc~adv_fointerp_mars_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node36"><a xlink:href=".././proc/adv_fointerp_mars_top.html" xlink:title="adv_FOinterp_mars_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="224.5,-108 98.5,-108 98.5,-84 224.5,-84 224.5,-108"/>
+<text text-anchor="middle" x="161.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_mars_top</text>
+</a>
+</g>
+</g>
+<!-- proc~adv_fointerp_mars_top&#45;&gt;proc~advance_fointerp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge64" class="edge">
+<title>proc~adv_fointerp_mars_top&#45;&gt;proc~advance_fointerp_vars</title>
+<path fill="none" stroke="#000000" d="M224.6954,-96C242.876,-96 262.8542,-96 281.572,-96"/>
+<polygon fill="#000000" stroke="#000000" points="281.8218,-99.5001 291.8218,-96 281.8217,-92.5001 281.8218,-99.5001"/>
+</g>
+<!-- program~main -->
+<g id="proc~~gammacee~~CalledByGraph_node37" class="node">
+<title>program~main</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node37"><a xlink:href=".././program/main.html" xlink:title="main">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-318 0,-318 0,-294 54,-294 54,-318"/>
+<text text-anchor="middle" x="27" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge57" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top</title>
+<path fill="none" stroke="#000000" d="M35.8963,-293.9905C47.0245,-279.7973 67.386,-256.4187 90,-243 93.0406,-241.1958 96.2468,-239.5375 99.5486,-238.0144"/>
+<polygon fill="#000000" stroke="#000000" points="101.1543,-241.1376 109.0488,-234.0717 98.471,-234.6723 101.1543,-241.1376"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psiwe_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge59" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psiwe_top</title>
+<path fill="none" stroke="#000000" d="M27.7151,-318.0929C30.3609,-354.2426 42.097,-463.5261 90,-537 100.5546,-553.1886 117.0881,-567.0232 131.5988,-577.1162"/>
+<polygon fill="#000000" stroke="#000000" points="130.0361,-580.2803 140.3008,-582.9047 133.913,-574.452 130.0361,-580.2803"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gceqn_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge75" class="edge">
+<title>program~main&#45;&gt;proc~adv_gceqn_top</title>
+<path fill="none" stroke="#000000" d="M28.0898,-318.011C32.9117,-368.96 53.7102,-566.847 90,-616 96.8854,-625.326 106.6938,-632.6785 116.8468,-638.3651"/>
+<polygon fill="#000000" stroke="#000000" points="115.2963,-641.5033 125.7931,-642.9414 118.4841,-635.2713 115.2963,-641.5033"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs -->
+<g id="proc~~gammacee~~CalledByGraph_edge76" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi_top_fs</title>
+<path fill="none" stroke="#000000" d="M29.4912,-318.0412C37.4801,-355.569 63.4877,-469.4274 90,-495 91.1349,-496.0946 92.3237,-497.1327 93.5589,-498.117"/>
+<polygon fill="#000000" stroke="#000000" points="92.0221,-501.2952 102.3007,-503.8643 95.8676,-495.4461 92.0221,-501.2952"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fointerp_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge77" class="edge">
+<title>program~main&#45;&gt;proc~adv_fointerp_top</title>
+<path fill="none" stroke="#000000" d="M28.7421,-293.7919C35.1109,-250.7894 58.4191,-107.2003 90,-75 93.9067,-71.0167 98.5261,-67.7795 103.5074,-65.1501"/>
+<polygon fill="#000000" stroke="#000000" points="105.0599,-68.2905 112.7886,-61.0436 102.2275,-61.8891 105.0599,-68.2905"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fofio_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge78" class="edge">
+<title>program~main&#45;&gt;proc~adv_fofio_top</title>
+<path fill="none" stroke="#000000" d="M28.1762,-293.9578C33.0583,-246.3568 53.2123,-72.0198 90,-33 95.7417,-26.9099 103.1477,-22.5568 111.0102,-19.4516"/>
+<polygon fill="#000000" stroke="#000000" points="112.3397,-22.6989 120.7459,-16.2501 110.1529,-16.0492 112.3397,-22.6989"/>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fointerp_mars_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge79" class="edge">
+<title>program~main&#45;&gt;proc~adv_fointerp_mars_top</title>
+<path fill="none" stroke="#000000" d="M29.4912,-293.9588C37.4801,-256.431 63.4877,-142.5726 90,-117 91.1349,-115.9054 92.3237,-114.8673 93.5589,-113.883"/>
+<polygon fill="#000000" stroke="#000000" points="95.8676,-116.5539 102.3007,-108.1357 92.0221,-110.7048 95.8676,-116.5539"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~gammacee~~CalledByGraph_node38" class="node">
+<title>proc~adv_gcinterp_psi2x1t_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node38"><a xlink:href=".././proc/adv_gcinterp_psi2x1t_top.html" xlink:title="adv_GCinterp_psi2x1t_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-486 93,-486 93,-462 230,-462 230,-486"/>
+<text text-anchor="middle" x="161.5" y="-471.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_psi2x1t_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge80" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_psi2x1t_top</title>
+<path fill="none" stroke="#000000" d="M28.6939,-318.3107C33.2255,-346.4623 48.2559,-415.9579 90,-453 91.4878,-454.3202 93.0549,-455.5577 94.6862,-456.7174"/>
+<polygon fill="#000000" stroke="#000000" points="92.9345,-459.748 103.3099,-461.8932 96.5368,-453.746 92.9345,-459.748"/>
+</g>
+<!-- proc~adv_gcinterp_b_top -->
+<g id="proc~~gammacee~~CalledByGraph_node39" class="node">
+<title>proc~adv_gcinterp_b_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node39"><a xlink:href=".././proc/adv_gcinterp_b_top.html" xlink:title="adv_GCinterp_B_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="217,-444 106,-444 106,-420 217,-420 217,-444"/>
+<text text-anchor="middle" x="161.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge81" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b_top</title>
+<path fill="none" stroke="#000000" d="M30.9087,-318.0675C38.6167,-339.9413 57.874,-386.1684 90,-411 92.1048,-412.6269 94.3328,-414.1279 96.6506,-415.5128"/>
+<polygon fill="#000000" stroke="#000000" points="95.4709,-418.8417 105.965,-420.2993 98.6704,-412.6156 95.4709,-418.8417"/>
+</g>
+<!-- proc~adv_foeqn_top -->
+<g id="proc~~gammacee~~CalledByGraph_node40" class="node">
+<title>proc~adv_foeqn_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node40"><a xlink:href=".././proc/adv_foeqn_top.html" xlink:title="adv_FOeqn_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="205.5,-192 117.5,-192 117.5,-168 205.5,-168 205.5,-192"/>
+<text text-anchor="middle" x="161.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOeqn_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_foeqn_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge82" class="edge">
+<title>program~main&#45;&gt;proc~adv_foeqn_top</title>
+<path fill="none" stroke="#000000" d="M30.9087,-293.9325C38.6167,-272.0587 57.874,-225.8316 90,-201 95.3644,-196.8536 101.5288,-193.5248 107.941,-190.8526"/>
+<polygon fill="#000000" stroke="#000000" points="109.2507,-194.1005 117.4483,-187.3886 106.8543,-187.5235 109.2507,-194.1005"/>
+</g>
+<!-- proc~adv_fointerp_aorsa_top -->
+<g id="proc~~gammacee~~CalledByGraph_node41" class="node">
+<title>proc~adv_fointerp_aorsa_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node41"><a xlink:href=".././proc/adv_fointerp_aorsa_top.html" xlink:title="adv_FOinterp_aorsa_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="226,-150 97,-150 97,-126 226,-126 226,-150"/>
+<text text-anchor="middle" x="161.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_aorsa_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_fointerp_aorsa_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge83" class="edge">
+<title>program~main&#45;&gt;proc~adv_fointerp_aorsa_top</title>
+<path fill="none" stroke="#000000" d="M28.6939,-293.6893C33.2255,-265.5377 48.2559,-196.0421 90,-159 91.4878,-157.6798 93.0549,-156.4423 94.6862,-155.2826"/>
+<polygon fill="#000000" stroke="#000000" points="96.5368,-158.254 103.3099,-150.1068 92.9345,-152.252 96.5368,-158.254"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~gammacee~~CalledByGraph_node42" class="node">
+<title>proc~adv_gcinterp_3dbdb_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node42"><a xlink:href=".././proc/adv_gcinterp_3dbdb_top.html" xlink:title="adv_GCinterp_3DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-402 93,-402 93,-378 230,-378 230,-402"/>
+<text text-anchor="middle" x="161.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge84" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb_top</title>
+<path fill="none" stroke="#000000" d="M35.8963,-318.0095C47.0245,-332.2027 67.386,-355.5813 90,-369 93.0406,-370.8042 96.2468,-372.4625 99.5486,-373.9856"/>
+<polygon fill="#000000" stroke="#000000" points="98.471,-377.3277 109.0488,-377.9283 101.1543,-370.8624 98.471,-377.3277"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~gammacee~~CalledByGraph_node43" class="node">
+<title>proc~adv_gcinterp_3dbdb1_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node43"><a xlink:href=".././proc/adv_gcinterp_3dbdb1_top.html" xlink:title="adv_GCinterp_3DBdB1_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="233,-360 90,-360 90,-336 233,-336 233,-360"/>
+<text text-anchor="middle" x="161.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_3DBdB1_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge85" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_3dbdb1_top</title>
+<path fill="none" stroke="#000000" d="M54.2192,-315.3114C65.2912,-319.0368 78.2284,-323.3107 90,-327 96.3868,-329.0017 103.1123,-331.052 109.7786,-333.0494"/>
+<polygon fill="#000000" stroke="#000000" points="108.8743,-336.4319 119.457,-335.9264 110.8689,-329.7221 108.8743,-336.4319"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~gammacee~~CalledByGraph_node44" class="node">
+<title>proc~adv_gcinterp_2dbdb_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node44"><a xlink:href=".././proc/adv_gcinterp_2dbdb_top.html" xlink:title="adv_GCinterp_2DBdB_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-318 93,-318 93,-294 230,-294 230,-318"/>
+<text text-anchor="middle" x="161.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_2DBdB_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge86" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_2dbdb_top</title>
+<path fill="none" stroke="#000000" d="M54.2181,-306C62.6809,-306 72.4735,-306 82.6309,-306"/>
+<polygon fill="#000000" stroke="#000000" points="82.874,-309.5001 92.874,-306 82.874,-302.5001 82.874,-309.5001"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top -->
+<g id="proc~~gammacee~~CalledByGraph_node45" class="node">
+<title>proc~adv_gcinterp_b2d_top</title>
+<g id="a_proc~~gammacee~~CalledByGraph_node45"><a xlink:href=".././proc/adv_gcinterp_b2d_top.html" xlink:title="adv_GCinterp_B2D_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="223.5,-276 99.5,-276 99.5,-252 223.5,-252 223.5,-276"/>
+<text text-anchor="middle" x="161.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_GCinterp_B2D_top</text>
+</a>
+</g>
+</g>
+<!-- program~main&#45;&gt;proc~adv_gcinterp_b2d_top -->
+<g id="proc~~gammacee~~CalledByGraph_edge87" class="edge">
+<title>program~main&#45;&gt;proc~adv_gcinterp_b2d_top</title>
+<path fill="none" stroke="#000000" d="M54.2192,-296.6886C65.2912,-292.9632 78.2284,-288.6893 90,-285 96.3868,-282.9983 103.1123,-280.948 109.7786,-278.9506"/>
+<polygon fill="#000000" stroke="#000000" points="110.8689,-282.2779 119.457,-276.0736 108.8743,-275.5681 110.8689,-282.2779"/>
+</g>
+<!-- proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge69" class="edge">
+<title>proc~adv_gcinterp_psi2x1t_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M219.7521,-461.9625C224.551,-459.5073 229.0618,-456.5534 233,-453 264.374,-424.6918 236.9995,-392.598 269,-365 273.2683,-361.319 278.0809,-358.2627 283.1925,-355.7275"/>
+<polygon fill="#000000" stroke="#000000" points="284.8275,-358.8357 292.6632,-351.7046 282.0908,-352.3928 284.8275,-358.8357"/>
+</g>
+<!-- proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge70" class="edge">
+<title>proc~adv_gcinterp_b_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M215.8551,-419.9957C221.8973,-417.526 227.7544,-414.5596 233,-411 254.4819,-396.4226 247.1967,-379.0923 269,-365 273.3806,-362.1686 278.1126,-359.719 283.0245,-357.5995"/>
+<polygon fill="#000000" stroke="#000000" points="284.5583,-360.7602 292.6469,-353.9173 282.0564,-354.2225 284.5583,-360.7602"/>
+</g>
+<!-- proc~adv_foeqn_top&#45;&gt;proc~advance_foeqn_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge58" class="edge">
+<title>proc~adv_foeqn_top&#45;&gt;proc~advance_foeqn_vars</title>
+<path fill="none" stroke="#000000" d="M205.7781,-180C229.5606,-180 259.3987,-180 286.0945,-180"/>
+<polygon fill="#000000" stroke="#000000" points="286.1529,-183.5001 296.1528,-180 286.1528,-176.5001 286.1529,-183.5001"/>
+</g>
+<!-- proc~adv_foeqn_top&#45;&gt;proc~advance_fp3deqn_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge66" class="edge">
+<title>proc~adv_foeqn_top&#45;&gt;proc~advance_fp3deqn_vars</title>
+<path fill="none" stroke="#000000" d="M205.7781,-170.3644C230.4583,-164.9935 261.6599,-158.2035 289.1035,-152.2314"/>
+<polygon fill="#000000" stroke="#000000" points="289.9982,-155.6187 299.0253,-150.0722 288.5097,-148.7787 289.9982,-155.6187"/>
+</g>
+<!-- proc~adv_fointerp_aorsa_top&#45;&gt;proc~advance_fointerp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge62" class="edge">
+<title>proc~adv_fointerp_aorsa_top&#45;&gt;proc~advance_fointerp_vars</title>
+<path fill="none" stroke="#000000" d="M216.8061,-125.9645C239.418,-121.0437 265.7449,-115.3146 289.2862,-110.1916"/>
+<polygon fill="#000000" stroke="#000000" points="290.1588,-113.5837 299.1859,-108.0373 288.6703,-106.7438 290.1588,-113.5837"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge71" class="edge">
+<title>proc~adv_gcinterp_3dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M211.9564,-377.9741C237.1114,-371.9786 267.7187,-364.6836 294.1136,-358.3926"/>
+<polygon fill="#000000" stroke="#000000" points="295.0872,-361.7587 304.0033,-356.0355 293.4642,-354.9494 295.0872,-361.7587"/>
+</g>
+<!-- proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge72" class="edge">
+<title>proc~adv_gcinterp_3dbdb1_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M233.0918,-346.5162C249.1959,-346.1825 266.2935,-345.8281 282.4176,-345.4939"/>
+<polygon fill="#000000" stroke="#000000" points="282.9273,-348.9842 292.8526,-345.2777 282.7822,-341.9857 282.9273,-348.9842"/>
+</g>
+<!-- proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge73" class="edge">
+<title>proc~adv_gcinterp_2dbdb_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M222.5664,-318.0234C241.9336,-321.8367 263.512,-326.0853 283.5147,-330.0236"/>
+<polygon fill="#000000" stroke="#000000" points="283.012,-333.4918 293.4998,-331.9896 284.3644,-326.6236 283.012,-333.4918"/>
+</g>
+<!-- proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars -->
+<g id="proc~~gammacee~~CalledByGraph_edge74" class="edge">
+<title>proc~adv_gcinterp_b2d_top&#45;&gt;proc~advance_fpinterp_vars</title>
+<path fill="none" stroke="#000000" d="M214.4158,-276.0642C220.9038,-278.538 227.2613,-281.4891 233,-285 252.8451,-297.1411 248.8878,-311.3067 269,-323 273.4287,-325.5749 278.1633,-327.8355 283.0477,-329.82"/>
+<polygon fill="#000000" stroke="#000000" points="281.9907,-333.16 292.5846,-333.306 284.394,-326.5855 281.9907,-333.16"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocgammaceeCalledByGraph = svgPanZoom('#procgammaceeCalledByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="554pt" height="32pt"
+ viewBox="0.00 0.00 553.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 549.5,-28 549.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="63,-24 0,-24 0,0 63,0 63,-24"/>
+<text text-anchor="middle" x="31.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="135.5,-24 81.5,-24 81.5,0 135.5,0 135.5,-24"/>
+<text text-anchor="middle" x="108.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="207.5,-24 153.5,-24 153.5,0 207.5,0 207.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="359.5,-24 225.5,-24 225.5,0 359.5,0 359.5,-24"/>
+<text text-anchor="middle" x="292.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="431.5,-24 377.5,-24 377.5,0 431.5,0 431.5,-24"/>
+<text text-anchor="middle" x="404.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="545.5,-24 449.5,-24 449.5,0 545.5,0 545.5,-24"/>
+<text text-anchor="middle" x="497.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../proc/gammacee.html#src">Gammacee</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span>  <span class="k">function </span><span class="n">Gammacee</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">)</span>
+    <span class="c">!! Dimensionless ne and Te</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">v</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">ne</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> 	<span class="kd">::</span> <span class="n">Te</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 				<span class="kd">::</span> <span class="n">Gammacee</span>
+
+    <span class="n">Gammacee</span> <span class="o">=</span> <span class="n">ne</span><span class="o">*</span><span class="n">CLogee</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">ne</span><span class="p">,</span><span class="n">Te</span><span class="p">)</span><span class="o">*</span><span class="n">cparams_ss</span><span class="p">%</span><span class="n">Gammaco</span>
+  <span class="k">end function </span><span class="n">Gammacee</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

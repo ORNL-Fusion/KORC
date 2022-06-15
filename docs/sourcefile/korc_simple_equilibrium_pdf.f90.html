@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Kinetic Orbit Runaway electrons Code (KORC)">
+    
+    <meta name="author" content="Matt Beidler" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>korc_simple_equilibrium_pdf.f90 &ndash; KORC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">KORC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>README</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/main.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/main.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>korc_simple_equilibrium_pdf.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.1% of total for source files.">298 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/korc_simple_equilibrium_pdf.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">korc_simple_equilibrium_pdf.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_simple_equilibrium_pdf.html">korc_simple_equilibrium_pdf</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_simple_equilibrium_pdf.f90.html#src">korc_simple_equilibrium_pdf.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_simple_equilibrium_pdff90EfferentGraph" width="590pt" height="232pt"
+ viewBox="0.00 0.00 590.00 232.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 228)">
+<title>sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-228 586,-228 586,4 -4,4"/>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<polygon fill="none" stroke="#000000" points="582,-124 419,-124 419,-100 582,-100 582,-124"/>
+<text text-anchor="middle" x="500.5" y="-109.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_simple_equilibrium_pdf.f90</text>
+</g>
+<!-- sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~korc_constants.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/korc_constants.f90.html" xlink:title="korc_constants.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="218,-224 117,-224 117,-200 218,-200 218,-224"/>
+<text text-anchor="middle" x="167.5" y="-209.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_constants.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M487.6919,-124.2546C467.3712,-142.8454 425.6582,-177.6339 383,-193 333.0072,-211.0081 272.4524,-214.9148 228.279,-214.8064"/>
+<polygon fill="#000000" stroke="#000000" points="228.2996,-211.3065 218.2673,-214.7127 228.2341,-218.3062 228.2996,-211.3065"/>
+</g>
+<!-- sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~korc_hpc.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/korc_hpc.f90.html" xlink:title="korc_hpc.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="204,-144 131,-144 131,-120 204,-120 204,-144"/>
+<text text-anchor="middle" x="167.5" y="-129.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_hpc.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M418.6125,-116.9182C354.3408,-120.7783 267.1592,-126.0145 214.2456,-129.1925"/>
+<polygon fill="#000000" stroke="#000000" points="213.9089,-125.7063 204.1368,-129.7996 214.3287,-132.6937 213.9089,-125.7063"/>
+</g>
+<!-- sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~korc_types.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/korc_types.f90.html" xlink:title="korc_types.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="81,-164 0,-164 0,-140 81,-140 81,-164"/>
+<text text-anchor="middle" x="40.5" y="-149.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_types.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M167.5,-52C120.3283,-64.9366 78.5188,-106.6128 56.6364,-131.8972"/>
+<polygon fill="#000000" stroke="#000000" points="53.7641,-129.8745 50.0004,-139.7784 59.1187,-134.3832 53.7641,-129.8745"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M475.5142,-99.993C419.6199,-74.7568 280.5201,-21.0048 167.5,-52"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~korc_hdf5.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/korc_hdf5.f90.html" xlink:title="korc_HDF5.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="360,-184 277,-184 277,-160 360,-160 360,-184"/>
+<text text-anchor="middle" x="318.5" y="-169.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_HDF5.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_hdf5.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M463.6696,-124.1419C435.0833,-133.5659 395.284,-146.6866 364.586,-156.8068"/>
+<polygon fill="#000000" stroke="#000000" points="363.366,-153.5236 354.9646,-159.9787 365.5577,-160.1717 363.366,-153.5236"/>
+</g>
+<!-- sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~korc_input.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/korc_input.f90.html" xlink:title="korc_input.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="357.5,-104 279.5,-104 279.5,-80 357.5,-80 357.5,-104"/>
+<text text-anchor="middle" x="318.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_input.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_input.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~korc_input.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M418.8165,-103.0238C401.4524,-101.1157 383.6311,-99.1573 367.9172,-97.4305"/>
+<polygon fill="#000000" stroke="#000000" points="368.2437,-93.9454 357.9212,-96.332 367.479,-100.9035 368.2437,-93.9454"/>
+</g>
+<!-- sourcefile~special_fun_modules.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~special_fun_modules.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_node7"><a xlink:href=".././sourcefile/special_fun_modules.f90.html" xlink:title="special_fun_modules.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="383,-24 254,-24 254,0 383,0 383,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">special_fun_modules.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~special_fun_modules.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90&#45;&gt;sourcefile~special_fun_modules.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M483.5527,-99.9641C461.209,-84.4188 420.3494,-57.0948 383,-38 376.0461,-34.4448 368.4881,-31.0262 361.0754,-27.9022"/>
+<polygon fill="#000000" stroke="#000000" points="362.4008,-24.6629 351.8201,-24.1145 359.7494,-31.1413 362.4008,-24.6629"/>
+</g>
+<!-- sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~korc_constants.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M141.7997,-199.8581C122.6921,-190.8309 96.4052,-178.4119 75.3979,-168.4872"/>
+<polygon fill="#000000" stroke="#000000" points="76.699,-165.231 66.1621,-164.1238 73.7087,-171.5602 76.699,-165.231"/>
+</g>
+<!-- sourcefile~korc_hpc.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~korc_hpc.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M130.7663,-137.7848C118.3904,-139.7338 104.3541,-141.9442 91.1005,-144.0314"/>
+<polygon fill="#000000" stroke="#000000" points="90.4922,-140.584 81.1584,-145.5971 91.5812,-147.4988 90.4922,-140.584"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_constants.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_constants.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M276.8389,-183.0361C260.1191,-187.4651 240.6078,-192.6337 222.7332,-197.3687"/>
+<polygon fill="#000000" stroke="#000000" points="221.7697,-194.0031 212.9993,-199.9472 223.5622,-200.7697 221.7697,-194.0031"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M276.8389,-160.9639C257.3478,-155.8008 234.0631,-149.6326 214.0001,-144.3179"/>
+<polygon fill="#000000" stroke="#000000" points="214.7038,-140.8837 204.141,-141.7062 212.9113,-147.6503 214.7038,-140.8837"/>
+</g>
+<!-- sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~korc_hdf5.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M276.8806,-169.0058C227.3215,-165.4404 144.572,-159.4872 91.2904,-155.654"/>
+<polygon fill="#000000" stroke="#000000" points="91.271,-152.1436 81.0456,-154.9169 90.7686,-159.1256 91.271,-152.1436"/>
+</g>
+<!-- sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_hpc.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_hpc.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M279.2207,-102.4051C259.3204,-107.6767 235.0201,-114.1139 214.1712,-119.6368"/>
+<polygon fill="#000000" stroke="#000000" points="213.0183,-116.3214 204.2479,-122.2654 214.8108,-123.088 213.0183,-116.3214"/>
+</g>
+<!-- sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_types.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~korc_input.f90&#45;&gt;sourcefile~korc_types.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M287.6613,-79.9139C250.4244,-66.0086 189.9923,-45.8316 167.5,-52"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilekorc_simple_equilibrium_pdff90AfferentGraph" width="573pt" height="32pt"
+ viewBox="0.00 0.00 573.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 569,-28 569,4 -4,4"/>
+<!-- sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<polygon fill="none" stroke="#000000" points="163,-24 0,-24 0,0 163,0 163,-24"/>
+<text text-anchor="middle" x="81.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">korc_simple_equilibrium_pdf.f90</text>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~korc_velocity_distribution.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/korc_velocity_distribution.f90.html" xlink:title="korc_velocity_distribution.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="346,-24 199,-24 199,0 346,0 346,-24"/>
+<text text-anchor="middle" x="272.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_velocity_distribution.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_simple_equilibrium_pdf.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~korc_velocity_distribution.f90&#45;&gt;sourcefile~korc_simple_equilibrium_pdf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M198.9276,-12C190.5435,-12 181.921,-12 173.3381,-12"/>
+<polygon fill="#000000" stroke="#000000" points="173.2972,-8.5001 163.2972,-12 173.2972,-15.5001 173.2972,-8.5001"/>
+</g>
+<!-- sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~korc_initialize.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/korc_initialize.f90.html" xlink:title="korc_initialize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="475,-24 382,-24 382,0 475,0 475,-24"/>
+<text text-anchor="middle" x="428.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">korc_initialize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~korc_initialize.f90&#45;&gt;sourcefile~korc_velocity_distribution.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M381.6949,-12C373.6316,-12 365.0358,-12 356.3428,-12"/>
+<polygon fill="#000000" stroke="#000000" points="356.1192,-8.5001 346.1192,-12 356.1192,-15.5001 356.1192,-8.5001"/>
+</g>
+<!-- sourcefile~main.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~main.f90</title>
+<g id="a_sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/main.f90.html" xlink:title="main.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="565,-24 511,-24 511,0 565,0 565,-24"/>
+<text text-anchor="middle" x="538" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">main.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90 -->
+<g id="sourcefile~~korc_simple_equilibrium_pdf.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~main.f90&#45;&gt;sourcefile~korc_initialize.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M510.9326,-12C503.1101,-12 494.2644,-12 485.3445,-12"/>
+<polygon fill="#000000" stroke="#000000" points="485.2927,-8.5001 475.2927,-12 485.2927,-15.5001 485.2927,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="32pt"
+ viewBox="0.00 0.00 188.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 184,-28 184,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-24 0,-24 0,0 66,0 66,-24"/>
+<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="180,-24 84,-24 84,0 180,0 180,-24"/>
+<text text-anchor="middle" x="132" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/korc_simple_equilibrium_pdf.html">korc_simple_equilibrium_pdf</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/korc_simple_equilibrium_pdf.f90.html#src">korc_simple_equilibrium_pdf.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="k">MODULE </span><span class="n">korc_simple_equilibrium_pdf</span>
+<a name="ln-2"></a>  <span class="k">USE </span><span class="n">korc_types</span>
+<a name="ln-3"></a>  <span class="k">USE </span><span class="n">korc_constants</span>
+<a name="ln-4"></a>  <span class="k">USE </span><span class="n">korc_HDF5</span>
+<a name="ln-5"></a>  <span class="k">USE </span><span class="n">korc_hpc</span>
+<a name="ln-6"></a>  <span class="k">USE </span><span class="n">special_functions</span>
+<a name="ln-7"></a>  <span class="k">USE </span><span class="n">korc_input</span>
+<a name="ln-8"></a>
+<a name="ln-9"></a>  <span class="k">IMPLICIT NONE</span>
+<a name="ln-10"></a>
+<a name="ln-11"></a><span class="k">  TYPE</span><span class="p">,</span> <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">PARAMS</span>
+<a name="ln-12"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">E</span> <span class="c">! Parallel electric field normalized using the critical electric field</span>
+<a name="ln-13"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Zeff</span> <span class="c">! Effective atomic number of impurities</span>
+<a name="ln-14"></a>
+<a name="ln-15"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">max_pitch_angle</span> <span class="c">! Maximum pitch angle of sampled PDF in degrees</span>
+<a name="ln-16"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">min_pitch_angle</span> <span class="c">! Minimum pitch angle of sampled PDF in degrees</span>
+<a name="ln-17"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">po</span> <span class="c">! Momentum of sampled PDF in units of mc</span>
+<a name="ln-18"></a>
+<a name="ln-19"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Bo</span>
+<a name="ln-20"></a>     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lambda</span>
+<a name="ln-21"></a>  <span class="k">END TYPE </span><span class="n">PARAMS</span>
+<a name="ln-22"></a>
+<a name="ln-23"></a>  <span class="k">TYPE</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">),</span> <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">pdf_params</span>
+<a name="ln-24"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PRIVATE</span><span class="p">,</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">xo</span> <span class="o">=</span> <span class="p">(</span><span class="n">C_ME</span><span class="o">*</span><span class="n">C_C</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">C_E</span><span class="p">)</span><span class="o">/</span><span class="mf">1.0E6</span>
+<a name="ln-25"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PRIVATE</span><span class="p">,</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">Tol</span> <span class="o">=</span> <span class="mf">1.0E-5_rp</span>
+<a name="ln-26"></a>  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">PRIVATE</span><span class="p">,</span> <span class="k">PARAMETER</span> <span class="kd">::</span> <span class="n">minmax_buffer_size</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">0.0_rp</span>
+<a name="ln-27"></a>
+<a name="ln-28"></a>  <span class="k">PUBLIC</span> <span class="kd">::</span> <span class="n">get_equilibrium_distribution</span>
+<a name="ln-29"></a>  <span class="k">PRIVATE</span> <span class="kd">::</span> <span class="n">initialize_params</span><span class="p">,&amp;</span>
+<a name="ln-30"></a>       <span class="n">save_params</span><span class="p">,&amp;</span>
+<a name="ln-31"></a>       <span class="n">sample_distribution</span><span class="p">,&amp;</span>
+<a name="ln-32"></a>       <span class="n">deg2rad</span><span class="p">,&amp;</span>
+<a name="ln-33"></a>       <span class="n">rad2deg</span><span class="p">,&amp;</span>
+<a name="ln-34"></a>       <span class="n">fRE</span><span class="p">,&amp;</span>
+<a name="ln-35"></a>       <span class="n">random_norm</span><span class="p">,&amp;</span>
+<a name="ln-36"></a>       <span class="n">PR</span><span class="p">,&amp;</span>
+<a name="ln-37"></a>       <span class="n">P_integral</span><span class="p">,&amp;</span>
+<a name="ln-38"></a>       <span class="n">IntK</span><span class="p">,&amp;</span>
+<a name="ln-39"></a>       <span class="n">IntBesselK</span>
+<a name="ln-40"></a>
+<a name="ln-41"></a><span class="k">CONTAINS</span>
+<a name="ln-42"></a>
+<a name="ln-43"></a><span class="k">  SUBROUTINE </span><span class="n">get_equilibrium_distribution</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">go</span><span class="p">,</span><span class="n">etao</span><span class="p">)</span>
+<a name="ln-44"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-45"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta</span>
+<a name="ln-46"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">go</span>
+<a name="ln-47"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">etao</span>
+<a name="ln-48"></a>
+<a name="ln-49"></a>    <span class="k">call </span><span class="n">initialize_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">go</span><span class="p">)</span>
+<a name="ln-50"></a>
+<a name="ln-51"></a>    <span class="k">call </span><span class="n">save_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-52"></a>
+<a name="ln-53"></a>    <span class="k">call </span><span class="n">sample_distribution</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">etao</span><span class="p">)</span>
+<a name="ln-54"></a>  <span class="k">END SUBROUTINE </span><span class="n">get_equilibrium_distribution</span>
+<a name="ln-55"></a>
+<a name="ln-56"></a>
+<a name="ln-57"></a>  <span class="k">SUBROUTINE </span><span class="n">initialize_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">go</span><span class="p">)</span>
+<a name="ln-58"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-59"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">go</span>
+<a name="ln-60"></a>    <span class="c">!REAL(rp) :: max_pitch_angle</span>
+<a name="ln-61"></a>    <span class="c">!REAL(rp) :: min_pitch_angle</span>
+<a name="ln-62"></a>    <span class="c">!REAL(rp) :: Zeff</span>
+<a name="ln-63"></a>    <span class="c">!REAL(rp) :: E</span>
+<a name="ln-64"></a>    <span class="c">!REAL(rp) :: Bo</span>
+<a name="ln-65"></a>    <span class="c">!REAL(rp) :: lambda</span>
+<a name="ln-66"></a>    <span class="c">!NAMELIST /SimpleEquilibriumPDF/ max_pitch_angle,min_pitch_angle,Zeff,E,Bo,lambda</span>
+<a name="ln-67"></a>
+<a name="ln-68"></a>    <span class="c">!open(unit=default_unit_open,file=TRIM(params%path_to_inputs),status=&#39;OLD&#39;,form=&#39;formatted&#39;)</span>
+<a name="ln-69"></a>    <span class="c">!read(default_unit_open,nml=SimpleEquilibriumPDF)</span>
+<a name="ln-70"></a>    <span class="c">!close(default_unit_open)</span>
+<a name="ln-71"></a>
+<a name="ln-72"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">=</span> <span class="n">max_pitch_angle_simple</span>
+<a name="ln-73"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">min_pitch_angle_simple</span>
+<a name="ln-74"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">Zeff</span> <span class="o">=</span> <span class="n">Zeff_simple</span>
+<a name="ln-75"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">E</span> <span class="o">=</span> <span class="n">E_simple</span>
+<a name="ln-76"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">Bo</span> <span class="o">=</span> <span class="n">Bo_simple</span>
+<a name="ln-77"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">lambda</span> <span class="o">=</span> <span class="n">lambda_simple</span>
+<a name="ln-78"></a>
+<a name="ln-79"></a>    <span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">go</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="p">)</span>
+<a name="ln-80"></a>  <span class="k">END SUBROUTINE </span><span class="n">initialize_params</span>
+<a name="ln-81"></a>
+<a name="ln-82"></a>
+<a name="ln-83"></a>  <span class="k">FUNCTION </span><span class="n">deg2rad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<a name="ln-84"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-85"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">deg2rad</span>
+<a name="ln-86"></a>
+<a name="ln-87"></a>    <span class="n">deg2rad</span> <span class="o">=</span> <span class="n">C_PI</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">18</span><span class="mf">0.0_rp</span>
+<a name="ln-88"></a>  <span class="k">END FUNCTION </span><span class="n">deg2rad</span>
+<a name="ln-89"></a>
+<a name="ln-90"></a>
+<a name="ln-91"></a>  <span class="k">FUNCTION </span><span class="n">rad2deg</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<a name="ln-92"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-93"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rad2deg</span>
+<a name="ln-94"></a>
+<a name="ln-95"></a>    <span class="n">rad2deg</span> <span class="o">=</span> <span class="mi">18</span><span class="mf">0.0_rp</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="n">C_PI</span>
+<a name="ln-96"></a>  <span class="k">END FUNCTION </span><span class="n">rad2deg</span>
+<a name="ln-97"></a>
+<a name="ln-98"></a>
+<a name="ln-99"></a>  <span class="k">FUNCTION </span><span class="n">fRE</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+<a name="ln-100"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta</span> <span class="c">! pitch angle in degrees</span>
+<a name="ln-101"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">p</span> <span class="c">! momentum in units of mc</span>
+<a name="ln-102"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fRE</span>
+<a name="ln-103"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">A</span>
+<a name="ln-104"></a>
+<a name="ln-105"></a>    <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">E</span><span class="o">/</span><span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">Zeff</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">SQRT</span><span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="mf">2.0_rp</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">))</span>
+<a name="ln-106"></a>    <span class="n">fRE</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">A</span><span class="o">*</span><span class="nb">EXP</span><span class="p">(</span><span class="n">A</span><span class="o">*</span><span class="nb">COS</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">eta</span><span class="p">)))</span><span class="o">/</span><span class="nb">SINH</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<a name="ln-107"></a>    <span class="c">!	fRE = fRE*PR(eta,p,pdf_params%Bo,pdf_params%lambda)</span>
+<a name="ln-108"></a>  <span class="k">END FUNCTION </span><span class="n">fRE</span>
+<a name="ln-109"></a>
+<a name="ln-110"></a>
+<a name="ln-111"></a>  <span class="k">FUNCTION </span><span class="n">random_norm</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span>
+<a name="ln-112"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">mean</span>
+<a name="ln-113"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sigma</span>
+<a name="ln-114"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">random_norm</span>
+<a name="ln-115"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rand1</span><span class="p">,</span> <span class="n">rand2</span>
+<a name="ln-116"></a>
+<a name="ln-117"></a>    <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand1</span><span class="p">)</span>
+<a name="ln-118"></a>    <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand2</span><span class="p">)</span>
+<a name="ln-119"></a>
+<a name="ln-120"></a>    <span class="n">random_norm</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="nb">LOG</span><span class="p">(</span><span class="mf">1.0_rp</span><span class="o">-</span><span class="n">rand1</span><span class="p">))</span><span class="o">*</span><span class="nb">COS</span><span class="p">(</span><span class="mf">2.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">*</span><span class="n">rand2</span><span class="p">);</span>
+<a name="ln-121"></a>  <span class="k">END FUNCTION </span><span class="n">random_norm</span>
+<a name="ln-122"></a>
+<a name="ln-123"></a>
+<a name="ln-124"></a>  <span class="k">FUNCTION </span><span class="n">IntK</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<a name="ln-125"></a>    <span class="k">IMPLICIT NONE</span>
+<a name="ln-126"></a><span class="k">    </span><span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">IntK</span>
+<a name="ln-127"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-128"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-129"></a>
+<a name="ln-130"></a>    <span class="n">IntK</span> <span class="o">=</span> <span class="p">(</span><span class="n">C_PI</span><span class="o">/</span><span class="nb">SQRT</span><span class="p">(</span><span class="mf">2.0_rp</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0_rp</span> <span class="o">-</span> <span class="mf">0.25_rp</span><span class="o">*</span><span class="p">(</span><span class="mf">4.0_rp</span><span class="o">*</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="p">))</span><span class="o">*</span><span class="nb">ERFC</span><span class="p">(</span><span class="nb">SQRT</span><span class="p">(</span><span class="n">x</span><span class="p">))&amp;</span>
+<a name="ln-131"></a>         <span class="o">+</span> <span class="mf">0.25_rp</span><span class="o">*</span><span class="p">(</span><span class="mf">4.0_rp</span><span class="o">*</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="p">)</span><span class="o">*</span><span class="nb">SQRT</span><span class="p">(</span><span class="mf">0.5_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">/</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="nb">EXP</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
+<a name="ln-132"></a>  <span class="k">END FUNCTION </span><span class="n">IntK</span>
+<a name="ln-133"></a>
+<a name="ln-134"></a>
+<a name="ln-135"></a>  <span class="k">FUNCTION </span><span class="n">besselk</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<a name="ln-136"></a>    <span class="k">IMPLICIT NONE</span>
+<a name="ln-137"></a><span class="k">    </span><span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">besselk</span>
+<a name="ln-138"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a name="ln-139"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-140"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ri</span><span class="p">,</span><span class="n">rk</span><span class="p">,</span><span class="n">rip</span><span class="p">,</span><span class="n">rkp</span>
+<a name="ln-141"></a>
+<a name="ln-142"></a>    <span class="k">call </span><span class="n">bessik</span><span class="p">(</span><span class="kt">REAL</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="kt">REAL</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">ri</span><span class="p">,</span><span class="n">rk</span><span class="p">,</span><span class="n">rip</span><span class="p">,</span><span class="n">rkp</span><span class="p">)</span>
+<a name="ln-143"></a>    <span class="n">besselk</span> <span class="o">=</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">rk</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span>
+<a name="ln-144"></a>  <span class="k">END FUNCTION </span><span class="n">besselk</span>
+<a name="ln-145"></a>
+<a name="ln-146"></a>
+<a name="ln-147"></a>  <span class="k">FUNCTION </span><span class="n">IntBesselK</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<a name="ln-148"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<a name="ln-149"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">b</span>
+<a name="ln-150"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">IntBesselK</span>
+<a name="ln-151"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Iold</span>
+<a name="ln-152"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Inew</span>
+<a name="ln-153"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rerr</span>
+<a name="ln-154"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sum_f</span>
+<a name="ln-155"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">z</span>
+<a name="ln-156"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">ii</span><span class="p">,</span><span class="n">jj</span><span class="p">,</span><span class="n">npoints</span>
+<a name="ln-157"></a>    <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">flag</span>
+<a name="ln-158"></a>
+<a name="ln-159"></a>    <span class="n">v</span> <span class="o">=</span> <span class="mf">5.0_rp</span><span class="o">/</span><span class="mf">3.0_rp</span>
+<a name="ln-160"></a>    <span class="n">h</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span>
+<a name="ln-161"></a>    <span class="n">sum_f</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">besselk</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">besselk</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+<a name="ln-162"></a>
+<a name="ln-163"></a>    <span class="n">Iold</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+<a name="ln-164"></a>    <span class="n">Inew</span> <span class="o">=</span> <span class="n">sum_f</span><span class="o">*</span><span class="n">h</span>
+<a name="ln-165"></a>
+<a name="ln-166"></a>    <span class="n">ii</span> <span class="o">=</span> <span class="mi">1_idef</span>
+<a name="ln-167"></a>    <span class="n">flag</span> <span class="o">=</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<a name="ln-168"></a>    <span class="k">do while</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<a name="ln-169"></a>       <span class="n">Iold</span> <span class="o">=</span> <span class="n">Inew</span>
+<a name="ln-170"></a>
+<a name="ln-171"></a>       <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-172"></a>       <span class="n">npoints</span> <span class="o">=</span> <span class="mi">2_idef</span><span class="o">**</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">2_idef</span><span class="p">)</span>
+<a name="ln-173"></a>       <span class="n">h</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="kt">REAL</span><span class="p">(</span><span class="n">npoints</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span>
+<a name="ln-174"></a>       <span class="n">sum_f</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+<a name="ln-175"></a>       <span class="k">do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="n">npoints</span>
+<a name="ln-176"></a>          <span class="n">z</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">h</span> <span class="o">+</span> <span class="mf">2.0_rp</span><span class="o">*</span><span class="p">(</span><span class="kt">REAL</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="p">)</span><span class="o">*</span><span class="n">h</span>
+<a name="ln-177"></a>          <span class="n">sum_f</span> <span class="o">=</span> <span class="n">sum_f</span> <span class="o">+</span> <span class="n">besselk</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+<a name="ln-178"></a>       <span class="k">end do</span>
+<a name="ln-179"></a>
+<a name="ln-180"></a><span class="k">       </span><span class="n">Inew</span> <span class="o">=</span> <span class="mf">0.5_rp</span><span class="o">*</span><span class="n">Iold</span> <span class="o">+</span> <span class="n">sum_f</span><span class="o">*</span><span class="n">h</span>
+<a name="ln-181"></a>       <span class="n">rerr</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">((</span><span class="n">Inew</span> <span class="o">-</span> <span class="n">Iold</span><span class="p">)</span><span class="o">/</span><span class="n">Iold</span><span class="p">)</span>
+<a name="ln-182"></a>       <span class="n">flag</span> <span class="o">=</span> <span class="p">.</span><span class="nb">NOT</span><span class="p">.(</span><span class="n">rerr</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">Tol</span><span class="p">)</span>
+<a name="ln-183"></a>    <span class="k">end do</span>
+<a name="ln-184"></a><span class="k">    </span><span class="n">IntBesselK</span> <span class="o">=</span> <span class="n">Inew</span>
+<a name="ln-185"></a>  <span class="k">END FUNCTION </span><span class="n">IntBesselK</span>
+<a name="ln-186"></a>
+<a name="ln-187"></a>  <span class="k">SUBROUTINE </span><span class="n">P_integral</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">P</span><span class="p">)</span>
+<a name="ln-188"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">P</span>
+<a name="ln-189"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">z</span>
+<a name="ln-190"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<a name="ln-191"></a>
+<a name="ln-192"></a>    <span class="n">P</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+<a name="ln-193"></a>
+<a name="ln-194"></a>    <span class="k">IF</span> <span class="p">(</span><span class="n">z</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="mf">0.5_rp</span><span class="p">)</span> <span class="k">THEN</span>
+<a name="ln-195"></a><span class="k">       </span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.16_rp</span><span class="o">/</span><span class="mf">2.0_rp</span><span class="o">**</span><span class="p">(</span><span class="mf">2.0_rp</span><span class="o">/</span><span class="mf">3.0_rp</span><span class="p">))</span><span class="o">*</span><span class="n">z</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0_rp</span><span class="o">/</span><span class="mf">3.0_rp</span><span class="p">)</span>
+<a name="ln-196"></a>       <span class="n">P</span> <span class="o">=</span> <span class="n">IntBesselK</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">IntK</span><span class="p">(</span><span class="mf">5.0_rp</span><span class="o">/</span><span class="mf">3.0_rp</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+<a name="ln-197"></a>    <span class="k">ELSE IF</span> <span class="p">((</span><span class="n">z</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">0.5_rp</span><span class="p">).</span><span class="nb">AND</span><span class="p">.(</span><span class="n">z</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="mf">2.5_rp</span><span class="p">))</span> <span class="k">THEN</span>
+<a name="ln-198"></a><span class="k">       </span><span class="n">a</span> <span class="o">=</span> <span class="mf">0.72_rp</span><span class="o">*</span><span class="p">(</span><span class="n">z</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">)</span>
+<a name="ln-199"></a>       <span class="n">P</span> <span class="o">=</span> <span class="n">IntBesselK</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">IntK</span><span class="p">(</span><span class="mf">5.0_rp</span><span class="o">/</span><span class="mf">3.0_rp</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+<a name="ln-200"></a>    <span class="k">ELSE</span>
+<a name="ln-201"></a><span class="k">       </span><span class="n">P</span> <span class="o">=</span> <span class="n">IntK</span><span class="p">(</span><span class="mf">5.0_rp</span><span class="o">/</span><span class="mf">3.0_rp</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+<a name="ln-202"></a>    <span class="k">END IF</span>
+<a name="ln-203"></a><span class="k">  END SUBROUTINE </span><span class="n">P_integral</span>
+<a name="ln-204"></a>
+<a name="ln-205"></a>
+<a name="ln-206"></a>  <span class="k">FUNCTION </span><span class="n">PR</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">Bo</span><span class="p">,</span><span class="n">l</span><span class="p">)</span>
+<a name="ln-207"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta</span> <span class="c">! in radians</span>
+<a name="ln-208"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">p</span> <span class="c">! dimensionless (in units of mc)</span>
+<a name="ln-209"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Bo</span>
+<a name="ln-210"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">l</span>
+<a name="ln-211"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">PR</span>
+<a name="ln-212"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">g</span>
+<a name="ln-213"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v</span>
+<a name="ln-214"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">k</span>
+<a name="ln-215"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lc</span>
+<a name="ln-216"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">z</span>
+<a name="ln-217"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Pi</span>
+<a name="ln-218"></a>
+<a name="ln-219"></a>    <span class="n">g</span> <span class="o">=</span> <span class="nb">SQRT</span><span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.0_rp</span><span class="p">)</span>
+<a name="ln-220"></a>    <span class="n">v</span> <span class="o">=</span> <span class="n">C_C</span><span class="o">*</span><span class="nb">SQRT</span><span class="p">(</span><span class="mf">1.0_rp</span> <span class="o">-</span> <span class="mf">1.0_rp</span><span class="o">/</span><span class="n">g</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-221"></a>
+<a name="ln-222"></a>    <span class="n">k</span> <span class="o">=</span> <span class="n">C_E</span><span class="o">*</span><span class="n">Bo</span><span class="o">*</span><span class="nb">SIN</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">eta</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">C_ME</span><span class="o">*</span><span class="n">v</span><span class="p">)</span>
+<a name="ln-223"></a>
+<a name="ln-224"></a>    <span class="n">lc</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.0_rp</span><span class="o">*</span><span class="n">C_PI</span><span class="o">/</span><span class="mf">3.0_rp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">g</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="c">! Critical wavelength</span>
+<a name="ln-225"></a>
+<a name="ln-226"></a>    <span class="n">z</span> <span class="o">=</span> <span class="n">lc</span><span class="o">/</span><span class="n">l</span>
+<a name="ln-227"></a>
+<a name="ln-228"></a>    <span class="k">call </span><span class="n">P_integral</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">Pi</span><span class="p">)</span>
+<a name="ln-229"></a>
+<a name="ln-230"></a>    <span class="n">PR</span> <span class="o">=</span> <span class="p">(</span><span class="n">C_C</span><span class="o">*</span><span class="n">C_E</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">Pi</span><span class="o">/</span><span class="p">(</span><span class="nb">SQRT</span><span class="p">(</span><span class="mf">3.0_rp</span><span class="p">)</span><span class="o">*</span><span class="n">C_E0</span><span class="o">*</span><span class="n">g</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-231"></a>  <span class="k">END FUNCTION </span><span class="n">PR</span>
+<a name="ln-232"></a>
+<a name="ln-233"></a>
+<a name="ln-234"></a>  <span class="k">SUBROUTINE </span><span class="n">sample_distribution</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">etao</span><span class="p">)</span>
+<a name="ln-235"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-236"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta</span>
+<a name="ln-237"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">etao</span>
+<a name="ln-238"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">go_root</span>
+<a name="ln-239"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">etao_root</span>
+<a name="ln-240"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eta_buffer</span><span class="p">,</span> <span class="n">eta_test</span>
+<a name="ln-241"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">rand_unif</span>
+<a name="ln-242"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">eta_samples</span>
+<a name="ln-243"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">eta_tmp</span>
+<a name="ln-244"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">minmax</span><span class="p">,</span> <span class="n">min_pitch_angle</span><span class="p">,</span> <span class="n">max_pitch_angle</span>
+<a name="ln-245"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">deta</span>
+<a name="ln-246"></a>    <span class="kt">LOGICAL</span> <span class="kd">::</span> <span class="n">leta</span>
+<a name="ln-247"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">num_accepted</span>
+<a name="ln-248"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">ii</span><span class="p">,</span><span class="n">jj</span><span class="p">,</span><span class="n">ppp</span><span class="p">,</span><span class="n">nsamples</span>
+<a name="ln-249"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">mpierr</span>
+<a name="ln-250"></a>
+<a name="ln-251"></a>    <span class="n">ppp</span> <span class="o">=</span> <span class="n">SIZE</span><span class="p">(</span><span class="n">eta</span><span class="p">)</span>
+<a name="ln-252"></a>    <span class="n">nsamples</span> <span class="o">=</span> <span class="n">ppp</span><span class="o">*</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">nmpi</span>
+<a name="ln-253"></a>
+<a name="ln-254"></a>    <span class="n">deta</span> <span class="o">=</span> <span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">-</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="mf">0.0_rp</span>
+<a name="ln-255"></a>
+<a name="ln-256"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">.</span><span class="n">GE</span><span class="p">.</span><span class="n">korc_zero</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-257"></a><span class="k">       do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+<a name="ln-258"></a>          <span class="n">minmax</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> <span class="o">-</span>  <span class="kt">REAL</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">deta</span>
+<a name="ln-259"></a>          <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">GT</span><span class="p">.</span><span class="mf">0.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-260"></a><span class="k">             </span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">minmax</span>
+<a name="ln-261"></a>          <span class="k">end if</span>
+<a name="ln-262"></a><span class="k">       end do</span>
+<a name="ln-263"></a><span class="k">    else</span>
+<a name="ln-264"></a><span class="k">       </span><span class="n">min_pitch_angle</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span>
+<a name="ln-265"></a>    <span class="k">end if</span>
+<a name="ln-266"></a>
+<a name="ln-267"></a><span class="k">    do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
+<a name="ln-268"></a>       <span class="n">minmax</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">+</span> <span class="kt">REAL</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">rp</span><span class="p">)</span><span class="o">*</span><span class="n">deta</span>
+<a name="ln-269"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">minmax</span><span class="p">.</span><span class="n">LE</span><span class="p">.</span><span class="mi">9</span><span class="mf">0.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-270"></a><span class="k">          </span><span class="n">max_pitch_angle</span> <span class="o">=</span> <span class="n">minmax</span>
+<a name="ln-271"></a>       <span class="k">end if</span>
+<a name="ln-272"></a><span class="k">    end do</span>
+<a name="ln-273"></a>
+<a name="ln-274"></a>    <span class="c">!	write(output_unit_write,*) min_pitch_angle,max_pitch_angle</span>
+<a name="ln-275"></a>
+<a name="ln-276"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-277"></a><span class="k">       ALLOCATE</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span><span class="c">! Number of samples to distribute among all MPI processes</span>
+<a name="ln-278"></a>       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))</span><span class="c">! Number of samples to distribute among all MPI processes</span>
+<a name="ln-279"></a>
+<a name="ln-280"></a>       <span class="c">!* * * Transient * * *!</span>
+<a name="ln-281"></a>       <span class="k">call </span><span class="nb">RANDOM_SEED</span><span class="p">()</span>
+<a name="ln-282"></a>       <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+<a name="ln-283"></a>       <span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span> <span class="o">+</span> <span class="p">(</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span> <span class="o">-</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span><span class="o">*</span><span class="n">rand_unif</span>
+<a name="ln-284"></a>
+<a name="ln-285"></a>       <span class="n">ii</span><span class="o">=</span><span class="mi">2_idef</span>
+<a name="ln-286"></a>       <span class="k">do while</span> <span class="p">(</span><span class="n">ii</span> <span class="p">.</span><span class="n">LE</span><span class="p">.</span> <span class="mi">1000_idef</span><span class="p">)</span>
+<a name="ln-287"></a>          <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+<a name="ln-288"></a>          <span class="k">do while</span> <span class="p">((</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">))</span>
+<a name="ln-289"></a>             <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_buffer</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+<a name="ln-290"></a>          <span class="k">end do</span>
+<a name="ln-291"></a>
+<a name="ln-292"></a><span class="k">          </span><span class="n">ratio</span> <span class="o">=</span> <span class="n">fRE</span><span class="p">(</span><span class="n">eta_test</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span><span class="o">/</span><span class="n">fRE</span><span class="p">(</span><span class="n">eta_buffer</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span>
+<a name="ln-293"></a>
+<a name="ln-294"></a>          <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">1.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-295"></a><span class="k">             </span><span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+<a name="ln-296"></a>             <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-297"></a>          <span class="k">else</span>
+<a name="ln-298"></a><span class="k">             call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+<a name="ln-299"></a>             <span class="k">if</span> <span class="p">(</span><span class="n">rand_unif</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">ratio</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-300"></a><span class="k">                </span><span class="n">eta_buffer</span> <span class="o">=</span> <span class="n">eta_test</span>
+<a name="ln-301"></a>                <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-302"></a>             <span class="k">end if</span>
+<a name="ln-303"></a><span class="k">          end if</span>
+<a name="ln-304"></a><span class="k">       end do</span>
+<a name="ln-305"></a>       <span class="c">!* * * Transient * * *!</span>
+<a name="ln-306"></a>
+<a name="ln-307"></a>
+<a name="ln-308"></a>       <span class="n">eta_tmp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_buffer</span>
+<a name="ln-309"></a>
+<a name="ln-310"></a>       <span class="k">call </span><span class="nb">RANDOM_SEED</span><span class="p">()</span>
+<a name="ln-311"></a>       <span class="k">call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+<a name="ln-312"></a>
+<a name="ln-313"></a>       <span class="n">num_accepted</span> <span class="o">=</span> <span class="mi">0_idef</span>
+<a name="ln-314"></a>       <span class="k">do while</span><span class="p">(</span><span class="n">num_accepted</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">nsamples</span><span class="p">)</span>
+<a name="ln-315"></a>          <span class="n">ii</span><span class="o">=</span><span class="mi">2_idef</span>
+<a name="ln-316"></a>          <span class="k">do while</span> <span class="p">(</span><span class="n">ii</span> <span class="p">.</span><span class="n">LE</span><span class="p">.</span> <span class="n">nsamples</span><span class="p">)</span>
+<a name="ln-317"></a>             <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+<a name="ln-318"></a>             <span class="k">do while</span> <span class="p">((</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">GT</span><span class="p">.</span> <span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">OR</span><span class="p">.(</span><span class="nb">ABS</span><span class="p">(</span><span class="n">eta_test</span><span class="p">)</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">min_pitch_angle</span><span class="p">))</span>
+<a name="ln-319"></a>                <span class="n">eta_test</span> <span class="o">=</span> <span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">random_norm</span><span class="p">(</span><span class="mf">0.0_rp</span><span class="p">,</span><span class="n">deta</span><span class="p">)</span>
+<a name="ln-320"></a>             <span class="k">end do</span>
+<a name="ln-321"></a>
+<a name="ln-322"></a><span class="k">             </span><span class="n">ratio</span> <span class="o">=</span> <span class="n">fRE</span><span class="p">(</span><span class="n">eta_test</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span><span class="o">/</span><span class="n">fRE</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">po</span><span class="p">)</span>
+<a name="ln-323"></a>
+<a name="ln-324"></a>             <span class="k">if</span> <span class="p">(</span><span class="n">ratio</span> <span class="p">.</span><span class="n">GE</span><span class="p">.</span> <span class="mf">1.0_rp</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-325"></a><span class="k">                </span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_test</span>
+<a name="ln-326"></a>                <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-327"></a>             <span class="k">else</span>
+<a name="ln-328"></a><span class="k">                call </span><span class="nb">RANDOM_NUMBER</span><span class="p">(</span><span class="n">rand_unif</span><span class="p">)</span>
+<a name="ln-329"></a>                <span class="k">if</span> <span class="p">(</span><span class="n">rand_unif</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="n">ratio</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-330"></a><span class="k">                   </span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_test</span>
+<a name="ln-331"></a>                   <span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-332"></a>                <span class="k">end if</span>
+<a name="ln-333"></a><span class="k">             end if</span>
+<a name="ln-334"></a><span class="k">          end do</span>
+<a name="ln-335"></a>
+<a name="ln-336"></a><span class="k">          </span><span class="n">eta_tmp</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">)</span>
+<a name="ln-337"></a>
+<a name="ln-338"></a>          <span class="n">ii</span> <span class="o">=</span> <span class="mi">1_idef</span>
+<a name="ln-339"></a>          <span class="k">do while</span> <span class="p">(</span> <span class="p">(</span><span class="n">ii</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">nsamples</span><span class="p">).</span><span class="nb">AND</span><span class="p">.(</span><span class="n">num_accepted</span><span class="p">.</span><span class="n">LT</span><span class="p">.</span><span class="n">nsamples</span><span class="p">)</span> <span class="p">)</span>
+<a name="ln-340"></a>             <span class="n">leta</span> <span class="o">=</span> <span class="p">(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">).</span><span class="n">LE</span><span class="p">.</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">).</span><span class="nb">AND</span><span class="p">.(</span><span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">).</span><span class="n">GE</span><span class="p">.</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">)</span>
+<a name="ln-341"></a>             <span class="k">if</span> <span class="p">(</span><span class="n">leta</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-342"></a><span class="k">                </span><span class="n">num_accepted</span> <span class="o">=</span> <span class="n">num_accepted</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-343"></a>                <span class="n">eta_samples</span><span class="p">(</span><span class="n">num_accepted</span><span class="p">)</span> <span class="o">=</span> <span class="n">eta_tmp</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+<a name="ln-344"></a>             <span class="k">end if</span>
+<a name="ln-345"></a><span class="k">             </span><span class="n">ii</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">+</span> <span class="mi">1_idef</span>
+<a name="ln-346"></a>          <span class="k">end do</span>
+<a name="ln-347"></a><span class="k">       end do</span>
+<a name="ln-348"></a>
+<a name="ln-349"></a><span class="k">       </span><span class="n">etao</span> <span class="o">=</span> <span class="nb">SUM</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">)</span><span class="o">/</span><span class="n">nsamples</span>
+<a name="ln-350"></a>    <span class="k">end if</span>
+<a name="ln-351"></a>
+<a name="ln-352"></a><span class="k">    CALL </span><span class="n">MPI_SCATTER</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">,</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">ppp</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-353"></a>
+<a name="ln-354"></a>    <span class="k">CALL </span><span class="n">MPI_BCAST</span><span class="p">(</span><span class="n">etao</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">MPI_REAL8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-355"></a>
+<a name="ln-356"></a>    <span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="n">mpierr</span><span class="p">)</span>
+<a name="ln-357"></a>
+<a name="ln-358"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="mi">0_idef</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-359"></a><span class="k">       DEALLOCATE</span><span class="p">(</span><span class="n">eta_samples</span><span class="p">)</span>
+<a name="ln-360"></a>       <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">eta_tmp</span><span class="p">)</span>
+<a name="ln-361"></a>    <span class="k">end if</span>
+<a name="ln-362"></a>
+<a name="ln-363"></a><span class="k">  END SUBROUTINE </span><span class="n">sample_distribution</span>
+<a name="ln-364"></a>
+<a name="ln-365"></a>
+<a name="ln-366"></a>  <span class="k">SUBROUTINE </span><span class="n">save_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a name="ln-367"></a>    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">params</span>
+<a name="ln-368"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span>
+<a name="ln-369"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gname</span>
+<a name="ln-370"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">attr_array</span>
+<a name="ln-371"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dset</span>
+<a name="ln-372"></a>    <span class="kt">CHARACTER</span><span class="p">(</span><span class="n">MAX_STRING_LENGTH</span><span class="p">)</span> <span class="kd">::</span> <span class="n">attr</span>
+<a name="ln-373"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">HID_T</span><span class="p">)</span> <span class="kd">::</span> <span class="n">h5file_id</span>
+<a name="ln-374"></a>    <span class="kt">INTEGER</span><span class="p">(</span><span class="n">HID_T</span><span class="p">)</span> <span class="kd">::</span> <span class="n">group_id</span>
+<a name="ln-375"></a>    <span class="kt">INTEGER</span> <span class="kd">::</span> <span class="n">h5error</span>
+<a name="ln-376"></a>    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">units</span>
+<a name="ln-377"></a>
+<a name="ln-378"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-379"></a><span class="k">       </span><span class="n">filename</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">path_to_outputs</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;simple_equilibrium_pdf.h5&quot;</span>
+<a name="ln-380"></a>       <span class="k">call </span><span class="n">h5fcreate_f</span><span class="p">(</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">H5F_ACC_TRUNC_F</span><span class="p">,</span> <span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+<a name="ln-381"></a>
+<a name="ln-382"></a>       <span class="n">gname</span> <span class="o">=</span> <span class="s2">&quot;pdf_params&quot;</span>
+<a name="ln-383"></a>       <span class="k">call </span><span class="n">h5gcreate_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">),</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+<a name="ln-384"></a>
+<a name="ln-385"></a>       <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/max_pitch_angle&quot;</span>
+<a name="ln-386"></a>       <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Maximum pitch angle in avalanche PDF (degrees)&quot;</span>
+<a name="ln-387"></a>       <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">max_pitch_angle</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+<a name="ln-388"></a>
+<a name="ln-389"></a>       <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/min_pitch_angle&quot;</span>
+<a name="ln-390"></a>       <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Minimum pitch angle in avalanche PDF (degrees)&quot;</span>
+<a name="ln-391"></a>       <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+<a name="ln-392"></a>
+<a name="ln-393"></a>       <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Zeff&quot;</span>
+<a name="ln-394"></a>       <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Effective atomic number of ions.&quot;</span>
+<a name="ln-395"></a>       <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">Zeff</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+<a name="ln-396"></a>
+<a name="ln-397"></a>       <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/E&quot;</span>
+<a name="ln-398"></a>       <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Parallel electric field in (Ec)&quot;</span>
+<a name="ln-399"></a>       <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">E</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+<a name="ln-400"></a>
+<a name="ln-401"></a>       <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/Bo&quot;</span>
+<a name="ln-402"></a>       <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Characteristic magnetic field in T (in case of using PR)&quot;</span>
+<a name="ln-403"></a>       <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">Bo</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+<a name="ln-404"></a>
+<a name="ln-405"></a>       <span class="n">dset</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">gname</span><span class="p">)</span> <span class="o">//</span> <span class="s2">&quot;/lambda&quot;</span>
+<a name="ln-406"></a>       <span class="n">attr</span> <span class="o">=</span> <span class="s2">&quot;Characteristic wavelength in m (in case of using PR)&quot;</span>
+<a name="ln-407"></a>       <span class="k">call </span><span class="n">save_to_hdf5</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span><span class="n">dset</span><span class="p">,</span><span class="n">pdf_params</span><span class="p">%</span><span class="n">lambda</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span>
+<a name="ln-408"></a>
+<a name="ln-409"></a>       <span class="k">call </span><span class="n">h5gclose_f</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+<a name="ln-410"></a>
+<a name="ln-411"></a>       <span class="k">call </span><span class="n">h5fclose_f</span><span class="p">(</span><span class="n">h5file_id</span><span class="p">,</span> <span class="n">h5error</span><span class="p">)</span>
+<a name="ln-412"></a>    <span class="k">end if</span>
+<a name="ln-413"></a><span class="k">  END SUBROUTINE </span><span class="n">save_params</span>
+<a name="ln-414"></a>
+<a name="ln-415"></a><span class="k">END MODULE </span><span class="n">korc_simple_equilibrium_pdf</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> KORC was developed by Matt Beidler</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>
