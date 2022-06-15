@@ -296,15 +296,13 @@ contains
                 call uniform_fields_p(pchunk,F, &
                     B_X,B_Y,B_Z,E_X,E_Y,E_Z)
 #ifdef PSPLINE
-             else if (F%axisymmetric_fields.and. &
-                  (params%orbit_model(3:3).eq.'B')) then
+             else if (F%axisymmetric_fields.and.F%Bfield) then
                 call interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
                      E_X,E_Y,E_Z,PSIp,flagCon)
-             else if ((.not.F%axisymmetric_fields).and. &
-                  (params%orbit_model(3:3).eq.'B')) then
+             else if ((.not.F%axisymmetric_fields).and.F%Bfield) then
                 call interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
                      B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
-             else if (params%orbit_model(3:5).eq.'psi') then
+             else if (F%axisymmetric_fields.and.F%Bflux) then
                 call interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
                      E_X,E_Y,E_Z,PSIp,flagCon)
              else if (params%field_model(10:13).eq.'MARS') then
@@ -328,6 +326,9 @@ contains
                         PSIp,flagCon,hint)
                 end if
 #endif
+             else
+                write(6,*) 'No fields interpolated!!!'
+                call KORC_ABORT(25)
              end if
 
              !write(6,'("Y_R: ",E17.10)') Y_R*params%cpp%length
@@ -1337,17 +1338,18 @@ contains
 
                 call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
-                if (F%axisymmetric_fields.and. &
-                     (params%orbit_model(3:3).eq.'B')) then
+                if (F%axisymmetric_fields.and.F%Bfield) then
                    call interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
                         E_X,E_Y,E_Z,PSIp,flagCon)
-                else if ((.not.F%axisymmetric_fields).and. &
-                     (params%orbit_model(3:3).eq.'B')) then
+                else if ((.not.F%axisymmetric_fields).and.F%Bfield) then
                    call interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
                         B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
-                else if (params%orbit_model(3:5).eq.'psi') then
+                else if (F%axisymmetric_fields.and.F%Bflux) then
                    call interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
                         E_X,E_Y,E_Z,PSIp,flagCon)
+                else
+                   write(6,*) 'No fields interpolated!!!'
+                   call KORC_ABORT(25)
                 end if
 
 
@@ -3053,7 +3055,7 @@ contains
                 !$OMP& FIRSTPRIVATE(m_cache,pchunk,q_cache) &
                 !$OMP& shared(F,P,params,ii,spp,tt) &
                 !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-                !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
+                !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,PSIp,ne, &
                 !$OMP& achunk,tttt,Te)
                 do pp=1_idef,spp(ii)%pRE,pchunk
 
@@ -3088,10 +3090,9 @@ contains
 
                    if (.not.params%FokPlan) then
                       do tttt=1_ip,params%orbits_per_coll
-                         call advance_GCeqn_vars(spp(ii)%vars,pp, &
-                              tttt,params, &
+                         call advance_GCeqn_vars(spp(ii)%vars,pp,tttt,params, &
                               Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                              B_R,B_PHI,B_Z,F,P,PSIp,E_PHI)
+                              B_R,B_PHI,B_Z,F,P,PSIp,E_R,E_PHI,E_Z)
                       end do
                    endif
 
@@ -3119,7 +3120,9 @@ contains
                       spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
 
                       spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+                      spp(ii)%vars%E(pp-1+cc,1) = E_R(cc)
                       spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
+                      spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
                    end do
                    !$OMP END SIMD
 
