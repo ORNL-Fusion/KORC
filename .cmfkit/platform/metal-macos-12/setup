@@ -2,5 +2,3 @@
 
 brew install hdf5 open-mpi
 
-CMAKE_Fortran_COMPILER=/usr/local/opt/gfortran/bin/gfortran
-
