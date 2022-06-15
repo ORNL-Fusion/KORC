@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.5% of total for procedures.">99 statements</a>
+    title=" 0.4% of total for procedures.">101 statements</a>
      </li> 
      
      
@@ -238,7 +238,7 @@ private subroutine load_korc_params(params)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~136"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~155"></span>type(KORC_PARAMS),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -549,6 +549,8 @@ private subroutine load_korc_params(params)
     <span class="n">params</span><span class="p">%</span><span class="n">proceed</span> <span class="o">=</span> <span class="n">proceed</span>
     <span class="n">params</span><span class="p">%</span><span class="n">reinit</span>  <span class="o">=</span> <span class="n">reinit</span>
 
+    <span class="n">params</span><span class="p">%</span><span class="n">load_balance</span> <span class="o">=</span> <span class="n">load_balance</span>
+    
     <span class="n">params</span><span class="p">%</span><span class="n">simulation_time</span> <span class="o">=</span> <span class="n">simulation_time</span>
     <span class="n">params</span><span class="p">%</span><span class="n">snapshot_frequency</span> <span class="o">=</span> <span class="n">snapshot_frequency</span>
     <span class="n">params</span><span class="p">%</span><span class="n">restart_overwrite_frequency</span><span class="o">=</span><span class="n">restart_overwrite_frequency</span>
@@ -568,6 +570,7 @@ private subroutine load_korc_params(params)
          <span class="p">(</span><span class="n">C_ME</span><span class="o">*</span><span class="n">C_C</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c">! Minimum value of relativistic gamma factor</span>
     <span class="n">params</span><span class="p">%</span><span class="n">radiation</span> <span class="o">=</span> <span class="n">radiation</span>
     <span class="n">params</span><span class="p">%</span><span class="n">collisions</span> <span class="o">=</span> <span class="n">collisions</span>
+    <span class="n">params</span><span class="p">%</span><span class="n">LargeCollisions</span> <span class="o">=</span> <span class="n">LargeCollisions</span>
     <span class="n">params</span><span class="p">%</span><span class="n">collisions_model</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">collisions_model</span><span class="p">)</span>
     <span class="n">params</span><span class="p">%</span><span class="n">bound_electron_model</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">bound_electron_model</span><span class="p">)</span>
     <span class="n">params</span><span class="p">%</span><span class="n">GC_rad_model</span> <span class="o">=</span> <span class="nb">TRIM</span><span class="p">(</span><span class="n">GC_rad_model</span><span class="p">)</span>
@@ -669,7 +672,7 @@ private subroutine load_korc_params(params)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

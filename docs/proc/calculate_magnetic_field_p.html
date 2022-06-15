@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.1% of total for procedures.">16 statements</a>
+    title=" 0.1% of total for procedures.">18 statements</a>
      </li> 
      
      
@@ -234,7 +234,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   
 <tr>
   
-  <td><span class="anchor" id="variable-pchunk~13"></span>integer,</td>
+  <td><span class="anchor" id="variable-pchunk~20"></span>integer,</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -249,7 +249,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   
 <tr>
   
-  <td><span class="anchor" id="variable-f~62"></span>type(FIELDS),</td>
+  <td><span class="anchor" id="variable-f~80"></span>type(FIELDS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -264,7 +264,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   
 <tr>
   
-  <td><span class="anchor" id="variable-y_r~29"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-y_r~34"></span>real(kind=rp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -279,7 +279,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   
 <tr>
   
-  <td><span class="anchor" id="variable-y_z~28"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-y_z~33"></span>real(kind=rp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -324,7 +324,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   
 <tr>
   
-  <td><span class="anchor" id="variable-b_z~28"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-b_z~32"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -502,35 +502,35 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
 <path fill="none" stroke="#000000" d="M324.1487,-33C332.3337,-33 340.9787,-33 349.6542,-33"/>
 <polygon fill="#000000" stroke="#000000" points="349.8267,-36.5001 359.8267,-33 349.8267,-29.5001 349.8267,-36.5001"/>
 </g>
-<!-- proc~fo_init -->
-<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_node3" class="node">
-<title>proc~fo_init</title>
-<g id="a_proc~~calculate_magnetic_field_p~~CalledByGraph_node3"><a xlink:href=".././proc/fo_init.html" xlink:title="FO_init">
-<polygon fill="#d9534f" stroke="#d9534f" points="165.5,-66 111.5,-66 111.5,-42 165.5,-42 165.5,-66"/>
-<text text-anchor="middle" x="138.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">FO_init</text>
-</a>
-</g>
-</g>
-<!-- proc~fo_init&#45;&gt;proc~interp_fofields1_p -->
-<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge2" class="edge">
-<title>proc~fo_init&#45;&gt;proc~interp_fofields1_p</title>
-<path fill="none" stroke="#000000" d="M165.8193,-49.7503C179.3456,-47.6462 196.2565,-45.0157 212.6405,-42.467"/>
-<polygon fill="#000000" stroke="#000000" points="213.3956,-45.8918 222.7388,-40.8962 212.3196,-38.9749 213.3956,-45.8918"/>
-</g>
 <!-- proc~adv_fointerp_top -->
-<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_node4" class="node">
+<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_node3" class="node">
 <title>proc~adv_fointerp_top</title>
-<g id="a_proc~~calculate_magnetic_field_p~~CalledByGraph_node4"><a xlink:href=".././proc/adv_fointerp_top.html" xlink:title="adv_FOinterp_top">
-<polygon fill="#d9534f" stroke="#d9534f" points="187,-24 90,-24 90,0 187,0 187,-24"/>
-<text text-anchor="middle" x="138.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_top</text>
+<g id="a_proc~~calculate_magnetic_field_p~~CalledByGraph_node3"><a xlink:href=".././proc/adv_fointerp_top.html" xlink:title="adv_FOinterp_top">
+<polygon fill="#d9534f" stroke="#d9534f" points="187,-66 90,-66 90,-42 187,-42 187,-66"/>
+<text text-anchor="middle" x="138.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">adv_FOinterp_top</text>
 </a>
 </g>
 </g>
 <!-- proc~adv_fointerp_top&#45;&gt;proc~interp_fofields1_p -->
-<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge3" class="edge">
+<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge2" class="edge">
 <title>proc~adv_fointerp_top&#45;&gt;proc~interp_fofields1_p</title>
-<path fill="none" stroke="#000000" d="M187.2381,-19.5815C195.4893,-20.865 204.1467,-22.2117 212.6615,-23.5362"/>
-<polygon fill="#000000" stroke="#000000" points="212.1393,-26.997 222.5585,-25.0758 213.2153,-20.0802 212.1393,-26.997"/>
+<path fill="none" stroke="#000000" d="M187.2381,-46.4185C195.4893,-45.135 204.1467,-43.7883 212.6615,-42.4638"/>
+<polygon fill="#000000" stroke="#000000" points="213.2153,-45.9198 222.5585,-40.9242 212.1393,-39.003 213.2153,-45.9198"/>
+</g>
+<!-- proc~fo_init -->
+<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_node4" class="node">
+<title>proc~fo_init</title>
+<g id="a_proc~~calculate_magnetic_field_p~~CalledByGraph_node4"><a xlink:href=".././proc/fo_init.html" xlink:title="FO_init">
+<polygon fill="#d9534f" stroke="#d9534f" points="165.5,-24 111.5,-24 111.5,0 165.5,0 165.5,-24"/>
+<text text-anchor="middle" x="138.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">FO_init</text>
+</a>
+</g>
+</g>
+<!-- proc~fo_init&#45;&gt;proc~interp_fofields1_p -->
+<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge3" class="edge">
+<title>proc~fo_init&#45;&gt;proc~interp_fofields1_p</title>
+<path fill="none" stroke="#000000" d="M165.8193,-16.2497C179.3456,-18.3538 196.2565,-20.9843 212.6405,-23.533"/>
+<polygon fill="#000000" stroke="#000000" points="212.3196,-27.0251 222.7388,-25.1038 213.3956,-20.1082 212.3196,-27.0251"/>
 </g>
 <!-- program~main -->
 <g id="proc~~calculate_magnetic_field_p~~CalledByGraph_node5" class="node">
@@ -541,17 +541,17 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
 </a>
 </g>
 </g>
-<!-- program~main&#45;&gt;proc~fo_init -->
-<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge4" class="edge">
-<title>program~main&#45;&gt;proc~fo_init</title>
-<path fill="none" stroke="#000000" d="M54.276,-38.1372C68.3146,-40.7812 85.6462,-44.0455 100.9305,-46.9241"/>
-<polygon fill="#000000" stroke="#000000" points="100.6441,-50.4317 111.1192,-48.8431 101.9398,-43.5526 100.6441,-50.4317"/>
-</g>
 <!-- program~main&#45;&gt;proc~adv_fointerp_top -->
-<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge5" class="edge">
+<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge4" class="edge">
 <title>program~main&#45;&gt;proc~adv_fointerp_top</title>
-<path fill="none" stroke="#000000" d="M54.276,-27.8628C62.0518,-26.3983 70.8379,-24.7435 79.7268,-23.0694"/>
-<polygon fill="#000000" stroke="#000000" points="80.5786,-26.4706 89.7579,-21.1801 79.2829,-19.5915 80.5786,-26.4706"/>
+<path fill="none" stroke="#000000" d="M54.276,-38.1372C62.0518,-39.6017 70.8379,-41.2565 79.7268,-42.9306"/>
+<polygon fill="#000000" stroke="#000000" points="79.2829,-46.4085 89.7579,-44.8199 80.5786,-39.5294 79.2829,-46.4085"/>
+</g>
+<!-- program~main&#45;&gt;proc~fo_init -->
+<g id="proc~~calculate_magnetic_field_p~~CalledByGraph_edge5" class="edge">
+<title>program~main&#45;&gt;proc~fo_init</title>
+<path fill="none" stroke="#000000" d="M54.276,-27.8628C68.3146,-25.2188 85.6462,-21.9545 100.9305,-19.0759"/>
+<polygon fill="#000000" stroke="#000000" points="101.9398,-22.4474 111.1192,-17.1569 100.6441,-15.5683 101.9398,-22.4474"/>
 </g>
 </g>
 </svg>
@@ -684,6 +684,9 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   <span class="kt">INTEGER</span>                                                <span class="kd">::</span> <span class="n">pp</span>
   <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">PSIp</span>
   <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">A</span>
+  <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">psip_conv</span>
+
+  <span class="n">psip_conv</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">psip_conv</span>
   
   <span class="k">call </span><span class="n">EZspline_interp</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">,</span> <span class="n">pchunk</span><span class="p">,</span> <span class="n">Y_R</span><span class="p">,</span> <span class="n">Y_Z</span><span class="p">,</span> <span class="p">&amp;</span>
        <span class="n">PSIp</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">)</span>
@@ -698,7 +701,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
   <span class="c">!write(output_unit_write,&#39;(&quot;dPSIp/dZ: &quot;,E17.10)&#39;) A(:,2)</span>
   <span class="c">!write(output_unit_write,&#39;(&quot;Y_R: &quot;,E17.10)&#39;) Y_R</span>
 
-  <span class="n">B_R</span> <span class="o">=</span> <span class="n">A</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Y_R</span>
+  <span class="n">B_R</span> <span class="o">=</span> <span class="n">psip_conv</span><span class="o">*</span><span class="n">A</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Y_R</span>
 
   <span class="c">! FPHI = Fo*Ro/R</span>
   <span class="n">B_PHI</span> <span class="o">=</span> <span class="o">-</span><span class="n">F</span><span class="p">%</span><span class="n">Bo</span><span class="o">*</span><span class="n">F</span><span class="p">%</span><span class="n">Ro</span><span class="o">/</span><span class="n">Y_R</span>
@@ -707,7 +710,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
 
   <span class="c">!     write(output_unit_write,&#39;(&quot;R*B_Z: &quot;,E17.10)&#39;) B_Z(1)</span>
 
-  <span class="n">B_Z</span><span class="o">=</span> <span class="o">-</span><span class="n">A</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">Y_R</span>
+  <span class="n">B_Z</span><span class="o">=</span> <span class="o">-</span><span class="n">psip_conv</span><span class="o">*</span><span class="n">A</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">Y_R</span>
 
    
 <span class="c">!  write(output_unit_write,&#39;(&quot;PSIp: &quot;,E17.10)&#39;) PSIp</span>
@@ -735,7 +738,7 @@ public subroutine calculate_magnetic_field_p(pchunk, F, Y_R, Y_Z, B_R, B_PHI, B_
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

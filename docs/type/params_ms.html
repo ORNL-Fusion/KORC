@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="<p> 3.7% of total for derived types.</p>Including implementation: 22 statements,  3.7% of total for derived types.">22 statements</a>
+    title="<p> 4.1% of total for derived types.</p>Including implementation: 28 statements,  4.1% of total for derived types.">28 statements</a>
      </li> 
      
      
@@ -207,17 +207,31 @@
       
       <a class="list-group-item" href="../type/params_ms.html#variable-re">re</a>
       
+      <a class="list-group-item" href="../type/params_ms.html#variable-gammac_min">Gammac_min</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-ah">aH</a>
+      
       <a class="list-group-item" href="../type/params_ms.html#variable-ac">aC</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-ane">aNe</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-aar">aAr</a>
       
+      <a class="list-group-item" href="../type/params_ms.html#variable-ih">IH</a>
+      
       <a class="list-group-item" href="../type/params_ms.html#variable-ic">IC</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-ine">INe</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-iar">IAr</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-neut_prof">neut_prof</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-ec">Ec</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-ec_min">Ec_min</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-largecollisions">LargeCollisions</a>
       
     </div>
   </div>
@@ -305,17 +319,31 @@
       
       <a class="list-group-item" href="../type/params_ms.html#variable-re">re</a>
       
+      <a class="list-group-item" href="../type/params_ms.html#variable-gammac_min">Gammac_min</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-ah">aH</a>
+      
       <a class="list-group-item" href="../type/params_ms.html#variable-ac">aC</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-ane">aNe</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-aar">aAr</a>
       
+      <a class="list-group-item" href="../type/params_ms.html#variable-ih">IH</a>
+      
       <a class="list-group-item" href="../type/params_ms.html#variable-ic">IC</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-ine">INe</a>
       
       <a class="list-group-item" href="../type/params_ms.html#variable-iar">IAr</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-neut_prof">neut_prof</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-ec">Ec</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-ec_min">Ec_min</a>
+      
+      <a class="list-group-item" href="../type/params_ms.html#variable-largecollisions">LargeCollisions</a>
       
     </div>
   </div>
@@ -581,6 +609,34 @@
   
 <tr>
   
+  <td><span class="anchor" id="variable-gammac_min"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Gammac_min</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ah"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(2)</td><td>::</td>
+  <td><strong>aH</strong></td><td> =</td><td>(/274._rp, 0._rp/)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-ac"></span>real(kind=rp),</td>
   
   <td>public,</td>
@@ -623,6 +679,20 @@
   
 <tr>
   
+  <td><span class="anchor" id="variable-ih"></span>real(kind=rp),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(2)</td><td>::</td>
+  <td><strong>IH</strong></td><td> =</td><td>(/14.9916_rp, huge(1._rp)/)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-ic"></span>real(kind=rp),</td>
   
   <td>public,</td>
@@ -656,6 +726,62 @@
   <td>public,</td>
   <td>DIMENSION(19)</td><td>::</td>
   <td><strong>IAr</strong></td><td> =</td><td>(/188.5_rp, 219.4_rp, 253.8_rp, 293.4_rp, 339.1_rp, 394.5_rp, 463.4_rp, 568.0_rp, 728.0_rp, 795.9_rp, 879.8_rp, 989.9_rp, 1138.1_rp, 1369.5_rp, 1791.2_rp, 2497.0_rp, 4677.2_rp, 4838.2_rp, huge(1._rp)/)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-neut_prof"></span>character(len=30),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>neut_prof</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ec"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ec</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ec_min"></span>real(kind=rp),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>Ec_min</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-largecollisions"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>LargeCollisions</strong></td><td></td><td></td><td></td>
   
 </tr>
 
@@ -704,8 +830,10 @@
      <span class="c">! Debye length</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">re</span>
      <span class="c">! Classical electron radius</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 					<span class="kd">::</span> <span class="n">Gammac_min</span>
 
 
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="kd">::</span> <span class="n">aH</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">27</span><span class="mf">4._rp</span><span class="p">,</span><span class="mf">0._rp</span><span class="o">/</span><span class="p">)</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="kd">::</span> <span class="n">aC</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">14</span><span class="mf">4._rp</span><span class="p">,</span><span class="mi">11</span><span class="mf">8._rp</span><span class="p">,</span><span class="mi">9</span><span class="mf">5._rp</span><span class="p">,</span><span class="mi">7</span><span class="mf">0._rp</span><span class="p">,</span> <span class="p">&amp;</span>
           <span class="mi">4</span><span class="mf">2._rp</span><span class="p">,</span><span class="mi">3</span><span class="mf">9._rp</span><span class="p">,</span><span class="mf">0._rp</span><span class="o">/</span><span class="p">)</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="kd">::</span> <span class="n">aNe</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">11</span><span class="mf">1._rp</span><span class="p">,</span><span class="mi">10</span><span class="mf">0._rp</span><span class="p">,</span><span class="mi">9</span><span class="mf">0._rp</span><span class="p">,</span><span class="mi">8</span><span class="mf">0._rp</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -715,6 +843,7 @@
           <span class="mi">2</span><span class="mf">7._rp</span><span class="p">,</span><span class="mi">2</span><span class="mf">1._rp</span><span class="p">,</span><span class="mi">1</span><span class="mf">3._rp</span><span class="p">,</span><span class="mi">1</span><span class="mf">3._rp</span><span class="p">,</span><span class="mf">0._rp</span><span class="o">/</span><span class="p">)</span>
 
 
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="kd">::</span> <span class="n">IH</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">1</span><span class="mf">4.9916_rp</span><span class="p">,</span><span class="nb">huge</span><span class="p">(</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">/</span><span class="p">)</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="kd">::</span> <span class="n">IC</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">6</span><span class="mf">5.9_rp</span><span class="p">,</span><span class="mi">9</span><span class="mf">2.6_rp</span><span class="p">,</span><span class="mi">13</span><span class="mf">4.8_rp</span><span class="p">,</span><span class="mi">21</span><span class="mf">4.2_rp</span><span class="p">,</span> <span class="p">&amp;</span>
           <span class="mi">48</span><span class="mf">6.2_rp</span><span class="p">,</span><span class="mi">53</span><span class="mf">9.5_rp</span><span class="p">,</span><span class="nb">huge</span><span class="p">(</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">/</span><span class="p">)</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="kd">::</span> <span class="n">INe</span><span class="o">=</span><span class="p">(</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.2_rp</span><span class="p">,</span><span class="mi">16</span><span class="mf">5.2_rp</span><span class="p">,</span><span class="mi">19</span><span class="mf">6.9_rp</span><span class="p">,</span><span class="mi">23</span><span class="mf">5.2_rp</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -723,6 +852,11 @@
           <span class="mi">33</span><span class="mf">9.1_rp</span><span class="p">,</span><span class="mi">39</span><span class="mf">4.5_rp</span><span class="p">,</span><span class="mi">46</span><span class="mf">3.4_rp</span><span class="p">,</span><span class="mi">56</span><span class="mf">8.0_rp</span><span class="p">,</span><span class="mi">72</span><span class="mf">8.0_rp</span><span class="p">,</span><span class="mi">79</span><span class="mf">5.9_rp</span><span class="p">,</span><span class="mi">87</span><span class="mf">9.8_rp</span><span class="p">,</span> <span class="p">&amp;</span>
           <span class="mi">98</span><span class="mf">9.9_rp</span><span class="p">,</span><span class="mi">113</span><span class="mf">8.1_rp</span><span class="p">,</span><span class="mi">136</span><span class="mf">9.5_rp</span><span class="p">,</span><span class="mi">179</span><span class="mf">1.2_rp</span><span class="p">,</span><span class="mi">249</span><span class="mf">7.0_rp</span><span class="p">,</span><span class="mi">467</span><span class="mf">7.2_rp</span><span class="p">,</span> <span class="p">&amp;</span>
           <span class="mi">483</span><span class="mf">8.2_rp</span><span class="p">,</span><span class="nb">huge</span><span class="p">(</span><span class="mf">1._rp</span><span class="p">)</span><span class="o">/</span><span class="p">)</span>
+
+     <span class="kt">CHARACTER</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="kd">::</span> <span class="n">neut_prof</span>
+     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> 			<span class="kd">::</span> <span class="n">Ec</span><span class="p">,</span><span class="n">Ec_min</span>
+     <span class="c">! Critical electric field</span>
+     <span class="kt">LOGICAL</span>  <span class="kd">::</span> <span class="n">LargeCollisions</span>
      
   <span class="k">END TYPE </span><span class="n">PARAMS_MS</span>
 </pre></div>
@@ -739,7 +873,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

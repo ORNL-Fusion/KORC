@@ -88,57 +88,6 @@ CONTAINS
        write(output_unit_write,*) 'The output folder is: ',&
             TRIM(params%path_to_outputs)
        write(output_unit_write,'("* * * * * * * * * * * * *",/)')      
-
-       write(output_unit_write,'(/,"* * * * * * * GIT INFO * * * * * * *")')
-
-#ifdef MAC
-       !write(6,*) 'MAC'
-       call execute_command_line("/Users/21b/Desktop/KORC/src/get_git_details.sh", &
-            exitstat=exei)
-#elif CORI
-       !write(6,*) 'CORI'
-       call execute_command_line("/global/cfs/cdirs/m3236/build_unstable/KORC/src/get_git_details.sh", &
-            exitstat=exei)
-#endif
-
-       IF (exei/=0) then
-          write(6,*) 'Error executing get_git_details.sh'
-          call korc_abort(11)
-       end if
-       
-       OPEN(UNIT=default_unit_open,FILE='git_hash.txt', &
-            STATUS='OLD',POSITION='REWIND')
-       READ(UNIT=default_unit_open,FMT='(a)',IOSTAT=read_stat) ctmp
-       
-       IF (read_stat/=0) then
-          write(6,*) 'Error reading git_hash.txt'
-          call korc_abort(11)
-       end if
-       write(output_unit_write,*) 'Git hash of most recent commit is: ', &
-            TRIM(ctmp)
-       write(output_unit_write,'(/)')      
-       CLOSE(default_unit_open,STATUS='DELETE')
-
-       OPEN(UNIT=default_unit_open,FILE='git_diff.txt', &
-            STATUS='OLD',POSITION='REWIND')
-
-       write(output_unit_write,*) 'Git diff of HEAD and most recent commit is:'
-       DO
-          READ(UNIT=default_unit_open,FMT='(a)',IOSTAT=read_stat) ctmp
-          
-          IF (read_stat.gt.0) then
-             write(6,*) 'Error reading git_diff.txt'
-             call korc_abort(11)
-          else if (read_stat.lt.0) then
-             CLOSE(default_unit_open,STATUS='DELETE')
-       
-             write(output_unit_write,'("* * * * * * * * * * * * * * * * *",/)')
-             RETURN
-          end if
-          write(output_unit_write,*) TRIM(ctmp)
-       END DO
-
-     
     end if
   end subroutine set_paths
 

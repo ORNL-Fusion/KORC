@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.0% of total for procedures.">4 statements</a>
+    title=" 0.1% of total for procedures.">23 statements</a>
      </li> 
      
      
@@ -234,7 +234,7 @@ public subroutine DEALLOCATE_PROFILES_ARRAYS(P)
   
 <tr>
   
-  <td><span class="anchor" id="variable-p~16"></span>type(PROFILES),</td>
+  <td><span class="anchor" id="variable-p~22"></span>type(PROFILES),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -431,8 +431,33 @@ public subroutine DEALLOCATE_PROFILES_ARRAYS(P)
     <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">DEALLOCATE_PROFILES_ARRAYS</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
     <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">P</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">M3D_C1_nimp</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">M3D_C1_nimp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">PHI</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">PHI</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">ne_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">ne_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Te_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Te_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Zeff_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Zeff_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">ne_3D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">ne_3D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Te_3D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Te_3D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Zeff_3D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Zeff_3D</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">RHON</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">RHON</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nRE_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nRE_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr0_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr0_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr1_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr1_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr2_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr2_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr3_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr3_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nD_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nD_2D</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nD1_2D</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nD1_2D</span><span class="p">)</span>
+    
+<span class="cp">#ifdef FIO</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">))</span> <span class="k">DEALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">FIO_nimp</span><span class="p">)</span>
+<span class="cp">#endif</span>
+    
   <span class="k">end subroutine </span><span class="n">DEALLOCATE_PROFILES_ARRAYS</span>
 </pre></div>
 
@@ -449,7 +474,7 @@ public subroutine DEALLOCATE_PROFILES_ARRAYS(P)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

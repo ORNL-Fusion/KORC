@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="<p> 6.6% of total for derived types.</p>Including implementation: 39 statements,  6.6% of total for derived types.">39 statements</a>
+    title="<p> 5.9% of total for derived types.</p>Including implementation: 41 statements,  5.9% of total for derived types.">41 statements</a>
      </li> 
      
      
@@ -177,13 +177,13 @@
   <div id="vars-0" class="panel-collapse collapse">
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/particles.html#variable-x">X</a>
+      <a class="list-group-item" href="../type/particles.html#variable-x~3">X</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-v">V</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-rgc">Rgc</a>
       
-      <a class="list-group-item" href="../type/particles.html#variable-y">Y</a>
+      <a class="list-group-item" href="../type/particles.html#variable-y~3">Y</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-y0">Y0</a>
       
@@ -243,9 +243,13 @@
       
       <a class="list-group-item" href="../type/particles.html#variable-flagcol">flagCol</a>
       
+      <a class="list-group-item" href="../type/particles.html#variable-flagre">flagRE</a>
+      
       <a class="list-group-item" href="../type/particles.html#variable-aux">AUX</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-wt">wt</a>
+      
+      <a class="list-group-item" href="../type/particles.html#variable-initlcfs">initLCFS</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-hint">hint</a>
       
@@ -462,13 +466,13 @@ in the simulation. </p></div>
   <div id="vars-1" class="panel-collapse collapse">
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/particles.html#variable-x">X</a>
+      <a class="list-group-item" href="../type/particles.html#variable-x~3">X</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-v">V</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-rgc">Rgc</a>
       
-      <a class="list-group-item" href="../type/particles.html#variable-y">Y</a>
+      <a class="list-group-item" href="../type/particles.html#variable-y~3">Y</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-y0">Y0</a>
       
@@ -528,9 +532,13 @@ in the simulation. </p></div>
       
       <a class="list-group-item" href="../type/particles.html#variable-flagcol">flagCol</a>
       
+      <a class="list-group-item" href="../type/particles.html#variable-flagre">flagRE</a>
+      
       <a class="list-group-item" href="../type/particles.html#variable-aux">AUX</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-wt">wt</a>
+      
+      <a class="list-group-item" href="../type/particles.html#variable-initlcfs">initLCFS</a>
       
       <a class="list-group-item" href="../type/particles.html#variable-hint">hint</a>
       
@@ -590,7 +598,7 @@ in the simulation. </p></div>
   
 <tr>
   
-  <td><span class="anchor" id="variable-x"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-x~3"></span>real(kind=rp),</td>
   
   <td>public,</td>
   <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
@@ -633,7 +641,7 @@ in the simulation. </p></div>
   
 <tr>
   
-  <td><span class="anchor" id="variable-y"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-y~3"></span>real(kind=rp),</td>
   
   <td>public,</td>
   <td>DIMENSION(:,:), ALLOCATABLE</td><td>::</td>
@@ -1040,7 +1048,7 @@ in the simulation. </p></div>
   
   <td>public,</td>
   <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
-  <td><strong>flagCon</strong></td><td></td><td></td><td></td>
+  <td><strong>flagCon</strong></td><td></td><td></td><td><p>Flag for each particle to decide whether it is contained</p></td>
   
 </tr>
 
@@ -1054,8 +1062,22 @@ in the simulation. </p></div>
   
   <td>public,</td>
   <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
-  <td><strong>flagCol</strong></td><td></td><td></td><td><p>Flag for each particle to decide whether it is being followed
- (flag=T) or not (flag=F).</p></td>
+  <td><strong>flagCol</strong></td><td></td><td></td><td><p>Flag for each particle to decide whether it is part of the high
+ energy population</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-flagre"></span>integer(kind=is),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>flagRE</strong></td><td></td><td></td><td><p>Flag for each particle to decide whether it is initialized</p></td>
   
 </tr>
 
@@ -1085,6 +1107,20 @@ in the simulation. </p></div>
   <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
   <td><strong>wt</strong></td><td></td><td></td><td><p>Weight of each electron. This is used when sampling weighted
  PDFs and in the synthetic camera diagnostic.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-initlcfs"></span>integer(kind=is),</td>
+  
+  <td>public,</td>
+  <td>DIMENSION(:), ALLOCATABLE</td><td>::</td>
+  <td><strong>initLCFS</strong></td><td></td><td></td><td></td>
   
 </tr>
 
@@ -1209,16 +1245,22 @@ in the simulation. </p></div>
      <span class="c">!! Instantaneous input power of each electron due to the electric</span>
      <span class="c">!! field acceleration.</span>
      <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">flagCon</span>
-     <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">flagCol</span> 
-     <span class="c">!! Flag for each particle to decide whether it is being followed</span>
-     <span class="c">!! (flag=T) or not (flag=F).</span>
+     <span class="c">!! Flag for each particle to decide whether it is contained</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">flagCol</span>
+     <span class="c">!! Flag for each particle to decide whether it is part of the high</span>
+     <span class="c">!! energy population</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">flagRE</span> 
+     <span class="c">!! Flag for each particle to decide whether it is initialized</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">AUX</span> 
      <span class="c">!! An auxiliary scalar variable for each electron.</span>
      <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">wt</span> 
      <span class="c">!! Weight of each electron. This is used when sampling weighted</span>
      <span class="c">!! PDFs and in the synthetic camera diagnostic.</span>
+     <span class="kt">INTEGER</span><span class="p">(</span><span class="k">is</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> 	<span class="kd">::</span> <span class="n">initLCFS</span>
+<span class="cp">#ifdef FIO</span>
      <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">),</span> <span class="k">DIMENSION</span><span class="p">(:),</span> <span class="k">ALLOCATABLE</span> <span class="kd">::</span> <span class="n">hint</span>
      <span class="c">!! Hint for M3D_C1 interpolation.</span>
+<span class="cp">#endif</span>
      <span class="kt">LOGICAL</span>                                <span class="kd">::</span> <span class="n">cart</span>
   <span class="k">END TYPE </span><span class="n">PARTICLES</span>
 </pre></div>
@@ -1235,7 +1277,7 @@ in the simulation. </p></div>
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

@@ -361,7 +361,7 @@ program main
   !! subroutines to save simulation and collision parameters.
   
   
-  if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
+  if (.NOT.(params%restart.OR.params%proceed)) then
      
      call save_simulation_outputs(params,spp,F) ! Save initial condition
      call save_restart_variables(params,spp,F)
@@ -565,10 +565,17 @@ program main
      
      do it=params%ito,params%t_steps,params%t_skip
         call adv_GCinterp_psi_top(params,spp,P,F)
-        
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt        
-        params%it = it-1_ip+params%t_skip
+
+        if (.not.params%LargeCollisions) then
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)*params%dt        
+           params%it = it-1_ip+params%t_skip
+        else
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)/REAL(params%t_skip,rp)* &
+                params%snapshot_frequency       
+           params%it = it-1_ip+params%t_skip
+        endif
         
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
@@ -610,9 +617,16 @@ program main
      do it=params%ito,params%t_steps,params%t_skip
         call adv_GCinterp_psiwE_top(params,spp,P,F)
 
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt        
-        params%it = it-1_ip+params%t_skip
+        if (.not.params%LargeCollisions) then
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)*params%dt        
+           params%it = it-1_ip+params%t_skip
+        else
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)/REAL(params%t_skip,rp)* &
+                params%snapshot_frequency       
+           params%it = it-1_ip+params%t_skip
+        endif
 
         call save_simulation_outputs(params,spp,F)
 

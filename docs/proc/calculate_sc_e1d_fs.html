@@ -234,7 +234,7 @@ public subroutine calculate_SC_E1D_FS(params, F, dintJphidPSIP)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~169"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~194"></span>type(KORC_PARAMS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -249,7 +249,7 @@ public subroutine calculate_SC_E1D_FS(params, F, dintJphidPSIP)
   
 <tr>
   
-  <td><span class="anchor" id="variable-f~111"></span>type(FIELDS),</td>
+  <td><span class="anchor" id="variable-f~133"></span>type(FIELDS),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -331,29 +331,29 @@ public subroutine calculate_SC_E1D_FS(params, F, dintJphidPSIP)
 <path fill="none" stroke="#000000" d="M120.0998,-89.2688C128.4272,-88.3362 137.163,-87.3577 145.9912,-86.369"/>
 <polygon fill="#000000" stroke="#000000" points="146.4326,-89.8415 155.9809,-85.2501 145.6534,-82.885 146.4326,-89.8415"/>
 </g>
-<!-- ezspline_allocated -->
+<!-- ezspline_init -->
 <g id="proc~~calculate_sc_e1d_fs~~CallsGraph_node4" class="node">
-<title>ezspline_allocated</title>
-<polygon fill="#777777" stroke="#777777" points="474,-150 375,-150 375,-126 474,-126 474,-150"/>
-<text text-anchor="middle" x="424.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_allocated</text>
+<title>ezspline_init</title>
+<polygon fill="#777777" stroke="#777777" points="459.5,-150 389.5,-150 389.5,-126 459.5,-126 459.5,-150"/>
+<text text-anchor="middle" x="424.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_init</text>
 </g>
-<!-- proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_allocated -->
-<g id="proc~~calculate_sc_e1d_fs~~CallsGraph_edge6" class="edge">
-<title>proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_allocated</title>
+<!-- proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_init -->
+<g id="proc~~calculate_sc_e1d_fs~~CallsGraph_edge3" class="edge">
+<title>proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_init</title>
 <path fill="none" stroke="#000000" d="M311.2637,-87.0119C320.7065,-89.5412 330.2102,-92.5214 339,-96 356.2235,-102.8162 358.4406,-108.6995 375,-117 378.2808,-118.6445 381.7213,-120.2792 385.195,-121.8682"/>
 <polygon fill="#000000" stroke="#000000" points="383.8209,-125.0875 394.3811,-125.9434 386.6595,-118.6889 383.8209,-125.0875"/>
 </g>
-<!-- ezspline_setup -->
+<!-- ezspline_allocated -->
 <g id="proc~~calculate_sc_e1d_fs~~CallsGraph_node5" class="node">
-<title>ezspline_setup</title>
-<polygon fill="#777777" stroke="#777777" points="466,-108 383,-108 383,-84 466,-84 466,-108"/>
-<text text-anchor="middle" x="424.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_setup</text>
+<title>ezspline_allocated</title>
+<polygon fill="#777777" stroke="#777777" points="474,-108 375,-108 375,-84 474,-84 474,-108"/>
+<text text-anchor="middle" x="424.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_allocated</text>
 </g>
-<!-- proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_setup -->
-<g id="proc~~calculate_sc_e1d_fs~~CallsGraph_edge3" class="edge">
-<title>proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_setup</title>
-<path fill="none" stroke="#000000" d="M339.1108,-85.8691C350.745,-87.2494 362.3075,-88.6212 372.9926,-89.889"/>
-<polygon fill="#000000" stroke="#000000" points="372.5992,-93.3667 382.942,-91.0694 373.424,-86.4155 372.5992,-93.3667"/>
+<!-- proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_allocated -->
+<g id="proc~~calculate_sc_e1d_fs~~CallsGraph_edge4" class="edge">
+<title>proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_allocated</title>
+<path fill="none" stroke="#000000" d="M339.1108,-85.8691C347.8664,-86.9079 356.5814,-87.9419 364.9124,-88.9303"/>
+<polygon fill="#000000" stroke="#000000" points="364.5181,-92.408 374.8609,-90.1106 365.3429,-85.4567 364.5181,-92.408"/>
 </g>
 <!-- ezspline_error -->
 <g id="proc~~calculate_sc_e1d_fs~~CallsGraph_node6" class="node">
@@ -367,15 +367,15 @@ public subroutine calculate_SC_E1D_FS(params, F, dintJphidPSIP)
 <path fill="none" stroke="#000000" d="M339.1108,-64.1309C351.3816,-62.6751 363.5726,-61.2287 374.7386,-59.9039"/>
 <polygon fill="#000000" stroke="#000000" points="375.1598,-63.3786 384.6778,-58.7247 374.335,-56.4273 375.1598,-63.3786"/>
 </g>
-<!-- ezspline_init -->
+<!-- ezspline_setup -->
 <g id="proc~~calculate_sc_e1d_fs~~CallsGraph_node7" class="node">
-<title>ezspline_init</title>
-<polygon fill="#777777" stroke="#777777" points="459.5,-24 389.5,-24 389.5,0 459.5,0 459.5,-24"/>
-<text text-anchor="middle" x="424.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_init</text>
+<title>ezspline_setup</title>
+<polygon fill="#777777" stroke="#777777" points="466,-24 383,-24 383,0 466,0 466,-24"/>
+<text text-anchor="middle" x="424.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_setup</text>
 </g>
-<!-- proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_init -->
-<g id="proc~~calculate_sc_e1d_fs~~CallsGraph_edge4" class="edge">
-<title>proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_init</title>
+<!-- proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_setup -->
+<g id="proc~~calculate_sc_e1d_fs~~CallsGraph_edge6" class="edge">
+<title>proc~initialize_sc1d_field_interpolant_fs&#45;&gt;ezspline_setup</title>
 <path fill="none" stroke="#000000" d="M281.6274,-62.853C309.9999,-52.7543 350.5455,-38.3228 381.2005,-27.4117"/>
 <polygon fill="#000000" stroke="#000000" points="382.5306,-30.6534 390.778,-24.0028 380.1833,-24.0587 382.5306,-30.6534"/>
 </g>
@@ -713,7 +713,9 @@ public subroutine calculate_SC_E1D_FS(params, F, dintJphidPSIP)
     
     <span class="n">F</span><span class="p">%</span><span class="n">E_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">E_SC_1D</span><span class="p">%</span><span class="n">PHI</span><span class="o">/</span><span class="n">params</span><span class="p">%</span><span class="n">cpp</span><span class="p">%</span><span class="n">Eo</span>
 
+<span class="cp">#ifdef PSPLINE</span>
     <span class="k">call </span><span class="n">initialize_SC1D_field_interpolant_FS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+<span class="cp">#endif</span>
     
   <span class="k">end subroutine </span><span class="n">calculate_SC_E1D_FS</span>
 </pre></div>
@@ -731,7 +733,7 @@ public subroutine calculate_SC_E1D_FS(params, F, dintJphidPSIP)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

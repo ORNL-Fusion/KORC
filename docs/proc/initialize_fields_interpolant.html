@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 2.1% of total for procedures.">429 statements</a>
+    title=" 2.3% of total for procedures.">583 statements</a>
      </li> 
      
      
@@ -238,7 +238,7 @@ public subroutine initialize_fields_interpolant(params, F)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~102"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~115"></span>type(KORC_PARAMS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -253,7 +253,7 @@ public subroutine initialize_fields_interpolant(params, F)
   
 <tr>
   
-  <td><span class="anchor" id="variable-f~52"></span>type(FIELDS),</td>
+  <td><span class="anchor" id="variable-f~64"></span>type(FIELDS),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -295,29 +295,29 @@ public subroutine initialize_fields_interpolant(params, F)
 <polygon fill="none" stroke="#000000" points="135,-87 0,-87 0,-63 135,-63 135,-87"/>
 <text text-anchor="middle" x="67.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_fields_interpolant</text>
 </g>
-<!-- ezspline_allocated -->
+<!-- ezspline_init -->
 <g id="proc~~initialize_fields_interpolant~~CallsGraph_node2" class="node">
-<title>ezspline_allocated</title>
-<polygon fill="#777777" stroke="#777777" points="270,-150 171,-150 171,-126 270,-126 270,-150"/>
-<text text-anchor="middle" x="220.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_allocated</text>
+<title>ezspline_init</title>
+<polygon fill="#777777" stroke="#777777" points="255.5,-150 185.5,-150 185.5,-126 255.5,-126 255.5,-150"/>
+<text text-anchor="middle" x="220.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_init</text>
 </g>
-<!-- proc~initialize_fields_interpolant&#45;&gt;ezspline_allocated -->
-<g id="proc~~initialize_fields_interpolant~~CallsGraph_edge4" class="edge">
-<title>proc~initialize_fields_interpolant&#45;&gt;ezspline_allocated</title>
+<!-- proc~initialize_fields_interpolant&#45;&gt;ezspline_init -->
+<g id="proc~~initialize_fields_interpolant~~CallsGraph_edge1" class="edge">
+<title>proc~initialize_fields_interpolant&#45;&gt;ezspline_init</title>
 <path fill="none" stroke="#000000" d="M96.9999,-87.147C121.2068,-97.1146 155.6647,-111.3031 182.035,-122.1615"/>
 <polygon fill="#000000" stroke="#000000" points="180.771,-125.4261 191.3505,-125.9972 183.4363,-118.9533 180.771,-125.4261"/>
 </g>
-<!-- ezspline_setup -->
+<!-- ezspline_allocated -->
 <g id="proc~~initialize_fields_interpolant~~CallsGraph_node3" class="node">
-<title>ezspline_setup</title>
-<polygon fill="#777777" stroke="#777777" points="262,-108 179,-108 179,-84 262,-84 262,-108"/>
-<text text-anchor="middle" x="220.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_setup</text>
+<title>ezspline_allocated</title>
+<polygon fill="#777777" stroke="#777777" points="270,-108 171,-108 171,-84 270,-84 270,-108"/>
+<text text-anchor="middle" x="220.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_allocated</text>
 </g>
-<!-- proc~initialize_fields_interpolant&#45;&gt;ezspline_setup -->
-<g id="proc~~initialize_fields_interpolant~~CallsGraph_edge1" class="edge">
-<title>proc~initialize_fields_interpolant&#45;&gt;ezspline_setup</title>
-<path fill="none" stroke="#000000" d="M135.0534,-84.272C146.337,-85.8208 157.8838,-87.4056 168.6937,-88.8893"/>
-<polygon fill="#000000" stroke="#000000" points="168.4164,-92.384 178.7995,-90.2764 169.3683,-85.449 168.4164,-92.384"/>
+<!-- proc~initialize_fields_interpolant&#45;&gt;ezspline_allocated -->
+<g id="proc~~initialize_fields_interpolant~~CallsGraph_edge2" class="edge">
+<title>proc~initialize_fields_interpolant&#45;&gt;ezspline_allocated</title>
+<path fill="none" stroke="#000000" d="M135.0534,-84.272C143.5902,-85.4438 152.2777,-86.6361 160.6827,-87.7898"/>
+<polygon fill="#000000" stroke="#000000" points="160.3827,-91.2813 170.7658,-89.1737 161.3347,-84.3464 160.3827,-91.2813"/>
 </g>
 <!-- ezspline_error -->
 <g id="proc~~initialize_fields_interpolant~~CallsGraph_node4" class="node">
@@ -331,15 +331,15 @@ public subroutine initialize_fields_interpolant(params, F)
 <path fill="none" stroke="#000000" d="M135.0534,-65.728C147.0662,-64.0792 159.3774,-62.3894 170.7801,-60.8243"/>
 <polygon fill="#000000" stroke="#000000" points="171.5308,-64.2542 180.9619,-59.4268 170.5789,-57.3192 171.5308,-64.2542"/>
 </g>
-<!-- ezspline_init -->
+<!-- ezspline_setup -->
 <g id="proc~~initialize_fields_interpolant~~CallsGraph_node5" class="node">
-<title>ezspline_init</title>
-<polygon fill="#777777" stroke="#777777" points="255.5,-24 185.5,-24 185.5,0 255.5,0 255.5,-24"/>
-<text text-anchor="middle" x="220.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_init</text>
+<title>ezspline_setup</title>
+<polygon fill="#777777" stroke="#777777" points="262,-24 179,-24 179,0 262,0 262,-24"/>
+<text text-anchor="middle" x="220.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_setup</text>
 </g>
-<!-- proc~initialize_fields_interpolant&#45;&gt;ezspline_init -->
-<g id="proc~~initialize_fields_interpolant~~CallsGraph_edge2" class="edge">
-<title>proc~initialize_fields_interpolant&#45;&gt;ezspline_init</title>
+<!-- proc~initialize_fields_interpolant&#45;&gt;ezspline_setup -->
+<g id="proc~~initialize_fields_interpolant~~CallsGraph_edge4" class="edge">
+<title>proc~initialize_fields_interpolant&#45;&gt;ezspline_setup</title>
 <path fill="none" stroke="#000000" d="M96.9999,-62.853C121.2068,-52.8854 155.6647,-38.6969 182.035,-27.8385"/>
 <polygon fill="#000000" stroke="#000000" points="183.4363,-31.0467 191.3505,-24.0028 180.771,-24.5739 183.4363,-31.0467"/>
 </g>
@@ -582,16 +582,20 @@ public subroutine initialize_fields_interpolant(params, F)
 
     <span class="k">if</span> <span class="p">(((</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="s1">&#39;EXTERNAL&#39;</span><span class="p">).</span><span class="nb">or</span><span class="p">.</span> <span class="p">&amp;</span>
          <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_eval</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;interp&#39;</span><span class="p">)).</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
-         <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;M3D_C1&#39;</span><span class="p">))</span> <span class="k">then</span>
-
+         <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;M3D_C1&#39;</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">&amp;</span>
+         <span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="nb">TRIM</span><span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;NIMROD&#39;</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">       </span>
 <span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * INITIALIZING FIELDS INTERPOLANT * * * *&quot;)&#39;</span><span class="p">)</span>
        <span class="k">end if</span>
 
        <span class="c">! * * * * * * * * MAGNETIC FIELD * * * * * * * * !</span>
-       <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+       <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">&amp;</span>
+            <span class="p">((</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;FO&#39;</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">))</span> <span class="k">then</span>
 
-<span class="k">          if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D poloidal flux function&#39;</span>
+
+          <span class="k">if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
 
 <span class="k">             if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.(</span><span class="n">EZspline_allocated</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">)))</span> <span class="k">then     </span>
 
@@ -622,12 +626,18 @@ public subroutine initialize_fields_interpolant(params, F)
 
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG2D</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">FLAG3D</span><span class="p">(:,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">,:)</span>
 
+             <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span><span class="p">))</span> <span class="p">&amp;</span>
+                  <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">))</span>
+
+             <span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">LCFS3D</span><span class="p">(:,</span><span class="n">F</span><span class="p">%</span><span class="n">ind_2x1t</span><span class="p">,:)</span>
+
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
              <span class="n">F</span><span class="p">%</span><span class="n">Bflux3D</span> <span class="o">=</span> <span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
              
           <span class="k">else</span>
+<span class="k">             </span>
 <span class="k">             if</span> <span class="p">(</span><span class="n">EZspline_allocated</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">))</span> <span class="p">&amp;</span>
                   <span class="k">call </span><span class="n">Ezspline_free</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">)</span>
 
@@ -643,9 +653,11 @@ public subroutine initialize_fields_interpolant(params, F)
              <span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
              <span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
 
-             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
-             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
-
+<span class="cp">#if DBG_CHECK    </span>
+             <span class="c">!write(6,*) &#39;R&#39;,F%X%R</span>
+             <span class="c">!write(6,*) &#39;Z&#39;,F%X%Z</span>
+<span class="cp">#endif</span>
+             
              <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">A</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">PSIp</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
 
@@ -656,14 +668,258 @@ public subroutine initialize_fields_interpolant(params, F)
 
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG2D</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span>
 
+             <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span><span class="p">))</span> <span class="p">&amp;</span>
+                  <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">))</span>
+
+             <span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">LCFS2D</span>
+
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
           <span class="n">endif</span>
        <span class="k">end if</span>
 
+<span class="k">       if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">B1field</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;MARS&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D n=1 MARS magnetic fields&#39;</span>
+          
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+             <span class="c">! Initializing BR1Re interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Re_2D</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Re_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Re_2D%R&#39;,F%B1Re_2D%R(:,200)*params%cpp%Bo</span>
+             
+             <span class="c">! Initializing BPHI1Re interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Re_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+             
+             <span class="c">! Initializing BZ1_Re interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Refield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Re_2D</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+             
+             <span class="c">! Initializing BR1RIm interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Im_2D</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">! Initializing BPHI1Im interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Im_2D</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+
+             <span class="c">! Initializing BZ1_Im interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Imfield_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Im_2D</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">else if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">field_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">14</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;AORSA&#39;</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D AORSA magnetic fields&#39;</span>
+             <span class="nb">flush</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">)</span>
+          
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+             <span class="c">! Initializing BX1Re interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Re_2DX</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Re_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Re_2DX%X&#39;,F%B1Re_2DX%X(:,200)*params%cpp%Bo</span>
+         
+
+             <span class="c">! Initializing BY1Re interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Re_2DX</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Re_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Re_2D%R&#39;,F%B1Re_2D%R(:,200)*params%cpp%Bo</span>
+
+             <span class="c">! Initializing BZ1Re interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Re_2DX</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Re_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Re_2D%R&#39;,F%B1Re_2D%R(:,200)*params%cpp%Bo</span>
+             
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+             <span class="c">! Initializing BX1Im interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Im_2DX</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Im_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Im_2D%R&#39;,F%B1Im_2D%R(:,200)*params%cpp%Bo</span>
+         
+
+             <span class="c">! Initializing BY1Im interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Im_2DX</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Im_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Im_2D%R&#39;,F%B1Im_2D%R(:,200)*params%cpp%Bo</span>
+
+             <span class="c">! Initializing BZ1Im interpolant</span>
+             <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+             <span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+             <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+             <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+             <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">b1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B1Im_2DX</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+             <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,*) &#39;size&#39;,size(F%B1Im_2D%R(:,200))</span>
+             <span class="c">!write(6,*) &#39;B1Im_2D%R&#39;,F%B1Im_2D%R(:,200)*params%cpp%Bo</span>
+             
+          <span class="n">endif</span>
+          
+       <span class="k">end if</span>
+<span class="k">       </span>
 <span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bflux3D</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;3D psi potential&quot;)&#39;</span><span class="p">)</span>
+          <span class="k">end if</span>
+<span class="k">          </span>
 <span class="k">          if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Dim2x1t</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">             </span><span class="n">bfield_2X1T</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2X1T poloidal flux function&#39;</span>
+             
+             <span class="n">bfield_2X1T</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">bfield_2X1T</span><span class="p">%</span><span class="n">NT</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
              <span class="n">bfield_2X1T</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -693,7 +949,10 @@ public subroutine initialize_fields_interpolant(params, F)
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">To</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">PHI</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              
           <span class="k">else</span>
-<span class="k">             </span><span class="n">bfield_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;3D poloidal flux function&#39;</span>
+             
+             <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NPHI</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
              <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -716,7 +975,10 @@ public subroutine initialize_fields_interpolant(params, F)
 <span class="k">       </span>
 <span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Bfield</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">             </span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D magnetic field&#39;</span>
+             
+             <span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
              <span class="c">! Initializing R component</span>
@@ -763,7 +1025,10 @@ public subroutine initialize_fields_interpolant(params, F)
              
 
              <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;GCpre&#39;</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">                </span><span class="n">gradB_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D precalculated auxiliary fields&#39;</span>
+                
+                <span class="n">gradB_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">gradB_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
                 <span class="c">! Initializing GRADBR component</span>
@@ -842,10 +1107,18 @@ public subroutine initialize_fields_interpolant(params, F)
 
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">FLAG2D</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">FLAG2D</span>
 
+             <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">ALLOCATED</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span><span class="p">))</span> <span class="p">&amp;</span>
+                  <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span><span class="p">(</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">bfield_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">))</span>
+
+             <span class="n">fields_domain</span><span class="p">%</span><span class="n">LCFS2D</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">LCFS2D</span>
+
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">DR</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
              <span class="n">fields_domain</span><span class="p">%</span><span class="n">DZ</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-          <span class="k">else </span>
-<span class="k">             </span><span class="n">bfield_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+          <span class="k">else</span>
+<span class="k">             </span>
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;3D magnetic field&#39;</span>
+             
+             <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NPHI</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
              <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -861,6 +1134,16 @@ public subroutine initialize_fields_interpolant(params, F)
 
              <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">bfield_3d</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">B_3D</span><span class="p">%</span><span class="n">R</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+             <span class="c">!write(6,&#39;(&quot;bfield_3d%R: &quot;,E17.10)&#39;) bfield_3d%R%fspl(1,:,:,:)</span>
+             <span class="c">!do ii=1_idef,bfield_3d%R%n1</span>
+             <span class="c">!   do jj=1_idef,bfield_3d%R%n3                   </span>
+             <span class="c">!      write(6,&#39;(&quot;BR_spline1 at R &quot;,E17.10,&quot;, Z &quot;,E17.10,&quot;: &quot;,E17.10)&#39;) &amp;</span>
+             <span class="c">!          bfield_3d%R%x1(ii)*params%cpp%length, &amp;</span>
+             <span class="c">!          bfield_3d%R%x3(jj)*params%cpp%length, &amp;</span>
+             <span class="c">!          bfield_3d%R%fspl(1,ii,1,jj)*params%cpp%Bo</span>
+             <span class="c">!  end do</span>
+             <span class="c">!end do</span>
 
              <span class="c">! Initializing PHI component of interpolant</span>
              <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">bfield_3d</span><span class="p">%</span><span class="n">PHI</span><span class="p">,</span> <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="n">bfield_3d</span><span class="p">%</span><span class="n">NPHI</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -892,7 +1175,10 @@ public subroutine initialize_fields_interpolant(params, F)
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
 
              <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">orbit_model</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;GCpre&#39;</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">                </span><span class="n">gradB_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;3D precalculated auxiliary fields&#39;</span>
+                
+                <span class="n">gradB_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">gradB_3d</span><span class="p">%</span><span class="n">NPHI</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
                 <span class="n">gradB_3d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -992,6 +1278,9 @@ public subroutine initialize_fields_interpolant(params, F)
 <span class="k">       </span>
 <span class="k">       if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">dBfield</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D precalculated gradient fields&#39;</span>
+             
              <span class="c">! dBdR</span>
              <span class="n">dbdR_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">dbdR_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -1101,7 +1390,10 @@ public subroutine initialize_fields_interpolant(params, F)
              <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">dbdZ_2d</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">dBdZ_2D</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
 
-          <span class="k">else</span> 
+          <span class="k">else</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;3D precalculated gradient fields&#39;</span>
+             
              <span class="c">! dBdR</span>
              <span class="n">dbdR_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">dbdR_3d</span><span class="p">%</span><span class="n">NPHI</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -1252,7 +1544,12 @@ public subroutine initialize_fields_interpolant(params, F)
        <span class="c">! * * * * * * * * ELECTRIC FIELD * * * * * * * * !</span>
        <span class="k">if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">Efield</span><span class="p">.</span><span class="nb">AND</span><span class="p">.(</span><span class="n">params</span><span class="p">%</span><span class="n">field_eval</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;interp&#39;</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">          if</span> <span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">axisymmetric_fields</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">             if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">             if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D electric fields&#39;</span>
+             <span class="n">endif</span>
+                
+             <span class="k">if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">ReInterp_2x1t</span><span class="p">)</span> <span class="k">then</span>
 
 <span class="k">                if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.(</span><span class="n">EZspline_allocated</span><span class="p">(</span><span class="n">efield_2d</span><span class="p">%</span><span class="n">PHI</span><span class="p">)))</span> <span class="k">then</span>
 <span class="k">                </span>
@@ -1300,6 +1597,7 @@ public subroutine initialize_fields_interpolant(params, F)
 <span class="c">!                write(output_unit_write,&#39;(&quot;efield_2d%PHI: &quot;,E17.10)&#39;) efield_2d%PHI%fspl(1,:,:)</span>
                 
              <span class="k">else</span>
+<span class="k">                </span>
 <span class="k">                </span><span class="n">efield_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">efield_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -1338,7 +1636,10 @@ public subroutine initialize_fields_interpolant(params, F)
 
              <span class="k">end if</span>
 <span class="k">          else</span>
-<span class="k">             </span><span class="n">efield_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">             write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;3D electric fields&#39;</span>
+             
+             <span class="n">efield_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">efield_3d</span><span class="p">%</span><span class="n">NPHI</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
              <span class="n">efield_3d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -1380,6 +1681,130 @@ public subroutine initialize_fields_interpolant(params, F)
           <span class="k">end if</span>
 <span class="k">       end if</span>
 
+<span class="k">       if</span><span class="p">(</span><span class="n">F</span><span class="p">%</span><span class="n">E1field</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D AORSA electric fields&#39;</span>
+          <span class="nb">flush</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">)</span>
+
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+          <span class="c">! Initializing BX1Re interpolant</span>
+          <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+          <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+          <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+          <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">E1Re_2DX</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;size&#39;,size(F%E1Re_2D%R(:,200))</span>
+          <span class="c">!write(6,*) &#39;E1Re_2D%R&#39;,F%E1Re_2D%R(:,200)*params%cpp%Bo</span>
+
+
+          <span class="c">! Initializing BY1Re interpolant</span>
+          <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+          <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+          <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+          <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">E1Re_2DX</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;size&#39;,size(F%E1Re_2D%R(:,200))</span>
+          <span class="c">!write(6,*) &#39;E1Re_2D%R&#39;,F%E1Re_2D%R(:,200)*params%cpp%Bo</span>
+
+          <span class="c">! Initializing BZ1Re interpolant</span>
+          <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+          <span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+          <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+          <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+          <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">e1Refield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">E1Re_2DX</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;size&#39;,size(F%E1Re_2D%R(:,200))</span>
+          <span class="c">!write(6,*) &#39;E1Re_2D%R&#39;,F%E1Re_2D%R(:,200)*params%cpp%Bo</span>
+
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+          <span class="c">! Initializing BX1Im interpolant</span>
+          <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+          <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+          <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+          <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">E1Im_2DX</span><span class="p">%</span><span class="n">X</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;size&#39;,size(F%E1Im_2D%R(:,200))</span>
+          <span class="c">!write(6,*) &#39;E1Im_2D%R&#39;,F%E1Im_2D%R(:,200)*params%cpp%Bo</span>
+
+
+          <span class="c">! Initializing BY1Im interpolant</span>
+          <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+          <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+          <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+          <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">E1Im_2DX</span><span class="p">%</span><span class="n">Y</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;size&#39;,size(F%E1Im_2D%R(:,200))</span>
+          <span class="c">!write(6,*) &#39;E1Im_2D%R&#39;,F%E1Im_2D%R(:,200)*params%cpp%Bo</span>
+
+          <span class="c">! Initializing BZ1Im interpolant</span>
+          <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+               <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+          <span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">F</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+          <span class="c">!write(output_unit_write,&#39;(&quot;R&quot;,E17.10)&#39;) F%X%R</span>
+          <span class="c">!write(output_unit_write,&#39;(&quot;Z&quot;,E17.10)&#39;) F%X%Z</span>
+
+          <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">e1Imfield_2dx</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">F</span><span class="p">%</span><span class="n">E1Im_2DX</span><span class="p">%</span><span class="n">Z</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+          <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+          <span class="c">!write(6,*) &#39;size&#39;,size(F%E1Im_2D%R(:,200))</span>
+          <span class="c">!write(6,*) &#39;E1Im_2D%R&#39;,F%E1Im_2D%R(:,200)*params%cpp%Bo</span>
+             
+          
+       <span class="k">end if</span>
+
 <span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="s1">&#39;(&quot;* * * * * * INTERPOLANT INITIALIZED * * * * * *&quot;,/)&#39;</span><span class="p">)</span>
        <span class="k">end if</span>
@@ -1408,7 +1833,7 @@ public subroutine initialize_fields_interpolant(params, F)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

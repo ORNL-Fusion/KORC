@@ -41,12 +41,17 @@ CONTAINS
 !    write(output_unit_write,'("X_X: ",E17.10)') X(1:10,1)
 !    write(output_unit_write,'("X_Y: ",E17.10)') X(1:10,2)
 !    write(output_unit_write,'("X_Z: ",E17.10)') X(1:10,3)
-    
-    if (X(2,1).eq.0) then
-       ss=1_idef
-    else
+
+    if (size(X,1).eq.1) then
        ss = size(X,1)
-    end if
+    else
+       if (X(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(X,1)
+       end if
+    endif
+    
 
 !    write(output_unit_write,*) 'varX',X(:,1)
 !    write(output_unit_write,*) 'varY',X(:,2)
@@ -118,12 +123,17 @@ CONTAINS
     !! Iterator.
     INTEGER                                                :: ss
     !! Iterator.
-
-    if (Xcyl(2,1).eq.0) then
-       ss=1_idef
-    else
+    
+    if (size(Xcyl,1).eq.1) then
        ss = size(Xcyl,1)
-    end if
+    else
+       if (Xcyl(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(Xcyl,1)
+       end if
+    endif
+    
 
     !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp) SHARED(X,Xcyl)
     do pp=1_idef,ss
@@ -152,11 +162,15 @@ CONTAINS
     !! Iterator.
  
 
-    if (Xcyl(2,1).eq.0) then
-       ss=1_idef
-    else
+    if (size(Xcyl,1).eq.1) then
        ss = size(Xcyl,1)
-    end if
+    else
+       if (Xcyl(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(Xcyl,1)
+       end if
+    endif
 
     
     a = F%AB%a
@@ -226,11 +240,15 @@ CONTAINS
     INTEGER                                                :: ss
     !! Iterator.
 
-    if (X(2,1).eq.0) then
-       ss=1_idef
-    else
+    if (size(X,1).eq.1) then
        ss = size(X,1)
-    end if
+    else
+       if (X(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(X,1)
+       end if
+    endif
     
     a = F%AB%a
     Ro = F%AB%Ro

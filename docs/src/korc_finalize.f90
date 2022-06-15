@@ -60,6 +60,8 @@ CONTAINS
        DEALLOCATE(spp(ii)%vars%Prad)
        DEALLOCATE(spp(ii)%vars%flagCon)
        DEALLOCATE(spp(ii)%vars%flagCol)
+       DEALLOCATE(spp(ii)%vars%flagRE)
+       DEALLOCATE(spp(ii)%vars%initLCFS)
        DEALLOCATE(spp(ii)%vars%wt)
 
        if (params%orbit_model(1:2).eq.'GC') then

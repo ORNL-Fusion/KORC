@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.2% of total for procedures.">34 statements</a>
+    title=" 0.2% of total for procedures.">48 statements</a>
      </li> 
      
      
@@ -205,7 +205,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y, X_Z, B_X, B_Y, B_Z, E_X, E_Y, E_Z, flag_cache)
+public subroutine analytical_fields_p(params, pchunk, F, X_X, X_Y, X_Z, B_X, B_Y, B_Z, E_X, E_Y, E_Z, flag_cache)
     
     
    
@@ -234,7 +234,22 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-pchunk~21"></span>integer,</td>
+  <td><span class="anchor" id="variable-params~186"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td><p>Core KORC simulation parameters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pchunk~29"></span>integer,</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -249,12 +264,12 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-b0~2"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-f~117"></span>type(FIELDS),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>B0</strong></td><td></td>
+  <td><strong>F</strong></td><td></td>
   
 </tr>
 
@@ -264,82 +279,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-e0"></span>real(kind=rp),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>E0</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-r0~8"></span>real(kind=rp),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>R0</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-q0~2"></span>real(kind=rp),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>q0</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-lam~2"></span>real(kind=rp),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lam</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ar"></span>real(kind=rp),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>ar</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-x_x~7"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-x_x~8"></span>real(kind=rp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -354,7 +294,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-x_y~7"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-x_y~8"></span>real(kind=rp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -369,7 +309,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-x_z~7"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-x_z~8"></span>real(kind=rp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -384,7 +324,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-b_x~11"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-b_x~15"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -399,7 +339,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-b_y~11"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-b_y~15"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -414,7 +354,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-b_z~38"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-b_z~42"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -429,7 +369,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-e_x~10"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-e_x~12"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -444,7 +384,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-e_y~10"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-e_y~12"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -459,7 +399,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-e_z~25"></span>real(kind=rp),</td>
+  <td><span class="anchor" id="variable-e_z~27"></span>real(kind=rp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -474,7 +414,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
   
 <tr>
   
-  <td><span class="anchor" id="variable-flag_cache~14"></span>integer(kind=is),</td>
+  <td><span class="anchor" id="variable-flag_cache~19"></span>integer(kind=is),</td>
   <td>intent(inout),</td>
   <td></td>
   
@@ -790,10 +730,13 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">analytical_fields_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">B0</span><span class="p">,</span><span class="n">E0</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">q0</span><span class="p">,</span><span class="n">lam</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span> <span class="p">&amp;</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">analytical_fields_p</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">pchunk</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span> <span class="p">&amp;</span>
        <span class="n">B_X</span><span class="p">,</span><span class="n">B_Y</span><span class="p">,</span><span class="n">B_Z</span><span class="p">,</span><span class="n">E_X</span><span class="p">,</span><span class="n">E_Y</span><span class="p">,</span><span class="n">E_Z</span><span class="p">,</span><span class="n">flag_cache</span><span class="p">)</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">params</span>
+    <span class="c">!! Core KORC simulation parameters.</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">F</span>
     <span class="kt">INTEGER</span><span class="p">,</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">pchunk</span>
-    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">R0</span><span class="p">,</span><span class="n">B0</span><span class="p">,</span><span class="n">lam</span><span class="p">,</span><span class="n">q0</span><span class="p">,</span><span class="n">E0</span><span class="p">,</span><span class="n">ar</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">R0</span><span class="p">,</span><span class="n">B0</span><span class="p">,</span><span class="n">lam</span><span class="p">,</span><span class="n">q0</span><span class="p">,</span><span class="n">E0</span><span class="p">,</span><span class="n">ar</span>
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span>
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">B_X</span><span class="p">,</span><span class="n">B_Y</span><span class="p">,</span><span class="n">B_Z</span>
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span>  <span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">E_X</span><span class="p">,</span><span class="n">E_Y</span><span class="p">,</span><span class="n">E_Z</span>
@@ -801,6 +744,8 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">T_R</span><span class="p">,</span><span class="n">T_T</span><span class="p">,</span><span class="n">T_Z</span>
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">Ezeta</span>
     <span class="c">!! Toroidal electric field \(E_\zeta\).</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">Er</span>
+    <span class="c">!! changed YG Radial electric field \(E_\r\).</span>
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">Bzeta</span>
     <span class="c">!! Toroidal magnetic field \(B_\zeta\).</span>
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">Bp</span>
@@ -812,7 +757,19 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
     <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">),</span><span class="k">DIMENSION</span><span class="p">(</span><span class="n">pchunk</span><span class="p">)</span>                             <span class="kd">::</span> <span class="n">cT</span><span class="p">,</span><span class="n">sT</span><span class="p">,</span><span class="n">cZ</span><span class="p">,</span><span class="n">sZ</span>
     <span class="kt">INTEGER</span>                                      <span class="kd">::</span> <span class="n">cc</span>
     <span class="c">!! Particle chunk iterator.</span>
+    <span class="kt">REAL</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Er0</span><span class="p">,</span><span class="n">rrmn</span><span class="p">,</span><span class="n">sigmaamn</span>
+    
+    <span class="n">B0</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">Bo</span>
+    <span class="n">E0</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">Eo</span>
+    <span class="n">lam</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">lambda</span>
+    <span class="n">R0</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ro</span>
+    <span class="n">q0</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">qo</span>
+    <span class="n">ar</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">a</span>
 
+    <span class="n">Er0</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">Ero</span>
+    <span class="n">rrmn</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">rmn</span>
+    <span class="n">sigmaamn</span><span class="o">=</span><span class="n">F</span><span class="p">%</span><span class="n">AB</span><span class="p">%</span><span class="n">sigmamn</span>
+    
     <span class="k">call </span><span class="n">cart_to_tor_check_if_confined_p</span><span class="p">(</span><span class="n">pchunk</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">R0</span><span class="p">,</span><span class="n">X_X</span><span class="p">,</span><span class="n">X_Y</span><span class="p">,</span><span class="n">X_Z</span><span class="p">,</span> <span class="p">&amp;</span>
          <span class="n">T_R</span><span class="p">,</span><span class="n">T_T</span><span class="p">,</span><span class="n">T_Z</span><span class="p">,</span><span class="n">flag_cache</span><span class="p">)</span>
 
@@ -828,6 +785,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
        <span class="n">eta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="n">R0</span>
        <span class="n">q</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">q0</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0_rp</span> <span class="o">+</span> <span class="p">(</span><span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">lam</span><span class="o">*</span><span class="n">lam</span><span class="p">)))</span>
        <span class="n">Bp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">eta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">B0</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0_rp</span> <span class="o">+</span> <span class="n">eta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cT</span><span class="p">(</span><span class="n">cc</span><span class="p">)))</span>
+       <span class="c">!changed kappa  YG</span>
        <span class="n">Bzeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">B0</span><span class="o">/</span><span class="p">(</span> <span class="mf">1.0_rp</span> <span class="o">+</span> <span class="n">eta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cT</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
 
 
@@ -835,11 +793,19 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
        <span class="n">B_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">Bzeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">-</span> <span class="n">Bp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sT</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
        <span class="n">B_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Bp</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cT</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
 
+       <span class="c">!write(6,*) &#39;Ero &#39;,Ero,&#39;Er0 &#39;,Er0</span>
+       <span class="c">!write(6,*) &#39;rmn &#39;,rmn,&#39;rrmn &#39;,rrmn</span>
+       <span class="c">!write(6,*) &#39;sigmamn &#39;,sigmamn,&#39;sigmaamn &#39;,sigmaamn</span>
+       <span class="c">!write(6,*) &#39;T_R &#39;,T_R(cc)*params%cpp%length</span>
+       
        <span class="n">Ezeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">E0</span><span class="o">/</span><span class="p">(</span> <span class="mf">1.0_rp</span> <span class="o">+</span> <span class="n">eta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cT</span><span class="p">(</span><span class="n">cc</span><span class="p">))</span>
+       <span class="n">Er</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span><span class="n">Er0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="nb">cosh</span><span class="p">((</span><span class="n">T_R</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">-</span><span class="n">rrmn</span><span class="p">)</span><span class="o">/</span><span class="n">sigmaamn</span><span class="p">))</span>
 
-       <span class="n">E_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Ezeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
-       <span class="n">E_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">Ezeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
-       <span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0_rp</span>
+       <span class="n">E_X</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Ezeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">Er</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cT</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">E_Y</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">Ezeta</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">+</span><span class="n">Er</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cT</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">cZ</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+       <span class="n">E_Z</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Er</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span><span class="o">*</span><span class="n">sT</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+       <span class="c">!write(6,*) &#39;Er &#39;,Er(cc)</span>
     <span class="k">end do</span>
     <span class="c">!$OMP END SIMD</span>
 
@@ -859,7 +825,7 @@ public subroutine analytical_fields_p(pchunk, B0, E0, R0, q0, lam, ar, X_X, X_Y,
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

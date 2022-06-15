@@ -42,9 +42,9 @@ rm -rf CMakeFiles
 
 if [ $MACHINE_ID == "MBP115573" ]
 then
-    export CC=/opt/local/bin/mpicc-openmpi-gcc8
-    export CXX=/opt/local/bin/mpicxx-openmpi-gcc8
-    export FC=/opt/local/bin/mpifort-openmpi-gcc8
+    export CC=/opt/local/bin/gcc-mp-11
+    export CXX=/opt/local/bin/g++-mp-11
+    export FC=/opt/local/bin/gfortran-mp-11
 
     cmake ../ \
 	  -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE                             \

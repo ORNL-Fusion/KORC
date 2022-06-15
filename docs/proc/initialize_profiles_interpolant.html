@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.4% of total for procedures.">77 statements</a>
+    title=" 0.6% of total for procedures.">138 statements</a>
      </li> 
      
      
@@ -238,7 +238,7 @@ public subroutine initialize_profiles_interpolant(params, P)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~105"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~119"></span>type(KORC_PARAMS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -253,7 +253,7 @@ public subroutine initialize_profiles_interpolant(params, P)
   
 <tr>
   
-  <td><span class="anchor" id="variable-p~53"></span>type(PROFILES),</td>
+  <td><span class="anchor" id="variable-p~63"></span>type(PROFILES),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -295,17 +295,17 @@ public subroutine initialize_profiles_interpolant(params, P)
 <polygon fill="none" stroke="#000000" points="144,-66 0,-66 0,-42 144,-42 144,-66"/>
 <text text-anchor="middle" x="72" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">initialize_profiles_interpolant</text>
 </g>
-<!-- ezspline_setup -->
+<!-- ezspline_init -->
 <g id="proc~~initialize_profiles_interpolant~~CallsGraph_node2" class="node">
-<title>ezspline_setup</title>
-<polygon fill="#777777" stroke="#777777" points="263,-108 180,-108 180,-84 263,-84 263,-108"/>
-<text text-anchor="middle" x="221.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_setup</text>
+<title>ezspline_init</title>
+<polygon fill="#777777" stroke="#777777" points="256.5,-108 186.5,-108 186.5,-84 256.5,-84 256.5,-108"/>
+<text text-anchor="middle" x="221.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_init</text>
 </g>
-<!-- proc~initialize_profiles_interpolant&#45;&gt;ezspline_setup -->
+<!-- proc~initialize_profiles_interpolant&#45;&gt;ezspline_init -->
 <g id="proc~~initialize_profiles_interpolant~~CallsGraph_edge1" class="edge">
-<title>proc~initialize_profiles_interpolant&#45;&gt;ezspline_setup</title>
-<path fill="none" stroke="#000000" d="M114.8407,-66.0355C132.0946,-70.8828 152.1409,-76.5145 170.1663,-81.5785"/>
-<polygon fill="#000000" stroke="#000000" points="169.3681,-84.9897 179.942,-84.3249 171.2614,-78.2506 169.3681,-84.9897"/>
+<title>proc~initialize_profiles_interpolant&#45;&gt;ezspline_init</title>
+<path fill="none" stroke="#000000" d="M114.8407,-66.0355C134.0913,-71.4437 156.8178,-77.8284 176.3355,-83.3116"/>
+<polygon fill="#000000" stroke="#000000" points="175.6401,-86.7517 186.2141,-86.0869 177.5334,-80.0126 175.6401,-86.7517"/>
 </g>
 <!-- ezspline_error -->
 <g id="proc~~initialize_profiles_interpolant~~CallsGraph_node3" class="node">
@@ -314,22 +314,22 @@ public subroutine initialize_profiles_interpolant(params, P)
 <text text-anchor="middle" x="221.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_error</text>
 </g>
 <!-- proc~initialize_profiles_interpolant&#45;&gt;ezspline_error -->
-<g id="proc~~initialize_profiles_interpolant~~CallsGraph_edge3" class="edge">
+<g id="proc~~initialize_profiles_interpolant~~CallsGraph_edge2" class="edge">
 <title>proc~initialize_profiles_interpolant&#45;&gt;ezspline_error</title>
 <path fill="none" stroke="#000000" d="M144.1226,-54C153.4607,-54 162.8536,-54 171.7173,-54"/>
 <polygon fill="#000000" stroke="#000000" points="171.8446,-57.5001 181.8446,-54 171.8445,-50.5001 171.8446,-57.5001"/>
 </g>
-<!-- ezspline_init -->
+<!-- ezspline_setup -->
 <g id="proc~~initialize_profiles_interpolant~~CallsGraph_node4" class="node">
-<title>ezspline_init</title>
-<polygon fill="#777777" stroke="#777777" points="256.5,-24 186.5,-24 186.5,0 256.5,0 256.5,-24"/>
-<text text-anchor="middle" x="221.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_init</text>
+<title>ezspline_setup</title>
+<polygon fill="#777777" stroke="#777777" points="263,-24 180,-24 180,0 263,0 263,-24"/>
+<text text-anchor="middle" x="221.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ezspline_setup</text>
 </g>
-<!-- proc~initialize_profiles_interpolant&#45;&gt;ezspline_init -->
-<g id="proc~~initialize_profiles_interpolant~~CallsGraph_edge2" class="edge">
-<title>proc~initialize_profiles_interpolant&#45;&gt;ezspline_init</title>
-<path fill="none" stroke="#000000" d="M114.8407,-41.9645C134.0913,-36.5563 156.8178,-30.1716 176.3355,-24.6884"/>
-<polygon fill="#000000" stroke="#000000" points="177.5334,-27.9874 186.2141,-21.9131 175.6401,-21.2483 177.5334,-27.9874"/>
+<!-- proc~initialize_profiles_interpolant&#45;&gt;ezspline_setup -->
+<g id="proc~~initialize_profiles_interpolant~~CallsGraph_edge3" class="edge">
+<title>proc~initialize_profiles_interpolant&#45;&gt;ezspline_setup</title>
+<path fill="none" stroke="#000000" d="M114.8407,-41.9645C132.0946,-37.1172 152.1409,-31.4855 170.1663,-26.4215"/>
+<polygon fill="#000000" stroke="#000000" points="171.2614,-29.7494 179.942,-23.6751 169.3681,-23.0103 171.2614,-29.7494"/>
 </g>
 </g>
 </svg>
@@ -567,13 +567,13 @@ public subroutine initialize_profiles_interpolant(params, P)
     <span class="c">!! all the information about the plasma profiles used in the simulation.</span>
     <span class="c">!! See [[korc_types]] and [[korc_profiles]].</span>
 
-<span class="c">!#ifdef M3D_C1</span>
-<span class="c">!    P%M3D_C1_ne = -1</span>
-<span class="c">!    P%M3D_C1_te = -1</span>
-<span class="c">!    P%M3D_C1_zeff = -1</span>
+<span class="c">!#ifdef FIO</span>
+<span class="c">!    P%FIO_ne = -1</span>
+<span class="c">!    P%FIO_te = -1</span>
+<span class="c">!    P%FIO_zeff = -1</span>
 <span class="c">!#endif</span>
     
-    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">collisions</span><span class="p">)</span> <span class="k">then</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">collisions</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">params</span><span class="p">%</span><span class="n">radiation</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="s1">&#39;EXTERNAL&#39;</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          </span>
 <span class="k">          if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
@@ -581,6 +581,12 @@ public subroutine initialize_profiles_interpolant(params, P)
           <span class="k">end if</span>
 
 <span class="k">          if</span> <span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">axisymmetric</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">             if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D ne, Te, Zeff&#39;</span>
+                <span class="nb">flush</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">)</span>
+             <span class="k">end if</span>
+
 <span class="k">             </span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
@@ -588,8 +594,6 @@ public subroutine initialize_profiles_interpolant(params, P)
 <span class="c">!             write(output_unit_write,&#39;(&quot;NZ&quot;,I15)&#39;) profiles_2d%NR</span>
              
              <span class="c">! Initializing ne</span>
-             <span class="c">!			call EZspline_init(profiles_2d%ne,profiles_2d%NR, &amp;</span>
-             <span class="c">!profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)</span>
              <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">ne</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span> <span class="p">&amp;</span>
                   <span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
@@ -600,10 +604,7 @@ public subroutine initialize_profiles_interpolant(params, P)
              <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">ne</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">ne_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
 
-             
              <span class="c">! Initializing Te</span>
-             <span class="c">!			call EZspline_init(profiles_2d%Te,profiles_2d%NR, &amp;</span>
-             <span class="c">!profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)</span>
              <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">Te</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span> <span class="p">&amp;</span>
                   <span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
@@ -618,10 +619,9 @@ public subroutine initialize_profiles_interpolant(params, P)
              
              <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">Te</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">Te_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
              
              <span class="c">! Initializing Zeff</span>
-             <span class="c">!			call EZspline_init(profiles_2d%Zeff, &amp;</span>
-             <span class="c">!profiles_2d%NR,profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)</span>
              <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">Zeff</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
                   <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
@@ -632,13 +632,116 @@ public subroutine initialize_profiles_interpolant(params, P)
              <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">Zeff</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">Zeff_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
              <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
 
-             
-             <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">profiles_domain</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">))</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="s1">&#39;H&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                </span>
+<span class="k">                if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                   write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;2D Hollmann impurities&#39;</span>
+                   <span class="nb">flush</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">)</span>
+                <span class="k">end if</span>
+
+                <span class="c">! Initializing RHON</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">RHON</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">RHON</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">RHON</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">RHON</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">RHON</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">!write(output_unit_write,&#39;(&quot;profiles_2d%RHON: &quot;,E17.10)&#39;) profiles_2d%RHON%fspl(1,:,:)</span>
+                
+                <span class="c">! Initializing nRE</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nRE</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nRE</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nRE</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nRE</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nRE_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">! Initializing nAr0</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr0</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr0</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr0</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr0</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nAr0_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">! Initializing nAr1</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr1</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr1</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr1</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr1</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nAr1_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">! Initializing nAr2</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr2</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr2</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr2</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr2</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nAr2_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">! Initializing nAr3</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr3</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr3</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr3</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nAr3</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nAr3_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">! Initializing nD</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nD_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="c">! Initializing nD1</span>
+                <span class="k">call </span><span class="n">EZspline_init</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD1</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">BCSZ</span><span class="p">,</span><span class="n">ezerr</span><span class="p">)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD1</span><span class="p">%</span><span class="n">x1</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span>
+                <span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD1</span><span class="p">%</span><span class="n">x2</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span>
+
+                <span class="k">call </span><span class="n">EZspline_setup</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">nD1</span><span class="p">,</span> <span class="n">P</span><span class="p">%</span><span class="n">nD1_2D</span><span class="p">,</span> <span class="n">ezerr</span><span class="p">,</span> <span class="p">.</span><span class="n">TRUE</span><span class="p">.)</span>
+                <span class="k">call </span><span class="n">EZspline_error</span><span class="p">(</span><span class="n">ezerr</span><span class="p">)</span>
+                
+             <span class="k">end if</span>
+<span class="k">             </span>
+<span class="k">             ALLOCATE</span><span class="p">(</span><span class="n">profiles_domain</span><span class="p">%</span><span class="n">FLAG2D</span><span class="p">(</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NR</span><span class="p">,</span><span class="n">profiles_2d</span><span class="p">%</span><span class="n">NZ</span><span class="p">))</span>
              <span class="n">profiles_domain</span><span class="p">%</span><span class="n">FLAG2D</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">FLAG2D</span>
 
              <span class="n">profiles_domain</span><span class="p">%</span><span class="n">DR</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
              <span class="n">profiles_domain</span><span class="p">%</span><span class="n">DZ</span> <span class="o">=</span> <span class="nb">ABS</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">Z</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
           <span class="k">else</span>
+
+<span class="k">             if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">mpi_params</span><span class="p">%</span><span class="n">rank</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">output_unit_write</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s1">&#39;3D ne, Te, Zeff&#39;</span>
+             <span class="k">end if</span>
+<span class="k">             </span>
 <span class="k">             </span><span class="n">profiles_3d</span><span class="p">%</span><span class="n">NR</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
              <span class="n">profiles_3d</span><span class="p">%</span><span class="n">NPHI</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
              <span class="n">profiles_3d</span><span class="p">%</span><span class="n">NZ</span> <span class="o">=</span> <span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -723,7 +826,7 @@ public subroutine initialize_profiles_interpolant(params, P)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

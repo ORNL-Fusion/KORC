@@ -51,7 +51,7 @@ then
           -DEZSpline_LINK_FLAGS="-L/Users/m4c/repo/trunk/build/lib -lstell" \
           -DCMAKE_Fortran_FLAGS=-DHDF5_DOUBLE_PRESICION
 
-elif [ $MACHINE_ID == "MBP115573"     ] 
+elif [ $MACHINE_ID == "MBP115573"     ]
 then
     #  Config for Matt Beidler's ORNL machine.
 
@@ -59,34 +59,34 @@ then
 #    export CXX=/opt/local/bin/mpic++-mpich-gcc8
 #    export FC=/opt/local/bin/mpif90-mpich-gcc8
 
-    export CC=/opt/local/bin/gcc-mp-8
-    export CXX=/opt/local/bin/g++-mp-8
-    export FC=/opt/local/bin/gfortran-mp-8
+    export CC=/opt/local/bin/gcc-mp-11
+    export CXX=/opt/local/bin/g++-mp-11
+    export FC=/opt/local/bin/gfortran-mp-11
 
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE                             \
 	  -DUSE_PSPLINE=ON         \
-          -DEZSpline_INCLUDE_PATH=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/include \
-          -DEZSpline_LINK_FLAGS="-L/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib -lpspline" \
+     -DUSE_FIO=OFF          \
+     -DCORI_DIR=OFF \
+     -DKORC_TEST=OFF \
+     -DEZSpline_INCLUDE_PATH=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/include \
+     -DEZSpline_LINK_FLAGS="-L/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib -lpspline" \
 	  -DEZSpline_LIBRARIES=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib/libpspline.a   \
-          -DCMAKE_Fortran_FLAGS="-O3 -msse2 -DHDF5_DOUBLE_PRESICION -fopenmp -malign-double -fconvert='big-endian'" \
-          -DCMAKE_C_FLAGS="-O3 -msse2 -fopenmp -malign-double"  \
-          -DCMAKE_CXX_FLAGS="-O3 -msse2 -fopenmp -malign-double" \
+     -DCMAKE_Fortran_FLAGS="-O3 -msse2 -DHDF5_DOUBLE_PRESICION -fopenmp -malign-double -fconvert='big-endian'" \
+     -DCMAKE_C_FLAGS="-O3 -msse2 -fopenmp -malign-double"  \
+     -DCMAKE_CXX_FLAGS="-O3 -msse2 -fopenmp -malign-double" \
 	  -DCMAKE_Fortran_FLAGS_DEBUG="-g -ffpe-trap=invalid,zero,overflow -fimplicit-none -fbacktrace  -fsanitize=address"   \
-          -DCMAKE_C_FLAGS_DEBUG="-g -g3" \
-    	  -DCMAKE_CXX_FLAGS_DEBUG="-g -g3" \
-	  -DUSE_FIO=OFF          \
+     -DCMAKE_C_FLAGS_DEBUG="-g -g3" \
+ 	  -DCMAKE_CXX_FLAGS_DEBUG="-g -g3" \
 	  -DFIO_LIBRARIES=/Users/21b/Desktop/KORC/FIO/install/lib/libfusionio.a  \
 	  -DM3DC1_LIBRARIES=/Users/21b/Desktop/KORC/FIO/install/lib/libm3dc1.a	\
-          -DFIO_INCLUDE_PATH=/Users/21b/Desktop/KORC/FIO/install/include  \
-          -DFIO_LINK_FLAGS="-L/Users/21b/Desktop/KORC/FIO/install/lib -lfusionio -lm3dc1" \
+     -DFIO_INCLUDE_PATH=/Users/21b/Desktop/KORC/FIO/install/include  \
+     -DFIO_LINK_FLAGS="-L/Users/21b/Desktop/KORC/FIO/install/lib -lfusionio -lm3dc1" \
 	  -DFRUIT_INCLUDE_PATH=/Users/21b/Desktop/KORC/test/fruit \
 	  -DFRUIT_LINK_FLAGS="-L/Users/21b/Desktop/KORC/test/fruit -lfruit" \
 	  -DFRUIT_LIBRARIES=/Users/21b/Desktop/KORC/test/fruit/libfruit.a \
 	  -DKORCSRC_INCLUDE_PATH=/Users/21b/Desktop/KORC/build/modules \
 	  -DKORCSRC_LINK_FLAGS="-L/Users/21b/Desktop/KORC/build/lib -lkorcsrc" \
 	  -DKORCSRC_LIBRARIES=/Users/21b/Desktop/KORC/build/lib/libkorcsrc.a \
-	  -DCORI_DIR=OFF \
-	  -DKORC_TEST=OFF \
 	  -DNIMROD_INCLUDE_PATH=/Users/21b/Desktop/NIMROD/NIMUW/nimrod \
 	  -DNIMFIO_INCLUDE_PATH=/Users/21b/Desktop/NIMROD/NIMUW/nimfio \
 	  -DNIMFIO_LINK_FLAGS="-L/Users/21b/Desktop/NIMROD/NIMUW/nimfio -lnimfio" \
@@ -108,10 +108,10 @@ then
 	  -DNIMLAP_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/liblapack_dummy.a \
 	  -DNIMSLU_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/libsslu_dummy.a \
 	  -DNIMLUD_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/libslud_dummy.a \
- 
+
 #	  -DCMAKE_CXX_COMPILER=/opt/local/bin/mpic++-mpich-gcc8
 
-    
+
 elif [ $MACHINE_ID == "cori01"   ] || \
      [ $MACHINE_ID == "cori02"   ] || \
      [ $MACHINE_ID == "cori03"   ] || \
@@ -194,7 +194,7 @@ then
 #	   -DCMAKE_Fortran_FLAGS_DEBUG="-g -ffpe-trap=invalid,zero,overflow -fimplicit-none -fbacktrace" \
 #          -DCMAKE_C_FLAGS_DEBUG="-g -g3" \
 #    	   -DCMAKE_CXX_FLAGS_DEBUG="-g -g3"
-    
+
 else
 # MACHINE_ID is new and unknown. Inform the user how to add support for this new machine.
     echo $MACHINE_ID not suported by this script.

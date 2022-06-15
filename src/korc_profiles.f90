@@ -141,7 +141,7 @@ CONTAINS
         
        P%Te_profile = TRIM(Te_profile)
        P%Teo = Teo*C_E ! Converted to Joules
-       P%n_Te = n_Te
+       P%n_Te = n_Te*C_E ! Converted to Joules
        P%a_Te = a_Te
 
        P%Zeff_profile = TRIM(Zeff_profile)
@@ -198,6 +198,8 @@ CONTAINS
                 CASE('RE-EVO-PSIP-G1')                   
                    !flat profile placeholder, updates every timestep
                    P%ne_2D(ii,kk) = P%neo
+                CASE('MST_FSA')
+                   P%ne_2D(ii,kk) = P%neo*(1._rp-r_a**4._rp)**4._rp
                 CASE DEFAULT
                    P%ne_2D(ii,kk) = P%neo
                 END SELECT
@@ -207,6 +209,8 @@ CONTAINS
                    P%Te_2D(ii,kk) = P%Teo
                 CASE('SPONG')
                    P%Te_2D(ii,kk) = (P%Teo-P%n_Te)*(1._rp-0.6*r_a**2)**2+P%n_Te
+                CASE('MST_FSA')
+                   P%Te_2D(ii,kk) = P%Teo*(1._rp-r_a**8._rp)**4._rp
                 CASE DEFAULT
                    P%Te_2D(ii,kk) = P%Teo
                 END SELECT
@@ -329,7 +333,7 @@ CONTAINS
     !! Effective atomic charge seen by simulated particles.
     INTEGER(ip)                                        :: cc
     !! Particle iterator.
-    REAL(rp) :: R0,Z0,a,ne0,n_ne,Te0,n_Te,Zeff0
+    REAL(rp) :: R0,Z0,a,ne0,n_ne,Te0,n_Te,Zeff0,R0a
     REAL(rp) :: R0_RE,Z0_RE,sigmaR_RE,sigmaZ_RE,psimax_RE
     REAL(rp) :: n_REr0,n_tauion,n_lamfront,n_lamback,n_lamshelf
     REAL(rp) :: n_psifront,n_psiback,n_psishelf
@@ -341,6 +345,7 @@ CONTAINS
     R0=P%R0
     Z0=P%Z0
     a=P%a
+    R0a=F%AB%Ro
     
     ne0=P%neo
     n_ne=P%n_ne
@@ -411,6 +416,20 @@ CONTAINS
           rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
           ne(cc) = ne0*(1._rp-0.2*r_a(cc)**8)+n_ne
+       end do
+       !$OMP END SIMD
+    CASE('MST_FSA')       
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          rm(cc)=sqrt((Y_R(cc)-R0a)**2+(Y_Z(cc)-Z0)**2)
+          r_a(cc)=rm(cc)/a
+          ne(cc) = (ne0-n_ne)*(1._rp-r_a(cc)**4._rp)**4._rp+n_ne
+
+          !write(6,*) 'R',Y_R*params%cpp%length,'R0',R0*params%cpp%length, &
+          !     'Z',Y_Z*params%cpp%length,'Z0',Z0*params%cpp%length, &
+          !     'a',a*params%cpp%length
+          !write(6,*) 'r_a',r_a,'ne',ne(cc)*params%cpp%density
+          
        end do
        !$OMP END SIMD
     CASE('RE-EVO')
@@ -534,6 +553,17 @@ CONTAINS
           rm(cc)=sqrt((Y_R(cc)-R0)**2+(Y_Z(cc)-Z0)**2)
           r_a(cc)=rm(cc)/a
           Te(cc) = Te0*(1._rp-0.6*r_a(cc)**2)**2+Te0*n_Te
+       end do
+       !$OMP END SIMD
+    CASE('MST_FSA')
+       !$OMP SIMD
+       do cc=1_idef,pchunk
+          rm(cc)=sqrt((Y_R(cc)-R0a)**2+(Y_Z(cc)-Z0)**2)
+          r_a(cc)=rm(cc)/a
+          Te(cc) = (Te0-n_Te)*(1._rp-r_a(cc)**8._rp)**4._rp+n_Te
+
+          !write(6,*) 'T_e',Te(cc)*params%cpp%temperature/C_E         
+          
        end do
        !$OMP END SIMD
     CASE DEFAULT

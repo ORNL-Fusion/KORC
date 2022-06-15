@@ -58,6 +58,17 @@ MODULE korc_random
   END INTERFACE
 
   INTERFACE
+     REAL (C_DOUBLE) FUNCTION random_get_number(r) BIND(C, NAME='random_get_number')
+       USE, INTRINSIC :: iso_c_binding
+
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE :: r
+
+     END FUNCTION random_get_number
+  END INTERFACE
+  
+  INTERFACE
      SUBROUTINE random_destroy_U(r) BIND(C, NAME='random_destroy_U')
        USE, INTRINSIC :: iso_c_binding
 
@@ -78,7 +89,19 @@ MODULE korc_random
 
      END SUBROUTINE random_destroy_N
   END INTERFACE
+  
+  INTERFACE
+     SUBROUTINE random_set_dist(r, low, high) BIND(C, NAME='random_set_dist')
+       USE, INTRINSIC :: iso_c_binding
 
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE    :: r
+       REAL (C_DOUBLE), VALUE :: low
+       REAL (C_DOUBLE), VALUE :: high
+     END SUBROUTINE random_set_dist
+  END INTERFACE
+  
   PUBLIC :: initialize_random
 
 CONTAINS
@@ -128,7 +151,7 @@ CONTAINS
 
     REAL(rp)            :: get_random
 
-    get_random = random_get_number_U(states(OMP_GET_THREAD_NUM()))
+    get_random = random_get_number(states(OMP_GET_THREAD_NUM()))
   END FUNCTION get_random
 
   FUNCTION get_random_U()
@@ -148,6 +171,34 @@ CONTAINS
 
     get_random_N = random_get_number_N(state)
   END FUNCTION get_random_N
+
+  SUBROUTINE get_randoms(nums)
+    USE omp_lib
+    IMPLICIT NONE
+
+    REAL(rp), DIMENSION(:), INTENT(OUT) :: nums
+
+    INTEGER                             :: i
+
+    !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(i)
+    DO i = 1, SIZE(nums)
+       nums(i) = get_random()
+    END DO
+    !$OMP END PARALLEL DO
+  END SUBROUTINE get_randoms
+
+  SUBROUTINE set_random_dist(low, high)
+    USE omp_lib
+    IMPLICIT NONE
+
+    REAL(rp), INTENT(IN) :: low
+    REAL(rp), INTENT(IN) :: high
+
+    !$OMP PARALLEL DEFAULT(SHARED)
+    CALL random_set_dist(states(OMP_GET_THREAD_NUM()), low, high)
+    !$OMP END PARALLEL
+
+  END SUBROUTINE set_random_dist
   
   !SUBROUTINE initialize_random_mkl(seed)
   !    USE omp_lib

@@ -150,13 +150,22 @@ subroutine normalize_variables(params,spp,F,P)
   !	Normalize electromagnetic fields and profiles
   F%Bo = F%Bo/params%cpp%Bo
   F%Eo = F%Eo/params%cpp%Eo
+  F%AB%Ero = F%AB%Ero/params%cpp%Eo
+  F%AB%rmn=F%AB%rmn/params%cpp%length
+  F%AB%sigmamn=F%AB%sigmamn/params%cpp%length
   F%Ro = F%Ro/params%cpp%length
   F%Zo = F%Zo/params%cpp%length
   F%E_dyn = F%E_dyn/params%cpp%Eo
   F%E_pulse=F%E_pulse/params%cpp%time
   F%E_width=F%E_width/params%cpp%time
   F%t0_2x1t=F%t0_2x1t/params%cpp%time
+  F%circumradius=F%circumradius/params%cpp%length
 
+  if (F%E_profile.eq.'MST_FSA') then
+     F%AB%a = F%AB%a/params%cpp%length
+     F%AB%Ro = F%AB%Ro/params%cpp%length
+  end if
+  
   P%a = P%a/params%cpp%length
   P%R0 = P%R0/params%cpp%length
   P%Z0 = P%Z0/params%cpp%length
@@ -197,15 +206,28 @@ subroutine normalize_variables(params,spp,F,P)
      if (ALLOCATED(P%ne_3D)) P%ne_3D = P%ne_3D/params%cpp%density
      if (ALLOCATED(P%Te_3D)) P%Te_3D = P%Te_3D/params%cpp%temperature
 
+     if (params%profile_model(10:10).eq.'H') then
+        if (ALLOCATED(P%nRE_2D)) P%nRE_2D = P%nRE_2D/params%cpp%density
+        if (ALLOCATED(P%nAr0_2D)) P%nAr0_2D = P%nAr0_2D/params%cpp%density
+        if (ALLOCATED(P%nAr1_2D)) P%nAr1_2D = P%nAr1_2D/params%cpp%density
+        if (ALLOCATED(P%nAr2_2D)) P%nAr2_2D = P%nAr2_2D/params%cpp%density
+        if (ALLOCATED(P%nAr3_2D)) P%nAr3_2D = P%nAr3_2D/params%cpp%density
+        if (ALLOCATED(P%nD_2D)) P%nD_2D = P%nD_2D/params%cpp%density
+        if (ALLOCATED(P%nD1_2D)) P%nD1_2D = P%nD1_2D/params%cpp%density
+     endif
+
   end if
   
   if (params%field_model(1:10) .EQ. 'ANALYTICAL') then
      F%AB%Bo = F%AB%Bo/params%cpp%Bo
-     F%AB%a = F%AB%a/params%cpp%length
-     F%AB%Ro = F%AB%Ro/params%cpp%length
      F%AB%lambda = F%AB%lambda/params%cpp%length
      F%AB%Bpo = F%AB%Bpo/params%cpp%Bo
 
+     if (.not.(F%E_profile.eq.'MST_FSA')) then
+        F%AB%a = F%AB%a/params%cpp%length
+        F%AB%Ro = F%AB%Ro/params%cpp%length
+     end if
+     
      if (params%field_eval.eq.'interp') then
         if (ALLOCATED(F%B_2D%R)) F%B_2D%R = F%B_2D%R/params%cpp%Bo
         if (ALLOCATED(F%B_2D%PHI)) F%B_2D%PHI = F%B_2D%PHI/params%cpp%Bo
@@ -363,6 +385,58 @@ subroutine normalize_variables(params,spp,F,P)
         if (ALLOCATED(F%dBdZ_3D%Z)) F%dBdZ_3D%Z = F%dBdZ_3D%Z/ &
              (params%cpp%Bo/params%cpp%length)
         
+     end if
+
+     if (F%B1field) then
+
+        if (params%field_model(10:13).eq.'MARS') then
+        
+           if (ALLOCATED(F%B1Re_2D%R)) F%B1Re_2D%R = F%B1Re_2D%R/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Re_2D%PHI)) F%B1Re_2D%PHI = F%B1Re_2D%PHI/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Re_2D%Z)) F%B1Re_2D%Z = F%B1Re_2D%Z/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2D%R)) F%B1Im_2D%R = F%B1Im_2D%R/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2D%PHI)) F%B1Im_2D%PHI = F%B1Im_2D%PHI/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2D%Z)) F%B1Im_2D%Z = F%B1Im_2D%Z/ &
+                params%cpp%Bo
+           
+        else if (params%field_model(10:14).eq.'AORSA') then
+
+           if (ALLOCATED(F%B1Re_2DX%X)) F%B1Re_2DX%X = F%B1Re_2DX%X/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Re_2DX%Y)) F%B1Re_2DX%Y = F%B1Re_2DX%Y/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Re_2DX%Z)) F%B1Re_2DX%Z = F%B1Re_2DX%Z/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2DX%X)) F%B1Im_2DX%X = F%B1Im_2DX%X/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2DX%Y)) F%B1Im_2DX%Y = F%B1Im_2DX%Y/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2DX%Z)) F%B1Im_2DX%Z = F%B1Im_2DX%Z/ &
+                params%cpp%Bo
+           
+        endif
+     end if
+
+     if (F%E1field) then
+
+        if (ALLOCATED(F%E1Re_2DX%X)) F%E1Re_2DX%X = F%E1Re_2DX%X/ &
+             params%cpp%Eo
+        if (ALLOCATED(F%E1Re_2DX%Y)) F%E1Re_2DX%Y = F%E1Re_2DX%Y/ &
+             params%cpp%Eo
+        if (ALLOCATED(F%E1Re_2DX%Z)) F%E1Re_2DX%Z = F%E1Re_2DX%Z/ &
+             params%cpp%Eo
+        if (ALLOCATED(F%E1Im_2DX%X)) F%E1Im_2DX%X = F%E1Im_2DX%X/ &
+             params%cpp%Eo
+        if (ALLOCATED(F%E1Im_2DX%Y)) F%E1Im_2DX%Y = F%E1Im_2DX%Y/ &
+             params%cpp%Eo
+        if (ALLOCATED(F%E1Im_2DX%Z)) F%E1Im_2DX%Z = F%E1Im_2DX%Z/ &
+             params%cpp%Eo
+
      end if
      
      F%X%R = F%X%R/params%cpp%length

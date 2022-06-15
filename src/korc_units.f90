@@ -1,6 +1,6 @@
 module korc_units
-  !! @note Module with subroutines that calculate the characteristic 
-  !! scales in the simulation used in the normalization and 
+  !! @note Module with subroutines that calculate the characteristic
+  !! scales in the simulation used in the normalization and
   !! nondimensionalization of the simulation variables. @endnote
   use korc_types
   use korc_constants
@@ -15,14 +15,14 @@ CONTAINS
 
 
 subroutine compute_charcs_plasma_params(params,spp,F)
-  !! @note Subroutine that calculates characteristic scales of 
+  !! @note Subroutine that calculates characteristic scales of
   !! the current KORC simulation. @endnote
-  !! Normalization and non-dimensionalization of the variables and equations 
-  !! of motion allows us to solve them more accurately by reducing truncation 
+  !! Normalization and non-dimensionalization of the variables and equations
+  !! of motion allows us to solve them more accurately by reducing truncation
   !! erros when performing operations that combine small and large numbers.
   !!
-  !! For normalizing and obtaining the non-dimensional form of the variables 
-  !! and equations solved in KORC we use characteristic scales calculated with 
+  !! For normalizing and obtaining the non-dimensional form of the variables
+  !! and equations solved in KORC we use characteristic scales calculated with
   !! the input data of each KORC simulation.
   !! <table cellspacing="10">
   !! <caption id="multi_row">Characteristic scales in KORC</caption>
@@ -42,29 +42,29 @@ subroutine compute_charcs_plasma_params(params,spp,F)
   !! <tr><td rowspan="1">Magnetic moment 	<td>\(\mu_{ch}\)<td>\(m_{ch}v_{ch}^2/B_{ch}\)	<td>--
   !! <tr><td rowspan="1">Pressure 	<td>\(P_{ch}\)		<td>--		                <td>--
   !! </table>
-  !! With these characteristic scales we can write the dimensionless 
-  !! form of all the equations. For example, the Lorentz force for a 
-  !! charged particle \(q\), mass \(m\), and momentum 
+  !! With these characteristic scales we can write the dimensionless
+  !! form of all the equations. For example, the Lorentz force for a
+  !! charged particle \(q\), mass \(m\), and momentum
   !! \(\mathbf{p}=\gamma m \mathbf{v}\) can be written as:
   !!
-  !! $$\frac{d \mathbf{p}'}{dt'} = q'\left[ \mathbf{E}' + 
+  !! $$\frac{d \mathbf{p}'}{dt'} = q'\left[ \mathbf{E}' +
   !! \frac{\mathbf{p}'}{\gamma m'}\times \mathbf{B}' \right],$$
   !!
-  !! where \(\mathbf{p}' = \mathbf{p}/p_{ch}\), \(t' = t/t_{ch}\), 
-  !! \(q' = q/q_{ch}\), \(m' = m/m_{ch}\), \(\mathbf{E}' = \mathbf{E}/E_{ch}\), 
+  !! where \(\mathbf{p}' = \mathbf{p}/p_{ch}\), \(t' = t/t_{ch}\),
+  !! \(q' = q/q_{ch}\), \(m' = m/m_{ch}\), \(\mathbf{E}' = \mathbf{E}/E_{ch}\),
   !! and \(\mathbf{B}'=\mathbf{B}/B_{ch}\).
   !! @todo Characteristic pressure needs to be defined.
   TYPE(KORC_PARAMS), INTENT(INOUT) 				:: params
     !! Core KORC simulation parameters.
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
-    !! An instance of KORC's derived type SPECIES containing all the 
+    !! An instance of KORC's derived type SPECIES containing all the
     !! information of different electron species. See [[korc_types]].
   TYPE(FIELDS), INTENT(IN) 					:: F
-    !! An instance of KORC's derived type FIELDS containing all the 
-    !! information about the fields used in the simulation. 
+    !! An instance of KORC's derived type FIELDS containing all the
+    !! information about the fields used in the simulation.
     !! See [[korc_types]] and [[korc_fields]].
   INTEGER 							:: ii
-    !! Index of the spp array containing the mass, electric charge 
+    !! Index of the spp array containing the mass, electric charge
     !! and corresponding cyclotron frequency used to derived some characteristic scales.
 
   params%cpp%velocity = C_C
@@ -96,15 +96,15 @@ end subroutine compute_charcs_plasma_params
 
 
 subroutine normalize_variables(params,spp,F,P)
-  !! @note Subroutine that normalizes the simulation variables with 
+  !! @note Subroutine that normalizes the simulation variables with
   !! the previously computed characteristic scales. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 				:: params
     !! Core KORC simulation parameters.
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
-    !! An instance of KORC's derived type SPECIES containing all 
+    !! An instance of KORC's derived type SPECIES containing all
     !! the information of different electron species. See [[korc_types]].
   TYPE(FIELDS), INTENT(INOUT) 					:: F
-    !! @param[in,out] F An instance of KORC's derived type FIELDS 
+    !! @param[in,out] F An instance of KORC's derived type FIELDS
     !! containing all the information about the fields used in the simulation.
     !! See [[korc_types]] and [[korc_fields]].
   TYPE(PROFILES), INTENT(INOUT) 				:: P
@@ -144,7 +144,7 @@ subroutine normalize_variables(params,spp,F,P)
      spp(ii)%Spong_w = spp(ii)%Spong_w/params%cpp%length
      spp(ii)%dR = spp(ii)%dR/params%cpp%length
      spp(ii)%dZ = spp(ii)%dZ/params%cpp%length
-     
+
   end do
 
   !	Normalize electromagnetic fields and profiles
@@ -156,10 +156,14 @@ subroutine normalize_variables(params,spp,F,P)
   F%Ro = F%Ro/params%cpp%length
   F%Zo = F%Zo/params%cpp%length
   F%E_dyn = F%E_dyn/params%cpp%Eo
+  F%E_edge = F%E_edge/params%cpp%Eo
   F%E_pulse=F%E_pulse/params%cpp%time
   F%E_width=F%E_width/params%cpp%time
   F%t0_2x1t=F%t0_2x1t/params%cpp%time
   F%circumradius=F%circumradius/params%cpp%length
+  F%AB%a = F%AB%a/params%cpp%length
+  F%AB%Ro = F%AB%Ro/params%cpp%length
+
 
   P%a = P%a/params%cpp%length
   P%R0 = P%R0/params%cpp%length
@@ -168,6 +172,7 @@ subroutine normalize_variables(params,spp,F,P)
   P%Z0_RE = P%Z0_RE/params%cpp%length
   P%neo = P%neo/params%cpp%density
   P%n_ne = P%n_ne/params%cpp%density
+  P%n_Te = P%n_Te/params%cpp%temperature
   P%n_shelf = P%n_shelf/params%cpp%density
   P%Teo = P%Teo/params%cpp%temperature
   P%n_REr0=P%n_REr0/params%cpp%length
@@ -191,7 +196,7 @@ subroutine normalize_variables(params,spp,F,P)
 
   else if (params%profile_model(1:8) .EQ. 'EXTERNAL') then
 
-     
+
      if (ALLOCATED(P%X%R)) P%X%R = P%X%R/params%cpp%length
      if (ALLOCATED(P%X%Z)) P%X%Z = P%X%Z/params%cpp%length
 
@@ -212,13 +217,12 @@ subroutine normalize_variables(params,spp,F,P)
      endif
 
   end if
-  
+
   if (params%field_model(1:10) .EQ. 'ANALYTICAL') then
      F%AB%Bo = F%AB%Bo/params%cpp%Bo
-     F%AB%a = F%AB%a/params%cpp%length
-     F%AB%Ro = F%AB%Ro/params%cpp%length
      F%AB%lambda = F%AB%lambda/params%cpp%length
      F%AB%Bpo = F%AB%Bpo/params%cpp%Bo
+
 
      if (params%field_eval.eq.'interp') then
         if (ALLOCATED(F%B_2D%R)) F%B_2D%R = F%B_2D%R/params%cpp%Bo
@@ -245,11 +249,11 @@ subroutine normalize_variables(params,spp,F,P)
            F%PSIp_lim = F%PSIp_lim/ &
                 (params%cpp%Bo*params%cpp%length**2)
         end if
-        
+
         F%X%R = F%X%R/params%cpp%length
         ! Nothing to do for the PHI component
         F%X%Z = F%X%Z/params%cpp%length
-        
+
 
         if (params%orbit_model(3:5).eq.'pre') then
            if (ALLOCATED(F%gradB_2D%R)) F%gradB_2D%R = F%gradB_2D%R/ &
@@ -280,10 +284,10 @@ subroutine normalize_variables(params,spp,F,P)
            if (ALLOCATED(F%curlb_3D%Z)) F%curlb_3D%Z = F%curlb_3D%Z/ &
                 (1./params%cpp%length)
         end if
-        
+
      end if
 
-          
+
   else if (params%field_model(1:8) .EQ. 'EXTERNAL') then
      if (ALLOCATED(F%B_3D%R)) F%B_3D%R = F%B_3D%R/params%cpp%Bo
      if (ALLOCATED(F%B_3D%PHI)) F%B_3D%PHI = F%B_3D%PHI/params%cpp%Bo
@@ -298,7 +302,7 @@ subroutine normalize_variables(params,spp,F,P)
           (params%cpp%Bo*params%cpp%length**2)
      F%PSIP_min = F%PSIP_min/(params%cpp%Bo*params%cpp%length**2)
      F%PSIp_lim = F%PSIp_lim/(params%cpp%Bo*params%cpp%length**2)
-     
+
      if (ALLOCATED(F%B_2D%R)) F%B_2D%R = F%B_2D%R/params%cpp%Bo
      if (ALLOCATED(F%B_2D%PHI)) F%B_2D%PHI = F%B_2D%PHI/params%cpp%Bo
      if (ALLOCATED(F%B_2D%Z)) F%B_2D%Z = F%B_2D%Z/params%cpp%Bo
@@ -376,13 +380,13 @@ subroutine normalize_variables(params,spp,F,P)
              (params%cpp%Bo/params%cpp%length)
         if (ALLOCATED(F%dBdZ_3D%Z)) F%dBdZ_3D%Z = F%dBdZ_3D%Z/ &
              (params%cpp%Bo/params%cpp%length)
-        
+
      end if
 
      if (F%B1field) then
 
         if (params%field_model(10:13).eq.'MARS') then
-        
+
            if (ALLOCATED(F%B1Re_2D%R)) F%B1Re_2D%R = F%B1Re_2D%R/ &
                 params%cpp%Bo
            if (ALLOCATED(F%B1Re_2D%PHI)) F%B1Re_2D%PHI = F%B1Re_2D%PHI/ &
@@ -395,7 +399,7 @@ subroutine normalize_variables(params,spp,F,P)
                 params%cpp%Bo
            if (ALLOCATED(F%B1Im_2D%Z)) F%B1Im_2D%Z = F%B1Im_2D%Z/ &
                 params%cpp%Bo
-           
+
         else if (params%field_model(10:14).eq.'AORSA') then
 
            if (ALLOCATED(F%B1Re_2DX%X)) F%B1Re_2DX%X = F%B1Re_2DX%X/ &
@@ -410,7 +414,7 @@ subroutine normalize_variables(params,spp,F,P)
                 params%cpp%Bo
            if (ALLOCATED(F%B1Im_2DX%Z)) F%B1Im_2DX%Z = F%B1Im_2DX%Z/ &
                 params%cpp%Bo
-           
+
         endif
      end if
 
@@ -430,7 +434,7 @@ subroutine normalize_variables(params,spp,F,P)
              params%cpp%Eo
 
      end if
-     
+
      F%X%R = F%X%R/params%cpp%length
      ! Nothing to do for the PHI component
      F%X%Z = F%X%Z/params%cpp%length

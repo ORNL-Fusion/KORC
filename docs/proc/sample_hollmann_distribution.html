@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.8% of total for procedures.">157 statements</a>
+    title=" 0.6% of total for procedures.">157 statements</a>
      </li> 
      
      
@@ -237,7 +237,7 @@ public subroutine sample_Hollmann_distribution(params, spp)
   
 <tr>
   
-  <td><span class="anchor" id="variable-params~157"></span>type(KORC_PARAMS),</td>
+  <td><span class="anchor" id="variable-params~180"></span>type(KORC_PARAMS),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -252,7 +252,7 @@ public subroutine sample_Hollmann_distribution(params, spp)
   
 <tr>
   
-  <td><span class="anchor" id="variable-spp~51"></span>type(SPECIES),</td>
+  <td><span class="anchor" id="variable-spp~60"></span>type(SPECIES),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -292,18 +292,18 @@ public subroutine sample_Hollmann_distribution(params, spp)
 <polygon fill="none" stroke="#000000" points="153,-128 0,-128 0,-104 153,-104 153,-128"/>
 <text text-anchor="middle" x="76.5" y="-113.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">sample_Hollmann_distribution</text>
 </g>
-<!-- proc~init_random_seed -->
+<!-- proc~random_norm~6 -->
 <g id="proc~~sample_hollmann_distribution~~CallsGraph_node2" class="node">
-<title>proc~init_random_seed</title>
-<g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node2"><a xlink:href=".././proc/init_random_seed.html" xlink:title="init_random_seed">
-<polygon fill="#d9534f" stroke="#d9534f" points="285,-230 189,-230 189,-206 285,-206 285,-230"/>
-<text text-anchor="middle" x="237" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
+<title>proc~random_norm~6</title>
+<g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node2"><a xlink:href=".././proc/random_norm~6.html" xlink:title="random_norm">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="276,-230 198,-230 198,-206 276,-206 276,-230"/>
+<text text-anchor="middle" x="237" y="-215.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_norm</text>
 </a>
 </g>
 </g>
-<!-- proc~sample_hollmann_distribution&#45;&gt;proc~init_random_seed -->
+<!-- proc~sample_hollmann_distribution&#45;&gt;proc~random_norm~6 -->
 <g id="proc~~sample_hollmann_distribution~~CallsGraph_edge1" class="edge">
-<title>proc~sample_hollmann_distribution&#45;&gt;proc~init_random_seed</title>
+<title>proc~sample_hollmann_distribution&#45;&gt;proc~random_norm~6</title>
 <path fill="none" stroke="#000000" d="M91.103,-128.0668C111.9331,-144.909 151.7853,-175.7803 189,-197 191.8051,-198.5995 194.7553,-200.1591 197.7563,-201.6593"/>
 <polygon fill="#000000" stroke="#000000" points="196.2832,-204.8344 206.8179,-205.9617 199.2856,-198.5109 196.2832,-204.8344"/>
 </g>
@@ -314,7 +314,7 @@ public subroutine sample_Hollmann_distribution(params, spp)
 <text text-anchor="middle" x="237" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_barrier</text>
 </g>
 <!-- proc~sample_hollmann_distribution&#45;&gt;mpi_barrier -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge2" class="edge">
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge3" class="edge">
 <title>proc~sample_hollmann_distribution&#45;&gt;mpi_barrier</title>
 <path fill="none" stroke="#000000" d="M108.9796,-128.1419C133.8615,-137.4436 168.3767,-150.3464 195.2995,-160.411"/>
 <polygon fill="#000000" stroke="#000000" points="194.2505,-163.7554 204.843,-163.9787 196.7017,-157.1986 194.2505,-163.7554"/>
@@ -323,64 +323,64 @@ public subroutine sample_Hollmann_distribution(params, spp)
 <g id="proc~~sample_hollmann_distribution~~CallsGraph_node4" class="node">
 <title>proc~deg2rad~5</title>
 <g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node4"><a xlink:href=".././proc/deg2rad~5.html" xlink:title="deg2rad">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="375,-128 321,-128 321,-104 375,-104 375,-128"/>
-<text text-anchor="middle" x="348" y="-113.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">deg2rad</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="375,-107 321,-107 321,-83 375,-83 375,-107"/>
+<text text-anchor="middle" x="348" y="-92.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">deg2rad</text>
 </a>
 </g>
 </g>
 <!-- proc~sample_hollmann_distribution&#45;&gt;proc~deg2rad~5 -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge3" class="edge">
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge2" class="edge">
 <title>proc~sample_hollmann_distribution&#45;&gt;proc~deg2rad~5</title>
-<path fill="none" stroke="#000000" d="M153.243,-116.8348C192.6311,-117.1449 241.3824,-117.3461 285,-117 293.2295,-116.9347 302.0632,-116.8214 310.4351,-116.694"/>
-<polygon fill="#000000" stroke="#000000" points="310.7704,-120.1891 320.7124,-116.5275 310.657,-113.19 310.7704,-120.1891"/>
+<path fill="none" stroke="#000000" d="M153.2664,-122.6505C192.8752,-124.5002 241.8166,-124.3231 285,-117 293.7022,-115.5243 302.8047,-112.9784 311.2984,-110.13"/>
+<polygon fill="#000000" stroke="#000000" points="312.6872,-113.3506 320.9292,-106.6933 310.3345,-106.7578 312.6872,-113.3506"/>
+</g>
+<!-- proc~init_random_seed -->
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_node5" class="node">
+<title>proc~init_random_seed</title>
+<g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node5"><a xlink:href=".././proc/init_random_seed.html" xlink:title="init_random_seed">
+<polygon fill="#d9534f" stroke="#d9534f" points="285,-108 189,-108 189,-84 285,-84 285,-108"/>
+<text text-anchor="middle" x="237" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_random_seed</text>
+</a>
+</g>
+</g>
+<!-- proc~sample_hollmann_distribution&#45;&gt;proc~init_random_seed -->
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge4" class="edge">
+<title>proc~sample_hollmann_distribution&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#000000" d="M153.4593,-106.4101C161.9445,-105.3527 170.4788,-104.2893 178.6819,-103.2671"/>
+<polygon fill="#000000" stroke="#000000" points="179.3764,-106.7077 188.8668,-101.9979 178.5107,-99.7614 179.3764,-106.7077"/>
 </g>
 <!-- proc~fre_h -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_node5" class="node">
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_node6" class="node">
 <title>proc~fre_h</title>
-<g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node5"><a xlink:href=".././proc/fre_h.html" xlink:title="fRE_H">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="264,-108 210,-108 210,-84 264,-84 264,-108"/>
-<text text-anchor="middle" x="237" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fRE_H</text>
+<g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node6"><a xlink:href=".././proc/fre_h.html" xlink:title="fRE_H">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="264,-66 210,-66 210,-42 264,-42 264,-66"/>
+<text text-anchor="middle" x="237" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fRE_H</text>
 </a>
 </g>
 </g>
 <!-- proc~sample_hollmann_distribution&#45;&gt;proc~fre_h -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge6" class="edge">
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge5" class="edge">
 <title>proc~sample_hollmann_distribution&#45;&gt;proc~fre_h</title>
-<path fill="none" stroke="#000000" d="M153.4593,-106.4101C169.6151,-104.3969 185.9489,-102.3615 199.836,-100.631"/>
-<polygon fill="#000000" stroke="#000000" points="200.4446,-104.0824 209.935,-99.3726 199.579,-97.1361 200.4446,-104.0824"/>
+<path fill="none" stroke="#000000" d="M107.827,-103.8986C134.3489,-93.6534 172.3992,-78.9548 200.3346,-68.1636"/>
+<polygon fill="#000000" stroke="#000000" points="201.6915,-71.3916 209.7585,-64.5232 199.169,-64.8618 201.6915,-71.3916"/>
 </g>
 <!-- mpi_scatter -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_node6" class="node">
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_node7" class="node">
 <title>mpi_scatter</title>
-<polygon fill="#777777" stroke="#777777" points="270.5,-66 203.5,-66 203.5,-42 270.5,-42 270.5,-66"/>
-<text text-anchor="middle" x="237" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
+<polygon fill="#777777" stroke="#777777" points="270.5,-24 203.5,-24 203.5,0 270.5,0 270.5,-24"/>
+<text text-anchor="middle" x="237" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_scatter</text>
 </g>
 <!-- proc~sample_hollmann_distribution&#45;&gt;mpi_scatter -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge5" class="edge">
+<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge6" class="edge">
 <title>proc~sample_hollmann_distribution&#45;&gt;mpi_scatter</title>
-<path fill="none" stroke="#000000" d="M107.827,-103.8986C133.1248,-94.1262 168.9114,-80.3021 196.4041,-69.6819"/>
-<polygon fill="#000000" stroke="#000000" points="197.685,-72.9392 205.752,-66.0709 195.1626,-66.4095 197.685,-72.9392"/>
-</g>
-<!-- proc~random_norm~6 -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_node7" class="node">
-<title>proc~random_norm~6</title>
-<g id="a_proc~~sample_hollmann_distribution~~CallsGraph_node7"><a xlink:href=".././proc/random_norm~6.html" xlink:title="random_norm">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="276,-24 198,-24 198,0 276,0 276,-24"/>
-<text text-anchor="middle" x="237" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">random_norm</text>
-</a>
-</g>
-</g>
-<!-- proc~sample_hollmann_distribution&#45;&gt;proc~random_norm~6 -->
-<g id="proc~~sample_hollmann_distribution~~CallsGraph_edge4" class="edge">
-<title>proc~sample_hollmann_distribution&#45;&gt;proc~random_norm~6</title>
 <path fill="none" stroke="#000000" d="M90.7015,-103.8904C111.3694,-86.6566 151.3837,-54.739 189,-33 191.6703,-31.4568 194.4752,-29.954 197.3323,-28.508"/>
 <polygon fill="#000000" stroke="#000000" points="199.026,-31.5777 206.5344,-24.1028 196.0034,-25.2639 199.026,-31.5777"/>
 </g>
 <!-- proc~fre_h&#45;&gt;proc~deg2rad~5 -->
 <g id="proc~~sample_hollmann_distribution~~CallsGraph_edge7" class="edge">
 <title>proc~fre_h&#45;&gt;proc~deg2rad~5</title>
-<path fill="none" stroke="#000000" d="M264.1537,-100.8926C278.1294,-103.4107 295.3832,-106.5195 310.5989,-109.2611"/>
-<polygon fill="#000000" stroke="#000000" points="310.2798,-112.7598 320.742,-111.0886 311.5211,-105.8708 310.2798,-112.7598"/>
+<path fill="none" stroke="#000000" d="M264.1537,-64.0297C278.2638,-69.2416 295.7153,-75.6876 311.0373,-81.3471"/>
+<polygon fill="#000000" stroke="#000000" points="310.1487,-84.75 320.742,-84.9317 312.5741,-78.1836 310.1487,-84.75"/>
 </g>
 </g>
 </svg>
@@ -665,7 +665,7 @@ public subroutine sample_Hollmann_distribution(params, spp)
 <span class="k">          </span><span class="n">max_g</span> <span class="o">=</span> <span class="n">minmax</span>
        <span class="k">end if</span>
 <span class="k">    end do</span>
-
+    
     <span class="c">! buffer at minimum pitch angle boundary  </span>
     <span class="k">if</span> <span class="p">(</span><span class="n">h_params</span><span class="p">%</span><span class="n">min_pitch_angle</span><span class="p">.</span><span class="n">GE</span><span class="p">.</span><span class="n">korc_zero</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       do </span><span class="n">jj</span><span class="o">=</span><span class="mi">1_idef</span><span class="p">,</span><span class="nb">INT</span><span class="p">(</span><span class="n">minmax_buffer_size</span><span class="p">,</span><span class="n">idef</span><span class="p">)</span>
@@ -883,7 +883,7 @@ public subroutine sample_Hollmann_distribution(params, spp)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

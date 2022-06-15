@@ -132,7 +132,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.0% of total for procedures.">9 statements</a>
+    title=" 0.1% of total for procedures.">20 statements</a>
      </li> 
      
      
@@ -205,7 +205,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine ALLOCATE_2D_PROFILES_ARRAYS(P)
+private subroutine ALLOCATE_2D_PROFILES_ARRAYS(params, P)
     
     
    
@@ -238,7 +238,22 @@ private subroutine ALLOCATE_2D_PROFILES_ARRAYS(P)
   
 <tr>
   
-  <td><span class="anchor" id="variable-p~14"></span>type(PROFILES),</td>
+  <td><span class="anchor" id="variable-params~52"></span>type(KORC_PARAMS),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>params</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-p~20"></span>type(PROFILES),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -453,7 +468,8 @@ private subroutine ALLOCATE_2D_PROFILES_ARRAYS(P)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">ALLOCATE_2D_PROFILES_ARRAYS</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">ALLOCATE_2D_PROFILES_ARRAYS</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="n">P</span><span class="p">)</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="n">KORC_PARAMS</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">params</span>
     <span class="k">TYPE</span><span class="p">(</span><span class="n">PROFILES</span><span class="p">),</span> <span class="k">INTENT</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">P</span>
 
     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">X</span><span class="p">%</span><span class="n">R</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
@@ -462,7 +478,19 @@ private subroutine ALLOCATE_2D_PROFILES_ARRAYS(P)
     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">ne_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Te_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
     <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">Zeff_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
-  <span class="k">end subroutine </span><span class="n">ALLOCATE_2D_PROFILES_ARRAYS</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">%</span><span class="n">profile_model</span><span class="p">(</span><span class="mi">10</span><span class="p">:</span><span class="mi">10</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;H&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">RHON</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nRE_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr0_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr1_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr2_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nAr3_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nD_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+       <span class="k">ALLOCATE</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">nD1_2D</span><span class="p">(</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">%</span><span class="n">dims</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+    <span class="k">end if</span>
+<span class="k">    </span>
+<span class="k">  end subroutine </span><span class="n">ALLOCATE_2D_PROFILES_ARRAYS</span>
 </pre></div>
 
     </section>
@@ -478,7 +506,7 @@ private subroutine ALLOCATE_2D_PROFILES_ARRAYS(P)
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">
