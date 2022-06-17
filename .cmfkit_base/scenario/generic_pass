@@ -1,0 +1,36 @@
+#!/bin/bash
+
+
+__import() {
+
+  # list of CMake definition variables to import from existing environment
+  _deflist_uptake_outset CMAKE_BUILD_TYPE
+
+  # commit outstanding CMake def variables to the final roster
+  _deflist_accrue_vars
+}
+
+
+__build() {
+
+  # set default cmake build type: 'Release'
+  CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE:-Release}"
+
+  # commit outstanding CMake def variables to the final roster
+  _deflist_accrue_vars
+
+  # convert the CMake def final roster to CMake cmdline form
+  _deflist_render_cmdline
+
+  # output the final CMake cmdline definitions
+  _deflist_report_cmdline
+
+  _debug "simulate build pass"
+}
+
+
+__test() {
+
+  _debug "simulate test pass"
+}
+

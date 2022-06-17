@@ -1,0 +1,65 @@
+#!/bin/bash
+
+_debug_dumpvars() {
+
+  local shell_vars
+
+  read shell_vars <<< $(
+    set 2>/dev/null | while read a
+      do [[ $a == *=* ]] || break
+        echo -n "${a:+ }${a}"
+      done
+  )
+
+  echo "."
+  echo "."
+  echo "cmfkit >> [Debug] << _dumpvars()"
+  echo "."
+  echo "${shell_vars}" | tr ' ' '\n' | sort
+  echo "."
+  echo "."
+}
+
+_debug() {
+
+  local readonly msg="$1"
+
+  echo "."
+  echo "cmfkit >> [Debug] << ${msg}"
+  echo "."
+}
+
+
+_error() {
+
+  local readonly msg="$1"
+
+  echo "."
+  echo "."
+  echo "cmfkit >> [Error] << ${msg}"
+  echo "."
+  echo "."
+
+  return 1
+}
+
+
+_error_fatal() {
+
+  local readonly msg="$1"
+
+  echo "."
+  echo "."
+  echo "cmfkit >> [Fatal Error] << ${msg}"
+  echo "."
+  echo "."
+
+  exit 1
+}
+
+
+_randutil() {
+
+  local readonly uniq_id=$(( $RANDOM % 10000 + 40000 ))
+}
+

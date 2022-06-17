@@ -1,0 +1,140 @@
+#!/bin/bash
+
+
+_preflight() {
+
+  CMFKIT_OUTSET_DIR="$( pwd -P )"
+  CMFKIT_SOURCE_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+  . $CMFKIT_SOURCE_DIR/mod_common
+  . $CMFKIT_SOURCE_DIR/mod_deflist
+  . $CMFKIT_SOURCE_DIR/mod_platform
+  . $CMFKIT_SOURCE_DIR/mod_readybake
+
+  [[ -f $CMFKIT_OUTSET_DIR/cmfkit_vars ]] \
+    && . $CMFKIT_OUTSET_DIR/cmfkit_vars
+}
+
+
+_dugout_init() {
+
+  local readonly outsetdir="$( pwd -P )"
+  local readonly cmfkitdir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+  local rc
+
+  cd $(mktemp -d) || return 1
+
+  #mkdir -p ./cmfkit_coalesce
+
+  #cp -r ${outsetdir}/* .
+  [[ -d ${outsetdir}/.cmfkit ]] && cp -r ${outsetdir}/.cmfkit .
+
+  mkdir -p ./.cmfkit/platform
+  mkdir -p ./.cmfkit/scenario
+  mkdir -p ./.cmfkit/testbank
+
+  cp -r ${cmfkitdir}/platform/* ./.cmfkit/platform
+  cp -r ${cmfkitdir}/scenario/* ./.cmfkit/scenario
+  cp -r ${cmfkitdir}/testbank/* ./.cmfkit/testbank
+
+  echo; echo "${PWD}"
+
+  CMFKIT_DUGOUT_DIR="${PWD}/.cmfkit"
+
+  cd - >/dev/null
+
+  #[[ ${OLDPWD} != ${outsetdir} ]] && rm -rf ${OLDPWD}
+}
+
+
+_dugout_demolish() {
+
+  local readonly dugout_parent="${CMFKIT_DUGOUT_DIR%/*}"
+
+  [[ -d ${dugout_parent}/.cmfkit ]] \
+    && [[ ${dugout_parent} =~ .+/tmp\..+ ]] \
+    && rm -rf ${dugout_parent}
+}
+
+
+_preflight
+
+_dugout_init || _error_fatal "dugout creation failed"
+
+# establish list of variables defined in a pre-scope context
+_deflist_denote_outset
+
+#[[ -v CMFKIT_PLATFORM              ]] || echo
+#[[ -v CMFKIT_SCENARIO              ]] || echo
+#[[ -v CMFKIT_READYBAKE_IMAGE_SEED  ]] || echo
+
+CMFKIT_PLATFORM="${CMFKIT_PLATFORM:-unknown}"
+CMFKIT_SCENARIO="${CMFKIT_SCENARIO:-basic}"
+CMFKIT_SCENARIO_PHASE_SELECT="$1"
+
+[[ $CMFKIT_PLATFORM =~ unknown ]] && _platform_autoselect
+[[ $CMFKIT_PLATFORM =~ unknown ]] \
+  && _dugout_demolish \
+  && _error_fatal "unable to select platform"
+
+. $CMFKIT_DUGOUT_DIR/scenario/$CMFKIT_SCENARIO || _error_fatal "unable to load scenario"
+
+__import || echo "cmfkit >> [Info] << scenario/$CMFKIT_SCENARIO __import() not present"
+
+# ------------
+
+[[ -n "$CMFKIT_READYBAKE_IMAGE_SEED" ]] \
+  && _readybake_isolate_buildpath "$CMFKIT_READYBAKE_IMAGE_SEED"
+
+[[ $CMFKIT_PLATFORM =~ readybake ]] \
+  && [[ -z "$CMFKIT_READYBAKE_BUILD_PATH" ]] \
+  && _dugout_demolish \
+  && _error_fatal "unable to isolate Dockerfile for $CMFKIT_READYBAKE_IMAGE_SEED"
+
+[[ $CMFKIT_PLATFORM =~ readybake ]] && _readybake_yield_image
+[[ $CMFKIT_PLATFORM =~ readybake ]]  \
+  && [[ -z "$CMFKIT_READYBAKE_IMAGE" ]] \
+  && _dugout_demolish \
+  && _error_fatal "unable to yield image: ${CMFKIT_READYBAKE_BUILD_PATH##*/} '$CMFKIT_READYBAKE_IMAGE_SEED'"
+
+[[ $CMFKIT_PLATFORM =~ readybake ]] && _readybake_init
+[[ $CMFKIT_PLATFORM =~ readybake ]]  \
+  && [[ -z "$CMFKIT_READYBAKE_CONTAINER_ID" ]] \
+  && _dugout_demolish \
+  && _error_fatal "unable to create container from ${CMFKIT_READYBAKE_IMAGE}"
+
+[[ $CMFKIT_PLATFORM =~ readybake ]] && rc=1 && _readybake_exec && rc=0
+
+# ------------
+
+[[ ! $CMFKIT_PLATFORM =~ readybake ]] \
+  && . $CMFKIT_DUGOUT_DIR/platform/$CMFKIT_PLATFORM/setup \
+  && _deflist_accrue_vars
+
+[[ ! $CMFKIT_PLATFORM =~ readybake ]] \
+  && [[ -z $CMFKIT_SCENARIO_PHASE_SELECT ]] && rc=1 \
+  && ( __build || _error  "build failure: 'scenario/$CMFKIT_SCENARIO' on '$CMFKIT_PLATFORM'" ) \
+  && ( __test  || _error   "test failure: 'scenario/$CMFKIT_SCENARIO' on '$CMFKIT_PLATFORM'" ) \
+  && rc=0
+
+[[ ! $CMFKIT_PLATFORM =~ readybake ]] \
+  && [[ $CMFKIT_SCENARIO_PHASE_SELECT =~ build|test ]] && rc=1 \
+  && ( "__$1"  || _error     "$1 failure: 'scenario/$CMFKIT_SCENARIO' on '$CMFKIT_PLATFORM'" ) \
+  && rc=0
+
+_dugout_demolish
+
+exit "${rc}"
+
+  # differentiate by:
+    # - compute_env:   [ nersc github docker ]
+    # - os_type:       [ ubuntu macos ]
+    # - mpi_wrapper:   [ openmpi mpich intel ]
+    # -
+
+
+# CMFKIT_READYBAKE_IMAGE_SEED
+# CMFKIT_PLATFORM [ autoselect nersc github_vm readybake ]
+# CMFKIT_SCENARIO [ all default none zilch ]
+
+# CMFKIT_INTERACTIVE [ yes no ]
