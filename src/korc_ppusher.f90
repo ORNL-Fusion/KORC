@@ -3831,8 +3831,8 @@ contains
                 end do
                 !$OMP END SIMD
 
-                write(6,*) 'Y',spp(ii)%vars%Y(1,1)*params%cpp%length,spp(ii)%vars%Y(1,2),spp(ii)%vars%Y(1,3)*params%cpp%length
-                write(6,*) 'Y0',spp(ii)%vars%Y0(1,1)*params%cpp%length,spp(ii)%vars%Y0(1,2),spp(ii)%vars%Y0(1,3)*params%cpp%length
+                !write(6,*) 'Y',spp(ii)%vars%Y(1,1)*params%cpp%length,spp(ii)%vars%Y(1,2),spp(ii)%vars%Y(1,3)*params%cpp%length
+                !write(6,*) 'Y0',spp(ii)%vars%Y0(1,1)*params%cpp%length,spp(ii)%vars%Y0(1,2),spp(ii)%vars%Y0(1,3)*params%cpp%length
 
 
              else if (params%FokPlan.and.params%collisions) then
