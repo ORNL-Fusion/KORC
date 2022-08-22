@@ -305,6 +305,10 @@ CONTAINS
        params%num_snapshots = params%t_steps/params%output_cadence
 
        if (params%t_steps.gt.params%output_cadence) then
+          if (params%snapshot_frequency.lt.params%dt) then
+             params%t_steps = CEILING(params%simulation_time/params%snapshot_frequency,ip)
+             params%num_snapshots = params%t_steps
+          end if
           params%dt=params%snapshot_frequency/float(params%output_cadence)
        endif
 
