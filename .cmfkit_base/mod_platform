@@ -1,0 +1,70 @@
+#!/bin/bash
+
+_hw_check() {
+
+  local cpu_arch
+  local cpu_count
+
+  read cpu_arch   <<< $( uname -p )
+  read cpu_count  <<< $( getconf _NPROCESSORS_ONLN )
+
+  [[ ${cpu_arch} =~ ${1,,} ]] \
+    && [[ ${cpu_count} =~ ${2,,} ]]
+}
+
+
+_os_check_linux() {
+
+  [[ -f /etc/os-release ]] && . /etc/os-release     \
+    && [[ ${1,,} =~ ${ID}${ID:+|}${ID_LIKE// /|} ]]  \
+    && [[ ${VERSION_ID} =~ ${2,,} ]]                  \
+    && [[ ${CPE_NAME}   =~ ${3,,} ]]                   \
+    && return 0
+
+  return 1
+}
+
+
+_os_check_macos() {
+
+  echo
+}
+
+
+_platform_autodetect() {
+
+  echo
+}
+
+
+_platform_autoselect() {
+
+  local manifest
+
+  _debug "_platform_autoselect() start"
+
+  #[[ -v   CMFKIT_DUGOUT_DIR   ]] || return 1
+  [[ -z "$CMFKIT_DUGOUT_DIR"  ]] || return 1
+
+  cd $CMFKIT_DUGOUT_DIR/platform
+
+  read manifest <<< $(
+    find . -mindepth 2   \
+           -maxdepth 2   \
+           -type f       \
+           -path "./*/match" \
+      | grep -v "/readybake" \
+      | tr '\n' ' '
+  )
+
+  echo "${manifest}" \
+    | tr ' ' '\n'    \
+    | xargs -n1 /bin/bash -c 'echo xx${1}' _
+
+    #xargs -n1 /bin/bash -c 'cd ${1%/*} && ./${1##*/}' _
+
+  cd - >/dev/null
+
+  _debug "_platform_autoselect() end"
+}
+

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sudo -- apt-get install -y gfortran
+sudo -- apt-get install -y libnetcdf-dev libnetcdff-dev
+sudo -- apt-get install -y libopenmpi-dev openmpi-common openmpi-bin
+
+export FC=gfortran
+export CXX=g++
+export NETCDF_FLAGS=" -D_NETCDF"
+export L_NETCDF=" -L/usr/lib/x86_64-linux-gnu/lib -lnetcdff"
+export I_NETCDF=" -I/usr/include"
+

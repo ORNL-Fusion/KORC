@@ -1,0 +1,4 @@
+#!/bin/bash
+
+brew install hdf5 open-mpi
+
