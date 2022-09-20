@@ -2014,6 +2014,12 @@ contains
           CBL(cc) = (CB_ee_SD(vm(cc),ne(cc),Te(cc),Zeff(cc))+ &
                CB_ei_SD(params,vm(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
 
+         if (.not.cparams_ss%slowing_down) CFL(cc)=0._rp
+         if (.not.cparams_ss%pitch_diffusion) CBL(cc)=0._rp
+         if (.not.cparams_ss%energy_diffusion) THEN
+            CAL(cc)=0._rp
+            dCAL(cc)=0._rp
+         ENDIF
 
           dpm(cc)=REAL(flagCol(cc))*REAL(flagCon(cc))* &
                ((-CFL(cc)+dCAL(cc))*dt+ &
