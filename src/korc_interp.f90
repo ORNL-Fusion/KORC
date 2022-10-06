@@ -3225,7 +3225,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
   REAL(rp),DIMENSION(1)   :: B1_R,B1_PHI,B1_Z
   REAL(rp),DIMENSION(1)   :: B1Re_R,B1Re_PHI,B1Re_Z
   REAL(rp),DIMENSION(1)   :: B1Im_R,B1Im_PHI,B1Im_Z
-  REAL(rp),DIMENSION(1)   :: cP,sP
+  REAL(rp),DIMENSION(1)   :: cP,sP,cPshift,sPshift
   REAL(rp), DIMENSION(1,3)  :: A
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: pp,ss
@@ -3273,12 +3273,14 @@ subroutine interp_FOfields_mars(prtcls, F, params)
      B0_PHI = -F%Bo*F%Ro/Y_R(1)
      B0_Z = -psip_conv*A(1,2)/Y_R(1)
 
-     cP=cos(Y_PHI(1)-phase)
-     sP=sin(Y_PHI(1)-phase)
+     cP=cos(Y_PHI(1))
+     sP=sin(Y_PHI(1))
+     cPshift=cos(Y_PHI(1)-phase)
+     sPshift=sin(Y_PHI(1)-phase)
 
-     B1_R = amp*(B1Re_R*cP-B1Im_R*sP)
-     B1_PHI = amp*(B1Re_PHI*cP-B1Im_PHI*sP)
-     B1_Z = amp*(B1Re_Z*cP-B1Im_Z*sP)
+     B1_R = amp*(B1Re_R*cPshift-B1Im_R*sPshift)
+     B1_PHI = amp*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+     B1_Z = amp*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
      B_R = B0_R+B1_R
      B_PHI = B0_PHI+B1_PHI
@@ -3317,7 +3319,7 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   REAL(rp),DIMENSION(pchunk)   :: B1Re_R,B1Re_PHI,B1Re_Z
   REAL(rp),DIMENSION(pchunk)   :: B1Im_R,B1Im_PHI,B1Im_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: PSIp
-  REAL(rp),DIMENSION(pchunk)   :: cP,sP
+  REAL(rp),DIMENSION(pchunk)   :: cP,sP,cPshift,sPshift
   REAL(rp), DIMENSION(pchunk,3)  :: A
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: cc
@@ -3345,12 +3347,14 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
      B0_PHI(cc) = -F%Bo*F%Ro/Y_R(cc)
      B0_Z(cc) = -psip_conv*A(cc,2)/Y_R(cc)
 
-     cP(cc)=cos(Y_PHI(cc)-phase)
-     sP(cc)=sin(Y_PHI(cc)-phase)
+     cP(cc)=cos(Y_PHI(cc))
+     sP(cc)=sin(Y_PHI(cc))
+     cPshift(cc)=cos(Y_PHI(cc)-phase)
+     sPshift(cc)=sin(Y_PHI(cc)-phase)
 
-     B1_R(cc) = amp*(B1Re_R(cc)*cP(cc)-B1Im_R(cc)*sP(cc))
-     B1_PHI(cc) = amp*(B1Re_PHI(cc)*cP(cc)-B1Im_PHI(cc)*sP(cc))
-     B1_Z(cc) = amp*(B1Re_Z(cc)*cP(cc)-B1Im_Z(cc)*sP(cc))
+     B1_R(cc) = amp*(B1Re_R(cc)*cPshift(cc)-B1Im_R(cc)*sPshift(cc))
+     B1_PHI(cc) = amp*(B1Re_PHI(cc)*cPshift(cc)-B1Im_PHI(cc)*sPshift(cc))
+     B1_Z(cc) = amp*(B1Re_Z(cc)*cPshift(cc)-B1Im_Z(cc)*sPshift(cc))
 
      B_R(cc) = B0_R(cc)+B1_R(cc)
      B_PHI(cc) = B0_PHI(cc)+B1_PHI(cc)
