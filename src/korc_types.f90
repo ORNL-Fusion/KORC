@@ -618,6 +618,7 @@ module korc_types
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp)  :: AMP
      REAL(rp)  :: MARS_AMP_Scale
+     REAL(rp)  :: MARS_phase
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
      REAL(rp)  :: AORSA_nmode
@@ -695,6 +696,9 @@ module korc_types
 #endif
      REAL(rp)  :: psip_conv
      LOGICAL :: useLCFS
+     LOGICAL :: useDiMES
+     REAL(rp),DIMENSION(3) :: DiMESloc
+     REAL(rp),DIMENSION(2) :: DiMESdims
 
   END TYPE FIELDS
 

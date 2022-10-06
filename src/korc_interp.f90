@@ -1,7 +1,7 @@
 module korc_interp
-  !! @note Module containing functions and subroutines for performing 
+  !! @note Module containing functions and subroutines for performing
   !! interpolations using the PSPLINE library. @endnote
-  !! For a detailed documentation of the PSPLINE library we refer the 
+  !! For a detailed documentation of the PSPLINE library we refer the
   !! user to "https://w3.pppl.gov/ntcc/PSPLINE/".
   use korc_types
   use korc_coords
@@ -12,11 +12,11 @@ module korc_interp
   use EZspline_obj	! psplines module
   use EZspline		! psplines module
 #endif
-  
+
 #ifdef FIO
   use korc_fio
 #endif
-  
+
   !$ use OMP_LIB
 
   IMPLICIT NONE
@@ -26,63 +26,63 @@ module korc_interp
 
 
   TYPE, PRIVATE :: KORC_3D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for 
+     !! @note Derived type containing 3-D PSPLINE interpolants for
      !! cylindrical components of vector fields
-     !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi + 
+     !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi +
      !! F_Z\hat{e}_Z\). Real precision of 8 bytes. @endnote
      TYPE(EZspline3)    :: A     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline3)    :: R		
+     TYPE(EZspline3)    :: R
      !! Interpolant of \(F_R(R,\phi,Z)\).
-     TYPE(EZspline3)    :: PHI	
+     TYPE(EZspline3)    :: PHI
      !! Interpolant of \(F_\phi(R,\phi,Z)\).
-     TYPE(EZspline3)    :: Z		
+     TYPE(EZspline3)    :: Z
      !! Interpolant of \(F_Z(R,\phi,Z)\).
-     
-     INTEGER               :: NR 
+
+     INTEGER               :: NR
      !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NPHI 
+     INTEGER               :: NPHI
      !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ 
+     INTEGER               :: NZ
      !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /) 
-     !! Not-a-knot boundary condition for the interpolants at both 
+     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+     !! Not-a-knot boundary condition for the interpolants at both
      !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /) 
-     !! Periodic boundary condition for the interpolants at both 
+     INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
+     !! Periodic boundary condition for the interpolants at both
      !! ends of the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /) 
-     !! Not-a-knot boundary condition for the interpolants at both 
+     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+     !! Not-a-knot boundary condition for the interpolants at both
      !! ends of the \(Z\) direction.
   END TYPE KORC_3D_FIELDS_INTERPOLANT
 
   TYPE, PRIVATE :: KORC_2X1T_FIELDS_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for 
+     !! @note Derived type containing 3-D PSPLINE interpolants for
      !! cylindrical components of vector fields
-     !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi + 
+     !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi +
      !! F_Z\hat{e}_Z\). Real precision of 8 bytes. @endnote
      TYPE(EZspline3)    :: A
      !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline3)    :: R		
+     TYPE(EZspline3)    :: R
      !! Interpolant of \(F_R(R,\phi,Z)\).
-     TYPE(EZspline3)    :: T	
+     TYPE(EZspline3)    :: T
      !! Interpolant of \(F_\phi(R,\phi,Z)\).
-     TYPE(EZspline3)    :: Z		
+     TYPE(EZspline3)    :: Z
      !! Interpolant of \(F_Z(R,\phi,Z)\).
-     
-     INTEGER               :: NR 
+
+     INTEGER               :: NR
      !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NT 
+     INTEGER               :: NT
      !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ 
+     INTEGER               :: NZ
      !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /) 
-     !! Not-a-knot boundary condition for the interpolants at both 
+     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+     !! Not-a-knot boundary condition for the interpolants at both
      !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCST = (/ 0, 0 /) 
-     !! Periodic boundary condition for the interpolants at both 
+     INTEGER, DIMENSION(2) :: BCST = (/ 0, 0 /)
+     !! Periodic boundary condition for the interpolants at both
      !! ends of the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /) 
-     !! Not-a-knot boundary condition for the interpolants at both 
+     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+     !! Not-a-knot boundary condition for the interpolants at both
      !! ends of the \(Z\) direction.
   END TYPE KORC_2X1T_FIELDS_INTERPOLANT
 
@@ -99,7 +99,7 @@ module korc_interp
      !! Interpolant of \(F_Y(R,Z)\).
      TYPE(EZspline2)    :: Z
      !! Interpolant of \(F_Z(R,Z)\).
-     
+
      INTEGER               :: NR
      !! Size of mesh containing the field data along the \(R\)-axis.
      INTEGER               :: NZ
@@ -111,7 +111,7 @@ module korc_interp
      !! Not-a-knot boundary condition for the interpolants at both
      !! ends of the \(Z\) direction.
   END TYPE KORC_2DX_FIELDS_INTERPOLANT
-  
+
   TYPE, PRIVATE :: KORC_2D_FIELDS_INTERPOLANT
      !! @note Derived type containing 2-D PSPLINE interpolants for
      !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
@@ -125,7 +125,7 @@ module korc_interp
      !! Interpolant of \(F_\phi(R,Z)\).
      TYPE(EZspline2)    :: Z
      !! Interpolant of \(F_Z(R,Z)\).
-     
+
      INTEGER               :: NR
      !! Size of mesh containing the field data along the \(R\)-axis.
      INTEGER               :: NZ
@@ -151,7 +151,7 @@ module korc_interp
      !! Interpolant of \(F_\phi(R,Z)\).
      TYPE(EZspline1)    :: Z
      !! Interpolant of \(F_Z(R,Z)\).
-     
+
      INTEGER               :: Nrm
      !! Size of mesh containing the field data along the \(R\)-axis.
      INTEGER, DIMENSION(2) :: BCSrm = (/ 0, 0 /)
@@ -213,7 +213,7 @@ module korc_interp
      TYPE(EZspline2)    :: nAr3
      TYPE(EZspline2)    :: nD
      TYPE(EZspline2)    :: nD1
-     
+
      INTEGER               :: NR
      !! Size of mesh containing the field data along the \(R\)-axis.
      INTEGER               :: NZ
@@ -232,7 +232,7 @@ module korc_interp
      !! effective charge number \(Z_{eff}(R,Z)\) profiles.
      !! Real precision of 8 bytes. @endnote
      TYPE(EZspline2)    :: fRE_E
-     TYPE(EZspline2)    :: fRE_pitch     
+     TYPE(EZspline2)    :: fRE_pitch
 
      INTEGER               :: NE
      !! Size of mesh containing the field data along the \(R\)-axis.
@@ -245,11 +245,11 @@ module korc_interp
      !! Not-a-knot boundary condition for the interpolants at both
      !! ends of the \(Z\) direction.
   END TYPE KORC_2D_HOLLMANN_INTERPOLANT
-  
-  
+
+
 #elif SINGLE_PRECISION
 
-  
+
   TYPE, PRIVATE :: KORC_3D_FIELDS_INTERPOLANT
      !! @note Derived type containing 3-D PSPLINE interpolants for cylindrical
      !! components of vector fields \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R +
@@ -347,7 +347,7 @@ module korc_interp
      !! Interpolant of \(F_\phi(R,Z)\).
      TYPE(EZspline1_r4)    :: Z
      !! Interpolant of \(F_Z(R,Z)\).
-     
+
      INTEGER               :: Nrm
      !! Size of mesh containing the field data along the \(R\)-axis.
      INTEGER, DIMENSION(2) :: BCSrm = (/ 0, 0 /)
@@ -425,7 +425,7 @@ module korc_interp
      !! and plasma profiles are known.
      INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: FLAG2D
      !! 2-D array with info of the spatial domain where the axisymmetric fields
-     !! and plasma profiles are known.     
+     !! and plasma profiles are known.
      INTEGER(KIND=1), DIMENSION(:,:,:), ALLOCATABLE    :: FLAG3D
      !! 3-D array with info of the spatial domain where the 3-D fields and plasma
      !! profiles are known.
@@ -438,7 +438,7 @@ module korc_interp
      REAL(rp)                                          :: Zo
      !! Smaller vertical position of the fields and profiles domain
      REAL(rp)                                          :: To
-     
+
      REAL(rp)                                          :: Drm
      REAL(rp)                                          :: DPSIP
      REAL(rp)                                          :: DR
@@ -449,7 +449,7 @@ module korc_interp
      ! Separation between grid points along the azimuthal direction.
      REAL(rp)                                          :: DZ
      !! Separation between grid points along the vertical direction.
-     
+
   END TYPE KORC_INTERPOLANT_DOMAIN
 
   TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2d
@@ -483,7 +483,7 @@ module korc_interp
   !! the electric field.
   TYPE(KORC_1D_FIELDS_INTERPOLANT), PRIVATE      :: efield_SC1d
   !! An instance of KORC_1D_FIELDS_INTERPOLANT for interpolating
-  !! the self-consistent electric field.  
+  !! the self-consistent electric field.
   TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: gradB_2d
   !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
   !! the magnetic field.
@@ -559,7 +559,7 @@ module korc_interp
        interp_2D_curlbfields,&
        gradient_2D_Bfields
 #else
-  PUBLIC :: interp_fields 
+  PUBLIC :: interp_fields
 
 #endif
 
@@ -582,7 +582,7 @@ CONTAINS
          (params%field_eval.eq.'interp')).and. &
          (.not.TRIM(params%field_model).eq.'M3D_C1'.and. &
          .not.TRIM(params%field_model).eq.'NIMROD')) then
-       
+
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING FIELDS INTERPOLANT * * * *")')
        end if
@@ -595,7 +595,7 @@ CONTAINS
 
           if(F%ReInterp_2x1t) then
 
-             if (.not.(EZspline_allocated(bfield_2d%A))) then     
+             if (.not.(EZspline_allocated(bfield_2d%A))) then
 
                 bfield_2d%NR = F%dims(1)
                 bfield_2d%NZ = F%dims(3)
@@ -609,7 +609,7 @@ CONTAINS
                 bfield_2d%A%x1 = F%X%R
                 bfield_2d%A%x2 = F%X%Z
              end if
-                
+
              !write(output_unit_write,'("R",E17.10)') F%X%R
              !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
@@ -633,9 +633,9 @@ CONTAINS
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
 
              F%Bflux3D = .FALSE.
-             
+
           else
-             
+
              if (EZspline_allocated(bfield_2d%A)) &
                   call Ezspline_free(bfield_2d%A, ezerr)
 
@@ -651,16 +651,16 @@ CONTAINS
              bfield_2d%A%x1 = F%X%R
              bfield_2d%A%x2 = F%X%Z
 
-#if DBG_CHECK    
+#if DBG_CHECK
              !write(6,*) 'R',F%X%R
              !write(6,*) 'Z',F%X%Z
 #endif
-             
+
              call EZspline_setup(bfield_2d%A, F%PSIp, ezerr, .TRUE.)
              call EZspline_error(ezerr)
 
              !write(output_unit_write,'("bfield_2d%A: ",E17.10)') bfield_2d%A%fspl(1,:,:)
-             
+
              if (.not.ALLOCATED(fields_domain%FLAG2D)) &
                   ALLOCATE(fields_domain%FLAG2D(bfield_2d%NR,bfield_2d%NZ))
 
@@ -679,9 +679,9 @@ CONTAINS
        if(F%B1field) then
 
           if (params%field_model(10:13).eq.'MARS') then
-          
+
              write(output_unit_write,*) '2D n=1 MARS magnetic fields'
-          
+
              b1Refield_2d%NR = F%dims(1)
              b1Refield_2d%NZ = F%dims(3)
 
@@ -702,7 +702,7 @@ CONTAINS
 
              !write(6,*) 'size',size(F%B1Re_2D%R(:,200))
              !write(6,*) 'B1Re_2D%R',F%B1Re_2D%R(:,200)*params%cpp%Bo
-             
+
              ! Initializing BPHI1Re interpolant
              call EZspline_init(b1Refield_2d%PHI,b1Refield_2d%NR, &
                   b1Refield_2d%NZ,b1Refield_2d%BCSR,b1Refield_2d%BCSZ,ezerr)
@@ -717,7 +717,7 @@ CONTAINS
 
              call EZspline_setup(b1Refield_2d%PHI, F%B1Re_2D%PHI, ezerr, .TRUE.)
              call EZspline_error(ezerr)
-             
+
              ! Initializing BZ1_Re interpolant
              call EZspline_init(b1Refield_2d%Z,b1Refield_2d%NR, &
                   b1Refield_2d%NZ,b1Refield_2d%BCSR,b1Refield_2d%BCSZ,ezerr)
@@ -735,7 +735,7 @@ CONTAINS
 
              b1Imfield_2d%NR = F%dims(1)
              b1Imfield_2d%NZ = F%dims(3)
-             
+
              ! Initializing BR1RIm interpolant
              call EZspline_init(b1Imfield_2d%R,b1Imfield_2d%NR, &
                   b1Imfield_2d%NZ,b1Imfield_2d%BCSR,b1Imfield_2d%BCSZ,ezerr)
@@ -786,7 +786,7 @@ CONTAINS
 
              write(output_unit_write,*) '2D AORSA magnetic fields'
              flush(output_unit_write)
-          
+
              b1Refield_2dx%NR = F%dims(1)
              b1Refield_2dx%NZ = F%dims(3)
 
@@ -807,7 +807,7 @@ CONTAINS
 
              !write(6,*) 'size',size(F%B1Re_2D%R(:,200))
              !write(6,*) 'B1Re_2DX%X',F%B1Re_2DX%X(:,200)*params%cpp%Bo
-         
+
 
              ! Initializing BY1Re interpolant
              call EZspline_init(b1Refield_2dx%Y,b1Refield_2dx%NR, &
@@ -844,7 +844,7 @@ CONTAINS
 
              !write(6,*) 'size',size(F%B1Re_2D%R(:,200))
              !write(6,*) 'B1Re_2D%R',F%B1Re_2D%R(:,200)*params%cpp%Bo
-             
+
              b1Imfield_2dx%NR = F%dims(1)
              b1Imfield_2dx%NZ = F%dims(3)
 
@@ -865,7 +865,7 @@ CONTAINS
 
              !write(6,*) 'size',size(F%B1Im_2D%R(:,200))
              !write(6,*) 'B1Im_2D%R',F%B1Im_2D%R(:,200)*params%cpp%Bo
-         
+
 
              ! Initializing BY1Im interpolant
              call EZspline_init(b1Imfield_2dx%Y,b1Imfield_2dx%NR, &
@@ -902,21 +902,21 @@ CONTAINS
 
              !write(6,*) 'size',size(F%B1Im_2D%R(:,200))
              !write(6,*) 'B1Im_2D%R',F%B1Im_2D%R(:,200)*params%cpp%Bo
-             
+
           endif
-          
+
        end if
-       
+
        if (F%Bflux3D) then
 
           if (params%mpi_params%rank .EQ. 0) then
              write(output_unit_write,'("3D psi potential")')
           end if
-          
+
           if(F%Dim2x1t) then
 
              write(output_unit_write,*) '2X1T poloidal flux function'
-             
+
              bfield_2X1T%NR = F%dims(1)
              bfield_2X1T%NT = F%dims(2)
              bfield_2X1T%NZ = F%dims(3)
@@ -945,11 +945,11 @@ CONTAINS
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
 
              fields_domain%To = F%X%PHI(1)
-             
+
           else
 
              write(output_unit_write,*) '3D poloidal flux function'
-             
+
              bfield_3d%NR = F%dims(1)
              bfield_3d%NPHI = F%dims(2)
              bfield_3d%NZ = F%dims(3)
@@ -967,15 +967,15 @@ CONTAINS
              call EZspline_setup(bfield_3d%A, F%PSIp3D, ezerr, .TRUE.)
              call EZspline_error(ezerr)
           end if
-          
+
        end if
 
-       
+
        if (F%Bfield) then
           if (F%axisymmetric_fields) then
 
              write(output_unit_write,*) '2D magnetic field'
-             
+
              bfield_2d%NR = F%dims(1)
              bfield_2d%NZ = F%dims(3)
 
@@ -983,7 +983,7 @@ CONTAINS
              call EZspline_init(bfield_2d%R,bfield_2d%NR,bfield_2d%NZ, &
                   bfield_2d%BCSR,bfield_2d%BCSZ,ezerr)
              call EZspline_error(ezerr)
-             
+
              bfield_2d%R%x1 = F%X%R
              bfield_2d%R%x2 = F%X%Z
 
@@ -1013,19 +1013,19 @@ CONTAINS
              call EZspline_error(ezerr)
 
 !             do ii=1_idef,bfield_2d%PHI%n1
-!                do jj=1_idef,bfield_2d%PHI%n2                   
+!                do jj=1_idef,bfield_2d%PHI%n2
 !                   write(output_unit_write,'("BPHI_spline1 at R ",E17.10,", Z ",E17.10,": ",E17.10)') &
 !                        bfield_2d%PHI%x1(ii)*params%cpp%length, &
 !                        bfield_2d%PHI%x2(jj)*params%cpp%length, &
 !                        bfield_2d%PHI%fspl(1,ii,jj)*params%cpp%Bo
 !                end do
 !             end do
-             
+
 
              if (params%orbit_model.eq.'GCpre') then
 
                 write(output_unit_write,*) '2D precalculated auxiliary fields'
-                
+
                 gradB_2d%NR = F%dims(1)
                 gradB_2d%NZ = F%dims(3)
 
@@ -1113,9 +1113,9 @@ CONTAINS
              fields_domain%DR = ABS(F%X%R(2) - F%X%R(1))
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
           else
-             
+
              write(output_unit_write,*) '3D magnetic field'
-             
+
              bfield_3d%NR = F%dims(1)
              bfield_3d%NPHI = F%dims(2)
              bfield_3d%NZ = F%dims(3)
@@ -1135,7 +1135,7 @@ CONTAINS
 
              !write(6,'("bfield_3d%R: ",E17.10)') bfield_3d%R%fspl(1,:,:,:)
              !do ii=1_idef,bfield_3d%R%n1
-             !   do jj=1_idef,bfield_3d%R%n3                   
+             !   do jj=1_idef,bfield_3d%R%n3
              !      write(6,'("BR_spline1 at R ",E17.10,", Z ",E17.10,": ",E17.10)') &
              !          bfield_3d%R%x1(ii)*params%cpp%length, &
              !          bfield_3d%R%x3(jj)*params%cpp%length, &
@@ -1157,7 +1157,7 @@ CONTAINS
              call EZspline_error(ezerr)
 
              !write(output_unit_write,*) bfield_3d%PHI%x2
-             
+
 
              ! Initializing Z component of interpolant
              call EZspline_init(bfield_3d%Z, bfield_3d%NR, bfield_3d%NPHI, &
@@ -1175,7 +1175,7 @@ CONTAINS
              if (params%orbit_model.eq.'GCpre') then
 
                 write(output_unit_write,*) '3D precalculated auxiliary fields'
-                
+
                 gradB_3d%NR = F%dims(1)
                 gradB_3d%NPHI = F%dims(2)
                 gradB_3d%NZ = F%dims(3)
@@ -1263,7 +1263,7 @@ CONTAINS
                 call EZspline_error(ezerr)
 
              end if
-             
+
              ALLOCATE(fields_domain%FLAG3D(bfield_3d%NR,bfield_3d%NPHI, &
                   bfield_3d%NZ))
              fields_domain%FLAG3D = F%FLAG3D
@@ -1273,12 +1273,12 @@ CONTAINS
              fields_domain%DZ = ABS(F%X%Z(2) - F%X%Z(1))
           end if
        end if
-       
+
        if (F%dBfield) then
           if (F%axisymmetric_fields) then
 
              write(output_unit_write,*) '2D precalculated gradient fields'
-             
+
              ! dBdR
              dbdR_2d%NR = F%dims(1)
              dbdR_2d%NZ = F%dims(3)
@@ -1287,7 +1287,7 @@ CONTAINS
              call EZspline_init(dbdR_2d%R,dbdR_2d%NR,dbdR_2d%NZ, &
                   dbdR_2d%BCSR,dbdR_2d%BCSZ,ezerr)
              call EZspline_error(ezerr)
-             
+
              dbdR_2d%R%x1 = F%X%R
              dbdR_2d%R%x2 = F%X%Z
 
@@ -1323,7 +1323,7 @@ CONTAINS
              call EZspline_init(dbdPHI_2d%R,dbdPHI_2d%NR,dbdPHI_2d%NZ, &
                   dbdPHI_2d%BCSR,dbdPHI_2d%BCSZ,ezerr)
              call EZspline_error(ezerr)
-             
+
              dbdPHI_2d%R%x1 = F%X%R
              dbdPHI_2d%R%x2 = F%X%Z
 
@@ -1359,7 +1359,7 @@ CONTAINS
              call EZspline_init(dbdZ_2d%R,dbdZ_2d%NR,dbdZ_2d%NZ, &
                   dbdZ_2d%BCSR,dbdZ_2d%BCSZ,ezerr)
              call EZspline_error(ezerr)
-             
+
              dbdZ_2d%R%x1 = F%X%R
              dbdZ_2d%R%x2 = F%X%Z
 
@@ -1391,7 +1391,7 @@ CONTAINS
           else
 
              write(output_unit_write,*) '3D precalculated gradient fields'
-             
+
              ! dBdR
              dbdR_3d%NR = F%dims(1)
              dbdR_3d%NPHI = F%dims(2)
@@ -1424,7 +1424,7 @@ CONTAINS
              call EZspline_error(ezerr)
 
              !write(output_unit_write,*) dbdR_3d%PHI%x2
-             
+
 
              ! Initializing Z component of interpolant
              call EZspline_init(dbdR_3d%Z, dbdR_3d%NR, dbdR_3d%NPHI, &
@@ -1471,7 +1471,7 @@ CONTAINS
              call EZspline_error(ezerr)
 
              !write(output_unit_write,*) dbdPHI_3d%PHI%x2
-             
+
 
              ! Initializing Z component of interpolant
              call EZspline_init(dbdPHI_3d%Z, dbdPHI_3d%NR, dbdPHI_3d%NPHI, &
@@ -1518,7 +1518,7 @@ CONTAINS
              call EZspline_error(ezerr)
 
              !write(output_unit_write,*) dbdZ_3d%PHI%x2
-             
+
 
              ! Initializing Z component of interpolant
              call EZspline_init(dbdZ_3d%Z, dbdZ_3d%NR, dbdZ_3d%NPHI, &
@@ -1535,7 +1535,7 @@ CONTAINS
 
           end if
        end if
-       
+
        fields_domain%Ro = F%X%R(1)
        fields_domain%Zo = F%X%Z(1)
 
@@ -1546,11 +1546,11 @@ CONTAINS
              if (params%mpi_params%rank .EQ. 0) then
                 write(output_unit_write,*) '2D electric fields'
              endif
-                
+
              if(F%ReInterp_2x1t) then
 
                 if (.not.(EZspline_allocated(efield_2d%PHI))) then
-                
+
                    efield_2d%NR = F%dims(1)
                    efield_2d%NZ = F%dims(3)
 
@@ -1583,7 +1583,7 @@ CONTAINS
                 call EZspline_setup(efield_2d%R, F%E_3D%R(:,F%ind_2x1t,:), &
                      ezerr, .TRUE.)
                 call EZspline_error(ezerr)
-                
+
                 call EZspline_setup(efield_2d%PHI, F%E_3D%PHI(:,F%ind_2x1t,:), &
                      ezerr, .TRUE.)
                 call EZspline_error(ezerr)
@@ -1593,9 +1593,9 @@ CONTAINS
                 call EZspline_error(ezerr)
 
 !                write(output_unit_write,'("efield_2d%PHI: ",E17.10)') efield_2d%PHI%fspl(1,:,:)
-                
+
              else
-                
+
                 efield_2d%NR = F%dims(1)
                 efield_2d%NZ = F%dims(3)
 
@@ -1636,7 +1636,7 @@ CONTAINS
           else
 
              write(output_unit_write,*) '3D electric fields'
-             
+
              efield_3d%NR = F%dims(1)
              efield_3d%NPHI = F%dims(2)
              efield_3d%NZ = F%dims(3)
@@ -1799,8 +1799,8 @@ CONTAINS
 
           !write(6,*) 'size',size(F%E1Im_2D%R(:,200))
           !write(6,*) 'E1Im_2D%R',F%E1Im_2D%R(:,200)*params%cpp%Bo
-             
-          
+
+
        end if
 
        if (params%mpi_params%rank .EQ. 0) then
@@ -1828,8 +1828,8 @@ CONTAINS
     REAL(rp),DIMENSION(NE), INTENT(IN)  :: g_axis
     REAL(rp),DIMENSION(Nrho,NE), INTENT(IN)  :: fRE_E,fRE_pitch
 
-   
-    hollmann_2d%NRHO = Nrho    
+
+    hollmann_2d%NRHO = Nrho
     hollmann_2d%NE = NE
 
     ! initialize fRE_E
@@ -1843,8 +1843,8 @@ CONTAINS
     call EZspline_setup(hollmann_2d%fRE_E, fRE_E, ezerr, .TRUE.)
     call EZspline_error(ezerr)
 
-    
-    ! initialize fRE_pitch    
+
+    ! initialize fRE_pitch
     call EZspline_init(hollmann_2d%fRE_pitch,hollmann_2d%NRHO, &
          hollmann_2d%NE,hollmann_2d%BCRHO,hollmann_2d%BCE,ezerr)
     call EZspline_error(ezerr)
@@ -1859,7 +1859,7 @@ CONTAINS
 
 
   end subroutine initialize_Hollmann_interpolant
-  
+
   subroutine initialize_SC1D_field_interpolant(params,F)
     !! @note Subroutine that initializes fields interpolants. @endnote
     !! This subroutine initializes either 2-D or 3-D PSPLINE interpolants
@@ -1872,7 +1872,7 @@ CONTAINS
     !! See [[korc_types]] and [[korc_fields]].
     integer :: ii,jj
 
-     
+
 !    if (EZspline_allocated(efield_SC1d%PHI)) &
 !         call Ezspline_free(efield_SC1d%PHI, ezerr)
 
@@ -1895,7 +1895,7 @@ CONTAINS
     fields_domain%Drm = ABS(F%r_1D(2) - F%r_1D(1))
 
   end subroutine initialize_SC1D_field_interpolant
-  
+
   subroutine initialize_SC1D_field_interpolant_FS(params,F)
     !! @note Subroutine that initializes fields interpolants. @endnote
     !! This subroutine initializes either 2-D or 3-D PSPLINE interpolants
@@ -1908,7 +1908,7 @@ CONTAINS
     !! See [[korc_types]] and [[korc_fields]].
     integer :: ii,jj
 
-     
+
 !    if (EZspline_allocated(efield_SC1d%PHI)) &
 !         call Ezspline_free(efield_SC1d%PHI, ezerr)
 
@@ -1931,7 +1931,7 @@ CONTAINS
     fields_domain%DPSIP = ABS(F%PSIP_1D(2) - F%PSIP_1D(1))
 
   end subroutine initialize_SC1D_field_interpolant_FS
-  
+
   subroutine check_if_in_fields_domain(F,Y,flag)
     !! @note Subrotuine that checks if particles in the simulation are within
     !! the spatial domain where interpolants and fields are known. @endnote
@@ -1962,7 +1962,9 @@ CONTAINS
     !! Particle iterator.
     INTEGER(ip)                                            :: ss
     !! Species iterator.
-    REAL(rp) :: Rwall
+    REAL(rp) :: Rwall,xtmp,ytmp,ztmp,DiMESsurf,DiMESrad
+    REAL(rp),DIMENSION(3) :: DiMESloc_cyl,DiMESloc_cart
+    REAL(rp),DIMENSION(2) :: DiMESdims
 
     if (size(Y,1).eq.1) then
        ss = size(Y,1)
@@ -1979,10 +1981,10 @@ CONTAINS
 !    write(output_unit_write,'("Z: ",E15.10)') Y(1,3)
 
 !    write(output_unit_write,*) 'Flag',flag(1)
-    
+
     if (ALLOCATED(fields_domain%FLAG3D)) then
        if (F%Dim2x1t) then
-          
+
           !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,IR,IZ) &
           !$OMP& SHARED(Y,flag,fields_domain,bfield_2X1T)
           do pp=1_idef,ss
@@ -2039,7 +2041,7 @@ CONTAINS
           !$OMP END PARALLEL DO
        end if
     else if (ALLOCATED(fields_domain%FLAG2D)) then
-       
+
        !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,IR,IZ) &
        !$OMP& SHARED(Y,flag,fields_domain,bfield_2d)
        do pp=1_idef,ss
@@ -2049,7 +2051,7 @@ CONTAINS
           IZ = INT(FLOOR((Y(pp,3)  + ABS(fields_domain%Zo) + 0.5_rp* &
                fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
 
-#if DBG_CHECK    
+#if DBG_CHECK
           if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
                bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
              write(6,'("YR:",E17.10)') Y(1,1)
@@ -2077,18 +2079,51 @@ CONTAINS
                    Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
                         (cos((modulo(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                    if (Y(pp,1).lt.Rwall) flag(pp) = 0_is
-                      
+
                 else
                    flag(pp) = 0_is
                 endif
              endif
           end if
+
+          if (F%useDiMES) THEN
+
+             DiMESloc_cyl=F%DiMESloc
+             DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
+             DiMESdims=F%DiMESdims
+
+             if ((abs(Y(pp,1)-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
+                  (abs(Y(pp,3)-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
+                  (abs(Y(pp,2)-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
+
+                xtmp=Y(pp,1)*cos(Y(pp,2))
+                ytmp=Y(pp,1)*sin(Y(pp,2))
+                ztmp=Y(pp,3)
+
+                DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
+                DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
+                DiMESloc_cart(3)=DiMESloc_cyl(3)
+
+                DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
+
+                if (DiMESrad.le.0._rp) THEN
+                   cycle
+                end if
+
+                DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+
+                if (ztmp.le.DiMESsurf) flag(pp)=0_is
+
+             end if
+
+          end if
+
        end do
        !$OMP END PARALLEL DO
 
     end if
   end subroutine check_if_in_fields_domain
-  
+
   subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
     !! @note Subrotuine that checks if particles in the simulation are within
     !! the spatial domain where interpolants and fields are known. @endnote
@@ -2098,7 +2133,7 @@ CONTAINS
     !! stop following it, otherwise this will cause an error in the simulation.
     INTEGER, INTENT(IN)  :: pchunk
     TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp), DIMENSION(pchunk),  INTENT(IN)      :: Y_R,Y_PHI,Y_Z    
+    REAL(rp), DIMENSION(pchunk),  INTENT(IN)      :: Y_R,Y_PHI,Y_Z
     INTEGER(is), DIMENSION(pchunk), INTENT(INOUT)  :: flag
     !! Flag that determines whether particles are followed in the
     !! simulation (flag=1), or not (flag=0).
@@ -2118,10 +2153,12 @@ CONTAINS
     !! Particle iterator.
     INTEGER(ip)                                            :: ss
     !! Species iterator.
-    REAL(rp) :: Rwall,lscale
+    REAL(rp) :: Rwall,lscale,xtmp,ytmp,ztmp,DiMESsurf,DiMESrad
+    REAL(rp),DIMENSION(3) :: DiMESloc_cyl,DiMESloc_cart
+    REAL(rp),DIMENSION(2) :: DiMESdims
 
     lscale=7.983650528137727e-04
-    
+
     !write(output_unit_write,'("YR:",E17.10)') Y_R
     !write(output_unit_write,'("YPHI:",E17.10)') Y_PHI
     !write(output_unit_write,'("YZ:",E17.10)') Y_Z
@@ -2132,7 +2169,7 @@ CONTAINS
     !write(output_unit_write,'("DZ:",E17.10)') fields_domain%DZ
     !write(output_unit_write,'("DT:",E17.10)') fields_domain%DT
 
-    
+
     if (ALLOCATED(fields_domain%FLAG3D)) then
        if (F%Dim2x1t) then
           !$OMP SIMD
@@ -2148,7 +2185,7 @@ CONTAINS
 !             write(output_unit_write,'("IR: ",I16)') IR
 !             write(output_unit_write,'("IPHI: ",I16)') IPHI
 !             write(output_unit_write,'("IZ: ",I16)') IZ
-             
+
              if ((fields_domain%FLAG3D(IR,1,IZ).NE.1_is).OR. &
                   ((IR.GT.bfield_2X1T%NR).OR.(IZ.GT.bfield_2X1T%NZ))) then
                 if (F%Analytic_IWL.eq.'NONE') then
@@ -2226,7 +2263,7 @@ CONTAINS
        do pp=1_idef,pchunk
 
           !write(output_unit_write,*) Y_R(pp),Y_Z(pp),fields_domain%Ro,fields_domain%DR,fields_domain%Zo,fields_domain%DZ
-          
+
           IR = INT(FLOOR((Y_R(pp)  - fields_domain%Ro + &
                0.5_rp*fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
           IZ = INT(FLOOR((Y_Z(pp)  + ABS(fields_domain%Zo) + &
@@ -2237,8 +2274,8 @@ CONTAINS
 !          write(output_unit_write,'("Size of fields_domain R: ",I16)') &
 !               size(fields_domain%FLAG2D,1)
 !          write(output_unit_write,'("Size of fields_domain Z: ",I16)') &
-!               size(fields_domain%FLAG2D,2)   
-          
+!               size(fields_domain%FLAG2D,2)
+
 !          if ((IR.lt.0).or.(IZ.lt.0)) then
 !             write(output_unit_write,'("YR:",E17.10)') Y_R(pp)
 !             write(output_unit_write,'("YZ:",E17.10)') Y_Z(pp)
@@ -2246,10 +2283,10 @@ CONTAINS
 !             write(output_unit_write,'("IZ: ",I16)') IZ
 !          end if
 
-#if DBG_CHECK    
+#if DBG_CHECK
           if ((IR.lt.1).or.(IZ.lt.1).or.(IR.GT. &
                bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
-          
+
              !write(6,'("YR:",E17.10)') Y_R(pp)
              !write(6,'("YZ:",E17.10)') Y_Z(pp)
              !write(6,'("IR: ",I16)') IR
@@ -2260,7 +2297,7 @@ CONTAINS
              !call KORC_ABORT(23)
           end if
 #endif
-          
+
           if ((IR.lt.1).or.(IZ.lt.1).or. &
                (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
                (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
@@ -2273,7 +2310,7 @@ CONTAINS
              !write(6,*) 'BFLAG',floor(bfield_2d%NR/6._rp),floor(bfield_2d%NR/5._rp),floor(4._rp*bfield_2d%NR/5._rp)
              !write(6,*) 'FLAGR',fields_domain%Ro*lscale,fields_domain%DR*lscale
              !write(6,*) 'FLAGZ',fields_domain%Zo*lscale,fields_domain%DZ*lscale
-             
+
              if (F%Analytic_IWL.eq.'NONE') then
                 flag(pp) = 0_is
              else if (F%Analytic_IWL.eq.'D3D') then
@@ -2287,7 +2324,7 @@ CONTAINS
                    !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
                    !write(6,*) 'Rwall',Rwall*lscale
                    !write(6,*) 'mod',modulo(Y_PHI(pp),2*C_PI/F%ntiles)
-                   
+
                    if (Y_R(pp).lt.Rwall) flag(pp) = 0_is
 
                 else
@@ -2295,9 +2332,41 @@ CONTAINS
                 endif
              endif
 
+             if (F%useDiMES) THEN
+
+               DiMESloc_cyl=F%DiMESloc
+               DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
+               DiMESdims=F%DiMESdims
+
+               if ((abs(Y_R(pp)-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
+                    (abs(Y_Z(pp)-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
+                    (abs(Y_PHI(pp)-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
+
+                  xtmp=Y_R(pp)*cos(Y_PHI(pp))
+                  ytmp=Y_R(pp)*sin(Y_PHI(pp))
+                  ztmp=Y_Z(pp)
+
+                  DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
+                  DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
+                  DiMESloc_cart(3)=DiMESloc_cyl(3)
+
+                  DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
+
+                  if (DiMESrad.le.0._rp) THEN
+                     cycle
+                  end if
+
+                  DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+
+                  if (ztmp.le.DiMESsurf) flag(pp)=0_is
+
+               end if
+
+            end if
+
 !             write(output_unit_write,'("Shit''s fucked.")')
           end if
-       end do      
+       end do
        !$OMP END SIMD
 !       write(output_unit_write,'("Shit''s not fucked.")')
     end if
@@ -2353,9 +2422,9 @@ CONTAINS
 
     !write(6,*) 'ss',ss
     !write(6,*) 'inLCFS',inLCFS
-    
 
-       
+
+
     !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,IR,IZ) &
     !$OMP& SHARED(Y,inLCFS,fields_domain,bfield_2d)
     do pp=1_idef,ss
@@ -2365,7 +2434,7 @@ CONTAINS
        IZ = INT(FLOOR((Y(pp,3)  + ABS(fields_domain%Zo) + 0.5_rp* &
             fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
 
-#if DBG_CHECK    
+#if DBG_CHECK
        if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
             bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
           write(6,'("YR:",E17.10)') Y(1,1)
@@ -2390,9 +2459,9 @@ CONTAINS
     end do
     !$OMP END PARALLEL DO
 
-  
+
   end subroutine check_if_in_LCFS
-  
+
   subroutine initialize_profiles_interpolant(params,P)
     !! @note Subroutine that initializes plasma profiles interpolants. @endnote
     !! This subroutine initializes either 2-D or 3-D PSPLINE interpolants
@@ -2409,10 +2478,10 @@ CONTAINS
 !    P%FIO_te = -1
 !    P%FIO_zeff = -1
 !#endif
-    
+
     if (params%collisions.or.params%radiation) then
        if (params%profile_model(1:8) .EQ. 'EXTERNAL') then
-          
+
           if (params%mpi_params%rank .EQ. 0) then
              write(output_unit_write,'("* * * * INITIALIZING PROFILES INTERPOLANT * * * *")')
           end if
@@ -2429,7 +2498,7 @@ CONTAINS
 
 !             write(output_unit_write,'("NR",I15)') profiles_2d%NR
 !             write(output_unit_write,'("NZ",I15)') profiles_2d%NR
-             
+
              ! Initializing ne
              call EZspline_init(profiles_2d%ne,profiles_2d%NR,profiles_2d%NZ, &
                   profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
@@ -2453,11 +2522,11 @@ CONTAINS
 !             write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
 
 !             write(output_unit_write,'("Te",E17.10)') P%Te_2D(10,:)
-             
+
              call EZspline_setup(profiles_2d%Te, P%Te_2D, ezerr, .TRUE.)
              call EZspline_error(ezerr)
 
-             
+
              ! Initializing Zeff
              call EZspline_init(profiles_2d%Zeff,profiles_2d%NR, &
                   profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
@@ -2465,12 +2534,12 @@ CONTAINS
 
              profiles_2d%Zeff%x1 = P%X%R
              profiles_2d%Zeff%x2 = P%X%Z
-             
+
              call EZspline_setup(profiles_2d%Zeff, P%Zeff_2D, ezerr, .TRUE.)
              call EZspline_error(ezerr)
 
              if (params%profile_model(10:10) .EQ. 'H') then
-                
+
                 if (params%mpi_params%rank .EQ. 0) then
                    write(output_unit_write,*) '2D Hollmann impurities'
                    flush(output_unit_write)
@@ -2488,7 +2557,7 @@ CONTAINS
                 call EZspline_error(ezerr)
 
                 !write(output_unit_write,'("profiles_2d%RHON: ",E17.10)') profiles_2d%RHON%fspl(1,:,:)
-                
+
                 ! Initializing nRE
                 call EZspline_init(profiles_2d%nRE,profiles_2d%NR, &
                      profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
@@ -2565,9 +2634,9 @@ CONTAINS
 
                 call EZspline_setup(profiles_2d%nD1, P%nD1_2D, ezerr, .TRUE.)
                 call EZspline_error(ezerr)
-                
+
              end if
-             
+
              ALLOCATE(profiles_domain%FLAG2D(profiles_2d%NR,profiles_2d%NZ))
              profiles_domain%FLAG2D = P%FLAG2D
 
@@ -2578,7 +2647,7 @@ CONTAINS
              if (params%mpi_params%rank .EQ. 0) then
                 write(output_unit_write,*) '3D ne, Te, Zeff'
              end if
-             
+
              profiles_3d%NR = P%dims(1)
              profiles_3d%NPHI = P%dims(2)
              profiles_3d%NZ = P%dims(3)
@@ -2680,7 +2749,7 @@ CONTAINS
     !! @param pp Particle iterator.
     INTEGER(ip)                                            :: ss
     !! @param ss Species iterator.
-    
+
     if (size(Y,1).eq.1) then
        ss = size(Y,1)
     else
@@ -2748,7 +2817,7 @@ CONTAINS
     !! @param pp Particle iterator.
     INTEGER(ip)                                            :: ss
     !! @param ss Species iterator.
-    
+
 
     if (ALLOCATED(profiles_domain%FLAG3D)) then
        !$OMP SIMD
@@ -2782,7 +2851,7 @@ CONTAINS
 
 !             write(output_unit_write,'("Shit''s fucked.")')
           end if
-       end do      
+       end do
        !$OMP END SIMD
 !       write(output_unit_write,'("Shit''s not fucked.")')
     end if
@@ -2809,7 +2878,7 @@ subroutine interp_2D_bfields(params,Y,B,flag)
   !! Particle iterator.
   INTEGER                                                :: ss
   !! Species iterator.
-  
+
   ss = size(Y,1)
 
   ALLOCATE(F(ss,3))
@@ -2857,7 +2926,7 @@ subroutine gradient_2D_Bfields(Y,BR,BPHI,BZ,flag)
   REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: BPHI
   !! Cylindrical components of gradient of R-component of magnetic field.
   REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: BZ
-  !! Cylindrical components of gradient of R-component of magnetic field.  
+  !! Cylindrical components of gradient of R-component of magnetic field.
   REAL(rp), DIMENSION(:,:), ALLOCATABLE                  :: F
   !! Cylindrical components of interpolated magnetic field components.
   !! F(1,:)=\(B_R\), F(2,:)=\(B_\phi\), and F(3,:)=\(B_Z\).
@@ -2868,7 +2937,7 @@ subroutine gradient_2D_Bfields(Y,BR,BPHI,BZ,flag)
   !! Particle iterator.
   INTEGER                                                :: ss
   !! Species iterator.
-  
+
   ss = size(Y,1)
 
   ALLOCATE(F(2,ss))
@@ -2878,15 +2947,15 @@ subroutine gradient_2D_Bfields(Y,BR,BPHI,BZ,flag)
      if ( flag(pp) .EQ. 1_is ) then
         call EZspline_gradient(bfield_2d%R, Y(pp,1), Y(pp,3), F(:,pp), ezerr)
         call EZspline_error(ezerr)
-        
+
         BR(pp,1) = F(pp,1)
         BR(pp,2) = 0._rp
         BR(pp,3) = F(pp,2)
-        
+
         if (ezerr .NE. 0) then ! We flag the particle as lost
            flag(pp) = 0_is
         end if
-        
+
         call EZspline_gradient(bfield_2d%PHI, Y(pp,1), Y(pp,3), F(:,pp), &
              ezerr)
         call EZspline_error(ezerr)
@@ -2894,14 +2963,14 @@ subroutine gradient_2D_Bfields(Y,BR,BPHI,BZ,flag)
         BPHI(pp,1) = F(pp,1)
         BPHI(pp,2) = 0._rp
         BPHI(pp,3) = F(pp,2)
-        
+
         call EZspline_gradient(bfield_2d%Z, Y(pp,1), Y(pp,3), F(:,pp), ezerr)
         call EZspline_error(ezerr)
 
         BZ(pp,1) = F(pp,1)
         BZ(pp,2) = 0._rp
         BZ(pp,3) = F(pp,2)
-        
+
      end if
   end do
   !$OMP END PARALLEL DO
@@ -2928,7 +2997,7 @@ subroutine interp_2D_gradBfields(Y,gradB,flag)
   !! Particle iterator.
   INTEGER                                                :: ss
   !! Species iterator.
-  
+
   ss = size(Y,1)
 
   ALLOCATE(F(ss,3))
@@ -2938,27 +3007,27 @@ subroutine interp_2D_gradBfields(Y,gradB,flag)
      if ( flag(pp) .EQ. 1_is ) then
         call EZspline_interp(gradB_2d%R, Y(pp,1), Y(pp,3), F(pp,1), ezerr)
         call EZspline_error(ezerr)
-        
+
         if (ezerr .NE. 0) then ! We flag the particle as lost
            flag(pp) = 0_is
         end if
-        
+
         call EZspline_interp(gradB_2d%PHI, Y(pp,1), Y(pp,3), F(pp,2), ezerr)
         call EZspline_error(ezerr)
-        
+
         call EZspline_interp(gradB_2d%Z, Y(pp,1), Y(pp,3), F(pp,3), ezerr)
         call EZspline_error(ezerr)
 
 !        write(output_unit_write,'("PS R-gradB ",E17.10)') F(pp,1)
 !        write(output_unit_write,'("PS PHI-gradB ",E17.10)') F(pp,2)
 !        write(output_unit_write,'("PS Z-gradB ",E17.10)') F(pp,3)
-        
+
         gradB(pp,1) = F(pp,1)
         gradB(pp,2) = F(pp,2)
         gradB(pp,3) = F(pp,3)
 
 !        write(output_unit_write,'("PHI-gradB ",E17.10)') gradB(2,1)
-        
+
      end if
   end do
   !$OMP END PARALLEL DO
@@ -2985,7 +3054,7 @@ subroutine interp_2D_curlbfields(Y,curlb,flag)
   !! Particle iterator.
   INTEGER                                                :: ss
   !! Species iterator.
-  
+
   ss = size(Y,1)
 
   ALLOCATE(F(ss,3))
@@ -3021,11 +3090,11 @@ subroutine interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: B_X,B_Y,B_Z
-  REAL(rp),DIMENSION(pchunk)   :: B_R,B_PHI  
+  REAL(rp),DIMENSION(pchunk)   :: B_R,B_PHI
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: E_X,E_Y,E_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: PSIp
   REAL(rp),DIMENSION(pchunk)   :: E_R,E_PHI
-  REAL(rp),DIMENSION(pchunk)   :: cP,sP  
+  REAL(rp),DIMENSION(pchunk)   :: cP,sP
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: cc
   !! Particle chunk iterator.
@@ -3040,13 +3109,13 @@ subroutine interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
        efield_2d%PHI,efield_2d%Z,pchunk,Y_R,Y_Z,B_R,B_PHI,B_Z, &
        E_R,E_PHI,E_Z,ezerr)
   call EZspline_error(ezerr)
- 
+
   !$OMP SIMD
 !  !$OMP& aligned (cP,sP,B_X,B_Y,E_X,E_Y,Y_PHI,B_R,B_PHI,E_R,E_PHI)
   do cc=1_idef,pchunk
      cP(cc)=cos(Y_PHI(cc))
      sP(cc)=sin(Y_PHI(cc))
-     
+
      B_X(cc) = B_R(cc)*cP(cc) - B_PHI(cc)*sP(cc)
      B_Y(cc) = B_R(cc)*sP(cc) + B_PHI(cc)*cP(cc)
 
@@ -3055,7 +3124,7 @@ subroutine interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 
   end do
   !$OMP END SIMD
-  
+
 end subroutine interp_FOfields_p
 
 subroutine interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
@@ -3064,10 +3133,10 @@ subroutine interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: B_X,B_Y,B_Z
-  REAL(rp),DIMENSION(pchunk)   :: B_R,B_PHI  
+  REAL(rp),DIMENSION(pchunk)   :: B_R,B_PHI
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: E_X,E_Y,E_Z
   REAL(rp),DIMENSION(pchunk)   :: E_R,E_PHI
-  REAL(rp),DIMENSION(pchunk)   :: cP,sP  
+  REAL(rp),DIMENSION(pchunk)   :: cP,sP
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: cc
   !! Particle chunk iterator.
@@ -3083,7 +3152,7 @@ subroutine interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   !write(6,*) 'B_R',B_R
   !write(6,*) 'B_PHI',B_PHI
   !write(6,*) 'B_Z',B_Z
-  
+
   !$OMP SIMD
 !  !$OMP& aligned (cP,sP,B_X,B_Y,E_X,E_Y,Y_PHI,B_R,B_PHI,E_R,E_PHI)
   do cc=1_idef,pchunk
@@ -3091,7 +3160,7 @@ subroutine interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
      sP(cc)=sin(Y_PHI(cc))
 
 
-     
+
      B_X(cc) = B_R(cc)*cP(cc) - B_PHI(cc)*sP(cc)
      B_Y(cc) = B_R(cc)*sP(cc) + B_PHI(cc)*cP(cc)
 
@@ -3100,7 +3169,7 @@ subroutine interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 
   end do
   !$OMP END SIMD
-  
+
 end subroutine interp_FO3Dfields_p
 
 subroutine interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
@@ -3109,11 +3178,11 @@ subroutine interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: B_X,B_Y,B_Z
-  REAL(rp),DIMENSION(pchunk)   :: B_R,B_PHI  
+  REAL(rp),DIMENSION(pchunk)   :: B_R,B_PHI
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: E_X,E_Y,E_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: PSIp
   REAL(rp),DIMENSION(pchunk)   :: E_R,E_PHI
-  REAL(rp),DIMENSION(pchunk)   :: cP,sP  
+  REAL(rp),DIMENSION(pchunk)   :: cP,sP
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: cc
   !! Particle chunk iterator.
@@ -3123,19 +3192,19 @@ subroutine interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 
   call EZspline_interp(bfield_2d%A,pchunk,Y_R, Y_Z,PSIp, ezerr)
   call EZspline_error(ezerr)
-  
+
   call calculate_magnetic_field_p(pchunk,F,Y_R,Y_Z,B_R,B_PHI,B_Z)
-  
+
   call EZspline_interp(efield_2d%R,efield_2d%PHI,efield_2d%Z,pchunk,Y_R,Y_Z, &
        E_R,E_PHI,E_Z,ezerr)
   call EZspline_error(ezerr)
- 
+
   !$OMP SIMD
 !  !$OMP& aligned (cP,sP,B_X,B_Y,E_X,E_Y,Y_PHI,B_R,B_PHI,E_R,E_PHI)
   do cc=1_idef,pchunk
      cP(cc)=cos(Y_PHI(cc))
      sP(cc)=sin(Y_PHI(cc))
-     
+
      B_X(cc) = B_R(cc)*cP(cc) - B_PHI(cc)*sP(cc)
      B_Y(cc) = B_R(cc)*sP(cc) + B_PHI(cc)*cP(cc)
 
@@ -3144,7 +3213,7 @@ subroutine interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 
   end do
   !$OMP END SIMD
-  
+
 end subroutine interp_FOfields1_p
 
 subroutine interp_FOfields_mars(prtcls, F, params)
@@ -3162,10 +3231,10 @@ subroutine interp_FOfields_mars(prtcls, F, params)
   INTEGER                                      :: pp,ss
   !! Particle chunk iterator.
   REAL(rp) :: psip_conv
-  REAL(rp) :: amp
+  REAL(rp) :: amp,phase
 
 
-    
+
   if (size(prtcls%Y,1).eq.1) then
      ss = size(prtcls%Y,1)
   else
@@ -3178,6 +3247,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 
   psip_conv=F%psip_conv
   amp=F%AMP
+  phase=F%MARS_phase
 
 
   !$OMP PARALLEL DO &
@@ -3190,22 +3260,22 @@ subroutine interp_FOfields_mars(prtcls, F, params)
      Y_R(1)=prtcls%Y(pp,1)
      Y_PHI(1)=prtcls%Y(pp,2)
      Y_Z(1)=prtcls%Y(pp,3)
-     
+
      call EZspline_interp(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
           b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
           1,Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z, &
           B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
      call EZspline_error(ezerr)
-     
+
      prtcls%PSI_P=A(1,1)
 
-     B0_R = psip_conv*A(1,3)/prtcls%Y(pp,1)
-     B0_PHI = -F%Bo*F%Ro/prtcls%Y(pp,1)
-     B0_Z = -psip_conv*A(1,2)/prtcls%Y(pp,1)
+     B0_R = psip_conv*A(1,3)/Y_R(1)
+     B0_PHI = -F%Bo*F%Ro/Y_R(1)
+     B0_Z = -psip_conv*A(1,2)/Y_R(1)
 
-     cP=cos(prtcls%Y(pp,2))
-     sP=sin(prtcls%Y(pp,2))
-     
+     cP=cos(Y_PHI(1)-phase)
+     sP=sin(Y_PHI(1)-phase)
+
      B1_R = amp*(B1Re_R*cP-B1Im_R*sP)
      B1_PHI = amp*(B1Re_PHI*cP-B1Im_PHI*sP)
      B1_Z = amp*(B1Re_Z*cP-B1Im_Z*sP)
@@ -3213,7 +3283,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
      B_R = B0_R+B1_R
      B_PHI = B0_PHI+B1_PHI
      prtcls%B(pp,3) = B0_Z(1)+B1_Z(1)
-     
+
      prtcls%B(pp,1) = B_R(1)*cP(1) - B_PHI(1)*sP(1)
      prtcls%B(pp,2) = B_R(1)*sP(1) + B_PHI(1)*cP(1)
 
@@ -3228,10 +3298,10 @@ subroutine interp_FOfields_mars(prtcls, F, params)
      !write(6,*) 'B1Im',B1Im_R*params%cpp%Bo,B1Im_PHI*params%cpp%Bo,B1Im_Z*params%cpp%Bo
      !write(6,*) 'B1',B1_R*params%cpp%Bo,B1_PHI*params%cpp%Bo,B1_Z*params%cpp%Bo
      !write(6,*) 'B',B_R*params%cpp%Bo,B_PHI*params%cpp%Bo,prtcls%B(pp,3)*params%cpp%Bo
-     
+
   end do
   !$OMP END PARALLEL DO
-  
+
 end subroutine interp_FOfields_mars
 
 subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
@@ -3254,11 +3324,12 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
-  REAL(rp) :: amp
+  REAL(rp) :: amp,phase
 
   psip_conv=F%psip_conv
   amp=F%AMP
-  
+  phase=F%MARS_phase
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
   call EZspline_interp(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
@@ -3274,9 +3345,9 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
      B0_PHI(cc) = -F%Bo*F%Ro/Y_R(cc)
      B0_Z(cc) = -psip_conv*A(cc,2)/Y_R(cc)
 
-     cP(cc)=cos(Y_PHI(cc))
-     sP(cc)=sin(Y_PHI(cc))
-     
+     cP(cc)=cos(Y_PHI(cc)-phase)
+     sP(cc)=sin(Y_PHI(cc)-phase)
+
      B1_R(cc) = amp*(B1Re_R(cc)*cP(cc)-B1Im_R(cc)*sP(cc))
      B1_PHI(cc) = amp*(B1Re_PHI(cc)*cP(cc)-B1Im_PHI(cc)*sP(cc))
      B1_Z(cc) = amp*(B1Re_Z(cc)*cP(cc)-B1Im_Z(cc)*sP(cc))
@@ -3284,7 +3355,7 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
      B_R(cc) = B0_R(cc)+B1_R(cc)
      B_PHI(cc) = B0_PHI(cc)+B1_PHI(cc)
      B_Z(cc) = B0_Z(cc)+B1_Z(cc)
-     
+
      B_X(cc) = B_R(cc)*cP(cc) - B_PHI(cc)*sP(cc)
      B_Y(cc) = B_R(cc)*sP(cc) + B_PHI(cc)*cP(cc)
 
@@ -3302,8 +3373,8 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   !write(6,*) 'B1Im',B1Im_R*params%cpp%Bo,B1Im_PHI*params%cpp%Bo,B1Im_Z*params%cpp%Bo
   !write(6,*) 'B1',B1_R*params%cpp%Bo,B1_PHI*params%cpp%Bo,B1_Z*params%cpp%Bo
   !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
-  
-  
+
+
 end subroutine interp_FOfields_mars_p
 
 subroutine interp_FOfields_aorsa(prtcls, F, params)
@@ -3352,7 +3423,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
      Y_R(1)=prtcls%Y(pp,1)
      Y_PHI(1)=prtcls%Y(pp,2)
      Y_Z(1)=prtcls%Y(pp,3)
-     
+
      call EZspline_interp(bfield_2d%A,&
           b1Refield_2dx%X,b1Refield_2dx%Y,b1Refield_2dx%Z, &
           b1Imfield_2dx%X,b1Imfield_2dx%Y,b1Imfield_2dx%Z, &
@@ -3361,7 +3432,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
           1,Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
           E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr)
      call EZspline_error(ezerr)
-     
+
      prtcls%PSI_P=A(1,1)
 
      B0_R = psip_conv*A(1,3)/prtcls%Y(pp,1)
@@ -3373,7 +3444,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
 
      cP=cos(Y_PHI)
      sP=sin(Y_PHI)
-     
+
      B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
      B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
      B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
@@ -3385,7 +3456,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
      B0_X = B0_R*cP - B0_PHI*sP
      B0_Y = B0_R*sP + B0_PHI*cP
      prtcls%B(pp,3) = B0_Z(1)+B1_Z(1)
-     
+
      prtcls%B(pp,1) = B0_X(1)+B1_X(1)
      prtcls%B(pp,2) = B0_Y(1)+B1_Y(1)
 
@@ -3401,12 +3472,12 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
      !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
      !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
      !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
-     
+
   end do
   !$OMP END PARALLEL DO
 
 
-  
+
 end subroutine interp_FOfields_aorsa
 
 subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
@@ -3438,7 +3509,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   amp=F%AMP
   nmode=F%AORSA_nmode
   omega=2*C_PI*F%AORSA_freq
-  
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
   call EZspline_interp(bfield_2d%A,b1Refield_2dx%X,b1Refield_2dx%Y, &
@@ -3449,7 +3520,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr)
   call EZspline_error(ezerr)
 
-  
+
   !$OMP SIMD
   do cc=1_idef,pchunk
      PSIp(cc)=A(cc,1)
@@ -3460,14 +3531,14 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
      cP(cc)=cos(Y_PHI(cc))
      sP(cc)=sin(Y_PHI(cc))
-     
+
      B0_X(cc) = B0_R(cc)*cP(cc) - B0_PHI(cc)*sP(cc)
      B0_Y(cc) = B0_R(cc)*sP(cc) + B0_PHI(cc)*cP(cc)
-     
+
 
      cnP(cc)=cos(omega*time+nmode*Y_PHI(cc))
      snP(cc)=sin(omega*time+nmode*Y_PHI(cc))
-     
+
      B1_X(cc) = amp*(B1Re_X(cc)*cnP(cc)-B1Im_X(cc)*snP(cc))
      B1_Y(cc) = amp*(B1Re_Y(cc)*cnP(cc)-B1Im_Y(cc)*snP(cc))
      B1_Z(cc) = amp*(B1Re_Z(cc)*cnP(cc)-B1Im_Z(cc)*snP(cc))
@@ -3475,16 +3546,16 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
      B_X(cc) = B0_X(cc)+B1_X(cc)
      B_Y(cc) = B0_Y(cc)+B1_Y(cc)
      B_Z(cc) = B0_Z(cc)+B1_Z(cc)
-     
+
      E_X(cc) = amp*(E1Re_X(cc)*cnP(cc)-E1Im_X(cc)*snP(cc))
      E_Y(cc) = amp*(E1Re_Y(cc)*cnP(cc)-E1Im_Y(cc)*snP(cc))
-     E_Z(cc) = amp*(E1Re_Z(cc)*cnP(cc)-E1Im_Z(cc)*snP(cc))     
+     E_Z(cc) = amp*(E1Re_Z(cc)*cnP(cc)-E1Im_Z(cc)*snP(cc))
 
 
   end do
   !$OMP END SIMD
 
-#if DBG_CHECK    
+#if DBG_CHECK
   !write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
   !     Y_Z*params%cpp%length,time
   !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
@@ -3497,7 +3568,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
   !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
 #endif
-  
+
 end subroutine interp_FOfields_aorsa_p
 
 subroutine interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flag_cache)
@@ -3510,17 +3581,17 @@ subroutine interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flag_cache)
 !  write(output_unit_write,'("YR: ",E17.10)') Y_R(1)
 !  write(output_unit_write,'("YPHI: ",E17.10)') Y_PHI(1)
 !  write(output_unit_write,'("YZ: ",E17.10)') Y_Z(1)
-  
+
 !  write(output_unit_write,'("Te_interp_R",E17.10)') profiles_2d%Te%x1
 !  write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
-  
+
   call EZspline_interp(profiles_2d%ne,profiles_2d%Te, &
        profiles_2d%Zeff,pchunk,Y_R,Y_Z,ne,Te,Zeff,ezerr)
   ! this will call PSPLINE routine EZspline_interp2_bmag_cloud as there
   ! is the same number of entries
   call EZspline_error(ezerr)
- 
-  
+
+
 end subroutine interp_FOcollision_p
 
 
@@ -3536,9 +3607,9 @@ subroutine interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
 
   !write(output_unit_write,*) Y_R,Y_Z,flag_cache
-  
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
-  
+
   call EZspline_interp(bfield_2d%R,bfield_2d%PHI,bfield_2d%Z,efield_2d%R, &
        efield_2d%PHI,efield_2d%Z,gradB_2d%R,gradB_2d%PHI,gradB_2d%Z, &
        curlb_2d%R,curlb_2d%PHI,curlb_2d%Z,pchunk,Y_R,Y_Z,B_R,B_PHI,B_Z, &
@@ -3558,14 +3629,14 @@ subroutine interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: curlB_R,curlB_PHI,curlB_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: E_R,E_PHI,E_Z
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
-  REAL(rp), DIMENSION(pchunk)     :: Y_PHI_mod  
+  REAL(rp), DIMENSION(pchunk)     :: Y_PHI_mod
 
   Y_PHI_mod=modulo(Y_PHI,2._rp*C_PI)
 !  write(output_unit_write,*) Y_PHI(1)
 !  write(output_unit_write,*) Y_PHI_mod(1)
-  
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI_mod,Y_Z,flag_cache)
-  
+
   call EZspline_interp(bfield_3d%R,bfield_3d%PHI,bfield_3d%Z,efield_3d%R, &
        efield_3d%PHI,efield_3d%Z,gradB_3d%R,gradB_3d%PHI,gradB_3d%Z, &
        curlb_3d%R,curlb_3d%PHI,curlb_3d%Z,pchunk,Y_R,Y_PHI_mod,Y_Z,B_R,B_PHI,B_Z, &
@@ -3586,13 +3657,13 @@ subroutine interp_collision_p(pchunk,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, 
 !  INTEGER(ip) :: ezerr
 
   call check_if_in_profiles_domain_p(pchunk,Y_R,Y_PHI,Y_Z,flag_cache)
-  
+
   call EZspline_interp(bfield_2d%R,bfield_2d%PHI,bfield_2d%Z,efield_2d%R, &
        efield_2d%PHI,efield_2d%Z,profiles_2d%ne,profiles_2d%Te, &
        profiles_2d%Zeff,pchunk,Y_R,Y_Z,B_R,B_PHI,B_Z, &
        E_R,E_PHI,E_Z,ne,Te,Zeff,ezerr)
   call EZspline_error(ezerr)
- 
+
 
 end subroutine interp_collision_p
 
@@ -3605,7 +3676,7 @@ subroutine interp_bmag_p(pchunk,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z)
   call EZspline_interp(bfield_2d%R,bfield_2d%PHI,bfield_2d%Z, &
        pchunk,Y_R,Y_Z,B_R,B_PHI,B_Z,ezerr)
   call EZspline_error(ezerr)
- 
+
 
 end subroutine interp_bmag_p
 
@@ -3659,7 +3730,7 @@ subroutine interp_3D_bfields(params,Y,B,flag)
            B(pp,3) = F(pp,3)
         end if
 
-        
+
      end if
   end do
   !$OMP END PARALLEL DO
@@ -3704,7 +3775,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
   REAL(rp)  :: psip_conv
 
   psip_conv=F%psip_conv
-  
+
   if (size(Y,1).eq.1) then
      ss = size(Y,1)
   else
@@ -3765,11 +3836,11 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
            !if(params%SC_E) A(pp,3)=A(pp,3)/(2*C_PI)
 
            call EZspline_derivative(bfield_2X1T%A, 0, 1, 0, Y(pp,1), &
-                F%t0_2x1t, Y(pp,3), E(pp,2), ezerr)           
+                F%t0_2x1t, Y(pp,3), E(pp,2), ezerr)
 
-           E(pp,2) = E(pp,2)/(2*C_PI*Y(pp,1)) 
-           
-           A(pp,3) = -psip_conv*A(pp,3)/Y(pp,1)                    
+           E(pp,2) = E(pp,2)/(2*C_PI*Y(pp,1))
+
+           A(pp,3) = -psip_conv*A(pp,3)/Y(pp,1)
 
            if (.not.params%GC_coords) then
               B(pp,1) = A(pp,1)*COS(Y(pp,2)) - A(pp,2)*SIN(Y(pp,2))
@@ -3781,7 +3852,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
            else
               B(pp,1) = A(pp,1)
               B(pp,2) = A(pp,2)
-              B(pp,3) = A(pp,3)              
+              B(pp,3) = A(pp,3)
            end if
 
 
@@ -3789,7 +3860,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
      end do
      !$OMP END PARALLEL DO
 
-     
+
   else
      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
      !$OMP& SHARED(F,Y,A,B,flag,bfield_2d,PSI_P)
@@ -3836,7 +3907,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
 
            !if(params%SC_E) A(pp,3)=A(pp,3)/(2*C_PI)
 
-           A(pp,3) = -psip_conv*A(pp,3)/Y(pp,1)                    
+           A(pp,3) = -psip_conv*A(pp,3)/Y(pp,1)
 
            if (.not.params%GC_coords) then
               B(pp,1) = A(pp,1)*COS(Y(pp,2)) - A(pp,2)*SIN(Y(pp,2))
@@ -3855,7 +3926,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
   end if
 
 !  write(output_unit_write,'("calculate_fields")')
-  
+
 !  write(output_unit_write,'("B_R: ",E17.10)') A(:,1)
 !  write(output_unit_write,'("B_PHI: ",E17.10)') A(:,2)
 !  write(output_unit_write,'("B_Z: ",E17.10)') A(:,3)
@@ -3863,7 +3934,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
 !  write(output_unit_write,'("B_X: ",E17.10)') B(:,1)
 !  write(output_unit_write,'("B_Y: ",E17.10)') B(:,2)
 !  write(output_unit_write,'("B_Z: ",E17.10)') B(:,3)
-  
+
   DEALLOCATE(A)
 end subroutine calculate_magnetic_field
 
@@ -3879,11 +3950,11 @@ subroutine calculate_magnetic_field_p(pchunk,F,Y_R,Y_Z,B_R,B_PHI,B_Z)
   REAL(rp)  :: psip_conv
 
   psip_conv=F%psip_conv
-  
+
   call EZspline_interp(bfield_2d%A, pchunk, Y_R, Y_Z, &
        PSIp, ezerr)
   call EZspline_error(ezerr)
-     
+
   ! FR = (dA/dZ)/R
   call EZspline_gradient(bfield_2d%A, pchunk, Y_R, Y_Z, &
        A, ezerr)
@@ -3904,12 +3975,12 @@ subroutine calculate_magnetic_field_p(pchunk,F,Y_R,Y_Z,B_R,B_PHI,B_Z)
 
   B_Z= -psip_conv*A(:,1)/Y_R
 
-   
+
 !  write(output_unit_write,'("PSIp: ",E17.10)') PSIp
-  
+
 !  write(output_unit_write,'("Y_R: ",E17.10)') Y_R(1)
 !  write(output_unit_write,'("Y_Z: ",E17.10)') Y_Z(1)
-  
+
 !  write(output_unit_write,'("B_R: ",E17.10)') B_R
 !  write(output_unit_write,'("B_PHI: ",E17.10)') B_PHI
 !  write(output_unit_write,'("B_Z: ",E17.10)') B_Z
@@ -3919,7 +3990,7 @@ end subroutine calculate_magnetic_field_p
 subroutine calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
      flag_cache,PSIp)
-  INTEGER, INTENT(IN)  :: pchunk 
+  INTEGER, INTENT(IN)  :: pchunk
   REAL(rp), DIMENSION(pchunk), INTENT(IN)      :: Y_R,Y_PHI,Y_Z
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp), DIMENSION(pchunk),  INTENT(OUT)   :: B_R,B_PHI,B_Z
@@ -3943,7 +4014,7 @@ subroutine calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
        pchunk,Y_R,Y_Z,BR,BPHI,BZ,E_R,E_PHI,E_Z,PSIp,ezerr)
   call EZspline_error(ezerr)
 
-  
+
 !  call EZspline_interp(bfield_2d%R,bfield_2d%PHI,bfield_2d%Z, &
 !       dbdR_2d%R,dbdR_2d%PHI,dBdR_2d%Z, &
 !       dbdPHI_2d%R,dbdPHI_2d%PHI,dbdPHI_2d%Z, &
@@ -3973,7 +4044,7 @@ subroutine calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      dBZdR(cc)=BZ(cc,2)
      dBZdPHI(cc)=0._rp
      dBZdZ(cc)=BZ(cc,3)
-     
+
      Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
      gradB_R(cc)=(B_R(cc)*dBRdR(cc)+B_PHI(cc)*dBPHIdR(cc)+ &
@@ -3990,16 +4061,16 @@ subroutine calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      curlb_Z(cc)=(Bmag(cc)*B_PHI(cc)/Y_R(cc)+Bmag(cc)*dBPHIdR(cc)- &
           B_PHI(cc)*gradB_R(cc)-Bmag(cc)*dBRdPHI(cc)/Y_R(cc)+ &
           B_R(cc)*gradB_PHI(cc))/(Bmag(cc)*bmag(cc))
-     
+
   end do
   !$OMP END SIMD
-  
-   
+
+
 !  write(output_unit_write,'("PSIp: ",E17.10)') PSIp
-  
+
 !  write(output_unit_write,'("Y_R: ",E17.10)') Y_R
 !  write(output_unit_write,'("Y_Z: ",E17.10)') Y_Z
-  
+
 !  write(output_unit_write,'("B_R: ",E17.10)') B_R
 !  write(output_unit_write,'("B_PHIinterp: ",E17.10)') B_PHI
 !  write(output_unit_write,'("B_Z: ",E17.10)') B_Z
@@ -4025,10 +4096,10 @@ subroutine calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
 
   Y_PHI_mod=modulo(Y_PHI,2._rp*C_PI)
-  
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI_mod,Y_Z,flag_cache)
 
-  
+
   call EZspline_interp(bfield_2d%R,bfield_2d%PHI,bfield_2d%Z, &
        dbdR_2d%R,dbdR_2d%PHI,dBdR_2d%Z, &
        dbdPHI_2d%R,dbdPHI_2d%PHI,dbdPHI_2d%Z, &
@@ -4059,16 +4130,16 @@ subroutine calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      curlb_Z(cc)=(Bmag(cc)*B_PHI(cc)/Y_R(cc)+Bmag(cc)*dBPHIdR(cc)- &
           B_PHI(cc)*gradB_R(cc)-Bmag(cc)*dBRdPHI(cc)/Y_R(cc)+ &
           B_R(cc)*gradB_PHI(cc))/(Bmag(cc)*Bmag(cc))
-     
+
   end do
   !$OMP END SIMD
-  
-   
+
+
 !  write(output_unit_write,'("PSIp: ",E17.10)') PSIp
-  
+
 !  write(output_unit_write,'("Y_R: ",E17.10)') Y_R
 !  write(output_unit_write,'("Y_Z: ",E17.10)') Y_Z
-  
+
 !  write(output_unit_write,'("B_R: ",E17.10)') B_R
 !  write(output_unit_write,'("B_PHIinterp: ",E17.10)') B_PHI
 !  write(output_unit_write,'("B_Z: ",E17.10)') B_Z
@@ -4097,7 +4168,7 @@ subroutine calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
 
   Y_PHI_mod=modulo(Y_PHI,2._rp*C_PI)
-  
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI_mod,Y_Z,flag_cache)
 
   call EZspline_interp(bfield_3d%R,bfield_3d%PHI,bfield_3d%Z, &
@@ -4105,7 +4176,7 @@ subroutine calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
        pchunk,Y_R,Y_PHI_mod,Y_Z,BR,BPHI,BZ,E_R,E_PHI,E_Z,PSIp,ezerr)
   call EZspline_error(ezerr)
 
-  
+
 !  call EZspline_interp(bfield_2d%R,bfield_2d%PHI,bfield_2d%Z, &
 !       dbdR_2d%R,dbdR_2d%PHI,dBdR_2d%Z, &
 !       dbdPHI_2d%R,dbdPHI_2d%PHI,dbdPHI_2d%Z, &
@@ -4135,7 +4206,7 @@ subroutine calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      dBZdR(cc)=BZ(cc,2)
      dBZdPHI(cc)=BZ(cc,3)
      dBZdZ(cc)=BZ(cc,4)
-     
+
      Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
      gradB_R(cc)=(B_R(cc)*dBRdR(cc)+B_PHI(cc)*dBPHIdR(cc)+ &
@@ -4152,16 +4223,16 @@ subroutine calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      curlb_Z(cc)=(Bmag(cc)*B_PHI(cc)/Y_R(cc)+Bmag(cc)*dBPHIdR(cc)- &
           B_PHI(cc)*gradB_R(cc)-Bmag(cc)*dBRdPHI(cc)/Y_R(cc)+ &
           B_R(cc)*gradB_PHI(cc))/(Bmag(cc)*Bmag(cc))
-     
+
   end do
   !$OMP END SIMD
-  
-   
+
+
 !  write(output_unit_write,'("PSIp: ",E17.10)') PSIp
-  
+
 !  write(output_unit_write,'("Y_R: ",E17.10)') Y_R
 !  write(output_unit_write,'("Y_Z: ",E17.10)') Y_Z
-  
+
 !  write(output_unit_write,'("B_R: ",E17.10)') B_R
 !  write(output_unit_write,'("B_PHIinterp: ",E17.10)') B_PHI
 !  write(output_unit_write,'("B_Z: ",E17.10)') B_Z
@@ -4187,7 +4258,7 @@ subroutine calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI
   psip_conv=F%psip_conv
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
-       
+
   call EZspline_derivative(bfield_2d%A, efield_2d%PHI, pchunk, Y_R, Y_Z, A, &
        EPHI, ezerr)
   call EZspline_error(ezerr)
@@ -4213,7 +4284,7 @@ subroutine calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI
      ! BR = -(dA/dR)/R
 
 
-     
+
      Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
      gradB_R(cc)=(B_R(cc)*psip_conv*A(cc,6)-B_Z(cc)*psip_conv*A(cc,4)- &
@@ -4238,7 +4309,7 @@ subroutine calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI
         E_Z(cc) = 0._rp
      end if
 
-     
+
   end do
 
 end subroutine calculate_GCfieldswE_p
@@ -4259,11 +4330,11 @@ subroutine calculate_GCfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
   REAL(rp), DIMENSION(pchunk,6)  :: A
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
-    
+
   psip_conv=F%psip_conv
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
-       
+
   call EZspline_derivative(bfield_2d%A, pchunk, Y_R, Y_Z, A, ezerr)
   call EZspline_error(ezerr)
 
@@ -4288,7 +4359,7 @@ subroutine calculate_GCfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      ! BR = -(dA/dR)/R
 
 
-     
+
      Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
      gradB_R(cc)=(B_R(cc)*psip_conv*A(cc,6)-B_Z(cc)*psip_conv*A(cc,4)- &
@@ -4305,10 +4376,10 @@ subroutine calculate_GCfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
 
      E_R(cc) = 0._rp
      E_PHI(cc) = F%Eo*F%Ro/Y_R(cc)
-     E_Z(cc) = 0._rp 
+     E_Z(cc) = 0._rp
 
 
-     
+
   end do
 
 end subroutine calculate_GCfields_p
@@ -4341,9 +4412,9 @@ subroutine calculate_GCfields_2x1t_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
   !$OMP END SIMD
 
   !write(output_unit_write,*) 't0',F%t0_2x1t,'time',time,'Y_T',Y_T(1)
-  
+
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_T,Y_Z,flag_cache)
-       
+
   call EZspline_derivative(bfield_2X1T%A, pchunk, Y_R, Y_T, Y_Z, A, ezerr)
   call EZspline_error(ezerr)
 
@@ -4368,7 +4439,7 @@ subroutine calculate_GCfields_2x1t_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      B_Z(cc) = -psip_conv*A(cc,2)/Y_R(cc)
      ! BR = -(dA/dR)/R
 
-     
+
      Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
      gradB_R(cc)=(B_R(cc)*psip_conv*A(cc,7)-B_Z(cc)*psip_conv*A(cc,5)- &
@@ -4392,7 +4463,7 @@ subroutine calculate_GCfields_2x1t_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
         E_PHI(cc) = 0._rp
         E_Z(cc) = 0._rp
      end if
-     
+
   end do
   !$OMP END SIMD
 
@@ -4418,12 +4489,12 @@ subroutine calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
   psip_conv=F%psip_conv
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
-       
+
   call EZspline_derivative(bfield_2d%A, pchunk, Y_R, Y_Z, A, ezerr)
   call EZspline_error(ezerr)
 
   !write (output_unit_write,*) A(1,1),A(1,2)
-  
+
   !A(:,1) = PSIp
   !A(:,2) = dPSIp/dR
   !A(:,3) = dPSIp/dZ
@@ -4442,8 +4513,8 @@ subroutine calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      A(cc,4)=psip_conv*A(cc,4)/(2*C_PI)
      A(cc,5)=psip_conv*A(cc,5)/(2*C_PI)
      A(cc,6)=psip_conv*A(cc,6)/(2*C_PI)
-     
-     
+
+
      B_R(cc) = A(cc,3)/Y_R(cc)
      ! BR = (dA/dZ)/R
      B_PHI(cc) = -F%Bo*F%Ro/Y_R(cc)
@@ -4452,7 +4523,7 @@ subroutine calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
      ! BR = -(dA/dR)/R
 
 
-     
+
      Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
 
      gradB_R(cc)=(B_R(cc)*A(cc,6)-B_Z(cc)*A(cc,4)-Bmag(cc)*Bmag(cc))/ &
@@ -4469,8 +4540,8 @@ subroutine calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
 
      E_R(cc) = 0._rp
      E_PHI(cc) = F%Eo*F%Ro/Y_R(cc)
-     E_Z(cc) = 0._rp 
-     
+     E_Z(cc) = 0._rp
+
   end do
 
 end subroutine calculate_GCfields_p_FS
@@ -4488,10 +4559,10 @@ subroutine add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
   pchunk=params%pchunk
   R0=F%Ro
   Z0=F%Zo
-  
+
   !$OMP SIMD
   do cc=1_idef,pchunk
-     rm(cc)=sqrt((Y_R(cc)-R0)*(Y_R(cc)-R0)+(Y_Z(cc)-Z0)*(Y_Z(cc)-Z0))     
+     rm(cc)=sqrt((Y_R(cc)-R0)*(Y_R(cc)-R0)+(Y_Z(cc)-Z0)*(Y_Z(cc)-Z0))
   end do
   !$OMP END SIMD
 
@@ -4502,8 +4573,8 @@ subroutine add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
   do cc=1_idef,pchunk
      E_PHI(cc)=E_PHI(cc)+E_SC_PHI(cc)
   end do
-  !$OMP END SIMD  
-  
+  !$OMP END SIMD
+
 end subroutine add_interp_SCE_p
 
 subroutine add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
@@ -4524,8 +4595,8 @@ subroutine add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
   do cc=1_idef,pchunk
      E_PHI(cc)=E_PHI(cc)+E_SC_PHI(cc)
   end do
-  !$OMP END SIMD  
-  
+  !$OMP END SIMD
+
 end subroutine add_interp_SCE_p_FS
 
 subroutine calculate_initial_magnetic_field(F)
@@ -4541,7 +4612,7 @@ subroutine calculate_initial_magnetic_field(F)
   call EZspline_interp(bfield_2d%A,F%dims(1),F%dims(3),F%X%R, F%X%Z, &
        F%PSIp, ezerr)
   call EZspline_error(ezerr)
- 
+
   ! FR = (dA/dZ)/R
   call EZspline_gradient(bfield_2d%A,F%dims(1),F%dims(3),F%X%R, F%X%Z, &
        gradA, ezerr)
@@ -4554,14 +4625,14 @@ subroutine calculate_initial_magnetic_field(F)
   end do
 
   !        write(output_unit_write,'("AR",E17.10)') gradA(1)
-  !        write(output_unit_write,'("AZ",E17.10)') gradA(2)        
-       
+  !        write(output_unit_write,'("AZ",E17.10)') gradA(2)
+
 end subroutine calculate_initial_magnetic_field
 
 subroutine sample_poloidal_flux(F)
 
   TYPE(FIELDS), INTENT(INOUT)                               :: F
-  
+
   ! FR = (dA/dZ)/R
   call EZspline_interp(bfield_2d%A,F%dims(1),F%dims(3),F%X%R, F%X%Z, &
        F%PSIp, ezerr)
@@ -4569,8 +4640,8 @@ subroutine sample_poloidal_flux(F)
 
 
   !        write(output_unit_write,'("AR",E17.10)') gradA(1)
-  !        write(output_unit_write,'("AZ",E17.10)') gradA(2)        
-       
+  !        write(output_unit_write,'("AZ",E17.10)') gradA(2)
+
 end subroutine sample_poloidal_flux
 
 !> @brief Subroutine for interpolating the pre-computed, axisymmetric electric field to the particles' position.
@@ -4592,7 +4663,7 @@ subroutine interp_2D_efields(params,Y,E,flag)
   INTEGER                                                :: ss
 
 !  write(output_unit_write,*) 'interp E fields'
-  
+
   if (size(Y,1).eq.1) then
      ss = size(Y,1)
   else
@@ -4632,8 +4703,8 @@ subroutine interp_2D_efields(params,Y,E,flag)
         end if
 
         !write(output_unit_write,*) 'EPHI',E(pp,2)
-     end if     
-     
+     end if
+
   end do
   !$OMP END PARALLEL DO
   DEALLOCATE(F)
@@ -4689,7 +4760,7 @@ subroutine interp_3D_efields(params,Y,E,flag)
            E(pp,2) = F(pp,2)
            E(pp,3) = F(pp,3)
         end if
-        
+
      end if
   end do
   !$OMP END PARALLEL DO
@@ -4698,21 +4769,21 @@ end subroutine interp_3D_efields
 #endif
 
 subroutine interp_fields(params,prtcls,F)
-  !! @note Subroutine that works as an interface for calling the 
-  !! appropriate subroutines for interpolating or calculating the 
+  !! @note Subroutine that works as an interface for calling the
+  !! appropriate subroutines for interpolating or calculating the
   !! electric and magnetic fields. @endnote
   TYPE(KORC_PARAMS), INTENT(IN)      :: params
     !! Core KORC simulation parameters.
   TYPE(PARTICLES), INTENT(INOUT) :: prtcls
     !! An instance of PARTICLES containing the variables of a given species.
   TYPE(FIELDS), INTENT(IN)       :: F
-    !! An instance of KORC's derived type FIELDS containing all the 
+    !! An instance of KORC's derived type FIELDS containing all the
     !! information about the fields used in the simulation.
   !! See [[korc_types]] and [[korc_fields]].
   integer :: pp
-  
+
   if (.not.params%GC_coords) call cart_to_cyl(prtcls%X,prtcls%Y)
-  
+
 !  write(output_unit_write,'("BR: ",E17.10)') prtcls%BR(:,1)
 !  write(output_unit_write,'("Y: ",E17.10)') prtcls%X(2,1)
 !  write(output_unit_write,'("Z: ",E17.10)') prtcls%X(3,1)
@@ -4722,7 +4793,7 @@ subroutine interp_fields(params,prtcls,F)
 
   call check_if_in_LCFS(F,prtcls%Y, prtcls%initLCFS)
 #endif
-  
+
   !write(output_unit_write,*) 'checked domain'
 
 #ifdef FIO
@@ -4790,14 +4861,14 @@ subroutine interp_fields(params,prtcls,F)
   end if
 
   if (ALLOCATED(F%PSIp3D).and.F%Bflux3D) then
-     
+
 !     write(output_unit_write,'("3 size of PSI_P: ",I16)') size(prtcls%PSI_P)
 
 !     write(output_unit_write,'("B_X: ",E17.10)') prtcls%B(:,1)
 !     write(output_unit_write,'("B_Z: ",E17.10)') prtcls%B(:,3)
 !     write(output_unit_write,'("B_Y: ",E17.10)') prtcls%B(:,2)
 !     write(output_unit_write,'("PSI_P: ",E17.10)') prtcls%PSI_P
-     
+
      call calculate_magnetic_field(params,prtcls%Y,F,prtcls%B,prtcls%E, &
           prtcls%PSI_P,prtcls%flagCon)
 
@@ -4807,7 +4878,7 @@ subroutine interp_fields(params,prtcls,F)
 !     write(output_unit_write,'("B_Y: ",E17.10)') prtcls%B(:,2)
 
   end if
-  
+
   if (ALLOCATED(F%B_2D%R).and.F%Bfield) then
      call interp_2D_bfields(params,prtcls%Y,prtcls%B,prtcls%flagCon)
   end if
@@ -4822,16 +4893,16 @@ subroutine interp_fields(params,prtcls,F)
 
   if (ALLOCATED(F%E_3D%R).and.F%Efield.and.(.not.F%ReInterp_2x1t)) then
      call interp_3D_efields(params,prtcls%Y,prtcls%E,prtcls%flagCon)
-     
+
   end if
 
   if (ALLOCATED(F%E_3D%R).and.F%Efield.and.F%ReInterp_2x1t) then
      call interp_2D_efields(params,prtcls%Y,prtcls%E,prtcls%flagCon)
 
 !     write(output_unit_write,*) 'interpolated efield'
-     
+
   end if
-  
+
   if (params%GC_coords.and.ALLOCATED(F%gradB_2D%R).and.F%Bfield) then
      call interp_2D_gradBfields(prtcls%Y,prtcls%gradB,prtcls%flagCon)
 
@@ -4846,7 +4917,7 @@ subroutine interp_fields(params,prtcls,F)
           prtcls%BZ,prtcls%flagCon)
   end if
 #endif
-  
+
 end subroutine interp_fields
 
 #ifdef PSPLINE
@@ -4862,10 +4933,10 @@ subroutine interp_Hcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
 !  write(output_unit_write,'("YR: ",E17.10)') Y_R(1)
 !  write(output_unit_write,'("YPHI: ",E17.10)') Y_PHI(1)
 !  write(output_unit_write,'("YZ: ",E17.10)') Y_Z(1)
-  
+
 !  write(output_unit_write,'("Te_interp_R",E17.10)') profiles_2d%Te%x1
 !  write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
-  
+
   call EZspline_interp(profiles_2d%ne,profiles_2d%Te,profiles_2d%Zeff, &
        profiles_2d%nAr0,profiles_2d%nAr1,profiles_2d%nAr2,profiles_2d%nAr3, &
        profiles_2d%nD,profiles_2d%nD1,pchunk,Y_R,Y_Z,ne,Te,Zeff, &
@@ -4873,7 +4944,7 @@ subroutine interp_Hcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
   ! this will call PSPLINE routine EZspline_interp2_bmag_cloud as there
   ! is the same number of entries
   call EZspline_error(ezerr)
-   
+
 end subroutine interp_Hcollision_p
 
 subroutine interp_nRE(params,Y_R,Y_PHI,Y_Z,PSIp,EPHI,ne,Te,nRE, &
@@ -4900,27 +4971,27 @@ subroutine interp_nRE(params,Y_R,Y_PHI,Y_Z,PSIp,EPHI,ne,Te,nRE, &
      call EZspline_error(ezerr)
 
      !write(6,*) 'RHON',RHON
-     
+
      if ((RHON.le.1).and.(RHON.gt.0)) then
         if(present(rho1D)) RHON=rho1D
-        
-        call EZspline_interp(hollmann_2d%fRE_E,RHON,g_test,fRE_out,ezerr)  
+
+        call EZspline_interp(hollmann_2d%fRE_E,RHON,g_test,fRE_out,ezerr)
         call EZspline_error(ezerr)
-        if (ezerr .NE. 0) then ! We flag the particle as lost          
+        if (ezerr .NE. 0) then ! We flag the particle as lost
            write(6,*) 'R,Z',Y_R*params%cpp%length,Y_Z*params%cpp%length
            write(6,*) 'RHON',RHON
         end if
 
      else
-        fRE_out=0._rp       
+        fRE_out=0._rp
      endif
-     
+
      if (fRE_OUT.lt.0) fRE_OUT=0._rp
   else
      fRE_OUT=0._rp
      nRE=0._rp
   endif
-  
+
 end subroutine interp_nRE
 
 subroutine interp_2D_profiles(Y,ne,Te,Zeff,flag)
@@ -4954,7 +5025,7 @@ subroutine interp_2D_profiles(Y,ne,Te,Zeff,flag)
   endif
 
 !  write(output_unit_write,'("Also R_buffer: ",E17.10)') Y(1,ss)
-  
+
   !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
   !$OMP& SHARED(Y,ne,Te,Zeff,flag,profiles_2d)
   do pp=1_idef,ss
@@ -4998,7 +5069,7 @@ subroutine interp_3D_profiles(Y,ne,Te,Zeff,flag)
   !! Particle iterator.
   INTEGER                                                :: ss
   !! Species iterator.
-  
+
   ss = size(Y,1)
 
   !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
@@ -5042,12 +5113,12 @@ subroutine interp_profiles(params,prtcls,P)
   !! See[[ korc_types]] and [[korc_profiles]].
 
   if (.not.params%GC_coords) call cart_to_cyl(prtcls%X,prtcls%X)
-  
-  !write(output_unit_write,'("Also R_buffer: ",E17.10)') prtcls%Y(1,1)  
+
+  !write(output_unit_write,'("Also R_buffer: ",E17.10)') prtcls%Y(1,1)
 #ifdef PSPLINE
   call check_if_in_profiles_domain(prtcls%Y, prtcls%flagCon)
 #endif
-  
+
   if (ALLOCATED(P%ne_2D)) then
 #ifdef PSPLINE
 !     write(output_unit_write,'("Also R_buffer: ",E17.10)') prtcls%X(1,1)
@@ -5087,19 +5158,19 @@ subroutine finalize_interpolants(params)
      if (EZspline_allocated(bfield_3d%R)) call Ezspline_free(bfield_3d%R, ezerr)
      if (EZspline_allocated(bfield_3d%PHI)) &
           call Ezspline_free(bfield_3d%PHI,ezerr)
-     
+
      if (EZspline_allocated(bfield_3d%Z)) call Ezspline_free(bfield_3d%Z, ezerr)
      if (EZspline_allocated(bfield_2d%A)) call Ezspline_free(bfield_2d%A, ezerr)
      if (EZspline_allocated(bfield_2d%R)) call Ezspline_free(bfield_2d%R, ezerr)
      if (EZspline_allocated(bfield_2d%PHI)) &
           call Ezspline_free(bfield_2d%PHI,ezerr)
-     
+
      if (EZspline_allocated(bfield_2d%Z)) call Ezspline_free(bfield_2d%Z, ezerr)
 
      if (EZspline_allocated(gradB_2d%R)) call Ezspline_free(gradB_2d%R, ezerr)
      if (EZspline_allocated(gradB_2d%PHI)) &
           call Ezspline_free(gradB_2d%PHI, ezerr)
-     
+
      if (EZspline_allocated(gradB_2d%Z)) call Ezspline_free(gradB_2d%Z, ezerr)
 
      if (EZspline_allocated(curlb_2d%R)) call Ezspline_free(curlb_2d%R, ezerr)
@@ -5109,13 +5180,13 @@ subroutine finalize_interpolants(params)
      if (EZspline_allocated(gradB_3d%R)) call Ezspline_free(gradB_3d%R, ezerr)
      if (EZspline_allocated(gradB_3d%PHI)) &
           call Ezspline_free(gradB_3d%PHI, ezerr)
-     
+
      if (EZspline_allocated(gradB_3d%Z)) call Ezspline_free(gradB_3d%Z, ezerr)
 
      if (EZspline_allocated(curlb_3d%R)) call Ezspline_free(curlb_3d%R, ezerr)
      if (EZspline_allocated(curlb_3d%PHI)) &
           call Ezspline_free(curlb_3d%PHI, ezerr)
-     
+
      if (EZspline_allocated(curlb_3d%Z)) call Ezspline_free(curlb_3d%Z, ezerr)
 
      if (ALLOCATED(profiles_domain%FLAG2D)) DEALLOCATE(profiles_domain%FLAG2D)
@@ -5125,26 +5196,26 @@ subroutine finalize_interpolants(params)
         write(output_unit_write,'("* * * * FIELD INTERPOLANT FINALIZED * * * *")')
      end if
   end if
-     
+
   if (params%profile_model(1:8) .EQ. 'EXTERNAL') then
      if (params%mpi_params%rank .EQ. 0) then
         write(output_unit_write,'("* * * * FINALIZING PROFILE INTERPOLANT * * * *")')
      end if
-     
+
      if (EZspline_allocated(profiles_3d%ne)) &
           call Ezspline_free(profiles_3d%ne,ezerr)
-     
+
      if (EZspline_allocated(profiles_3d%Te)) &
           call Ezspline_free(profiles_3d%Te,ezerr)
-     
+
      if (EZspline_allocated(profiles_3d%Zeff)) call Ezspline_free( &
           profiles_3d%Zeff, ezerr)
      if (EZspline_allocated(profiles_2d%ne)) &
           call Ezspline_free(profiles_2d%ne,ezerr)
-     
+
      if (EZspline_allocated(profiles_2d%Te)) &
           call Ezspline_free(profiles_2d%Te,ezerr)
-     
+
      if (EZspline_allocated(profiles_2d%Zeff)) call Ezspline_free( &
           profiles_2d%Zeff, ezerr)
 
@@ -5163,7 +5234,7 @@ end subroutine finalize_interpolants
 subroutine get_fio_magnetic_fields(prtcls, F, params)
   USE omp_lib
   IMPLICIT NONE
-  
+
     TYPE(PARTICLES), INTENT(INOUT) :: prtcls
     TYPE(FIELDS), INTENT(IN)       :: F
     TYPE(KORC_PARAMS), INTENT(IN)  :: params
@@ -5175,7 +5246,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     INTEGER             :: thread_num
 
 !    write(output_unit_write,*) 'in m3dc1 B'
-    
+
     if (prtcls%cart) then
        !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(pp,status,x)
        do pp = 1, SIZE(prtcls%hint)
@@ -5201,7 +5272,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
        !write(output_unit_write,*) 'hint: ',hint
 
        Btmp=0._rp
-       
+
        !$OMP PARALLEL DO DEFAULT(none) &
        !$OMP& SHARED(prtcls,params,F) &
        !$OMP& PRIVATE(pp,status,x,thread_num) &
@@ -5209,48 +5280,48 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
        do pp = 1, SIZE(prtcls%hint)
 
           thread_num = OMP_GET_THREAD_NUM()
-          
+
           if (prtcls%flagCon(pp) .EQ. 1_is) then
              x(1) = prtcls%Y(pp,1)*params%cpp%length
              x(2) = prtcls%Y(pp,2)
              x(3) = prtcls%Y(pp,3)*params%cpp%length
 
              !prtcls%hint(pp)=c_null_ptr
-             
+
              !write(6,*) 'thread',thread_num,'X',x
-             
+
              !             prtcls%hint(pp)=c_null_ptr
 
              !write(output_unit_write,*) 'thread',thread_num,'before interpolating B'
-             
+
              status = fio_eval_field(F%FIO_B, x(1),                      &
                   Btmp(1),prtcls%hint(pp))
 
-                     
+
              if (status .eq. FIO_NO_DATA) then
                 prtcls%B(pp,:) = 0
                 prtcls%flagCon(pp) = 0_is
              else if (status .ne. FIO_SUCCESS) then
                 prtcls%flagCon(pp) = 0_is
              end if
-            
-             
+
+
              if (.not.params%GC_coords) then
-                
+
                 prtcls%B(pp,1)=(Btmp(1)*cos(x(2))-Btmp(2)*sin(x(2)))/ &
                      params%cpp%Bo
                 prtcls%B(pp,2)=(Btmp(1)*sin(x(2))+Btmp(2)*cos(x(2)))/ &
                      params%cpp%Bo
                 prtcls%B(pp,3)=Btmp(3)/params%cpp%Bo
-                
+
              else
-                
+
                 prtcls%B(pp,1)=Btmp(1)/params%cpp%Bo
                 prtcls%B(pp,2)=Btmp(2)/params%cpp%Bo
                 prtcls%B(pp,3)=Btmp(3)/params%cpp%Bo
              end if
-             
-             
+
+
           end if
        end do
        !$OMP END PARALLEL DO
@@ -5290,7 +5361,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              B_Y(pp)=(Btmp(1)*sin(x(2))+Btmp(2)*cos(x(2)))/ &
                   params%cpp%Bo
              B_Z(pp)=Btmp(3)/params%cpp%Bo
-          else if (status .eq. FIO_NO_DATA) then            
+          else if (status .eq. FIO_NO_DATA) then
              flag(pp) = 0_is
           else if (status .ne. FIO_SUCCESS) then
              flag(pp) = 0_is
@@ -5337,13 +5408,13 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
           if (status .eq. FIO_SUCCESS) then
 
              !if (pp.eq.1) write(output_unit_write,*) 'interp success!'
-             
+
              B_R(pp)=Btmp(1)/params%cpp%Bo
              B_PHI(pp)=Btmp(2)/params%cpp%Bo
              B_Z(pp)=Btmp(3)/params%cpp%Bo
 
              Bmag=sqrt(B_R(pp)*B_R(pp)+B_PHI(pp)*B_PHI(pp)+B_Z(pp)*B_Z(pp))
-             
+
              status = fio_eval_field_deriv(F%FIO_B, x(1),dBtmp(1),hint(pp))
 
              !dBRdR=dBtmp(FIO_DR_R)*(params%cpp%length/params%cpp%Bo)
@@ -5375,7 +5446,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              !write(6,*) 'dBRdZ',dBRdZ
              !write(6,*) 'dBPHIdZ',dBPHIdZ
              !write(6,*) 'dBZdZ',dBZdZ
-             
+
              gradB_R(pp)=(B_R(pp)*dBRdR+B_PHI(pp)*dBPHIdR+B_Z(pp)*dBZdR)/ &
                   Bmag
              gradB_PHI(pp)=(B_R(pp)*dBRdPHI+B_PHI(pp)*dBPHIdPHI+ &
@@ -5390,18 +5461,18 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              curlb_Z(pp)=(Bmag/Y_R(pp)*B_PHI(pp)+Bmag*dBPHIdR- &
                   B_PHI(pp)*gradB_R(pp)- &
                   Bmag/Y_R(pp)*dBRdPHI+B_R(pp)*gradB_PHI(pp))/(Bmag*Bmag)
-             
-          else if (status .eq. FIO_NO_DATA) then            
+
+          else if (status .eq. FIO_NO_DATA) then
              flag(pp) = 0_is
           else if (status .ne. FIO_SUCCESS) then
              flag(pp) = 0_is
           end if
-          
+
        end if
     end do
 
   end subroutine get_fio_GCmagnetic_fields_p
-  
+
   subroutine get_fio_vector_potential(prtcls, F, params)
     TYPE(PARTICLES), INTENT(INOUT) :: prtcls
     TYPE(FIELDS), INTENT(IN)       :: F
@@ -5423,7 +5494,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     endif
 
     Atmp=0._rp
-    
+
     !$OMP PARALLEL DO DEFAULT(SHARED) &
     !$OMP& PRIVATE(pp,status,x) &
     !$OMP& FIRSTPRIVATE(Atmp)
@@ -5456,7 +5527,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     !$OMP END PARALLEL DO
 
   end subroutine get_fio_vector_potential
-  
+
   subroutine get_fio_vector_potential_p(params,F,Y_R,Y_PHI,Y_Z, &
        PSIp,flag,hint)
     TYPE(FIELDS), INTENT(IN)       :: F
@@ -5486,7 +5557,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                Atmp(1),hint(pp))
 
           if (status .eq. FIO_SUCCESS) then
-             PSIp(pp)=-Atmp(2)*x(1)          
+             PSIp(pp)=-Atmp(2)*x(1)
           else if (status .eq. FIO_NO_DATA) then
              PSIp(pp) = 100._rp
              flag(pp) = 0_is
@@ -5499,7 +5570,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     end do
 
   end subroutine get_fio_vector_potential_p
-  
+
   !!  @note FIXME Add documentation
   subroutine get_fio_electric_fields(prtcls, F, params)
     TYPE(PARTICLES), INTENT(INOUT) :: prtcls
@@ -5530,7 +5601,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     else
 
        Etmp=0._rp
-       
+
        !$OMP PARALLEL DO DEFAULT(none) &
        !$OMP& SHARED(prtcls,params,F) &
        !$OMP& PRIVATE(pp,status,x) &
@@ -5540,7 +5611,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              x(1) = prtcls%Y(pp,1)*params%cpp%length
              x(2) = prtcls%Y(pp,2)
              x(3) = prtcls%Y(pp,3)*params%cpp%length
-             
+
              status = fio_eval_field(F%FIO_E, x(1),                      &
                   Etmp(1),prtcls%hint(pp))
 
@@ -5551,7 +5622,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                 prtcls%flagCon(pp) = 0_is
              end if
 
-             if (.not.params%GC_coords) then             
+             if (.not.params%GC_coords) then
                 prtcls%E(pp,1)=(Etmp(1)*cos(x(2))-Etmp(2)*sin(x(2)))/ &
                      params%cpp%Eo
                 prtcls%E(pp,2)=(Etmp(1)*sin(x(2))+Etmp(2)*cos(x(2)))/ &
@@ -5562,7 +5633,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                 prtcls%E(pp,2)=Etmp(2)/params%cpp%Eo
                 prtcls%E(pp,3)=Etmp(3)/params%cpp%Eo
              end if
-             
+
           end if
        end do
        !$OMP END PARALLEL DO
@@ -5601,21 +5672,21 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                   params%cpp%Eo
              E_Y(pp)=(Etmp(1)*sin(x(2))+Etmp(2)*cos(x(2)))/ &
                   params%cpp%Eo
-             E_Z(pp)=Etmp(3)/params%cpp%Eo     
+             E_Z(pp)=Etmp(3)/params%cpp%Eo
           else if (status .eq. FIO_NO_DATA) then
              E_X(pp) = 0
              E_Y(pp) = 0
-             E_Z(pp) = 0                
+             E_Z(pp) = 0
              flag(pp) = 0_is
           else if (status .ne. FIO_SUCCESS) then
              flag(pp) = 0_is
           end if
-         
+
        end if
     end do
 
   end subroutine get_fio_FOelectric_fields_p
-  
+
   subroutine get_fio_GCelectric_fields_p(params,F,Y_R,Y_PHI,Y_Z, &
        E_R,E_PHI,E_Z,flag,hint)
     TYPE(FIELDS), INTENT(IN)       :: F
@@ -5630,7 +5701,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     REAL(rp), DIMENSION(3)         :: Etmp
 
     pchunk=params%pchunk
-    
+
     do pp = 1,pchunk
        if (flag(pp) .EQ. 1_is) then
           x(1) = Y_R(pp)*params%cpp%length
@@ -5643,23 +5714,23 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
           if (status .eq. FIO_SUCCESS) then
              E_R(pp)=Etmp(1)/params%cpp%Eo
              E_PHI(pp)=Etmp(2)/params%cpp%Eo
-             E_Z(pp)=Etmp(3)/params%cpp%Eo              
+             E_Z(pp)=Etmp(3)/params%cpp%Eo
           else if (status .eq. FIO_NO_DATA) then
              E_R(pp) = 0
              E_PHI(pp) = 0
-             E_Z(pp) = 0                
+             E_Z(pp) = 0
              flag(pp) = 0_is
           else if (status .ne. FIO_SUCCESS) then
              flag(pp) = 0_is
           end if
 
 !          write(6,*) E_R,E_PHI,E_Z
-          
+
        end if
     end do
 
   end subroutine get_fio_GCelectric_fields_p
-  
+
   subroutine get_fio_profile(prtcls, P, params)
     TYPE(PARTICLES), INTENT(INOUT) :: prtcls
     TYPE(PROFILES), INTENT(IN)     :: P
@@ -5694,7 +5765,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                 if(netmp.le.0) netmp=1._rp
 
                 prtcls%ne(pp) = netmp/params%cpp%density
-                
+
              else if (status .eq. FIO_NO_DATA) then
                 prtcls%ne(pp) = 0
              else if (status .ne. FIO_SUCCESS) then
@@ -5708,7 +5779,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
 
              if (status .eq. FIO_SUCCESS) then
                 if(Tetmp.le.0) Tetmp=0.1_rp
-             
+
                 prtcls%te(pp) = Tetmp/(params%cpp%temperature/C_E)
              else if (status .eq. FIO_NO_DATA) then
                 prtcls%te(pp) = 0
@@ -5738,7 +5809,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                 if(netmp.le.0) netmp=1._rp
 
                 prtcls%ne(pp) = netmp/params%cpp%density
-                
+
              else if (status .eq. FIO_NO_DATA) then
                 prtcls%ne(pp) = 0
              else if (status .ne. FIO_SUCCESS) then
@@ -5751,7 +5822,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
 
              if (status .eq. FIO_SUCCESS) then
                 if(Tetmp.le.0) Tetmp=0.1_rp
-             
+
                 prtcls%te(pp) = Tetmp/(params%cpp%temperature/C_E)
              else if (status .eq. FIO_NO_DATA) then
                 prtcls%te(pp) = 0
@@ -5783,7 +5854,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     REAL(rp)        :: netmp=-1._rp,Tetmp=-1._rp
 
     pchunk=params%pchunk
-    
+
     do pp = 1,pchunk
        if (flag(pp) .EQ. 1_is) then
           x(1) = Y_R(pp)*params%cpp%length
@@ -5791,14 +5862,14 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
           x(3) = Y_Z(pp)*params%cpp%length
 
           !write(6,*) P%FIO_ne,x
-          
+
           status = fio_eval_field(P%FIO_ne, x(1), &
                netmp,hint(pp))
-          
+
           if (status .eq. FIO_SUCCESS) then
 
              if(netmp.le.0) netmp=1._rp
-             
+
              n_e(pp) = netmp/params%cpp%density
           else if (status .eq. FIO_NO_DATA) then
              flag(pp) = 0_is
@@ -5806,19 +5877,19 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              flag(pp) = 0_is
              CYCLE
           end if
-          
+
           status = fio_eval_field(P%FIO_te, x(1), &
                Tetmp,hint(pp))
 
           if (status .eq. FIO_SUCCESS) then
 
              if(Tetmp.le.0) Tetmp=0.1_rp
-             
+
              T_e(pp) = Tetmp/(params%cpp%temperature/C_E)
           end if
-          
+
 !          write(6,*) E_R,E_PHI,E_Z
-          
+
        end if
     end do
 
@@ -5842,7 +5913,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
 
     pchunk=params%pchunk
     num_imp=params%num_impurity_species
-    
+
     do pp = 1,pchunk
        if (flag(pp) .EQ. 1_is) then
           x(1) = Y_R(pp)*params%cpp%length
@@ -5857,7 +5928,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
 
 !             write(6,*) P%FIO_nimp(ii)
 !             write(6,*) 'nimp_',ii,nimptmp
-             
+
              if (status .eq. FIO_SUCCESS) then
 
                 if(nimptmp.le.0) nimptmp=1._rp
@@ -5898,12 +5969,12 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              !write(6,*) 'n_i:',n_i(pp)
              !call korc_abort(21)
           endif
-          
+
        end if
     end do
 
   end subroutine get_fio_ion_p
-  
+
 #endif
 
 

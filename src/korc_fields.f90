@@ -2367,6 +2367,7 @@ CONTAINS
        F%ind0_2x1t = ind0_2x1t
        F%psip_conv = psip_conv
        F%MARS_AMP_Scale = MARS_AMP_Scale
+       F%MARS_phase = MARS_phase
        F%Analytic_IWL=Analytic_IWL
        F%ntiles=ntiles
        F%circumradius=circumradius
@@ -2374,6 +2375,9 @@ CONTAINS
        F%AORSA_freq=AORSA_freq
        F%AORSA_nmode=AORSA_nmode
        F%useLCFS = useLCFS
+       F%useDiMES = useDiMES
+       F%DiMESloc = DiMESloc
+       F%DiMESdims = DiMESdims
 
        if (params%proceed.and.F%ReInterp_2x1t) then
           call load_prev_iter(params)

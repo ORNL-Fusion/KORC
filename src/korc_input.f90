@@ -207,6 +207,7 @@ module korc_input
   REAL(rp) :: PSIp_0=0.6
   REAL(rp) :: psip_conv=1.0
   REAL(rp)  :: MARS_AMP_Scale=1.0
+  REAL(rp)  :: MARS_phase=0.0
   REAL(rp)  :: AORSA_AMP_Scale=1.0
   REAL(rp)  :: AORSA_freq=0.0
   REAL(rp)  :: AORSA_nmode=0.0
@@ -214,6 +215,11 @@ module korc_input
   INTEGER :: ntiles=42
   REAL(rp) :: circumradius=1.016
   LOGICAL :: useLCFS = .FALSE.
+  LOGICAL :: useDiMES = .FALSE.
+  REAL(rp), DIMENSION(3) :: DiMESloc = (/1.485,150.0,-1.245/)
+    ! In (R,PHI,Z) [m,deg,m]
+  REAL(rp), DIMENSION(2) :: DiMESdims = (/0.025,0.01/)
+    ! In (radius of semi-spheriod, height of semi-spheriod) [m,m]
 
   !! -----------------------------------------------
   !! plasmaProfiles
@@ -454,7 +460,7 @@ CONTAINS
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
          ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_IWL, &
          ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field, &
-         useLCFS
+         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &
