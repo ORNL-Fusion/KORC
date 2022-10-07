@@ -2331,41 +2331,41 @@ CONTAINS
                    flag(pp) = 0_is
                 endif
              endif
+!             write(output_unit_write,'("Shit''s fucked.")')
+          end if
 
-             if (F%useDiMES) THEN
+          if (F%useDiMES) THEN
 
-               DiMESloc_cyl=F%DiMESloc
-               DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
-               DiMESdims=F%DiMESdims
+            DiMESloc_cyl=F%DiMESloc
+            DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
+            DiMESdims=F%DiMESdims
 
-               if ((abs(Y_R(pp)-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
-                    (abs(Y_Z(pp)-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
-                    (abs(Y_PHI(pp)-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
+            if ((abs(Y_R(pp)-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
+                 (abs(Y_Z(pp)-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
+                 (abs(Y_PHI(pp)-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
 
-                  xtmp=Y_R(pp)*cos(Y_PHI(pp))
-                  ytmp=Y_R(pp)*sin(Y_PHI(pp))
-                  ztmp=Y_Z(pp)
+               xtmp=Y_R(pp)*cos(Y_PHI(pp))
+               ytmp=Y_R(pp)*sin(Y_PHI(pp))
+               ztmp=Y_Z(pp)
 
-                  DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
-                  DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
-                  DiMESloc_cart(3)=DiMESloc_cyl(3)
+               DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
+               DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
+               DiMESloc_cart(3)=DiMESloc_cyl(3)
 
-                  DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
+               DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
 
-                  if (DiMESrad.le.0._rp) THEN
-                     cycle
-                  end if
-
-                  DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
-
-                  if (ztmp.le.DiMESsurf) flag(pp)=0_is
-
+               if (DiMESrad.le.0._rp) THEN
+                  cycle
                end if
+
+               DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+
+               if (ztmp.le.DiMESsurf) flag(pp)=0_is
 
             end if
 
-!             write(output_unit_write,'("Shit''s fucked.")')
-          end if
+         end if
+
        end do
        !$OMP END SIMD
 !       write(output_unit_write,'("Shit''s not fucked.")')
