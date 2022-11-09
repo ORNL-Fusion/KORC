@@ -4795,7 +4795,7 @@ subroutine interp_fields(params,prtcls,F)
 #ifdef PSPLINE
   call check_if_in_fields_domain(F,prtcls%Y, prtcls%flagCon)
 
-  call check_if_in_LCFS(F,prtcls%Y, prtcls%initLCFS)
+  if (F%useLCFS) call check_if_in_LCFS(F,prtcls%Y, prtcls%initLCFS)
 #endif
 
   !write(output_unit_write,*) 'checked domain'
