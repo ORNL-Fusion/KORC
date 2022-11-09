@@ -1547,7 +1547,7 @@ CONTAINS
                 write(output_unit_write,*) '2D electric fields'
              endif
 
-             if(F%ReInterp_2x1t) then
+             if(F%Dim2x1t) then
 
                 if (.not.(EZspline_allocated(efield_2d%PHI))) then
 
@@ -2054,10 +2054,10 @@ CONTAINS
 #if DBG_CHECK
           if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
                bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
-             write(6,'("YR:",E17.10)') Y(1,1)
-             write(6,'("YZ:",E17.10)') Y(1,3)
-             write(6,'("IR: ",I16)') IR
-             write(6,'("IZ: ",I16)') IZ
+             !write(6,'("YR:",E17.10)') Y(1,1)
+             !write(6,'("YZ:",E17.10)') Y(1,3)
+             !write(6,'("IR: ",I16)') IR
+             !write(6,'("IZ: ",I16)') IZ
              !call KORC_ABORT(23)
           end if
 #endif
@@ -2437,10 +2437,10 @@ CONTAINS
 #if DBG_CHECK
        if ((IR.lt.0).or.(IZ.lt.0).or.(IR.GT. &
             bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ)) then
-          write(6,'("YR:",E17.10)') Y(1,1)
-          write(6,'("YZ:",E17.10)') Y(1,3)
-          write(6,'("IR: ",I16)') IR
-          write(6,'("IZ: ",I16)') IZ
+          !write(6,'("YR:",E17.10)') Y(1,1)
+          !write(6,'("YZ:",E17.10)') Y(1,3)
+          !write(6,'("IR: ",I16)') IR
+          !write(6,'("IZ: ",I16)') IZ
           !call KORC_ABORT(23)
        end if
 #endif
@@ -3810,7 +3810,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
              PSI_P(pp), ezerr)
         call EZspline_error(ezerr)
 
-        !        write(output_unit_write,'("PSI_P: ",E17.10)') PSI_P(1)
+        !write(output_unit_write,'("PSI_P: ",E17.10)') PSI_P(1)
 
         ! FR = (dA/dZ)/R
         call EZspline_derivative(bfield_2X1T%A, 0, 0, 1, Y(pp,1), F%t0_2x1t, &
@@ -4895,12 +4895,12 @@ subroutine interp_fields(params,prtcls,F)
 !     call interp_2D_efields(params,prtcls%Y,prtcls%E,prtcls%flagCon)
 !  end if
 
-  if (ALLOCATED(F%E_3D%R).and.F%Efield.and.(.not.F%ReInterp_2x1t)) then
+  if (ALLOCATED(F%E_3D%R).and.F%Efield.and.(.not.F%Dim2x1t)) then
      call interp_3D_efields(params,prtcls%Y,prtcls%E,prtcls%flagCon)
 
   end if
 
-  if (ALLOCATED(F%E_3D%R).and.F%Efield.and.F%ReInterp_2x1t) then
+  if (ALLOCATED(F%E_3D%R).and.F%Efield.and.F%Dim2x1t) then
      call interp_2D_efields(params,prtcls%Y,prtcls%E,prtcls%flagCon)
 
 !     write(output_unit_write,*) 'interpolated efield'

@@ -3535,7 +3535,7 @@ CONTAINS
     end if
 
     if (F%Efield.AND.F%Efield_in_file) then
-       if (F%axisymmetric_fields.and.(.not.F%ReInterp_2x1t)) then
+       if (F%axisymmetric_fields.and.(.not.F%Dim2x1t)) then
           dset = "/ER"
           call load_array_from_hdf5(h5file_id,dset,F%E_2D%R)
 
