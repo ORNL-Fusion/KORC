@@ -392,6 +392,9 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
+
      end do
   end if
 
@@ -411,6 +414,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 #endif
@@ -432,6 +437,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -474,6 +481,8 @@ program main
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
 
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
+
         F%ind_2x1t=F%ind_2x1t+1_ip
         if (params%mpi_params%rank .EQ. 0) then
            write(output_unit_write,*) 'KORC time ',params%time*params%cpp%time
@@ -500,6 +509,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -517,6 +528,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 #endif
@@ -536,6 +549,8 @@ program main
            flush(output_unit_write)
         end if
 
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
+
      end do
   end if
 
@@ -553,6 +568,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -577,6 +594,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -594,6 +613,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
 
      end do
   end if
@@ -642,6 +663,8 @@ program main
 
         call save_restart_variables(params,spp,F)
 
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
+
         if (params%mpi_params%rank .EQ. 0) then
            flush(output_unit_write)
         end if
@@ -661,6 +684,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -676,6 +701,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -693,6 +720,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -708,6 +737,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 
@@ -722,6 +753,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
      end do
   end if
 #endif
@@ -742,6 +775,8 @@ program main
         if (params%mpi_params%rank .EQ. 0) then
            flush(output_unit_write)
         end if
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
 
      end do
 
@@ -775,6 +810,8 @@ program main
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
+
+        if (sum(spp(1)%vars%flagCon*spp(1)%vars%flagCol*spp(1)%vars%flagRE)==0) EXIT
 
         !comment out for debugging only
         F%ind_2x1t=F%ind_2x1t+1_ip
