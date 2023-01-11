@@ -3419,7 +3419,7 @@ contains
        !write(6,*) 'Clog',CLogee_wu(params,ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature)
 
        if (.not.(cparams_ss%always_aval)) then
-          if (E_C.gt.abs(E_PHI(cc))) cycle
+          !if (E_C.gt.abs(E_PHI(cc))) cycle
 
           p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI(cc))/E_C-1)
           gam_c=sqrt(1+p_c**2)
