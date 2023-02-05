@@ -59,9 +59,9 @@ then
 #    export CXX=/opt/local/bin/mpic++-mpich-gcc8
 #    export FC=/opt/local/bin/mpif90-mpich-gcc8
 
-    export CC=/opt/local/bin/gcc-mp-11
-    export CXX=/opt/local/bin/g++-mp-11
-    export FC=/opt/local/bin/gfortran-mp-11
+    export CC=/usr/local/bin/gcc-12
+    export CXX=/usr/local/bin/g++-12
+    export FC=/usr/local/bin/gfortran-12
 
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE                             \
 	  -DUSE_PSPLINE=ON         \
