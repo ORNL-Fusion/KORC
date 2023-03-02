@@ -2002,7 +2002,7 @@ CONTAINS
                         (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                       Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                           (cos((modulo(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                           (cos((mod(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                       if (Y(pp,1).lt.Rwall) flag(pp) = 0_is
 
                    else
@@ -2075,7 +2075,7 @@ CONTAINS
                      (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                    Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                        (cos((modulo(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                        (cos((mod(Y(pp,2),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                    if (Y(pp,1).lt.Rwall) flag(pp) = 0_is
                       
                 else
@@ -2118,19 +2118,19 @@ CONTAINS
     !! Particle iterator.
     INTEGER(ip)                                            :: ss
     !! Species iterator.
-    REAL(rp) :: Rwall,lscale
+    REAL(rp) :: Rwall
 
-    lscale=7.983650528137727e-04
     
-    !write(output_unit_write,'("YR:",E17.10)') Y_R
-    !write(output_unit_write,'("YPHI:",E17.10)') Y_PHI
-    !write(output_unit_write,'("YZ:",E17.10)') Y_Z
+!    write(output_unit_write,'("YR:",E17.10)') Y_R
+!    write(output_unit_write,'("YPHI:",E17.10)') Y_PHI
+!    write(output_unit_write,'("YZ:",E17.10)') Y_Z
 
-    !write(output_unit_write,'("Ro:",E17.10)') fields_domain%Ro
-    !write(output_unit_write,'("Zo:",E17.10)') fields_domain%Zo
-    !write(output_unit_write,'("DR:",E17.10)') fields_domain%DR
-    !write(output_unit_write,'("DZ:",E17.10)') fields_domain%DZ
-    !write(output_unit_write,'("DT:",E17.10)') fields_domain%DT
+!    write(output_unit_write,'("Ro:",E17.10)') fields_domain%Ro
+!    write(output_unit_write,'("Zo:",E17.10)') fields_domain%Zo
+!    write(output_unit_write,'("DR:",E17.10)') fields_domain%DR
+    !    write(output_unit_write,'("DZ:",E17.10)') fields_domain%DZ
+!    write(output_unit_write,'("DT:",E17.10)') fields_domain%DT
+
 
     
     if (ALLOCATED(fields_domain%FLAG3D)) then
@@ -2159,7 +2159,7 @@ CONTAINS
                         (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                       Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                           (cos((modulo(Y_PHI(pp),2*C_PI/F%ntiles))-C_PI/F%ntiles))
+                           (cos((mod(Y_PHI(pp),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                       if (Y_R(pp).lt.Rwall) flag(pp) = 0_is
 
                    else
@@ -2264,16 +2264,6 @@ CONTAINS
           if ((IR.lt.1).or.(IZ.lt.1).or. &
                (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
                (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
-
-
-             !write(6,*) 'Y',Y_R(pp)*lscale,Y_PHI(pp),Y_Z(pp)*lscale
-             !write(6,*) 'flagCon',flag(pp)
-             !write(6,*) 'IFLAG',IR,IZ
-             !write(6,*) 'NFLAG',bfield_2d%NR,bfield_2d%NZ
-             !write(6,*) 'BFLAG',floor(bfield_2d%NR/6._rp),floor(bfield_2d%NR/5._rp),floor(4._rp*bfield_2d%NR/5._rp)
-             !write(6,*) 'FLAGR',fields_domain%Ro*lscale,fields_domain%DR*lscale
-             !write(6,*) 'FLAGZ',fields_domain%Zo*lscale,fields_domain%DZ*lscale
-             
              if (F%Analytic_IWL.eq.'NONE') then
                 flag(pp) = 0_is
              else if (F%Analytic_IWL.eq.'D3D') then
@@ -2282,12 +2272,7 @@ CONTAINS
                      (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
                    Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
-                        (cos(modulo(Y_PHI(pp),2*C_PI/F%ntiles)-C_PI/F%ntiles))
-
-                   !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
-                   !write(6,*) 'Rwall',Rwall*lscale
-                   !write(6,*) 'mod',modulo(Y_PHI(pp),2*C_PI/F%ntiles)
-                   
+                        (cos((mod(Y_PHI(pp),2*C_PI/F%ntiles))-C_PI/F%ntiles))
                    if (Y_R(pp).lt.Rwall) flag(pp) = 0_is
 
                 else
@@ -3313,7 +3298,9 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
   REAL(rp),DIMENSION(1)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),DIMENSION(1)   :: B0_R,B0_PHI,B0_Z
   REAL(rp),DIMENSION(1)   :: B0_X,B0_Y
+  REAL(rp),DIMENSION(1)   :: theta
   REAL(rp),DIMENSION(1)   :: B1_X,B1_Y,B1_Z
+  REAL(rp),DIMENSION(1)   :: E1_X,E1_Y,E1_Z
   REAL(rp),DIMENSION(1)   :: B1Re_X,B1Re_Y,B1Re_Z
   REAL(rp),DIMENSION(1)   :: B1Im_X,B1Im_Y,B1Im_Z
   REAL(rp),DIMENSION(1)   :: E1Re_X,E1Re_Y,E1Re_Z
@@ -3323,8 +3310,8 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: pp,ss
   !! Particle chunk iterator.
-  REAL(rp) :: psip_conv
-  REAL(rp) :: amp,nmode
+  REAL(rp) :: psip_conv,psirr,widthh
+  REAL(rp) :: amp,nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
 
   if (size(prtcls%Y,1).eq.1) then
      ss = size(prtcls%Y,1)
@@ -3338,6 +3325,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
 
   psip_conv=F%psip_conv
   amp=F%AMP
+  mmode=40
   nmode=F%AORSA_nmode
 
 
@@ -3352,6 +3340,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
      Y_R(1)=prtcls%Y(pp,1)
      Y_PHI(1)=prtcls%Y(pp,2)
      Y_Z(1)=prtcls%Y(pp,3)
+     theta(1)=atan2(Y_Z(1),(Y_R(1)-1.7))
      
      call EZspline_interp(bfield_2d%A,&
           b1Refield_2dx%X,b1Refield_2dx%Y,b1Refield_2dx%Z, &
@@ -3363,44 +3352,60 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
      call EZspline_error(ezerr)
      
      prtcls%PSI_P=A(1,1)
-
+     widthh=F%width
+     psirr=F%psir
      B0_R = psip_conv*A(1,3)/prtcls%Y(pp,1)
      B0_PHI = -F%Bo*F%Ro/prtcls%Y(pp,1)
      B0_Z = -psip_conv*A(1,2)/prtcls%Y(pp,1)
 
-     cnP=cos(nmode*Y_PHI)
-     snP=sin(nmode*Y_PHI)
+     cnP=cos(mmode*theta-nmode*Y_PHI)
+     !snP=sin(nmode*Y_PHI)
 
      cP=cos(Y_PHI)
-     sP=sin(Y_PHI)
-     
-     B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
-     B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
-     B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
+    !sP=sin(Y_PHI)
+     BXavg=6.95E-07/params%cpp%Bo
+     BYavg=1.184E-06/params%cpp%Bo
+     BZavg=1.118E-06/params%cpp%Bo 
+     B1_X = amp*(BXavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
+     B1_Y = amp*(BYavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
+     B1_Z = amp*(BZavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
 
-     prtcls%E(pp,1) = amp*(E1Re_X(1)*cnP(1)-E1Im_X(1)*snP(1))
-     prtcls%E(pp,2) = amp*(E1Re_Y(1)*cnP(1)-E1Im_Y(1)*snP(1))
-     prtcls%E(pp,3) = amp*(E1Re_Z(1)*cnP(1)-E1Im_Z(1)*snP(1))
+     EXavg=76.2/params%cpp%Eo
+     EYavg=57.7/params%cpp%Eo
+     EZavg=9.25/params%cpp%Eo
+     E1_X= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EXavg*cnp
+     E1_Y= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EYavg*cnp
+     E1_Z= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EZavg*cnp
+     prtcls%E(pp,1)=E1_X(1)
+     prtcls%E(pp,2)=E1_Y(1)
+     prtcls%E(pp,3)=E1_Z(1)
 
      B0_X = B0_R*cP - B0_PHI*sP
      B0_Y = B0_R*sP + B0_PHI*cP
      prtcls%B(pp,3) = B0_Z(1)+B1_Z(1)
-     
      prtcls%B(pp,1) = B0_X(1)+B1_X(1)
      prtcls%B(pp,2) = B0_Y(1)+B1_Y(1)
 
      !write(6,*) '(R,PHI,Z)',Y_R*params%cpp%length,Y_PHI, &
-     !     Y_Z*params%cpp%length
-     !write(6,*) 'amp',amp,'cP,sP',cP,sP,'cnP,snP',cnP,snP
-     !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
+     !    Y_Z*params%cpp%length
+!     write(6,*) 'sigma',widthh, 'norm width', params%cpp%Bo*params%cpp%length**2
+ !    write(6,*) 'theta_initial',theta(1),'zeta_initial', Y_PHI, 'cos_intial',cnp(1)
+!     write(6,*) 'psip', prtcls%PSI_P
+!     write(6,*) 'psirr',psirr
      !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
      !write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
      !write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
+     !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
+     !write(6,*) 'E0',E(pp,1)*params%cpp%Bo,E(pp,2)*params%cpp%Bo,E(pp,3)*params%cpp%Bo
+     !write(6,*) 'Eavg',EXavg,EYavg,EXavg
+     !write(6,*) 'Bavg',EXavg,EYavg,EXavg
+     !write(6,*) 'Y_R',Y_R,'Y_PHI', Y_PHI,'Y_Z', Y_Z
      !write(6,*) 'AMP',amp
      !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
      !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
      !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
-     !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
+!      write(6,*) 'EXavg',EXavg,EYavg,EZavg, 'norm Eo', params%cpp%Eo
+!        write(6,*) 'E1_X',prtcls%E(pp,1)*params%cpp%Eo,prtcls%E(pp,2)*params%cpp%Eo,prtcls%E(pp,3)*params%cpp%Eo
      
   end do
   !$OMP END PARALLEL DO
@@ -3420,6 +3425,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: E_X,E_Y,E_Z
   REAL(rp),DIMENSION(pchunk)   :: B0_R,B0_PHI,B0_Z,B0_X,B0_Y
   REAL(rp),DIMENSION(pchunk)   :: B1_X,B1_Y,B1_Z
+  REAL(rp),DIMENSION(pchunk)   :: radius,theta
   REAL(rp),DIMENSION(pchunk)   :: B1Re_X,B1Re_Y,B1Re_Z
   REAL(rp),DIMENSION(pchunk)   :: B1Im_X,B1Im_Y,B1Im_Z
   REAL(rp),DIMENSION(pchunk)   :: E1Re_X,E1Re_Y,E1Re_Z
@@ -3431,13 +3437,14 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   INTEGER                                      :: cc
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
-  REAL(rp) :: psip_conv
-  REAL(rp) :: amp,nmode,omega
+  REAL(rp) :: psip_conv,psirr,widthh
+  REAL(rp) :: amp,nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
 
   psip_conv=F%psip_conv
   amp=F%AMP
   nmode=F%AORSA_nmode
   omega=2*C_PI*F%AORSA_freq
+  mmode=40 
   
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
@@ -3453,7 +3460,13 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   !$OMP SIMD
   do cc=1_idef,pchunk
      PSIp(cc)=A(cc,1)
-
+     radius(cc)=sqrt((Y_R(cc)-1.7)**2-Y_Z(cc)**2)
+     theta(cc)=atan2(Y_Z(cc),(Y_R(cc)-F%AB%Ro))
+   !  F%AB%rmn=rmn
+     psirr=F%psir
+   !  F%AB%sigmamn=sigmamn
+     widthh=F%width
+!changed by YG
      B0_R(cc) = psip_conv*A(cc,3)/Y_R(cc)
      B0_PHI(cc) = -F%Bo*F%Ro/Y_R(cc)
      B0_Z(cc) = -psip_conv*A(cc,2)/Y_R(cc)
@@ -3465,38 +3478,52 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
      B0_Y(cc) = B0_R(cc)*sP(cc) + B0_PHI(cc)*cP(cc)
      
 
-     cnP(cc)=cos(omega*time+nmode*Y_PHI(cc))
-     snP(cc)=sin(omega*time+nmode*Y_PHI(cc))
-     
-     B1_X(cc) = amp*(B1Re_X(cc)*cnP(cc)-B1Im_X(cc)*snP(cc))
-     B1_Y(cc) = amp*(B1Re_Y(cc)*cnP(cc)-B1Im_Y(cc)*snP(cc))
-     B1_Z(cc) = amp*(B1Re_Z(cc)*cnP(cc)-B1Im_Z(cc)*snP(cc))
+     cnP(cc)=cos(mmode*theta(cc)-omega*params%time-nmode*Y_PHI(cc))
+    ! snP(cc)=sin(mmode*theta-omega*time-nmode*Y_PHI(cc))
+     BXavg=6.95E-07/params%cpp%Bo
+     BYavg=1.184E-06/params%cpp%Bo
+     BZavg=1.118E-06/params%cpp%Bo
+     B1_X(cc) = amp*(BXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     B1_Y(cc) = amp*(BYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     B1_Z(cc) = amp*(BZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
 
      B_X(cc) = B0_X(cc)+B1_X(cc)
      B_Y(cc) = B0_Y(cc)+B1_Y(cc)
      B_Z(cc) = B0_Z(cc)+B1_Z(cc)
-     
-     E_X(cc) = amp*(E1Re_X(cc)*cnP(cc)-E1Im_X(cc)*snP(cc))
-     E_Y(cc) = amp*(E1Re_Y(cc)*cnP(cc)-E1Im_Y(cc)*snP(cc))
-     E_Z(cc) = amp*(E1Re_Z(cc)*cnP(cc)-E1Im_Z(cc)*snP(cc))     
 
+     EXavg=76.2/params%cpp%Eo
+     EYavg=57.7/params%cpp%Eo
+     EZavg=9.25/params%cpp%Eo
+     E_X(cc) = amp*(EXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     E_Y(cc) = amp*(EYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     
 
   end do
   !$OMP END SIMD
 
-#if DBG_CHECK    
-  !write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
-  !     Y_Z*params%cpp%length,time
-  !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
-  !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
+!#if DBG_CHECK    
+!   write(output_unit_write,'("R,PHI,Z,time")')Y_R,Y_PHI,Y_Z,time
+!!    write(6,*) 'Psip', PSIp(1)*params%cpp%Bo*params%cpp%length**2,'psi0',psirr*params%cpp%Bo*params%cpp%length**2, 'theta', theta(1),'zeta', Y_PHI(1)
+!     write(6,*) 'psip_p', PSIp(1)*params%cpp%Bo*params%cpp%length**2, 'psi0', &
+!     psirr*params%cpp%Bo*params%cpp%length**2,'theta',theta(1), 'zeta',Y_PHI(1), 'omega*t', omega*params%time, &
+!    'width',widthh*params%cpp%Bo*params%cpp%length**2,'cos', cnp(1), &
+!    'B1_X',B1_X(1)*params%cpp%Bo, 'B1_Y', B1_Y(1)*params%cpp%Bo,'B1_Z', B1_Z(1)*params%cpp%Bo
+  !write(6,*) 'norm', params%cpp%Bo*params%cpp%length**2
+!    write(6,*) 'omega*t', omega*params%time
+!   write(6,*) 'time', params%time*params%cpp%time
+!   write(6,*) 'width', widthh*params%cpp%Bo*params%cpp%length**2
+   !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
   !write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
-  !write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
-  !write(6,*) 'AMP',amp
+!  write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
+ ! write(output_unit_write,'("AMP")'),amp
   !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
   !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
-  !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
-  !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
-#endif
+  !write(output_unit_write,'("B1")')B1_X,B1_Y,B1_Zi
+!   write(6,*) 'B1', B1_X(1)*params%cpp%Bo,B1_Y(1)*params%cpp%Bo,B1_Z(1)*params%cpp%Bo 
+!   write(6,*) 'B0', B0_X(1)*params%cpp%Bo,B0_Y(1)*params%cpp%Bo,B0_Z(1)*params%cpp%Bo 
+ !  write(6,*) 'E1X_pp', E_X(1)*params%cpp%Eo,'E1_Y_pp',E_Y(1)*params%cpp%Eo,'E1_Z_pp',E_Z(1)*params%cpp%Eo
+!#endif
   
 end subroutine interp_FOfields_aorsa_p
 

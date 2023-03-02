@@ -2417,6 +2417,8 @@ CONTAINS
        F%AORSA_AMP_Scale=AORSA_AMP_Scale
        F%AORSA_freq=AORSA_freq
        F%AORSA_nmode=AORSA_nmode
+       F%width=width
+       F%psir=psir
        F%useLCFS = useLCFS
 
        if (params%proceed.and.F%ReInterp_2x1t) then

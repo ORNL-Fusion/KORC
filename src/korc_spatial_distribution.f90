@@ -151,7 +151,7 @@ subroutine torus(params,spp)
     call set_random_dist(0.0_rp, 1.0_rp)
     call get_randoms(r)
 
-    r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
+     r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
 !$OMP PARALLEL WORKSHARE
     spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*SIN(zeta)
@@ -1283,8 +1283,6 @@ subroutine MH_psi(params,spp,F)
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
-  !! An instance of the derived type SPECIES containing all the parameters
-  !! and simulation variables of the different species in the simulation.
   TYPE(FIELDS), INTENT(IN)                                   :: F
   !! An instance of the KORC derived type FIELDS.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: R_samples,X_samples,Y_samples
@@ -1351,8 +1349,10 @@ subroutine MH_psi(params,spp,F)
      min_Z=minval(F%X%Z)
      max_Z=maxval(F%X%Z)
 
-     PSIp0=F%PSIP_min
-     psi_max = spp%psi_max
+ ! changed YG   PSIp0=F%PSIP_min
+     PSIp0=0.0498
+!  changed YG   psi_max = spp%psi_max
+     psi_max = 0.05
      psi_max_buff = spp%psi_max*2._rp
   end if
 

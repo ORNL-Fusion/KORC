@@ -620,6 +620,8 @@ module korc_types
      REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
+     REAL(rp)  :: psir
+     REAL(rp)  :: width 
      REAL(rp)  :: AORSA_nmode
      !! interpolated E field
      CHARACTER(30) :: Analytic_IWL
