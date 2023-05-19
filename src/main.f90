@@ -52,6 +52,8 @@ program main
   !! Subroutine [[initialize_communications]] in [[korc_hpc]] that
   !! initializes MPI and OpenMP communications.
 
+   write(6,*) 1/params%mpi_params%rank
+
   if (params%mpi_params%rank .EQ. 0) then
      flush(output_unit_write)
   end if

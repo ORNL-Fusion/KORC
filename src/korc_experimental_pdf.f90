@@ -1057,7 +1057,11 @@ CONTAINS
     
     E_CH=nf*C_E**3*CLogee/(4*C_PI*C_E0**2*C_ME*C_C**2)
 
-    E_G=abs(EPHI)/E_CH
+    if (EPHI.eq.0._rp) then
+      E_G=abs(h_params%Eo)/E_CH
+    else  
+      E_G=abs(EPHI)/E_CH
+    endif
 
     A = (2.0_rp*E_G/(Z_brac + 1.0_rp))*(g**2 - 1.0_rp)/g
     A = A*h_params%A_fact   
@@ -2667,10 +2671,10 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
      rr=1_idef
      do while (ii .LE. 1000_idef)
 
-        if (modulo(ii,100).eq.0) then
-           write(output_unit_write,'("Burn: ",I10)') ii
-           write(6,'("Burn: ",I10)') ii
-        end if
+        !if (modulo(ii,100).eq.0) then
+        !   write(output_unit_write,'("Burn: ",I10)') ii
+        !   write(6,'("Burn: ",I10)') ii
+        !end if
         
         R_test = R_buffer + get_random_N()*spp%dR
         Z_test = Z_buffer + get_random_N()*spp%dZ
@@ -2753,10 +2757,10 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
 
 !        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
 
-        if (rr.gt.100) then
-           write(6,*) 'f0,f1,R,Z,gam,eta',f0,f1,R_test*params%cpp%length,Z_test*params%cpp%length,G_test,eta_test
-           if (rr.gt.500) stop
-        endif
+        !if (rr.gt.100) then
+        !   write(6,*) 'f0,f1,R,Z,gam,eta',f0,f1,R_test*params%cpp%length,Z_test*params%cpp%length,G_test,eta_test
+        !   if (rr.gt.500) stop
+        !endif
         
         accepted=.false.
         if (ratio .GE. 1.0_rp) then
@@ -2798,7 +2802,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
        if (modulo(ii,nsamples/100).eq.0) then
           write(output_unit_write,'("Sample: ",I10)') ii
           write(6,'("Sample: ",I10)') ii
-        end if
+       end if
         
         R_test = R_buffer + get_random_N()*spp%dR
         Z_test = Z_buffer + get_random_N()*spp%dZ
@@ -2863,10 +2867,10 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
 
 !        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
 
-        if (rr.gt.100) then
-           write(6,*) 'f0,f1,R,Z,gam,eta',f0,f1,R_test*params%cpp%length,Z_test*params%cpp%length,G_test,eta_test
-           if (rr.gt.500) stop
-        endif
+        !if (rr.gt.100) then
+        !   write(6,*) 'f0,f1,R,Z,gam,eta',f0,f1,R_test*params%cpp%length,Z_test*params%cpp%length,G_test,eta_test
+        !   if (rr.gt.500) stop
+        !endif
         
         accepted=.false.
         if (ratio .GE. 1.0_rp) then
