@@ -2939,16 +2939,21 @@ contains
 
 #if DBG_CHECK
     do cc=1_idef,achunk
-       if (ISNAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
-          write(6,*) 'xi is NaN or >1 before LAC'
-          write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
-          write(6,*) 'p,xi',pm(cc),xi(cc)
-          write(6,*) 'dp,dxi',dp(cc),dxi(cc)
-          write(6,*) 'CBL',CBL(cc)
-          write(6,*) 'v,ne,Te,Zeff',v(cc),ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature,Zeff(cc)
-          write(6,*) 'ppll,pmu,Bmag',Ppll(cc),Pmu(cc),Bmag(cc)
-          call korc_abort(24)
-       end if
+#ifdef __NVCOMPILER
+      if (IEEE_IS_NAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
+#else
+      if (ISNAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
+#endif 
+         write(6,*) 'xi is NaN or >1 before LAC'
+         write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
+         write(6,*) 'p,xi',pm(cc),xi(cc)
+         write(6,*) 'dp,dxi',dp(cc),dxi(cc)
+         write(6,*) 'CBL',CBL(cc)
+         write(6,*) 'v,ne,Te,Zeff',v(cc),ne(cc)*params%cpp%density,Te(cc)*params%cpp%temperature,Zeff(cc)
+         write(6,*) 'ppll,pmu,Bmag',Ppll(cc),Pmu(cc),Bmag(cc)
+         call korc_abort(24)
+      end if
+
     end do
 # endif
 
@@ -3040,7 +3045,11 @@ contains
 
 #if DBG_CHECK
     do cc=1_idef,achunk
-       if (ISNAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
+#ifdef __NVCOMPILER
+      if (IEEE_IS_NAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
+#else
+      if (ISNAN(xi(cc)).or.(abs(xi(cc)).gt.1._rp)) then
+#endif  
           write(6,*) 'xi is NaN or >1 after LAC'
           write(6,*) 'p0,xi0',pm0(cc),xi0(cc)
           write(6,*) 'p,xi',pm(cc),xi(cc)
@@ -3274,8 +3283,13 @@ contains
 
 #if DBG_CHECK
        do cc=1_idef,pchunk
-          if((isnan(Ppll(cc)).or.isnan(Pmu(cc))).and. &
-             ((flagCol(cc).eq.1_is).and.(flagCon(cc).eq.1_is))) then
+#ifdef __NVCOMPILER
+         if((ieee_is_nan(Ppll(cc)).or.ieee_is_nan(Pmu(cc))).and. &
+            ((flagCol(cc).eq.1_is).and.(flagCon(cc).eq.1_is))) then
+#else
+         if((isnan(Ppll(cc)).or.isnan(Pmu(cc))).and. &
+            ((flagCol(cc).eq.1_is).and.(flagCon(cc).eq.1_is))) then
+#endif  
              write(6,*) 'End collision'
              write(6,*) 'Ppll',Ppll(cc)
              write(6,*) 'Pmu',Pmu(cc)
@@ -3592,16 +3606,23 @@ contains
 
        prob1(cc)=prob1(cc)*dt*2*C_PI
 
+#ifdef __NVCOMPILER
+       if (IEEE_IS_NAN(prob1(cc))) then
+
+#else
        if (ISNAN(prob1(cc))) then
-          write(6,*) 'NaN probability from secondary RE source'
-          write(6,*) 'p,xi',pm(cc),xi(cc)
-          write(6,*) 'gam_min,gammax',gam_min,gammax
-          write(6,*) 'E',E_PHI(cc)*params%cpp%Eo
-          write(6,*) 'E_C',E_C*params%cpp%Eo
-          !write(6,*) 'pitchprob',pitchprob
-          !write(6,*) 'S_LA',S_LA
-          call korc_abort(24)
+#endif
+         write(6,*) 'NaN probability from secondary RE source'
+         write(6,*) 'p,xi',pm(cc),xi(cc)
+         write(6,*) 'gam_min,gammax',gam_min,gammax
+         write(6,*) 'E',E_PHI(cc)*params%cpp%Eo
+         write(6,*) 'E_C',E_C*params%cpp%Eo
+         !write(6,*) 'pitchprob',pitchprob
+         !write(6,*) 'S_LA',S_LA
+         call korc_abort(24)
        end if
+         
+
 
        if (prob1(cc).gt.1._rp) then
           write(6,*) 'Multiple secondary REs generated in a collisional time step'
