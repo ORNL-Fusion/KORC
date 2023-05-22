@@ -36,7 +36,7 @@ __build() {
 
 __test() {
 
-  local readonly input_file="./input_file_regtest1.korc"
+  local readonly input_file="../egyro/input_file_egyro.korc"
   local readonly output_dir="OUT_TEST"
   local lc
 
@@ -45,7 +45,7 @@ __test() {
 
   ../../build/build/bin/xkorc ${input_file} ${output_dir}/ \
      > ${output_dir}/korc_regression_stdout.log \
-    2> ${output_dir}/korc_regression_stderr.log
+     > ${output_dir}/korc_regression_stderr.log
 
   read lc <<< $(
     cat ${output_dir}/korc_regression_stderr.log | wc -l
