@@ -15,6 +15,10 @@ module korc_collisions
   use korc_random
 #endif
 
+#ifdef __NVCOMPILER
+  use ieee_arithmetic
+#endif
+
   IMPLICIT NONE
 
   CHARACTER(LEN=*), PRIVATE, PARAMETER 	:: MODEL1 = 'SINGLE_SPECIES'
