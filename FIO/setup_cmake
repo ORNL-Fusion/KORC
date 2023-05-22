@@ -86,6 +86,32 @@ then
 	  -DCMAKE_FORTRAN_FLAGS="-convert big_endian -g -traceback -check all -Bdynamic -debug inline-debug-info -qopt-report=5 -qopt-report-phase=vec -qoverride-limits -simd -qopenmp" \
 	  -DCMAKE_C_FLAGS="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -simd -qopenmp" \
 	  -DCCMAKE_CXX_FLAGS="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -simd -qopenmp"
+
+elif [ $LMOD_SYSTEM_NAME == "perlmutter"   ]
+then
+
+    module load cmake
+    module load cray-hdf5
+    
+    cmake ../ -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE                                          \
+	  -DCMAKE_INSTALL_PREFIX=/global/cfs/cdirs/m3236/build_M3DC1/KORC/FIO/install \
+	  -DCMAKE_PREFIX_PATH=$MPICH_DIR \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio" \
+        -DCMAKE_C_FLAGS="-O3 -mp"   \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec  -qopenmp" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -qopenmp" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+
+else
+# MACHINE_ID is new and unknown. Inform the user how to add support for this new machine.
+    echo $MACHINE_ID not suported by this script.
+    echo To support this machine, add a new elif statement of the form
+    echo
+    echo elif [ \$MACHINE_ID == \"$MACHINE_ID\" ]
+    echo then
+    echo "   " cmake -DVARIABLE=value ...
+    echo
 fi
 
 echo To build the code run the following commands.

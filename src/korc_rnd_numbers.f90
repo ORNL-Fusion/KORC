@@ -112,10 +112,11 @@ subroutine rand_real(rrand)
 end subroutine rand_real
 
 
-subroutine init_random_seed()
+subroutine init_random_seed(params)
 #ifdef PARALLEL_RANDOM
   use korc_random
 #endif
+  TYPE(KORC_PARAMS), INTENT(IN) 	:: params  
   INTEGER, allocatable       :: seed(:)
   INTEGER(8), DIMENSION(8)   :: dt
   INTEGER(8)                 :: i
@@ -148,7 +149,7 @@ subroutine init_random_seed()
              + dt(7) * 1000_8 &
              + dt(8)
      end if
-     pid = getpid()
+     pid = params%mpi_params%rank
      write(output_unit_write,'("PID: ",I15)') pid
      t = ieor(t, int(pid, kind(t)))
      do i = 1, n

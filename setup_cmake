@@ -178,12 +178,12 @@ then
     #  Config for NERSC machines.
     module load cmake
     module load cray-hdf5
-    module unload darshan/3.1.4
+
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
         -DCMAKE_PREFIX_PATH=$MPICH_DIR \
         -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio" \
-        -DCMAKE_C_FLAGS="-O3 -vec-threshold0 -mp"   \
-        -DCMAKE_CXX_FLAGS="-O3 -std=c++11  -vec-threshold0  -mp" \
+        -DCMAKE_C_FLAGS="-O3 -mp"   \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
         -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec  -qopenmp" \
         -DCMAKE_C_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -qopenmp" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \

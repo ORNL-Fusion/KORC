@@ -98,13 +98,13 @@ subroutine disk(params,spp)
   ! A unique velocity direction
   call init_u_random(10986546_8)
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(theta)
 
   theta = 2.0_rp*C_PI*theta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(r)
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
@@ -131,21 +131,21 @@ subroutine torus(params,spp)
     ! A unique velocity direction
 !    call init_u_random(10986546_8)
 
-    call init_random_seed()
+    call init_random_seed(params)
 !    call RANDOM_NUMBER(theta)
 !    theta = 2.0_rp*C_PI*theta
 
     call set_random_dist(0.0_rp, 2.0_rp*C_PI)
     call get_randoms(theta)
 
-!    call init_random_seed()
+!    call init_random_seed(params)
 !    call RANDOM_NUMBER(zeta)
 !    zeta = 2.0_rp*C_PI*zeta
 
     call get_randoms(zeta)
 !
     ! Uniform distribution on a disk at a fixed azimuthal theta
-!    call init_random_seed()
+!    call init_random_seed(params)
 !    call RANDOM_NUMBER(r)
 
     call set_random_dist(0.0_rp, 1.0_rp)
@@ -198,7 +198,7 @@ end subroutine torus
 !  call init_u_random(10986546_8)
 
 !  if (.not.params%SameRandSeed) then
-!     call init_random_seed()
+!     call init_random_seed(params)
 !  else
 !     call random_seed(put=seed)
 !  end if
@@ -206,7 +206,7 @@ end subroutine torus
 !  theta = 2.0_rp*C_PI*theta
 
 !  if (.not.params%SameRandSeed) then
-!     call init_random_seed()
+!     call init_random_seed(params)
 !  else
 !     call random_seed(put=seed)
 !  end if
@@ -220,7 +220,7 @@ end subroutine torus
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
 !  if (.not.params%SameRandSeed) then
-!     call init_random_seed()
+!     call init_random_seed(params)
 !  else
 !     call random_seed(put=seed)
 !  end if
@@ -309,16 +309,16 @@ subroutine elliptic_torus(params,spp)
   ! A unique velocity direction
   call init_u_random(10986546_8)
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(r)
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
@@ -419,16 +419,16 @@ subroutine exponential_torus(params,spp)
   ! A unique velocity direction
   call init_u_random(10986546_8)
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(r)
 
   ! Newton-Raphson applied here for finding the radial distribution
@@ -535,16 +535,16 @@ subroutine exponential_elliptic_torus(params,spp)
   ! A unique velocity direction
   call init_u_random(10986546_8)
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(r)
 
   do pp=1_idef,spp%ppp
@@ -651,16 +651,16 @@ subroutine gaussian_elliptic_torus(params,spp)
   ! A unique velocity direction
   call init_u_random(10986546_8)
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(r)
 
   sigma = 1.0_rp/SQRT(2.0_rp*(spp%falloff_rate/params%cpp%length))
@@ -937,16 +937,16 @@ subroutine gaussian_torus(params,spp)
   ! A unique velocity direction
   call init_u_random(10986546_8)
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
 
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed()
+  call init_random_seed(params)
   call RANDOM_NUMBER(r)
 
   sigma = 1.0_rp/SQRT(2.0_rp*(spp%falloff_rate/params%cpp%length))
@@ -1382,7 +1382,7 @@ subroutine MH_psi(params,spp,F)
 
 
      if (.not.params%SameRandSeed) then
-        call init_random_seed()
+        call init_random_seed(params)
      else
         call random_seed(put=seed)
      end if
@@ -1859,7 +1859,7 @@ subroutine FIO_therm(params,spp,F,P)
      !write(6,*) 'PSIN0',PSIN0
 
      if (.not.params%SameRandSeed) then
-        call init_random_seed()
+        call init_random_seed(params)
      else
         call random_seed(put=seed)
      end if
@@ -2408,7 +2408,7 @@ subroutine BMC_radial(params,spp,F,P)
      !write(6,*) 'PSIN0',PSIN0
 
      if (.not.params%SameRandSeed) then
-        call init_random_seed()
+        call init_random_seed(params)
      else
         call random_seed(put=seed)
      end if

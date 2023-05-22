@@ -430,7 +430,7 @@ CONTAINS
 
     ! * * * * INITIALIZE VELOCITY * * * *
 
-    call init_random_seed()
+    call init_random_seed(params)
     call RANDOM_NUMBER(theta)
     theta = 2.0_rp*C_PI*theta
     
