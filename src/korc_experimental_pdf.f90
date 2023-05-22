@@ -1214,7 +1214,7 @@ CONTAINS
        !Transient!
 
        if (.not.params%SameRandSeed) then
-          call init_random_seed()
+          call init_random_seed(params)
        else
           call random_seed(put=seed)
        end if
@@ -1558,7 +1558,7 @@ subroutine sample_Hollmann_distribution_3D(params,spp,F)
 
 
      if (.not.params%SameRandSeed) then
-        call init_random_seed()
+        call init_random_seed(params)
      else
         call random_seed(put=seed)
      end if
@@ -2041,7 +2041,7 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
 
 
      if (.not.params%SameRandSeed) then
-        call init_random_seed()
+        call init_random_seed(params)
      else
         call random_seed(put=seed)
      end if
@@ -2628,7 +2628,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
 
 
      if (.not.params%SameRandSeed) then
-        call init_random_seed()
+        call init_random_seed(params)
      else
         call random_seed(put=seed)
      end if

@@ -947,7 +947,7 @@ CONTAINS
 
     !write(output_unit_write,*) 'before init_random_seed'
 
-    call init_random_seed()
+    call init_random_seed(params)
 
    ! write(output_unit_write,*) 'before get_fields'
 

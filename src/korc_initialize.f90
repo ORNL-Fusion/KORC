@@ -701,7 +701,7 @@ CONTAINS
        !write(6,*) 'flagRE',spp(1)%vars%flagRE
        !write(6,*) 'pRE',spp(1)%pRE
 
-       call init_random_seed()
+       call init_random_seed(params)
     else
 
        if (params%mpi_params%rank .EQ. 0) then
