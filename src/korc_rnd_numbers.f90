@@ -10,6 +10,11 @@ module korc_rnd_numbers
 #ifdef __INTEL_COMPILER
   use ifport
 #endif
+
+#ifdef __NVCOMPILER
+  use dfport
+#endif
+
   use korc_types
 
   IMPLICIT NONE
@@ -149,7 +154,7 @@ subroutine init_random_seed(params)
              + dt(7) * 1000_8 &
              + dt(8)
      end if
-     pid = params%mpi_params%rank
+     pid = getpid()
      write(output_unit_write,'("PID: ",I15)') pid
      t = ieor(t, int(pid, kind(t)))
      do i = 1, n
