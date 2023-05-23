@@ -12,7 +12,7 @@ jobs:
           - ubuntu-latest
 
         build_type:
-          - Debug
+          - Release
 
         scenario:
           - egyro
