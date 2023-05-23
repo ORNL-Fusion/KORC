@@ -280,7 +280,11 @@ CONTAINS
        params%num_snapshots = params%t_steps/params%output_cadence
 
        if (params%t_steps.gt.params%output_cadence) then
+#ifdef __NVCOMPILER
+       params%dt=params%snapshot_frequency/real(params%output_cadence)
+#else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
+#endif
        endif
 
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
@@ -309,7 +313,11 @@ CONTAINS
              params%t_steps = CEILING(params%simulation_time/params%snapshot_frequency,ip)
              params%num_snapshots = params%t_steps
           end if
+#ifdef __NVCOMPILER
+          params%dt=params%snapshot_frequency/real(params%output_cadence)
+#else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
+#endif
        endif
 
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
@@ -687,7 +695,11 @@ CONTAINS
 
        if(params%LargeCollisions.and.(.not.params%load_balance)) then
           do ii=1_idef,params%num_species
+#ifdef __NVCOMPILER
+             spp(ii)%pRE=int(sum(real(spp(ii)%vars%flagRE)))
+#else
              spp(ii)%pRE=int(sum(float(spp(ii)%vars%flagRE)))
+#endif
           end do
        end if
 

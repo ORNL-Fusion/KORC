@@ -9,7 +9,6 @@ list (APPEND korc_sources
     korc_constants.f90
     korc_finalize.f90
     korc_ppusher.f90
-    main_documentation_page.f90
     korc_HDF5.f90
     korc_coords.f90
     korc_hammersley_generator.f90
