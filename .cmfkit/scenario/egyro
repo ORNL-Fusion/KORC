@@ -18,8 +18,8 @@ __build() {
 
   # set compiler flag hdf5 double precision
   CMAKE_Fortran_FLAGS="-DHDF5_DOUBLE_PRESICION"
-  CMAKE_Fortran_FLAGS_DEBUG="-g -ffpe-trap=invalid,zero,overflow"
-
+  CMAKE_Fortran_FLAGS_DEBUG="-g"
+  CMAKE_Fortran_FLAGS_DEBUG="-ffpe-trap=invalid,zero,overflow"
 
   # commit outstanding CMake def variables to the final roster
   _deflist_accrue_vars
