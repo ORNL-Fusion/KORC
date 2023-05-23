@@ -3,7 +3,6 @@ MODULE korc_experimental_pdf
   USE korc_constants
   USE korc_HDF5
   USE korc_hpc
-  USE special_functions
   use korc_coords
   use korc_rnd_numbers
   use korc_random
