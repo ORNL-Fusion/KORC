@@ -14,7 +14,7 @@ __import() {
 __build() {
 
   # set default cmake build type: 'Release'
-  CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE:-Debug}"
+  CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE:-Release}"
 
   # set compiler flag hdf5 double precision
   CMAKE_Fortran_FLAGS="-DHDF5_DOUBLE_PRESICION"
