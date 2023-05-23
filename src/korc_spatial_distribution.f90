@@ -327,7 +327,11 @@ subroutine elliptic_torus(params,spp)
   X = r*COS(theta) + spp%shear_factor*Y
 
   !> @todo Modify this approximation.
+#ifdef __NVCOMPILER
+  rotation_angle = 0.5_rp*C_PI - ATAN2D(1.0_rp,1.0_rp + spp%shear_factor);
+#else
   rotation_angle = 0.5_rp*C_PI - ATAN(1.0_rp,1.0_rp + spp%shear_factor);
+#endif 
 
   X1 = X*COS(rotation_angle) - Y*SIN(rotation_angle) + spp%Ro
   Y1 = X*SIN(rotation_angle) + Y*COS(rotation_angle) + spp%Zo
@@ -584,7 +588,11 @@ subroutine exponential_elliptic_torus(params,spp)
   Y = r*SIN(theta)
   X = r*COS(theta) + spp%shear_factor*Y
 
+#ifdef __NVCOMPILER
+  rotation_angle = 0.5_rp*C_PI - ATAN2D(1.0_rp,1.0_rp + spp%shear_factor);
+#else
   rotation_angle = 0.5_rp*C_PI - ATAN(1.0_rp,1.0_rp + spp%shear_factor);
+#endif 
 
   X1 = X*COS(rotation_angle) - Y*SIN(rotation_angle) + spp%Ro
   Y1 = X*SIN(rotation_angle) + Y*COS(rotation_angle) + spp%Zo
@@ -675,7 +683,11 @@ subroutine gaussian_elliptic_torus(params,spp)
   Y = r*SIN(theta)
   X = r*COS(theta) + spp%shear_factor*Y
 
+#ifdef __NVCOMPILER
+  rotation_angle = 0.5_rp*C_PI - ATAN2D(1.0_rp,1.0_rp + spp%shear_factor);
+#else
   rotation_angle = 0.5_rp*C_PI - ATAN(1.0_rp,1.0_rp + spp%shear_factor);
+#endif 
 
   X1 = X*COS(rotation_angle) - Y*SIN(rotation_angle) + spp%Ro
   Y1 = X*SIN(rotation_angle) + Y*COS(rotation_angle) + spp%Zo

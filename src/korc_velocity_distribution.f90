@@ -8,11 +8,8 @@ MODULE korc_velocity_distribution
   use korc_fields
   use korc_rnd_numbers
   use korc_hammersley_generator
-
   use korc_avalanche
   use korc_experimental_pdf
-  use korc_energy_pdfs
-  use korc_simple_equilibrium_pdf
 
   IMPLICIT NONE
 

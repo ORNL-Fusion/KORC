@@ -16,7 +16,6 @@ list (APPEND korc_sources
     korc_profiles.f90
     korc_types.f90
     korc_avalanche.f90
-    korc_energy_pdfs.f90
     korc_hpc.f90
     korc_rnd_numbers.f90
     korc_units.f90
