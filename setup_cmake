@@ -181,7 +181,7 @@ then
 
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
         -DCMAKE_PREFIX_PATH=$MPICH_DIR \
-        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio" \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
         -DCMAKE_C_FLAGS="-O3 -mp"   \
         -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
         -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec  -qopenmp" \

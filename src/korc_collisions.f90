@@ -1018,7 +1018,13 @@ contains
           params%orbits_per_coll=ceiling(cparams_ss%coll_per_dump_dt/ &
                params%dt)
 
+
+#ifdef __NVCOMPILER
+          params%dt=cparams_ss%coll_per_dump_dt/real(params%orbits_per_coll)
+#else
           params%dt=cparams_ss%coll_per_dump_dt/float(params%orbits_per_coll)
+#endif     
+          
 
        end if
 
