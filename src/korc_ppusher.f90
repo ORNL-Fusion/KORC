@@ -2581,7 +2581,7 @@ contains
              end do
              !$OMP END SIMD
 
-             call add_analytical_E_p(params,0_ip,F,E_PHI,Y_R,Y_Z)
+             call add_analytical_E_p(params,int8(0),F,E_PHI,Y_R,Y_Z)
 
 
              !$OMP SIMD
@@ -2702,7 +2702,7 @@ contains
              !$OMP END SIMD
 
              if (params%field_model(1:8).eq.'EXTERNAL') then
-                call add_analytical_E_p(params,0_ip,F,E_PHI,Y_R,Y_Z)
+                call add_analytical_E_p(params,int8(0),F,E_PHI,Y_R,Y_Z)
              end if
 
              !$OMP SIMD
