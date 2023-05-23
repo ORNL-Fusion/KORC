@@ -257,21 +257,6 @@ CONTAINS
           spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
                - spp(ii)%m*C_C**2, &
                spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
-       CASE ('EXPERIMENTAL-GAMMA')
-          call get_experimentalG_distribution(params,spp(ii)%vars%g, &
-               spp(ii)%vars%eta, &
-               spp(ii)%go,spp(ii)%etao)
-          spp(ii)%Eo = spp(ii)%m*C_C**2*spp(ii)%go - spp(ii)%m*C_C**2
-          spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
-               - spp(ii)%m*C_C**2, &
-               spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
-       CASE ('GAMMA')
-          call get_gamma_distribution(params,spp(ii)%vars%g,spp(ii)%go)
-
-          spp(ii)%Eo = spp(ii)%m*C_C**2*spp(ii)%go - spp(ii)%m*C_C**2
-          spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
-               - spp(ii)%m*C_C**2, &
-               spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
        CASE ('UNIFORM')
           spp(ii)%Eo = spp(ii)%Eo_lims(1)
           spp(ii)%go = (spp(ii)%Eo + spp(ii)%m*C_C**2)/(spp(ii)%m*C_C**2)
@@ -325,20 +310,11 @@ CONTAINS
 !          spp(ii)%vars%eta = spp(ii)%etao
 !          spp(ii)%etao_lims = (/MINVAL(spp(ii)%vars%eta), &
 !               MAXVAL(spp(ii)%vars%eta)/)
-       CASE ('EXPERIMENTAL-GAMMA')
-          spp(ii)%etao_lims = (/MINVAL(spp(ii)%vars%eta), &
-               MAXVAL(spp(ii)%vars%eta)/)
        CASE ('UNIFORM')
           spp(ii)%etao = spp(ii)%etao_lims(1)
 
           spp(ii)%vars%eta = (spp(ii)%etao_lims(2) - &
                spp(ii)%etao_lims(1))*spp(ii)%vars%eta + spp(ii)%etao_lims(1)
-       CASE ('SIMPLE-EQUILIBRIUM')
-          call get_equilibrium_distribution(params,spp(ii)%vars%eta, &
-               spp(ii)%go,spp(ii)%etao)
-
-          spp(ii)%etao_lims = (/MINVAL(spp(ii)%vars%eta),&
-               MAXVAL(spp(ii)%vars%eta)/)
        CASE ('AVALANCHE-4D')
           spp(ii)%vars%eta = spp(ii)%etao
           !Monopitch from input file until sampled in Avalanche_4D

@@ -15,16 +15,13 @@ list (APPEND korc_sources
     korc_hammersley_generator.f90
     korc_profiles.f90
     korc_types.f90
-    special_fun_modules.f90
     korc_avalanche.f90
     korc_energy_pdfs.f90
     korc_hpc.f90
     korc_rnd_numbers.f90
     korc_units.f90
-    special_fun_subroutines.f90
     korc_experimental_pdf.f90
     korc_initialize.f90
-    korc_simple_equilibrium_pdf.f90
     korc_velocity_distribution.f90
     korc_c_random.cpp
     korc_random.f90
