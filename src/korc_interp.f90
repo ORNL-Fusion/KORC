@@ -17,6 +17,10 @@ module korc_interp
   use korc_fio
 #endif
 
+#ifdef __NVCOMPILER
+  use ieee_arithmetic
+#endif
+
   !$ use OMP_LIB
 
   IMPLICIT NONE
@@ -5959,8 +5963,13 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
           end do
           Zeff(pp)=Zeff(pp)/n_e(pp)
 
+#ifdef __NVCOMPILER
+          if ((Zeff(pp).gt.100).or.(Zeff(pp).lt.0.01).or. &
+               (IEEE_IS_NAN(Zeff(pp)))) then
+#else
           if ((Zeff(pp).gt.100).or.(Zeff(pp).lt.0.01).or. &
                (isnan(Zeff(pp)))) then
+#endif
              Zeff(pp)=1._rp
              !write(6,*) 'Zeff is ',Zeff(pp),'!!'
              !write(6,*) 'R:',x(1)
