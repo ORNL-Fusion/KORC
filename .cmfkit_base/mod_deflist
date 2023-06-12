@@ -85,12 +85,12 @@ _deflist_render_cmdline() {
   readarray cmake_defs <<< $(
   echo $CMFKIT_VARLIST_CMAKE_DEFINITIONS | tr ' ' '\n' | while read a
     do [[ -n $a ]] || break
-      echo -n "${a:+ }-D${a}=\"${!a}\""
+      echo -n "${a:+ }-D${a}=${!a}"
     done
     echo
   )
-
-  read CMFKIT_CMDLINE_CMAKE_DEFINITIONS <<< $( echo ${cmake_defs[@]} | tr '\n' ' ')
+  
+  read CMFKIT_CMDLINE_CMAKE_DEFINITIONS <<< $( echo -n "${cmake_defs[@]}" )
 }
 
 
