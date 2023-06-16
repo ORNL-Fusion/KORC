@@ -82,15 +82,15 @@ _deflist_export_vars() {
 
 _deflist_render_cmdline() {
 
-  read cmake_defs <<< $(
+  read -r cmake_defs <<< $(
   echo $CMFKIT_VARLIST_CMAKE_DEFINITIONS | tr ' ' '\n' | while read a
     do [[ -n $a ]] || break
       echo -n "${a:+ }-D${a}=${!a}"
     done
     echo
   )
-
-  CMFKIT_CMDLINE_CMAKE_DEFINITIONS="${cmake_defs}"
+  
+  read CMFKIT_CMDLINE_CMAKE_DEFINITIONS <<< $( echo -n "${cmake_defs[@]}" )
 }
 
 
@@ -99,8 +99,11 @@ _deflist_report_cmdline() {
   echo "."
   echo "."
   echo "cmfkit >> [Info] << cmdline CMake definitions"
-  echo -n "."
-  echo " $CMFKIT_CMDLINE_CMAKE_DEFINITIONS" | sed 's/ /\n  /g'
+  echo "."
+  echo $CMFKIT_VARLIST_CMAKE_DEFINITIONS | tr ' ' '\n' | while read a
+    do [[ -n $a ]] || break
+      echo "${a:+ }-D${a}=${!a}"
+    done
   echo "."
   echo "."
   echo; echo
