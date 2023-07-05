@@ -25,6 +25,7 @@ list (APPEND korc_sources
     korc_random.f90
     korc_fio_interface.f90
     korc_input.f90
+    korc_pspline.f90
     main.f90
 )
 
@@ -46,7 +47,7 @@ target_link_libraries (xkorc ${MPI_Fortran_LIBRARIES})
 target_link_libraries (xkorc ${HDF5_LIBRARIES})
 
 if (${USE_PSPLINE})
-   target_link_libraries (xkorc ${EZSpline_LIBRARIES})
+   #target_link_libraries (xkorc ${EZSpline_LIBRARIES})
 endif()
 
 if(${USE_FIO})

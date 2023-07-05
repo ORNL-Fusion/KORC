@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------------------------------------
 
-BUILD_TYPE=Release
+BUILD_TYPE=Debug
 
 MACHINE_ID=`uname -n`
 
@@ -63,20 +63,19 @@ then
     export CXX=/usr/local/bin/g++-13
     export FC=/usr/local/bin/gfortran-13
 
-    cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE                             \
-	    -DUSE_PSPLINE=ON         \
-        -DUSE_FIO=OFF          \
-        -DCORI_DIR=OFF \
-        -DKORC_TEST=OFF \
+    cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DUSE_OMP=ON \
+        -DCMAKE_Fortran_FLAGS="-O3 -DHDF5_DOUBLE_PRESICION -fopenmp -malign-double -fconvert='big-endian'" \
+        -DCMAKE_C_FLAGS="-O3 -fopenmp -malign-double"  \
+        -DCMAKE_CXX_FLAGS="-O3 -fopenmp -malign-double" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g -ffpe-trap=invalid,zero,overflow -fbacktrace -Werror" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -g3" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -g3" \
+	    -DUSE_PSPLINE=ON \
         -DEZSpline_INCLUDE_PATH=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/include \
         -DEZSpline_LINK_FLAGS="-L/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib -lpspline" \
 	    -DEZSpline_LIBRARIES=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib/libpspline.a   \
-        -DCMAKE_Fortran_FLAGS="-O3 -msse2 -DHDF5_DOUBLE_PRESICION -fopenmp -malign-double -fconvert='big-endian'" \
-        -DCMAKE_C_FLAGS="-O3 -msse2 -fopenmp -malign-double"  \
-        -DCMAKE_CXX_FLAGS="-O3 -msse2 -fopenmp -malign-double" \
-        -DCMAKE_Fortran_FLAGS_DEBUG="-g -ffpe-trap=invalid,zero,overflow"   \
-        -DCMAKE_C_FLAGS_DEBUG="-g -g3" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -g3" \
+        -DUSE_FIO=OFF \
         -DFIO_LIBRARIES=/Users/21b/Desktop/KORC/FIO/install/lib/libfusionio.a  \
         -DM3DC1_LIBRARIES=/Users/21b/Desktop/KORC/FIO/install/lib/libm3dc1.a	\
         -DFIO_INCLUDE_PATH=/Users/21b/Desktop/KORC/FIO/install/include  \
@@ -108,9 +107,8 @@ then
         -DNIMLAP_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/liblapack_dummy.a \
         -DNIMSLU_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/libsslu_dummy.a \
         -DNIMLUD_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/libslud_dummy.a \
-
-#	  -DCMAKE_CXX_COMPILER=/opt/local/bin/mpic++-mpich-gcc8
-
+        -DCORI_DIR=OFF \
+        -DKORC_TEST=OFF \
 
 elif [ $MACHINE_ID == "cori01"   ] || \
      [ $MACHINE_ID == "cori02"   ] || \

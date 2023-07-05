@@ -19,9 +19,18 @@ endif()
 
 
 #  Configure OpenMP
-find_package (OpenMP)
-set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
-set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_Fortran_FLAGS}")
+option (USE_OMP "Use OpenOMP" OFF)
+if (${USE_OMP})
+    find_package (OpenMP)
+    set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_Fortran_FLAGS}")
+    add_definitions (-DOMP)
+endif()
+
+option (USE_ACC "Use OpenACC" OFF)
+if (${USE_ACC})
+   add_definitions (-DACC)
+endif()
 
 #  Configure MPI
 find_package (MPI REQUIRED)
@@ -36,8 +45,8 @@ include_directories (${HDF5_INCLUDE_DIRS})
 #  Configure EZspline
 option (USE_PSPLINE "Use PSPLINE interpolation" OFF)
 if (${USE_PSPLINE})
-   include_directories (${EZSpline_INCLUDE_PATH})
-   set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EZSpline_LINK_FLAGS}")
+   #include_directories (${EZSpline_INCLUDE_PATH})
+   #set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EZSpline_LINK_FLAGS}")
    add_definitions (-DPSPLINE)
 endif ()
 

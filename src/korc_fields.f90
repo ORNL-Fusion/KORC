@@ -11,8 +11,7 @@ module korc_fields
 
   IMPLICIT NONE
 
-  PUBLIC :: mean_F_field,&
-       get_fields,&
+  PUBLIC :: get_fields,&
        add_analytical_E_p,&
        analytical_fields_GC_p,&
        analytical_fields_Bmag_p,&
@@ -23,15 +22,6 @@ module korc_fields
        ALLOCATE_2D_FIELDS_ARRAYS,&
        ALLOCATE_3D_FIELDS_ARRAYS,&
        DEALLOCATE_FIELDS_ARRAYS,&
-       calculate_SC_E1D,&
-       calculate_SC_p,&
-       init_SC_E1D,&
-       reinit_SC_E1D,&
-       calculate_SC_E1D_FS,&
-       calculate_SC_p_FS,&
-       init_SC_E1D_FS,&
-       reinit_SC_E1D_FS,&
-       define_SC_time_step,&
        uniform_fields_p
   PRIVATE :: get_analytical_fields,&
        analytical_fields,&
@@ -43,9 +33,7 @@ module korc_fields
        cross,&
        analytical_electric_field_cyl,&
        ALLOCATE_V_FIELD_2D,&
-       ALLOCATE_V_FIELD_3D,&
-       initialize_GC_fields,&
-       initialize_GC_fields_3D
+       ALLOCATE_V_FIELD_3D
 
 CONTAINS
 
@@ -279,10 +267,10 @@ CONTAINS
        theta=atan2(Y(pp,3),(Y(pp,1)-F%AB%Ro))
        qprof = 1.0_rp + (rm/F%AB%lambda)**2
 
-!       write(output_unit_write,*) 'rm: ',rm
-!       write(output_unit_write,*) 'R0: ',F%AB%Ro
-!       write(output_unit_write,*) 'Y_R: ',Y(pp,1)
-!       write(output_unit_write,*) 'theta: ',theta
+       !write(output_unit_write,*) 'rm: ',rm
+       !write(output_unit_write,*) 'R0: ',F%AB%Ro
+       !write(output_unit_write,*) 'Y_R: ',Y(pp,1)
+       !write(output_unit_write,*) 'theta: ',theta
 
        PSIp(pp)=Y(pp,1)*F%AB%lambda**2*F%Bo/ &
             (2*F%AB%qo*(F%AB%Ro+rm*cos(theta)))* &
@@ -417,7 +405,7 @@ CONTAINS
             (2*F%AB%qo*(F%AB%Ro+rm*cos(theta)))* &
             log(1+(rm/F%AB%lambda)**2)
 
-!       write(output_unit_write,*) 'PSIp: ',PSIp(pp)
+       !write(output_unit_write,*) 'PSIp: ',PSIp(pp)
 
        Btmp(1)=F%AB%Bo*Y(pp,3)/(F%AB%qo*qprof*Y(pp,1))
        Btmp(2)=-F%AB%Bo*F%AB%Ro/Y(pp,1)
@@ -440,8 +428,8 @@ CONTAINS
 
        Bmag=sqrt(B(pp,1)*B(pp,1)+B(pp,2)*B(pp,2)+B(pp,3)*B(pp,3))
 
-!       write(6,*) pp,B(pp,:),Bmag,dRBR,dRBPHI,dRBZ
-!       write(6,*) gradB(pp,:)
+       !write(6,*) pp,B(pp,:),Bmag,dRBR,dRBPHI,dRBZ
+       !write(6,*) gradB(pp,:)
 
        gradB(pp,1)=(B(pp,1)*dRBR+B(pp,2)*dRBPHI+B(pp,3)*dRBZ)/Bmag
        gradB(pp,2)=0._rp
@@ -465,8 +453,8 @@ CONTAINS
     end do
     !$OMP END PARALLEL DO
 
-!    write(output_unit_write,*) 'PSIp: ',PSIp(:)
-!    write(output_unit_write,*) 'B_PHI: ',B(:,2)
+    !write(output_unit_write,*) 'PSIp: ',PSIp(:)
+    !write(output_unit_write,*) 'B_PHI: ',B(:,2)
 
   end subroutine analytical_fields_GC
 
@@ -622,8 +610,8 @@ CONTAINS
     q0=F%AB%qo
 
     !$OMP SIMD
-!    !$OMP& aligned(Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,gradB_R,gradB_PHI,gradB_Z, &
-!    !$OMP& curlB_R,curlB_PHI,curlB_Z,E_R,E_PHI,E_Z,PSIp)
+    !!$OMP& aligned(Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,gradB_R,gradB_PHI,gradB_Z, &
+    !!$OMP& curlB_R,curlB_PHI,curlB_Z,E_R,E_PHI,E_Z,PSIp)
     do cc=1_idef,pchunk
        rm(cc)=sqrt((Y_R(cc)-R0)*(Y_R(cc)-R0)+Y_Z(cc)*Y_Z(cc))
        theta(cc)=atan2(Y_Z(cc),(Y_R(cc)-R0))
@@ -723,7 +711,6 @@ CONTAINS
 
   end subroutine uniform_fields_p
 
-
   subroutine uniform_electric_field(F,E)
     !! @note Subroutine that returns the value of a uniform electric
     !! field. @endnote
@@ -739,7 +726,6 @@ CONTAINS
     E(:,1) = F%Eo
     E(:,2:3) = 0.0_rp
   end subroutine uniform_electric_field
-
 
   subroutine analytical_electric_field_cyl(F,Y,E,flag)
     !! @note Subrotuine that calculates and returns the electric field using the
@@ -777,41 +763,6 @@ CONTAINS
        !$OMP END PARALLEL DO
     end if
   end subroutine analytical_electric_field_cyl
-
-
-  subroutine mean_F_field(F,Fo,op_field)
-    !! @note Subroutine that calculates the mean electric or magnetic field in
-    !! case external fields are being used. @endnote
-    TYPE(FIELDS), INTENT(IN)       :: F
-    !! An instance of the KORC derived type FIELDS.
-    REAL(rp), INTENT(OUT)          :: Fo
-    !! Mean electric or magnetic field.
-    TYPE(KORC_STRING), INTENT(IN)  :: op_field
-    !!String that specifies what mean field will be calculated.
-    !! Its value can be 'B' or 'E'.
-
-    if (TRIM(op_field%str) .EQ. 'B') then
-       if (ALLOCATED(F%B_3D%R)) then ! 3D field
-          Fo = SUM( SQRT(F%B_3D%R**2 + F%B_3D%PHI**2 + F%B_3D%Z**2) )/ &
-               SIZE(F%B_3D%R)
-       else if (ALLOCATED(F%B_2D%R)) then ! Axisymmetric 2D field
-          Fo = SUM( SQRT(F%B_2D%R**2 + F%B_2D%PHI**2 + F%B_2D%Z**2) )/ &
-               SIZE(F%B_2D%R)
-       end if
-    else if (TRIM(op_field%str) .EQ. 'E') then
-       if (ALLOCATED(F%E_3D%R)) then ! 3D field
-          Fo = SUM( SQRT(F%E_3D%R**2 + F%E_3D%PHI**2 + F%E_3D%Z**2) )/ &
-               SIZE(F%E_3D%R)
-       else if (ALLOCATED(F%E_2D%R)) then ! Axisymmetric 2D field
-          Fo = SUM( SQRT(F%E_2D%R**2 + F%E_2D%PHI**2 + F%E_2D%Z**2) )/ &
-               SIZE(F%E_2D%R)
-       end if
-    else
-       write(output_unit_write,'("KORC ERROR: Please enter a valid field: mean_F_field")')
-       call korc_abort(17)
-    end if
-  end subroutine mean_F_field
-
 
   subroutine get_analytical_fields(params,vars,F)
     !! @note Interface for calculating the analytical electric and magnetic
@@ -855,7 +806,6 @@ CONTAINS
 
   end subroutine get_analytical_fields
 
-
   subroutine uniform_fields(vars,F)
     !! @note Interface for calculating the uniform electric and magnetic
     !! fields for each particle in the simulation. @endnote
@@ -868,7 +818,6 @@ CONTAINS
 
     call uniform_electric_field(F, vars%E)
   end subroutine uniform_fields
-
 
   pure function cross(a,b)
     !! @note Function that calculates the cross product of the two
@@ -917,7 +866,7 @@ CONTAINS
     LOGICAL :: cart
     REAL(rp), DIMENSION(3) ::b1tmp,b2tmp,b3tmp,tmpvec
 
-!    write(output_unit_write,*) 'in unitVector'
+    !write(output_unit_write,*) 'in unitVector'
 
     ppp = SIZE(Xo,1) ! Number of particles
 
@@ -1034,10 +983,10 @@ CONTAINS
 
        call interp_fields(params,vars, F)
 
-!       write(output_unit_write,'("get_fields")')
-!       write(output_unit_write,'("B_X: ",E17.10)') vars%B(:,1)
-!       write(output_unit_write,'("B_Z: ",E17.10)') vars%B(:,2)
-!       write(output_unit_write,'("B_Y: ",E17.10)') vars%B(:,3)
+       !write(output_unit_write,'("get_fields")')
+       !write(output_unit_write,'("B_X: ",E17.10)') vars%B(:,1)
+       !write(output_unit_write,'("B_Z: ",E17.10)') vars%B(:,2)
+       !write(output_unit_write,'("B_Y: ",E17.10)') vars%B(:,3)
 
        !if (F%Efield.AND..NOT.F%Efield_in_file) then
        !   call analytical_electric_field_cyl(F,vars%Y,vars%E,vars%flagCon)
@@ -1053,991 +1002,6 @@ CONTAINS
        call uniform_fields(vars, F)
     end if
   end subroutine get_fields
-
-
-  subroutine calculate_SC_E1D(params,F,Vden)
-
-    TYPE(FIELDS), INTENT(INOUT)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    real(rp),dimension(F%dim_1D),intent(in) :: Vden
-    real(rp),dimension(F%dim_1D) :: Jsamone,Jsamall,Jexp,dJdt
-    real(rp),dimension(F%dim_1D) :: a,b,c,u,gam,r
-    real(rp) :: dr,bet
-    integer :: ii
-    INTEGER 				:: mpierr
-
-!    if (params%mpi_params%rank .EQ. 0) then
-!       write(output_unit_write,*) 'Calculating SC_E1D'
-!    end if
-
-    dr=F%r_1D(2)-F%r_1D(1)
-
-    Jsamone=C_E*Vden
-
-    ! Add sampled current densities from all MPI processes Jsamone,
-    ! and output of total sampled current density Jsamall to each
-    ! MPI process.
-
-    call MPI_ALLREDUCE(Jsamone,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
-         MPI_COMM_WORLD,mpierr)
-
-    !write(output_unit_write,*) 'Jsam: ',Jsamall(1:5)
-
-    Jexp=Jsamall*F%Ip0
-
-    F%J3_SC_1D%PHI=F%J2_SC_1D%PHI
-    F%J2_SC_1D%PHI=F%J1_SC_1D%PHI
-    F%J1_SC_1D%PHI=Jexp
-
-    ! Calculating time-derivative of E_phi
-
-    dJdt=(3*F%J1_SC_1D%PHI-4*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
-         (2*F%dt_E_SC)
-
-!    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-
-    ! Solving 1D Poisson equation with tridiagonal matrix solve
-
-    a=0._rp
-    b=-2._rp
-    c=0._rp
-    u=0._rp
-    gam=0._rp
-!    r=-2*dr**2*C_MU*Jexp
-    r=2*dr**2*C_MU*dJdt
-
-    do ii=2_idef,F%dim_1D
-       a(ii)=(REAL(ii)-2._rp)/(REAL(ii)-1._rp)
-       c(ii)=REAL(ii)/(REAL(ii)-1._rp)
-    end do
-
-    bet=b(2)
-    u(2)=r(2)/bet
-    do ii=3_idef,F%dim_1D-1
-       gam(ii)=c(ii-1)/bet
-       bet=b(ii)-a(ii)*gam(ii)
-       if (bet.eq.0) then
-          stop 'tridiag failed'
-       end if
-       u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
-    end do
-
-    do ii=F%dim_1D-2,2,-1
-       u(ii)=u(ii)-gam(ii+1)*u(ii+1)
-    end do
-
-    u(1)=(4*u(2)-u(3))/3._rp
-
-    ! Writing over F%A* data
-
-!    F%A3_SC_1D%PHI=F%A2_SC_1D%PHI
-!    F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
-!    F%A1_SC_1D%PHI=u
-
-!    if (init) then
-!       F%A3_SC_1D%PHI=F%A1_SC_1D%PHI
-!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
-!    end if
-
-!    write(output_unit_write,*) params%mpi_params%rank,'A1(1)',F%A1_SC_1D%PHI(1)
-!    write(output_unit_write,*) params%mpi_params%rank,'A2(1)',F%A2_SC_1D%PHI(1)
-!    write(output_unit_write,*) params%mpi_params%rank,'A3(1)',F%A3_SC_1D%PHI(1)
-
-    ! Calculating inductive E_phi
-
-!    F%E_SC_1D%PHI=-(3*F%A1_SC_1D%PHI-4*F%A2_SC_1D%PHI+F%A3_SC_1D%PHI)/ &
-!         (2*F%dt_E_SC)
-
-    F%E_SC_1D%PHI=u
-
-    if (params%mpi_params%rank.eq.0) then
-       write(output_unit_write,*) 'J1(2)',F%J1_SC_1D%PHI(2)
-       write(output_unit_write,*) 'J2(2)',F%J2_SC_1D%PHI(2)
-       write(output_unit_write,*) 'J3(2)',F%J3_SC_1D%PHI(2)
-
-       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
-    end if
-
-    ! Normalizing inductive E_phi
-
-    F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
-
-#ifdef PSPLINE
-    call initialize_SC1D_field_interpolant(params,F)
-#endif
-
-  end subroutine calculate_SC_E1D
-
-  subroutine calculate_SC_E1D_FS(params,F,dintJphidPSIP)
-
-    TYPE(FIELDS), INTENT(INOUT)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    real(rp),dimension(F%dim_1D),intent(in) :: dintJphidPSIP
-    real(rp),dimension(F%dim_1D) :: Jsamall,Jexp,dJdt
-    real(rp),dimension(F%dim_1D) :: a,b,c,u,gam,r,alpha,beta,gamma
-    real(rp) :: dPSIP,bet
-    integer :: ii
-    INTEGER 				:: mpierr
-
-!    if (params%mpi_params%rank .EQ. 0) then
-!       write(output_unit_write,*) 'Calculating SC_E1D'
-!    end if
-
-    !write(output_unit_write,*) 'dintJphidPSIP',dintJphidPSIP(F%dim_1D)
-
-    dPSIP=F%PSIP_1D(2)-F%PSIP_1D(1)
-
-
-    ! Add sampled current densities from all MPI processes Jsamone,
-    ! and output of total sampled current density Jsamall to each
-    ! MPI process.
-
-    call MPI_ALLREDUCE(dintJphidPSIP,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
-         MPI_COMM_WORLD,mpierr)
-
-    !write(output_unit_write,*) 'JSamAll',Jsamall(F%dim_1D)
-
-    !write(output_unit_write,*) 'Jsam: ',Jsamall(1:5)
-
-    Jexp=Jsamall*F%Ip0
-
-    F%J3_SC_1D%PHI=F%J2_SC_1D%PHI
-    F%J2_SC_1D%PHI=F%J1_SC_1D%PHI
-    F%J1_SC_1D%PHI=Jexp
-
-    ! Calculating time-derivative of E_phi
-
-    dJdt=(3*F%J1_SC_1D%PHI-4*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
-         (2*F%dt_E_SC)
-
-!    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-
-    ! Solving 1D Poisson equation with tridiagonal matrix solve
-
-    alpha=F%ddMagPsiSqdPsiPSq
-    beta=F%dMagPsiSqdPsiP
-    gamma=C_MU*dJdt
-
-
-    a=-alpha*dPSIP/2._rp+beta
-    b=-2._rp*beta
-    c=alpha*dPSIP/2._rp+beta
-    u=0._rp
-    gam=0._rp
-!    r=-2*dr**2*C_MU*Jexp
-    r=dPSIP**2*gamma
-
-    c(2)=c(2)-a(2)*a(1)/c(1)
-    b(2)=b(2)-a(2)*b(1)/c(1)
-    r(2)=r(2)-a(2)*r(1)/c(1)
-
-    bet=b(2)
-    u(2)=r(2)/bet
-    do ii=3_idef,F%dim_1D-1
-       gam(ii)=c(ii-1)/bet
-       bet=b(ii)-a(ii)*gam(ii)
-       if (bet.eq.0) then
-          stop 'tridiag failed'
-       end if
-       u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
-    end do
-
-    do ii=F%dim_1D-2,2,-1
-       u(ii)=u(ii)-gam(ii+1)*u(ii+1)
-    end do
-
-    u(1)=2*u(2)-u(3)
-
-    F%E_SC_1D%PHI=u
-
-    if (params%mpi_params%rank.eq.0) then
-       write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
-       write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
-       write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-
-       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
-    end if
-
-    ! Normalizing inductive E_phi
-
-    F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
-
-#ifdef PSPLINE
-    call initialize_SC1D_field_interpolant_FS(params,F)
-#endif
-
-  end subroutine calculate_SC_E1D_FS
-
-  subroutine calculate_SC_p(params,F,B_R,B_PHI,B_Z,Y_R,Y_Z, &
-       V_PLL,V_MU,m_cache,flagCon,flagCol,Vden)
-
-    TYPE(FIELDS), INTENT(IN)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    real(rp),dimension(params%pchunk),intent(in) :: Y_R,Y_Z
-    real(rp),dimension(params%pchunk),intent(in) :: B_R,B_PHI,B_Z
-    real(rp),dimension(params%pchunk),intent(in) :: V_PLL,V_MU
-    real(rp),intent(in) :: m_cache
-    integer(is),dimension(params%pchunk),intent(in) :: flagCon,flagCol
-    real(rp),dimension(params%pchunk) :: rm,Bmag,gam,vpll
-    real(rp),dimension(F%dim_1D),intent(out) :: Vden
-    real(rp),dimension(F%dim_1D) :: Vpart,Ai
-    real(rp),dimension(F%dim_1D) :: r_1D
-    real(rp) :: dr,sigr,ar,arg,arg1,arg2,arg3
-    integer :: cc,ii,rind,pchunk
-
-    pchunk=params%pchunk
-
-    dr=F%r_1D(2)-F%r_1D(1)
-    r_1D=F%r_1D
-    sigr=dr
-
-    Vpart=0._rp
-    do cc=1_idef,pchunk
-
-       ! 1D nearest grid point weighting in minor radius
-
-       !    RR=spp%vars%Y(:,1)
-       !    ZZ=spp%vars%Y(:,3)
-       rm(cc)=sqrt((Y_R(cc)-F%Ro)**2+(Y_Z(cc)-F%Zo)**2)* &
-            params%cpp%length
-
-       !    write (output_unit_write,*) params%mpi_params%rank,'RR',RR
-       !    write (output_unit_write,*) params%mpi_params%rank,'ZZ',spp%vars%Y(:,3)
-       write (output_unit_write,*) 'rm',rm(cc)
-
-       Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
-            B_Z(cc)*B_Z(cc))
-       gam(cc)=sqrt(1+V_PLL(cc)**2+ &
-            2*V_MU(cc)*Bmag(cc)*m_cache)
-       vpll(cc)=V_PLL(cc)/gam(cc)
-
-
-       ! Weighting parallel velocity
-
-       !    write (output_unit_write,*) params%mpi_params%rank,'vpll',vpll
-
-       !   do pp=1_idef,spp%ppp
-       ! NGP weighting
-       rind=FLOOR((rm(cc)-dr/2)/dr)+2_ip
-       Vpart(rind)=Vpart(rind)+real(flagCon(cc))*real(flagCol(cc))*vpll(cc)
-
-       ! First-order weighting
-!       rind=FLOOR(rm(cc)/dr)+1_ip
-!       Vpart(rind)=Vpart(rind)+ &
-!            vpll(cc)*(r_1D(rind+1)-rm(cc))/dr
-!       Vpart(rind+1)=Vpart(rind+1)+ &
-!            vpll(cc)*(rm(cc)-r_1D(rind))/dr
-
-       ! Gaussian weighting
-
-!       do ii=1_idef,F%dim_1D
-!          arg=MIN((r_1D(ii)-rm(cc))**2._rp/(2._rp*sigr**2._rp),100._rp)
-!          Vpart(ii)=Vpart(ii)+1/sqrt(2._rp*C_PI*sigr**2._rp)* &
-!               exp(-arg)*vpll(cc)
-!       end do
-
-    end do
-
-    ar=F%AB%a
-    ! Calculating density of minor radial annulus
-    do ii=1_idef,F%dim_1D
-       ! NGP weighting
-       if(ii.eq.1) then
-          Vden(ii)=Vpart(ii)/(C_PI*dr**2/4)
-       else
-          Vden(ii)=Vpart(ii)/(2*C_PI*dr**2*(ii-1))
-       end if
-       ! First-order weighting
-!       if(ii.eq.1) then
-!          Vden(ii)=Vpart(ii)/(C_PI*dr**2/3)
-!       else
-!          Vden(ii)=Vpart(ii)/(2*C_PI*dr**2*(ii-1))
-!       end if
-
-       ! Gaussian weighting
-!       arg=MIN(r_1D(ii)**2._rp/(2._rp*sigr**2._rp),100._rp)
-!       arg1=MIN((ar-r_1D(ii))**2._rp/(2._rp*sigr**2._rp),100._rp)
-!       arg2=MIN((ar-r_1D(ii))/(sqrt(2._rp)*sigr),10._rp)
-!       arg3=MIN((r_1D(ii))/(sqrt(2._rp)*sigr),10._rp)
-
-!       Ai(ii)=sqrt(C_PI*sigr)*(sqrt(2._rp)*sigr*(exp(-arg)- &
-!            exp(-arg1))+r_1D(ii)*sqrt(C_PI)* &
-!            (erf(arg2)-erf(-arg3)))
-!       Vden(ii)=Vpart(ii)/Ai(ii)
-
-    end do
-
-  end subroutine calculate_SC_p
-
-  subroutine calculate_SC_p_FS(params,F,B_R,B_PHI,B_Z,PSIp, &
-       V_PLL,V_MU,m_cache,flagCon,flagCol,dintJphidPSIP)
-
-    TYPE(FIELDS), INTENT(IN)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    real(rp),dimension(params%pchunk),intent(in) :: PSIp
-    real(rp),dimension(params%pchunk),intent(in) :: B_R,B_PHI,B_Z
-    real(rp),dimension(params%pchunk),intent(in) :: V_PLL,V_MU
-    real(rp),intent(in) :: m_cache
-    integer(is),dimension(params%pchunk),intent(in) :: flagCon,flagCol
-    real(rp),dimension(params%pchunk) :: Bmag,gam,vpll,PSIp_cache
-    real(rp),dimension(F%dim_1D),intent(out) :: dintJphidPSIP
-    real(rp),dimension(F%dim_1D) :: PSIP_1D
-    real(rp) :: dPSIP,ar,arg,arg1,arg2,arg3,PSIP_lim,sigPSIP
-    integer :: cc,ii,PSIPind,pchunk
-
-    pchunk=params%pchunk
-
-    PSIP_1D=F%PSIP_1D
-    dPSIP=PSIP_1D(2)-PSIP_1D(1)
-    PSIp_cache=PSIp*(params%cpp%Bo*params%cpp%length**2)
-
-    sigPSIP=dPSIP
-
-    dintJphidPSIP=0._rp
-
-    do cc=1_idef,pchunk
-
-       ! 1D Riemann sum
-
-       !write (output_unit_write,*) 'rm',rm(cc)
-
-       Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
-            B_Z(cc)*B_Z(cc))
-       gam(cc)=sqrt(1+V_PLL(cc)**2+ &
-            2*V_MU(cc)*Bmag(cc)*m_cache)
-       vpll(cc)=V_PLL(cc)/gam(cc)
-
-!       write(output_unit_write,*) PSIp_cache(cc)
-
-       if (PSIp_cache(cc).lt.0._rp) PSIp_cache(cc)=0._rp
-
-       PSIPind=FLOOR(PSIp_cache(cc)/dPSIP)+1_ip
-
-       ! NGP weighting
-!       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+vpll(cc)
-
-       ! First-order weighting
-!       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+ &
-!            vpll(cc)*(PSIP_1D(PSIPind+1)-PSIP_cache(cc))/dPSIP
-!       dintJphidPSIP(PSIPind+1)=dintJphidPSIP(PSIPind+1)+ &
-!            vpll(cc)*(PSIP_cache(cc)-PSIP_1D(PSIPind))/dPSIP
-
-       ! Gaussian weighting
-
-       do ii=1_idef,F%dim_1D
-          arg=MIN((PSIP_1D(ii)-PSIP_cache(cc))**2._rp/ &
-               (2._rp*sigPSIP**2._rp),100._rp)
-          dintJphidPSIP(ii)=dintJphidPSIP(ii)+ &
-               exp(-arg)*vpll(cc)*real(flagCon(cc))*real(flagCol(cc))
-       end do
-
-
-    end do
-
-    ! First-order weighting
-!    dintJphidPSIP(1)=2*dintJphidPSIP(1)
-
-    ! Gaussian weighting
-    PSIP_lim=PSIP_1D(F%dim_1D)
-
-    do ii=1_idef,F%dim_1D
-       arg=MIN((PSIP_lim-PSIP_1D(ii))/(sqrt(2._rp)*sigPSIP),10._rp)
-       arg1=MIN(PSIP_1D(ii)/(sqrt(2._rp)*sigPSIP),10._rp)
-       dintJphidPSIP(ii)=dintJphidPSIP(ii)/ &
-            (erf(arg)-erf(-arg1))
-    end do
-
-  end subroutine calculate_SC_p_FS
-
-  subroutine init_SC_E1D(params,F,spp)
-
-    TYPE(FIELDS), INTENT(INOUT)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    TYPE(SPECIES), INTENT(IN)    :: spp
-    real(rp),dimension(F%dim_1D) :: Vpart
-    real(rp),dimension(spp%ppp) :: RR,ZZ,rm,vpll
-    real(rp),dimension(F%dim_1D) :: Vden,Jsamone,Jsamall,Jexp,dJdt
-    real(rp),dimension(F%dim_1D) :: a,b,c,u,gam,r,r_1D,Ai
-    real(rp) :: dr,Isam,bet,sigr,ar,arg,arg1,arg2,arg3
-    integer :: pp,ii,rind
-    INTEGER 				:: mpierr
-
-!    if (params%mpi_params%rank .EQ. 0) then
-!       write(output_unit_write,*) 'Calculating SC_E1D'
-!    end if
-
-    ! 1D nearest grid point weighting in minor radius
-
-    RR=spp%vars%Y(:,1)
-    ZZ=spp%vars%Y(:,3)
-    rm=sqrt((RR-F%Ro)**2._rp+(ZZ-F%Zo)**2._rp)*params%cpp%length
-
-!    write (output_unit_write,*) params%mpi_params%rank,'RR',RR
-!    write (output_unit_write,*) params%mpi_params%rank,'ZZ',spp%vars%Y(:,3)
-    write (output_unit_write,*) 'rm',rm
-
-
-    dr=F%r_1D(2)-F%r_1D(1)
-
-    vpll=spp%vars%V(:,1)/spp%vars%g
-
-    ! Weighting parallel velocity
-
-!    write (output_unit_write,*) 'vpll',vpll
-
-    Vpart=0._rp
-    r_1D=F%r_1D
-    sigr=dr
-
-    do pp=1_idef,spp%ppp
-       ! NGP weighting
-       rind=FLOOR((rm(pp)-dr/2)/dr)+2_ip
-       Vpart(rind)=Vpart(rind)+vpll(pp)
-
-       ! First-order weighting
-!       rind=FLOOR(rm(pp)/dr)+1_ip
-!       Vpart(rind)=Vpart(rind)+vpll(pp)*(F%r_1D(rind+1)-rm(pp))/dr
-!       Vpart(rind+1)=Vpart(rind+1)+vpll(pp)*(rm(pp)-F%r_1D(rind))/dr
-
-       ! Gaussian weighting
-!       do ii=1_idef,F%dim_1D
-!          arg=MIN((r_1D(ii)-rm(pp))**2._rp/(2._rp*sigr**2._rp),100._rp)
-!          Vpart(ii)=Vpart(ii)+1/sqrt(2._rp*C_PI*sigr**2._rp)* &
-!               exp(-arg)
-!       end do
-
-    end do
-
-    ! Calculating density of minor radial annulus
-
-    ar=F%AB%a
-
-    do ii=1_idef,F%dim_1D
-       ! NGP weighting
-       if(ii.eq.1) then
-          Vden(ii)=Vpart(ii)/(C_PI*dr**2/4)
-       else
-          Vden(ii)=Vpart(ii)/(2*C_PI*dr**2*(ii-1))
-       end if
-       ! First-order weighting
-!       if(ii.eq.1) then
-!          Vden(ii)=Vpart(ii)/(C_PI*dr**2/3)
-!       else
-!          Vden(ii)=Vpart(ii)/(2*C_PI*dr**2*(ii-1))
-!       end if
-
-       ! Gaussian weighting
-
-!       arg=MIN(r_1D(ii)**2._rp/(2._rp*sigr**2._rp),100._rp)
-!       arg1=MIN((ar-r_1D(ii))**2._rp/(2._rp*sigr**2._rp),100._rp)
-!       arg2=MIN((ar-r_1D(ii))/(sqrt(2._rp)*sigr),10._rp)
-!       arg3=MIN((r_1D(ii))/(sqrt(2._rp)*sigr),10._rp)
-
-!       Ai(ii)=sqrt(C_PI*sigr)*(sqrt(2._rp)*sigr*(exp(-arg)- &
-!            exp(-arg1))+r_1D(ii)*sqrt(C_PI)* &
-!            (erf(arg2)-erf(-arg3)))
-!       Vden(ii)=Vpart(ii)/Ai(ii)
-
-    end do
-
-    Jsamone=C_E*Vden
-
-    ! Add sampled current densities from all MPI processes Jsamone,
-    ! and output of total sampled current density Jsamall to each
-    ! MPI process.
-
-    call MPI_ALLREDUCE(Jsamone,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
-         MPI_COMM_WORLD,mpierr)
-
-!    write(output_unit_write,*) 'Jsam: ',Jsamall(1:10)
-
-    ! Integrating current density to scale total current to
-    ! experimentally determined total current
-
-
-    Isam=0._rp
-    do ii=1_idef,F%dim_1D
-       if ((ii.eq.1).or.(ii.eq.F%dim_1D)) then
-          Isam=Isam+Jsamall(ii)*r_1D(ii)/2._rp
-       else
-          Isam=Isam+Jsamall(ii)*r_1D(ii)
-       end if
-    end do
-    Isam=2._rp*C_PI*Isam*dr
-!    write(output_unit_write,*) params%mpi_params%rank,'Isam: ',Isam
-
-    F%Ip0=F%Ip_exp/Isam
-
-
-    Jexp=Jsamall*F%Ip0
-
-    F%J3_SC_1D%PHI=Jexp
-    F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp
-
-    ! Calculating time-derivative of E_phi
-
-    dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
-         (2._rp*F%dt_E_SC)
-
-!    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-
-    ! Solving 1D Poisson equation with tridiagonal matrix solve
-
-    a=0._rp
-    b=-2._rp
-    c=0._rp
-    u=0._rp
-    gam=0._rp
-!    r=-2*dr**2*C_MU*Jexp
-    r=2*dr**2*C_MU*dJdt
-
-    do ii=2_idef,F%dim_1D
-       a(ii)=(REAL(ii)-2._rp)/(REAL(ii)-1._rp)
-       c(ii)=REAL(ii)/(REAL(ii)-1._rp)
-    end do
-
-    bet=b(2)
-    u(2)=r(2)/bet
-    do ii=3_idef,F%dim_1D-1
-       gam(ii)=c(ii-1)/bet
-       bet=b(ii)-a(ii)*gam(ii)
-       if (bet.eq.0) then
-          stop 'tridiag failed'
-       end if
-       u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
-    end do
-
-    do ii=F%dim_1D-2,2,-1
-       u(ii)=u(ii)-gam(ii+1)*u(ii+1)
-    end do
-
-    u(1)=(4._rp*u(2)-u(3))/3._rp
-
-    ! Writing over F%A* data
-
-!    F%A3_SC_1D%PHI=F%A2_SC_1D%PHI
-!    F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
-!    F%A1_SC_1D%PHI=u
-
-!    if (init) then
-!       F%A3_SC_1D%PHI=F%A1_SC_1D%PHI
-!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
-!    end if
-
-!    write(output_unit_write,*) params%mpi_params%rank,'A1(1)',F%A1_SC_1D%PHI(1)
-!    write(output_unit_write,*) params%mpi_params%rank,'A2(1)',F%A2_SC_1D%PHI(1)
-!    write(output_unit_write,*) params%mpi_params%rank,'A3(1)',F%A3_SC_1D%PHI(1)
-
-    ! Calculating inductive E_phi
-
-!    F%E_SC_1D%PHI=-(3*F%A1_SC_1D%PHI-4*F%A2_SC_1D%PHI+F%A3_SC_1D%PHI)/ &
-!         (2*F%dt_E_SC)
-
-    F%E_SC_1D%PHI=u
-
-    if (params%mpi_params%rank.eq.0) then
-       write(output_unit_write,*) 'J1(2)',F%J1_SC_1D%PHI(2)
-       write(output_unit_write,*) 'J2(2)',F%J2_SC_1D%PHI(2)
-       write(output_unit_write,*) 'J3(2)',F%J3_SC_1D%PHI(2)
-
-       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
-    end if
-
-    ! Normalizing inductive E_phi
-
-    F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
-
-#ifdef PSPLINE
-    call initialize_SC1D_field_interpolant(params,F)
-#endif
-
-  end subroutine init_SC_E1D
-
-  subroutine init_SC_E1D_FS(params,F,spp)
-
-    TYPE(FIELDS), INTENT(INOUT)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    TYPE(SPECIES), INTENT(IN)    :: spp
-    real(rp),dimension(F%dim_1D) :: dintJphidPSIP,PSIP_1D
-    real(rp),dimension(spp%ppp) :: PSIP,vpll
-    real(rp),dimension(F%dim_1D) :: Jsamall,Jexp,dJdt
-    real(rp),dimension(F%dim_1D) :: a,b,c,u,gam,r,alpha,beta,gamma
-    real(rp) :: dPSIP,Isam,bet,arg,arg1,PSIP_lim,sigPSIP
-    integer :: pp,ii,PSIPind
-    INTEGER 				:: mpierr
-
-
-    PSIP_1D=F%PSIP_1D
-    dPSIP=PSIP_1D(2)-PSIP_1D(1)
-    PSIP=spp%vars%PSI_P*(params%cpp%Bo*params%cpp%length**2)
-
-    sigPSIP=dPSIP
-
-    vpll=spp%vars%V(:,1)/spp%vars%g
-
-    dintJphidPSIP=0._rp
-
-    do pp=1_idef,spp%ppp
-       if (PSIP(pp).lt.0._rp) PSIP(pp)=0._rp
-
-       PSIPind=FLOOR(PSIP(pp)/dPSIP)+1_ip
-
-       ! NGP weighting
-!       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+vpll(pp)
-
-       ! First-order weighting
-!       dintJphidPSIP(PSIPind)=dintJphidPSIP(PSIPind)+ &
-!            vpll(pp)*(PSIP_1D(PSIPind+1)-PSIP(pp))/dPSIP
-!       dintJphidPSIP(PSIPind+1)=dintJphidPSIP(PSIPind+1)+ &
-!            vpll(pp)*(PSIP(pp)-PSIP_1D(PSIPind))/dPSIP
-
-!       write(output_unit_write,*) PSIP(pp),PSIP_1D(PSIPind),dPSIP
-
-       ! Gaussian weighting
-
-       do ii=1_idef,F%dim_1D
-          arg=MIN((PSIP_1D(ii)-PSIP(pp))**2._rp/ &
-               (2._rp*sigPSIP**2._rp),100._rp)
-          dintJphidPSIP(ii)=dintJphidPSIP(ii)+ &
-               vpll(pp)*exp(-arg)
-       end do
-
-    end do
-
-    ! First-order weighting
-!    dintJphidPSIP(1)=2*dintJphidPSIP(1)
-
-    ! Gaussian weighting
-    PSIP_lim=PSIP_1D(F%dim_1D)
-
-    do ii=1_idef,F%dim_1D
-       arg=MIN((PSIP_lim-PSIP_1D(ii))/(sqrt(2._rp)*sigPSIP),10._rp)
-       arg1=MIN(PSIP_1D(ii)/(sqrt(2._rp)*sigPSIP),10._rp)
-       dintJphidPSIP(ii)=dintJphidPSIP(ii)/ &
-            (erf(arg)-erf(-arg1))
-    end do
-
-    ! Add sampled current densities from all MPI processes Jsamone,
-    ! and output of total sampled current density Jsamall to each
-    ! MPI process.
-
-    call MPI_ALLREDUCE(dintJphidPSIP,Jsamall,F%dim_1D,MPI_REAL8,MPI_SUM, &
-         MPI_COMM_WORLD,mpierr)
-
-!    write(output_unit_write,*) 'Jsam: ',Jsamall(1:10)
-
-    ! Integrating current density to scale total current to
-    ! experimentally determined total current
-
-    Isam=0._rp
-    do ii=1_idef,F%dim_1D
-       if ((ii.eq.1).or.(ii.eq.F%dim_1D)) then
-          Isam=Isam+Jsamall(ii)/2._rp
-       else
-          Isam=Isam+Jsamall(ii)
-       end if
-    end do
-    Isam=Isam*dPSIP
-!    write(output_unit_write,*) params%mpi_params%rank,'Isam: ',Isam
-
-    F%Ip0=F%Ip_exp/Isam
-
-
-    Jexp=Jsamall*F%Ip0
-
-    F%J3_SC_1D%PHI=Jexp
-    F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp
-
-    ! Calculating time-derivative of E_phi
-
-    dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
-         (2._rp*F%dt_E_SC)
-
-!    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-
-    ! Solving 1D Poisson equation with tridiagonal matrix solve
-
-    alpha=F%ddMagPsiSqdPsiPSq
-    beta=F%dMagPsiSqdPsiP
-    gamma=C_MU*dJdt
-
-
-    a=-alpha*dPSIP/2._rp+beta
-    b=-2._rp*beta
-    c=alpha*dPSIP/2._rp+beta
-    u=0._rp
-    gam=0._rp
-!    r=-2*dr**2*C_MU*Jexp
-    r=dPSIP**2*gamma
-
-    c(2)=c(2)-a(2)*a(1)/c(1)
-    b(2)=b(2)-a(2)*b(1)/c(1)
-    r(2)=r(2)-a(2)*r(1)/c(1)
-
-    bet=b(2)
-    u(2)=r(2)/bet
-    do ii=3_idef,F%dim_1D-1
-       gam(ii)=c(ii-1)/bet
-       bet=b(ii)-a(ii)*gam(ii)
-       if (bet.eq.0) then
-          stop 'tridiag failed'
-       end if
-       u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
-    end do
-
-    do ii=F%dim_1D-2,2,-1
-       u(ii)=u(ii)-gam(ii+1)*u(ii+1)
-    end do
-
-    u(1)=2*u(2)-u(3)
-
-
-    F%E_SC_1D%PHI=u
-
-    if (params%mpi_params%rank.eq.0) then
-       write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
-       write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
-       write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-
-       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
-    end if
-
-    ! Normalizing inductive E_phi
-
-    F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
-
-#ifdef PSPLINE
-    call initialize_SC1D_field_interpolant_FS(params,F)
-#endif
-
-  end subroutine init_SC_E1D_FS
-
-  subroutine reinit_SC_E1D(params,F)
-
-    TYPE(FIELDS), INTENT(INOUT)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-
-    real(rp),dimension(F%dim_1D) :: Jsamall,Jexp,dJdt
-    real(rp),dimension(F%dim_1D) :: a,b,c,u,gam,r,r_1D,Ai
-    real(rp) :: dr,Isam,bet,sigr,ar,arg,arg1,arg2,arg3
-    integer :: pp,ii,rind
-    INTEGER 				:: mpierr
-
-!    if (params%mpi_params%rank .EQ. 0) then
-!       write(output_unit_write,*) 'Calculating SC_E1D'
-!    end if
-
-    dr=F%r_1D(2)-F%r_1D(1)
-    r_1D=F%r_1D
-    Jsamall=F%J0_SC_1D%PHI
-
-!    write(output_unit_write,*) Jsamall
-
-    Isam=0._rp
-    do ii=1_idef,F%dim_1D
-!       write(output_unit_write,*) Isam
-!       write(output_unit_write,*) ii
-!       write(output_unit_write,*) Jsamall(ii)
-!       write(output_unit_write,*) (ii)
-       if ((ii.eq.1_idef).or.(ii.eq.F%dim_1D)) then
-          Isam=Isam+Jsamall(ii)*r_1D(ii)/2._rp
-       else
-          Isam=Isam+Jsamall(ii)*r_1D(ii)
-       end if
-    end do
-    Isam=2._rp*C_PI*Isam*dr
-!    write(output_unit_write,*) params%mpi_params%rank,'Isam: ',Isam
-
-    F%Ip0=F%Ip_exp/Isam
-
-
-    Jexp=Jsamall*F%Ip0
-
-    F%J3_SC_1D%PHI=Jexp
-    F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp
-
-    ! Calculating time-derivative of E_phi
-
-    dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
-         (2._rp*F%dt_E_SC)
-
-!    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-
-    ! Solving 1D Poisson equation with tridiagonal matrix solve
-
-    a=0._rp
-    b=-2._rp
-    c=0._rp
-    u=0._rp
-    gam=0._rp
-!    r=-2*dr**2*C_MU*Jexp
-    r=2*dr**2*C_MU*dJdt
-
-    do ii=2_idef,F%dim_1D
-       a(ii)=(REAL(ii)-2._rp)/(REAL(ii)-1._rp)
-       c(ii)=REAL(ii)/(REAL(ii)-1._rp)
-    end do
-
-    bet=b(2)
-    u(2)=r(2)/bet
-    do ii=3_idef,F%dim_1D-1
-       gam(ii)=c(ii-1)/bet
-       bet=b(ii)-a(ii)*gam(ii)
-       if (bet.eq.0) then
-          stop 'tridiag failed'
-       end if
-       u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
-    end do
-
-    do ii=F%dim_1D-2,2,-1
-       u(ii)=u(ii)-gam(ii+1)*u(ii+1)
-    end do
-
-    u(1)=(4._rp*u(2)-u(3))/3._rp
-
-    ! Writing over F%A* data
-
-!    F%A3_SC_1D%PHI=F%A2_SC_1D%PHI
-!    F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
-!    F%A1_SC_1D%PHI=u
-
-!    if (init) then
-!       F%A3_SC_1D%PHI=F%A1_SC_1D%PHI
-!       F%A2_SC_1D%PHI=F%A1_SC_1D%PHI
-!    end if
-
-!    write(output_unit_write,*) params%mpi_params%rank,'A1(1)',F%A1_SC_1D%PHI(1)
-!    write(output_unit_write,*) params%mpi_params%rank,'A2(1)',F%A2_SC_1D%PHI(1)
-!    write(output_unit_write,*) params%mpi_params%rank,'A3(1)',F%A3_SC_1D%PHI(1)
-
-    ! Calculating inductive E_phi
-
-!    F%E_SC_1D%PHI=-(3*F%A1_SC_1D%PHI-4*F%A2_SC_1D%PHI+F%A3_SC_1D%PHI)/ &
-!         (2*F%dt_E_SC)
-
-    F%E_SC_1D%PHI=u
-
-!    if (params%mpi_params%rank.eq.0) then
-!       write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
-!       write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
-!       write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-
-!       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
-!    end if
-
-    ! Normalizing inductive E_phi
-
-    F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
-
-#ifdef PSPLINE
-    call initialize_SC1D_field_interpolant(params,F)
-#endif
-
-  end subroutine reinit_SC_E1D
-
-  subroutine reinit_SC_E1D_FS(params,F)
-
-    TYPE(FIELDS), INTENT(INOUT)                 :: F
-    TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-    real(rp),dimension(F%dim_1D) :: Jsamall,Jexp,dJdt,PSIP_1D
-    real(rp),dimension(F%dim_1D) :: a,b,c,u,gam,r,alpha,beta,gamma
-    real(rp) :: dPSIP,Isam,bet
-    integer :: pp,ii,PSIPind
-    INTEGER 				:: mpierr
-
-!    if (params%mpi_params%rank .EQ. 0) then
-!       write(output_unit_write,*) 'Calculating SC_E1D'
-!    end if
-
-    PSIP_1D=F%PSIP_1D
-    dPSIP=PSIP_1D(2)-PSIP_1D(1)
-    Jsamall=F%J0_SC_1D%PHI
-
-    Isam=0._rp
-    do ii=1_idef,F%dim_1D
-       if ((ii.eq.1).or.(ii.eq.F%dim_1D)) then
-          Isam=Isam+Jsamall(ii)/2._rp
-       else
-          Isam=Isam+Jsamall(ii)
-       end if
-    end do
-    Isam=Isam*dPSIP
-!    write(output_unit_write,*) params%mpi_params%rank,'Isam: ',Isam
-
-    F%Ip0=F%Ip_exp/Isam
-
-    Jexp=Jsamall*F%Ip0
-
-    F%J3_SC_1D%PHI=Jexp
-    F%J2_SC_1D%PHI=Jexp
-    F%J1_SC_1D%PHI=Jexp
-
-    ! Calculating time-derivative of E_phi
-
-    dJdt=(3._rp*F%J1_SC_1D%PHI-4._rp*F%J2_SC_1D%PHI+F%J3_SC_1D%PHI)/ &
-         (2._rp*F%dt_E_SC)
-
-!    write(output_unit_write,*) params%mpi_params%rank,'J(1)',F%J_SC_1D%PHI(1)
-
-    ! Solving 1D Poisson equation with tridiagonal matrix solve
-
-    alpha=F%ddMagPsiSqdPsiPSq
-    beta=F%dMagPsiSqdPsiP
-    gamma=C_MU*dJdt
-
-
-    a=-alpha*dPSIP/2._rp+beta
-    b=-2._rp*beta
-    c=alpha*dPSIP/2._rp+beta
-    u=0._rp
-    gam=0._rp
-!    r=-2*dr**2*C_MU*Jexp
-    r=dPSIP**2*gamma
-
-    c(2)=c(2)-a(2)*a(1)/c(1)
-    b(2)=b(2)-a(2)*b(1)/c(1)
-    r(2)=r(2)-a(2)*r(1)/c(1)
-
-    bet=b(2)
-    u(2)=r(2)/bet
-    do ii=3_idef,F%dim_1D-1
-       gam(ii)=c(ii-1)/bet
-       bet=b(ii)-a(ii)*gam(ii)
-       if (bet.eq.0) then
-          stop 'tridiag failed'
-       end if
-       u(ii)=(r(ii)-a(ii)*u(ii-1))/bet
-    end do
-
-    do ii=F%dim_1D-2,2,-1
-       u(ii)=u(ii)-gam(ii+1)*u(ii+1)
-    end do
-
-    u(1)=2*u(2)-u(3)
-
-
-    F%E_SC_1D%PHI=u
-
-    if (params%mpi_params%rank.eq.0) then
-       write(output_unit_write,*) 'J1(1)',F%J1_SC_1D%PHI(1)
-       write(output_unit_write,*) 'J2(1)',F%J2_SC_1D%PHI(1)
-       write(output_unit_write,*) 'J3(1)',F%J3_SC_1D%PHI(1)
-
-       write(output_unit_write,*) 'E(1)',F%E_SC_1D%PHI(1)
-    end if
-
-    ! Normalizing inductive E_phi
-
-    F%E_SC_1D%PHI=F%E_SC_1D%PHI/params%cpp%Eo
-
-#ifdef PSPLINE
-    call initialize_SC1D_field_interpolant_FS(params,F)
-#endif
-
-  end subroutine reinit_SC_E1D_FS
 
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * !
   ! * * *  SUBROUTINES FOR INITIALIZING FIELDS   * * * !
@@ -2315,36 +1279,6 @@ CONTAINS
 
        end if
 
-       if (params%SC_E) then
-
-          F%dim_1D=dim_1D
-          F%dt_E_SC=dt_E_SC
-          F%Ip_exp=Ip_exp
-
-          ALLOCATE(F%E_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%A1_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%A2_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%A3_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%J1_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%J2_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%J3_SC_1D%PHI(F%dim_1D))
-          ALLOCATE(F%r_1D(F%dim_1D))
-
-          F%E_SC_1D%PHI=0._rp
-          F%A1_SC_1D%PHI=0._rp
-          F%A2_SC_1D%PHI=0._rp
-          F%A3_SC_1D%PHI=0._rp
-          F%J1_SC_1D%PHI=0._rp
-          F%J2_SC_1D%PHI=0._rp
-          F%J3_SC_1D%PHI=0._rp
-          F%r_1D=0._rp
-
-          do ii=1_idef,F%dim_1D
-             F%r_1D(ii)=(ii-1)*F%AB%a/(F%dim_1D-1)
-          end do
-
-       end if
-
 !    CASE('EXTERNAL')
     else if (params%field_model(1:8).eq.'EXTERNAL') then
        ! Load the magnetic field from an external HDF5 file
@@ -2452,8 +1386,6 @@ CONTAINS
 
        if (F%axisymmetric_fields) then
 
-
-
           if (F%Dim2x1t) then
 
              call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
@@ -2507,7 +1439,6 @@ CONTAINS
        else if(F%Bflux3D) then
           F%PSIP_min=minval(F%PSIp3D(:,1,:))
        end if
-
 
        if ((.not.F%Efield_in_file).and.(.not.F%Dim2x1t).and.F%Efield) then
 
@@ -2565,119 +1496,6 @@ CONTAINS
 
        end if
 
-       if (params%SC_E) then
-
-          F%dim_1D=dim_1D
-          F%dt_E_SC=dt_E_SC
-          F%Ip_exp=Ip_exp
-
-          write(output_unit_write,*) 'dt_E_SC',F%dt_E_SC,'Ip_exp',Ip_exp
-
-          call allocate_1D_FS_arrays(params,F)
-          call load_1D_FS_from_hdf5(params,F)
-
-!          write(output_unit_write,*) F%PSIP_1D
-
-       end if
-
-!       test=.true.
-
-!       if (F%Bflux.and.(.not.test)) then
-
-!          call initialize_fields_interpolant(params,F)
-
-!          F%Bfield=.TRUE.
-!          F%Efield=.TRUE.
-!          F%Efield_in_file=.TRUE.
-
-
-!          RMIN=F%X%R(1)
-!          RMAX=F%X%R(F%dims(1))
-
-!          ZMIN=F%X%Z(1)
-!          ZMAX=F%X%Z(F%dims(3))
-
-!          do ii=1_idef,res_double
-!             F%dims(1)=2*F%dims(1)-1
-!             F%dims(3)=2*F%dims(3)-1
-!          end do
-
-!          if (res_double>0) then
-!             DEALLOCATE(F%X%R)
-!             DEALLOCATE(F%X%Z)
-!             DEALLOCATE(F%PSIp)
-!          end if
-
-!          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-!               F%Bflux,F%Efield.AND.F%Efield_in_file)
-
-!          do ii=1_idef,F%dims(1)
-!             F%X%R(ii)=RMIN+REAL(ii-1)/REAL(F%dims(1)-1)*(RMAX-RMIN)
-!          end do
-
-!          do ii=1_idef,F%dims(3)
-!             F%X%Z(ii)=ZMIN+REAL(ii-1)/REAL(F%dims(3)-1)*(ZMAX-ZMIN)
-!          end do
-
-!          call calculate_initial_magnetic_field(F)
-
-!          F%E_2D%R=0._rp
-!          do ii=1_idef,F%dims(1)
-!             F%E_2D%PHI(ii,:)=F%Eo*F%Ro/F%X%R(ii)
-!          end do
-!          F%E_2D%Z=0._rp
-
-!       end if
-
-
-!       if (F%Bflux.and.test) then
-
-!          F%Bfield=.TRUE.
-!          F%Efield=.TRUE.
-!          F%Efield_in_file=.TRUE.
-
-
-!          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-!               F%Bflux,F%Efield.AND.F%Efield_in_file)
-
-
-          ! B
-          ! edge nodes at minimum R,Z
-!          F%B_2D%Z(1,:)=-(F%PSIp(2,:)-F%PSIp(1,:))/(F%X%R(2)-F%X%R(1))/F%X%R(1)
-!          F%B_2D%R(:,1)=(F%PSIp(:,2)-F%PSIp(:,1))/(F%X%Z(2)-F%X%Z(1))/F%X%R(:)
-
-          ! edge nodes at maximum R,Z
-!          F%B_2D%Z(F%dims(1),:)=-(F%PSIp(F%dims(1),:)-F%PSIp(F%dims(1)-1,:))/ &
-!               (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))/F%X%R(F%dims(1))
-!          F%B_2D%R(:,F%dims(3))=(F%PSIp(:,F%dims(3))-F%PSIp(:,F%dims(3)-1))/ &
-!               (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))/F%X%R(:)
-
-!          do ii=2_idef,F%dims(1)-1
-             ! central difference over R for interior nodes for BZ
-!             F%B_2D%Z(ii,:)=-(F%PSIp(ii+1,:)-F%PSIp(ii-1,:))/ &
-!                  (F%X%R(ii+1)-F%X%R(ii-1))/F%X%R(ii)
-
-!          end do
-!          do ii=2_idef,F%dims(3)-1
-             ! central difference over Z for interior nodes for BR
-!             F%B_2D%R(:,ii)=(F%PSIp(:,ii+1)-F%PSIp(:,ii-1))/ &
-!                  (F%X%Z(ii+1)-F%X%Z(ii-1))/F%X%R(:)
-!          end do
-
-!          do ii=1_idef,F%dims(1)
-!             F%B_2D%PHI(ii,:)=-F%Bo*F%Ro/F%X%R(ii)
-!          end do
-
-!          F%E_2D%R=0._rp
-!          do ii=1_idef,F%dims(1)
-!             F%E_2D%PHI(ii,:)=F%Eo*F%Ro/F%X%R(ii)
-!          end do
-!          F%E_2D%Z=0._rp
-
-!          F%Bfield=.FALSE.
-
-
-
        if (params%mpi_params%rank.EQ.0) then
 
           if (F%axisymmetric_fields) then
@@ -2700,24 +1518,6 @@ CONTAINS
 
        end if
 
-       if (params%orbit_model(3:5).EQ.'pre') then
-          if (params%mpi_params%rank.eq.0) then
-             write(output_unit_write,'("Initializing GC fields from external EM fields")')
-          end if
-
-          if (params%field_model(10:12).eq.'2DB') then
-             if (F%axisymmetric_fields) then
-                call initialize_GC_fields(F)
-             else
-                call initialize_GC_fields_3D(F)
-             end if
-          end if
-       end if
-
-       !       write(output_unit_write,'("gradBR",E17.10)') F%gradB_2D%R(F%dims(1)/2,F%dims(3)/2)
-       !       write(output_unit_write,'("gradBPHI",E17.10)') F%gradB_2D%PHI(F%dims(1)/2,F%dims(3)/2)
-       !       write(output_unit_write,'("gradBZ",E17.10)') F%gradB_2D%Z(F%dims(1)/2,F%dims(3)/2)
-
     else
        F%Bo=Bo
        F%Eo=Eo
@@ -2733,309 +1533,7 @@ CONTAINS
        write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * * *",/)')
     end if
 
-  end subroutine initialize_fields
-
-  subroutine initialize_GC_fields(F)
-    !! Computes the auxiliary fields \(\nabla|{\bf B}|\) and
-    !! \(\nabla\times\hat{b}\) that are used in the RHS of the
-    !! evolution equations for the GC orbit model.
-    TYPE(FIELDS), INTENT(INOUT)      :: F
-    !! An instance of the KORC derived type FIELDS.
-    INTEGER                        :: ii
-    !! Iterator across F%dim
-    REAL(rp), DIMENSION(:,:),ALLOCATABLE :: Bmag
-    !! Magnetic field magnitude
-    REAL(rp), DIMENSION(:,:,:),ALLOCATABLE :: bhat
-    !! Magnetic field unit vector
-
-    Bmag=SQRT(F%B_2D%R**2+F%B_2D%PHI**2+F%B_2D%Z**2)
-
-    ALLOCATE(bhat(F%dims(1),F%dims(3),3))
-
-    bhat(:,:,1)=F%B_2D%R/Bmag
-    bhat(:,:,2)=F%B_2D%PHI/Bmag
-    bhat(:,:,3)=F%B_2D%Z/Bmag
-
-
-    F%gradB_2D%PHI=0.
-    ! No variation in phi direction
-
-    ! Single-sided difference for axiliary fields at edge nodes
-    ! Differential over R on first index, differential over Z
-    ! on second index.
-
-    ! gradB
-    ! edge nodes at minimum R,Z
-    F%gradB_2D%R(1,:)=(Bmag(2,:)-Bmag(1,:))/(F%X%R(2)-F%X%R(1))
-    F%gradB_2D%Z(:,1)=(Bmag(:,2)-Bmag(:,1))/(F%X%Z(2)-F%X%Z(1))
-
-    ! edge nodes at maximum R,Z
-    F%gradB_2D%R(F%dims(1),:)=(Bmag(F%dims(1),:)-Bmag(F%dims(1)-1,:))/ &
-         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))
-    F%gradB_2D%Z(:,F%dims(3))=(Bmag(:,F%dims(3))-Bmag(:,F%dims(3)-1))/ &
-         (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))
-
-    ! curlb
-    ! edge nodes at minimum R,Z
-    ! R component has differential over Z
-    F%curlb_2D%R(:,1)=-(bhat(:,2,2)-bhat(:,1,2))/ &
-         (F%X%Z(2)-F%X%Z(1))
-
-    ! PHI component has differentials over R and Z
-    F%curlb_2D%PHI(1,:)=-(bhat(2,:,3)-bhat(1,:,3))/ &
-         (F%X%R(2)-F%X%R(1))
-
-    F%curlb_2D%PHI(:,1)=F%curlb_2D%PHI(:,1)+ &
-         ((bhat(:,2,1)-bhat(:,1,1))/(F%X%Z(2)-F%X%Z(1)))
-
-    ! Z component has differentials over R
-    F%curlb_2D%Z(1,:)=((bhat(2,:,2)*F%X%R(2)- &
-         bhat(1,:,2)*F%X%R(1))/(F%X%R(2)-F%X%R(1)))/F%X%R(1)
-
-    ! edge nodes at minimum R,Z
-    ! R component has differential over Z
-    F%curlb_2D%R(:,F%dims(3))=-(bhat(:,F%dims(3),2)- &
-         bhat(:,F%dims(3)-1,2))/ &
-         (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))
-
-    ! PHI component has differentials over R and Z
-    F%curlb_2D%PHI(F%dims(1),:)=F%curlb_2D%PHI(F%dims(1),:)- &
-         (bhat(F%dims(1),:,3)-bhat(F%dims(1)-1,:,3))/ &
-         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))
-
-    F%curlb_2D%PHI(:,F%dims(3))=F%curlb_2D%PHI(:,F%dims(3))+ &
-         ((bhat(:,F%dims(3),1)-bhat(:,F%dims(3)-1,1))/ &
-         (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1)))
-
-    ! Z component has differentials over R
-    F%curlb_2D%Z(F%dims(1),:)=((bhat(F%dims(1),:,2)*F%X%R(F%dims(1))- &
-         bhat(F%dims(1)-1,:,2)*F%X%R(F%dims(1)-1))/(F%X%R(F%dims(1))- &
-         F%X%R(F%dims(1)-1)))/F%X%R(F%dims(1))
-
-    do ii=2_idef,F%dims(1)-1
-       ! central difference over R for interior nodes
-       F%gradB_2D%R(ii,:)=(Bmag(ii+1,:)-Bmag(ii-1,:))/ &
-            (F%X%R(ii+1)-F%X%R(ii-1))
-       F%curlb_2D%Z(ii,:)=((bhat(ii+1,:,2)*F%X%R(ii+1)- &
-            bhat(ii-1,:,2)*F%X%R(ii-1))/(F%X%R(ii+1)-F%X%R(ii-1)))/ &
-            F%X%R(ii)
-       F%curlb_2D%PHI(ii,:)=F%curlb_2D%PHI(ii,:)- &
-            (bhat(ii+1,:,3)-bhat(ii-1,:,3))/ &
-            (F%X%R(ii+1)-F%X%R(ii-1))
-    end do
-    do ii=2_idef,F%dims(3)-1
-       ! central difference over Z for interior nodes
-       F%gradB_2D%Z(:,ii)=(Bmag(:,ii+1)-Bmag(:,ii-1))/ &
-            (F%X%Z(ii+1)-F%X%Z(ii-1))
-       F%curlb_2D%R(:,ii)=-(bhat(:,ii+1,2)-bhat(:,ii-1,2))/ &
-            (F%X%Z(ii+1)-F%X%Z(ii-1))
-       F%curlb_2D%PHI(:,ii)=F%curlb_2D%PHI(:,ii)+ &
-            ((bhat(:,ii+1,1)-bhat(:,ii-1,1))/(F%X%Z(ii+1)-F%X%Z(ii-1)))
-    end do
-
-    DEALLOCATE(Bmag)
-    DEALLOCATE(bhat)
-
-  end subroutine initialize_GC_fields
-
-  subroutine initialize_GC_fields_3D(F)
-    !! Computes the auxiliary fields \(\nabla|{\bf B}|\) and
-    !! \(\nabla\times\hat{b}\) that are used in the RHS of the
-    !! evolution equations for the GC orbit model.
-    TYPE(FIELDS), INTENT(INOUT)      :: F
-    !! An instance of the KORC derived type FIELDS.
-    INTEGER                        :: ii,jj
-    !! Iterator across F%dim
-    REAL(rp), DIMENSION(:,:,:),ALLOCATABLE :: Bmag
-    !! Magnetic field magnitude
-    REAL(rp), DIMENSION(:,:,:,:),ALLOCATABLE :: bhat
-    !! Magnetic field unit vector
-
-    Bmag=SQRT(F%B_3D%R**2+F%B_3D%PHI**2+F%B_3D%Z**2)
-
-    ALLOCATE(bhat(F%dims(1),F%dims(2),F%dims(3),3))
-
-    bhat(:,:,:,1)=F%B_3D%R/Bmag
-    bhat(:,:,:,2)=F%B_3D%PHI/Bmag
-    bhat(:,:,:,3)=F%B_3D%Z/Bmag
-
-    ! Single-sided difference for axiliary fields at edge nodes
-    ! Differential over R on first index, differential over Z
-    ! on second index.
-
-    F%gradB_3D%R=0._rp
-    F%gradB_3D%PHI=0._rp
-    F%gradB_3D%Z=0._rp
-
-    F%curlb_3D%R=0._rp
-    F%curlb_3D%PHI=0._rp
-    F%curlb_3D%Z=0._rp
-
-    ! gradB
-    ! edge nodes at minimum R,Z
-    F%gradB_3D%R(1,:,:)=F%gradB_3D%R(1,:,:)+ &
-         (Bmag(2,:,:)-Bmag(1,:,:))/(F%X%R(2)-F%X%R(1))
-    do ii=1_idef,F%dims(1)
-       F%gradB_3D%PHI(ii,1,:)=F%gradB_3D%PHI(ii,1,:)+ &
-            (Bmag(ii,2,:)-Bmag(ii,F%dims(2),:))/ &
-            (F%X%R(ii)*(F%X%PHI(2)-F%X%PHI(F%dims(2))))
-    end do
-    F%gradB_3D%Z(:,:,1)=F%gradB_3D%Z(:,:,1)+ &
-         (Bmag(:,:,2)-Bmag(:,:,1))/(F%X%Z(2)-F%X%Z(1))
-
-    ! edge nodes at maximum R,Z
-    F%gradB_3D%R(F%dims(1),:,:)=F%gradB_3D%R(F%dims(1),:,:)+ &
-         (Bmag(F%dims(1),:,:)-Bmag(F%dims(1)-1,:,:))/ &
-         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))
-    do ii=1_idef,F%dims(1)
-       F%gradB_3D%PHI(ii,F%dims(2),:)=F%gradB_3D%PHI(ii,F%dims(2),:)+ &
-            (Bmag(ii,1,:)-Bmag(ii,F%dims(2)-1,:))/ &
-            (F%X%R(ii)*(F%X%PHI(1)-F%X%PHI(F%dims(2)-1)))
-    end do
-    F%gradB_3D%Z(:,:,F%dims(3))=F%gradB_3D%Z(:,:,F%dims(3))+ &
-         (Bmag(:,:,F%dims(3))-Bmag(:,:,F%dims(3)-1))/ &
-         (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))
-
-    ! curlb
-    ! edge nodes at minimum R,PHI,Z
-    ! R component has differential over PHI and Z
-    do ii=1_idef,F%dims(1)
-       F%curlb_3D%R(ii,1,:)=F%curlb_3D%R(ii,1,:)+ &
-            (bhat(ii,2,:,3)-bhat(ii,F%dims(2),:,3))/ &
-            (F%X%R(ii)*(F%X%PHI(2)-F%X%PHI(F%dims(2))))
-    end do
-    F%curlb_3D%R(:,:,1)=F%curlb_3D%R(:,:,1)-&
-         (bhat(:,:,2,2)-bhat(:,:,1,2))/(F%X%Z(2)-F%X%Z(1))
-
-    ! PHI component has differentials over R and Z
-    F%curlb_3D%PHI(1,:,:)=F%curlb_3D%PHI(1,:,:)- &
-         (bhat(2,:,:,3)-bhat(1,:,:,3))/ &
-         (F%X%R(2)-F%X%R(1))
-
-    F%curlb_3D%PHI(:,:,1)=F%curlb_3D%PHI(:,:,1)+ &
-         ((bhat(:,:,2,1)-bhat(:,:,1,1))/(F%X%Z(2)-F%X%Z(1)))
-
-    ! Z component has differentials over R and PHI
-    F%curlb_3D%Z(1,:,:)=F%curlb_3D%Z(1,:,:)+ &
-         ((bhat(2,:,:,2)*F%X%R(2)- &
-         bhat(1,:,:,2)*F%X%R(1))/(F%X%R(2)-F%X%R(1)))/F%X%R(1)
-
-    do ii=1_idef,F%dims(1)
-       F%curlb_3D%Z(ii,1,:)=F%curlb_3D%Z(ii,1,:)-&
-            (bhat(ii,2,:,1)-bhat(ii,F%dims(2),:,1))/ &
-            (F%X%R(ii)*(F%X%PHI(2)-F%X%PHI(F%dims(2))))
-    end do
-
-    ! edge nodes at maximum R,PHI,Z
-    ! R component has differential over PHI and Z
-    do ii=1_idef,F%dims(1)
-       F%curlb_3D%R(ii,F%dims(2),:)=F%curlb_3D%R(ii,F%dims(2),:)+ &
-            (bhat(ii,1,:,3)-bhat(ii,F%dims(2)-1,:,3))/ &
-            (F%X%R(ii)*(F%X%PHI(1)-F%X%PHI(F%dims(2)-1)))
-    end do
-    F%curlb_3D%R(:,:,F%dims(3))=F%curlb_3D%R(:,:,F%dims(3)) &
-         -(bhat(:,:,F%dims(3),2)-bhat(:,:,F%dims(3)-1,2))/ &
-         (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1))
-
-    ! PHI component has differentials over R and Z
-    F%curlb_3D%PHI(F%dims(1),:,:)=F%curlb_3D%PHI(F%dims(1),:,:)- &
-         (bhat(F%dims(1),:,:,3)-bhat(F%dims(1)-1,:,:,3))/ &
-         (F%X%R(F%dims(1))-F%X%R(F%dims(1)-1))
-
-    F%curlb_3D%PHI(:,:,F%dims(3))=F%curlb_3D%PHI(:,:,F%dims(3))+ &
-         ((bhat(:,:,F%dims(3),1)-bhat(:,:,F%dims(3)-1,1))/ &
-         (F%X%Z(F%dims(3))-F%X%Z(F%dims(3)-1)))
-
-    ! Z component has differentials over R and PHI
-    F%curlb_3D%Z(F%dims(1),:,:)=F%curlb_3D%Z(F%dims(1),:,:)+ &
-         ((bhat(F%dims(1),:,:,2)*F%X%R(F%dims(1))- &
-         bhat(F%dims(1)-1,:,:,2)*F%X%R(F%dims(1)-1))/(F%X%R(F%dims(1))- &
-         F%X%R(F%dims(1)-1)))/F%X%R(F%dims(1))
-
-    do ii=1_idef,F%dims(1)
-       F%curlb_3D%Z(ii,F%dims(2),:)=F%curlb_3D%Z(ii,F%dims(2),:)-&
-            (bhat(ii,1,:,1)-bhat(ii,F%dims(2)-1,:,1))/ &
-            (F%X%R(ii)*(F%X%PHI(1)-F%X%PHI(F%dims(2)-1)))
-    end do
-
-    do ii=2_idef,F%dims(1)-1
-       ! central difference over R for interior nodes
-       F%gradB_3D%R(ii,:,:)=F%gradB_3D%R(ii,:,:)+ &
-            (Bmag(ii+1,:,:)-Bmag(ii-1,:,:))/ &
-            (F%X%R(ii+1)-F%X%R(ii-1))
-
-       F%curlb_3D%Z(ii,:,:)=F%curlb_3D%Z(ii,:,:)+ &
-            ((bhat(ii+1,:,:,2)*F%X%R(ii+1)- &
-            bhat(ii-1,:,:,2)*F%X%R(ii-1))/(F%X%R(ii+1)-F%X%R(ii-1)))/ &
-            F%X%R(ii)
-       F%curlb_3D%PHI(ii,:,:)=F%curlb_3D%PHI(ii,:,:)- &
-            (bhat(ii+1,:,:,3)-bhat(ii-1,:,:,3))/ &
-            (F%X%R(ii+1)-F%X%R(ii-1))
-    end do
-    do ii=2_idef,F%dims(2)-1
-       ! central difference over PHI for interior nodes
-       do jj=1_idef,F%dims(1)
-          F%gradB_3D%PHI(jj,ii,:)=F%gradB_3D%PHI(jj,ii,:)+ &
-               (Bmag(jj,ii+1,:)-Bmag(jj,ii-1,:))/ &
-               (F%X%R(jj)*(F%X%PHI(ii+1)-F%X%PHI(ii-1)))
-
-          F%curlb_3D%Z(jj,ii,:)=F%curlb_3D%Z(jj,ii,:)-&
-               (bhat(jj,ii+1,:,1)-bhat(jj,ii-1,:,1))/ &
-               (F%X%R(jj)*(F%X%PHI(ii+1)-F%X%PHI(ii-1)))
-          F%curlb_3D%R(jj,ii,:)=F%curlb_3D%R(jj,ii,:)+ &
-               (bhat(jj,ii+1,:,3)-bhat(jj,ii-1,:,3))/ &
-            (F%X%R(jj)*(F%X%PHI(ii+1)-F%X%PHI(ii-1)))
-       end do
-    end do
-    do ii=2_idef,F%dims(3)-1
-       ! central difference over Z for interior nodes
-       F%gradB_3D%Z(:,:,ii)=F%gradB_3D%Z(:,:,ii)+ &
-            (Bmag(:,:,ii+1)-Bmag(:,:,ii-1))/ &
-            (F%X%Z(ii+1)-F%X%Z(ii-1))
-
-       F%curlb_3D%R(:,:,ii)=F%curlb_3D%R(:,:,ii)- &
-            (bhat(:,:,ii+1,2)-bhat(:,:,ii-1,2))/ &
-            (F%X%Z(ii+1)-F%X%Z(ii-1))
-       F%curlb_3D%PHI(:,:,ii)=F%curlb_3D%PHI(:,:,ii)+ &
-            ((bhat(:,:,ii+1,1)-bhat(:,:,ii-1,1))/(F%X%Z(ii+1)-F%X%Z(ii-1)))
-    end do
-
-    DEALLOCATE(Bmag)
-    DEALLOCATE(bhat)
-
-  end subroutine initialize_GC_fields_3D
-
-  subroutine define_SC_time_step(params,F)
-    TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
-    TYPE(FIELDS), INTENT(INOUT)         :: F
-    integer :: sub_E_SC
-
-    F%subcycle_E_SC = FLOOR(F%dt_E_SC/params%dt,ip)
-
-    sub_E_SC=F%subcycle_E_SC
-
-    params%t_it_SC = params%t_skip/F%subcycle_E_SC
-    params%t_skip=F%subcycle_E_SC
-
-    F%dt_E_SC=params%t_skip*params%dt
-
-!    write(output_unit_write,*) 'dt_E_SC',F%dt_E_SC,'dt',params%dt,'subcycle_E_SC', &
-!         F%subcycle_E_SC,'t_skip',params%t_skip, &
-!         't_it_SC',params%t_it_SC
-
-    if (params%mpi_params%rank.EQ.0) then
-
-     write(output_unit_write,'(/,"* * * * * SC_E1D SUBCYCLING * * * * *")')
-     write(output_unit_write,*) "SC_E1D sybcycling iterations: ",F%subcycle_E_SC
-     write(output_unit_write,*) "Updated number of outputs: ", &
-          params%t_steps/(params%t_skip*params%t_it_SC)
-
-     write(output_unit_write,'("* * * * * * * * * * * * * * * * * * *",/)')
-    end if
-
-
-
-  end subroutine define_SC_time_step
+  end subroutine initialize_field
 
   ! * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   ! Subroutines for getting the fields data from HDF5 files
@@ -3145,13 +1643,12 @@ CONTAINS
   !! @param group_id HDF5 group identifier.
   !! @param subgroup_id HDF5 subgroup identifier.
   !! @param h5error HDF5 error status.
-  subroutine which_fields_in_file(params,Bfield,Efield,Bflux,dBfield,B1field, &
+  subroutine which_fields_in_file(params,Bfield,Efield,Bflux,B1field, &
        E1field)
     TYPE(KORC_PARAMS), INTENT(IN)      :: params
     LOGICAL, INTENT(OUT)               :: Bfield
     LOGICAL, INTENT(OUT)               :: B1field
     LOGICAL, INTENT(OUT)               :: E1field
-    LOGICAL, INTENT(OUT)               :: dBfield
     LOGICAL, INTENT(OUT)               :: Efield
     LOGICAL, INTENT(OUT)               :: Bflux
     CHARACTER(MAX_STRING_LENGTH)       :: filename
@@ -3171,9 +1668,6 @@ CONTAINS
 
     gname = "BR"
     call h5lexists_f(h5file_id,TRIM(gname),Bfield,h5error)
-
-    gname = "dBRdR"
-    call h5lexists_f(h5file_id,TRIM(gname),dBfield,h5error)
 
     gname = "ER"
     call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
@@ -3207,426 +1701,269 @@ CONTAINS
   !! @param group_id HDF5 group identifier.
   !! @param subgroup_id HDF5 subgroup identifier.
   !! @param h5error HDF5 error status.
-  subroutine load_field_data_from_hdf5(params,F)
-    TYPE(KORC_PARAMS), INTENT(IN)          :: params
-    TYPE(FIELDS), INTENT(INOUT)            :: F
-    CHARACTER(MAX_STRING_LENGTH)           :: filename
-    CHARACTER(MAX_STRING_LENGTH)           :: gname
-    CHARACTER(MAX_STRING_LENGTH)           :: subgname
-    CHARACTER(MAX_STRING_LENGTH)           :: dset
-    INTEGER(HID_T)                         :: h5file_id
-    INTEGER(HID_T)                         :: group_id
-    INTEGER(HID_T)                         :: subgroup_id
-    INTEGER                                :: h5error
-    LOGICAL :: Efield
+   subroutine load_field_data_from_hdf5(params,F)
+      TYPE(KORC_PARAMS), INTENT(IN)          :: params
+      TYPE(FIELDS), INTENT(INOUT)            :: F
+      CHARACTER(MAX_STRING_LENGTH)           :: filename
+      CHARACTER(MAX_STRING_LENGTH)           :: gname
+      CHARACTER(MAX_STRING_LENGTH)           :: subgname
+      CHARACTER(MAX_STRING_LENGTH)           :: dset
+      INTEGER(HID_T)                         :: h5file_id
+      INTEGER(HID_T)                         :: group_id
+      INTEGER(HID_T)                         :: subgroup_id
+      INTEGER                                :: h5error
+      LOGICAL :: Efield
 
-    filename = TRIM(params%magnetic_field_filename)
-    call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
-    if (h5error .EQ. -1) then
-       write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fopen_f")')
-    end if
+      filename = TRIM(params%magnetic_field_filename)
+      call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
+      if (h5error .EQ. -1) then
+         write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fopen_f")')
+      end if
 
 
-    if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
-         F%Dim2x1t) then
-       dset = "/PHI"
-       call load_array_from_hdf5(h5file_id,dset,F%X%PHI)
-    end if
+      if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
+            F%Dim2x1t) then
+         dset = "/PHI"
+         call load_array_from_hdf5(h5file_id,dset,F%X%PHI)
+      end if
 
-    if (params%SC_E) then
 
-       dset = "/OSR"
-       call load_array_from_hdf5(h5file_id,dset,F%X%R)
 
-       dset = "/OSZ"
-       call load_array_from_hdf5(h5file_id,dset,F%X%Z)
+      dset = "/R"
+      call load_array_from_hdf5(h5file_id,dset,F%X%R)
 
-    else
+      dset = "/Z"
+      call load_array_from_hdf5(h5file_id,dset,F%X%Z)
 
-       dset = "/R"
-       call load_array_from_hdf5(h5file_id,dset,F%X%R)
 
-       dset = "/Z"
-       call load_array_from_hdf5(h5file_id,dset,F%X%Z)
+      dset = '/Bo'
+      call load_from_hdf5(h5file_id,dset,F%Bo)
 
-    end if
+      if (F%Efield) then
+         dset = '/Eo'
+         gname = 'Eo'
 
-    dset = '/Bo'
-    call load_from_hdf5(h5file_id,dset,F%Bo)
+         call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
-    if (F%Efield) then
-       dset = '/Eo'
-       gname = 'Eo'
+         if (Efield) then
+            call load_from_hdf5(h5file_id,dset,F%Eo)
+         else
+            F%Eo = 0.0_rp
+         end if
+      else
+         F%Eo = 0.0_rp
+      end if
 
-       call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+      if (params%field_model(10:13).eq.'MARS') then
 
-       if (Efield) then
-          call load_from_hdf5(h5file_id,dset,F%Eo)
-       else
-          F%Eo = 0.0_rp
-       end if
-    else
-       F%Eo = 0.0_rp
-    end if
+         dset = '/PSIP0'
+         call load_from_hdf5(h5file_id,dset,F%PSIP_min)
 
-    if (params%field_model(10:13).eq.'MARS') then
+         dset = '/PSIPlim'
+         call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
-       dset = '/PSIP0'
-       call load_from_hdf5(h5file_id,dset,F%PSIP_min)
+         dset = '/AMP'
+         call load_from_hdf5(h5file_id,dset,F%AMP)
 
-       dset = '/PSIPlim'
-       call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
+         F%AMP=F%AMP*F%MARS_AMP_Scale
 
-       dset = '/AMP'
-       call load_from_hdf5(h5file_id,dset,F%AMP)
+      end if
 
-       F%AMP=F%AMP*F%MARS_AMP_Scale
+      if (params%field_model(10:14).eq.'AORSA') then
 
-    end if
+         dset = '/PSIP0'
+         call load_from_hdf5(h5file_id,dset,F%PSIP_min)
 
-    if (params%field_model(10:14).eq.'AORSA') then
+         dset = '/PSIPlim'
+         call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
-       dset = '/PSIP0'
-       call load_from_hdf5(h5file_id,dset,F%PSIP_min)
+         F%AMP=F%AORSA_AMP_Scale
 
-       dset = '/PSIPlim'
-       call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
+      end if
 
-       F%AMP=F%AORSA_AMP_Scale
+      dset = '/Ro'
+      call load_from_hdf5(h5file_id,dset,F%Ro)
 
-    end if
+      dset = '/Zo'
+      call load_from_hdf5(h5file_id,dset,F%Zo)
 
-    dset = '/Ro'
-    call load_from_hdf5(h5file_id,dset,F%Ro)
+      if ((F%Bflux.OR.F%axisymmetric_fields).AND.(.NOT.F%Dim2x1t)) then
 
-    dset = '/Zo'
-    call load_from_hdf5(h5file_id,dset,F%Zo)
+         dset = "/FLAG"
+         call load_array_from_hdf5(h5file_id,dset,F%FLAG2D)
 
-    if ((F%Bflux.OR.F%axisymmetric_fields).AND.(.NOT.F%Dim2x1t)) then
+         if (F%useLCFS) then
+            dset = "/LCFS"
+            call load_array_from_hdf5(h5file_id,dset,F%LCFS2D)
+         else
+            F%LCFS2D = 0._rp
+         end if
 
-       if (params%SC_E) then
+      else
+         dset = "/FLAG"
+         call load_array_from_hdf5(h5file_id,dset,F%FLAG3D)
 
-          dset = "/OSFLAG"
-          call load_array_from_hdf5(h5file_id,dset,F%FLAG2D)
+         if (F%useLCFS) then
+            dset = "/LCFS"
+            call load_array_from_hdf5(h5file_id,dset,F%LCFS3D)
+         else
+            F%LCFS3D = 0._rp
+         end if
+      end if
 
-       else
+      if (F%Bflux) then
 
-          dset = "/FLAG"
-          call load_array_from_hdf5(h5file_id,dset,F%FLAG2D)
+         dset = "/PSIp"
+         gname = 'PSIp'
 
-          if (F%useLCFS) then
-             dset = "/LCFS"
-             call load_array_from_hdf5(h5file_id,dset,F%LCFS2D)
-          else
-             F%LCFS2D = 0._rp
-          end if
+         call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
-       end if
+         if (Efield) then
+            call load_array_from_hdf5(h5file_id,dset,F%PSIp)
+         else
+            F%PSIp = 0.0_rp
+         end if
 
+            !          F%PSIp=2*C_PI*(F%PSIp-minval(F%PSIp))
 
-    else
-       dset = "/FLAG"
-       call load_array_from_hdf5(h5file_id,dset,F%FLAG3D)
+      end if
 
-       if (F%useLCFS) then
-          dset = "/LCFS"
-          call load_array_from_hdf5(h5file_id,dset,F%LCFS3D)
-       else
-          F%LCFS3D = 0._rp
-       end if
-    end if
+      if (F%Bflux3D) then
+         dset = "/PSIp"
+         gname = 'PSIp'
 
-    if (F%Bflux) then
+         call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
-       !write(6,*) 'SC_E: ',params%SC_E
-       !write(6,*) size(F%PSIp)
-       !flush(6)
+         if (Efield) then
+            call load_array_from_hdf5(h5file_id,dset,F%PSIp3D)
+         else
+            F%PSIp3D = 0.0_rp
+         end if
 
-       if (.not.params%SC_E) then
+   !       F%PSIp3D=2*C_PI*(F%PSIp3D-minval(F%PSIp3D))
 
-          dset = "/PSIp"
-          gname = 'PSIp'
+      end if
 
-          call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+      if (F%B1field) then
 
-          if (Efield) then
-             call load_array_from_hdf5(h5file_id,dset,F%PSIp)
-          else
-             F%PSIp = 0.0_rp
-          end if
+         if (params%field_model(10:13).eq.'MARS') then
 
-          !          F%PSIp=2*C_PI*(F%PSIp-minval(F%PSIp))
+            dset = "/ReBR"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
 
-       else
+            dset = "/ReBPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%PHI)
 
-       !write(6,*) 'SC_E: ',params%SC_E
-       !flush(6)
+            dset = "/ReBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%Z)
 
-          dset = "/OSPSIp"
-          gname = 'OSPSIp'
+            dset = "/ImBR"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%R)
 
-          call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+            dset = "/ImBPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%PHI)
 
-          write(6,*) params%SC_E
-          flush(6)
+            dset = "/ImBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%Z)
 
-          if (Efield) then
-             call load_array_from_hdf5(h5file_id,dset,F%PSIp)
-          else
-             F%PSIp = 0.0_rp
-          end if
+         else if (params%field_model(10:14).eq.'AORSA') then
 
-       end if
+            dset = "/ReBX"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2DX%X)
 
-    end if
+            dset = "/ReBY"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2DX%Y)
 
-    if (F%Bflux3D) then
-       dset = "/PSIp"
-       gname = 'PSIp'
+            dset = "/ReBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2DX%Z)
 
-       call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+            dset = "/ImBX"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2DX%X)
 
-       if (Efield) then
-          call load_array_from_hdf5(h5file_id,dset,F%PSIp3D)
-       else
-          F%PSIp3D = 0.0_rp
-       end if
+            dset = "/ImBY"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2DX%Y)
 
-!       F%PSIp3D=2*C_PI*(F%PSIp3D-minval(F%PSIp3D))
+            dset = "/ImBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2DX%Z)
 
-    end if
+         endif
 
-    if (F%B1field) then
+      end if
 
-       if (params%field_model(10:13).eq.'MARS') then
+      if (F%E1field) then
 
-          dset = "/ReBR"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
+         dset = "/ReEX"
+         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
 
-          dset = "/ReBPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%PHI)
+         dset = "/ReEY"
+         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Y)
 
-          dset = "/ReBZ"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%Z)
+         dset = "/ReEZ"
+         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Z)
 
-          dset = "/ImBR"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%R)
+         dset = "/ImEX"
+         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%X)
 
-          dset = "/ImBPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%PHI)
+         dset = "/ImEY"
+         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Y)
 
-          dset = "/ImBZ"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%Z)
+         dset = "/ImEZ"
+         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
 
-       else if (params%field_model(10:14).eq.'AORSA') then
+      end if
 
-          dset = "/ReBX"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Re_2DX%X)
+      if (F%Bfield) then
+         if (F%axisymmetric_fields) then
+            dset = "/BR"
+            call load_array_from_hdf5(h5file_id,dset,F%B_2D%R)
 
-          dset = "/ReBY"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Re_2DX%Y)
+            dset = "/BPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B_2D%PHI)
 
-          dset = "/ReBZ"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Re_2DX%Z)
+            dset = "/BZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B_2D%Z)
+         else
+            dset = "/BR"
+            call load_array_from_hdf5(h5file_id,dset,F%B_3D%R)
 
-          dset = "/ImBX"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Im_2DX%X)
+            !write(6,*) 'BR(25,1,:)',F%B_3D%R(25,1,:)
 
-          dset = "/ImBY"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Im_2DX%Y)
+            dset = "/BPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B_3D%PHI)
 
-          dset = "/ImBZ"
-          call load_array_from_hdf5(h5file_id,dset,F%B1Im_2DX%Z)
+            dset = "/BZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B_3D%Z)
+         end if
+      end if
 
-       endif
+      if (F%Efield.AND.F%Efield_in_file) then
+         if (F%axisymmetric_fields.and.(.not.F%Dim2x1t)) then
+            dset = "/ER"
+            call load_array_from_hdf5(h5file_id,dset,F%E_2D%R)
 
-    end if
+            dset = "/EPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%E_2D%PHI)
 
-    if (F%E1field) then
+            dset = "/EZ"
+            call load_array_from_hdf5(h5file_id,dset,F%E_2D%Z)
+         else
 
-       dset = "/ReEX"
-       call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
+            dset = "/ER"
+            call load_array_from_hdf5(h5file_id,dset,F%E_3D%R)
 
-       dset = "/ReEY"
-       call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Y)
+            dset = "/EPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%E_3D%PHI)
 
-       dset = "/ReEZ"
-       call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Z)
+            dset = "/EZ"
+            call load_array_from_hdf5(h5file_id,dset,F%E_3D%Z)
+         end if
+      end if
 
-       dset = "/ImEX"
-       call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%X)
-
-       dset = "/ImEY"
-       call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Y)
-
-       dset = "/ImEZ"
-       call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
-
-    end if
-
-    if (F%Bfield) then
-       if (F%axisymmetric_fields) then
-          dset = "/BR"
-          call load_array_from_hdf5(h5file_id,dset,F%B_2D%R)
-
-          dset = "/BPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%B_2D%PHI)
-
-          dset = "/BZ"
-          call load_array_from_hdf5(h5file_id,dset,F%B_2D%Z)
-       else
-          dset = "/BR"
-          call load_array_from_hdf5(h5file_id,dset,F%B_3D%R)
-
-          !write(6,*) 'BR(25,1,:)',F%B_3D%R(25,1,:)
-
-          dset = "/BPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%B_3D%PHI)
-
-          dset = "/BZ"
-          call load_array_from_hdf5(h5file_id,dset,F%B_3D%Z)
-       end if
-    end if
-
-    if (F%dBfield.and.F%dBfield_in_file) then
-       if (F%axisymmetric_fields) then
-          dset = "/dBRdR"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdR_2D%R)
-          dset = "/dBPHIdR"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdR_2D%PHI)
-          dset = "/dBZdR"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdR_2D%Z)
-
-          dset = "/dBRdPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdPHI_2D%R)
-          dset = "/dBPHIdPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdPHI_2D%PHI)
-          dset = "/dBZdPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdPHI_2D%Z)
-
-          dset = "/dBRdZ"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdZ_2D%R)
-          dset = "/dBPHIdZ"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdZ_2D%PHI)
-          dset = "/dBZdZ"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdZ_2D%Z)
-       else
-          dset = "/dBRdR"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdR_3D%R)
-          dset = "/dBPHIdR"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdR_3D%PHI)
-          dset = "/dBZdR"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdR_3D%Z)
-
-          dset = "/dBRdPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdPHI_3D%R)
-          dset = "/dBPHIdPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdPHI_3D%PHI)
-          dset = "/dBZdPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdPHI_3D%Z)
-
-          dset = "/dBRdZ"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdZ_3D%R)
-          dset = "/dBPHIdZ"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdZ_3D%PHI)
-          dset = "/dBZdZ"
-          call load_array_from_hdf5(h5file_id,dset,F%dBdZ_3D%Z)
-       end if
-    end if
-
-    if (F%Efield.AND.F%Efield_in_file) then
-       if (F%axisymmetric_fields.and.(.not.F%Dim2x1t)) then
-          dset = "/ER"
-          call load_array_from_hdf5(h5file_id,dset,F%E_2D%R)
-
-          dset = "/EPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%E_2D%PHI)
-
-          dset = "/EZ"
-          call load_array_from_hdf5(h5file_id,dset,F%E_2D%Z)
-       else
-
-          dset = "/ER"
-          call load_array_from_hdf5(h5file_id,dset,F%E_3D%R)
-
-          dset = "/EPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%E_3D%PHI)
-
-          dset = "/EZ"
-          call load_array_from_hdf5(h5file_id,dset,F%E_3D%Z)
-       end if
-    end if
-
-    call h5fclose_f(h5file_id, h5error)
-    if (h5error .EQ. -1) then
-       write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fclose_f")')
-    end if
+      call h5fclose_f(h5file_id, h5error)
+      if (h5error .EQ. -1) then
+         write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fclose_f")')
+      end if
   end subroutine load_field_data_from_hdf5
-
-  subroutine load_1D_FS_from_hdf5(params,F)
-    TYPE(KORC_PARAMS), INTENT(IN)          :: params
-    TYPE(FIELDS), INTENT(INOUT)            :: F
-    CHARACTER(MAX_STRING_LENGTH)           :: filename
-    CHARACTER(MAX_STRING_LENGTH)           :: dset
-    INTEGER(HID_T)                         :: h5file_id
-    INTEGER                                :: h5error
-
-
-    filename = TRIM(params%magnetic_field_filename)
-    call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
-    if (h5error .EQ. -1) then
-       write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fopen_f")')
-    end if
-
-    dset = "/PSIP1D"
-    call load_array_from_hdf5(h5file_id,dset,F%PSIP_1D)
-
-    dset = "/dMagPsiSqdPsiP"
-    call load_array_from_hdf5(h5file_id,dset,F%dMagPsiSqdPsiP)
-
-    dset = "/ddMagPsiSqdPsiPSq"
-    call load_array_from_hdf5(h5file_id,dset,F%ddMagPsiSqdPsiPSq)
-
-    call h5fclose_f(h5file_id, h5error)
-    if (h5error .EQ. -1) then
-       write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fclose_f")')
-    end if
-  end subroutine load_1D_FS_from_hdf5
-
-
-  subroutine allocate_1D_FS_arrays(params,F)
-    !! @note Subroutine that allocates the variables keeping the axisymmetric
-    !! fields data. @endnote
-    TYPE (KORC_PARAMS), INTENT(IN) 	:: params
-    !! Core KORC simulation parameters.
-    TYPE(FIELDS), INTENT(INOUT)    :: F
-    !! An instance of the KORC derived type FIELDS. In this variable we keep
-    !! the loaded data.
-    CHARACTER(MAX_STRING_LENGTH)           :: dset
-    INTEGER(HID_T)                         :: h5file_id
-    INTEGER                                :: h5error
-    CHARACTER(MAX_STRING_LENGTH)           :: filename
-
-    filename = TRIM(params%magnetic_field_filename)
-    call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
-    if (h5error .EQ. -1) then
-       write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fopen_f")')
-    end if
-
-    dset = "/N1D"
-    call load_from_hdf5(h5file_id,dset,F%dim_1D)
-
-    ALLOCATE(F%PSIP_1D(F%dim_1D))
-    ALLOCATE(F%dMagPsiSqdPsiP(F%dim_1D))
-    ALLOCATE(F%ddMagPsiSqdPsiPSq(F%dim_1D))
-
-    call h5fclose_f(h5file_id, h5error)
-    if (h5error .EQ. -1) then
-       write(output_unit_write,'("KORC ERROR: Something went wrong in: load_field_data_from_hdf5 --> h5fclose_f")')
-    end if
-
-  end subroutine ALLOCATE_1D_FS_ARRAYS
-
 
   subroutine ALLOCATE_2D_FIELDS_ARRAYS(params,F,bfield,bflux,dbfield, &
        efield,b1field,e1field)
@@ -3823,14 +2160,6 @@ CONTAINS
     if (ALLOCATED(F%E_3D%R)) DEALLOCATE(F%E_3D%R)
     if (ALLOCATED(F%E_3D%PHI)) DEALLOCATE(F%E_3D%PHI)
     if (ALLOCATED(F%E_3D%Z)) DEALLOCATE(F%E_3D%Z)
-
-    if (ALLOCATED(F%E_SC_1D%PHI)) DEALLOCATE(F%E_SC_1D%PHI)
-    if (ALLOCATED(F%J1_SC_1D%PHI)) DEALLOCATE(F%J1_SC_1D%PHI)
-    if (ALLOCATED(F%J2_SC_1D%PHI)) DEALLOCATE(F%J2_SC_1D%PHI)
-    if (ALLOCATED(F%J3_SC_1D%PHI)) DEALLOCATE(F%J3_SC_1D%PHI)
-    if (ALLOCATED(F%A1_SC_1D%PHI)) DEALLOCATE(F%A1_SC_1D%PHI)
-    if (ALLOCATED(F%A2_SC_1D%PHI)) DEALLOCATE(F%A2_SC_1D%PHI)
-    if (ALLOCATED(F%A3_SC_1D%PHI)) DEALLOCATE(F%A3_SC_1D%PHI)
 
     if (ALLOCATED(F%X%R)) DEALLOCATE(F%X%R)
     if (ALLOCATED(F%X%PHI)) DEALLOCATE(F%X%PHI)
