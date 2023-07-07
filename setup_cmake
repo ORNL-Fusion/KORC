@@ -55,10 +55,6 @@ elif [ $MACHINE_ID == "MBP115573"     ]
 then
     #  Config for Matt Beidler's ORNL machine.
 
-#    export CC=/opt/local/bin/mpicc-mpich-gcc8
-#    export CXX=/opt/local/bin/mpic++-mpich-gcc8
-#    export FC=/opt/local/bin/mpif90-mpich-gcc8
-
     export CC=/usr/local/bin/gcc-13
     export CXX=/usr/local/bin/g++-13
     export FC=/usr/local/bin/gfortran-13
@@ -72,9 +68,6 @@ then
         -DCMAKE_C_FLAGS_DEBUG="-g -g3" \
         -DCMAKE_CXX_FLAGS_DEBUG="-g -g3" \
 	    -DUSE_PSPLINE=ON \
-        -DEZSpline_INCLUDE_PATH=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/include \
-        -DEZSpline_LINK_FLAGS="-L/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib -lpspline" \
-	    -DEZSpline_LIBRARIES=/Users/21b/Desktop/KORC_PERIPHERALS/PSPLINE_GH/pspline/build/lib/libpspline.a   \
         -DUSE_FIO=OFF \
         -DFIO_LIBRARIES=/Users/21b/Desktop/KORC/FIO/install/lib/libfusionio.a  \
         -DM3DC1_LIBRARIES=/Users/21b/Desktop/KORC/FIO/install/lib/libm3dc1.a	\

@@ -190,7 +190,7 @@ type EZspline1
   integer :: nguard
 end type EZspline1
 
-#endif
+#endif PSPLINE
   
   CONTAINS
   
@@ -1290,6 +1290,424 @@ subroutine mkbicub(x,nx,y,ny,f,nf2, &
    return
 end subroutine mkbicub
 
+subroutine mktricub(x,nx,y,ny,z,nz,f,nf2,nf3, &
+   ibcxmin,bcxmin,ibcxmax,bcxmax,inb1x, &
+   ibcymin,bcymin,ibcymax,bcymax,inb1y, &
+   ibczmin,bczmin,ibczmax,bczmax,inb1z, &
+   ilinx,iliny,ilinz,ier)
+   !
+   !  setup a tricubic spline; store coefficients in compact form
+   !  (as per suggestion of L. Zakharov, PPPL, Feb. 1999)
+   !  8 coeffs per (x,y,z) grid point:
+   !          f,fxx,fyy,fzz,fxxyy,fxxzz,fyyzz,fxxyyzz
+   !
+   !  dmc -- modified Feb 2004 -- rewritten to compute coefficients
+   !  directly rather than by conversion from the non-compact representation
+   !  (to reduce cpu and memory cost)
+   !
+   !
+   !  input:
+   implicit none
+   integer nx                        ! length of x vector
+   integer ny                        ! length of y vector
+   integer nz                        ! length of z vector
+   real(fp) :: x(nx)                        ! x vector, strict ascending
+   real(fp) :: y(ny)                        ! y vector, strict ascending
+   real(fp) :: z(nz)                        ! z vector, strict ascending
+   !
+   integer nf2                       ! 2nd dim. of f array, nf2.ge.nx
+   integer nf3                       ! 3rd dim. of f array, nf3.ge.ny
+   !
+   !  input/output:
+   !
+   real(fp) :: f(8,nf2,nf3,nz)              ! data and spline coefficients
+   !
+   !  on input:  f(1,i,j,k) = f(x(i),y(j),z(k))
+   !  on output:  f(1,i,j,k) unchanged
+   !              f(2,i,j,k) = d2f/dx2(x(i),y(j),z(k))
+   !              f(3,i,j,k) = d2f/dy2(x(i),y(j),z(k))
+   !              f(4,i,j,k) = d2f/dz2(x(i),y(j),z(k))
+   !              f(5,i,j,k) = d4f/dx2dy2(x(i),y(j),z(k))
+   !              f(6,i,j,k) = d4f/dx2dz2(x(i),y(j),z(k))
+   !              f(7,i,j,k) = d4f/dy2dz2(x(i),y(j),z(k))
+   !              f(8,i,j,k) = d6f/dx2dy2dz2(x(i),y(j),z(k))
+   !
+   !  there is a rather Hermite like interpolation formula to go with
+   !  this-- see evtricub.f90.  Also the bicubic formula is given in
+   !  mkbicubw.f90; the tricubic formula is precisely analogous.
+   !
+   !  boundary condition data
+   !  inputs:
+   integer inb1x                     ! 1st dim of xmin & xmax bc arrays
+   integer inb1y                     ! 1st dim of ymin & ymax bc arrays
+   integer inb1z                     ! 1st dim of zmin & zmax bc arrays
+   !
+   integer ibcxmin,ibcxmax           ! BC type flag @xmin, xmax
+   integer ibcymin,ibcymax           ! BC type flag @ymin, ymax
+   integer ibczmin,ibczmax           ! BC type flag @zmin, zmax
+   !
+   real(fp) :: bcxmin(inb1x,nz),bcxmax(inb1x,nz) ! xmin & xmax BC data, ny x nz
+   real(fp) :: bcymin(inb1y,nz),bcymax(inb1y,nz) ! ymin & ymax BC data, nx x nz
+   real(fp) :: bczmin(inb1z,ny),bczmax(inb1z,ny) ! zmin & zmax BC data, nx x ny
+   !
+   !  where BC data is not required, dummy scalars may be passed.
+   !  the ibc* flags determine whether BC data isneeded.
+   !
+   !  BC data:  bcxmin & bcxmax:  BC vs. y,z @xmin,xmax
+   !            bcymin & bcymax:  BC vs. x,z @ymin,ymax
+   !            bczmin & bczmax:  BC vs. x,y @zmin,zmax
+   !
+   !   ibcxmin -- indicator for boundary condition at xmin=x(1):
+   !    bcxmin(...) -- boundary condition data
+   !     =-1 -- use periodic boundary condition
+   !     =0 -- use "not a knot"
+   !     =1 -- match slope, specified at x(1),y(iy),z(iz) by bcxmin(iy,iz)
+   !     =2 -- match 2nd derivative, specified at x(1),y(iy),z(iz)
+   !           by bcxmin(iy,iz
+   !     =3 -- boundary condition is slope=0 (df/dx=0) at x(1), all y(j)
+   !     =4 -- boundary condition is d2f/dx2=0 at x(1), all y(j)
+   !     =5 -- df/dx BC from 1st divided difference
+   !     =6 -- d2f/dx2 BC from 2nd divided difference (parabolic fit)
+   !     =7 -- d3f/dx3 BC from 3rd divided difference (cubic fit)
+   !   ***NOTE bcxmin(...) referenced ONLY if ibcxmin=1 or ibcxmin=2
+   !
+   !   ibcxmax -- indicator for boundary condition at x(nx):
+   !    bcxmax(...) -- boundary condition data
+   !     (interpretation as with ibcxmin, bcxmin)
+   !     NOTE:  if ibcxmin=-1 then the periodic BC applies on both sides
+   !            and ibcxmax, bcxmax are ignored.
+   !   inb1x -- 1st dimension of bcxmin, bcxmax: if ibcxmin or ibcxmax .gt. 0
+   !            this must be .ge. ny.
+   !
+   !   interpretation of ibcymin,bcymin,ibcymax,bcymax,inb1y
+   !     is same as with ibcxmin,...
+   !
+   !   interpretation of ibczmin,bczmin,ibczmax,bczmax,inb1z
+   !     is same as with ibcxmin,...
+   !
+   !   the explicit bdy condition arrays are referenced only if the
+   !     corresponding "ibc" flag values are set to 1 or 2.
+   !
+   !  output:
+   integer ilinx                     ! x vector equal spacing flag
+   integer iliny                     ! y vector equal spacing flag
+   integer ilinz                     ! z vector equal spacing flag
+   !
+   !   ilinx -- =1 on output if x(nx) pts are nearly evenly spaced (tol=1e-3)
+   !   iliny -- =1 on output if y(ny) evenly spaced (tol=1e-3)
+   !   ilinz -- =1 on output if z(nz) evenly spaced (tol=1e-3)
+   !
+   integer ier                       ! exit code
+   !   ier -- completion code, 0 for normal
+   !
+   !-----------------------------------------------------
+   !  workspace **dynamic allocation**
+   !  f90 dynamic array
+   !
+   real(fp), dimension(:,:,:), allocatable :: fbicub ! bicubic subsection
+   real(fp), dimension(:,:), allocatable :: fwk ! work array
+   real(fp), dimension(:), allocatable :: bcx1,bcx2,bcy1,bcy2 ! BCs for mkbicub
+   !
+   real(fp), dimension(:,:,:,:), allocatable :: fcorr ! correction spline
+   real(fp), dimension(:,:), allocatable :: bcc1,bcc2 ! correction BCs
+   !
+   integer iflg,ierx,iery,ierz
+   integer ix,iy,iz
+   !
+   real(fp) :: ztol = 1.0E-3_fp
+   real(fp) :: zbc1,zbc2,hz
+   integer ibc1,ibc2
+   !
+   !-----------------------------------------------------
+   !
+   ier=0
+   !
+   iflg=0
+   !
+   !  check z bdy condition "linearity"
+   !
+   if(ibczmin.ne.-1) then
+      if((ibczmin.eq.1).or.(ibczmin.eq.2)) then
+         do iy=1,ny
+            do ix=1,nx
+               if(bczmin(ix,iy).ne.0.0_fp) iflg=1
+            end do
+         end do
+      end if
+      if((ibczmax.eq.1).or.(ibczmax.eq.2)) then
+         do iy=1,ny
+            do ix=1,nx
+               if(bczmax(ix,iy).ne.0.0_fp) iflg=1
+            end do
+         end do
+      end if
+   end if
+   !
+   if(nx.lt.2) then
+      write(6,'('' ?mktricub:  at least 2 x points required.'')')
+      ier=1
+   end if
+   if(ny.lt.2) then
+      write(6,'('' ?mktricub:  need at least 2 y points.'')')
+      ier=1
+   end if
+   if(nz.lt.2) then
+      write(6,'('' ?mktricub:  need at least 2 z points.'')')
+      ier=1
+   end if
+   !
+   if((ibcxmin.eq.1).or.(ibcxmax.eq.1).or.(ibcxmin.eq.2).or. &
+      (ibcxmax.eq.2)) then
+      if(inb1x.lt.ny) then
+         ier=1
+         write(6, &
+            '('' ?mktricub:  1st dim of bcxmin/max arrays .lt. ny'')')
+      end if
+   end if
+   !
+   if((ibcymin.eq.1).or.(ibcymax.eq.1).or.(ibcymin.eq.2).or. &
+      (ibcymax.eq.2)) then
+      if(inb1y.lt.nx) then
+         ier=1
+         write(6, &
+            '('' ?mktricub:  1st dim of bcymin/max arrays .lt. nx'')')
+      end if
+   end if
+   !
+   if((ibczmin.eq.1).or.(ibczmax.eq.1).or.(ibczmin.eq.2).or. &
+      (ibczmax.eq.2)) then
+      if(inb1z.lt.nx) then
+         ier=1
+         write(6, &
+            '('' ?mktricub:  1st dim of bczmin/max arrays .lt. nx'')')
+      end if
+   end if
+   !
+   call ibc_ck(ibcxmin,'mktricub','xmin',-1,7,ier)
+   if(ibcxmin.ge.0) call ibc_ck(ibcxmax,'mktricub','xmax',0,7,ier)
+   !
+   call ibc_ck(ibcymin,'mktricub','ymin',-1,7,ier)
+   if(ibcymin.ge.0) call ibc_ck(ibcymax,'mktricub','ymax',0,7,ier)
+   !
+   call ibc_ck(ibczmin,'mktricub','zmin',-1,7,ier)
+   if(ibczmax.ge.0) call ibc_ck(ibczmax,'mktricub','zmax',0,7,ier)
+   !
+   !  check ilinx & x vector
+   !
+   call splinck(x,nx,ilinx,ztol,ierx)
+   if(ierx.ne.0) ier=2
+   !
+   if(ier.eq.2) then
+      write(6,'('' ?mktricub:  x axis not strict ascending'')')
+   end if
+   !
+   !  check iliny & y vector
+   !
+   call splinck(y,ny,iliny,ztol,iery)
+   if(iery.ne.0) ier=3
+   !
+   if(ier.eq.3) then
+      write(6,'('' ?mktricub:  y axis not strict ascending'')')
+   end if
+   !
+   !  check ilinz & z vector
+   !
+   call splinck(z,nz,ilinz,ztol,ierz)
+   if(ierz.ne.0) ier=4
+   !
+   if(ier.eq.4) then
+      write(6,'('' ?mktricub:  z axis not strict ascending'')')
+   end if
+   !
+   if(ier.ne.0) return
+   !
+   !------------------------------------
+   !  1.  compute (x,y) bicubic splines using mkbicub
+   !
+   allocate(fbicub(4,nx,ny))
+   allocate(bcx1(ny),bcx2(ny),bcy1(nx),bcy2(nx))
+   bcx1=0.0; bcx2=0.0; bcy1=0.0; bcy2=0.0_fp
+   !
+   do iz=1,nz
+      if(ibcxmin.ne.-1) then
+         if((ibcxmin.eq.1).or.(ibcxmin.eq.2)) then
+            bcx1(1:ny)=bcxmin(1:ny,iz)
+         end if
+         if((ibcxmax.eq.1).or.(ibcxmax.eq.2)) then
+            bcx2(1:ny)=bcxmax(1:ny,iz)
+         end if
+      end if
+      if(ibcymin.ne.-1) then
+         if((ibcymin.eq.1).or.(ibcymin.eq.2)) then
+            bcy1(1:nx)=bcymin(1:nx,iz)
+         end if
+         if((ibcymax.eq.1).or.(ibcymax.eq.2)) then
+            bcy2(1:nx)=bcymax(1:nx,iz)
+         end if
+      end if
+      !
+      fbicub(1,1:nx,1:ny) = f(1,1:nx,1:ny,iz)
+      !
+      call mkbicub(x,nx,y,ny,fbicub,nx, &
+         ibcxmin,bcx1,ibcxmax,bcx2, &
+         ibcymin,bcy1,ibcymax,bcy2, &
+         ilinx,iliny,ier)
+      if(ier.ne.0) return
+      !
+      f(2:3,1:nx,1:ny,iz) = fbicub(2:3,1:nx,1:ny)  ! fxx, fyy
+      f(5,1:nx,1:ny,iz) = fbicub(4,1:nx,1:ny)      ! fxxyy
+      !
+   end do
+   !
+   deallocate(fbicub,bcx1,bcx2,bcy1,bcy2)
+   !
+   !  2.  homogeneous spline in z direction; inhomogeneous BC imposed later
+   !      if necessary
+   !
+   zbc1=0.0_fp
+   zbc2=0.0_fp
+   ibc1=ibczmin
+   ibc2=ibczmax
+   if(iflg.eq.1) then
+      if((ibczmin.eq.1).or.(ibczmin.eq.2)) ibc1=0
+      if((ibczmax.eq.1).or.(ibczmax.eq.2)) ibc2=0
+   end if
+   !
+   allocate(fwk(2,nz))
+   !
+   do iy=1,ny
+      do ix=1,nx
+
+         fwk(1,1:nz) = f(1,ix,iy,1:nz)
+         call mkspline(z,nz,fwk, &
+            ibc1,zbc1,ibc2,zbc2,ilinz,ier)
+         if(ier.ne.0) return
+         f(4,ix,iy,1:nz) = fwk(2,1:nz) ! fzz
+
+         fwk(1,1:nz) = f(2,ix,iy,1:nz)
+         call mkspline(z,nz,fwk, &
+            ibc1,zbc1,ibc2,zbc2,ilinz,ier)
+         if(ier.ne.0) return
+         f(6,ix,iy,1:nz) = fwk(2,1:nz) ! fxxzz
+
+         fwk(1,1:nz) = f(3,ix,iy,1:nz)
+         call mkspline(z,nz,fwk, &
+            ibc1,zbc1,ibc2,zbc2,ilinz,ier)
+         if(ier.ne.0) return
+         f(7,ix,iy,1:nz) = fwk(2,1:nz) ! fyyzz
+
+         fwk(1,1:nz) = f(5,ix,iy,1:nz)
+         call mkspline(z,nz,fwk, &
+            ibc1,zbc1,ibc2,zbc2,ilinz,ier)
+         if(ier.ne.0) return
+         f(8,ix,iy,1:nz) = fwk(2,1:nz) ! fxxyyzz
+
+      end do
+   end do
+   !
+   deallocate(fwk)
+   !
+   if(iflg.eq.1) then
+      !
+      !  3. inhomogeneous BC correction
+      !
+      allocate(fwk(2,max(nx,ny,nz)))
+      allocate(bcc1(nx,ny),bcc2(nx,ny))
+      allocate(fcorr(4,nx,ny,nz))
+      !
+      !  correction BCs
+      !
+      do iy=1,ny
+         do ix=1,nx
+            bcc1(ix,iy)=0.0_fp
+            if(ibczmin.eq.1) then
+               hz=z(2)-z(1)
+               bcc1(ix,iy)=(f(1,ix,iy,2)-f(1,ix,iy,1))/hz + &
+                  hz*(-2*f(4,ix,iy,1)-f(4,ix,iy,2))/6
+               bcc1(ix,iy)=bczmin(ix,iy)-bcc1(ix,iy)
+            else if(ibczmin.eq.2) then
+               bcc1(ix,iy)=bczmin(ix,iy)-f(4,ix,iy,1)
+            end if
+         end do
+      end do
+      !
+      do iy=1,ny
+         do ix=1,nx
+            bcc2(ix,iy)=0.0_fp
+            if(ibczmax.eq.1) then
+               hz=z(2)-z(1)
+               bcc2(ix,iy)=(f(1,ix,iy,2)-f(1,ix,iy,1))/hz + &
+                  hz*(-2*f(4,ix,iy,1)-f(4,ix,iy,2))/6
+               bcc2(ix,iy)=bczmax(ix,iy)-bcc2(ix,iy)
+            else if(ibczmax.eq.2) then
+               bcc2(ix,iy)=bczmax(ix,iy)-f(4,ix,iy,1)
+            end if
+         end do
+      end do
+      !
+      fwk(1,1:nz)=0.0_fp  ! values are all zero, only BC is set...
+      do iy=1,ny
+         do ix=1,nx
+            call mkspline(z,nz,fwk, &
+               ibczmin,bcc1(ix,iy),ibczmax,bcc2(ix,iy),ilinz,ier)
+            if(ier.ne.0) return
+            fcorr(1,ix,iy,1:nz)=fwk(2,1:nz)  ! fzz-correction
+         end do
+      end do
+      !
+      !  higher order corrections
+      !
+      zbc1=0.0_fp
+      zbc2=0.0_fp
+      !
+      do iz=1,nz
+         do iy=1,ny
+            fwk(1,1:nx)=fcorr(1,1:nx,iy,iz)
+            call mkspline(x,nx,fwk, &
+               ibcxmin,zbc1,ibcxmax,zbc2,ilinx,ier)
+            if(ier.ne.0) return
+            fcorr(2,1:nx,iy,iz)=fwk(2,1:nx)  ! fxxzz-correction
+         end do
+      end do
+      !
+      do iz=1,nz
+         do ix=1,nx
+            fwk(1,1:ny)=fcorr(1,ix,1:ny,iz)
+            call mkspline(y,ny,fwk, &
+               ibcymin,zbc1,ibcymax,zbc2,iliny,ier)
+            if(ier.ne.0) return
+            fcorr(3,ix,1:ny,iz)=fwk(2,1:ny)  ! fyyzz-correction
+
+            fwk(1,1:ny)=fcorr(2,ix,1:ny,iz)
+            call mkspline(y,ny,fwk, &
+               ibcymin,zbc1,ibcymax,zbc2,iliny,ier)
+            if(ier.ne.0) return
+            fcorr(4,ix,1:ny,iz)=fwk(2,1:ny)  ! fxxyyzz-correction
+         end do
+      end do
+      !
+      !  apply correction
+      !
+      do iz=1,nz
+         do iy=1,ny
+            do ix=1,nx
+               f(4,ix,iy,iz)=f(4,ix,iy,iz)+fcorr(1,ix,iy,iz)
+               f(6,ix,iy,iz)=f(6,ix,iy,iz)+fcorr(2,ix,iy,iz)
+               f(7,ix,iy,iz)=f(7,ix,iy,iz)+fcorr(3,ix,iy,iz)
+               f(8,ix,iy,iz)=f(8,ix,iy,iz)+fcorr(4,ix,iy,iz)
+            end do
+         end do
+      end do
+      !
+      deallocate(fwk,fcorr,bcc1,bcc2)
+      !
+   end if
+   !
+   !  that's all
+   !
+   return
+end subroutine mktricub
+
 subroutine mkspline(x,nx,fspl,ibcxmin,bcxmin,ibcxmax,bcxmax, &
    ilinx,ier)
    !
@@ -1433,7 +1851,6 @@ subroutine mkspline(x,nx,fspl,ibcxmin,bcxmin,ibcxmax,bcxmax, &
    !
    return
 end subroutine mkspline
-
 
 subroutine cspline(x,nx,fspl,ibcxmin,bcxmin,ibcxmax,bcxmax, &
    wk,iwk,ilinx,ier)
@@ -2341,6 +2758,169 @@ subroutine EZspline_interp2_FOvars(spline_oBR, spline_oBPHI, &
   
 end subroutine EZspline_interp2_FOvars
 
+subroutine EZspline_interp2_collision(spline_oBR, spline_oBPHI, &
+   spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, &
+   spline_one, spline_oTe, spline_oZeff, p1, p2, fBR, &
+   fBPHI, fBZ, fER, fEPHI, fEZ, fne, fTe, fZeff, ier)
+   !$acc routine seq
+   type(EZspline2) spline_oBR,spline_oBPHI,spline_oBZ
+   type(EZspline2) spline_oER,spline_oEPHI,spline_oEZ
+   type(EZspline2) spline_one,spline_oTe,spline_oZeff
+   real(fp), intent(in) :: p1, p2
+   real(fp), intent(out):: fBR, fBPHI, fBZ
+   real(fp), intent(out):: fER, fEPHI, fEZ
+   real(fp), intent(out):: fne, fTe, fZeff
+   integer, intent(out) :: ier
+   integer :: ifail
+   integer:: iwarn = 0
+
+   !$acc routine (EZspline_allocated2) seq
+   !$acc routine (evbicub_collision) seq
+
+   ier = 0
+   ifail = 0
+
+   if( .not.EZspline_allocated2(spline_oBR) .or. spline_oBR%isReady /= 1) then
+      ier = 94
+      return
+   endif
+
+   call evbicub_collision(p1, p2,  &
+      spline_oBR%x1(1), spline_oBR%n1, &
+      spline_oBR%x2(1), spline_oBR%n2, &
+      spline_oBR%ilin1, spline_oBR%ilin2, &
+      spline_oBR%fspl(1,1,1), spline_oBPHI%fspl(1,1,1), &
+      spline_oBZ%fspl(1,1,1), spline_oER%fspl(1,1,1), &
+      spline_oEPHI%fspl(1,1,1), spline_oEZ%fspl(1,1,1), spline_one%fspl(1,1,1), &
+      spline_oTe%fspl(1,1,1), spline_oZeff%fspl(1,1,1), &
+      spline_oBR%n1, &
+      fBR, fBPHI, fBZ, fER, fEPHI, fEZ, fne, fTe, fZeff, ifail)
+
+   if(ifail /= 0) ier = 97
+
+end subroutine EZspline_interp2_collision
+
+subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
+   spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, p1, p2, fA, fBR, &
+   fBPHI, fBZ, fER, fEPHI, fEZ, ier)
+   !$acc routine seq
+   type(EZspline2) spline_oA, spline_oBR,spline_oBPHI,spline_oBZ
+   type(EZspline2) spline_oER,spline_oEPHI,spline_oEZ
+   real(fp), intent(in) :: p1, p2
+   real(fp), intent(out):: fA(3)
+   real(fp), intent(out):: fBR, fBPHI, fBZ
+   real(fp), intent(out):: fER, fEPHI, fEZ
+   integer, intent(out) :: ier
+   integer :: ifail
+   integer:: iwarn = 0
+
+   !$acc routine (EZspline_allocated2) seq
+   !$acc routine (evbicub_FOmars) seq
+
+   ier = 0
+   ifail = 0
+
+   if( .not.EZspline_allocated2(spline_oBR) .or. spline_oBR%isReady /= 1) then
+      ier = 94
+      return
+   endif
+
+   call evbicub_FOmars(p1, p2,  &
+      spline_oBR%x1(1), spline_oBR%n1, &
+      spline_oBR%x2(1), spline_oBR%n2, &
+      spline_oBR%ilin1, spline_oBR%ilin2, &
+      spline_oA%fspl(1,1,1), spline_oBR%fspl(1,1,1), spline_oBPHI%fspl(1,1,1), &
+      spline_oBZ%fspl(1,1,1), spline_oER%fspl(1,1,1), &
+      spline_oEPHI%fspl(1,1,1), spline_oEZ%fspl(1,1,1), &
+      spline_oBR%n1, &
+      fA, fBR, fBPHI, fBZ, fER, fEPHI, fEZ, ifail)
+
+   if(ifail /= 0) ier = 97
+
+end subroutine EZspline_interp2_FOmars
+
+subroutine EZspline_interp2_FOaorsa(spline_oA, spline_oReBR, spline_oReBPHI, &
+   spline_oReBZ, spline_oImBR, spline_oImBPHI, spline_oImBZ, spline_oReER, &
+   spline_oReEPHI, spline_oReEZ, spline_oImER, spline_oImEPHI, spline_oImEZ, &
+   p1, p2, fA, fReBR, fReBPHI, fReBZ, fImBR, fImBPHI, fImBZ, fReER, fReEPHI, &
+   fReEZ, fImER, fImEPHI, fImEZ, ier)
+   !$acc routine seq
+   type(EZspline2) spline_oA, spline_oReBR,spline_oReBPHI,spline_oReBZ
+   type(EZspline2) spline_oImBR,spline_oImBPHI,spline_oImBZ
+   type(EZspline2) spline_oReER,spline_oReEPHI,spline_oReEZ
+   type(EZspline2) spline_oImER,spline_oImEPHI,spline_oImEZ
+   real(fp), intent(in) :: p1, p2
+   real(fp), intent(out):: fA(3)
+   real(fp), intent(out):: fReBR, fReBPHI, fReBZ
+   real(fp), intent(out):: fReER, fReEPHI, fReEZ
+   real(fp), intent(out):: fImBR, fImBPHI, fImBZ
+   real(fp), intent(out):: fImER, fImEPHI, fImEZ
+   integer, intent(out) :: ier
+   integer :: ifail
+   integer:: iwarn = 0
+
+   !$acc routine (EZspline_allocated2) seq
+   !$acc routine (evbicub_FOmars) seq
+
+   ier = 0
+   ifail = 0
+
+   if( .not.EZspline_allocated2(spline_oA) .or. spline_oA%isReady /= 1) then
+      ier = 94
+      return
+   endif
+
+   call evbicub_FOaorsa(p1, p2,  &
+      spline_oA%x1(1), spline_oA%n1, &
+      spline_oA%x2(1), spline_oA%n2, &
+      spline_oA%ilin1, spline_oA%ilin2, &
+      spline_oA%fspl(1,1,1), spline_oReBR%fspl(1,1,1), spline_oReBPHI%fspl(1,1,1), &
+      spline_oReBZ%fspl(1,1,1), spline_oImBR%fspl(1,1,1), spline_oImBPHI%fspl(1,1,1), &
+      spline_oImBZ%fspl(1,1,1),spline_oReER%fspl(1,1,1), &
+      spline_oReEPHI%fspl(1,1,1), spline_oReEZ%fspl(1,1,1),spline_oImER%fspl(1,1,1), &
+      spline_oImEPHI%fspl(1,1,1), spline_oImEZ%fspl(1,1,1), &
+      spline_oA%n1, &
+      fA, fReBR, fReBPHI, fReBZ, fImBR, fImBPHI, fImBZ, &
+      fReER, fReEPHI, fReEZ, fImER, fImEPHI, fImEZ, ifail)
+
+   if(ifail /= 0) ier = 97
+
+end subroutine EZspline_interp2_FOaorsa
+
+subroutine EZspline_interp2_GCvarswE(spline_oA, spline_oEPHI, &
+   p1, p2, fA, fEPHI, ier)
+   !$acc routine seq
+   type(EZspline2) spline_oA,spline_oEPHI
+   real(fp), intent(in) :: p1, p2
+   real(fp), intent(out):: fA(6)
+   real(fp), intent(out):: fEPHI
+   integer, intent(out) :: ier
+   integer :: ifail
+   integer:: iwarn = 0
+
+   !$acc routine (EZspline_allocated2) seq
+   !$acc routine (evbicub_GCvarswE) seq
+
+   ier = 0
+   ifail = 0
+
+   if( .not.EZspline_allocated2(spline_oA) .or. spline_oA%isReady /= 1) then
+      ier = 94
+      return
+   endif
+
+   call evbicub_GCvarswE(p1, p2,  &
+      spline_oA%x1(1), spline_oA%n1, &
+      spline_oA%x2(1), spline_oA%n2, &
+      spline_oA%ilin1, spline_oA%ilin2, &
+      spline_oA%fspl(1,1,1), spline_oEPHI%fspl(1,1,1), &
+      spline_oA%n1, &
+      fA, fEPHI, ifail)
+
+   if(ifail /= 0) ier = 97
+
+end subroutine EZspline_interp2_GCvarswE
+
 subroutine EZspline_interp3_FOvars(spline_oBR, spline_oBPHI, &
    spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, p1, p2, p3, fBR, &
    fBPHI, fBZ, fER, fEPHI, fEZ, ier)
@@ -2476,6 +3056,102 @@ subroutine EZspline_interp2_Bmag(spline_oBR, spline_oBPHI, spline_oBZ, &
    if(ifail /= 0) ier = 97
 
 end subroutine EZspline_interp2_Bmag
+
+subroutine EZspline_interp3_single(spline_o, p1, p2, p3, f, ier)
+   !$acc routine seq
+   implicit none
+   type(EZspline3) spline_o
+   real(fp) p1, p2, p3 ! the location where the interpolation is sought
+   real(fp) f          ! the interpolation
+ 
+   integer, intent(out) :: ier
+   integer ifail
+
+   !$acc routine (EZspline_allocated3) seq
+   !$acc routine (evtricub_single) seq
+ 
+   ier = 0
+   ifail=0
+   if( .not.EZspline_allocated3(spline_o) .or. spline_o%isReady /= 1) then
+     ier =94
+     return
+   end if
+ 
+   call evtricub_single(p1, p2, p3, &
+      spline_o%x1(1), spline_o%n1, &
+      spline_o%x2(1), spline_o%n2, &
+      spline_o%x3(1), spline_o%n3, &
+      spline_o%ilin1, spline_o%ilin2, spline_o%ilin3, &
+      spline_o%fspl(1,1,1,1), spline_o%n1, spline_o%n2, &
+      f, ifail)
+ 
+   if(ifail /= 0) ier = 97
+ 
+end subroutine EZspline_interp3_single
+
+subroutine EZspline_gradient3(spline_o, p1, p2, p3, f, ier)
+   !$acc routine seq
+   implicit none
+   type(EZspline3) spline_o
+   real(fp) p1, p2, p3 ! the location where the interpolation is sought
+   real(fp) f(3)          ! the interpolation
+ 
+   integer, intent(out) :: ier
+   integer ifail
+
+   !$acc routine (EZspline_allocated3) seq
+   !$acc routine (evtricub_gradient3) seq
+ 
+   ier = 0
+   ifail=0
+   if( .not.EZspline_allocated3(spline_o) .or. spline_o%isReady /= 1) then
+     ier =94
+     return
+   end if
+ 
+   call evtricub_gradient3(p1, p2, p3, &
+      spline_o%x1(1), spline_o%n1, &
+      spline_o%x2(1), spline_o%n2, &
+      spline_o%x3(1), spline_o%n3, &
+      spline_o%ilin1, spline_o%ilin2, spline_o%ilin3, &
+      spline_o%fspl(1,1,1,1), spline_o%n1, spline_o%n2, &
+      f, ifail)
+ 
+   if(ifail /= 0) ier = 97
+ 
+end subroutine EZspline_gradient3
+
+subroutine EZspline_interp3_GCvars(spline_o, p1, p2, p3, f, ier)
+   !$acc routine seq
+   implicit none
+   type(EZspline3) spline_o
+   real(fp) p1, p2, p3 ! the location where the interpolation is sought
+   real(fp) f(7)          ! the interpolation
+ 
+   integer, intent(out) :: ier
+   integer ifail
+
+   !$acc routine (EZspline_allocated3) seq
+   !$acc routine (evtricub_laplacian3) seq
+ 
+   ier = 0
+   ifail=0
+   if( .not.EZspline_allocated3(spline_o) .or. spline_o%isReady /= 1) then
+     ier =94
+     return
+   end if
+ 
+   call evtricub_laplacian3(p1, p2, p3, &
+      spline_o%x1(1), spline_o%n1, &
+      spline_o%x2(1), spline_o%n2, &
+      spline_o%x3(1), spline_o%n3, &
+      spline_o%ilin1, spline_o%ilin2, spline_o%ilin3, &
+      spline_o%fspl(1,1,1,1), spline_o%n1, spline_o%n2, &
+      f, ifail)
+ 
+   if(ifail /= 0) ier = 97
+ 
+end subroutine EZspline_interp3_GCvars
 
 logical function EZspline_allocated1(spline_o)
    !$acc routine seq
@@ -2651,6 +3327,621 @@ subroutine evbicub_FOvars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !
    return
 end subroutine evbicub_FOvars
+
+subroutine evbicub_GCvarswE(xget,yget,x,nx,y,ny,ilinx,iliny, &
+   fA,fEPHI,inf2,fvalA,fvalEPHI,ier)
+   !$acc routine seq
+   !
+   !  evaluate a 2d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in both directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm2xy  -- find cell containing (xget,yget)
+   !     fvbicub  -- evaluate interpolant function and (optionally) derivatives
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer inf2
+   !============
+   integer,intent(in) :: nx,ny                     ! grid sizes
+   real(fp) :: xget,yget                    ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   !
+   real(fp) :: fA(0:3,inf2,ny)               ! function data
+   real(fp) :: fEPHI(0:3,inf2,ny)
+   !
+   !       f 2nd dimension inf2 must be .ge. nx
+   !       contents of f:
+   !
+   !  f(0,i,j) = f @ x(i),y(j)
+   !  f(1,i,j) = d2f/dx2 @ x(i),y(j)
+   !  f(2,i,j) = d2f/dy2 @ x(i),y(j)
+   !  f(3,i,j) = d4f/dx2dy2 @ x(i),y(j)
+   !
+   !      (these are spline coefficients selected for continuous 2-
+   !      diffentiability, see mkbicub[w].f90)
+   !
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return d2f/dx2  (0, don't)
+   !  ict(5)=1 -- return d2f/dy2  (0, don't)
+   !  ict(6)=1 -- return d2f/dxdy (0, don't)
+   !                   the number of non zero values ict(1:6)
+   !                   determines the number of outputs...
+   !
+   !  new dmc December 2005 -- access to higher derivatives (even if not
+   !  continuous-- but can only go up to 3rd derivatives on any one coordinate.
+   !     if ict(1)=3 -- want 3rd derivatives
+   !          ict(2)=1 for d3f/dx3
+   !          ict(3)=1 for d3f/dx2dy
+   !          ict(4)=1 for d3f/dxdy2
+   !          ict(5)=1 for d3f/dy3
+   !               number of non-zero values ict(2:5) gives no. of outputs
+   !     if ict(1)=4 -- want 4th derivatives
+   !          ict(2)=1 for d4f/dx3dy
+   !          ict(3)=1 for d4f/dx2dy2
+   !          ict(4)=1 for d4f/dxdy3
+   !               number of non-zero values ict(2:4) gives no. of outputs
+   !     if ict(1)=5 -- want 5th derivatives
+   !          ict(2)=1 for d5f/dx3dy2
+   !          ict(3)=1 for d5f/dx2dy3
+   !               number of non-zero values ict(2:3) gives no. of outputs
+   !     if ict(1)=6 -- want 6th derivatives
+   !          d6f/dx3dy3 -- one value is returned.
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalA(6)                      ! output data
+   real(fp) :: fvalEPHI
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the fourth output (depends on ict(...) spec)
+   !  fval(5) receives the fourth output (depends on ict(...) spec)
+   !  fval(6) receives the fourth output (depends on ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,0,0,1]
+   !   on output fval= [f,df/dx,df/dy,d2f/dxdy], elements 5 & 6 not referenced.
+   !
+   !    on input ict = [1,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,0,1,1,0]
+   !   on output fval= [d2f/dx2,d2f/dy2] ... elements 3 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,1,0,0,0]
+   !   on output fval= [df/dy] ... elements 2 -- 6 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j                      ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !
+   real(fp) :: xparam,yparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy
+   real(fp) :: hxi,hyi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !
+   !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
+   !---------------------------------------------------------------------
+   !$acc routine (herm2xy) seq
+   !$acc routine (fvbicub_laplacian2) seq
+   !
+   i=0
+   j=0
+   call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
+      i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
+   if(ier.ne.0) return
+   !
+   call fvbicub_laplacian2(fvalA,i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub(fvalEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fEPHI,inf2,ny)
+   !
+   return
+end subroutine evbicub_GCvarswE
+
+subroutine evbicub_collision(xget,yget,x,nx,y,ny,ilinx,iliny, &
+   fBR,fBPHI,fBZ,fER,fEPHI,fEZ,fne,fTe,fZeff,inf2,fvalBR,fvalBPHI,fvalBZ, &
+   fvalER,fvalEPHI,fvalEZ,fvalne,fvalTe,fvalZeff,ier)
+   !$acc routine seq
+   !
+   !  evaluate a 2d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in both directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm2xy  -- find cell containing (xget,yget)
+   !     fvbicub  -- evaluate interpolant function and (optionally) derivatives
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer inf2
+   !============
+   integer,intent(in) :: nx,ny                     ! grid sizes
+   real(fp) :: xget,yget                    ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   !
+   real(fp) :: fBR(0:3,inf2,ny)               ! function data
+   real(fp) :: fBPHI(0:3,inf2,ny)
+   real(fp) :: fBZ(0:3,inf2,ny)
+   real(fp) :: fER(0:3,inf2,ny)
+   real(fp) :: fEPHI(0:3,inf2,ny)
+   real(fp) :: fEZ(0:3,inf2,ny)
+   real(fp) :: fne(0:3,inf2,ny)
+   real(fp) :: fTe(0:3,inf2,ny)
+   real(fp) :: fZeff(0:3,inf2,ny)
+   !
+   !       f 2nd dimension inf2 must be .ge. nx
+   !       contents of f:
+   !
+   !  f(0,i,j) = f @ x(i),y(j)
+   !  f(1,i,j) = d2f/dx2 @ x(i),y(j)
+   !  f(2,i,j) = d2f/dy2 @ x(i),y(j)
+   !  f(3,i,j) = d4f/dx2dy2 @ x(i),y(j)
+   !
+   !      (these are spline coefficients selected for continuous 2-
+   !      diffentiability, see mkbicub[w].f90)
+   !
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return d2f/dx2  (0, don't)
+   !  ict(5)=1 -- return d2f/dy2  (0, don't)
+   !  ict(6)=1 -- return d2f/dxdy (0, don't)
+   !                   the number of non zero values ict(1:6)
+   !                   determines the number of outputs...
+   !
+   !  new dmc December 2005 -- access to higher derivatives (even if not
+   !  continuous-- but can only go up to 3rd derivatives on any one coordinate.
+   !     if ict(1)=3 -- want 3rd derivatives
+   !          ict(2)=1 for d3f/dx3
+   !          ict(3)=1 for d3f/dx2dy
+   !          ict(4)=1 for d3f/dxdy2
+   !          ict(5)=1 for d3f/dy3
+   !               number of non-zero values ict(2:5) gives no. of outputs
+   !     if ict(1)=4 -- want 4th derivatives
+   !          ict(2)=1 for d4f/dx3dy
+   !          ict(3)=1 for d4f/dx2dy2
+   !          ict(4)=1 for d4f/dxdy3
+   !               number of non-zero values ict(2:4) gives no. of outputs
+   !     if ict(1)=5 -- want 5th derivatives
+   !          ict(2)=1 for d5f/dx3dy2
+   !          ict(3)=1 for d5f/dx2dy3
+   !               number of non-zero values ict(2:3) gives no. of outputs
+   !     if ict(1)=6 -- want 6th derivatives
+   !          d6f/dx3dy3 -- one value is returned.
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalBR                      ! output data
+   real(fp) :: fvalBPHI
+   real(fp) :: fvalBZ
+   real(fp) :: fvalER
+   real(fp) :: fvalEPHI
+   real(fp) :: fvalEZ
+   real(fp) :: fvalne
+   real(fp) :: fvalTe
+   real(fp) :: fvalZeff
+
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the fourth output (depends on ict(...) spec)
+   !  fval(5) receives the fourth output (depends on ict(...) spec)
+   !  fval(6) receives the fourth output (depends on ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,0,0,1]
+   !   on output fval= [f,df/dx,df/dy,d2f/dxdy], elements 5 & 6 not referenced.
+   !
+   !    on input ict = [1,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,0,1,1,0]
+   !   on output fval= [d2f/dx2,d2f/dy2] ... elements 3 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,1,0,0,0]
+   !   on output fval= [df/dy] ... elements 2 -- 6 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j                      ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !
+   real(fp) :: xparam,yparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy
+   real(fp) :: hxi,hyi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !
+   !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
+   !---------------------------------------------------------------------
+   !$acc routine (herm2xy) seq
+   !$acc routine (fvbicub) seq
+   !
+   i=0
+   j=0
+   call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
+      i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
+   if(ier.ne.0) return
+   !
+   call fvbicub(fvalBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fBR,inf2,ny)
+   call fvbicub(fvalBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fBPHI,inf2,ny)
+   call fvbicub(fvalBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fBZ,inf2,ny)
+   call fvbicub(fvalER,i,j,xparam,yparam,hx,hxi,hy,hyi,fER,inf2,ny)
+   call fvbicub(fvalEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fEPHI,inf2,ny)
+   call fvbicub(fvalEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fEZ,inf2,ny)
+   call fvbicub(fvalne,i,j,xparam,yparam,hx,hxi,hy,hyi,fne,inf2,ny)
+   call fvbicub(fvalTe,i,j,xparam,yparam,hx,hxi,hy,hyi,fTe,inf2,ny)
+   call fvbicub(fvalZeff,i,j,xparam,yparam,hx,hxi,hy,hyi,fZeff,inf2,ny)
+   !
+   return
+end subroutine evbicub_collision
+
+subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
+   fA,fBR,fBPHI,fBZ,fER,fEPHI,fEZ,inf2,fvalA,fvalBR,fvalBPHI,fvalBZ, &
+   fvalER,fvalEPHI,fvalEZ,ier)
+   !$acc routine seq
+   !
+   !  evaluate a 2d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in both directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm2xy  -- find cell containing (xget,yget)
+   !     fvbicub  -- evaluate interpolant function and (optionally) derivatives
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer inf2
+   !============
+   integer,intent(in) :: nx,ny                     ! grid sizes
+   real(fp) :: xget,yget                    ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   !
+   real(fp) :: fA(0:3,inf2,ny)               ! function data
+   real(fp) :: fBR(0:3,inf2,ny)
+   real(fp) :: fBPHI(0:3,inf2,ny)
+   real(fp) :: fBZ(0:3,inf2,ny)
+   real(fp) :: fER(0:3,inf2,ny)
+   real(fp) :: fEPHI(0:3,inf2,ny)
+   real(fp) :: fEZ(0:3,inf2,ny)
+   !
+   !       f 2nd dimension inf2 must be .ge. nx
+   !       contents of f:
+   !
+   !  f(0,i,j) = f @ x(i),y(j)
+   !  f(1,i,j) = d2f/dx2 @ x(i),y(j)
+   !  f(2,i,j) = d2f/dy2 @ x(i),y(j)
+   !  f(3,i,j) = d4f/dx2dy2 @ x(i),y(j)
+   !
+   !      (these are spline coefficients selected for continuous 2-
+   !      diffentiability, see mkbicub[w].f90)
+   !
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return d2f/dx2  (0, don't)
+   !  ict(5)=1 -- return d2f/dy2  (0, don't)
+   !  ict(6)=1 -- return d2f/dxdy (0, don't)
+   !                   the number of non zero values ict(1:6)
+   !                   determines the number of outputs...
+   !
+   !  new dmc December 2005 -- access to higher derivatives (even if not
+   !  continuous-- but can only go up to 3rd derivatives on any one coordinate.
+   !     if ict(1)=3 -- want 3rd derivatives
+   !          ict(2)=1 for d3f/dx3
+   !          ict(3)=1 for d3f/dx2dy
+   !          ict(4)=1 for d3f/dxdy2
+   !          ict(5)=1 for d3f/dy3
+   !               number of non-zero values ict(2:5) gives no. of outputs
+   !     if ict(1)=4 -- want 4th derivatives
+   !          ict(2)=1 for d4f/dx3dy
+   !          ict(3)=1 for d4f/dx2dy2
+   !          ict(4)=1 for d4f/dxdy3
+   !               number of non-zero values ict(2:4) gives no. of outputs
+   !     if ict(1)=5 -- want 5th derivatives
+   !          ict(2)=1 for d5f/dx3dy2
+   !          ict(3)=1 for d5f/dx2dy3
+   !               number of non-zero values ict(2:3) gives no. of outputs
+   !     if ict(1)=6 -- want 6th derivatives
+   !          d6f/dx3dy3 -- one value is returned.
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalA(3)                      ! output data
+   real(fp) :: fvalBR
+   real(fp) :: fvalBPHI
+   real(fp) :: fvalBZ
+   real(fp) :: fvalER
+   real(fp) :: fvalEPHI
+   real(fp) :: fvalEZ
+
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the fourth output (depends on ict(...) spec)
+   !  fval(5) receives the fourth output (depends on ict(...) spec)
+   !  fval(6) receives the fourth output (depends on ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,0,0,1]
+   !   on output fval= [f,df/dx,df/dy,d2f/dxdy], elements 5 & 6 not referenced.
+   !
+   !    on input ict = [1,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,0,1,1,0]
+   !   on output fval= [d2f/dx2,d2f/dy2] ... elements 3 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,1,0,0,0]
+   !   on output fval= [df/dy] ... elements 2 -- 6 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j                      ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !
+   real(fp) :: xparam,yparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy
+   real(fp) :: hxi,hyi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !
+   !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
+   !---------------------------------------------------------------------
+   !$acc routine (herm2xy) seq
+   !$acc routine (fvbicub) seq
+   !
+   i=0
+   j=0
+   call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
+      i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
+   if(ier.ne.0) return
+   !
+   call fvbicub(fvalA(1),i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub_grad(fvalA(2:3),i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub(fvalBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fBR,inf2,ny)
+   call fvbicub(fvalBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fBPHI,inf2,ny)
+   call fvbicub(fvalBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fBZ,inf2,ny)
+   call fvbicub(fvalER,i,j,xparam,yparam,hx,hxi,hy,hyi,fER,inf2,ny)
+   call fvbicub(fvalEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fEPHI,inf2,ny)
+   call fvbicub(fvalEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fEZ,inf2,ny)
+   !
+   return
+end subroutine evbicub_FOmars
+
+subroutine evbicub_FOaorsa(xget,yget,x,nx,y,ny,ilinx,iliny, &
+   fA,fReBR,fReBPHI,fReBZ,fImBR,fImBPHI,fImBZ,fReER,fReEPHI,fReEZ,&
+   fImER,fImEPHI,fImEZ,inf2,fvalA,fvalReBR,fvalReBPHI,fvalReBZ,&
+   fvalImBR,fvalImBPHI,fvalImBZ, &
+   fvalReER,fvalReEPHI,fvalReEZ,fvalImER,fvalImEPHI,fvalImEZ,ier)
+   !$acc routine seq
+   !
+   !  evaluate a 2d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in both directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm2xy  -- find cell containing (xget,yget)
+   !     fvbicub  -- evaluate interpolant function and (optionally) derivatives
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer inf2
+   !============
+   integer,intent(in) :: nx,ny                     ! grid sizes
+   real(fp) :: xget,yget                    ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   !
+   real(fp) :: fA(0:3,inf2,ny)               ! function data
+   real(fp) :: fReBR(0:3,inf2,ny)
+   real(fp) :: fReBPHI(0:3,inf2,ny)
+   real(fp) :: fReBZ(0:3,inf2,ny)
+   real(fp) :: fReER(0:3,inf2,ny)
+   real(fp) :: fReEPHI(0:3,inf2,ny)
+   real(fp) :: fReEZ(0:3,inf2,ny)
+   real(fp) :: fImBR(0:3,inf2,ny)
+   real(fp) :: fImBPHI(0:3,inf2,ny)
+   real(fp) :: fImBZ(0:3,inf2,ny)
+   real(fp) :: fImER(0:3,inf2,ny)
+   real(fp) :: fImEPHI(0:3,inf2,ny)
+   real(fp) :: fImEZ(0:3,inf2,ny)
+   !
+   !       f 2nd dimension inf2 must be .ge. nx
+   !       contents of f:
+   !
+   !  f(0,i,j) = f @ x(i),y(j)
+   !  f(1,i,j) = d2f/dx2 @ x(i),y(j)
+   !  f(2,i,j) = d2f/dy2 @ x(i),y(j)
+   !  f(3,i,j) = d4f/dx2dy2 @ x(i),y(j)
+   !
+   !      (these are spline coefficients selected for continuous 2-
+   !      diffentiability, see mkbicub[w].f90)
+   !
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return d2f/dx2  (0, don't)
+   !  ict(5)=1 -- return d2f/dy2  (0, don't)
+   !  ict(6)=1 -- return d2f/dxdy (0, don't)
+   !                   the number of non zero values ict(1:6)
+   !                   determines the number of outputs...
+   !
+   !  new dmc December 2005 -- access to higher derivatives (even if not
+   !  continuous-- but can only go up to 3rd derivatives on any one coordinate.
+   !     if ict(1)=3 -- want 3rd derivatives
+   !          ict(2)=1 for d3f/dx3
+   !          ict(3)=1 for d3f/dx2dy
+   !          ict(4)=1 for d3f/dxdy2
+   !          ict(5)=1 for d3f/dy3
+   !               number of non-zero values ict(2:5) gives no. of outputs
+   !     if ict(1)=4 -- want 4th derivatives
+   !          ict(2)=1 for d4f/dx3dy
+   !          ict(3)=1 for d4f/dx2dy2
+   !          ict(4)=1 for d4f/dxdy3
+   !               number of non-zero values ict(2:4) gives no. of outputs
+   !     if ict(1)=5 -- want 5th derivatives
+   !          ict(2)=1 for d5f/dx3dy2
+   !          ict(3)=1 for d5f/dx2dy3
+   !               number of non-zero values ict(2:3) gives no. of outputs
+   !     if ict(1)=6 -- want 6th derivatives
+   !          d6f/dx3dy3 -- one value is returned.
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalA(3)                      ! output data
+   real(fp) :: fvalReBR
+   real(fp) :: fvalReBPHI
+   real(fp) :: fvalReBZ
+   real(fp) :: fvalReER
+   real(fp) :: fvalReEPHI
+   real(fp) :: fvalReEZ
+   real(fp) :: fvalImBR
+   real(fp) :: fvalImBPHI
+   real(fp) :: fvalImBZ
+   real(fp) :: fvalImER
+   real(fp) :: fvalImEPHI
+   real(fp) :: fvalImEZ
+
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the fourth output (depends on ict(...) spec)
+   !  fval(5) receives the fourth output (depends on ict(...) spec)
+   !  fval(6) receives the fourth output (depends on ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,0,0,1]
+   !   on output fval= [f,df/dx,df/dy,d2f/dxdy], elements 5 & 6 not referenced.
+   !
+   !    on input ict = [1,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,0,1,1,0]
+   !   on output fval= [d2f/dx2,d2f/dy2] ... elements 3 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,1,0,0,0]
+   !   on output fval= [df/dy] ... elements 2 -- 6 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j                      ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !
+   real(fp) :: xparam,yparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy
+   real(fp) :: hxi,hyi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !
+   !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
+   !---------------------------------------------------------------------
+   !$acc routine (herm2xy) seq
+   !$acc routine (fvbicub) seq
+   !
+   i=0
+   j=0
+   call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
+      i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
+   if(ier.ne.0) return
+   !
+   call fvbicub(fvalA(1),i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub_grad(fvalA(2:3),i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub(fvalReBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fReBR,inf2,ny)
+   call fvbicub(fvalReBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fReBPHI,inf2,ny)
+   call fvbicub(fvalReBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fReBZ,inf2,ny)
+   call fvbicub(fvalReER,i,j,xparam,yparam,hx,hxi,hy,hyi,fReER,inf2,ny)
+   call fvbicub(fvalReEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fReEPHI,inf2,ny)
+   call fvbicub(fvalReEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fReEZ,inf2,ny)
+   call fvbicub(fvalImBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fImBR,inf2,ny)
+   call fvbicub(fvalImBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fImBPHI,inf2,ny)
+   call fvbicub(fvalImBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fImBZ,inf2,ny)
+   call fvbicub(fvalImER,i,j,xparam,yparam,hx,hxi,hy,hyi,fImER,inf2,ny)
+   call fvbicub(fvalImEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fImEPHI,inf2,ny)
+   call fvbicub(fvalImEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fImEZ,inf2,ny)
+   !
+   return
+end subroutine evbicub_FOaorsa
 
 subroutine evbicub_single(xget,yget,x,nx,y,ny,ilinx,iliny, &
    fBR,inf2,fvalBR,ier)
@@ -3221,6 +4512,450 @@ subroutine evtricub_FOvars(xget,yget,zget,x,nx,y,ny,z,nz, &
    return
 end subroutine evtricub_FOvars
 
+subroutine evtricub_single(xget,yget,zget,x,nx,y,ny,z,nz, &
+   ilinx,iliny,ilinz,fBR,inf2,inf3,fvalBR,ier)
+   !$acc routine seq
+   !
+   !  use mktricub to set up spline coefficients...
+   !
+   !  evaluate a 3d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in all directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm3xyz  -- find cell containing (xget,yget,zget)
+   !     fvtricub  -- evaluate the spline function (w/derivatives if req.)
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer ny,nz,inf2,inf3,nx
+   !============
+   real(fp) :: xget,yget,zget               ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   real(fp) :: z(nz)                        ! ordered z grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   integer ilinz                     ! ilinz=1 => assume z evenly spaced
+   !
+   real(fp) :: fBR(0:7,inf2,inf3,nz)          ! function data
+   !
+   !       f 2nd dimension inf2 must be .ge. nx; 3rd dim inf3 .ge. ny
+   !       contents of f:
+   !
+   !  f(0,i,j,k) = f @ x(i),y(j),z(k)
+   !  f(1,i,j,k) = d2f/dx2 @ x(i),y(j),z(k)
+   !  f(2,i,j,k) = d2f/dy2 @ x(i),y(j),z(k)
+   !  f(3,i,j,k) = d2f/dz2 @ x(i),y(j),z(k)
+   !  f(4,i,j,k) = d4f/dx2dy2 @ x(i),y(j),z(k)
+   !  f(5,i,j,k) = d4f/dx2dz2 @ x(i),y(j),z(k)
+   !  f(6,i,j,k) = d4f/dy2dz2 @ x(i),y(j),z(k)
+   !  f(7,i,j,k) = d6f/dx2dy2dz2 @ x(i),y(j),z(k)
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return df/dz  (0, don't)
+   !  ict(5)=1 -- return d2f/dx2  (0, don't)
+   !  ict(6)=1 -- return d2f/dy2  (0, don't)
+   !  ict(7)=1 -- return d2f/dz2  (0, don't)
+   !  ict(8)=1 -- return d2f/dxdy (0, don't)
+   !  ict(9)=1 -- return d2f/dxdz (0, don't)
+   !  ict(10)=1-- return d2f/dydz (0, don't)
+   !
+   !  (new dmc Dec 2005 -- higher derivatives available)
+   !    ict(1)=3 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:8) select: fxxy fxxz fxyy fxyz fxzz fyyz fyzz
+   !      ->note ict(1)=3, ict(5)=1 gives fxyz = d3f/dxdydz
+   !    ict(1)=-3 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:4) select: fxxx fyyy fzzz
+   !    ict(1)=4 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:7) select: fxxyy fxxyz fxxzz fxyyz fxyzz fyyzz
+   !    ict(1)=-4 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:7) select: fxxxy fxxxz fxyyy fxzzz fyyyz fyzzz
+   !    ict(1)=5 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:4) select: fxxyyz fxxyzz fxyyzz
+   !    ict(1)=-5 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:10) select:  fxxxyy fxxxyz fxxxzz fxxyyy fxxzzz
+   !                         fxyyyz fxyzzz fyyyzz fzzzyy
+   !    ict(1)=6 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      fxxyyzz
+   !    ict(1)=-6 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:10) select: fxxxyyy fxxxyyz fxxxyzz fxxxyyz
+   !                        fxxyyyz fxxyzzz fxyyyzz fxyyzzz fyyyzzz
+   !    ict(1)=-7 --> 7th derivative
+   !      ict(2:7) select: fxxxyyyz fxxxyyzz fxxxyzzz
+   !                       fxxyyyzz fxxyyzzz fxyyyzzz
+   !    ict(1)=-8 --> 8th derivative
+   !      ict(2:4) select: fxxxyyyzz fxxxyyzzz fxxyyyzzz
+   !    ict(1)=-9 --> 9th derivative:  fxxxyyyzzz
+   !
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalBR                     ! output data
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the 4th output (depends on ict(...) spec)
+   !  fval(5-10) receive 5th thru 10th outputs (if required by ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,1,0,0,0,0,0,0,0]
+   !   on output fval= [f,df/dx,df/dy,df/dz]
+   !
+   !    on input ict = [1,0,0,0,0,0,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2-10 never referenced
+   !
+   !    on input ict = [0,1,1,0,0,0,0,0,0,0,0]
+   !   on output fval= [df/dx,df/dy] ... elements 3-10 never referenced
+   !
+   !    on input ict = [0,0,0,0,1,0,0,0,0,0,0]
+   !   on output fval= [d2f/dx2] ... elements 2-10 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j,k                     ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j),z(k)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !    zparam=0 @z(k)  zparam=1 @z(k+1)
+   !
+   real(fp) :: xparam,yparam,zparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy,hz
+   real(fp) :: hxi,hyi,hzi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !  0 .le. zparam .le. 1
+   !
+   !---------------------------------------------------------------------
+   !  use lookup routine as in Hermite interpolation
+   !$acc routine (herm3xyz) seq
+   !$acc routine (fvtricub) seq
+   !
+   i=0
+   j=0
+   k=0
+   call herm3xyz(xget,yget,zget,x,nx,y,ny,z,nz,ilinx,iliny,ilinz, &
+      i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi,ier)
+   if(ier.ne.0) return
+   !
+   call fvtricub(fvalBR,i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi,fBR,inf2,inf3,nz)
+   !
+   return
+end subroutine evtricub_single
+
+subroutine evtricub_gradient3(xget,yget,zget,x,nx,y,ny,z,nz, &
+   ilinx,iliny,ilinz,fBR,inf2,inf3,fvalBR,ier)
+   !$acc routine seq
+   !
+   !  use mktricub to set up spline coefficients...
+   !
+   !  evaluate a 3d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in all directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm3xyz  -- find cell containing (xget,yget,zget)
+   !     fvtricub  -- evaluate the spline function (w/derivatives if req.)
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer ny,nz,inf2,inf3,nx
+   !============
+   real(fp) :: xget,yget,zget               ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   real(fp) :: z(nz)                        ! ordered z grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   integer ilinz                     ! ilinz=1 => assume z evenly spaced
+   !
+   real(fp) :: fBR(0:7,inf2,inf3,nz)          ! function data
+   !
+   !       f 2nd dimension inf2 must be .ge. nx; 3rd dim inf3 .ge. ny
+   !       contents of f:
+   !
+   !  f(0,i,j,k) = f @ x(i),y(j),z(k)
+   !  f(1,i,j,k) = d2f/dx2 @ x(i),y(j),z(k)
+   !  f(2,i,j,k) = d2f/dy2 @ x(i),y(j),z(k)
+   !  f(3,i,j,k) = d2f/dz2 @ x(i),y(j),z(k)
+   !  f(4,i,j,k) = d4f/dx2dy2 @ x(i),y(j),z(k)
+   !  f(5,i,j,k) = d4f/dx2dz2 @ x(i),y(j),z(k)
+   !  f(6,i,j,k) = d4f/dy2dz2 @ x(i),y(j),z(k)
+   !  f(7,i,j,k) = d6f/dx2dy2dz2 @ x(i),y(j),z(k)
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return df/dz  (0, don't)
+   !  ict(5)=1 -- return d2f/dx2  (0, don't)
+   !  ict(6)=1 -- return d2f/dy2  (0, don't)
+   !  ict(7)=1 -- return d2f/dz2  (0, don't)
+   !  ict(8)=1 -- return d2f/dxdy (0, don't)
+   !  ict(9)=1 -- return d2f/dxdz (0, don't)
+   !  ict(10)=1-- return d2f/dydz (0, don't)
+   !
+   !  (new dmc Dec 2005 -- higher derivatives available)
+   !    ict(1)=3 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:8) select: fxxy fxxz fxyy fxyz fxzz fyyz fyzz
+   !      ->note ict(1)=3, ict(5)=1 gives fxyz = d3f/dxdydz
+   !    ict(1)=-3 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:4) select: fxxx fyyy fzzz
+   !    ict(1)=4 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:7) select: fxxyy fxxyz fxxzz fxyyz fxyzz fyyzz
+   !    ict(1)=-4 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:7) select: fxxxy fxxxz fxyyy fxzzz fyyyz fyzzz
+   !    ict(1)=5 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:4) select: fxxyyz fxxyzz fxyyzz
+   !    ict(1)=-5 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:10) select:  fxxxyy fxxxyz fxxxzz fxxyyy fxxzzz
+   !                         fxyyyz fxyzzz fyyyzz fzzzyy
+   !    ict(1)=6 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      fxxyyzz
+   !    ict(1)=-6 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:10) select: fxxxyyy fxxxyyz fxxxyzz fxxxyyz
+   !                        fxxyyyz fxxyzzz fxyyyzz fxyyzzz fyyyzzz
+   !    ict(1)=-7 --> 7th derivative
+   !      ict(2:7) select: fxxxyyyz fxxxyyzz fxxxyzzz
+   !                       fxxyyyzz fxxyyzzz fxyyyzzz
+   !    ict(1)=-8 --> 8th derivative
+   !      ict(2:4) select: fxxxyyyzz fxxxyyzzz fxxyyyzzz
+   !    ict(1)=-9 --> 9th derivative:  fxxxyyyzzz
+   !
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalBR(3)                     ! output data
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the 4th output (depends on ict(...) spec)
+   !  fval(5-10) receive 5th thru 10th outputs (if required by ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,1,0,0,0,0,0,0,0]
+   !   on output fval= [f,df/dx,df/dy,df/dz]
+   !
+   !    on input ict = [1,0,0,0,0,0,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2-10 never referenced
+   !
+   !    on input ict = [0,1,1,0,0,0,0,0,0,0,0]
+   !   on output fval= [df/dx,df/dy] ... elements 3-10 never referenced
+   !
+   !    on input ict = [0,0,0,0,1,0,0,0,0,0,0]
+   !   on output fval= [d2f/dx2] ... elements 2-10 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j,k                     ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j),z(k)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !    zparam=0 @z(k)  zparam=1 @z(k+1)
+   !
+   real(fp) :: xparam,yparam,zparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy,hz
+   real(fp) :: hxi,hyi,hzi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !  0 .le. zparam .le. 1
+   !
+   !---------------------------------------------------------------------
+   !  use lookup routine as in Hermite interpolation
+   !$acc routine (herm3xyz) seq
+   !$acc routine (fvtricub_gradient) seq
+   !
+   i=0
+   j=0
+   k=0
+   call herm3xyz(xget,yget,zget,x,nx,y,ny,z,nz,ilinx,iliny,ilinz, &
+      i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi,ier)
+   if(ier.ne.0) return
+   !
+   call fvtricub_gradient(fvalBR,i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi,fBR,inf2,inf3,nz)
+   !
+   return
+end subroutine evtricub_gradient3
+
+subroutine evtricub_laplacian3(xget,yget,zget,x,nx,y,ny,z,nz, &
+   ilinx,iliny,ilinz,fBR,inf2,inf3,fvalBR,ier)
+   !$acc routine seq
+   !
+   !  use mktricub to set up spline coefficients...
+   !
+   !  evaluate a 3d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in all directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm3xyz  -- find cell containing (xget,yget,zget)
+   !     fvtricub  -- evaluate the spline function (w/derivatives if req.)
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer ny,nz,inf2,inf3,nx
+   !============
+   real(fp) :: xget,yget,zget               ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   real(fp) :: z(nz)                        ! ordered z grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   integer ilinz                     ! ilinz=1 => assume z evenly spaced
+   !
+   real(fp) :: fBR(0:7,inf2,inf3,nz)          ! function data
+   !
+   !       f 2nd dimension inf2 must be .ge. nx; 3rd dim inf3 .ge. ny
+   !       contents of f:
+   !
+   !  f(0,i,j,k) = f @ x(i),y(j),z(k)
+   !  f(1,i,j,k) = d2f/dx2 @ x(i),y(j),z(k)
+   !  f(2,i,j,k) = d2f/dy2 @ x(i),y(j),z(k)
+   !  f(3,i,j,k) = d2f/dz2 @ x(i),y(j),z(k)
+   !  f(4,i,j,k) = d4f/dx2dy2 @ x(i),y(j),z(k)
+   !  f(5,i,j,k) = d4f/dx2dz2 @ x(i),y(j),z(k)
+   !  f(6,i,j,k) = d4f/dy2dz2 @ x(i),y(j),z(k)
+   !  f(7,i,j,k) = d6f/dx2dy2dz2 @ x(i),y(j),z(k)
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return df/dz  (0, don't)
+   !  ict(5)=1 -- return d2f/dx2  (0, don't)
+   !  ict(6)=1 -- return d2f/dy2  (0, don't)
+   !  ict(7)=1 -- return d2f/dz2  (0, don't)
+   !  ict(8)=1 -- return d2f/dxdy (0, don't)
+   !  ict(9)=1 -- return d2f/dxdz (0, don't)
+   !  ict(10)=1-- return d2f/dydz (0, don't)
+   !
+   !  (new dmc Dec 2005 -- higher derivatives available)
+   !    ict(1)=3 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:8) select: fxxy fxxz fxyy fxyz fxzz fyyz fyzz
+   !      ->note ict(1)=3, ict(5)=1 gives fxyz = d3f/dxdydz
+   !    ict(1)=-3 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:4) select: fxxx fyyy fzzz
+   !    ict(1)=4 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:7) select: fxxyy fxxyz fxxzz fxyyz fxyzz fyyzz
+   !    ict(1)=-4 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:7) select: fxxxy fxxxz fxyyy fxzzz fyyyz fyzzz
+   !    ict(1)=5 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      ict(2:4) select: fxxyyz fxxyzz fxyyzz
+   !    ict(1)=-5 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:10) select:  fxxxyy fxxxyz fxxxzz fxxyyy fxxzzz
+   !                         fxyyyz fxyzzz fyyyzz fzzzyy
+   !    ict(1)=6 --> 3rd derivative, .le.2 diff. in any coordinate
+   !      fxxyyzz
+   !    ict(1)=-6 --> 3rd derivative, 3 in one coordinate
+   !      ict(2:10) select: fxxxyyy fxxxyyz fxxxyzz fxxxyyz
+   !                        fxxyyyz fxxyzzz fxyyyzz fxyyzzz fyyyzzz
+   !    ict(1)=-7 --> 7th derivative
+   !      ict(2:7) select: fxxxyyyz fxxxyyzz fxxxyzzz
+   !                       fxxyyyzz fxxyyzzz fxyyyzzz
+   !    ict(1)=-8 --> 8th derivative
+   !      ict(2:4) select: fxxxyyyzz fxxxyyzzz fxxyyyzzz
+   !    ict(1)=-9 --> 9th derivative:  fxxxyyyzzz
+   !
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalBR(7)                     ! output data
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the 4th output (depends on ict(...) spec)
+   !  fval(5-10) receive 5th thru 10th outputs (if required by ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,1,0,0,0,0,0,0,0]
+   !   on output fval= [f,df/dx,df/dy,df/dz]
+   !
+   !    on input ict = [1,0,0,0,0,0,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2-10 never referenced
+   !
+   !    on input ict = [0,1,1,0,0,0,0,0,0,0,0]
+   !   on output fval= [df/dx,df/dy] ... elements 3-10 never referenced
+   !
+   !    on input ict = [0,0,0,0,1,0,0,0,0,0,0]
+   !   on output fval= [d2f/dx2] ... elements 2-10 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j,k                     ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j),z(k)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !    zparam=0 @z(k)  zparam=1 @z(k+1)
+   !
+   real(fp) :: xparam,yparam,zparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy,hz
+   real(fp) :: hxi,hyi,hzi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !  0 .le. zparam .le. 1
+   !
+   !---------------------------------------------------------------------
+   !  use lookup routine as in Hermite interpolation
+   !$acc routine (herm3xyz) seq
+   !$acc routine (fvtricub_laplacian3) seq
+   !
+   i=0
+   j=0
+   k=0
+   call herm3xyz(xget,yget,zget,x,nx,y,ny,z,nz,ilinx,iliny,ilinz, &
+      i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi,ier)
+   if(ier.ne.0) return
+   !
+   call fvtricub_laplacian3(fvalBR,i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi,fBR,inf2,inf3,nz)
+   !
+   return
+end subroutine evtricub_laplacian3
+
 subroutine herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
    i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
    !---------------------------------------------------------------------
@@ -3781,9 +5516,6 @@ subroutine fvbicub_grad(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
    real(fp) :: z36th,xp,xpi,xp2,xpi2,cx,cxi,hx2,yp,ypi,yp2,ypi2,cy
    real(fp) :: cyi,hy2,cxd,cxdi,cyd,cydi
    !============
-   integer ict(6)                    ! requested output control
-   integer ivec                      ! vector length
-   integer ivecd                     ! vector dimension (1st dim of fval)
    !
    integer i,j       ! target cells (i,j)
    real(fp) :: xparam,yparam
@@ -3913,6 +5645,295 @@ subroutine fvbicub_grad(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
 
    return
 end subroutine fvbicub_grad
+
+subroutine fvbicub_laplacian2(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
+   fin,inf2,ny)
+   !$acc routine seq
+   !
+   !============
+   implicit none
+   integer ny,inf2,iadr,i,j
+   !============
+   real(fp) :: z36th,xp,xpi,xp2,xpi2,cx,cxi,hx2,yp,ypi,yp2,ypi2,cy
+   real(fp) :: cyi,hy2,cxd,cxdi,cyd,cydi
+   !============
+   !
+   real(fp) :: xparam,yparam
+   ! normalized displacements from (i,j) corners
+   !
+   real(fp) :: hx,hy           ! grid spacing, and
+   real(fp) :: hxi,hyi          ! inverse grid spacing 1/(x(i+1)-x(i))
+   ! & 1/(y(j+1)-y(j))
+   !
+   real(fp) :: fin(0:3,inf2,ny)             ! interpolant data (cf "evbicub")
+   !
+   real(fp) :: fval(6)                ! output returned
+   !
+   !  for detailed description of fin, ict and fval see subroutine
+   !  evbicub comments.  Note ict is not vectorized; the same output
+   !  is expected to be returned for all input vector data points.
+   !
+   !  note that the index inputs ii,jj and parameter inputs
+   !     xparam,yparam,hx,hxi,hy,hyi are vectorized, and the
+   !     output array fval has a vector ** 1st dimension ** whose
+   !     size must be given as a separate argument
+   !
+   !  to use this routine in scalar mode, pass in ivec=ivecd=1
+   !
+   !---------------
+   !  Spline evaluation consists of a "mixing" of the interpolant
+   !  data using the linear functionals xparam, xpi = 1-xparam,
+   !  yparam, ypi = 1-yparam, and the cubic functionals
+   !  xparam**3-xparam, xpi**3-xpi, yparam**3-yparam, ypi**3-ypi ...
+   !  and their derivatives as needed.
+   !
+   real(fp) :: sum
+   !
+   real(fp), parameter :: sixth = 0.166666666666666667_fp
+   !
+   !---------------
+   !   ...in x direction
+   !
+   z36th=sixth*sixth
+   iadr=0
+   !
+   !
+   !  function value:
+   !
+   iadr=iadr+1
+   !
+   !  in x direction...
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   sum=xpi*(ypi*fin(0,i,j)  +yp*fin(0,i,j+1))+ &
+      xp*(ypi*fin(0,i+1,j)+yp*fin(0,i+1,j+1))
+   !
+   sum=sum+sixth*hx2*( &
+      cxi*(ypi*fin(1,i,j)  +yp*fin(1,i,j+1))+ &
+      cx*(ypi*fin(1,i+1,j)+yp*fin(1,i+1,j+1)))
+   !
+   sum=sum+sixth*hy2*( &
+      xpi*(cyi*fin(2,i,j)  +cy*fin(2,i,j+1))+ &
+      xp*(cyi*fin(2,i+1,j)+cy*fin(2,i+1,j+1)))
+   !
+   sum=sum+z36th*hx2*hy2*( &
+      cxi*(cyi*fin(3,i,j)  +cy*fin(3,i,j+1))+ &
+      cx*(cyi*fin(3,i+1,j)+cy*fin(3,i+1,j+1)))
+   !
+   fval(iadr)=sum
+   !
+   !
+   !  df/dx:
+   !
+   iadr=iadr+1
+   !
+   !  in x direction...
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+
+   cxd=3.0_fp*xp2-1.0_fp
+   cxdi=-3.0_fp*xpi2+1.0_fp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   sum=hxi*( &
+      -(ypi*fin(0,i,j)  +yp*fin(0,i,j+1)) &
+      +(ypi*fin(0,i+1,j)+yp*fin(0,i+1,j+1)))
+   !
+   sum=sum+sixth*hx*( &
+      cxdi*(ypi*fin(1,i,j)  +yp*fin(1,i,j+1))+ &
+      cxd*(ypi*fin(1,i+1,j)+yp*fin(1,i+1,j+1)))
+   !
+   sum=sum+sixth*hxi*hy2*( &
+      -(cyi*fin(2,i,j)  +cy*fin(2,i,j+1)) &
+      +(cyi*fin(2,i+1,j)+cy*fin(2,i+1,j+1)))
+   !
+   sum=sum+z36th*hx*hy2*( &
+      cxdi*(cyi*fin(3,i,j)  +cy*fin(3,i,j+1))+ &
+      cxd*(cyi*fin(3,i+1,j)+cy*fin(3,i+1,j+1)))
+   !
+   fval(iadr)=sum
+   !
+   !  df/dy:
+   !
+   iadr=iadr+1
+   !
+   !  in x direction...
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+
+   cyd=3.0_fp*yp2-1.0_fp
+   cydi=-3.0_fp*ypi2+1.0_fp
+   !
+   sum=hyi*( &
+      xpi*(-fin(0,i,j)  +fin(0,i,j+1))+ &
+      xp*(-fin(0,i+1,j)+fin(0,i+1,j+1)))
+   !
+   sum=sum+sixth*hx2*hyi*( &
+      cxi*(-fin(1,i,j)  +fin(1,i,j+1))+ &
+      cx*(-fin(1,i+1,j)+fin(1,i+1,j+1)))
+   !
+   sum=sum+sixth*hy*( &
+      xpi*(cydi*fin(2,i,j)  +cyd*fin(2,i,j+1))+ &
+      xp*(cydi*fin(2,i+1,j)+cyd*fin(2,i+1,j+1)))
+   !
+   sum=sum+z36th*hx2*hy*( &
+      cxi*(cydi*fin(3,i,j)  +cyd*fin(3,i,j+1))+ &
+      cx*(cydi*fin(3,i+1,j)+cyd*fin(3,i+1,j+1)))
+   !
+   fval(iadr)=sum
+   !
+   !
+   !  d2f/dx2:
+   !
+   iadr=iadr+1
+   !
+   !  in x direction...
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   sum=( &
+      xpi*(ypi*fin(1,i,j)  +yp*fin(1,i,j+1))+ &
+      xp*(ypi*fin(1,i+1,j)+yp*fin(1,i+1,j+1)))
+   !
+   sum=sum+sixth*hy2*( &
+      xpi*(cyi*fin(3,i,j)  +cy*fin(3,i,j+1))+ &
+      xp*(cyi*fin(3,i+1,j)+cy*fin(3,i+1,j+1)))
+   !
+   fval(iadr)=sum
+   !
+   !  d2f/dy2:
+   !
+   iadr=iadr+1
+   !
+   !  in x direction...
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   !
+   sum=( &
+      xpi*(ypi*fin(2,i,j)  +yp*fin(2,i,j+1))+ &
+      xp*(ypi*fin(2,i+1,j)+yp*fin(2,i+1,j+1)))
+   !
+   sum=sum+sixth*hx2*( &
+      cxi*(ypi*fin(3,i,j)  +yp*fin(3,i,j+1))+ &
+      cx*(ypi*fin(3,i+1,j)+yp*fin(3,i+1,j+1)))
+   !
+   fval(iadr)=sum
+   !
+   !
+   !  d2f/dxdy:
+   !
+   iadr=iadr+1
+   !
+   !  in x direction...
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+
+   cxd=3.0_fp*xp2-1.0_fp
+   cxdi=-3.0_fp*xpi2+1.0_fp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+
+   cyd=3.0_fp*yp2-1.0_fp
+   cydi=-3.0_fp*ypi2+1.0_fp
+   !
+   sum=hxi*hyi*( &
+      fin(0,i,j)  -fin(0,i,j+1) &
+      -fin(0,i+1,j)+fin(0,i+1,j+1))
+   !
+   sum=sum+sixth*hx*hyi*( &
+      cxdi*(-fin(1,i,j)  +fin(1,i,j+1))+ &
+      cxd*(-fin(1,i+1,j)+fin(1,i+1,j+1)))
+   !
+   sum=sum+sixth*hxi*hy*( &
+      -(cydi*fin(2,i,j)  +cyd*fin(2,i,j+1)) &
+      +(cydi*fin(2,i+1,j)+cyd*fin(2,i+1,j+1)))
+   !
+   sum=sum+z36th*hx*hy*( &
+      cxdi*(cydi*fin(3,i,j)  +cyd*fin(3,i,j+1))+ &
+      cxd*(cydi*fin(3,i+1,j)+cyd*fin(3,i+1,j+1)))
+   !
+   fval(iadr)=sum
+   !
+   return
+end subroutine fvbicub_laplacian2
 
 subroutine fvtricub(fval,i,j,k,xparam,yparam,zparam, &
    hx,hxi,hy,hyi,hz,hzi, &
@@ -4068,6 +6089,1056 @@ subroutine fvtricub(fval,i,j,k,xparam,yparam,zparam, &
 
    return
 end subroutine fvtricub
+
+subroutine fvtricub_gradient(fval,i,j,k,xparam,yparam,zparam, &
+      hx,hxi,hy,hyi,hz,hzi, &
+      fin,inf2,inf3,nz)
+   !
+   !  use mktricub to set up spline coefficients...
+   !
+   !============
+   implicit none
+   integer inf3,nz,inf2,iadr,i,j,k
+   !============
+   real(fp) :: z36th,z216th,xp,xpi,xp2,xpi2,cx,cxi,hx2,yp,ypi,yp2
+   real(fp) :: ypi2,cy,cyi,hy2,zp,zpi,zp2,zpi2,cz,czi,hz2,cxd,cxdi
+   real(fp) :: cyd,cydi,czd,czdi
+   !============
+   real(fp) :: xparam,yparam,zparam
+   ! normalized displacements from (i,j,k) corners
+   !
+   real(fp) :: hx,hy,hz  ! grid spacing, and
+   real(fp) :: hxi,hyi,hzi ! inverse grid spacing
+   ! 1/(x(i+1)-x(i)) & 1/(y(j+1)-y(j)) & 1/(z(k+1)-z(i))
+   !
+   real(fp) :: fin(0:7,inf2,inf3,nz)        ! interpolant data (cf "evtricub")
+   !
+   real(fp) :: fval(3)               ! output returned
+   !
+   !  for detailed description of fin, ict and fval see subroutine evtricub
+   !  comments.  Note ict is not vectorized; the same output
+   !  is expected to be returned for all input vector data points.
+   !
+   !  note that the index inputs ii,jj,kk and parameter inputs
+   !     xparam,yparam,zparam,hx,hxi,hy,hyi,hz,hzi are vectorized, and the
+   !     output array fval has a vector ** 1st dimension ** whose
+   !     size must be given as a separate argument
+   !
+   !  to use this routine in scalar mode, pass in ivec=ivecd=1
+   !
+   !---------------
+   !
+   integer v
+   !
+   real(fp) :: sum
+   real(fp), parameter :: sixth = 0.166666666666666667_fp
+   !
+   !---------------
+   !
+   z36th=sixth*sixth
+   z216th=sixth*sixth*sixth
+   !
+   iadr=0
+   !
+   !  df/dx:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+
+   cxd=3.0_fp*xp2-1.0_fp
+   cxdi=-3.0_fp*xpi2+1.0_fp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+   !
+   cz=zp*(zp2-1.0_fp)
+   czi=zpi*(zpi2-1.0_fp)
+   hz2=hz*hz
+   !
+   sum=hxi*( &
+      zpi*( &
+      -(ypi*fin(0,i,j,k)  +yp*fin(0,i,j+1,k)) &
+      +(ypi*fin(0,i+1,j,k)+yp*fin(0,i+1,j+1,k))) &
+      +zp*( &
+      -(ypi*fin(0,i,j,k+1)  +yp*fin(0,i,j+1,k+1)) &
+      +(ypi*fin(0,i+1,j,k+1)+yp*fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx*( &
+      zpi*( &
+      cxdi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      cxd*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +zp*( &
+      cxdi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      cxd*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hxi*hy2*( &
+      zpi*( &
+      -(cyi*fin(2,i,j,k)  +cy*fin(2,i,j+1,k)) &
+      +(cyi*fin(2,i+1,j,k)+cy*fin(2,i+1,j+1,k))) &
+      +zp*( &
+      -(cyi*fin(2,i,j,k+1)  +cy*fin(2,i,j+1,k+1)) &
+      +(cyi*fin(2,i+1,j,k+1)+cy*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hxi*hz2*( &
+      czi*( &
+      -(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k)) &
+      +(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +cz*( &
+      -(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1)) &
+      +(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx*hy2*( &
+      zpi*( &
+      cxdi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      cxd*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +zp*( &
+      cxdi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      cxd*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx*hz2*( &
+      czi*( &
+      cxdi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cxd*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +cz*( &
+      cxdi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cxd*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hxi*hy2*hz2*( &
+      czi*( &
+      -(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k)) &
+      +(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +cz*( &
+      -(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1)) &
+      +(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx*hy2*hz2*( &
+      czi*( &
+      cxdi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cxd*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +cz*( &
+      cxdi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cxd*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  df/dy:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+
+   cyd=3.0_fp*yp2-1.0_fp
+   cydi=-3.0_fp*ypi2+1.0_fp
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+   !
+   cz=zp*(zp2-1.0_fp)
+   czi=zpi*(zpi2-1.0_fp)
+   hz2=hz*hz
+   !
+   sum=hyi*( &
+      zpi*( &
+      xpi*(-fin(0,i,j,k)  +fin(0,i,j+1,k))+ &
+      xp*(-fin(0,i+1,j,k)+fin(0,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(-fin(0,i,j,k+1)  +fin(0,i,j+1,k+1))+ &
+      xp*(-fin(0,i+1,j,k+1)+fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hyi*hx2*( &
+      zpi*( &
+      cxi*(-fin(1,i,j,k)  +fin(1,i,j+1,k))+ &
+      cx*(-fin(1,i+1,j,k)+fin(1,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(-fin(1,i,j,k+1)  +fin(1,i,j+1,k+1))+ &
+      cx*(-fin(1,i+1,j,k+1)+fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy*( &
+      zpi*( &
+      xpi*(cydi*fin(2,i,j,k)  +cyd*fin(2,i,j+1,k))+ &
+      xp*(cydi*fin(2,i+1,j,k)+cyd*fin(2,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(cydi*fin(2,i,j,k+1)  +cyd*fin(2,i,j+1,k+1))+ &
+      xp*(cydi*fin(2,i+1,j,k+1)+cyd*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hyi*hz2*( &
+      czi*( &
+      xpi*(-fin(3,i,j,k)  +fin(3,i,j+1,k))+ &
+      xp*(-fin(3,i+1,j,k)+fin(3,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(-fin(3,i,j,k+1)  +fin(3,i,j+1,k+1))+ &
+      xp*(-fin(3,i+1,j,k+1)+fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hy*( &
+      zpi*( &
+      cxi*(cydi*fin(4,i,j,k)  +cyd*fin(4,i,j+1,k))+ &
+      cx*(cydi*fin(4,i+1,j,k)+cyd*fin(4,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(cydi*fin(4,i,j,k+1)  +cyd*fin(4,i,j+1,k+1))+ &
+      cx*(cydi*fin(4,i+1,j,k+1)+cyd*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hyi*hx2*hz2*( &
+      czi*( &
+      cxi*(-fin(5,i,j,k)  +fin(5,i,j+1,k))+ &
+      cx*(-fin(5,i+1,j,k)+fin(5,i+1,j+1,k))) &
+      +cz*( &
+      cxi*(-fin(5,i,j,k+1)  +fin(5,i,j+1,k+1))+ &
+      cx*(-fin(5,i+1,j,k+1)+fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hy*hz2*( &
+      czi*( &
+      xpi*(cydi*fin(6,i,j,k)  +cyd*fin(6,i,j+1,k))+ &
+      xp*(cydi*fin(6,i+1,j,k)+cyd*fin(6,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(cydi*fin(6,i,j,k+1)  +cyd*fin(6,i,j+1,k+1))+ &
+      xp*(cydi*fin(6,i+1,j,k+1)+cyd*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx2*hy*hz2*( &
+      czi*( &
+      cxi*(cydi*fin(7,i,j,k)  +cyd*fin(7,i,j+1,k))+ &
+      cx*(cydi*fin(7,i+1,j,k)+cyd*fin(7,i+1,j+1,k))) &
+      +cz*( &
+      cxi*(cydi*fin(7,i,j,k+1)  +cyd*fin(7,i,j+1,k+1))+ &
+      cx*(cydi*fin(7,i+1,j,k+1)+cyd*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  df/dz:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+
+   czd=3.0_fp*zp2-1.0_fp
+   czdi=-3.0_fp*zpi2+1.0_fp
+   !
+   sum=hzi*( &
+      -( &
+      xpi*(ypi*fin(0,i,j,k)  +yp*fin(0,i,j+1,k))+ &
+      xp*(ypi*fin(0,i+1,j,k)+yp*fin(0,i+1,j+1,k))) &
+      +( &
+      xpi*(ypi*fin(0,i,j,k+1)  +yp*fin(0,i,j+1,k+1))+ &
+      xp*(ypi*fin(0,i+1,j,k+1)+yp*fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx2*hzi*( &
+      -( &
+      cxi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      cx*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +( &
+      cxi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      cx*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy2*hzi*( &
+      -( &
+      xpi*(cyi*fin(2,i,j,k)  +cy*fin(2,i,j+1,k))+ &
+      xp*(cyi*fin(2,i+1,j,k)+cy*fin(2,i+1,j+1,k))) &
+      +( &
+      xpi*(cyi*fin(2,i,j,k+1)  +cy*fin(2,i,j+1,k+1))+ &
+      xp*(cyi*fin(2,i+1,j,k+1)+cy*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hz*( &
+      czdi*( &
+      xpi*(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k))+ &
+      xp*(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +czd*( &
+      xpi*(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1))+ &
+      xp*(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hy2*hzi*( &
+      -( &
+      cxi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      cx*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +( &
+      cxi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      cx*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hz*( &
+      czdi*( &
+      cxi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cx*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +czd*( &
+      cxi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cx*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hy2*hz*( &
+      czdi*( &
+      xpi*(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k))+ &
+      xp*(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +czd*( &
+      xpi*(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1))+ &
+      xp*(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx2*hy2*hz*( &
+      czdi*( &
+      cxi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cx*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +czd*( &
+      cxi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cx*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+
+   return
+end subroutine fvtricub_gradient
+
+subroutine fvtricub_laplacian3(fval,i,j,k,xparam,yparam,zparam, &
+   hx,hxi,hy,hyi,hz,hzi, &
+   fin,inf2,inf3,nz)
+   !
+   !  use mktricub to set up spline coefficients...
+   !
+   !============
+   implicit none
+   integer inf3,nz,inf2,iadr,i,j,k
+   !============
+   real(fp) :: z36th,z216th,xp,xpi,xp2,xpi2,cx,cxi,hx2,yp,ypi,yp2
+   real(fp) :: ypi2,cy,cyi,hy2,zp,zpi,zp2,zpi2,cz,czi,hz2,cxd,cxdi
+   real(fp) :: cyd,cydi,czd,czdi
+   !============
+   real(fp) :: xparam,yparam,zparam
+   ! normalized displacements from (i,j,k) corners
+   !
+   real(fp) :: hx,hy,hz   ! grid spacing, and
+   real(fp) :: hxi,hyi,hzi ! inverse grid spacing
+   ! 1/(x(i+1)-x(i)) & 1/(y(j+1)-y(j)) & 1/(z(k+1)-z(i))
+   !
+   real(fp) :: fin(0:7,inf2,inf3,nz)        ! interpolant data (cf "evtricub")
+   !
+   real(fp) :: fval(7)               ! output returned
+   !
+   !  for detailed description of fin, ict and fval see subroutine evtricub
+   !  comments.  Note ict is not vectorized; the same output
+   !  is expected to be returned for all input vector data points.
+   !
+   !  note that the index inputs ii,jj,kk and parameter inputs
+   !     xparam,yparam,zparam,hx,hxi,hy,hyi,hz,hzi are vectorized, and the
+   !     output array fval has a vector ** 1st dimension ** whose
+   !     size must be given as a separate argument
+   !
+   !  to use this routine in scalar mode, pass in ivec=ivecd=1
+   !
+   !---------------
+   !
+   real(fp) :: sum
+   real(fp), parameter :: sixth = 0.166666666666666667_fp
+   !
+   !---------------
+   !
+   z36th=sixth*sixth
+   z216th=sixth*sixth*sixth
+   !
+   iadr=0
+   !
+   !  function value...
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+   !
+   cz=zp*(zp2-1.0_fp)
+   czi=zpi*(zpi2-1.0_fp)
+   hz2=hz*hz
+   !
+   sum=( &
+      zpi*( &
+      xpi*(ypi*fin(0,i,j,k)  +yp*fin(0,i,j+1,k))+ &
+      xp*(ypi*fin(0,i+1,j,k)+yp*fin(0,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(ypi*fin(0,i,j,k+1)  +yp*fin(0,i,j+1,k+1))+ &
+      xp*(ypi*fin(0,i+1,j,k+1)+yp*fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx2*( &
+      zpi*( &
+      cxi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      cx*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      cx*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy2*( &
+      zpi*( &
+      xpi*(cyi*fin(2,i,j,k)  +cy*fin(2,i,j+1,k))+ &
+      xp*(cyi*fin(2,i+1,j,k)+cy*fin(2,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(cyi*fin(2,i,j,k+1)  +cy*fin(2,i,j+1,k+1))+ &
+      xp*(cyi*fin(2,i+1,j,k+1)+cy*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hz2*( &
+      czi*( &
+      xpi*(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k))+ &
+      xp*(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1))+ &
+      xp*(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hy2*( &
+      zpi*( &
+      cxi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      cx*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      cx*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hz2*( &
+      czi*( &
+      cxi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cx*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +cz*( &
+      cxi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cx*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hy2*hz2*( &
+      czi*( &
+      xpi*(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k))+ &
+      xp*(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1))+ &
+      xp*(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx2*hy2*hz2*( &
+      czi*( &
+      cxi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cx*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +cz*( &
+      cxi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cx*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  df/dx:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+
+   cxd=3.0_fp*xp2-1.0_fp
+   cxdi=-3.0_fp*xpi2+1.0_fp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+   !
+   cz=zp*(zp2-1.0_fp)
+   czi=zpi*(zpi2-1.0_fp)
+   hz2=hz*hz
+   !
+   sum=hxi*( &
+      zpi*( &
+      -(ypi*fin(0,i,j,k)  +yp*fin(0,i,j+1,k)) &
+      +(ypi*fin(0,i+1,j,k)+yp*fin(0,i+1,j+1,k))) &
+      +zp*( &
+      -(ypi*fin(0,i,j,k+1)  +yp*fin(0,i,j+1,k+1)) &
+      +(ypi*fin(0,i+1,j,k+1)+yp*fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx*( &
+      zpi*( &
+      cxdi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      cxd*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +zp*( &
+      cxdi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      cxd*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hxi*hy2*( &
+      zpi*( &
+      -(cyi*fin(2,i,j,k)  +cy*fin(2,i,j+1,k)) &
+      +(cyi*fin(2,i+1,j,k)+cy*fin(2,i+1,j+1,k))) &
+      +zp*( &
+      -(cyi*fin(2,i,j,k+1)  +cy*fin(2,i,j+1,k+1)) &
+      +(cyi*fin(2,i+1,j,k+1)+cy*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hxi*hz2*( &
+      czi*( &
+      -(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k)) &
+      +(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +cz*( &
+      -(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1)) &
+      +(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx*hy2*( &
+      zpi*( &
+      cxdi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      cxd*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +zp*( &
+      cxdi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      cxd*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx*hz2*( &
+      czi*( &
+      cxdi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cxd*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +cz*( &
+      cxdi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cxd*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hxi*hy2*hz2*( &
+      czi*( &
+      -(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k)) &
+      +(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +cz*( &
+      -(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1)) &
+      +(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx*hy2*hz2*( &
+      czi*( &
+      cxdi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cxd*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +cz*( &
+      cxdi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cxd*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  df/dy:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+
+   cyd=3.0_fp*yp2-1.0_fp
+   cydi=-3.0_fp*ypi2+1.0_fp
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+   !
+   cz=zp*(zp2-1.0_fp)
+   czi=zpi*(zpi2-1.0_fp)
+   hz2=hz*hz
+   !
+   sum=hyi*( &
+      zpi*( &
+      xpi*(-fin(0,i,j,k)  +fin(0,i,j+1,k))+ &
+      xp*(-fin(0,i+1,j,k)+fin(0,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(-fin(0,i,j,k+1)  +fin(0,i,j+1,k+1))+ &
+      xp*(-fin(0,i+1,j,k+1)+fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hyi*hx2*( &
+      zpi*( &
+      cxi*(-fin(1,i,j,k)  +fin(1,i,j+1,k))+ &
+      cx*(-fin(1,i+1,j,k)+fin(1,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(-fin(1,i,j,k+1)  +fin(1,i,j+1,k+1))+ &
+      cx*(-fin(1,i+1,j,k+1)+fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy*( &
+      zpi*( &
+      xpi*(cydi*fin(2,i,j,k)  +cyd*fin(2,i,j+1,k))+ &
+      xp*(cydi*fin(2,i+1,j,k)+cyd*fin(2,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(cydi*fin(2,i,j,k+1)  +cyd*fin(2,i,j+1,k+1))+ &
+      xp*(cydi*fin(2,i+1,j,k+1)+cyd*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hyi*hz2*( &
+      czi*( &
+      xpi*(-fin(3,i,j,k)  +fin(3,i,j+1,k))+ &
+      xp*(-fin(3,i+1,j,k)+fin(3,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(-fin(3,i,j,k+1)  +fin(3,i,j+1,k+1))+ &
+      xp*(-fin(3,i+1,j,k+1)+fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hy*( &
+      zpi*( &
+      cxi*(cydi*fin(4,i,j,k)  +cyd*fin(4,i,j+1,k))+ &
+      cx*(cydi*fin(4,i+1,j,k)+cyd*fin(4,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(cydi*fin(4,i,j,k+1)  +cyd*fin(4,i,j+1,k+1))+ &
+      cx*(cydi*fin(4,i+1,j,k+1)+cyd*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hyi*hx2*hz2*( &
+      czi*( &
+      cxi*(-fin(5,i,j,k)  +fin(5,i,j+1,k))+ &
+      cx*(-fin(5,i+1,j,k)+fin(5,i+1,j+1,k))) &
+      +cz*( &
+      cxi*(-fin(5,i,j,k+1)  +fin(5,i,j+1,k+1))+ &
+      cx*(-fin(5,i+1,j,k+1)+fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hy*hz2*( &
+      czi*( &
+      xpi*(cydi*fin(6,i,j,k)  +cyd*fin(6,i,j+1,k))+ &
+      xp*(cydi*fin(6,i+1,j,k)+cyd*fin(6,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(cydi*fin(6,i,j,k+1)  +cyd*fin(6,i,j+1,k+1))+ &
+      xp*(cydi*fin(6,i+1,j,k+1)+cyd*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx2*hy*hz2*( &
+      czi*( &
+      cxi*(cydi*fin(7,i,j,k)  +cyd*fin(7,i,j+1,k))+ &
+      cx*(cydi*fin(7,i+1,j,k)+cyd*fin(7,i+1,j+1,k))) &
+      +cz*( &
+      cxi*(cydi*fin(7,i,j,k+1)  +cyd*fin(7,i,j+1,k+1))+ &
+      cx*(cydi*fin(7,i+1,j,k+1)+cyd*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  df/dz:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+
+   czd=3.0_fp*zp2-1.0_fp
+   czdi=-3.0_fp*zpi2+1.0_fp
+   !
+   sum=hzi*( &
+      -( &
+      xpi*(ypi*fin(0,i,j,k)  +yp*fin(0,i,j+1,k))+ &
+      xp*(ypi*fin(0,i+1,j,k)+yp*fin(0,i+1,j+1,k))) &
+      +( &
+      xpi*(ypi*fin(0,i,j,k+1)  +yp*fin(0,i,j+1,k+1))+ &
+      xp*(ypi*fin(0,i+1,j,k+1)+yp*fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx2*hzi*( &
+      -( &
+      cxi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      cx*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +( &
+      cxi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      cx*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy2*hzi*( &
+      -( &
+      xpi*(cyi*fin(2,i,j,k)  +cy*fin(2,i,j+1,k))+ &
+      xp*(cyi*fin(2,i+1,j,k)+cy*fin(2,i+1,j+1,k))) &
+      +( &
+      xpi*(cyi*fin(2,i,j,k+1)  +cy*fin(2,i,j+1,k+1))+ &
+      xp*(cyi*fin(2,i+1,j,k+1)+cy*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hz*( &
+      czdi*( &
+      xpi*(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k))+ &
+      xp*(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +czd*( &
+      xpi*(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1))+ &
+      xp*(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hy2*hzi*( &
+      -( &
+      cxi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      cx*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +( &
+      cxi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      cx*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hz*( &
+      czdi*( &
+      cxi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cx*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +czd*( &
+      cxi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cx*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hy2*hz*( &
+      czdi*( &
+      xpi*(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k))+ &
+      xp*(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +czd*( &
+      xpi*(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1))+ &
+      xp*(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx2*hy2*hz*( &
+      czdi*( &
+      cxi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cx*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +czd*( &
+      cxi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cx*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  d2f/dx2:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+   !
+   cz=zp*(zp2-1.0_fp)
+   czi=zpi*(zpi2-1.0_fp)
+   hz2=hz*hz
+   !
+   sum=( &
+      zpi*( &
+      xpi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      xp*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      xp*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy2*( &
+      zpi*( &
+      xpi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      xp*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      xp*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hz2*( &
+      czi*( &
+      xpi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      xp*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      xp*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hy2*hz2*( &
+      czi*( &
+      xpi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      xp*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +cz*( &
+      xpi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      xp*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  d2f/dz2:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+   !
+   cx=xp*(xp2-1.0_fp)
+   cxi=xpi*(xpi2-1.0_fp)
+   hx2=hx*hx
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   !
+   sum=( &
+      zpi*( &
+      xpi*(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k))+ &
+      xp*(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1))+ &
+      xp*(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx2*( &
+      zpi*( &
+      cxi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cx*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cx*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hy2*( &
+      zpi*( &
+      xpi*(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k))+ &
+      xp*(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +zp*( &
+      xpi*(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1))+ &
+      xp*(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx2*hy2*( &
+      zpi*( &
+      cxi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cx*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +zp*( &
+      cxi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cx*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+   !
+   !  d2f/dxdz:
+   !
+   iadr=iadr+1
+   !
+   !   ...in x direction
+   !
+   xp=xparam
+   xpi=1.0_fp-xp
+   xp2=xp*xp
+   xpi2=xpi*xpi
+
+   cxd=3.0_fp*xp2-1.0_fp
+   cxdi=-3.0_fp*xpi2+1.0_fp
+   !
+   !   ...and in y direction
+   !
+   yp=yparam
+   ypi=1.0_fp-yp
+   yp2=yp*yp
+   ypi2=ypi*ypi
+   !
+   cy=yp*(yp2-1.0_fp)
+   cyi=ypi*(ypi2-1.0_fp)
+   hy2=hy*hy
+   !
+   !   ...and in z direction
+   !
+   zp=zparam
+   zpi=1.0_fp-zp
+   zp2=zp*zp
+   zpi2=zpi*zpi
+
+   czd=3.0_fp*zp2-1.0_fp
+   czdi=-3.0_fp*zpi2+1.0_fp
+   !
+   sum=hxi*hzi*( &
+      ( &
+      (ypi*fin(0,i,j,k)  +yp*fin(0,i,j+1,k)) - &
+      (ypi*fin(0,i+1,j,k)+yp*fin(0,i+1,j+1,k))) &
+      -( &
+      (ypi*fin(0,i,j,k+1)  +yp*fin(0,i,j+1,k+1)) - &
+      (ypi*fin(0,i+1,j,k+1)+yp*fin(0,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hx*hzi*( &
+      -( &
+      cxdi*(ypi*fin(1,i,j,k)  +yp*fin(1,i,j+1,k))+ &
+      cxd*(ypi*fin(1,i+1,j,k)+yp*fin(1,i+1,j+1,k))) &
+      +( &
+      cxdi*(ypi*fin(1,i,j,k+1)  +yp*fin(1,i,j+1,k+1))+ &
+      cxd*(ypi*fin(1,i+1,j,k+1)+yp*fin(1,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hxi*hy2*hzi*( &
+      ( &
+      (cyi*fin(2,i,j,k)  +cy*fin(2,i,j+1,k)) - &
+      (cyi*fin(2,i+1,j,k)+cy*fin(2,i+1,j+1,k))) &
+      -( &
+      (cyi*fin(2,i,j,k+1)  +cy*fin(2,i,j+1,k+1)) - &
+      (cyi*fin(2,i+1,j,k+1)+cy*fin(2,i+1,j+1,k+1))))
+   !
+   sum=sum+sixth*hxi*hz*( &
+      czdi*( &
+      -(ypi*fin(3,i,j,k)  +yp*fin(3,i,j+1,k)) &
+      +(ypi*fin(3,i+1,j,k)+yp*fin(3,i+1,j+1,k))) &
+      +czd*( &
+      -(ypi*fin(3,i,j,k+1)  +yp*fin(3,i,j+1,k+1)) &
+      +(ypi*fin(3,i+1,j,k+1)+yp*fin(3,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx*hy2*hzi*( &
+      -( &
+      cxdi*(cyi*fin(4,i,j,k)  +cy*fin(4,i,j+1,k))+ &
+      cxd*(cyi*fin(4,i+1,j,k)+cy*fin(4,i+1,j+1,k))) &
+      +( &
+      cxdi*(cyi*fin(4,i,j,k+1)  +cy*fin(4,i,j+1,k+1))+ &
+      cxd*(cyi*fin(4,i+1,j,k+1)+cy*fin(4,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hx*hz*( &
+      czdi*( &
+      cxdi*(ypi*fin(5,i,j,k)  +yp*fin(5,i,j+1,k))+ &
+      cxd*(ypi*fin(5,i+1,j,k)+yp*fin(5,i+1,j+1,k))) &
+      +czd*( &
+      cxdi*(ypi*fin(5,i,j,k+1)  +yp*fin(5,i,j+1,k+1))+ &
+      cxd*(ypi*fin(5,i+1,j,k+1)+yp*fin(5,i+1,j+1,k+1))))
+   !
+   sum=sum+z36th*hxi*hy2*hz*( &
+      czdi*( &
+      -(cyi*fin(6,i,j,k)  +cy*fin(6,i,j+1,k)) &
+      +(cyi*fin(6,i+1,j,k)+cy*fin(6,i+1,j+1,k))) &
+      +czd*( &
+      -(cyi*fin(6,i,j,k+1)  +cy*fin(6,i,j+1,k+1)) &
+      +(cyi*fin(6,i+1,j,k+1)+cy*fin(6,i+1,j+1,k+1))))
+   !
+   sum=sum+z216th*hx*hy2*hz*( &
+      czdi*( &
+      cxdi*(cyi*fin(7,i,j,k)  +cy*fin(7,i,j+1,k))+ &
+      cxd*(cyi*fin(7,i+1,j,k)+cy*fin(7,i+1,j+1,k))) &
+      +czd*( &
+      cxdi*(cyi*fin(7,i,j,k+1)  +cy*fin(7,i,j+1,k+1))+ &
+      cxd*(cyi*fin(7,i+1,j,k+1)+cy*fin(7,i+1,j+1,k+1))))
+   !
+   fval(iadr)=sum
+
+   return
+end subroutine fvtricub_laplacian3
 
 subroutine EZspline_free1(spline_o, ier)
    implicit none

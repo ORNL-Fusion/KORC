@@ -194,18 +194,12 @@ program main
   call initialize_particle_pusher(params)
   !! <h4>11\. Initialize Particle Pusher</h4>
 
-  if (params%SC_E) then
-     call define_SC_time_step(params,F)
-  end if
-
   call normalize_variables(params,spp,F,P)
   !! <h4>12\. Normalize Variables</h4>
   !!
   !! Subroutine [[normalize_variables]] in [[korc_units]] normalizes
   !! variables consistent with characteristic plasma parameters
   !! calculated in [[compute_charcs_plasma_params]].
-
-
 
   call normalize_collisions_params(params)
   !! <h4>13\. Normalize Collision Parameters </h4>
@@ -315,32 +309,9 @@ program main
 
      end if
 
-     if (params%SC_E) then
-
-        if (params%field_model(1:1).eq.'A') then
-           call init_SC_E1D(params,F,spp(1))
-        else if (params%field_model(1:1).eq.'E') then
-           call init_SC_E1D_FS(params,F,spp(1))
-        end if
-
-     end if
-
   else
 
      call get_fields(params,spp(1)%vars,F)
-
-     if (params%SC_E) then
-
-
-        if (params%field_model(1:1).eq.'A') then
-           call reinit_SC_E1D(params,F)
-        else if (params%field_model(1:1).eq.'E') then
-           call reinit_SC_E1D_FS(params,F)
-        end if
-
-
-
-     end if
 
   end if
 
@@ -545,22 +516,6 @@ program main
   end if
 
 #ifdef PSPLINE
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-       F%axisymmetric_fields.and.params%field_model(10:12).eq.'PSI'.and. &
-       params%SC_E.and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_psi_top_FS(params,spp,P,F)
-
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
-
-
-        call save_simulation_outputs(params,spp,F)
-        call save_restart_variables(params,spp,F)
-
-      end do
-  end if
 
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
        F%axisymmetric_fields.and.(params%field_model(10:12).eq.'PSI'.OR. &
@@ -656,86 +611,6 @@ program main
      end do
   end if
 
-
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-       F%axisymmetric_fields.and.F%dBfield.and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_2DBdB_top(params,spp,P,F)
-
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
-
-        call save_simulation_outputs(params,spp,F)
-        call save_restart_variables(params,spp,F)
-
-     end do
-  end if
-
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-       F%axisymmetric_fields.and.(params%field_model(10:12).eq.'2DB'.or. &
-       params%field_model(12:13).eq.'2D').and..not.(F%dBfield).and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_B2D_top(params,spp,P,F)
-
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
-
-        call save_simulation_outputs(params,spp,F)
-        call save_restart_variables(params,spp,F)
-
-     end do
-  end if
-
-
-
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-         .not.(F%axisymmetric_fields).and.(F%dBfield).and. &
-         (params%field_model(10:14).eq.'3DBdB').and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_3DBdB_top(params,spp,P,F)
-
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
-
-        call save_simulation_outputs(params,spp,F)
-        call save_restart_variables(params,spp,F)
-
-     end do
-  end if
-
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-         .not.(F%axisymmetric_fields).and.(F%dBfield).and. &
-         .not.(params%field_model(10:14).eq.'3DBdB').and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_3DBdB1_top(params,spp,P,F)
-
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
-
-        call save_simulation_outputs(params,spp,F)
-        call save_restart_variables(params,spp,F)
-
-     end do
-  end if
-
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'interp'.and. &
-       .not.(F%axisymmetric_fields).and..not.(F%dBfield).and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_B_top(params,spp,P,F)
-
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
-
-        call save_simulation_outputs(params,spp,F)
-        call save_restart_variables(params,spp,F)
-
-     end do
-  end if
 #endif
 
 #ifdef FIO
