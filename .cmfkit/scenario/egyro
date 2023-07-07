@@ -32,6 +32,8 @@ __build() {
 
   mkdir -p ./build && cd $_
 
+  echo $CMFKIT_CMDLINE_CMAKE_DEFINITIONS
+
   cmake "$CMFKIT_CMDLINE_CMAKE_DEFINITIONS" .. && make VERBOSE=1 \
     || return 1
 }
