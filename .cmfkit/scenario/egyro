@@ -34,7 +34,7 @@ __build() {
 
   echo $CMFKIT_CMDLINE_CMAKE_DEFINITIONS
 
-  cmake --trace "$CMFKIT_CMDLINE_CMAKE_DEFINITIONS" .. && make VERBOSE=1 \
+  cmake "$CMFKIT_CMDLINE_CMAKE_DEFINITIONS" --trace .. && make VERBOSE=1 \
     || return 1
 }
 
