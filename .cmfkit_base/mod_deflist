@@ -65,6 +65,7 @@ _deflist_accrue_vars() {
   # isolate new vars that serve as cmake definitions
   read cmake_vars <<< $(
     echo ${latest_vars} | tr ' ' '\n' | grep "^CMAKE_*" | tr '\n' ' '
+    echo ${latest_vars} | tr ' ' '\n' | grep "^USE_*" | tr '\n' ' '
   )
 
   CMFKIT_VARLIST_CMAKE_DEFINITIONS="${cmake_vars}"
