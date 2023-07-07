@@ -20,7 +20,7 @@ endif()
 
 #  Configure OpenMP
 option (USE_OMP "Use OpenOMP" OFF)
-if (${USE_OMP})
+if (USE_OMP)
     find_package (OpenMP)
     set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_Fortran_FLAGS}")
