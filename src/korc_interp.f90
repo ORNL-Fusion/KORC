@@ -2638,6 +2638,7 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 
    call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
+   !$OMP SIMD
    do cc=1_idef,pchunk      
       call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
             b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
@@ -2667,7 +2668,7 @@ subroutine interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
       B_Y(cc) = B_R*sP + B_PHI*cP
 
    end do
-
+   !$OMP END SIMD
 
   !write(6,*) '(R,PHI,Z)',Y_R*params%cpp%length,Y_PHI*params%cpp%length, &
   !     Y_Z*params%cpp%length
@@ -2816,6 +2817,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
    call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
+   !$OMP SIMD
    do cc=1_idef,pchunk
       call EZspline_interp2_FOaorsa(bfield_2d%A,b1Refield_2dx%X,b1Refield_2dx%Y, &
             b1Refield_2dx%Z,b1Imfield_2dx%X,b1Imfield_2dx%Y,b1Imfield_2dx%Z, &
@@ -2856,6 +2858,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
 
    end do
+   !$OMP END SIMD
 
 #if DBG_CHECK
   !write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
