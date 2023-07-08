@@ -211,6 +211,24 @@ then
         -DCORI_DIR=OFF \
     	-DKORC_TEST=OFF \
 
+
+elif [ $HOSTNAME == "checkerboard.ornl.gov"   ]
+then
+
+    export CC=/usr/bin/gcc
+    export CXX=/usr/bin/g++
+    export FC=/usr/bin/gfortran
+
+    cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
+        -DCMAKE_C_FLAGS="-O3 -mp"   \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec  -qopenmp" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -qopenmp" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+        -DUSE_PSPLINE=ON \
+        -DUSE_OMP=ON \
+
 else
 # MACHINE_ID is new and unknown. Inform the user how to add support for this new machine.
     echo $MACHINE_ID not suported by this script.
