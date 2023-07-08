@@ -2800,9 +2800,11 @@ subroutine EZspline_interp2_collision(spline_oBR, spline_oBPHI, &
 
 end subroutine EZspline_interp2_collision
 
+
 subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
    spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, p1, p2, fA, fBR, &
    fBPHI, fBZ, fER, fEPHI, fEZ, ier)
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
    !$acc routine seq
    type(EZspline2) spline_oA, spline_oBR,spline_oBPHI,spline_oBZ
    type(EZspline2) spline_oER,spline_oEPHI,spline_oEZ
@@ -3163,6 +3165,7 @@ end function EZspline_allocated1
 
 logical function EZspline_allocated2(spline_o)
    !$acc routine seq
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars) 
    type(EZspline2) spline_o
    EZspline_allocated2 = allocated(spline_o%fspl) &
          .and. allocated(spline_o%x1) .and. allocated(spline_o%x1pkg) &
@@ -3623,6 +3626,7 @@ subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    fA,fBR,fBPHI,fBZ,fER,fEPHI,fEZ,inf2,fvalA,fvalBR,fvalBPHI,fvalBZ, &
    fvalER,fvalEPHI,fvalEZ,ier)
    !$acc routine seq
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
    !
    !  evaluate a 2d cubic Spline interpolant on a rectilinear
    !  grid -- this is C2 in both directions.
@@ -4969,6 +4973,7 @@ subroutine herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !
    !============
    !$acc routine seq
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
    implicit none
    integer nxm,nym,ii,jj
    !============
@@ -5326,6 +5331,7 @@ end subroutine herm3xyz
 
 subroutine zonfind(x,nx,zxget,i)
    !$acc routine seq
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
    implicit none
    integer nx,nxm,i1,i2,ij,ii
    real(fp) :: dx
@@ -5416,6 +5422,7 @@ end subroutine zonfind
 subroutine fvbicub(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
    fin,inf2,ny)
    !$acc routine seq
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
    !
    !============
    implicit none
@@ -7227,6 +7234,7 @@ end subroutine EZspline_free3
 
 subroutine EZspline_error(ier)
    !$acc routine seq
+   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
    !
    ! Error handling routine. Maps error ier code to a meaningful message.
    ! Note: does not abort nor stop if ier/=0.
