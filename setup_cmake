@@ -166,68 +166,91 @@ then
 elif [ $LMOD_SYSTEM_NAME == "perlmutter"   ]
 then
 
-    #  Config for NERSC machines.
-    module load cmake
-    module load cray-hdf5
+  BUILD_TYPE=Debug
+  HARDWARE_TYPE=CPU
+ 
+  echo cmake configured to generate a $BUILD_TYPE build.
 
-    cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
-        -DCMAKE_PREFIX_PATH=$MPICH_DIR \
-        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
-        -DCMAKE_C_FLAGS="-O3 -mp"   \
-        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec  -qopenmp" \
-        -DCMAKE_C_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -qopenmp" \
+  rm -f CMakeCache.txt
+  rm -rf CMakeFiles
+
+  rm ./src/*.mod
+
+  rm -rf ./build 
+  mkdir ./build && cd $_
+
+  if [ "$HARDWARE_TYPE" == CPU ]
+  then
+    cmake \
+        -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DUSE_OMP=ON \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DUSE_PSPLINE=ON \
-        -DUSE_FIO=ON           \
-        -DEZSpline_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/include \
-        -DEZSpline_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib -lpspline" \
-        -DEZSpline_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib/libpspline.a   \
-	    -DFIO_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/KORC/FIO/install/lib/libfusionio.a  \
-	    -DM3DC1_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/KORC/FIO/install/lib/libm3dc1.a	\
-        -DFIO_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/KORC/FIO/install/include  \
-        -DFIO_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/KORC/FIO/install/lib -lfusionio -lm3dc1" \
-	    -DNIMROD_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimrod \
-        -DNIMFIO_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimfio \
-        -DNIMFIO_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimfio -lnimfio" \
-        -DNIMFIO_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimfio/libnimfio.a \
-        -DNIMCORE_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore \
-        -DNIMCORE_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore -lnimblock -lnimbltype -lnimlocate -lnimmatrix -lnimiter -lnimpar" \
-        -DNIMBLK_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore/libnimblock.a \
-        -DNIMBTY_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore/libnimbltype.a \
-        -DNIMLOC_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore/libnimlocate.a \
-        -DNIMMAT_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore/libnimmatrix.a \
-        -DNIMITER_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore/libnimiter.a \
-        -DNIMPAR_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimcore/libnimpar.a \
-        -DNIMLIB_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimlib \
-        -DNIMLIB_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimlib -lnimlib -lnimmpi" \
-        -DNIMLIB_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimlib/libnimlib.a \
-        -DNIMMPI_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/nimlib/libnimmpi.a \
-        -DNIMEXT_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/NIMUW/externals \
-        -DNIMEXT_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/NIMUW/externals -llapack_dummy -lsslu_dummy -lslud_dummy" \
-        -DNIMLAP_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/externals/liblapack_dummy.a \
-        -DNIMSLU_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/externals/libsslu_dummy.a \
-        -DNIMLUD_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/NIMUW/externals/libslud_dummy.a \
-        -DCORI_DIR=OFF \
-    	-DKORC_TEST=OFF \
+      ..
+  elif [ "$HARDWARE_TYPE" == GPU ]
+  then
+    cmake \
+        -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DUSE_OMP=OFF \
+        -DUSE_ACC=ON \
+        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=cc80 -Mfree -fPIC -O3 -Mpreprocess" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+        -DUSE_PSPLINE=ON \
+      ..
+  else
+    echo " choose a valid hardware type "
+  fi
 
+  [[ $? -eq 0 ]] && make VERBOSE=1
 
 elif [ $HOSTNAME == "checkerboard.ornl.gov"   ]
 then
 
-    export CC=/usr/bin/gcc
-    export CXX=/usr/bin/g++
-    export FC=/usr/bin/gfortran
+  BUILD_TYPE=Debug
+  HARDWARE_TYPE=GPU
+ 
+  echo cmake configured to generate a $BUILD_TYPE build.
 
-    cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
-        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
-        -DCMAKE_C_FLAGS="-O3 -mp"   \
-        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
-        -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec  -qopenmp" \
-        -DCMAKE_C_FLAGS_DEBUG="-g -traceback -Bdynamic -qopt-report=5 -qopt-report-phase=vec -qopenmp" \
+  rm -f CMakeCache.txt
+  rm -rf CMakeFiles
+
+  rm ./src/*.mod
+
+  rm -rf ./build 
+  mkdir ./build && cd $_
+
+  if [ "$HARDWARE_TYPE" == CPU ]
+  then
+    cmake \
+        -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DUSE_OMP=ON \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DUSE_PSPLINE=ON \
-        -DUSE_OMP=ON \
+        -DPSPLINE_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/include \
+        -DPSPLINE_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib -lpspline" \
+        -DPSPLINE_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib/libpspline.a   \
+      ..
+  elif [ "$HARDWARE_TYPE" == GPU ]
+  then
+    cmake \
+        -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DUSE_OMP=OFF \
+        -DUSE_ACC=ON \
+        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=cc80 -Mfree -fPIC -O3 -Mpreprocess" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+        -DUSE_PSPLINE=ON \
+        -DPSPLINE_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_gpu_test/PSPLINE_GH/pspline/build/include \
+        -DPSPLINE_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_gpu_test/PSPLINE_GH/pspline/build/lib -lpspline" \
+        -DPSPLINE_LIBRARIES=/global/cfs/cdirs/m3236/build_gpu_test/PSPLINE_GH/pspline/build/lib/libpspline.a   \
+      ..
+  else
+    echo " choose a valid hardware type "
+  fi
+
+  [[ $? -eq 0 ]] && make VERBOSE=1
+
 
 else
 # MACHINE_ID is new and unknown. Inform the user how to add support for this new machine.

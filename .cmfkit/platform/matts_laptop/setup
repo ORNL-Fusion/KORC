@@ -26,4 +26,5 @@ CMAKE_CXX_FLAGS="\"-O3 -Wopenmp -Walign-double\""
 CMAKE_Fortran_FLAGS_DEBUG="\"-g -Wfpe-trap=invalid,zero,overflow -Wbacktrace\""
 CMAKE_C_FLAGS_DEBUG="\"-g -W3\""
 CMAKE_CXX_FLAGS_DEBUG="\"-g -W3\""
-USE_PSPLINE=OFF
+USE_PSPLINE=ON
+USE_OMP=ON
