@@ -184,11 +184,11 @@ then
     cmake \
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
         -DUSE_OMP=ON \
-        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mvect=simd:256" \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mvect=simd:256 -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DCMAKE_C_FLAGS="-O3 -mp -Mvect=simd:256" \
         -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
-        -DCMAKE_CXX_FLAGS="-O3 -mp -Mvect=simd:256" \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp -Mvect=simd:256" \
         -DCMAKE_CXX_FLAGS_DEBUG="-g -Minfo=all -traceback" \
         -DUSE_PSPLINE=ON \
       ..
