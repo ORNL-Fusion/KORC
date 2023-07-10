@@ -55,6 +55,14 @@ elif [ $MACHINE_ID == "MBP115573"     ]
 then
     #  Config for Matt Beidler's ORNL machine.
 
+    rm -f CMakeCache.txt
+    rm -rf CMakeFiles
+
+    rm ./src/*.mod
+
+    rm -rf ./build 
+    mkdir ./build
+
     export CC=/usr/local/bin/gcc-13
     export CXX=/usr/local/bin/g++-13
     export FC=/usr/local/bin/gfortran-13
@@ -184,7 +192,7 @@ then
     cmake \
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
         -DUSE_OMP=ON \
-        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp -Mvect=simd:256 -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -fPIC -O3 -mp -Mvect=simd:256 -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DCMAKE_C_FLAGS="-O3 -mp -Mvect=simd:256" \
         -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
