@@ -25,477 +25,303 @@ module korc_interp
   IMPLICIT NONE
 
 #ifdef PSPLINE
-#ifdef DOUBLE_PRECISION
 
-  TYPE, PRIVATE :: KORC_3D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for
-     !! cylindrical components of vector fields
-     !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi +
-     !! F_Z\hat{e}_Z\). Real precision of 8 bytes. @endnote
-     TYPE(EZspline3)    :: A     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline3)    :: R
-     !! Interpolant of \(F_R(R,\phi,Z)\).
-     TYPE(EZspline3)    :: PHI
-     !! Interpolant of \(F_\phi(R,\phi,Z)\).
-     TYPE(EZspline3)    :: Z
-     !! Interpolant of \(F_Z(R,\phi,Z)\).
+TYPE, PRIVATE :: KORC_3D_FIELDS_INTERPOLANT
+  !! @note Derived type containing 3-D PSPLINE interpolants for
+  !! cylindrical components of vector fields
+  !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi +
+  !! F_Z\hat{e}_Z\). Real precision of 8 bytes. @endnote
+  TYPE(EZspline3)    :: A     !! Interpolant of a scalar field \(A(R,Z)\).
+  TYPE(EZspline3)    :: R
+  !! Interpolant of \(F_R(R,\phi,Z)\).
+  TYPE(EZspline3)    :: PHI
+  !! Interpolant of \(F_\phi(R,\phi,Z)\).
+  TYPE(EZspline3)    :: Z
+  !! Interpolant of \(F_Z(R,\phi,Z)\).
 
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NPHI
-     !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
-     !! Periodic boundary condition for the interpolants at both
-     !! ends of the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(Z\) direction.
-  END TYPE KORC_3D_FIELDS_INTERPOLANT
+  INTEGER               :: NR
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NPHI
+  !! Size of mesh containing the field data along the \(\phi\)-axis.
+  INTEGER               :: NZ
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
+  !! Periodic boundary condition for the interpolants at both
+  !! ends of the \(\phi\) direction.
+  INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(Z\) direction.
+END TYPE KORC_3D_FIELDS_INTERPOLANT
 
-  TYPE, PRIVATE :: KORC_2X1T_FIELDS_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for
-     !! cylindrical components of vector fields
-     !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi +
-     !! F_Z\hat{e}_Z\). Real precision of 8 bytes. @endnote
-     TYPE(EZspline3)    :: A
-     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline3)    :: R
-     !! Interpolant of \(F_R(R,\phi,Z)\).
-     TYPE(EZspline3)    :: T
-     !! Interpolant of \(F_\phi(R,\phi,Z)\).
-     TYPE(EZspline3)    :: Z
-     !! Interpolant of \(F_Z(R,\phi,Z)\).
+TYPE, PRIVATE :: KORC_2X1T_FIELDS_INTERPOLANT
+  !! @note Derived type containing 3-D PSPLINE interpolants for
+  !! cylindrical components of vector fields
+  !! \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R + F_\phi\hat{e}_phi +
+  !! F_Z\hat{e}_Z\). Real precision of 8 bytes. @endnote
+  TYPE(EZspline3)    :: A
+  !! Interpolant of a scalar field \(A(R,Z)\).
+  TYPE(EZspline3)    :: R
+  !! Interpolant of \(F_R(R,\phi,Z)\).
+  TYPE(EZspline3)    :: T
+  !! Interpolant of \(F_\phi(R,\phi,Z)\).
+  TYPE(EZspline3)    :: Z
+  !! Interpolant of \(F_Z(R,\phi,Z)\).
 
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NT
-     !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCST = (/ 0, 0 /)
-     !! Periodic boundary condition for the interpolants at both
-     !! ends of the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(Z\) direction.
-  END TYPE KORC_2X1T_FIELDS_INTERPOLANT
+  INTEGER               :: NR
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NT
+  !! Size of mesh containing the field data along the \(\phi\)-axis.
+  INTEGER               :: NZ
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCST = (/ 0, 0 /)
+  !! Periodic boundary condition for the interpolants at both
+  !! ends of the \(\phi\) direction.
+  INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(Z\) direction.
+END TYPE KORC_2X1T_FIELDS_INTERPOLANT
 
-  TYPE, PRIVATE :: KORC_2DX_FIELDS_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for
-     !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
-     !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline2)    :: A
-     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline2)    :: X
-     !! Interpolant of \(F_X(R,Z)\).
-     TYPE(EZspline2)    :: Y
-     !! Interpolant of \(F_Y(R,Z)\).
-     TYPE(EZspline2)    :: Z
-     !! Interpolant of \(F_Z(R,Z)\).
+TYPE, PRIVATE :: KORC_2DX_FIELDS_INTERPOLANT
+  !! @note Derived type containing 2-D PSPLINE interpolants for
+  !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
+  !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
+  !! Real precision of 8 bytes. @endnote
+  TYPE(EZspline2)    :: A
+  !! Interpolant of a scalar field \(A(R,Z)\).
+  TYPE(EZspline2)    :: X
+  !! Interpolant of \(F_X(R,Z)\).
+  TYPE(EZspline2)    :: Y
+  !! Interpolant of \(F_Y(R,Z)\).
+  TYPE(EZspline2)    :: Z
+  !! Interpolant of \(F_Z(R,Z)\).
 
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(Z\) direction.
-  END TYPE KORC_2DX_FIELDS_INTERPOLANT
+  INTEGER               :: NR
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NZ
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(Z\) direction.
+END TYPE KORC_2DX_FIELDS_INTERPOLANT
 
-  TYPE, PRIVATE :: KORC_2D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for
-     !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
-     !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline2)    :: A
-     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline2)    :: R
-     !! Interpolant of \(F_R(R,Z)\).
-     TYPE(EZspline2)    :: PHI
-     !! Interpolant of \(F_\phi(R,Z)\).
-     TYPE(EZspline2)    :: Z
-     !! Interpolant of \(F_Z(R,Z)\).
+TYPE, PRIVATE :: KORC_2D_FIELDS_INTERPOLANT
+  !! @note Derived type containing 2-D PSPLINE interpolants for
+  !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
+  !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
+  !! Real precision of 8 bytes. @endnote
+  TYPE(EZspline2)    :: A
+  !! Interpolant of a scalar field \(A(R,Z)\).
+  TYPE(EZspline2)    :: R
+  !! Interpolant of \(F_R(R,Z)\).
+  TYPE(EZspline2)    :: PHI
+  !! Interpolant of \(F_\phi(R,Z)\).
+  TYPE(EZspline2)    :: Z
+  !! Interpolant of \(F_Z(R,Z)\).
 
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(Z\) direction.
-  END TYPE KORC_2D_FIELDS_INTERPOLANT
+  INTEGER               :: NR
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NZ
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(Z\) direction.
+END TYPE KORC_2D_FIELDS_INTERPOLANT
 
-  TYPE, PRIVATE :: KORC_1D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for
-     !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
-     !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline1)    :: A
-     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline1)    :: R
-     !! Interpolant of \(F_R(R,Z)\).
-     TYPE(EZspline1)    :: PHI
-     !! Interpolant of \(F_\phi(R,Z)\).
-     TYPE(EZspline1)    :: Z
-     !! Interpolant of \(F_Z(R,Z)\).
+TYPE, PRIVATE :: KORC_1D_FIELDS_INTERPOLANT
+  !! @note Derived type containing 2-D PSPLINE interpolants for
+  !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
+  !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
+  !! Real precision of 8 bytes. @endnote
+  TYPE(EZspline1)    :: A
+  !! Interpolant of a scalar field \(A(R,Z)\).
+  TYPE(EZspline1)    :: R
+  !! Interpolant of \(F_R(R,Z)\).
+  TYPE(EZspline1)    :: PHI
+  !! Interpolant of \(F_\phi(R,Z)\).
+  TYPE(EZspline1)    :: Z
+  !! Interpolant of \(F_Z(R,Z)\).
 
-     INTEGER               :: Nrm
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER, DIMENSION(2) :: BCSrm = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER               :: NPSIP
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER, DIMENSION(2) :: BCSPSIP = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-  END TYPE KORC_1D_FIELDS_INTERPOLANT
+  INTEGER               :: Nrm
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER, DIMENSION(2) :: BCSrm = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER               :: NPSIP
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER, DIMENSION(2) :: BCSPSIP = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+END TYPE KORC_1D_FIELDS_INTERPOLANT
 
-  TYPE, PRIVATE :: KORC_3D_PROFILES_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for cylindrical
-     !! components of the density \(n_e(R,\phi,Z)\),
-     !! temperature \(T_e(R,\phi,Z)\), and effective charge number
-     !! \(Z_{eff}(R,\phi,Z)\) profiles. Real precision of 8 bytes. @endnote
-     TYPE(EZspline3)    :: ne
-     !! Interpolant of background electron density \(n_e(R,\phi,Z)\).
-     TYPE(EZspline3)    :: Te
-     !! Interpolant of background electron temperature \(T_e(R,\phi,Z)\).
-     TYPE(EZspline3)    :: Zeff
-     !! Interpolant of effective charge number \(Z_{eff}(R,\phi,Z)\).
+TYPE, PRIVATE :: KORC_3D_PROFILES_INTERPOLANT
+  !! @note Derived type containing 3-D PSPLINE interpolants for cylindrical
+  !! components of the density \(n_e(R,\phi,Z)\),
+  !! temperature \(T_e(R,\phi,Z)\), and effective charge number
+  !! \(Z_{eff}(R,\phi,Z)\) profiles. Real precision of 8 bytes. @endnote
+  TYPE(EZspline3)    :: ne
+  !! Interpolant of background electron density \(n_e(R,\phi,Z)\).
+  TYPE(EZspline3)    :: Te
+  !! Interpolant of background electron temperature \(T_e(R,\phi,Z)\).
+  TYPE(EZspline3)    :: Zeff
+  !! Interpolant of effective charge number \(Z_{eff}(R,\phi,Z)\).
 
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NPHI
-     !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
-     !! Periodic boundary condition for the interpolants at both ends of
-     !! the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(Z\) direction.
-  END TYPE KORC_3D_PROFILES_INTERPOLANT
+  INTEGER               :: NR
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NPHI
+  !! Size of mesh containing the field data along the \(\phi\)-axis.
+  INTEGER               :: NZ
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both ends
+  !! of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
+  !! Periodic boundary condition for the interpolants at both ends of
+  !! the \(\phi\) direction.
+  INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both ends
+  !! of the \(Z\) direction.
+END TYPE KORC_3D_PROFILES_INTERPOLANT
 
+TYPE, PRIVATE :: KORC_2D_PROFILES_INTERPOLANT
+  !! @note Derived type containing 2-D PSPLINE interpolants for cylindrical
+  !! components of the density \(n_e(R,Z)\), temperature \(T_e(R,Z)\), and
+  !! effective charge number \(Z_{eff}(R,Z)\) profiles.
+  !! Real precision of 8 bytes. @endnote
+  TYPE(EZspline2)    :: ne
+  !! Interpolant of background electron density \(n_e(R,Z)\).
+  TYPE(EZspline2)    :: Te
+  !! Interpolant of background electron temperature \(T_e(R,Z)\).
+  TYPE(EZspline2)    :: Zeff
+  !! Interpolant of effective charge number \(Z_{eff}(R,Z)\)
+  TYPE(EZspline2)    :: RHON
+  TYPE(EZspline2)    :: nRE
+  TYPE(EZspline2)    :: nAr0
+  TYPE(EZspline2)    :: nAr1
+  TYPE(EZspline2)    :: nAr2
+  TYPE(EZspline2)    :: nAr3
+  TYPE(EZspline2)    :: nD
+  TYPE(EZspline2)    :: nD1
 
-  TYPE, PRIVATE :: KORC_2D_PROFILES_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for cylindrical
-     !! components of the density \(n_e(R,Z)\), temperature \(T_e(R,Z)\), and
-     !! effective charge number \(Z_{eff}(R,Z)\) profiles.
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline2)    :: ne
-     !! Interpolant of background electron density \(n_e(R,Z)\).
-     TYPE(EZspline2)    :: Te
-     !! Interpolant of background electron temperature \(T_e(R,Z)\).
-     TYPE(EZspline2)    :: Zeff
-     !! Interpolant of effective charge number \(Z_{eff}(R,Z)\)
-     TYPE(EZspline2)    :: RHON
-     TYPE(EZspline2)    :: nRE
-     TYPE(EZspline2)    :: nAr0
-     TYPE(EZspline2)    :: nAr1
-     TYPE(EZspline2)    :: nAr2
-     TYPE(EZspline2)    :: nAr3
-     TYPE(EZspline2)    :: nD
-     TYPE(EZspline2)    :: nD1
+  INTEGER               :: NR
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NZ
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(Z\) direction.
+END TYPE KORC_2D_PROFILES_INTERPOLANT
 
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(Z\) direction.
-  END TYPE KORC_2D_PROFILES_INTERPOLANT
+TYPE, PRIVATE :: KORC_2D_HOLLMANN_INTERPOLANT
+  !! @note Derived type containing 2-D PSPLINE interpolants for cylindrical
+  !! components of the density \(n_e(R,Z)\), temperature \(T_e(R,Z)\), and
+  !! effective charge number \(Z_{eff}(R,Z)\) profiles.
+  !! Real precision of 8 bytes. @endnote
+  TYPE(EZspline2)    :: fRE_E
+  TYPE(EZspline2)    :: fRE_pitch
 
-  TYPE, PRIVATE :: KORC_2D_HOLLMANN_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for cylindrical
-     !! components of the density \(n_e(R,Z)\), temperature \(T_e(R,Z)\), and
-     !! effective charge number \(Z_{eff}(R,Z)\) profiles.
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline2)    :: fRE_E
-     TYPE(EZspline2)    :: fRE_pitch
+  INTEGER               :: NE
+  !! Size of mesh containing the field data along the \(R\)-axis.
+  INTEGER               :: NRHO
+  !! Size of mesh containing the field data along the \(Z\)-axis.
+  INTEGER, DIMENSION(2) :: BCRHO = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(R\) direction.
+  INTEGER, DIMENSION(2) :: BCE = (/ 0, 0 /)
+  !! Not-a-knot boundary condition for the interpolants at both
+  !! ends of the \(Z\) direction.
+END TYPE KORC_2D_HOLLMANN_INTERPOLANT
 
-     INTEGER               :: NE
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NRHO
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCRHO = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCE = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(Z\) direction.
-  END TYPE KORC_2D_HOLLMANN_INTERPOLANT
+TYPE, PRIVATE :: KORC_INTERPOLANT_DOMAIN
+  !! @note Derived type containing 2-D and 3-D arrays with the information of
+  !! the spatial domain where the fields and profiles are known.
+  !! This info is used for detecting when a particle is lost, and therefore not
+  !! followed anymore. @endnote
+  INTEGER(KIND=1), DIMENSION(:), ALLOCATABLE      :: FLAG1D
+  !! 2-D array with info of the spatial domain where the axisymmetric fields
+  !! and plasma profiles are known.
+  INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: FLAG2D
+  !! 2-D array with info of the spatial domain where the axisymmetric fields
+  !! and plasma profiles are known.
+  INTEGER(KIND=1), DIMENSION(:,:,:), ALLOCATABLE    :: FLAG3D
+  !! 3-D array with info of the spatial domain where the 3-D fields and plasma
+  !! profiles are known.
+  INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: LCFS2D
+  !! 2-D array with info of the spatial domain where the axisymmetric fields
+  !! and plasma profiles are known.
 
+  REAL(rp)                                          :: Ro
+  !! Smaller radial position of the fields and profiles domain.
+  REAL(rp)                                          :: Zo
+  !! Smaller vertical position of the fields and profiles domain
+  REAL(rp)                                          :: To
 
-#elif SINGLE_PRECISION
+  REAL(rp)                                          :: Drm
+  REAL(rp)                                          :: DPSIP
+  REAL(rp)                                          :: DR
+  !! Separation between grid points along the radial direction.
+  REAL(rp)                                          :: DPHI  !
+  ! Separation between grid points along the azimuthal direction.
+  REAL(rp)                                          :: DT  !
+  ! Separation between grid points along the azimuthal direction.
+  REAL(rp)                                          :: DZ
+  !! Separation between grid points along the vertical direction.
+END TYPE KORC_INTERPOLANT_DOMAIN
 
+TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2d
+!$acc declare create(bfield_2d)
+!! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
+!! the magnetic field.
+TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_3d
+!! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
+!! the magnetic field.
+TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2d
+!$acc declare create(b1Refield_2d)
+TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2d
+!$acc declare create(b1Imfield_2d)
+TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Refield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Imfield_2dx
+TYPE(KORC_2X1T_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2X1T
+TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: efield_2d
+!! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
+!! the electric field.
+TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: efield_3d
+!! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
+!! the electric field.
+TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: fields_domain
+!! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating fields.
+TYPE(KORC_2D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_2d
+!! An instance of KORC_2D_PROFILES_INTERPOLANT for interpolating plasma
+!! profiles.
+TYPE(KORC_3D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_3d
+!! An instance of KORC_3D_PROFILES_INTERPOLANT for interpolating plasma
+!! profiles.
+TYPE(KORC_2D_HOLLMANN_INTERPOLANT), PRIVATE    :: hollmann_2d
+!! An instance of KORC_2D_PROFILES_INTERPOLANT for interpolating plasma
+!! profiles.
+TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: profiles_domain
+!! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating plasma
+!! profiles.
+INTEGER                                        :: ezerr
+!! Error status during PSPLINE interpolations.
 
-  TYPE, PRIVATE :: KORC_3D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for cylindrical
-     !! components of vector fields \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R +
-     !! F_\phi\hat{e}_phi + F_Z\hat{e}_Z\).
-     !! Real precision of 4 bytes. @endnote
-     TYPE(EZspline3_r4)    :: R
-     !! Interpolant of \(F_R(R,\phi,Z)\).
-     TYPE(EZspline3_r4)    :: PHI
-     !! Interpolant of \(F_\phi(R,\phi,Z)\).
-     TYPE(EZspline3_r4)    :: Z
-     !! Interpolant of \(F_Z(R,\phi,Z)\).
-
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NPHI
-     !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
-     !! Periodic boundary condition for the interpolants at both ends of
-     !! the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends of
-     !! the \(Z\) direction.
-  END TYPE KORC_3D_FIELDS_INTERPOLANT
-
-    TYPE, PRIVATE :: KORC_2X1T_FIELDS_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for cylindrical
-     !! components of vector fields \(\mathbf{F}(R,\phi,Z) = F_R\hat{e}_R +
-     !! F_\phi\hat{e}_phi + F_Z\hat{e}_Z\).
-     !! Real precision of 4 bytes. @endnote
-     TYPE(EZspline3_r4)    :: R
-     !! Interpolant of \(F_R(R,\phi,Z)\).
-     TYPE(EZspline3_r4)    :: T
-     !! Interpolant of \(F_\phi(R,\phi,Z)\).
-     TYPE(EZspline3_r4)    :: Z
-     !! Interpolant of \(F_Z(R,\phi,Z)\).
-
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NT
-     !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCST = (/ 0, 0 /)
-     !! Periodic boundary condition for the interpolants at both ends of
-     !! the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends of
-     !! the \(Z\) direction.
-  END TYPE KORC_2X1T_FIELDS_INTERPOLANT
-
-  TYPE, PRIVATE :: KORC_2D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for cylindrical
-     !! components of vector fields \(\mathbf{F}(R,Z) = F_R\hat{e}_R +
-     !! F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
-     !! Real precision of 4 bytes. @endnote
-     TYPE(EZspline2_r4)    :: A
-     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline2_r4)    :: R
-     !! Interpolant of \(F_R(R,Z)\).
-     TYPE(EZspline2_r4)    :: PHI
-     !! Interpolant of \(F_\phi(R,Z)\).
-     TYPE(EZspline2_r4)    :: Z
-     !! Interpolant of \(F_Z(R,Z)\).
-
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(Z\) direction.
-  END TYPE KORC_2D_FIELDS_INTERPOLANT
-
-  TYPE, PRIVATE :: KORC_1D_FIELDS_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for
-     !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
-     !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline1_r4)    :: A
-     !! Interpolant of a scalar field \(A(R,Z)\).
-     TYPE(EZspline1_r4)    :: R
-     !! Interpolant of \(F_R(R,Z)\).
-     TYPE(EZspline1_r4)    :: PHI
-     !! Interpolant of \(F_\phi(R,Z)\).
-     TYPE(EZspline1_r4)    :: Z
-     !! Interpolant of \(F_Z(R,Z)\).
-
-     INTEGER               :: Nrm
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER, DIMENSION(2) :: BCSrm = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both
-     !! ends of the \(R\) direction.
-  END TYPE KORC_1D_FIELDS_INTERPOLANT
-
-  TYPE, PRIVATE :: KORC_3D_PROFILES_INTERPOLANT
-     !! @note Derived type containing 3-D PSPLINE interpolants for cylindrical
-     !! components of the density \(n_e(R,\phi,Z)\),
-     !! temperature \(T_e(R,\phi,Z)\), and effective charge number
-     !! \(Z_{eff}(R,\phi,Z)\) profiles.
-     !! Real precision of 4 bytes. @endnote
-     TYPE(EZspline3_r4)    :: ne
-     !! Interpolant of background electron density \(n_e(R,\phi,Z)\).
-     TYPE(EZspline3_r4)    :: Te
-     !! Interpolant of background electron temperature \(T_e(R,\phi,Z)\).
-     TYPE(EZspline3_r4)    :: Zeff
-     !! Interpolant of effective charge number \(Z_{eff}(R,\phi,Z)\).
-
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NPHI
-     !! Size of mesh containing the field data along the \(\phi\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends of
-     !! the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSPHI = (/ -1, -1 /)
-     !! Periodic boundary condition for the interpolants at both ends of
-     !! the \(\phi\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(Z\) direction.
-  END TYPE KORC_3D_PROFILES_INTERPOLANT
-
-
-
-  TYPE, PRIVATE :: KORC_2D_PROFILES_INTERPOLANT
-     !! @note Derived type containing 2-D PSPLINE interpolants for
-     !! cylindrical components of the density \(n_e(R,Z)\),
-     !! temperature \(T_e(R,Z)\), and effective charge number \(Z_{eff}(R,Z)\) profiles.
-     !! Real precision of 8 bytes. @endnote
-     TYPE(EZspline2_r4)    :: ne
-     !! Interpolant of background electron density \(n_e(R,Z)\).
-     TYPE(EZspline2_r4)    :: Te
-     !! Interpolant of background electron temperature \(T_e(R,Z)\).
-     TYPE(EZspline2_r4)    :: Zeff
-     !! Interpolant of effective charge number \(Z_{eff}(R,Z)\).
-
-     INTEGER               :: NR
-     !! Size of mesh containing the field data along the \(R\)-axis.
-     INTEGER               :: NZ
-     !! Size of mesh containing the field data along the \(Z\)-axis.
-     INTEGER, DIMENSION(2) :: BCSR = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(R\) direction.
-     INTEGER, DIMENSION(2) :: BCSZ = (/ 0, 0 /)
-     !! Not-a-knot boundary condition for the interpolants at both ends
-     !! of the \(Z\) direction.
-  END TYPE KORC_2D_PROFILES_INTERPOLANT
-
-
-#endif
-
-
-  TYPE, PRIVATE :: KORC_INTERPOLANT_DOMAIN
-     !! @note Derived type containing 2-D and 3-D arrays with the information of
-     !! the spatial domain where the fields and profiles are known.
-     !! This info is used for detecting when a particle is lost, and therefore not
-     !! followed anymore. @endnote
-     INTEGER(KIND=1), DIMENSION(:), ALLOCATABLE      :: FLAG1D
-     !! 2-D array with info of the spatial domain where the axisymmetric fields
-     !! and plasma profiles are known.
-     INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: FLAG2D
-     !! 2-D array with info of the spatial domain where the axisymmetric fields
-     !! and plasma profiles are known.
-     INTEGER(KIND=1), DIMENSION(:,:,:), ALLOCATABLE    :: FLAG3D
-     !! 3-D array with info of the spatial domain where the 3-D fields and plasma
-     !! profiles are known.
-     INTEGER(KIND=1), DIMENSION(:,:), ALLOCATABLE      :: LCFS2D
-     !! 2-D array with info of the spatial domain where the axisymmetric fields
-     !! and plasma profiles are known.
-
-     REAL(rp)                                          :: Ro
-     !! Smaller radial position of the fields and profiles domain.
-     REAL(rp)                                          :: Zo
-     !! Smaller vertical position of the fields and profiles domain
-     REAL(rp)                                          :: To
-
-     REAL(rp)                                          :: Drm
-     REAL(rp)                                          :: DPSIP
-     REAL(rp)                                          :: DR
-     !! Separation between grid points along the radial direction.
-     REAL(rp)                                          :: DPHI  !
-     ! Separation between grid points along the azimuthal direction.
-     REAL(rp)                                          :: DT  !
-     ! Separation between grid points along the azimuthal direction.
-     REAL(rp)                                          :: DZ
-     !! Separation between grid points along the vertical direction.
-
-  END TYPE KORC_INTERPOLANT_DOMAIN
-
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2d
-  !$acc declare create(bfield_2d)
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_3d
-  !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2d
-  !$acc declare create(b1Refield_2d)
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2d
-  !$acc declare create(b1Imfield_2d)
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2dx
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2dx
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Refield_2dx
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Imfield_2dx
-  TYPE(KORC_2X1T_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2X1T
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: efield_2d
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the electric field.
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: efield_3d
-  !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
-  !! the electric field.
-  TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: fields_domain
-  !! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating fields.
-  TYPE(KORC_2D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_2d
-  !! An instance of KORC_2D_PROFILES_INTERPOLANT for interpolating plasma
-  !! profiles.
-  TYPE(KORC_3D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_3d
-  !! An instance of KORC_3D_PROFILES_INTERPOLANT for interpolating plasma
-  !! profiles.
-  TYPE(KORC_2D_HOLLMANN_INTERPOLANT), PRIVATE    :: hollmann_2d
-  !! An instance of KORC_2D_PROFILES_INTERPOLANT for interpolating plasma
-  !! profiles.
-  TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: profiles_domain
-  !! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating plasma
-  !! profiles.
-  INTEGER                                        :: ezerr
-  !! Error status during PSPLINE interpolations.
-
-#endif
-
-
+#endif PSPLINE
 
 #ifdef PSPLINE
   PUBLIC :: interp_fields,&
