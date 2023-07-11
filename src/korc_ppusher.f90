@@ -1525,7 +1525,7 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
        q_cache=spp(ii)%q
        a =params%dt
 
-
+#ifdef OMP
        !$OMP PARALLEL DO default(none) &
        !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
        !$OMP& shared(params,ii,spp,P,F) &
@@ -1533,6 +1533,7 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
        !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
        !$OMP& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp)
+#endif OMP
        do pp=1_idef,spp(ii)%ppp,pchunk
 
           !$OMP SIMD

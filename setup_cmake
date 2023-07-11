@@ -175,7 +175,7 @@ elif [ $LMOD_SYSTEM_NAME == "perlmutter"   ]
 then
 
   BUILD_TYPE=Debug
-  HARDWARE_TYPE=CPU
+  HARDWARE_TYPE=GPU
  
   echo cmake configured to generate a $BUILD_TYPE build.
 
@@ -204,9 +204,9 @@ then
   then
     cmake \
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
-        -DUSE_OMP=OFF \
+        -DUSE_OMP=ON \
         -DUSE_ACC=ON \
-        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=cc80 -Mfree -fPIC -O3 -Mpreprocess" \
+        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc80 -Mfree -fPIC -O3 -Mpreprocess" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DUSE_PSPLINE=ON \
       ..

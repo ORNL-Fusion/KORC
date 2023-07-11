@@ -3756,6 +3756,7 @@ subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !---------------------------------------------------------------------
    !$acc routine (herm2xy) seq
    !$acc routine (fvbicub) seq
+   !$acc routine (fvbicub_grad) seq
    !
    i=0
    j=0

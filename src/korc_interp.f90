@@ -455,49 +455,27 @@ module korc_interp
   END TYPE KORC_INTERPOLANT_DOMAIN
 
   TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2d
+  !$acc declare create(bfield_2d)
   !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
   !! the magnetic field.
   TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_3d
   !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
   !! the magnetic field.
   TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2d
+  !$acc declare create(b1Refield_2d)
   TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2d
+  !$acc declare create(b1Imfield_2d)
   TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2dx
   TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2dx
   TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Refield_2dx
   TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Imfield_2dx
   TYPE(KORC_2X1T_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2X1T
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: dbdR_2d
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: dbdPHI_2d
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: dbdZ_2d
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: dbdR_3d
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: dbdPHI_3d
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: dbdZ_3d
-  !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
   TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: efield_2d
   !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
   !! the electric field.
   TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: efield_3d
   !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
   !! the electric field.
-  TYPE(KORC_1D_FIELDS_INTERPOLANT), PRIVATE      :: efield_SC1d
-  !! An instance of KORC_1D_FIELDS_INTERPOLANT for interpolating
-  !! the self-consistent electric field.
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: gradB_2d
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
-  TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: curlb_2d
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: gradB_3d
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
-  TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: curlb_3d
-  !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
-  !! the magnetic field.
   TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: fields_domain
   !! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating fields.
   TYPE(KORC_2D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_2d
@@ -2523,6 +2501,7 @@ subroutine interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 end subroutine interp_FOfields1_p
 
 subroutine interp_FOfields_mars(prtcls, F, params)
+   !$acc routine seq
    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
    TYPE(PARTICLES), INTENT(INOUT) :: prtcls
    TYPE(FIELDS), INTENT(IN)       :: F
@@ -2539,6 +2518,9 @@ subroutine interp_FOfields_mars(prtcls, F, params)
    REAL(rp) :: psip_conv
    REAL(rp) :: amp,phase
 
+   !$acc routine (EZspline_interp2_FOmars) seq
+   !$acc routine (EZspline_error) seq
+
    if (size(prtcls%Y,1).eq.1) then
       ss = size(prtcls%Y,1)
    else
@@ -2553,12 +2535,24 @@ subroutine interp_FOfields_mars(prtcls, F, params)
    amp=F%AMP
    phase=F%MARS_phase
 
-
+#ifdef OMP
    !$OMP PARALLEL DO &
    !$OMP& PRIVATE(pp,ezerr,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z, &
    !$OMP& B0_R,B0_PHI,B0_Z,B1_R,B1_PHI,B1_Z,cP,sP,B_R,B_PHI,Y_R,Y_Z,Y_PHI) &
    !$OMP& FIRSTPRIVATE(psip_conv,amp) &
    !$OMP& SHARED(prtcls,F,params)
+#endif OMP
+#ifdef ACC
+   !$acc enter data copyin(F,params,bfield_2d,b1Refield_2d,b1Imfield_2d)
+
+   !$acc  parallel loop &
+   !$acc& firstprivate(ss,psip_conv,amp) &
+   !$acc& private(Y_R,Y_PHI,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z, &
+   !$acc& ezerr,B0_R,B0_PHI,B0_Z,B1_R,B1_PHI,B1_Z,cP,sP,B_R,B_PHI) &
+   !$acc& copyout(prtcl%Y(1:ss,1:3),prtcl%B(1:ss,1:3)) &
+
+   !$acc loop seq
+#endif
    do pp = 1,ss
 
       Y_R=prtcls%Y(pp,1)
@@ -2606,7 +2600,14 @@ subroutine interp_FOfields_mars(prtcls, F, params)
       !write(6,*) 'B',B_R*params%cpp%Bo,B_PHI*params%cpp%Bo,prtcls%B(pp,3)*params%cpp%Bo
 
    end do
+#ifdef OMP
    !$OMP END PARALLEL DO
+#endif OMP
+#ifdef ACC
+   !$acc end parallel loop
+
+   !$acc exit data delete(F,params,bfield_2d,b1Refield_2d,b1Imfield_2d)
+#endif ACC
 
 end subroutine interp_FOfields_mars
 
