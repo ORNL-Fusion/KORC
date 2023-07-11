@@ -2549,7 +2549,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
    !$acc& firstprivate(ss,psip_conv,amp) &
    !$acc& private(pp,Y_R,Y_PHI,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z, &
    !$acc& ezerr,B0_R,B0_PHI,B0_Z,B1_R,B1_PHI,B1_Z,cP,sP,B_R,B_PHI) &
-   !$acc& copyout(prtcl%Y(1:ss,1:3),prtcl%B(1:ss,1:3)) &
+   !$acc& copyout(prtcl%Y(1:ss,1:3),prtcl%B(1:ss,1:3))
 #endif
    do pp = 1,ss
 
@@ -3967,28 +3967,6 @@ subroutine finalize_interpolants(params)
           call Ezspline_free2(bfield_2d%PHI,ezerr)
 
      if (EZspline_allocated2(bfield_2d%Z)) call Ezspline_free2(bfield_2d%Z, ezerr)
-
-     if (EZspline_allocated2(gradB_2d%R)) call Ezspline_free2(gradB_2d%R, ezerr)
-     if (EZspline_allocated2(gradB_2d%PHI)) &
-          call Ezspline_free2(gradB_2d%PHI, ezerr)
-
-     if (EZspline_allocated2(gradB_2d%Z)) call Ezspline_free2(gradB_2d%Z, ezerr)
-
-     if (EZspline_allocated2(curlb_2d%R)) call Ezspline_free2(curlb_2d%R, ezerr)
-     if (EZspline_allocated2(curlb_2d%PHI)) &
-          call Ezspline_free2(curlb_2d%PHI, ezerr)
-
-     if (EZspline_allocated3(gradB_3d%R)) call Ezspline_free3(gradB_3d%R, ezerr)
-     if (EZspline_allocated3(gradB_3d%PHI)) &
-          call Ezspline_free3(gradB_3d%PHI, ezerr)
-
-     if (EZspline_allocated3(gradB_3d%Z)) call Ezspline_free3(gradB_3d%Z, ezerr)
-
-     if (EZspline_allocated3(curlb_3d%R)) call Ezspline_free3(curlb_3d%R, ezerr)
-     if (EZspline_allocated3(curlb_3d%PHI)) &
-          call Ezspline_free3(curlb_3d%PHI, ezerr)
-
-     if (EZspline_allocated3(curlb_3d%Z)) call Ezspline_free3(curlb_3d%Z, ezerr)
 
      if (ALLOCATED(profiles_domain%FLAG2D)) DEALLOCATE(profiles_domain%FLAG2D)
      if (ALLOCATED(profiles_domain%FLAG3D)) DEALLOCATE(profiles_domain%FLAG3D)

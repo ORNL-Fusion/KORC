@@ -204,11 +204,15 @@ then
   then
     cmake \
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
-        -DUSE_OMP=ON \
+        -DUSE_OMP=OFF \
         -DUSE_ACC=ON \
+        -DUSE_PSPLINE=ON \
         -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc80 -Mfree -fPIC -O3 -Mpreprocess" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
-        -DUSE_PSPLINE=ON \
+        -DCMAKE_C_FLAGS="-O3 -mp -Mvect=simd:256" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp -Mvect=simd:256" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -Minfo=all -traceback" \
       ..
   else
     echo " choose a valid hardware type "
