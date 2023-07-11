@@ -8,6 +8,7 @@ module korc_coords
 
   PUBLIC :: cart_to_cyl,&
        cart_to_cyl_p,&
+       cart_to_cyl_p_ACC,&
        cart_to_tor_check_if_confined,&
        cart_to_tor_p,&
        cyl_to_cart,&
@@ -102,6 +103,24 @@ CONTAINS
     !$OMP END SIMD
 
   end subroutine cart_to_cyl_p
+
+subroutine cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+  !$acc routine seq
+  implicit none
+  REAL(rp), INTENT(IN)      :: X_X
+  REAL(rp), INTENT(IN)      :: X_Y
+  REAL(rp), INTENT(IN)      :: X_Z
+
+  REAL(rp), INTENT(OUT)   :: Y_R
+  REAL(rp), INTENT(OUT)   :: Y_PHI
+  REAL(rp), INTENT(OUT)   :: Y_Z
+
+  Y_R = SQRT(X_X*X_X + X_Y*X_Y)
+  Y_PHI = ATAN2(X_Y, X_X)
+  Y_PHI = MODULO(Y_PHI, 2.0_rp*C_PI)
+  Y_Z = X_Z
+
+end subroutine cart_to_cyl_p_ACC
 
   subroutine cyl_to_cart(Xcyl,X)
     !! @note  Subroutine that converts the position of simulated particles

@@ -1285,7 +1285,7 @@ subroutine initialize_fields(params,F)
       F%psip_conv = psip_conv
       F%MARS_AMP_Scale = MARS_AMP_Scale
       F%MARS_phase = MARS_phase
-      F%Analytic_IWL=Analytic_IWL
+      F%Analytic_D3D_IWL=Analytic_D3D_IWL
       F%ntiles=ntiles
       F%circumradius=circumradius
       F%AORSA_AMP_Scale=AORSA_AMP_Scale

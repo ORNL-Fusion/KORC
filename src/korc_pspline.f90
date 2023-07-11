@@ -2800,7 +2800,6 @@ subroutine EZspline_interp2_collision(spline_oBR, spline_oBPHI, &
 
 end subroutine EZspline_interp2_collision
 
-
 subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
    spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, p1, p2, fA, fBR, &
    fBPHI, fBZ, fER, fEPHI, fEZ, ier)
@@ -5033,7 +5032,7 @@ subroutine herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !------------------------------------
 #ifdef ACC
    !$acc routine (zonfind) seq
-#ENDIF ACC
+#endif ACC
    !
    ier=0
    !
@@ -5450,7 +5449,7 @@ subroutine fvbicub(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
    fin,inf2,ny)
 #ifdef ACC
    !$acc routine seq
-#endif
+#endif ACC
 #ifdef OMP
    !$OMP DECLARE SIMD (fvbicub)
 #endif OMP
@@ -7266,8 +7265,12 @@ subroutine EZspline_free3(spline_o, ier)
 end subroutine EZspline_free3
 
 subroutine EZspline_error(ier)
+#ifdef ACC
    !$acc routine seq
-   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
+#endif ACC
+#ifdef OMP
+   !$OMP DECLARE SIMD (EZspline_error)
+#endif OMP
    !
    ! Error handling routine. Maps error ier code to a meaningful message.
    ! Note: does not abort nor stop if ier/=0.

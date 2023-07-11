@@ -211,7 +211,7 @@ module korc_input
   REAL(rp)  :: AORSA_AMP_Scale=1.0
   REAL(rp)  :: AORSA_freq=0.0
   REAL(rp)  :: AORSA_nmode=0.0
-  CHARACTER(30) :: Analytic_IWL='NONE'
+  LOGICAL :: Analytic_D3D_IWL=.FALSE.
   INTEGER :: ntiles=42
   REAL(rp) :: circumradius=1.016
   LOGICAL :: useLCFS = .FALSE.
@@ -458,7 +458,7 @@ CONTAINS
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
-         ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_IWL, &
+         ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_D3D_IWL, &
          ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field, &
          useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
