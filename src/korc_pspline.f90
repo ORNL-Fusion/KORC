@@ -2809,7 +2809,7 @@ subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
 #endif OMP
 #ifdef ACC
    !$acc routine seq
-#ENDIF ACC
+#endif ACC
    type(EZspline2) spline_oA, spline_oBR,spline_oBPHI,spline_oBZ
    type(EZspline2) spline_oER,spline_oEPHI,spline_oEZ
    real(fp), intent(in) :: p1, p2

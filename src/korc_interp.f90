@@ -2501,7 +2501,6 @@ subroutine interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 end subroutine interp_FOfields1_p
 
 subroutine interp_FOfields_mars(prtcls, F, params)
-   !$acc routine seq
    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
    TYPE(PARTICLES), INTENT(INOUT) :: prtcls
    TYPE(FIELDS), INTENT(IN)       :: F
@@ -2516,7 +2515,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
    INTEGER                                      :: pp,ss
    !! Particle chunk iterator.
    REAL(rp) :: psip_conv
-   REAL(rp) :: amp,phase
+   REAL(rp) :: amp,phase,Ro,Bo
 
    !$acc routine (EZspline_interp2_FOmars) seq
    !$acc routine (EZspline_error) seq
@@ -2534,6 +2533,8 @@ subroutine interp_FOfields_mars(prtcls, F, params)
    psip_conv=F%psip_conv
    amp=F%AMP
    phase=F%MARS_phase
+   Ro=F%Ro
+   Bo=F%Bo
 
 #ifdef OMP
    !$OMP PARALLEL DO &
@@ -2544,11 +2545,11 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 #endif OMP
 #ifdef ACC
    !$acc  parallel loop &
-   !$acc& firstprivate(ss,psip_conv,amp) &
+   !$acc& firstprivate(ss,psip_conv,amp,phase,Ro,Bo) &
    !$acc& copyin(bfield_2d,b1Refield_2d,b1Imfield_2d) &
    !$acc& private(pp,Y_R,Y_PHI,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z, &
    !$acc& ezerr,B0_R,B0_PHI,B0_Z,B1_R,B1_PHI,B1_Z,cP,sP,B_R,B_PHI) &
-   !$acc& copyout(prtcls%Y(1:ss,1:3),prtcls%B(1:ss,1:3))
+   !$acc& copyout(prtcls%Y(1:ss,1:3),prtcls%PSI_P(1:ss),prtcls%B(1:ss,1:3))
 #endif
    do pp = 1,ss
 
@@ -2565,7 +2566,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
       prtcls%PSI_P=A(1)
 
       B0_R = psip_conv*A(3)/Y_R
-      B0_PHI = -F%Bo*F%Ro/Y_R
+      B0_PHI = -Bo*Ro/Y_R
       B0_Z = -psip_conv*A(2)/Y_R
 
       cP=cos(Y_PHI)
