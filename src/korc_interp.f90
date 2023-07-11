@@ -2543,13 +2543,12 @@ subroutine interp_FOfields_mars(prtcls, F, params)
    !$OMP& SHARED(prtcls,F,params)
 #endif OMP
 #ifdef ACC
-   !$acc enter data copyin(bfield_2d,b1Refield_2d,b1Imfield_2d)
-
    !$acc  parallel loop &
    !$acc& firstprivate(ss,psip_conv,amp) &
+   !$acc& copyin(bfield_2d,b1Refield_2d,b1Imfield_2d) &
    !$acc& private(pp,Y_R,Y_PHI,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z, &
    !$acc& ezerr,B0_R,B0_PHI,B0_Z,B1_R,B1_PHI,B1_Z,cP,sP,B_R,B_PHI) &
-   !$acc& copyout(prtcl%Y(1:ss,1:3),prtcl%B(1:ss,1:3))
+   !$acc& copyout(prtcls%Y(1:ss,1:3),prtcls%B(1:ss,1:3))
 #endif
    do pp = 1,ss
 
@@ -2603,8 +2602,6 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 #endif OMP
 #ifdef ACC
    !$acc end parallel loop
-
-   !$acc exit data delete(F,params,bfield_2d,b1Refield_2d,b1Imfield_2d)
 #endif ACC
 
 end subroutine interp_FOfields_mars

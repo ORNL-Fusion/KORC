@@ -10,25 +10,8 @@ MACHINE_ID=`uname -n`
 
 echo Building KORC for machine $MACHINE_ID
 echo
-
-if [ $# -eq 1 ]
-then
-    BUILD_TYPE=Debug
-fi
-
 echo cmake configured to generate a $BUILD_TYPE build.
-if [ "$BUILD_TYPE" == Debug ]
-then
-    echo "    cmake may be reconfigured to generate a Release build by running this     "
-    echo "    script with no arguments or using the commmand                            "
-    echo
-    echo "    cmake -DCMAKE_BUILD_TYPE=Release                                          "
-else
-    echo "    cmake may be reconfigured to generate a Debug build by running this script"
-    echo "    with a Debug argument or using the commmand                               "
-    echo
-    echo "    cmake -DCMAKE_BUILD_TYPE=Debug                                            "
-fi
+
 
 # CMake doesn't like being reconfigured completely. To avoid problems this
 # script will delete the CMakeCache.txt file allowing this script to start
@@ -174,10 +157,7 @@ then
 elif [ $LMOD_SYSTEM_NAME == "perlmutter"   ]
 then
 
-  BUILD_TYPE=Debug
   HARDWARE_TYPE=GPU
- 
-  echo cmake configured to generate a $BUILD_TYPE build.
 
   rm -f CMakeCache.txt
   rm -rf CMakeFiles
