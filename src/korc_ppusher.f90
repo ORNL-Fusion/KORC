@@ -515,8 +515,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
       !$acc& PRIVATE(pp,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
       !$acc& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,Bmag, &
       !$acc& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-      !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g) &
-      !!$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d,ezerr)
+      !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g)
       do pp=1_idef,spp(ii)%ppp
 
         X_X=spp(ii)%vars%X(pp,1)
@@ -1912,7 +1911,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   INTEGER(is) :: flagCon,flagCol
   REAL(rp) :: a,m_cache,q_cache,tskip,psip_conv,amp,phase
   REAL(rp) :: Ro,Bo,circumradius,ntiles,dt
-  INTEGER  :: ii,pp,ss,tt,ppp,tskip
+  INTEGER  :: ii,pp,ss,tt,ppp
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
@@ -1967,8 +1966,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     !$acc& copyout(spp(ii)%vars%eta(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%mu(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%Prad(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%Pin(1:spp(ii)%ppp)) &
-    !!$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d)
+    !$acc& spp(ii)%vars%Pin(1:spp(ii)%ppp))
 
     do pp=1_idef,ppp
 
@@ -1999,7 +1997,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
       flagCon=spp(ii)%vars%flagCon(pp)
       flagCol=spp(ii)%vars%flagCol(pp)
 
-      do tt=1_ip,t_skip
+      do tt=1_ip,tskip
 
         call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
@@ -2530,7 +2528,7 @@ end subroutine advance_FOinterp_vars
 subroutine advance_FOinterp_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,PSIp)
   !$acc routine seq
-  INTEGER(ip), INTENT(IN)                                       :: tt
+  INTEGER, INTENT(IN)                                       :: tt
   !! Time step used in the leapfrog step (\(\Delta t\)).
   REAL(rp)                                      :: dt
   !! Time step used in the leapfrog step (\(\Delta t\)).

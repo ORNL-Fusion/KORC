@@ -470,15 +470,15 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
   call FO_init_ACC(params,F,spp,.false.,.true.)
 #else
   call FO_init(params,F,spp,.false.,.true.)
-#endif
+#endif ACC
     ! Initial half-time particle push
 
   do it=params%ito,params%t_steps,params%t_skip
-#ifdef OMP
-    call adv_FOinterp_mars_top(params,F,P,spp)
-#endif OMP
-    call adv_FOinterp_mars_top_ACC(params,F,P,spp)
 #ifdef ACC
+    call adv_FOinterp_mars_top_ACC(params,F,P,spp)
+#else
+    call adv_FOinterp_mars_top(params,F,P,spp)
+#endif ACC
 
     params%time = params%init_time &
       +REAL(it-1_ip+params%t_skip,rp)*params%dt
@@ -623,7 +623,7 @@ end if
      end do
   end if
 
-#endif
+#endif PSPLINE
 
 #ifdef FIO
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_model.eq.'M3D_C1'.and. &
@@ -686,7 +686,7 @@ end if
 
      end do
   end if
-#endif
+#endif FIO
 
   call timing_KORC(params)
 
@@ -695,14 +695,14 @@ end if
 
 #ifdef PSPLINE
   call finalize_interpolants(params)
-#endif
+#endif PSPLINE
 
 #ifdef FIO
   if (TRIM(params%field_model) .eq. 'M3D_C1'.or. &
       TRIM(params%field_model) .eq. 'NIMROD') then
      call finalize_FIO(params,F,P)
   end if
-#endif
+#endif FIO
 
   ! DEALLOCATION OF VARIABLES
   call deallocate_variables(params,F,P,spp)
