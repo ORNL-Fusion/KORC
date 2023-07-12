@@ -516,7 +516,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
       !$acc& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
       !$acc& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
       !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g) &
-      !$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d)
+      !$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d,ezerr)
       do pp=1_idef,spp(ii)%ppp
 
         X_X=spp(ii)%vars%X(pp,1)

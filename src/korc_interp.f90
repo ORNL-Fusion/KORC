@@ -320,6 +320,7 @@ TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: profiles_domain
 !! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating plasma
 !! profiles.
 INTEGER                                        :: ezerr
+!$acc declare create(ezerr)
 !! Error status during PSPLINE interpolations.
 
 #endif PSPLINE
@@ -1650,8 +1651,9 @@ subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius
       IZ = INT(FLOOR((Y_Z  + ABS(fields_domain%Zo) + &
           0.5_rp*fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
 
-      if ((fields_domain%FLAG3D(IR,1,IZ).NE.1_is).OR. &
-          ((IR.GT.bfield_2X1T%NR).OR.(IZ.GT.bfield_2X1T%NZ))) then
+      if (fields_domain%FLAG3D(IR,1,IZ).NE.1_is) then
+      !if ((fields_domain%FLAG3D(IR,1,IZ).NE.1_is).OR. &
+      !    ((IR.GT.bfield_2X1T%NR).OR.(IZ.GT.bfield_2X1T%NZ))) then
         if (.not.Analytic_D3D_IWL) then
             flag = 0_is
         else if (Analytic_D3D_IWL) then
@@ -1678,8 +1680,9 @@ subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius
       IZ = INT(FLOOR((Y_Z  + ABS(fields_domain%Zo) + &
           0.5_rp*fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
 
-      if ((fields_domain%FLAG3D(IR,IPHI,IZ).NE.1_is).OR. &
-          ((IR.GT.bfield_3d%NR).OR.(IZ.GT.bfield_3d%NZ))) then
+      if (fields_domain%FLAG3D(IR,IPHI,IZ).NE.1_is) then
+      !if ((fields_domain%FLAG3D(IR,IPHI,IZ).NE.1_is).OR. &
+      !    ((IR.GT.bfield_3d%NR).OR.(IZ.GT.bfield_3d%NZ))) then      
         flag = 0_is
       end if
 
