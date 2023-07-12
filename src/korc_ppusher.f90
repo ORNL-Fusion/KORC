@@ -294,7 +294,7 @@ subroutine FO_init(params,F,spp,output,step)
           call interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
             E_X,E_Y,E_Z,PSIp,flagCon)
         else if (params%field_model(10:13).eq.'MARS') then
-          call interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z, &
+          call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
             B_X,B_Y,B_Z,PSIp,flagCon)
         else if (params%field_model(10:14).eq.'AORSA') then
           call interp_FOfields_aorsa_p(0._rp,params,pchunk,F, &
@@ -504,19 +504,19 @@ subroutine FO_init_ACC(params,F,spp,output,step)
     if(output) then
 
       !$acc  parallel loop &
-      !$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
+      !$acc& firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
       !$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
       !$acc& DiMESdims,Dim2x1t) &
       !$acc& copyin(ii,spp) &
       !$acc& copy(spp(ii)%vars%X(1:pp,1:3),spp(ii)%vars%V(1:pp,1:3), &
       !$acc& spp(ii)%vars%flagCon(1:pp),spp(ii)%vars%flagCol(1:pp)) &
       !$acc& copyout(spp(ii)%vars%B(1:pp,1:3),spp(ii)%vars%E(1:pp,1:3), &
-      !$acc& spp(ii)%vars%PSIp(1:pp)) &
-      !$acc& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
-      !$acc& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
+      !$acc& spp(ii)%vars%PSI_P(1:pp)) &
+      !$acc& PRIVATE(pp,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
+      !$acc& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,Bmag, &
       !$acc& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
       !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g) &
-      !$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d,ezerr)
+      !!$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d,ezerr)
       do pp=1_idef,spp(ii)%ppp
 
         X_X=spp(ii)%vars%X(pp,1)
@@ -1911,9 +1911,9 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   REAL(rp) :: PSIp
   INTEGER(is) :: flagCon,flagCol
   REAL(rp) :: a,m_cache,q_cache,tskip,psip_conv,amp,phase
-  REAL(rp) :: Ro,Bo,circumradius,ntiles
-  INTEGER  :: ii,ps,ss,tt,ppp,dt
-  LOGICAL :: Analytic_D3D_IWL,useDiMES
+  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt
+  INTEGER  :: ii,pp,ss,tt,ppp,tskip
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
  
@@ -1940,6 +1940,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     Ro=F%Ro
     Bo=F%Bo
 
+    Dim2x1t=F%Dim2x1t
     Analytic_D3D_IWL=F%Analytic_D3D_IWL
     circumradius=F%circumradius
     ntiles=F%ntiles
@@ -1950,8 +1951,8 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     !$acc parallel loop &
     !$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
     !$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
-    !$acc& DiMESdims,tskip,ii,ppp,dt) &
-    !$acc& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
+    !$acc& DiMESdims,tskip,ii,ppp,dt,Dim2x1t) &
+    !$acc& PRIVATE(pp,tt,Bmag,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
     !$acc& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
     !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
     !$acc& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp) &
@@ -1959,7 +1960,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     !$acc& spp(ii)%vars%V(1:spp(ii)%ppp,1:3), &
     !$acc& spp(ii)%vars%B(1:spp(ii)%ppp,1:3), &
     !$acc& spp(ii)%vars%E(1:spp(ii)%ppp,1:3), &
-    !$acc& spp(ii)%vars%PSIp(1:spp(ii)%ppp), &
+    !$acc& spp(ii)%vars%PSI_P(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%g(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%flagCon(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%flagCol(1:spp(ii)%ppp)) &
@@ -1967,7 +1968,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     !$acc& spp(ii)%vars%mu(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%Prad(1:spp(ii)%ppp), &
     !$acc& spp(ii)%vars%Pin(1:spp(ii)%ppp)) &
-    !$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d)
+    !!$acc& copyin(fields_domain,bfield_2d,b1Refield_2d,b1Imfield_2d)
 
     do pp=1_idef,ppp
 
@@ -2002,7 +2003,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
         call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
-        call check_if_in_fields_domain_p_ACC(Analytic_D3D_IWL,circumradius, &
+        call check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
         call interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
@@ -2010,7 +2011,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
         call advance_FOinterp_vars_ACC(dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-            g,flagCon,flagCol,P,F,PSIp)
+            g,flagCon,flagCol,PSIp)
       end do !timestep iterator
 
 
@@ -2527,10 +2528,8 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 end subroutine advance_FOinterp_vars
 
 subroutine advance_FOinterp_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
-  V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,P,F,PSIp)
+  V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,PSIp)
   !$acc routine seq
-  TYPE(PROFILES), INTENT(IN)                                 :: P
-  TYPE(FIELDS), INTENT(IN)      :: F
   INTEGER(ip), INTENT(IN)                                       :: tt
   !! Time step used in the leapfrog step (\(\Delta t\)).
   REAL(rp)                                      :: dt
