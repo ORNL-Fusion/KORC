@@ -117,7 +117,7 @@ then
         -DUSE_OMP=OFF \
         -DUSE_ACC=ON \
         -DUSE_PSPLINE=ON \
-        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc80 -Mfree -fPIC -O3 -Mpreprocess" \
+        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc80 -Mfree -fPIC -O3 -Mpreprocess -DHDF5_DOUBLE_PRESICION" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DCMAKE_C_FLAGS="-O3 -mp" \
         -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
