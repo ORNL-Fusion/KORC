@@ -337,7 +337,7 @@ PUBLIC :: interp_fields,&
   calculate_magnetic_field_p,&
   calculate_GCfields_p,&
   calculate_GCfieldswE_p,&
-  calculate_GCfields_2x1t_p
+  calculate_GCfields_2x1t_p,&
   interp_3D_bfields,&
   interp_2D_bfields,&
   interp_3D_efields,&
@@ -1264,9 +1264,9 @@ subroutine check_if_in_fields_domain(F,Y,flag)
 
         if ((fields_domain%FLAG3D(IR,1,IZ).NE.1_is).OR. &
             ((IR.GT.bfield_2X1T%NR).OR.(IZ.GT.bfield_2X1T%NZ))) then
-          if (.not.F%Analytic_D3D_IWL) then
+          if (.not.Analytic_D3D_IWL) then
               flag(pp) = 0_is
-          else if (F%Analytic_D3D_IWL) then
+          else if (Analytic_D3D_IWL) then
             if ((IR.lt.floor(bfield_2d%NR/6._rp)).and. &
               (IZ.gt.floor(bfield_2d%NZ/5._rp)).and. &
               (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
@@ -1314,9 +1314,9 @@ subroutine check_if_in_fields_domain(F,Y,flag)
 #ifdef ACC
     !$acc parallel loop &
     !$acc& firstprivate(ss,DiMESloc_cyl,DiMESdims,Analytic_D3D_IWL, &
-    !$acc$ circumradius,ntiles,useDiMES) &
+    !$acc& circumradius,ntiles,useDiMES) &
     !$acc& PRIVATE(pp,IR,IZ,Rwall, &
-    !$acc$ xtmp,ytmp,ztmp,DiMESrad,DiMESloc_cart,DiMESsurf) &
+    !$acc& xtmp,ytmp,ztmp,DiMESrad,DiMESloc_cart,DiMESsurf) &
     !$acc& copy(Y(1:ss,1:3),flag(1:ss)) &
     !$acc& copyin(fields_domain,bfield_2d)
 #endif
@@ -1607,7 +1607,7 @@ subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
     end if
   end subroutine check_if_in_fields_domain_p
 
-subroutine check_if_in_fields_domain_p_ACC(Analytic_D3D_IWL,circumradius, &
+subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
   ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
   !$acc routine seq
   !! @note Subrotuine that checks if particles in the simulation are within
@@ -1639,10 +1639,10 @@ subroutine check_if_in_fields_domain_p_ACC(Analytic_D3D_IWL,circumradius, &
   REAL(rp),DIMENSION(3),INTENT(IN) :: DiMESloc_cyl
   REAL(rp),DIMENSION(2),INTENT(IN) :: DiMESdims
   REAL(rp),INTENT(IN) :: circumradius,ntiles
-  LOGICAL,INTENT(IN) :: Analytic_D3D_IWL,useDiMES
+  LOGICAL,INTENT(IN) :: Dim2x1t,Analytic_D3D_IWL,useDiMES
 
   if (ALLOCATED(fields_domain%FLAG3D)) then
-    if (F%Dim2x1t) then
+    if (Dim2x1t) then
 
       IR = INT(FLOOR((Y_R  - fields_domain%Ro + &
           0.5_rp*fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
@@ -2579,7 +2579,6 @@ end subroutine interp_FOfields_mars_p
 subroutine interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
   Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
   !$acc routine seq
-  TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
   REAL(rp)   :: B_R,B_PHI

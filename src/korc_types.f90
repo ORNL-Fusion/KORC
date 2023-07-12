@@ -623,7 +623,7 @@ module korc_types
      REAL(rp)  :: AORSA_freq
      REAL(rp)  :: AORSA_nmode
      !! interpolated E field
-     LOGICAL :: Analytic_IWL
+     LOGICAL :: Analytic_D3D_IWL
      INTEGER :: ntiles
      REAL(rp) :: circumradius
      INTEGER 			:: res_double

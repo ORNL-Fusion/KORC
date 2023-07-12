@@ -224,7 +224,6 @@ subroutine FO_init(params,F,spp,output,step)
 
     if(output) then
 
-#ifdef OMP
       !$OMP PARALLEL DO default(none) &
       !$OMP firstprivate(E0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk) &
       !$OMP& shared(params,ii,spp,F) &
@@ -341,6 +340,7 @@ subroutine FO_init(params,F,spp,output,step)
           !$OMP END SIMD
         end if
 #endif FIO
+
         !$OMP SIMD
         do cc=1_idef,pchunk
           !Derived output data
@@ -413,151 +413,13 @@ subroutine FO_init(params,F,spp,output,step)
 
       end do
       !$OMP END PARALLEL DO
-#ifdef OMP
-
-#ifdef ACC
-      !$acc parallel loop &
-      !$acc firstprivate(E0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar) &
-      !$acc& copyin(ii,spp,F) &
-      !$acc& copy(spp(ii)%vars%X(1:pp,1:3),spp(ii)%vars%V(1:pp,1:3), &
-      !$acc& spp(ii)%vars%flagCon(1:pp),spp(ii)%vars%flagCol(1:pp)) &
-      !$acc& copyout(spp(ii)%vars%B(1:pp,1:3),spp(ii)%vars%E(1:pp,1:3)) &
-      !$acc& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
-      !$acc& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
-      !$acc& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-      !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g)
-      do pp=1_idef,spp(ii)%ppp
-
-          X_X=spp(ii)%vars%X(pp,1)
-          X_Y=spp(ii)%vars%X(pp,2)
-          X_Z=spp(ii)%vars%X(pp,3)
-
-          V_X=spp(ii)%vars%V(pp,1)
-          V_Y=spp(ii)%vars%V(pp,2)
-          V_Z=spp(ii)%vars%V(pp,3)
-
-          Y_R=0._rp
-          Y_PHI=0._rp
-          Y_Z=0._rp
-
-          B_X=0._rp
-          B_Y=0._rp
-          B_Z=0._rp
-
-          E_X=0._rp
-          E_Y=0._rp
-          E_Z=0._rp
-
-          PSIp=100._rp
-
-          flagCon=spp(ii)%vars%flagCon(pp)
-          flagCol=spp(ii)%vars%flagCol(pp)
-        end do
-
-        call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
-
-      #ifdef PSPLINE
-
-          call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
-            B_X,B_Y,B_Z,PSIp,flagCon)
-
-      #endif PSPLINE
-
-        end if
-
-        !$OMP SIMD
-        do cc=1_idef,pchunk
-          spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
-          spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
-          spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-          spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
-          spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
-          spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
-
-          spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-        end do
-        !$OMP END SIMD
-
-        !$OMP SIMD
-        do cc=1_idef,pchunk
-          !Derived output data
-          Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
-
-          ! Parallel unit vector
-          b_unit_X(cc) = B_X(cc)/Bmag(cc)
-          b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
-          b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
-
-          !write(6,*) 'X',X_X,X_Y,X_Z
-          !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
-
-          v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
-          if (v(cc).GT.korc_zero) then
-            ! Parallel and perpendicular components of velocity
-            vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
-                V_Z(cc)*b_unit_Z(cc))
-
-            vperp(cc) =  v(cc)**2 - vpar(cc)**2
-            if ( vperp(cc) .GE. korc_zero ) then
-              vperp(cc) = SQRT( vperp(cc) )
-            else
-              vperp(cc) = 0.0_rp
-            end if
-
-            !write(6,*) 'v,vpar,vperp',v(cc),vpar(cc),vperp(cc)
-
-            ! Pitch angle
-            spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
-              MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
-
-            ! Magnetic moment
-            spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
-              g(cc)**2*vperp(cc)**2/Bmag(cc)
-            ! See Northrop's book (The adiabatic motion of charged
-            ! particles)
-
-            ! Radiated power
-            tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
-
-            cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
-            cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
-            cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
-
-            vec_X(cc) = E_X(cc) + cross_X(cc)
-            vec_Y(cc) = E_Y(cc) + cross_Y(cc)
-            vec_Z(cc) = E_Z(cc) + cross_Z(cc)
-
-            spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
-              ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
-              cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
-              cross_Z(cc)*E_Z(cc) + g(cc)**2* &
-              ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
-              - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
-              vec_Z(cc)*vec_Z(cc)) )
-
-            ! Input power due to electric field
-            spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
-              E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
-          else
-              spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
-              spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
-              spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
-              spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
-          end if
-
-        end do
-
-      end do
-      !$acc end parallel loop
-#ifdef ACC
 
     endif !(if output)
 
     if(step.and.(.not.params%FokPlan)) then
       dt=0.5_rp*params%dt
 
-#ifdef OMP
+
       !$OMP PARALLEL DO FIRSTPRIVATE(dt) PRIVATE(pp,cc) &
       !$OMP& SHARED(ii,spp,params)
       do pp=1_idef,spp(ii)%ppp,pchunk
@@ -575,26 +437,6 @@ subroutine FO_init(params,F,spp,output,step)
 
       end do
       !$OMP END PARALLEL DO
-#endif OMP
-
-#ifdef ACC
-      !$acc  parallel loop &
-      !$acc& firstprivate(dt) &
-      !$acc& private(pp) &
-      !$acc& copyin(ii,spp(ii)%ppp) &
-      !$acc& copyout(spp(ii)%vars%X(1:pp,1:3))
-      do pp=1_idef,spp(ii)%ppp
-
-        spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
-          dt*spp(ii)%vars%V(pp,1)
-        spp(ii)%vars%X(pp,2) = spp(ii)%vars%X(pp,2) + &
-          dt*spp(ii)%vars%V(pp,2)
-        spp(ii)%vars%X(pp,3) = spp(ii)%vars%X(pp,3) + &
-          dt*spp(ii)%vars%V(pp,3)
-
-      end do
-      !$acc end parallel loop
-#endif ACC
 
     end if !(if step)
 
