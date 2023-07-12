@@ -475,7 +475,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
   REAL(rp) :: PSIp
   REAL(rp) :: m_cache,q_cache,psip_conv,amp,phase,Ro,Bo,circumradius,ntiles
   INTEGER(is) :: flagCon,flagCol
-  LOGICAL :: Analytic_D3D_IWL,useDiMES
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
 
@@ -493,6 +493,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
     Ro=F%Ro
     Bo=F%Bo
 
+    Dim2x1t=F%Dim2x1t
     Analytic_D3D_IWL=F%Analytic_D3D_IWL
     circumradius=F%circumradius
     ntiles=F%ntiles
@@ -505,7 +506,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
       !$acc  parallel loop &
       !$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
       !$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
-      !$acc& DiMESdims) &
+      !$acc& DiMESdims,Dim2x1t) &
       !$acc& copyin(ii,spp) &
       !$acc& copy(spp(ii)%vars%X(1:pp,1:3),spp(ii)%vars%V(1:pp,1:3), &
       !$acc& spp(ii)%vars%flagCon(1:pp),spp(ii)%vars%flagCol(1:pp)) &
@@ -547,8 +548,8 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
 #ifdef PSPLINE
 
-        call check_if_in_fields_domain_p_ACC(Analytic_D3D_IWL,circumradius, &
-        ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
+        call check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
+          ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
         call interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
           Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)

@@ -1737,7 +1737,7 @@ subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius
           DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
 
           if (DiMESrad.le.0._rp) THEN
-            cycle
+            return
           end if
 
           DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
@@ -2592,7 +2592,7 @@ subroutine interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
   !  INTEGER(ip) :: ezerr
   INTEGER                                      :: cc
   !! Particle chunk iterator.
-  REAL(rp), INTENT(IN) :: psip_conv,amp,phase
+  REAL(rp), INTENT(IN) :: psip_conv,amp,phase,Bo,Ro
 
   !$acc routine (EZspline_interp2_FOmars) seq
   !$acc routine (EZspline_error) seq
@@ -2605,7 +2605,7 @@ subroutine interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
   PSIp=A(1)
 
   B0_R = psip_conv*A(3)/Y_R
-  B0_PHI = -F%Bo*F%Ro/Y_R
+  B0_PHI = -Bo*Ro/Y_R
   B0_Z = -psip_conv*A(2)/Y_R
 
   cP=cos(Y_PHI)
