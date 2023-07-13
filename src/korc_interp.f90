@@ -2537,15 +2537,11 @@ subroutine interp_FOfields_mars_p(bfield_2d_local,b1Refield_2d_local,b1Imfield_2
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: PSIp
   REAL(rp)   :: cP,sP,cPshift,sPshift
   REAL(rp), DIMENSION(3)  :: A
-  INTEGER :: ezerr_local
   INTEGER                                      :: cc
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
   REAL(rp) :: amp,phase
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2d_local
 
   psip_conv=F%psip_conv
   amp=F%AMP
@@ -2555,10 +2551,10 @@ subroutine interp_FOfields_mars_p(bfield_2d_local,b1Refield_2d_local,b1Imfield_2
 
   !$OMP SIMD
   do cc=1_idef,pchunk      
-    call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local%R,b1Refield_2d_local%PHI, &
-          b1Refield_2d_local%Z,b1Imfield_2d_local%R,b1Imfield_2d_local%PHI,b1Imfield_2d_local%Z, &
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
+          b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
           Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
-    call EZspline_error(ezerr_local)
+    call EZspline_error(ezerr)
 
     PSIp(cc)=A(1)
 
@@ -2587,8 +2583,8 @@ subroutine interp_FOfields_mars_p(bfield_2d_local,b1Refield_2d_local,b1Imfield_2
 
 end subroutine interp_FOfields_mars_p
 
-subroutine interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
-  Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+  psip_conv,amp,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
   !$acc routine seq
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
@@ -2600,18 +2596,21 @@ subroutine interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
   REAL(rp),INTENT(OUT)   :: PSIp
   REAL(rp)   :: cP,sP,cPshift,sPshift
   REAL(rp), DIMENSION(3)  :: A
-  !  INTEGER(ip) :: ezerr
+  INTEGER(ip) :: ezerr_local
   INTEGER                                      :: cc
   !! Particle chunk iterator.
   REAL(rp), INTENT(IN) :: psip_conv,amp,phase,Bo,Ro
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2d_local
 
   !$acc routine (EZspline_interp2_FOmars) seq
   !$acc routine (EZspline_error) seq
      
-  call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
-    b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
+  call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local%R,b1Refield_2d_local%PHI, &
+    b1Refield_2d_local%Z,b1Imfield_2d_local%R,b1Imfield_2d_local%PHI,b1Imfield_2d_local%Z, &
     Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
-  call EZspline_error(ezerr)
+  call EZspline_error(ezerr_local)
 
   PSIp=A(1)
 
