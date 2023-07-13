@@ -282,45 +282,40 @@ TYPE, PRIVATE :: KORC_INTERPOLANT_DOMAIN
   !! Separation between grid points along the vertical direction.
 END TYPE KORC_INTERPOLANT_DOMAIN
 
-TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2d
-!$acc declare create(bfield_2d)
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d
 !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
 !! the magnetic field.
-TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: bfield_3d
+TYPE(KORC_3D_FIELDS_INTERPOLANT)      :: bfield_3d
 !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
 !! the magnetic field.
-TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2d
-!$acc declare create(b1Refield_2d)
-TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2d
-!$acc declare create(b1Imfield_2d)
-TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Refield_2dx
-TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: b1Imfield_2dx
-TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Refield_2dx
-TYPE(KORC_2DX_FIELDS_INTERPOLANT), PRIVATE      :: e1Imfield_2dx
-TYPE(KORC_2X1T_FIELDS_INTERPOLANT), PRIVATE      :: bfield_2X1T
-TYPE(KORC_2D_FIELDS_INTERPOLANT), PRIVATE      :: efield_2d
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d
+TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: b1Refield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: b1Imfield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: e1Imfield_2dx
+TYPE(KORC_2X1T_FIELDS_INTERPOLANT)     :: bfield_2X1T
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: efield_2d
 !! An instance of KORC_2D_FIELDS_INTERPOLANT for interpolating
 !! the electric field.
-TYPE(KORC_3D_FIELDS_INTERPOLANT), PRIVATE      :: efield_3d
+TYPE(KORC_3D_FIELDS_INTERPOLANT)     :: efield_3d
 !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
 !! the electric field.
-TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: fields_domain
-!$acc declare create(fields_domain)
+TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain
 !! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating fields.
-TYPE(KORC_2D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_2d
+TYPE(KORC_2D_PROFILES_INTERPOLANT)    :: profiles_2d
 !! An instance of KORC_2D_PROFILES_INTERPOLANT for interpolating plasma
 !! profiles.
-TYPE(KORC_3D_PROFILES_INTERPOLANT), PRIVATE    :: profiles_3d
+TYPE(KORC_3D_PROFILES_INTERPOLANT)    :: profiles_3d
 !! An instance of KORC_3D_PROFILES_INTERPOLANT for interpolating plasma
 !! profiles.
-TYPE(KORC_2D_HOLLMANN_INTERPOLANT), PRIVATE    :: hollmann_2d
+TYPE(KORC_2D_HOLLMANN_INTERPOLANT)    :: hollmann_2d
 !! An instance of KORC_2D_PROFILES_INTERPOLANT for interpolating plasma
 !! profiles.
-TYPE(KORC_INTERPOLANT_DOMAIN), PRIVATE         :: profiles_domain
+TYPE(KORC_INTERPOLANT_DOMAIN)      :: profiles_domain
 !! An instance of KORC_INTERPOLANT_DOMAIN used for interpolating plasma
 !! profiles.
 INTEGER                                        :: ezerr
-!$acc declare create(ezerr)
 !! Error status during PSPLINE interpolations.
 
 #endif PSPLINE
@@ -350,7 +345,8 @@ PUBLIC :: interp_fields,&
   check_if_in_profiles_domain,&
   check_if_in_profiles_domain_p,&
   check_if_in_fields_domain_p, &
-  check_if_in_fields_domain_p_ACC
+  check_if_in_fields_domain_p_ACC, &
+  provide_ezspline_mars_ACC
 #else
   PUBLIC :: interp_fields
 
@@ -2469,10 +2465,9 @@ subroutine interp_FOfields_mars(prtcls, F, params)
   !$OMP& SHARED(prtcls,F,params)
 #endif OMP
 #ifdef ACC
-  !$acc enter data copyin(bfield_2d,b1Refield_2d,b1Imfield_2d)
-
   !$acc  parallel loop &
   !$acc& firstprivate(ss,psip_conv,amp,phase,Ro,Bo) &
+  !$acc& copyin(bfield_2d,b1Refield_2d,b1Imfield_2d) &
   !$acc& private(pp,Y_R,Y_PHI,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z, &
   !$acc& ezerr,B0_R,B0_PHI,B0_Z,B1_R,B1_PHI,B1_Z,cP,sP,B_R,B_PHI) &
   !$acc& copy(prtcls)
@@ -2517,14 +2512,19 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 #endif OMP
 #ifdef ACC
   !$acc end parallel loop
-
-  !$acc exit data delete(bfield_2d,b1Refield_2d,b1Imfield_2d)
 #endif ACC
 
 end subroutine interp_FOfields_mars
 
-subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
-  PSIp,flag_cache)
+subroutine provide_ezspline_mars_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d)
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d
+
+end subroutine provide_ezspline_mars_ACC
+
+subroutine interp_FOfields_mars_p(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+  pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache)
   INTEGER, INTENT(IN)  :: pchunk
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
@@ -2537,12 +2537,15 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: PSIp
   REAL(rp)   :: cP,sP,cPshift,sPshift
   REAL(rp), DIMENSION(3)  :: A
-  !  INTEGER(ip) :: ezerr
+  INTEGER :: ezerr_local
   INTEGER                                      :: cc
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
   REAL(rp) :: amp,phase
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2d_local
 
   psip_conv=F%psip_conv
   amp=F%AMP
@@ -2552,10 +2555,10 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
 
   !$OMP SIMD
   do cc=1_idef,pchunk      
-    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
-          b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
+    call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local%R,b1Refield_2d_local%PHI, &
+          b1Refield_2d_local%Z,b1Imfield_2d_local%R,b1Imfield_2d_local%PHI,b1Imfield_2d_local%Z, &
           Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
-    call EZspline_error(ezerr)
+    call EZspline_error(ezerr_local)
 
     PSIp(cc)=A(1)
 
@@ -3599,10 +3602,10 @@ subroutine interp_fields(params,prtcls,F)
     call interp_FOfields_aorsa(prtcls, F, params)
   end if
 
-  if ((ALLOCATED(F%PSIp).and.F%Bflux).or. &
-    (F%ReInterp_2x1t.and.(.not.((TRIM(params%field_model).eq.'M3D_C1').or. &
+  if (((ALLOCATED(F%PSIp).and.F%Bflux).or. &
+    F%ReInterp_2x1t).and.(.not.((TRIM(params%field_model).eq.'M3D_C1').or. &
     (params%field_model(10:13).eq.'MARS').or. &
-    (TRIM(params%field_model).eq.'NIMROD'))))) then
+    (TRIM(params%field_model).eq.'NIMROD')))) then
 
   !     write(output_unit_write,'("3 size of PSI_P: ",I16)') size(prtcls%PSI_P)
 

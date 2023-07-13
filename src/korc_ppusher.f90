@@ -478,6 +478,9 @@ subroutine FO_init_ACC(params,F,spp,output,step)
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (interp_FOfields_mars_p_ACC) seq
@@ -503,11 +506,13 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
     if(output) then
 
+      call provide_ezspline_mars_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d)
+
       !$acc  parallel loop &
       !$acc& firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
       !$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
       !$acc& DiMESdims,Dim2x1t) &
-      !$acc& copyin(ii,spp) &
+      !$acc& copyin(ii,spp,bfield_2d,b1Refield_2d,b1Imfield_2d) &
       !$acc& copy(spp(ii)%vars%X(1:pp,1:3),spp(ii)%vars%V(1:pp,1:3), &
       !$acc& spp(ii)%vars%flagCon(1:pp),spp(ii)%vars%flagCol(1:pp)) &
       !$acc& copyout(spp(ii)%vars%B(1:pp,1:3),spp(ii)%vars%E(1:pp,1:3), &
@@ -550,7 +555,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
         call check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
-        call interp_FOfields_mars_p_ACC(psip_conv,amp,phase,Bo,Ro, &
+        call interp_FOfields_mars_p_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d,psip_conv,amp,phase,Bo,Ro, &
           Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
 #endif PSPLINE
