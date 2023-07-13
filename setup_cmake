@@ -143,6 +143,10 @@ then
   rm -rf ./build 
   mkdir ./build && cd $_
 
+  export CC=nvc
+  export CXX=nvc++
+  export FC=nvfortran
+
   if [ "$HARDWARE_TYPE" == CPU ]
   then
     cmake \
@@ -160,10 +164,11 @@ then
   then
     cmake \
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DCMAKE_PREFIX_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.5/comm_libs/openmpi/openmpi-3.1.5/lib/ \
         -DUSE_OMP=OFF \
         -DUSE_ACC=ON \
         -DUSE_PSPLINE=ON \
-        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc80,lineinfo -Mfree -fPIC -O3 -Mpreprocess -DHDF5_DOUBLE_PRESICION" \
+        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc70,lineinfo -Mfree -fPIC -O3 -Mpreprocess -DHDF5_DOUBLE_PRESICION" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DCMAKE_C_FLAGS="-O3 -mp" \
         -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
