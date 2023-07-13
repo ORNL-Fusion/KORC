@@ -557,7 +557,8 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
 #ifdef PSPLINE
 
-        call check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_D3D_IWL,circumradius, &
+        call check_if_in_fields_domain_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
         call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
@@ -2018,7 +2019,8 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
         call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
-        call check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_D3D_IWL,circumradius, &
+        call check_if_in_fields_domain_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
         call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &

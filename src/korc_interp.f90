@@ -1602,7 +1602,8 @@ subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
     end if
   end subroutine check_if_in_fields_domain_p
 
-subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_D3D_IWL,circumradius, &
+subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,bfield_2d_local, &
+  Dim2x1t,Analytic_D3D_IWL,circumradius, &
   ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
   !$acc routine seq
   !! @note Subrotuine that checks if particles in the simulation are within
@@ -1635,7 +1636,8 @@ subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_
   REAL(rp),DIMENSION(2),INTENT(IN) :: DiMESdims
   REAL(rp),INTENT(IN) :: circumradius,ntiles
   LOGICAL,INTENT(IN) :: Dim2x1t,Analytic_D3D_IWL,useDiMES
-  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
+  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(IN)        :: fields_domain_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
 
   if (ALLOCATED(fields_domain_local%FLAG3D)) then
     if (Dim2x1t) then
@@ -1652,9 +1654,9 @@ subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_
         if (.not.Analytic_D3D_IWL) then
             flag = 0_is
         else if (Analytic_D3D_IWL) then
-            if ((IR.lt.floor(bfield_2d%NR/6._rp)).and. &
-                (IZ.gt.floor(bfield_2d%NZ/5._rp)).and. &
-                (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
+            if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
+                (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
+                (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
 
               Rwall=circumradius*cos(C_PI/ntiles)/ &
                     (cos((modulo(Y_PHI,2*C_PI/ntiles))-C_PI/ntiles))
@@ -1690,15 +1692,15 @@ subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_
           0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
 
     if ((IR.lt.1).or.(IZ.lt.1).or. &
-          (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
+          (IR.GT.bfield_2d_local%NR).OR.(IZ.GT.bfield_2d_local%NZ).or. &
           (fields_domain_local%FLAG2D(IR,IZ).NE.1_is)) then
 
       if (.not.Analytic_D3D_IWL) then
         flag = 0_is
       else if (Analytic_D3D_IWL) then
-        if ((IR.lt.floor(bfield_2d%NR/6._rp)).and. &
-              (IZ.gt.floor(bfield_2d%NZ/5._rp)).and. &
-              (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
+        if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
+              (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
+              (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
 
             Rwall=circumradius*cos(C_PI/ntiles)/ &
                 (cos(modulo(Y_PHI,2*C_PI/ntiles)-C_PI/ntiles))
