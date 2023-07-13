@@ -481,9 +481,11 @@ subroutine FO_init_ACC(params,F,spp,output,step)
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (interp_FOfields_mars_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_p_ACC) seq
 
   do ii = 1_idef,params%num_species
 
@@ -506,13 +508,15 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
     if(output) then
 
-      call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local)
+      call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+        fields_domain_local)
 
       !$acc  parallel loop &
       !$acc& firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
       !$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
       !$acc& DiMESdims,Dim2x1t) &
-      !$acc& copyin(ii,spp(ii)%ppp,bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local) &
+      !$acc& copyin(ii,spp(ii)%ppp,bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+      !$acc& fields_domain_local) &
       !$acc& copy(spp(ii)%vars%X(1:pp,1:3),spp(ii)%vars%V(1:pp,1:3), &
       !$acc& spp(ii)%vars%flagCon(1:pp),spp(ii)%vars%flagCol(1:pp)) &
       !$acc& copyout(spp(ii)%vars%B(1:pp,1:3),spp(ii)%vars%E(1:pp,1:3), &
@@ -553,7 +557,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
 #ifdef PSPLINE
 
-        call check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
+        call check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
         call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
@@ -1924,6 +1928,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (check_if_in_fields_domain_p_ACC) seq
@@ -1955,7 +1960,8 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     DiMESloc_cyl=F%DiMESloc
     DiMESdims=F%DiMESdims
 
-    call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local)
+    call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+      fields_domain_local)
 
     !$acc parallel loop &
     !$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
@@ -1965,7 +1971,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     !$acc& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
     !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
     !$acc& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp) &
-    !$acc& copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local) &
+    !$acc& copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local) &
     !$acc& copy(spp(ii)%vars%X(1:spp(ii)%ppp,1:3), &
     !$acc& spp(ii)%vars%V(1:spp(ii)%ppp,1:3), &
     !$acc& spp(ii)%vars%B(1:spp(ii)%ppp,1:3), &
@@ -2012,7 +2018,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
         call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
-        call check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
+        call check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
         call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &

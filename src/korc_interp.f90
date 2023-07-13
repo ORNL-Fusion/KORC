@@ -246,7 +246,7 @@ TYPE, PRIVATE :: KORC_2D_HOLLMANN_INTERPOLANT
   !! ends of the \(Z\) direction.
 END TYPE KORC_2D_HOLLMANN_INTERPOLANT
 
-TYPE, PRIVATE :: KORC_INTERPOLANT_DOMAIN
+TYPE :: KORC_INTERPOLANT_DOMAIN
   !! @note Derived type containing 2-D and 3-D arrays with the information of
   !! the spatial domain where the fields and profiles are known.
   !! This info is used for detecting when a particle is lost, and therefore not
@@ -344,9 +344,7 @@ PUBLIC :: interp_fields,&
   check_if_in_LCFS,&
   check_if_in_profiles_domain,&
   check_if_in_profiles_domain_p,&
-  check_if_in_fields_domain_p, &
-  check_if_in_fields_domain_p_ACC, &
-  provide_ezspline_mars_ACC
+  check_if_in_fields_domain_p
 #else
   PUBLIC :: interp_fields
 
@@ -1604,7 +1602,7 @@ subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
     end if
   end subroutine check_if_in_fields_domain_p
 
-subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius, &
+subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,Dim2x1t,Analytic_D3D_IWL,circumradius, &
   ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
   !$acc routine seq
   !! @note Subrotuine that checks if particles in the simulation are within
@@ -1637,18 +1635,19 @@ subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius
   REAL(rp),DIMENSION(2),INTENT(IN) :: DiMESdims
   REAL(rp),INTENT(IN) :: circumradius,ntiles
   LOGICAL,INTENT(IN) :: Dim2x1t,Analytic_D3D_IWL,useDiMES
+  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
-  if (ALLOCATED(fields_domain%FLAG3D)) then
+  if (ALLOCATED(fields_domain_local%FLAG3D)) then
     if (Dim2x1t) then
 
-      IR = INT(FLOOR((Y_R  - fields_domain%Ro + &
-          0.5_rp*fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
+      IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
+          0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
 
-      IZ = INT(FLOOR((Y_Z  + ABS(fields_domain%Zo) + &
-          0.5_rp*fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
+      IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
+          0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
 
-      if (fields_domain%FLAG3D(IR,1,IZ).NE.1_is) then
-      !if ((fields_domain%FLAG3D(IR,1,IZ).NE.1_is).OR. &
+      if (fields_domain_local%FLAG3D(IR,1,IZ).NE.1_is) then
+      !if ((fields_domain_local%FLAG3D(IR,1,IZ).NE.1_is).OR. &
       !    ((IR.GT.bfield_2X1T%NR).OR.(IZ.GT.bfield_2X1T%NZ))) then
         if (.not.Analytic_D3D_IWL) then
             flag = 0_is
@@ -1669,30 +1668,30 @@ subroutine check_if_in_fields_domain_p_ACC(Dim2x1t,Analytic_D3D_IWL,circumradius
 
     else
 
-      IR = INT(FLOOR((Y_R  - fields_domain%Ro + &
-          0.5_rp*fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
-      IPHI = INT(FLOOR((Y_PHI  + 0.5_rp*fields_domain%DPHI)/ &
-          fields_domain%DPHI) + 1.0_rp,idef)
-      IZ = INT(FLOOR((Y_Z  + ABS(fields_domain%Zo) + &
-          0.5_rp*fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
+      IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
+          0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
+      IPHI = INT(FLOOR((Y_PHI  + 0.5_rp*fields_domain_local%DPHI)/ &
+          fields_domain_local%DPHI) + 1.0_rp,idef)
+      IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
+          0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
 
-      if (fields_domain%FLAG3D(IR,IPHI,IZ).NE.1_is) then
-      !if ((fields_domain%FLAG3D(IR,IPHI,IZ).NE.1_is).OR. &
+      if (fields_domain_local%FLAG3D(IR,IPHI,IZ).NE.1_is) then
+      !if ((fields_domain_local%FLAG3D(IR,IPHI,IZ).NE.1_is).OR. &
       !    ((IR.GT.bfield_3d%NR).OR.(IZ.GT.bfield_3d%NZ))) then      
         flag = 0_is
       end if
 
     end if
-  else if (ALLOCATED(fields_domain%FLAG2D)) then
+  else if (ALLOCATED(fields_domain_local%FLAG2D)) then
 
-    IR = INT(FLOOR((Y_R  - fields_domain%Ro + &
-          0.5_rp*fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
-    IZ = INT(FLOOR((Y_Z  + ABS(fields_domain%Zo) + &
-          0.5_rp*fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
+    IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
+          0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
+    IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
+          0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
 
     if ((IR.lt.1).or.(IZ.lt.1).or. &
           (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
-          (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
+          (fields_domain_local%FLAG2D(IR,IZ).NE.1_is)) then
 
       if (.not.Analytic_D3D_IWL) then
         flag = 0_is
@@ -2516,10 +2515,11 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 
 end subroutine interp_FOfields_mars
 
-subroutine provide_ezspline_mars_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d)
+subroutine provide_ezspline_mars_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d,fields_domain)
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d
+  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT)        :: fields_domain
 
 end subroutine provide_ezspline_mars_ACC
 
@@ -2608,7 +2608,7 @@ subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfie
      
   call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local%R,b1Refield_2d_local%PHI, &
     b1Refield_2d_local%Z,b1Imfield_2d_local%R,b1Imfield_2d_local%PHI,b1Imfield_2d_local%Z, &
-    Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
+    Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
 
   PSIp=A(1)
