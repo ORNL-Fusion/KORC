@@ -133,10 +133,7 @@ then
 elif [ $HOSTNAME == "checkerboard.ornl.gov"   ]
 then
 
-  BUILD_TYPE=Debug
   HARDWARE_TYPE=GPU
- 
-  echo cmake configured to generate a $BUILD_TYPE build.
 
   rm -f CMakeCache.txt
   rm -rf CMakeFiles
@@ -151,12 +148,13 @@ then
     cmake \
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
         -DUSE_OMP=ON \
-        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -r8 -fPIC -O3 -mp" \
+        -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -fPIC -O3 -mp -Mvect=simd:256 -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
         -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+        -DCMAKE_C_FLAGS="-O3 -mp -Mvect=simd:256" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp -Mvect=simd:256" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -Minfo=all -traceback" \
         -DUSE_PSPLINE=ON \
-        -DPSPLINE_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/include \
-        -DPSPLINE_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib -lpspline" \
-        -DPSPLINE_LIBRARIES=/global/cfs/cdirs/m3236/build_unstable/PSPLINE_GH/pspline/build/lib/libpspline.a   \
       ..
   elif [ "$HARDWARE_TYPE" == GPU ]
   then
@@ -164,19 +162,19 @@ then
         -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
         -DUSE_OMP=OFF \
         -DUSE_ACC=ON \
-        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=cc80 -Mfree -fPIC -O3 -Mpreprocess" \
-        -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
         -DUSE_PSPLINE=ON \
-        -DPSPLINE_INCLUDE_PATH=/global/cfs/cdirs/m3236/build_gpu_test/PSPLINE_GH/pspline/build/include \
-        -DPSPLINE_LINK_FLAGS="-L/global/cfs/cdirs/m3236/build_gpu_test/PSPLINE_GH/pspline/build/lib -lpspline" \
-        -DPSPLINE_LIBRARIES=/global/cfs/cdirs/m3236/build_gpu_test/PSPLINE_GH/pspline/build/lib/libpspline.a   \
+        -DCMAKE_Fortran_FLAGS="-fast -acc=gpu -gpu=deepcopy,cc80,lineinfo -Mfree -fPIC -O3 -Mpreprocess -DHDF5_DOUBLE_PRESICION" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+        -DCMAKE_C_FLAGS="-O3 -mp" \
+        -DCMAKE_C_FLAGS_DEBUG="-g -Minfo=all -traceback" \
+        -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g -Minfo=all -traceback" \
       ..
   else
     echo " choose a valid hardware type "
   fi
 
   [[ $? -eq 0 ]] && make VERBOSE=1
-
 
 else
 # MACHINE_ID is new and unknown. Inform the user how to add support for this new machine.
