@@ -113,7 +113,7 @@ TYPE, PRIVATE :: KORC_2DX_FIELDS_INTERPOLANT
   !! ends of the \(Z\) direction.
 END TYPE KORC_2DX_FIELDS_INTERPOLANT
 
-TYPE, PRIVATE :: KORC_2D_FIELDS_INTERPOLANT
+TYPE :: KORC_2D_FIELDS_INTERPOLANT
   !! @note Derived type containing 2-D PSPLINE interpolants for
   !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
   !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
@@ -2523,8 +2523,7 @@ subroutine provide_ezspline_mars_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d)
 
 end subroutine provide_ezspline_mars_ACC
 
-subroutine interp_FOfields_mars_p(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-  pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache)
+subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache)
   INTEGER, INTENT(IN)  :: pchunk
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
@@ -2596,7 +2595,7 @@ subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfie
   REAL(rp),INTENT(OUT)   :: PSIp
   REAL(rp)   :: cP,sP,cPshift,sPshift
   REAL(rp), DIMENSION(3)  :: A
-  INTEGER(ip) :: ezerr_local
+  INTEGER :: ezerr_local
   INTEGER                                      :: cc
   !! Particle chunk iterator.
   REAL(rp), INTENT(IN) :: psip_conv,amp,phase,Bo,Ro
