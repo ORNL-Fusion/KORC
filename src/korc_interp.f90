@@ -2426,11 +2426,16 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 
 end subroutine interp_FOfields_mars
 
-subroutine provide_ezspline_mars_ACC(bfield_2d,b1Refield_2d,b1Imfield_2d,fields_domain)
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d
-  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT)        :: fields_domain
+subroutine provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT)        :: fields_domain_local
+
+  bfield_2d_local=bfield_2d  
+  b1Refield_2d_local=b1Refield_2d
+  b1Imfield_2d_local=b1Imfield_2d
+  fields_domain_local=fields_domain
 
 end subroutine provide_ezspline_mars_ACC
 
