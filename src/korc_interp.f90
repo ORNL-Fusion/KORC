@@ -1583,7 +1583,7 @@ subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
     end if
   end subroutine check_if_in_fields_domain_p
 
-subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,bfield_2d_local, &
+subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
   Dim2x1t,Analytic_D3D_IWL,circumradius, &
   ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
   !$acc routine seq
@@ -1620,114 +1620,67 @@ subroutine check_if_in_fields_domain_p_ACC(fields_domain_local,bfield_2d_local, 
   TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(IN)        :: fields_domain_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
 
-  if (ALLOCATED(fields_domain_local%FLAG3D)) then
-    if (Dim2x1t) then
+  IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
+        0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
+  IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
+        0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
 
-      IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
-          0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
+  if ((IR.lt.1).or.(IZ.lt.1).or. &
+        (IR.GT.bfield_2d_local%NR).OR.(IZ.GT.bfield_2d_local%NZ).or. &
+        (fields_domain_local%FLAG2D(IR,IZ).NE.1_is)) then
 
-      IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
-          0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
+    if (.not.Analytic_D3D_IWL) then
+      flag = 0_is
+    else if (Analytic_D3D_IWL) then
+      if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
+            (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
+            (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
 
-      if (fields_domain_local%FLAG3D(IR,1,IZ).NE.1_is) then
-      !if ((fields_domain_local%FLAG3D(IR,1,IZ).NE.1_is).OR. &
-      !    ((IR.GT.bfield_2X1T%NR).OR.(IZ.GT.bfield_2X1T%NZ))) then
-        if (.not.Analytic_D3D_IWL) then
-            flag = 0_is
-        else if (Analytic_D3D_IWL) then
-            if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
-                (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
-                (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
+          Rwall=circumradius*cos(C_PI/ntiles)/ &
+              (cos(modulo(Y_PHI,2*C_PI/ntiles)-C_PI/ntiles))
 
-              Rwall=circumradius*cos(C_PI/ntiles)/ &
-                    (cos((modulo(Y_PHI,2*C_PI/ntiles))-C_PI/ntiles))
-              if (Y_R.lt.Rwall) flag = 0_is
+          !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
+          !write(6,*) 'Rwall',Rwall*lscale
+          !write(6,*) 'mod',modulo(Y_PHI,2*C_PI/F%ntiles)
 
-            else
-              flag = 0_is
-            endif
-        endif
-      end if
+          if (Y_R.lt.Rwall) flag = 0_is
 
-    else
-
-      IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
-          0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
-      IPHI = INT(FLOOR((Y_PHI  + 0.5_rp*fields_domain_local%DPHI)/ &
-          fields_domain_local%DPHI) + 1.0_rp,idef)
-      IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
-          0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
-
-      if (fields_domain_local%FLAG3D(IR,IPHI,IZ).NE.1_is) then
-      !if ((fields_domain_local%FLAG3D(IR,IPHI,IZ).NE.1_is).OR. &
-      !    ((IR.GT.bfield_3d%NR).OR.(IZ.GT.bfield_3d%NZ))) then      
-        flag = 0_is
-      end if
-
-    end if
-  else if (ALLOCATED(fields_domain_local%FLAG2D)) then
-
-    IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
-          0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
-    IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
-          0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
-
-    if ((IR.lt.1).or.(IZ.lt.1).or. &
-          (IR.GT.bfield_2d_local%NR).OR.(IZ.GT.bfield_2d_local%NZ).or. &
-          (fields_domain_local%FLAG2D(IR,IZ).NE.1_is)) then
-
-      if (.not.Analytic_D3D_IWL) then
-        flag = 0_is
-      else if (Analytic_D3D_IWL) then
-        if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
-              (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
-              (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
-
-            Rwall=circumradius*cos(C_PI/ntiles)/ &
-                (cos(modulo(Y_PHI,2*C_PI/ntiles)-C_PI/ntiles))
-
-            !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
-            !write(6,*) 'Rwall',Rwall*lscale
-            !write(6,*) 'mod',modulo(Y_PHI,2*C_PI/F%ntiles)
-
-            if (Y_R.lt.Rwall) flag = 0_is
-
-        else
-            flag = 0_is
-        endif
+      else
+          flag = 0_is
       endif
+    endif
+
+  end if
+
+  if (useDiMES) THEN
+
+    DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
+
+    if ((abs(Y_R-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
+          (abs(Y_Z-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
+          (abs(Y_PHI-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
+
+        xtmp=Y_R*cos(Y_PHI)
+        ytmp=Y_R*sin(Y_PHI)
+        ztmp=Y_Z
+
+        DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
+        DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
+        DiMESloc_cart(3)=DiMESloc_cyl(3)
+
+        DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
+
+        if (DiMESrad.le.0._rp) THEN
+          return
+        end if
+
+        DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+
+        if (ztmp.le.DiMESsurf) flag=0_is
 
     end if
+  endif !DiMES
 
-    if (useDiMES) THEN
-
-      DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
-
-      if ((abs(Y_R-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
-            (abs(Y_Z-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
-            (abs(Y_PHI-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
-
-          xtmp=Y_R*cos(Y_PHI)
-          ytmp=Y_R*sin(Y_PHI)
-          ztmp=Y_Z
-
-          DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
-          DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
-          DiMESloc_cart(3)=DiMESloc_cyl(3)
-
-          DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
-
-          if (DiMESrad.le.0._rp) THEN
-            return
-          end if
-
-          DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
-
-          if (ztmp.le.DiMESsurf) flag=0_is
-
-      end if
-    endif !DiMES
-  end if
 end subroutine check_if_in_fields_domain_p_ACC
 
 subroutine check_if_in_LCFS(F,Y,inLCFS)
