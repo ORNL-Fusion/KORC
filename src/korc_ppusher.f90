@@ -511,6 +511,8 @@ subroutine FO_init_ACC(params,F,spp,output,step)
       call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
         fields_domain_local)
 
+      !$acc enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local)
+
       !$acc  parallel loop !&
       !!$acc& firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
       !!$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl(3), &
@@ -643,6 +645,8 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
       enddo
       !$acc end parallel loop
+
+      !$acc exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local)
 
     endif !(if output)
 
