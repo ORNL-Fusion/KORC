@@ -1112,9 +1112,9 @@ subroutine initialize_fields(params,F)
       F%AB%current_direction = TRIM(current_direction)
       SELECT CASE (TRIM(F%AB%current_direction))
       CASE('PARALLEL')
-         F%AB%Bp_sign = 1.0_rp
+        F%AB%Bp_sign = 1.0_rp
       CASE('ANTI-PARALLEL')
-         F%AB%Bp_sign = -1.0_rp
+        F%AB%Bp_sign = -1.0_rp
       CASE DEFAULT
       END SELECT
       F%Eo = Eo
