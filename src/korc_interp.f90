@@ -1681,7 +1681,7 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
     end if
   endif !DiMES
 
-end subroutine check_if_in_fields_domain_p_ACC
+end subroutine check_if_in_fields_domain_2D_p_ACC
 
 subroutine check_if_in_LCFS(F,Y,inLCFS)
    !! @note Subrotuine that checks if particles in the simulation are within

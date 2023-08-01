@@ -485,7 +485,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (interp_FOfields_mars_p_ACC) seq
-  !$acc routine (check_if_in_fields_domain_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
 
   do ii = 1_idef,params%num_species
 
@@ -649,11 +649,11 @@ subroutine FO_init_ACC(params,F,spp,output,step)
     if(step.and.(.not.params%FokPlan)) then
       dt=0.5_rp*params%dt
 
-      !$acc  parallel loop &
-      !$acc& firstprivate(dt) &
-      !$acc& private(pp) &
-      !$acc& copyin(ii,spp(ii)%ppp) &
-      !$acc& copyout(spp(ii)%vars%X(1:pp,1:3))
+      !$acc  parallel loop !&
+      !!$acc& firstprivate(dt) &
+      !!$acc& private(pp) &
+      !!$acc& copyin(ii,spp(ii)%ppp) &
+      !!$acc& copyout(spp(ii)%vars%X(1:pp,1:3))
       do pp=1_idef,spp(ii)%ppp
 
         spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
@@ -1932,7 +1932,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
-  !$acc routine (check_if_in_fields_domain_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
   !$acc routine (interp_FOfields_mars_p_ACC) seq
   !$acc routine (advance_FOinterp_vars_ACC) seq
 
@@ -1964,27 +1964,27 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
       fields_domain_local)
 
-    !$acc parallel loop &
-    !$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
-    !$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
-    !$acc& DiMESdims,tskip,ii,ppp,dt,Dim2x1t) &
-    !$acc& PRIVATE(pp,tt,Bmag,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
-    !$acc& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-    !$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
-    !$acc& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp) &
-    !$acc& copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local) &
-    !$acc& copy(spp(ii)%vars%X(1:spp(ii)%ppp,1:3), &
-    !$acc& spp(ii)%vars%V(1:spp(ii)%ppp,1:3), &
-    !$acc& spp(ii)%vars%B(1:spp(ii)%ppp,1:3), &
-    !$acc& spp(ii)%vars%E(1:spp(ii)%ppp,1:3), &
-    !$acc& spp(ii)%vars%PSI_P(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%g(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%flagCon(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%flagCol(1:spp(ii)%ppp)) &
-    !$acc& copyout(spp(ii)%vars%eta(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%mu(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%Prad(1:spp(ii)%ppp), &
-    !$acc& spp(ii)%vars%Pin(1:spp(ii)%ppp))
+    !$acc parallel loop !&
+    !!$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
+    !!$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
+    !!$acc& DiMESdims,tskip,ii,ppp,dt,Dim2x1t) &
+    !!$acc& PRIVATE(pp,tt,Bmag,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
+    !!$acc& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
+    !!$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
+    !!$acc& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp) &
+    !!$acc& copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local) &
+    !!$acc& copy(spp(ii)%vars%X(1:spp(ii)%ppp,1:3), &
+    !!$acc& spp(ii)%vars%V(1:spp(ii)%ppp,1:3), &
+    !!$acc& spp(ii)%vars%B(1:spp(ii)%ppp,1:3), &
+    !!$acc& spp(ii)%vars%E(1:spp(ii)%ppp,1:3), &
+    !!$acc& spp(ii)%vars%PSI_P(1:spp(ii)%ppp), &
+    !!$acc& spp(ii)%vars%g(1:spp(ii)%ppp), &
+    !!$acc& spp(ii)%vars%flagCon(1:spp(ii)%ppp), &
+    !!$acc& spp(ii)%vars%flagCol(1:spp(ii)%ppp)) &
+    !!$acc& copyout(spp(ii)%vars%eta(1:spp(ii)%ppp), &
+    !!$acc& spp(ii)%vars%mu(1:spp(ii)%ppp), &
+    !!$acc& spp(ii)%vars%Prad(1:spp(ii)%ppp), &
+    !!$acc& spp(ii)%vars%Pin(1:spp(ii)%ppp))
 
     do pp=1_idef,ppp
 
@@ -2019,7 +2019,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
         call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
-        call check_if_in_fields_domain_p_ACC(fields_domain_local,bfield_2d_local, &
+        call check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
           Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
