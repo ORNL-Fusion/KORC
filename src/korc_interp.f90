@@ -799,8 +799,8 @@ CONTAINS
              b1Refield_2dx%X%x1 = F%X%R
              b1Refield_2dx%X%x2 = F%X%Z
 
-             !write(output_unit_write,'("R",E17.10)') F%X%R
-             !write(output_unit_write,'("Z",E17.10)') F%X%Z
+!             write(6,'("R",E17.10)') F%X%R
+!             write(6,'("Z",E17.10)') F%X%Z
 
              call EZspline_setup(b1Refield_2dx%X, F%B1Re_2DX%X, ezerr, .TRUE.)
              call EZspline_error(ezerr)
@@ -3325,7 +3325,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
 
   psip_conv=F%psip_conv
   amp=F%AMP
-  mmode=40
+  mmode=F%AORSA_mmode
   nmode=F%AORSA_nmode
 
 
@@ -3359,23 +3359,27 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
      B0_Z = -psip_conv*A(1,2)/prtcls%Y(pp,1)
 
      cnP=cos(mmode*theta-nmode*Y_PHI)
+     snP=sin(mmode*theta-nmode*Y_PHI)
      !snP=sin(nmode*Y_PHI)
 
      cP=cos(Y_PHI)
     !sP=sin(Y_PHI)
-     BXavg=6.95E-07/params%cpp%Bo
-     BYavg=1.184E-06/params%cpp%Bo
-     BZavg=1.118E-06/params%cpp%Bo 
+      BXavg=6.95E-07/params%cpp%Bo
+      BYavg=1.184E-06/params%cpp%Bo
+      BZavg=1.118E-06/params%cpp%Bo 
+    !  BXavg=0.0
+    !  BYavg=0.0
+    !  BZavg=0.0
      B1_X = amp*(BXavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
-     B1_Y = amp*(BYavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
-     B1_Z = amp*(BZavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
+     B1_Y = amp*(BYavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*snp)
+     B1_Z =-amp*(BZavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
 
      EXavg=76.2/params%cpp%Eo
      EYavg=57.7/params%cpp%Eo
      EZavg=9.25/params%cpp%Eo
-     E1_X= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EXavg*cnp
+     E1_X= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EXavg*snp
      E1_Y= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EYavg*cnp
-     E1_Z= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EZavg*cnp
+     E1_Z=-amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EZavg*snp
      prtcls%E(pp,1)=E1_X(1)
      prtcls%E(pp,2)=E1_Y(1)
      prtcls%E(pp,3)=E1_Z(1)
@@ -3444,7 +3448,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   amp=F%AMP
   nmode=F%AORSA_nmode
   omega=2*C_PI*F%AORSA_freq
-  mmode=40 
+  mmode=F%AORSA_mmode
   
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
@@ -3479,13 +3483,17 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
      
 
      cnP(cc)=cos(mmode*theta(cc)-omega*params%time-nmode*Y_PHI(cc))
+     snP(cc)=sin(mmode*theta(cc)-omega*params%time-nmode*Y_PHI(cc))
     ! snP(cc)=sin(mmode*theta-omega*time-nmode*Y_PHI(cc))
-     BXavg=6.95E-07/params%cpp%Bo
-     BYavg=1.184E-06/params%cpp%Bo
-     BZavg=1.118E-06/params%cpp%Bo
+      BXavg=6.95E-07/params%cpp%Bo
+      BYavg=1.184E-06/params%cpp%Bo
+      BZavg=1.118E-06/params%cpp%Bo
+!      BXavg=0.0
+!      BYavg=0.0
+!      BZavg=0.0
      B1_X(cc) = amp*(BXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
-     B1_Y(cc) = amp*(BYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
-     B1_Z(cc) = amp*(BZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     B1_Y(cc) = amp*(BYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp(cc)
+     B1_Z(cc) = -amp*(BZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
 
      B_X(cc) = B0_X(cc)+B1_X(cc)
      B_Y(cc) = B0_Y(cc)+B1_Y(cc)
@@ -3494,9 +3502,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
      EXavg=76.2/params%cpp%Eo
      EYavg=57.7/params%cpp%Eo
      EZavg=9.25/params%cpp%Eo
-     E_X(cc) = amp*(EXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     E_X(cc) = -amp*(EXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp(cc)
      E_Y(cc) = amp*(EYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
-     E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp(cc)
      
 
   end do

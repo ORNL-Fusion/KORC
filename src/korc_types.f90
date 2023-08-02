@@ -481,7 +481,7 @@ module korc_types
      REAL(rp)                            :: theta_gauss
      !! Angle of counter-clockwise rotation (in degrees) of 2D Gaussian
      !! distribution relative to R,Z
-     REAL(rp)                            :: psi_max
+     REAL(rp)                            :: psi_max,PSIp_min
      !! Maximum value of the argument of the 2D gaussian exponential, used
      !! for an indicator function that limits the region of MH sampling
      REAL(rp)                            :: Spong_b
@@ -623,6 +623,7 @@ module korc_types
      REAL(rp)  :: psir
      REAL(rp)  :: width 
      REAL(rp)  :: AORSA_nmode
+     REAL(rp)  :: AORSA_mmode
      !! interpolated E field
      CHARACTER(30) :: Analytic_IWL
      INTEGER :: ntiles

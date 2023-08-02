@@ -2417,6 +2417,7 @@ CONTAINS
        F%AORSA_AMP_Scale=AORSA_AMP_Scale
        F%AORSA_freq=AORSA_freq
        F%AORSA_nmode=AORSA_nmode
+       F%AORSA_mmode=AORSA_mmode
        F%width=width
        F%psir=psir
        F%useLCFS = useLCFS

@@ -31,6 +31,7 @@ MODULE korc_spatial_distribution
        fzero,&
        MH_gaussian_elliptic_torus,&
        indicator,&
+       indicatortwo,&
        PSI_ROT,&
        Spong_3D,&
        Spong_2D, &
@@ -151,7 +152,7 @@ subroutine torus(params,spp)
     call set_random_dist(0.0_rp, 1.0_rp)
     call get_randoms(r)
 
-     r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
+    r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
 !$OMP PARALLEL WORKSHARE
     spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*SIN(zeta)
@@ -735,6 +736,18 @@ FUNCTION indicator(psi,psi_max)
 END FUNCTION indicator
 
 
+FUNCTION indicatortwo(psi,PSIp_min)
+
+  REAL(rp), INTENT(IN)  :: psi
+  REAL(rp), INTENT(IN)  :: PSIp_min
+  REAL(rp)              :: indicatortwo
+
+  IF (psi.GT.PSIp_min) THEN
+     indicatortwo=1
+  ELSE
+     indicatortwo=0
+  END IF
+  END FUNCTION indicatortwo 
 FUNCTION random_norm(mean,sigma)
 	REAL(rp), INTENT(IN) :: mean
 	REAL(rp), INTENT(IN) :: sigma
@@ -1283,6 +1296,8 @@ subroutine MH_psi(params,spp,F)
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
   TYPE(FIELDS), INTENT(IN)                                   :: F
   !! An instance of the KORC derived type FIELDS.
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: R_samples,X_samples,Y_samples
@@ -1308,7 +1323,7 @@ subroutine MH_psi(params,spp,F)
   !! Present sample of Z location
   REAL(rp) 				:: PHI_test
 
-  REAL(rp) 				:: psi_max,psi_max_buff
+  REAL(rp) 				:: psi_max,PSIp_min,psi_max_buff
   REAL(rp)  :: PSIp_lim,PSIP0,PSIN,PSIN0,PSIN1,sigma,psi0,psi1
 
   REAL(rp) 				:: rand_unif
@@ -1333,7 +1348,7 @@ subroutine MH_psi(params,spp,F)
 
   params%GC_coords=.TRUE.
   PSIp_lim=F%PSIp_lim
-
+  !changed_YG
   if (params%field_model.eq.'M3D_C1') then
      min_R=params%rmin/params%cpp%length
      max_R=params%rmax/params%cpp%length
@@ -1349,16 +1364,18 @@ subroutine MH_psi(params,spp,F)
      min_Z=minval(F%X%Z)
      max_Z=maxval(F%X%Z)
 
- ! changed YG   PSIp0=F%PSIP_min
-     PSIp0=0.0498
-!  changed YG   psi_max = spp%psi_max
-     psi_max = 0.05
+     PSIp0=F%PSIP_min
+     psi_max = spp%psi_max/(params%cpp%Bo*params%cpp%length**2)
      psi_max_buff = spp%psi_max*2._rp
+     PSIp_min=spp%PSIp_min/(params%cpp%Bo*params%cpp%length**2)
+    ! psi_max=(psi_max-PSIp0)/(PSIp_lim-PSIp0)
+    ! PSIp_min=(PSIp_min-PSIp0)/(PSIp_lim-PSIp0)
+!    write(6,*)"psip0",PSIp0,"psi_max",psi_max,"PSIp_min",PSIp_min,"PSIp_lim", PSIp_lim
   end if
 
   sigma=spp%sigmaR*params%cpp%length
 
-  !write(output_unit_write,*) min_R,max_R
+  write(6,*) "sigma",sigma
   !write(output_unit_write,*) min_Z,max_Z
 
 
@@ -1406,9 +1423,6 @@ subroutine MH_psi(params,spp,F)
         Z_test = Z_buffer + get_random_N()*spp%dZ
 
 
-
-
-
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
            !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
            !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
@@ -1421,6 +1435,7 @@ subroutine MH_psi(params,spp,F)
            Z_test = Z_buffer + get_random_N()*spp%dZ
         end do
         PHI_test = 2.0_rp*C_PI*get_random_U()
+!	write(6,*)"R_test",R_test,"Z_test",Z_test
 
 
         ! initialize 2D gaussian argument and distribution function, or
@@ -1506,9 +1521,9 @@ subroutine MH_psi(params,spp,F)
         if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
         ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
              indicator(PSIN1,psi_max)* &
+          indicatortwo(PSIN1,PSIp_min)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
-
 !        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
 
         accepted=.false.
@@ -1544,10 +1559,9 @@ subroutine MH_psi(params,spp,F)
 !        write(output_unit_write,'("sample:",I15)') ii
 
 #if DBG_CHECK
-#else
-        if (modulo(ii,nsamples/10).eq.0) then
-           !write(output_unit_write,'("Sample: ",I10)') ii
-        end if
+     if (modulo(ii,nsamples/10).eq.0) then
+        write(output_unit_write,'("Sample: ",I10)') ii
+     end if
 #endif
 
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
@@ -1615,6 +1629,7 @@ subroutine MH_psi(params,spp,F)
         if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
         ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
              indicator(PSIN1,psi_max)* &
+             indicatortwo(PSIN1,PSIp_min)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 
@@ -1644,7 +1659,7 @@ subroutine MH_psi(params,spp,F)
         ! Only accept sample if it is within desired boundary, but
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
-        IF ((INT(indicator(PSIN1,psi_max)).EQ.1).AND. &
+        IF ((INT(indicator(PSIN1,psi_max)).EQ.1).AND.(INT(indicatortwo(PSIN1,PSIp_min)).EQ.1).AND. &
              ACCEPTED) THEN
            R_samples(ii) = R_buffer
            Z_samples(ii) = Z_buffer
