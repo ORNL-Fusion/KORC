@@ -1291,6 +1291,7 @@ subroutine initialize_fields(params,F)
       F%AORSA_AMP_Scale=AORSA_AMP_Scale
       F%AORSA_freq=AORSA_freq
       F%AORSA_nmode=AORSA_nmode
+      F%AORSA_mmode=AORSA_mmode
       F%useLCFS = useLCFS
       F%useDiMES = useDiMES
       F%DiMESloc = DiMESloc

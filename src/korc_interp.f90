@@ -87,7 +87,7 @@ TYPE, PRIVATE :: KORC_2X1T_FIELDS_INTERPOLANT
   !! ends of the \(Z\) direction.
 END TYPE KORC_2X1T_FIELDS_INTERPOLANT
 
-TYPE, PRIVATE :: KORC_2DX_FIELDS_INTERPOLANT
+TYPE :: KORC_2DX_FIELDS_INTERPOLANT
   !! @note Derived type containing 2-D PSPLINE interpolants for
   !! cylindrical components of vector fields \(\mathbf{F}(R,Z) =
   !! F_R\hat{e}_R + F_\phi\hat{e}_phi+ F_Z\hat{e}_Z\).
@@ -292,7 +292,7 @@ TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d
 TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d
 TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: b1Refield_2dx
 TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: b1Imfield_2dx
-TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx
+TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: e1Refield_2dx
 TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: e1Imfield_2dx
 TYPE(KORC_2X1T_FIELDS_INTERPOLANT)     :: bfield_2X1T
 TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: efield_2d
@@ -1611,7 +1611,7 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
   !! to the vertical position of the particles.
 
   REAL(rp) :: Rwall,lscale,xtmp,ytmp,ztmp
-  REAL(rp) :: DiMESsurf,DiMESrad
+  REAL(rp) :: DiMESsurf,DiMESrad,DiMESloc_deg
   REAL(rp),DIMENSION(3) :: DiMESloc_cart
   REAL(rp),DIMENSION(3),INTENT(IN) :: DiMESloc_cyl
   REAL(rp),DIMENSION(2),INTENT(IN) :: DiMESdims
@@ -1654,18 +1654,18 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
 
   if (useDiMES) THEN
 
-    DiMESloc_cyl(2)=C_PI*DiMESloc_cyl(2)/180._rp
+    DiMESloc_deg=C_PI*DiMESloc_cyl(2)/180._rp
 
     if ((abs(Y_R-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
           (abs(Y_Z-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
-          (abs(Y_PHI-DiMESloc_cyl(2)).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
+          (abs(Y_PHI-DiMESloc_deg).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
 
         xtmp=Y_R*cos(Y_PHI)
         ytmp=Y_R*sin(Y_PHI)
         ztmp=Y_Z
 
-        DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_cyl(2))
-        DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_cyl(2))
+        DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_deg)
+        DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_deg)
         DiMESloc_cart(3)=DiMESloc_cyl(3)
 
         DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
@@ -2426,7 +2426,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 
 end subroutine interp_FOfields_mars
 
-subroutine provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local
+subroutine provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local)
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d_local
@@ -2551,6 +2551,24 @@ subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfie
 
 end subroutine interp_FOfields_mars_p_ACC
 
+subroutine provide_ezspline_aorsa_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+  e1Refield_2d_local,e1Imfield_2d_local,fields_domain_local)
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(OUT)      :: e1Refield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(OUT)      :: e1Imfield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT)        :: fields_domain_local
+
+  bfield_2d_local=bfield_2d  
+  b1Refield_2d_local=b1Refield_2dx
+  b1Imfield_2d_local=b1Imfield_2dx
+  e1Refield_2d_local=e1Refield_2dx
+  e1Imfield_2d_local=e1Imfield_2dx
+  fields_domain_local=fields_domain
+
+end subroutine provide_ezspline_aorsa_ACC
+
 subroutine interp_FOfields_aorsa(prtcls, F, params)
    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
    TYPE(PARTICLES), INTENT(INOUT) :: prtcls
@@ -2650,6 +2668,73 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    !$OMP END PARALLEL DO
 
 end subroutine interp_FOfields_aorsa
+
+subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+  e1Refield_2dx_local,e1Imfield_2dx_local,psip_conv,amp,nmode,omega,Bo,Ro, &
+  Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+  !$acc routine seq
+  REAL(rp), INTENT(IN)  :: time
+  REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
+  REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
+  REAL(rp),INTENT(OUT)   :: E_X,E_Y,E_Z
+  REAL(rp)   :: B0_R,B0_PHI,B0_Z,B0_X,B0_Y
+  REAL(rp)   :: B1_X,B1_Y,B1_Z
+  REAL(rp)   :: B1Re_X,B1Re_Y,B1Re_Z
+  REAL(rp)   :: B1Im_X,B1Im_Y,B1Im_Z
+  REAL(rp)   :: E1Re_X,E1Re_Y,E1Re_Z
+  REAL(rp)   :: E1Im_X,E1Im_Y,E1Im_Z
+  REAL(rp),INTENT(OUT)   :: PSIp
+  REAL(rp)   :: cP,sP,cnP,snP
+  REAL(rp), DIMENSION(3)  :: A
+  INTEGER :: ezerr_local
+  REAL(rp),INTENT(IN) :: psip_conv,amp,nmode,omega,Bo,Ro
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: e1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: e1Imfield_2dx_local
+
+  !$acc routine (EZspline_interp2_FOaorsa) seq
+  !$acc routine (EZspline_error) seq
+
+  call EZspline_interp2_FOaorsa(bfield_2d_local%A,b1Refield_2dx_local%X,b1Refield_2dx_local%Y, &
+        b1Refield_2dx_local%Z,b1Imfield_2dx_local%X,b1Imfield_2dx_local%Y,b1Imfield_2dx_local%Z, &
+        e1Refield_2dx_local%X,e1Refield_2dx_local%Y,e1Refield_2dx_local%Z, &
+        e1Imfield_2dx_local%X,e1Imfield_2dx_local%Y,e1Imfield_2dx_local%Z, &
+        Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
+        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr)
+  call EZspline_error(ezerr_local)
+
+
+  PSIp=A(1)
+
+  B0_R = psip_conv*A(3)/Y_R
+  B0_PHI = -Bo*Ro/Y_R
+  B0_Z = -psip_conv*A(2)/Y_R
+
+  cP=cos(Y_PHI)
+  sP=sin(Y_PHI)
+
+  B0_X = B0_R*cP - B0_PHI*sP
+  B0_Y = B0_R*sP + B0_PHI*cP
+
+  cnP=cos(omega*time+nmode*Y_PHI)
+  snP=sin(omega*time+nmode*Y_PHI)
+
+  B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
+  B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
+  B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
+
+  B_X = B0_X+B1_X
+  B_Y = B0_Y+B1_Y
+  B_Z = B0_Z+B1_Z
+
+  E_X = amp*(E1Re_X*cnP-E1Im_X*snP)
+  E_Y = amp*(E1Re_Y*cnP-E1Im_Y*snP)
+  E_Z = amp*(E1Re_Z*cnP-E1Im_Z*snP)
+
+
+end subroutine interp_FOfields_aorsa_p_ACC
 
 subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
    B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp,flag_cache)

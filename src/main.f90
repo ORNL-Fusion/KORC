@@ -492,12 +492,19 @@ end if
 
   if (params%orbit_model(1:2).eq.'FO'.and. &
        params%field_model(10:14).eq.'AORSA') then
-     call FO_init(params,F,spp,.false.,.true.)
+#ifdef ACC
+        call FO_init_ACC(params,F,spp,.false.,.true.)
+#else
+        call FO_init(params,F,spp,.false.,.true.)
+#endif ACC
      ! Initial half-time particle push
 
      do it=params%ito,params%t_steps,params%t_skip
+#ifdef ACC
+        call adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
+#else
         call adv_FOinterp_aorsa_top(params,F,P,spp)
-
+#endif ACC  
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
         params%it = it-1_ip+params%t_skip

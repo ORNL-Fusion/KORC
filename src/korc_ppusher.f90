@@ -473,7 +473,7 @@ subroutine FO_init_ACC(params,F,spp,output,step)
   REAL(rp) :: B_X,B_Y,B_Z
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
-  REAL(rp) :: m_cache,q_cache,psip_conv,amp,phase,Ro,Bo,circumradius,ntiles
+  REAL(rp) :: m_cache,q_cache,psip_conv,amp,phase,Ro,Bo,circumradius,ntiles,nmode,mmode,omega
   INTEGER(is) :: flagCon,flagCol
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
@@ -481,6 +481,10 @@ subroutine FO_init_ACC(params,F,spp,output,step)
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
   TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
@@ -495,6 +499,9 @@ subroutine FO_init_ACC(params,F,spp,output,step)
     psip_conv=F%psip_conv
     amp=F%AMP
     phase=F%MARS_phase
+    nmode=F%AORSA_nmode
+    omega=2*C_PI*F%AORSA_freq
+    mmode=F%AORSA_mmode
     Ro=F%Ro
     Bo=F%Bo
 
@@ -508,26 +515,19 @@ subroutine FO_init_ACC(params,F,spp,output,step)
 
     if(output) then
 
-      call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-        fields_domain_local)
+      if (params%field_model(10:13).eq.'MARS') then
+        call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+          fields_domain_local)
+      elseif (params%field_model(10:13).eq.'AORSA') then
+        call provide_ezspline_aorsa_ACC(bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+          e1Refield_2dx_local,e1Imfield_2dx_local,fields_domain_local)
+      endif
 
-      !$acc enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local)
+      !$acc  enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+      !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
+      !$acc& fields_domain_local)
 
-      !$acc  parallel loop !&
-      !!$acc& firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
-      !!$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl(3), &
-      !!$acc& DiMESdims(2),Dim2x1t) &
-      !!$acc& copyin(ii,spp(ii)%ppp,bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-      !!$acc& fields_domain_local) &
-      !!$acc& copy(spp(ii)%vars%X(1:spp(ii)%ppp,1:3),spp(ii)%vars%V(1:spp(ii)%ppp,1:3), &
-      !!$acc& spp(ii)%vars%flagCon(1:spp(ii)%ppp),spp(ii)%vars%flagCol(1:spp(ii)%ppp)) &
-      !!$acc& copyout(spp(ii)%vars%B(1:spp(ii)%ppp,1:3),spp(ii)%vars%E(1:spp(ii)%ppp,1:3), &
-      !!$acc& spp(ii)%vars%PSI_P(1:spp(ii)%ppp),spp(ii)%vars%eta(1:spp(ii)%ppp), &
-      !!$acc& spp(ii)%vars%mu(1:spp(ii)%pppb),spp(ii)%vars%Pin(1:spp(ii)%ppp),spp(ii)%vars%Prad(1:spp(ii)%ppp)) &
-      !!$acc& PRIVATE(pp,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
-      !!$acc& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,Bmag, &
-      !!$acc& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-      !!$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g)
+      !$acc  parallel loop
       do pp=1_idef,spp(ii)%ppp
 
         X_X=spp(ii)%vars%X(pp,1)
@@ -563,8 +563,14 @@ subroutine FO_init_ACC(params,F,spp,output,step)
           Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
-        call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-          psip_conv,amp,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+        if (params%field_model(10:13).eq.'MARS') then
+          call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+            psip_conv,amp,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+        elseif (params%field_model(10:13).eq.'AORSA') then
+          call interp_FOfields_aorsa_p_ACC(0._rp,bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+            e1Refield_2dx_local,e1Imfield_2dx_local,psip_conv,amp,nmode,omega,Bo,Ro, &
+            Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+        endif
 
 #endif PSPLINE
 
@@ -646,18 +652,16 @@ subroutine FO_init_ACC(params,F,spp,output,step)
       enddo
       !$acc end parallel loop
 
-      !$acc exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local)
+      !$acc  exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+      !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
+      !$acc& fields_domain_local)
 
     endif !(if output)
 
     if(step.and.(.not.params%FokPlan)) then
       dt=0.5_rp*params%dt
 
-      !$acc  parallel loop !&
-      !!$acc& firstprivate(dt) &
-      !!$acc& private(pp) &
-      !!$acc& copyin(ii,spp(ii)%ppp) &
-      !!$acc& copyout(spp(ii)%vars%X(1:pp,1:3))
+      !$acc  parallel loop
       do pp=1_idef,spp(ii)%ppp
 
         spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
@@ -1923,8 +1927,8 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   REAL(rp) :: B_X,B_Y,B_Z
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
-  INTEGER(is) :: flagCon,flagCol
-  REAL(rp) :: a,m_cache,q_cache,tskip,psip_conv,amp,phase
+  INTEGER(is) :: flagCon,flagCol,tskip
+  REAL(rp) :: a,m_cache,q_cache,psip_conv,amp,phase
   REAL(rp) :: Ro,Bo,circumradius,ntiles,dt
   INTEGER  :: ii,pp,ss,tt,ppp
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
@@ -1968,28 +1972,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
       fields_domain_local)
 
-    !$acc parallel loop !&
-    !!$acc  firstprivate(E0,m_cache,q_cache,psip_conv,amp,phase,Ro,Bo, &
-    !!$acc& Analytic_D3D_IWL,circumradius,ntiles,useDiMES,DiMESloc_cyl, &
-    !!$acc& DiMESdims,tskip,ii,ppp,dt,Dim2x1t) &
-    !!$acc& PRIVATE(pp,tt,Bmag,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
-    !!$acc& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-    !!$acc& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
-    !!$acc& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp) &
-    !!$acc& copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local) &
-    !!$acc& copy(spp(ii)%vars%X(1:spp(ii)%ppp,1:3), &
-    !!$acc& spp(ii)%vars%V(1:spp(ii)%ppp,1:3), &
-    !!$acc& spp(ii)%vars%B(1:spp(ii)%ppp,1:3), &
-    !!$acc& spp(ii)%vars%E(1:spp(ii)%ppp,1:3), &
-    !!$acc& spp(ii)%vars%PSI_P(1:spp(ii)%ppp), &
-    !!$acc& spp(ii)%vars%g(1:spp(ii)%ppp), &
-    !!$acc& spp(ii)%vars%flagCon(1:spp(ii)%ppp), &
-    !!$acc& spp(ii)%vars%flagCol(1:spp(ii)%ppp)) &
-    !!$acc& copyout(spp(ii)%vars%eta(1:spp(ii)%ppp), &
-    !!$acc& spp(ii)%vars%mu(1:spp(ii)%ppp), &
-    !!$acc& spp(ii)%vars%Prad(1:spp(ii)%ppp), &
-    !!$acc& spp(ii)%vars%Pin(1:spp(ii)%ppp))
-
+    !$acc parallel loop 
     do pp=1_idef,ppp
 
       X_X=spp(ii)%vars%X(pp,1)
@@ -2332,6 +2315,220 @@ subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
     end do !species iterator
 
 end subroutine adv_FOinterp_aorsa_top
+
+subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
+  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)                                 :: P
+  !! An instance of the KORC derived type PROFILES.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp) :: Bmag
+  REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp) :: v,vpar,vperp
+  REAL(rp) :: tmp
+  REAL(rp) :: g
+  REAL(rp) :: cross_X,cross_Y,cross_Z
+  REAL(rp) :: vec_X,vec_Y,vec_Z
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  REAL(rp) :: PSIp
+  INTEGER(is) :: flagCon,flagCol,tskip
+  REAL(rp) :: a,m_cache,q_cache,psip_conv,amp,phase,nmode,mmode,omega
+  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,time,t0,tnorm
+  INTEGER  :: ii,pp,ss,tt,ppp
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
+  REAL(rp),DIMENSION(2) :: DiMESdims
+  REAL(rp),DIMENSION(3) :: DiMESloc_cyl
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
+  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
+
+  !$acc routine (cart_to_cyl_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
+  !$acc routine (interp_FOfields_aorsa_p_ACC) seq
+  !$acc routine (advance_FOinterp_vars_ACC) seq
+
+  ss=params%num_species
+
+  do ii = 1_idef,ss
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+    a =params%dt
+    tskip=params%t_skip
+    ppp=spp(ii)%ppp
+    dt=params%dt
+    t0=params%time
+    tnorm=params%cpp%time
+  
+
+    psip_conv=F%psip_conv
+    amp=F%AMP
+    phase=F%MARS_phase
+    nmode=F%AORSA_nmode
+    omega=2*C_PI*F%AORSA_freq
+    mmode=F%AORSA_mmode
+    Ro=F%Ro
+    Bo=F%Bo
+
+    Dim2x1t=F%Dim2x1t
+    Analytic_D3D_IWL=F%Analytic_D3D_IWL
+    circumradius=F%circumradius
+    ntiles=F%ntiles
+    useDiMES=F%useDiMES
+    DiMESloc_cyl=F%DiMESloc
+    DiMESdims=F%DiMESdims
+
+    call provide_ezspline_aorsa_ACC(bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+      e1Refield_2dx_local,e1Imfield_2dx_local,fields_domain_local)
+
+    !$acc parallel loop 
+    do pp=1_idef,ppp
+
+      X_X=spp(ii)%vars%X(pp,1)
+      X_Y=spp(ii)%vars%X(pp,2)
+      X_Z=spp(ii)%vars%X(pp,3)
+
+      Y_R=0._rp
+      Y_PHI=0._rp
+      Y_Z=0._rp
+
+      V_X=spp(ii)%vars%V(pp,1)
+      V_Y=spp(ii)%vars%V(pp,2)
+      V_Z=spp(ii)%vars%V(pp,3)
+
+      B_X=spp(ii)%vars%B(pp,1)
+      B_Y=spp(ii)%vars%B(pp,2)
+      B_Z=spp(ii)%vars%B(pp,3)
+
+      E_X=spp(ii)%vars%E(pp,1)
+      E_Y=spp(ii)%vars%E(pp,2)
+      E_Z=spp(ii)%vars%E(pp,3)
+
+      PSIp=spp(ii)%vars%PSI_P(pp)
+
+      g=spp(ii)%vars%g(pp)
+
+      flagCon=spp(ii)%vars%flagCon(pp)
+      flagCol=spp(ii)%vars%flagCol(pp)
+
+      do tt=1_ip,tskip
+
+        time=(t0+dt*tt)*tnorm
+
+        call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+        call check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
+          ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
+
+        call interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+          e1Refield_2dx_local,e1Imfield_2dx_local,psip_conv,amp,nmode,omega,Bo,Ro, &
+          Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+
+        call advance_FOinterp_vars_ACC(dt,tt,a,q_cache,m_cache, &
+            X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            g,flagCon,flagCol,PSIp)
+      end do !timestep iterator
+
+
+      spp(ii)%vars%X(pp,1)=X_X
+      spp(ii)%vars%X(pp,2)=X_Y
+      spp(ii)%vars%X(pp,3)=X_Z
+
+      spp(ii)%vars%V(pp,1)=V_X
+      spp(ii)%vars%V(pp,2)=V_Y
+      spp(ii)%vars%V(pp,3)=V_Z
+
+      spp(ii)%vars%g(pp) = g
+      spp(ii)%vars%flagCon(pp) = flagCon
+      spp(ii)%vars%flagCol(pp) = flagCol
+
+      spp(ii)%vars%B(pp,1) = B_X
+      spp(ii)%vars%B(pp,2) = B_Y
+      spp(ii)%vars%B(pp,3) = B_Z
+
+      spp(ii)%vars%E(pp,1) = E_X
+      spp(ii)%vars%E(pp,2) = E_Y
+      spp(ii)%vars%E(pp,3) = E_Z
+
+      spp(ii)%vars%PSI_P(pp) = PSIp
+
+      !Derived output data
+      Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+      ! Parallel unit vector
+      b_unit_X = B_X/Bmag
+      b_unit_Y = B_Y/Bmag
+      b_unit_Z = B_Z/Bmag
+
+      v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+      if (v.GT.korc_zero) then
+        ! Parallel and perpendicular components of velocity
+        vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+          V_Z*b_unit_Z)
+
+        vperp =  v**2 - vpar**2
+        if ( vperp .GE. korc_zero ) then
+          vperp = SQRT( vperp )
+        else
+          vperp = 0.0_rp
+        end if
+
+        ! Pitch angle
+        spp(ii)%vars%eta(pp) = 180.0_rp* &
+          MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+
+        ! Magnetic moment
+        spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+          g**2*vperp**2/Bmag
+        ! See Northrop's book (The adiabatic motion of charged
+        ! particles)
+
+        ! Radiated power
+        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+        cross_X = V_Y*B_Z-V_Z*B_Y
+        cross_Y = V_Z*B_X-V_X*B_Z
+        cross_Z = V_X*B_Y-V_Y*B_X
+
+        vec_X = E_X + cross_X
+        vec_Y = E_Y + cross_Y
+        vec_Z = E_Z + cross_Z
+
+        spp(ii)%vars%Prad(pp) = tmp* &
+          ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+          cross_X*E_X+cross_Y*E_Y+ &
+          cross_Z*E_Z + g**2* &
+          ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+          - vec_X*vec_X+vec_Y*vec_Y+ &
+          vec_Z*vec_Z) )
+
+        ! Input power due to electric field
+        spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+          E_Y*V_Y+E_Z*V_Z)
+      else
+        spp(ii)%vars%eta(pp) = 0.0_rp
+        spp(ii)%vars%mu(pp) = 0.0_rp
+        spp(ii)%vars%Prad(pp) = 0.0_rp
+        spp(ii)%vars%Pin(pp) = 0.0_rp
+      end if
+
+    end do !particle iterator
+
+  end do !species iterator
+
+end subroutine adv_FOinterp_aorsa_top_ACC
 
 subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,P,F,PSIp)
