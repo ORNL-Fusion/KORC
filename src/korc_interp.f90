@@ -2603,12 +2603,6 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    amp=F%AMP
    nmode=F%AORSA_nmode
 
-   !$OMP PARALLEL DO &
-   !$OMP& PRIVATE(pp,ezerr,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
-   !$OMP& E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z, &
-   !$OMP& B0_R,B0_PHI,B0_X,B0_Y,B0_Z,B1_X,B1_Y,B1_Z,cP,sP,cnP,snP,Y_R,Y_Z,Y_PHI)&
-   !$OMP& FIRSTPRIVATE(psip_conv,amp,nmode) &
-   !$OMP& SHARED(prtcls,F,params)
    do pp = 1,ss
 
       Y_R=prtcls%Y(pp,1)
@@ -2665,7 +2659,6 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
 
    end do
-   !$OMP END PARALLEL DO
 
 end subroutine interp_FOfields_aorsa
 
@@ -2702,7 +2695,7 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
         e1Refield_2dx_local%X,e1Refield_2dx_local%Y,e1Refield_2dx_local%Z, &
         e1Imfield_2dx_local%X,e1Imfield_2dx_local%Y,e1Imfield_2dx_local%Z, &
         Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
-        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr)
+        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
 
 

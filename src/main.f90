@@ -302,7 +302,11 @@ if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
   if (params%orbit_model(1:2).eq.'FO') then
 
 #ifdef ACC
-    call FO_init_ACC(params,F,spp,.true.,.false.)
+    if (params%field_model(10:13).eq.'MARS') then
+      call FO_init_mars_ACC(params,F,spp,.true.,.false.)
+    else if (params%field_model(10:13).eq.'AORSA') then
+      call FO_init_aorsa_ACC(params,F,spp,.true.,.false.)
+    end if
 #else
     call FO_init(params,F,spp,.true.,.false.)
 #endif ACC
@@ -467,7 +471,7 @@ end if
 if (params%orbit_model(1:2).eq.'FO'.and. &
   params%field_model(10:13).eq.'MARS') then
 #ifdef ACC
-  call FO_init_ACC(params,F,spp,.false.,.true.)
+  call FO_init_mars_ACC(params,F,spp,.false.,.true.)
 #else
   call FO_init(params,F,spp,.false.,.true.)
 #endif ACC
@@ -493,7 +497,7 @@ end if
   if (params%orbit_model(1:2).eq.'FO'.and. &
        params%field_model(10:14).eq.'AORSA') then
 #ifdef ACC
-        call FO_init_ACC(params,F,spp,.false.,.true.)
+        call FO_init_aorsa_ACC(params,F,spp,.false.,.true.)
 #else
         call FO_init(params,F,spp,.false.,.true.)
 #endif ACC
