@@ -2803,12 +2803,7 @@ end subroutine EZspline_interp2_collision
 subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
    spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, p1, p2, fA, fBR, &
    fBPHI, fBZ, fER, fEPHI, fEZ, ier)
-#ifdef OMP
-   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
-#endif OMP
-#ifdef ACC
    !$acc routine seq
-#endif ACC
    type(EZspline2) spline_oA, spline_oBR,spline_oBPHI,spline_oBZ
    type(EZspline2) spline_oER,spline_oEPHI,spline_oEZ
    real(fp), intent(in) :: p1, p2
@@ -2818,11 +2813,9 @@ subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
    integer, intent(out) :: ier
    integer :: ifail
    integer:: iwarn = 0
-
-#ifdef ACC   
+  
    !$acc routine (EZspline_allocated2) seq
    !$acc routine (evbicub_FOmars) seq
-#endif ACC
 
    ier = 0
    ifail = 0
@@ -3169,12 +3162,7 @@ logical function EZspline_allocated1(spline_o)
 end function EZspline_allocated1
 
 logical function EZspline_allocated2(spline_o)
-#ifdef ACC
    !$acc routine seq
-#endif ACC
-#ifdef OMP
-   !$OMP DECLARE SIMD (EZspline_allocated2) 
-#endif OMP
    type(EZspline2) spline_o
    EZspline_allocated2 = allocated(spline_o%fspl) &
          .and. allocated(spline_o%x1) .and. allocated(spline_o%x1pkg) &
@@ -3634,12 +3622,7 @@ end subroutine evbicub_collision
 subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    fA,fBR,fBPHI,fBZ,fER,fEPHI,fEZ,inf2,fvalA,fvalBR,fvalBPHI,fvalBZ, &
    fvalER,fvalEPHI,fvalEZ,ier)
-#ifdef ACC
    !$acc routine seq
-#endif ACC
-#ifdef OMP   
-   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
-#endif OMP
    !
    !  evaluate a 2d cubic Spline interpolant on a rectilinear
    !  grid -- this is C2 in both directions.
@@ -3767,11 +3750,9 @@ subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !
    !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
    !---------------------------------------------------------------------
-#ifdef ACC   
    !$acc routine (herm2xy) seq
    !$acc routine (fvbicub) seq
    !$acc routine (fvbicub_grad) seq
-#endif ACC
    !
    i=0
    j=0
@@ -4988,12 +4969,7 @@ subroutine herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !  ================
    !
    !============
-#ifdef ACC   
    !$acc routine seq
-#endif ACC
-#ifdef OMP
-   !$OMP DECLARE SIMD (EZspline_interp2_FOmars)
-#endif OMP
    implicit none
    integer nxm,nym,ii,jj
    !============
@@ -5030,9 +5006,7 @@ subroutine herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
    integer ier                       ! return ier.ne.0 on error
    !
    !------------------------------------
-#ifdef ACC
    !$acc routine (zonfind) seq
-#endif ACC
    !
    ier=0
    !
@@ -5351,13 +5325,8 @@ subroutine herm3xyz(xget,yget,zget,x,nx,y,ny,z,nz, &
    return
 end subroutine herm3xyz
 
-subroutine zonfind(x,nx,zxget,i)
-#ifdef ACC   
+subroutine zonfind(x,nx,zxget,i) 
    !$acc routine seq
-#endif ACC
-#ifdef OMP
-   !$OMP DECLARE SIMD (zonfind)
-#endif OMP
    implicit none
    integer nx,nxm,i1,i2,ij,ii
    real(fp) :: dx
@@ -5447,12 +5416,7 @@ end subroutine zonfind
   
 subroutine fvbicub(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
    fin,inf2,ny)
-#ifdef ACC
    !$acc routine seq
-#endif ACC
-#ifdef OMP
-   !$OMP DECLARE SIMD (fvbicub)
-#endif OMP
    !
    !============
    implicit none
@@ -5544,9 +5508,7 @@ end subroutine fvbicub
 
 subroutine fvbicub_grad(fval,i,j,xparam,yparam,hx,hxi,hy,hyi, &
    fin,inf2,ny)
-#ifdef ACC
    !$acc routine seq
-#endif ACC
    !
    !============
    implicit none
@@ -7265,12 +7227,7 @@ subroutine EZspline_free3(spline_o, ier)
 end subroutine EZspline_free3
 
 subroutine EZspline_error(ier)
-#ifdef ACC
    !$acc routine seq
-#endif ACC
-#ifdef OMP
-   !$OMP DECLARE SIMD (EZspline_error)
-#endif OMP
    !
    ! Error handling routine. Maps error ier code to a meaningful message.
    ! Note: does not abort nor stop if ier/=0.
