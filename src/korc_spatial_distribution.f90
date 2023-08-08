@@ -1336,7 +1336,7 @@ subroutine MH_psi(params,spp,F)
   !! mpi error indicator
 
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
+  INTEGER,DIMENSION(34) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'

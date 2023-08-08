@@ -2216,7 +2216,8 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
       flagCon=spp(ii)%vars%flagCon(pp)
       flagCol=spp(ii)%vars%flagCol(pp)
-
+      
+      !$acc loop seq
       do tt=1_ip,tskip
 
         call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
@@ -2637,6 +2638,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
       flagCon=spp(ii)%vars%flagCon(pp)
       flagCol=spp(ii)%vars%flagCol(pp)
 
+      !$acc loop seq
       do tt=1_ip,tskip
 
         time=(t0+dt*tt)*tnorm
