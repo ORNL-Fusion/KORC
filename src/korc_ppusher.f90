@@ -517,7 +517,7 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
 
 
       !$acc  enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-      !$acc& fields_domain_local,spp)
+      !$acc& fields_domain_local)
 
       !$acc  parallel loop
       do pp=1_idef,spp(ii)%ppp
@@ -641,14 +641,12 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
       !$acc end parallel loop
 
       !$acc  exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-      !$acc& fields_domain_local,spp)
+      !$acc& fields_domain_local)
 
     endif !(if output)
 
     if(step.and.(.not.params%FokPlan)) then
       dt=0.5_rp*params%dt
-
-      !$acc  enter data copyin(spp)
 
       !$acc  parallel loop
       do pp=1_idef,spp(ii)%ppp
@@ -662,8 +660,6 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
 
       end do
       !$acc end parallel loop
-
-      !$acc  exit data delete(spp)
 
     endif !(if step)
 
@@ -747,7 +743,7 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
 
       !$acc  enter data copyin(bfield_2d_local, &
       !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
-      !$acc& fields_domain_local,spp)
+      !$acc& fields_domain_local)
 
       !$acc  parallel loop
       do pp=1_idef,spp(ii)%ppp
@@ -873,14 +869,12 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
 
       !$acc  exit data delete(bfield_2d_local, &
       !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
-      !$acc& fields_domain_local,spp)
+      !$acc& fields_domain_local)
 
     endif !(if output)
 
     if(step.and.(.not.params%FokPlan)) then
       dt=0.5_rp*params%dt
-
-      !$acc  enter data copyin(spp)
 
       !$acc  parallel loop
       do pp=1_idef,spp(ii)%ppp
@@ -894,8 +888,6 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
 
       end do
       !$acc end parallel loop
-
-      !$acc  exit data delete(spp)
 
     endif !(if step)
 
@@ -2196,7 +2188,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
       fields_domain_local)
 
     !$acc  enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-    !$acc& fields_domain_local,spp)
+    !$acc& fields_domain_local)
 
     !$acc parallel loop 
     do pp=1_idef,ppp
@@ -2332,7 +2324,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     !$acc end parallel loop
 
     !$acc  exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-    !$acc& fields_domain_local,spp)
+    !$acc& fields_domain_local)
 
   end do !species iterator
 
@@ -2625,7 +2617,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
 
     !$acc  enter data copyin(bfield_2d_local, &
     !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
-    !$acc& fields_domain_local,spp)
+    !$acc& fields_domain_local)
 
     !$acc parallel loop 
     do pp=1_idef,ppp
@@ -2767,7 +2759,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
 
   !$acc  exit data delete(bfield_2d_local, &
   !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
-  !$acc& fields_domain_local,spp)
+  !$acc& fields_domain_local)
 
 end subroutine adv_FOinterp_aorsa_top_ACC
 
