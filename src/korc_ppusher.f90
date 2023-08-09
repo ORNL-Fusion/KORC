@@ -2142,7 +2142,8 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   REAL(rp) :: B_X,B_Y,B_Z
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
-  INTEGER(is) :: flagCon,flagCol,tskip
+  INTEGER(is) :: flagCon,flagCol
+  INTEGER(ip) :: tskip
   REAL(rp) :: a,m_cache,q_cache,psip_conv,amp,phase
   REAL(rp) :: Ro,Bo,circumradius,ntiles,dt
   INTEGER  :: ii,pp,ss,tt,ppp
@@ -2562,7 +2563,8 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   REAL(rp) :: B_X,B_Y,B_Z
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
-  INTEGER(is) :: flagCon,flagCol,tskip
+  INTEGER(is) :: flagCon,flagCol
+  INTEGER(ip) :: tskip
   REAL(rp) :: a,m_cache,q_cache,psip_conv,amp,phase,nmode,mmode,omega
   REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,time,t0,tnorm
   INTEGER  :: ii,pp,ss,tt,ppp
