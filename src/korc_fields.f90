@@ -247,9 +247,9 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
 end subroutine analytical_fields_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
-  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,epa_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
   !$acc routine seq
-  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,epa_mn,l_mn,sigma_mn,cpp_len,cpp_B
+  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B
   LOGICAL,INTENT(IN) :: perturb
   REAL(rp),  INTENT(OUT)     :: B_X,B_Y,B_Z
   REAL(rp),  INTENT(OUT)    :: E_X,E_Y,E_Z
