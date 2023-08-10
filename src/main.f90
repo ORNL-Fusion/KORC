@@ -302,7 +302,9 @@ if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
   if (params%orbit_model(1:2).eq.'FO') then
 
 #ifdef ACC
-    if (params%field_model(10:13).eq.'MARS') then
+    if (params%field_model(1:3).eq.'ANA') then
+      call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
+    else if (params%field_model(10:13).eq.'MARS') then
       call FO_init_mars_ACC(params,F,spp,.true.,.false.)
     else if (params%field_model(10:13).eq.'AORSA') then
       call FO_init_aorsa_ACC(params,F,spp,.true.,.false.)

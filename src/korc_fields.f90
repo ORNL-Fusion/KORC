@@ -197,6 +197,49 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
 
 end subroutine analytical_fields_p
 
+subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar)
+  !$acc routine seq
+
+  REAL(rp)      :: R0,B0,lam,q0,E0,ar
+  REAL(rp),  INTENT(OUT)     :: B_X,B_Y,B_Z
+  REAL(rp),  INTENT(OUT)    :: E_X,E_Y,E_Z
+  INTEGER(is),  INTENT(IN)     :: flag_cache
+  REAL(rp),INTENT(IN)     :: T_R,T_T,T_Z
+  REAL(rp)                               :: Ezeta
+  !! Toroidal electric field \(E_\zeta\).
+  REAL(rp)                               :: Bzeta
+  !! Toroidal magnetic field \(B_\zeta\).
+  REAL(rp)                             :: Bp
+  !! Poloidal magnetic field \(B_\theta(r)\).
+  REAL(rp)                              :: eta
+  !! Aspect ratio \(\eta\).
+  REAL(rp)                               :: q
+  !! Safety profile \(q(r)\).
+  REAL(rp)                             :: cT,sT,cZ,sZ
+
+  cT=cos(T_T)
+  sT=sin(T_T)
+  cZ=cos(T_Z)
+  sZ=sin(T_Z)
+
+  eta = T_R/R0
+  q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
+  Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+  Bzeta = B0/( 1.0_rp + eta*cT)
+
+  B_X =  Bzeta*cZ - Bp*sT*sZ
+  B_Y = -Bzeta*sZ - Bp*sT*cZ
+  B_Z = Bp*cT
+
+  Ezeta = -E0/( 1.0_rp + eta*cT)
+
+  E_X = Ezeta*cZ
+  E_Y = -Ezeta*sZ
+  E_Z = 0._rp
+
+end subroutine analytical_fields_p_ACC
+
 subroutine analytical_fields_GC_init(params,F,Y,E,B,gradB,curlb,flag,PSIp)
    TYPE(KORC_PARAMS), INTENT(IN)      :: params
    !! Core KORC simulation parameters.

@@ -357,5 +357,29 @@ end subroutine cart_to_cyl_p_ACC
     !$OMP END SIMD
     
   end subroutine cart_to_tor_check_if_confined_p
+
+subroutine cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+  T_R,T_T,T_Z,flag_cache)
+  !$acc routine seq
+  REAL(rp),  INTENT(IN)      :: R0,ar
+  REAL(rp),  INTENT(IN)      :: X_X,X_Y,X_Z
+  REAL(rp),  INTENT(OUT)      :: T_R,T_T,T_Z
+  INTEGER(is),  INTENT(INOUT)      :: flag_cache
+  REAL(rp)   :: RR
+  !! Particle chunk iterator.
+
+  RR=SQRT(X_X*X_X + X_Y*X_Y) - R0
+
+  T_R = SQRT( RR*RR + X_Z*X_Z )
+  T_T = ATAN2(X_Z, RR)
+  T_T = MODULO(T_T,2.0_rp*C_PI)
+  T_Z = ATAN2(X_X,X_Y)
+  T_Z = MODULO(T_Z,2.0_rp*C_PI)
+
+  if (T_R .GT. ar) then
+    flag_cache = 0_is
+  end if
+
+end subroutine cart_to_tor_check_if_confined_p_ACC
   
 end module korc_coords
