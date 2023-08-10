@@ -473,7 +473,7 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
   REAL(rp) :: B_X,B_Y,B_Z
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
-  REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar
+  REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar,cpp_B,cpp_len
   INTEGER(is) :: flagCon,flagCol
 
   !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
@@ -490,6 +490,13 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
     R0=F%AB%Ro
     q0=F%AB%qo
     ar=F%AB%a
+
+    eps_mn = F%AB%eps_mn
+    l_mn = F%AB%l_mn
+    sigma_mn = F%AB%sigma_mn
+    perturb=F%AB%perturb
+    cpp_len=params%cpp%length
+    cpp_B=params%cpp%Bo
 
     if(output) then
 
@@ -518,7 +525,7 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
           T_R,T_T,T_Z,flagCon)
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
-        B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar)
+        B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
 
         spp(ii)%vars%B(pp,1) = B_X
         spp(ii)%vars%B(pp,2) = B_Y
@@ -1333,7 +1340,8 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
   INTEGER(is) :: flagCon,flagCol
   INTEGER(ip) :: tskip
   REAL(rp) :: a,m_cache,q_cache,dt
-  REAL(rp) :: R0,B0,E0,lam,q0,ar
+  REAL(rp) :: R0,B0,E0,lam,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B
+  LOGICAL :: perturb
   INTEGER  :: ii,pp,ss,tt,ppp
 
   !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
@@ -1356,6 +1364,13 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
     R0=F%AB%Ro
     q0=F%AB%qo
     ar=F%AB%a
+
+    eps_mn = F%AB%eps_mn
+    l_mn = F%AB%l_mn
+    sigma_mn = F%AB%sigma_mn
+    perturb=F%AB%perturb
+    cpp_len=params%cpp%length
+    cpp_B=params%cpp%Bo
 
     !$acc parallel loop 
     do pp=1_idef,ppp
@@ -1392,7 +1407,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
           T_R,T_T,T_Z,flagCon)
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
-          B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar)
+          B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
 
         call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
@@ -3344,9 +3359,7 @@ subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   !! Time step used in the leapfrog step (\(\Delta t\)).
   REAL(rp), INTENT(IN)                                       :: m_cache,q_cache
   !! Time step used in the leapfrog step (\(\Delta t\)).
-
   REAL(rp)                                :: Bmag
-
   REAL(rp),INTENT(in)                                       :: a
   !! This variable is used to simplify notation in the code, and
   !! is given by \(a=q\Delta t/m\),
@@ -3389,9 +3402,7 @@ subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
 
   REAL(rp)                     :: Frad_X,Frad_Y,Frad_Z
   !! Synchrotron radiation reaction force of each particle.
-
   REAL(rp) :: ne,Te,Zeff
-
   INTEGER                                      :: cc,pchunk
   !! Chunk iterator.
 

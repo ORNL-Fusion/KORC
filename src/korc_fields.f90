@@ -37,7 +37,7 @@ PRIVATE :: get_analytical_fields,&
 
 CONTAINS
 
-subroutine analytical_fields(F,Y,E,B,flag)
+subroutine analytical_fields(F,Y,E,B,flag,params)
    !! @note Subroutine that calculates and returns the analytic electric and
    !! magnetic field for each particle in the simulation. @endnote
    !! The analytical magnetic field is given by:
@@ -59,6 +59,7 @@ subroutine analytical_fields(F,Y,E,B,flag)
    !! E_0 \hat{e}_\zeta,$$
    !!
    !! where \(E_0\) is the electric field as measured at the mangetic axis.
+   TYPE(KORC_PARAMS), INTENT(IN)                              :: params
    TYPE(FIELDS), INTENT(IN)                               :: F
    !! An instance of the KORC derived type FIELDS.
    REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)      :: Y
@@ -77,7 +78,7 @@ subroutine analytical_fields(F,Y,E,B,flag)
    !! Toroidal electric field \(E_\zeta\).
    REAL(rp)                                               :: Bzeta
    !! Toroidal magnetic field \(B_\zeta\).
-   REAL(rp)                                               :: Bp
+   REAL(rp)                                               :: Bp,Br
    !! Poloidal magnetic field \(B_\theta(r)\).
    REAL(rp)                                               :: eta
    !! Aspect ratio \(\eta\).
@@ -87,22 +88,47 @@ subroutine analytical_fields(F,Y,E,B,flag)
    !! Particle iterator.
    INTEGER(ip)                                            :: ss
    !! Particle species iterator.
+   LOGICAL  :: perturb
+   REAL(rp)      :: R0,ar,sigma_mn,eps_mn,m,n,Bp_temp,Br_temp,a3,a2,a1,a0
 
    ss = SIZE(Y,1)
+   perturb=F%AB%perturb
+   R0=F%AB%Ro
+   ar=F%AB%a
+   eps_mn = F%AB%eps_mn
+   l_mn = F%AB%l_mn
+   sigma_mn = F%AB%sigma_mn
+   m=2.
+   n=1.
+   a3 = 100./3. * params%cpp%length**3
+   a2 = -40./3. * params%cpp%length**2
+   a1 = 3. * params%cpp%length
+   a0 = 0.8
 
    !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,Ezeta,Bp,Bzeta,eta,q) &
    !$OMP& SHARED(F,Y,E,B,flag)
    do pp=1_idef,ss
       if ( flag(pp) .EQ. 1_is ) then
          eta = Y(pp,1)/F%Ro
-         q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
-         Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
+         !q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
+         q = a3*Y(pp,1)**3 + a2*Y(pp,1)**2 + a1*Y(pp,1) + a0
+         !Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
+         Bp=0._rp
+         Br=0._rp
          Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
 
+         Bp_temp = curl_Amn_p(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)),SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+         Br_temp = curl_Amn_r(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)),SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
 
-         B(pp,1) =  Bzeta*COS(Y(pp,3)) - Bp*SIN(Y(pp,2))*SIN(Y(pp,3))
-         B(pp,2) = -Bzeta*SIN(Y(pp,3)) - Bp*SIN(Y(pp,2))*COS(Y(pp,3))
-         B(pp,3) = Bp*COS(Y(pp,2))
+         if (perturb)   then
+          Bp = Bp + Bp_temp/params%cpp%Bo
+          Br = Br + Br_temp/params%cpp%Bo
+        end if
+
+
+        B(pp,1) =  Bzeta*COS(Y(pp,3)) - Bp*SIN(Y(pp,2))*SIN(Y(pp,3)) + Br*COS(Y(pp,2))*SIN(Y(pp,3))
+        B(pp,2) = -Bzeta*SIN(Y(pp,3)) - Bp*SIN(Y(pp,2))*COS(Y(pp,3)) + Br*COS(Y(pp,2))*COS(Y(pp,3))
+        B(pp,3) = Bp*COS(Y(pp,2)) + Br*SIN(Y(pp,2))
 
          if (abs(F%Eo) > 0) then
             Ezeta = -F%Eo/( 1.0_rp + eta*COS(Y(pp,2)) )
@@ -122,7 +148,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    !! Core KORC simulation parameters.
    TYPE(FIELDS), INTENT(IN)                                   :: F
    INTEGER, INTENT(IN)  :: pchunk
-   REAL(rp)      :: R0,B0,lam,q0,E0,ar
+   REAL(rp)      :: R0,B0,lam,q0,E0,ar,l_mn,sigma_mn,eps_mn
    REAL(rp),  INTENT(IN),DIMENSION(pchunk)      :: X_X,X_Y,X_Z
    REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: B_X,B_Y,B_Z
    REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: E_X,E_Y,E_Z
@@ -134,7 +160,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    !! changed YG Radial electric field \(E_\r\).
    REAL(rp),DIMENSION(pchunk)                               :: Bzeta
    !! Toroidal magnetic field \(B_\zeta\).
-   REAL(rp),DIMENSION(pchunk)                              :: Bp
+   REAL(rp),DIMENSION(pchunk)                              :: Bp,Br
    !! Poloidal magnetic field \(B_\theta(r)\).
    REAL(rp),DIMENSION(pchunk)                               :: eta
    !! Aspect ratio \(\eta\).
@@ -143,7 +169,8 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    REAL(rp),DIMENSION(pchunk)                             :: cT,sT,cZ,sZ
    INTEGER                                      :: cc
    !! Particle chunk iterator.
-   REAL(rp) :: Er0,rrmn,sigmaamn
+   REAL(rp) :: Er0,rrmn,sigmaamn,Br_temp,Bp_temp,m,n,a3,a2,a1,a0
+   LOGICAL  :: perturb
 
    B0=F%Bo
    E0=F%Eo
@@ -151,10 +178,20 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    R0=F%AB%Ro
    q0=F%AB%qo
    ar=F%AB%a
+   eps_mn = F%AB%eps_mn
+   l_mn = F%AB%l_mn
+   sigma_mn = F%AB%sigma_mn
 
    Er0=F%AB%Ero
    rrmn=F%AB%rmn
    sigmaamn=F%AB%sigmamn
+   perturb=F%AB%perturb
+   m=2.
+   n=1.
+   a3 = 100./3. * params%cpp%length**3
+   a2 = -40./3. * params%cpp%length**2
+   a1 = 3. * params%cpp%length
+   a0 = 0.8
 
    call cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
       T_R,T_T,T_Z,flag_cache)
@@ -169,15 +206,27 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       sZ(cc)=sin(T_Z(cc))
 
       eta(cc) = T_R(cc)/R0
-      q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
-      Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+      !q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
+      q(cc) = a3*T_R(cc)**3 + a2*T_R(cc)**2 + a1*T_R(cc) + a0
+      !Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
       !changed kappa  YG
       Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
+      Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+      Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
 
-      B_X(cc) =  Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc)
-      B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc)
-      B_Z(cc) = Bp(cc)*cT(cc)
+      if (perturb)   then
+        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc))) + Bp_temp/params%cpp%Bo
+        Br(cc) = Br_temp/params%cpp%Bo
+
+      else
+        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+        Br(cc) = 0._rp
+      end if
+
+      B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc) + Br(cc)*cT(cc)*sZ(cc)
+      B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc) + Br(cc)*cT(cc)*cZ(cc)
+      B_Z(cc) = Bp(cc)*cT(cc) + Br(cc)*sT(cc)
 
       !write(6,*) 'Ero ',Ero,'Er0 ',Er0
       !write(6,*) 'rmn ',rmn,'rrmn ',rrmn
@@ -198,10 +247,10 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
 end subroutine analytical_fields_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
-  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar)
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,epa_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
   !$acc routine seq
-
-  REAL(rp)      :: R0,B0,lam,q0,E0,ar
+  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,epa_mn,l_mn,sigma_mn,cpp_len,cpp_B
+  LOGICAL,INTENT(IN) :: perturb
   REAL(rp),  INTENT(OUT)     :: B_X,B_Y,B_Z
   REAL(rp),  INTENT(OUT)    :: E_X,E_Y,E_Z
   INTEGER(is),  INTENT(IN)     :: flag_cache
@@ -210,13 +259,24 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   !! Toroidal electric field \(E_\zeta\).
   REAL(rp)                               :: Bzeta
   !! Toroidal magnetic field \(B_\zeta\).
-  REAL(rp)                             :: Bp
+  REAL(rp)                             :: Bp,Br
   !! Poloidal magnetic field \(B_\theta(r)\).
   REAL(rp)                              :: eta
   !! Aspect ratio \(\eta\).
   REAL(rp)                               :: q
   !! Safety profile \(q(r)\).
   REAL(rp)                             :: cT,sT,cZ,sZ
+  REAL(rp) :: m,n,a0,a1,a2,a3,Br_temp,Bp_temp
+
+  !$acc routine (curl_Amn_r) seq
+  !$acc routine (curl_Amn_p) seq
+
+  m=2.
+  n=1.
+  a3 = 100./3. * cpp_len**3
+  a2 = -40./3. * cpp_len**2
+  a1 = 3. * cpp_len
+  a0 = 0.8
 
   cT=cos(T_T)
   sT=sin(T_T)
@@ -224,13 +284,25 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   sZ=sin(T_Z)
 
   eta = T_R/R0
-  q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
-  Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+  !q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
+  q = a3*T_R**3 + a2*T_R**2 + a1*T_R + a0
+  !Bp = -eta*B0/(q*(1.0_rp + eta*cT))
   Bzeta = B0/( 1.0_rp + eta*cT)
 
-  B_X =  Bzeta*cZ - Bp*sT*sZ
-  B_Y = -Bzeta*sZ - Bp*sT*cZ
-  B_Z = Bp*cT
+  Br_temp = curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
+  Bp_temp = curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
+
+  if (perturb)   then
+    Bp = -eta*B0/(q*(1.0_rp + eta*cT)) + Bp_temp/cpp_B
+    Br = Br_temp/cpp_B
+  else
+    Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+    Br = 0._rp
+  end if
+
+  B_X = Bzeta*cZ - Bp*sT*sZ + Br*cT*sZ
+  B_Y = -Bzeta*sZ - Bp*sT*cZ + Br*cT*cZ
+  B_Z = Bp*cT + Br*sT
 
   Ezeta = -E0/( 1.0_rp + eta*cT)
 
@@ -239,6 +311,91 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   E_Z = 0._rp
 
 end subroutine analytical_fields_p_ACC
+
+FUNCTION curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,a,sigma_mn,length)
+  !$acc routine seq
+  REAL(rp),  INTENT(IN)        :: m
+  REAL(rp),  INTENT(IN)        :: n
+  REAL(rp),   INTENT(IN)      :: R0
+  REAL(rp),   INTENT(IN)      :: T_R,T_T,T_Z,cT,sT      
+  REAL(rp) 				:: eps_mn
+  REAL(rp) 				:: a
+  REAL(rp) 				:: l_mn
+  REAL(rp) 				:: sigma_mn
+  REAL(rp)             :: curl_Amn_r,length
+  !$acc routine (alpha_mn_r) seq
+
+  !! following case only for one mode perturbation with m=2, n=1
+  curl_Amn_r = - alpha_mn_r(m,n,T_R,a,eps_mn,l_mn,sigma_mn,length)/(R0 + T_R*cT) &
+    * ( T_R*sT*cos(m*T_T + n*T_Z) + m*(R0+T_R*cT)*sin(m*T_T + n*T_Z)    )
+end FUNCTION
+
+
+FUNCTION curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,a,sigma_mn,length)
+  !$acc routine seq
+  REAL(rp),  INTENT(IN)        :: m
+  REAL(rp),  INTENT(IN)        :: n
+  REAL(rp),   INTENT(IN)      :: R0
+  REAL(rp),   INTENT(IN)      :: T_R,T_T,T_Z,cT,sT      
+  REAL(rp) 				:: eps_mn
+  REAL(rp) 				:: a
+  REAL(rp) 				:: l_mn
+  REAL(rp) 				:: sigma_mn
+  REAL(rp)             :: curl_Amn_p,deralpha,dr,length
+  !$acc routine (alpha_mn) seq
+
+  dr = 1E-6_rp
+  deralpha = (alpha_mn(m,n,T_R+dr,a,eps_mn,l_mn,sigma_mn,length) - alpha_mn(m,n,T_R,a,eps_mn,l_mn,sigma_mn,length))/dr
+
+  curl_Amn_p = -1_rp/(R0 + T_R*cT)*( (R0 + T_R*cT)*cos(m*T_T + n*T_Z)*deralpha &
+    + cT*cos(m*T_T + n*T_Z)*alpha_mn(m,n,T_R,a,eps_mn,l_mn,sigma_mn,length))
+  
+end FUNCTION
+
+FUNCTION alpha_mn_r(m,n,T_R,a,eps,l,sigma,length)
+  !$acc routine seq
+  REAL(rp),  INTENT(IN)        :: m
+  REAL(rp),  INTENT(IN)        :: n
+  REAL(rp),  INTENT(IN) 				:: eps, T_R
+  REAL(rp),  INTENT(IN)				:: a
+  REAL(rp),  INTENT(IN) 				:: l
+  REAL(rp),  INTENT(IN) 				:: sigma
+  REAL(rp)                         :: r_star_mn,f_R,g_R,r_mn,h_R,alpha_mn_r,length
+
+  f_R = 0.5_rp*(1-tanh( (T_R - a)/l ))
+
+  r_star_mn = 0.4/length
+  g_R = T_R**(m-1)/r_star_mn**m
+
+  r_mn = r_star_mn - m*sigma**2/r_star_mn
+  h_R = EXP( -(T_R-r_mn)**2/(2*sigma**2) + (r_star_mn-r_mn)**2/(2*sigma**2) )
+
+  alpha_mn_r = eps * f_R * g_R* h_R
+end FUNCTION
+
+
+FUNCTION alpha_mn(m,n,T_R,a,eps,l,sigma,length)
+  !$acc routine seq
+  REAL(rp),  INTENT(IN)        :: m
+  REAL(rp),  INTENT(IN)        :: n
+  REAL(rp),  INTENT(IN) 				:: eps,T_R
+  REAL(rp),  INTENT(IN)				:: a
+  REAL(rp),  INTENT(IN) 				:: l
+  REAL(rp),  INTENT(IN) 				:: sigma
+  REAL(rp)                         :: r_star_mn,f_R,g_R,r_mn,h_R,alpha_mn,length
+
+  f_R = 0.5_rp*(1-tanh( (T_R - a)/l ))
+
+  r_star_mn = 0.4/length
+  g_R = T_R**m/r_star_mn**m
+  ! if (isnan(g_R)) stop '"g_R" is a NaN'
+  ! if (isnan(r_star_mn)) stop '"r_star_mn" is a NaN'
+
+  r_mn = r_star_mn - m*sigma**2/r_star_mn
+  h_R = EXP( -(T_R-r_mn)**2/(2*sigma**2) + (r_star_mn-r_mn)**2/(2*sigma**2) )
+  alpha_mn = eps * f_R * g_R * h_R
+
+end FUNCTION
 
 subroutine analytical_fields_GC_init(params,F,Y,E,B,gradB,curlb,flag,PSIp)
    TYPE(KORC_PARAMS), INTENT(IN)      :: params
@@ -821,7 +978,7 @@ subroutine get_analytical_fields(params,vars,F)
 
       call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
 
-      call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon)
+      call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon,params)
 
       !       call cart_to_cyl(vars%X,vars%Y)
 
@@ -1173,6 +1330,11 @@ subroutine initialize_fields(params,F)
       F%AB%Ero=Ero
       F%AB%rmn=rmn
       F%AB%sigmamn=sigmamn
+
+      F%AB%perturb = perturb
+      F%AB%eps_mn = eps_mn
+      F%AB%l_mn = l_mn
+      F%AB%sigma_mn = sigma_mn
 
       !write(output_unit_write,*) E_dyn,E_pulse,E_width
 

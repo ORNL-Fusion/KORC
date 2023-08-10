@@ -515,6 +515,10 @@ module korc_types
      !! the values of \(q_0\) and \(q(r)\)
      !! at the plasma edge \(r=r_{edge}\).
 
+    LOGICAL         :: perturb
+    REAL(rp)        :: l_mn
+    REAL(rp)        :: sigma_mn
+    REAL(rp)        :: eps_mn
      REAL(rp) 			:: Bo
      !! Magnitude of the toroidal magnetic field \(B_0\).
      REAL(rp) 			:: a
