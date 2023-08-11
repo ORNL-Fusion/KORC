@@ -35,8 +35,14 @@ __build() {
 
   echo $CMFKIT_CMDLINE_CMAKE_DEFINITIONS
 
+  # enable xtrace
+  set -x
+
   cmake $CMFKIT_CMDLINE_CMAKE_DEFINITIONS .. && make VERBOSE=1 \
     || return 1
+
+  #disable xtrace
+  set +x
 }
 
 
