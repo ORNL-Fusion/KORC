@@ -33,6 +33,8 @@ __build() {
 
   mkdir -p ./build && cd $_
 
+  cmake --version
+
   echo $CMFKIT_CMDLINE_CMAKE_DEFINITIONS
 
   set -x
