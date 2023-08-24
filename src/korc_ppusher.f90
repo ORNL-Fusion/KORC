@@ -16,6 +16,14 @@ module korc_ppusher
 
   IMPLICIT NONE
 
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
   REAL(rp), PRIVATE :: E0
   !! Dimensionless vacuum permittivity \(\epsilon_0 \times (m_{ch}^2
   !! v_{ch}^3/q_{ch}^3 B_{ch})\), see [[korc_units]].
@@ -661,10 +669,6 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
-  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (interp_FOfields_mars_p_ACC) seq
@@ -884,12 +888,6 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
-  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (interp_FOfields_aorsa_p_ACC) seq
@@ -2520,10 +2518,6 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
-  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
@@ -2554,9 +2548,6 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     useDiMES=F%useDiMES
     DiMESloc_cyl=F%DiMESloc
     DiMESdims=F%DiMESdims
-
-    call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-      fields_domain_local)
 
     !$acc  enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
     !$acc& fields_domain_local)
@@ -2941,12 +2932,6 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
-  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
-  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
-  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
@@ -2983,9 +2968,6 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
     useDiMES=F%useDiMES
     DiMESloc_cyl=F%DiMESloc
     DiMESdims=F%DiMESdims
-
-    call provide_ezspline_aorsa_ACC(bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
-      e1Refield_2dx_local,e1Imfield_2dx_local,fields_domain_local)
 
     !$acc  enter data copyin(bfield_2d_local, &
     !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
