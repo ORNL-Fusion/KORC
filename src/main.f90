@@ -306,7 +306,7 @@ if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
       call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
     else if (params%field_model(10:13).eq.'MARS') then
       call FO_init_mars_ACC(params,F,spp,.true.,.false.)
-    else if (params%field_model(10:13).eq.'AORSA') then
+    else if (params%field_model(10:14).eq.'AORSA') then
       call FO_init_aorsa_ACC(params,F,spp,.true.,.false.)
     end if
 #else
