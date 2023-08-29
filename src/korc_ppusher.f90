@@ -1121,7 +1121,7 @@ subroutine adv_FOeqn_top(params,F,P,spp)
      pchunk=params%pchunk
      m_cache=spp(ii)%m
      q_cache=spp(ii)%q
-     a = params%dt
+     a = q_cache/abs(q_cache)*params%dt
 
      !write(6,*) 'q,m,dt,a',q_cache,m_cache,params%dt,a
 
@@ -1351,7 +1351,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
 
     m_cache=spp(ii)%m
     q_cache=spp(ii)%q
-    a =params%dt
+    a = q_cache/abs(q_cache)*params%dt
     tskip=params%t_skip
     ppp=spp(ii)%ppp
     dt=params%dt
@@ -1820,7 +1820,7 @@ subroutine adv_FOfio_top(params,F,P,spp)
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = params%dt
+       a = q_cache/abs(q_cache)*params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -2085,7 +2085,7 @@ subroutine adv_FOinterp_top(params,F,P,spp)
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = params%dt
+       a = q_cache/abs(q_cache)*params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -2332,7 +2332,7 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
     pchunk=params%pchunk
     m_cache=spp(ii)%m
     q_cache=spp(ii)%q
-    a =params%dt
+    a = q_cache/abs(q_cache)*params%dt
 
 #ifdef OMP
     !$OMP PARALLEL DO default(none) &
@@ -2530,7 +2530,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
     m_cache=spp(ii)%m
     q_cache=spp(ii)%q
-    a =params%dt
+    a = q_cache/abs(q_cache)*params%dt
     tskip=params%t_skip
     ppp=spp(ii)%ppp
     dt=params%dt
@@ -2731,7 +2731,7 @@ subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = params%dt
+       a = q_cache/abs(q_cache)*params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -2944,7 +2944,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
 
     m_cache=spp(ii)%m
     q_cache=spp(ii)%q
-    a =params%dt
+    a = q_cache/abs(q_cache)*params%dt
     tskip=params%t_skip
     ppp=spp(ii)%ppp
     dt=params%dt
