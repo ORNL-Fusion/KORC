@@ -1035,12 +1035,14 @@ pure function cross(a,b)
 end function cross
 
 
-subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint)
+subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    !! @note Subrotuine that calculates an orthonormal basis using information
    !! of the (local) magnetic field at position \(\mathbf{X}_0\). @endnote
    TYPE(KORC_PARAMS), INTENT(IN)                                      :: params
    !! Core KORC simulation parameters.
    REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)                  :: Xo
+   !! Array with the position of the simulated particles.
+   REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)                  :: Bo
    !! Array with the position of the simulated particles.
    TYPE(FIELDS), INTENT(IN)                                           :: F
    !! F An instance of the KORC derived type FIELDS.
@@ -1110,6 +1112,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint)
 
       !write(output_unit_write,*) 'before b1,b2,b3 calculation'
 
+    Bo=vars%B
+
    tmpvec=(/1.0_rp,1.0_rp,1.0_rp/)
 
    do ii=1_idef,ppp
@@ -1129,6 +1133,9 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint)
       b1(ii,:)=b1tmp
       b2(ii,:)=b2tmp
       b3(ii,:)=b3tmp
+
+      !write(6,*) 'unitvectors',ii,'B',vars%B(ii,:),'psi',vars%PSI_P(ii)
+
    end do
 
    !write(output_unit_write,*) 'before copying hint and flag'

@@ -212,7 +212,7 @@ subroutine FO_init(params,F,spp,output,step)
   REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
   REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
   REAL(rp),DIMENSION(params%pchunk) :: PSIp
-  REAL(rp) :: m_cache,q_cache,B0,EF0,lam,R0,q0,ar
+  REAL(rp) :: m_cache,q_cache,B0,EF0,lam,R0,q0,ar,eta_tmp
   TYPE(C_PTR),DIMENSION(params%pchunk) :: hint
   INTEGER(is) ,DIMENSION(params%pchunk) :: flagCon,flagCol
 
@@ -238,7 +238,7 @@ subroutine FO_init(params,F,spp,output,step)
       !$OMP& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
       !$OMP& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
       !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-      !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g)
+      !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,eta_tmp)
       do pp=1_idef,spp(ii)%ppp,pchunk
 
         !$OMP SIMD
@@ -378,8 +378,22 @@ subroutine FO_init(params,F,spp,output,step)
             !write(6,*) 'v,vpar,vperp',v(cc),vpar(cc),vperp(cc)
 
             ! Pitch angle
-            spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
-              MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+            !spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
+            !  MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+             
+            eta_tmp=180.0_rp/C_PI* &
+              ACOS((B_X(cc)*V_X(cc)+B_Y(cc)*V_Y(cc)+B_Z(cc)*V_Z(cc))/(Bmag(cc)*v(cc)))
+
+            if ((eta_tmp.gt.20._rp).or. &
+              ((spp(ii)%vars%eta(pp-1+cc)-eta_tmp)/spp(ii)%vars%eta(pp-1+cc).gt.0.01)) then 
+                write(6,*) 'abberation',pp
+                write(6,*) pp,spp(ii)%vars%eta(pp-1+cc),eta_tmp,'B', &
+                  spp(ii)%vars%B(pp-1+cc,:),'PSI_P',spp(ii)%vars%PSI_P(pp-1+cc)
+  
+            endif  
+
+            spp(ii)%vars%eta(pp-1+cc) = eta_tmp 
+
 
             ! Magnetic moment
             spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
@@ -1009,6 +1023,11 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
           ! Pitch angle
           spp(ii)%vars%eta(pp) = 180.0_rp* &
             MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+
+          if (spp(ii)%vars%eta(pp).gt.20._rp) then 
+            write(6,*) 'FO_init',pp,spp(ii)%vars%eta(pp)
+          endif
+
 
           ! Magnetic moment
           spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &

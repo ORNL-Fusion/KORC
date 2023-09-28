@@ -2658,7 +2658,11 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
       !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
 
+      !write(6,*) 'unitvectors',pp,prtcls%B(pp,:)
+
    end do
+
+   
 
 end subroutine interp_FOfields_aorsa
 

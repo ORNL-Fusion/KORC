@@ -41,6 +41,7 @@ then
     export FC=/usr/local/bin/gfortran-13
 
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+      -DMPI_Fortran_LINK_FLAGS="-ld_classic -Wl,-flat_namespace -Wl,-commons,use_dylibs -L/usr/local/Cellar/hwloc/2.9.2/lib -L/usr/local/Cellar/libevent/2.1.12_1/lib" \
       -DUSE_OMP=OFF \
       -DUSE_PSPLINE=ON \
       -DUSE_FIO=OFF \
