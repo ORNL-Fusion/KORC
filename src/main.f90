@@ -298,32 +298,33 @@ end if
 
 !  write(output_unit_write,'("GC init eta: ",E17.10)') spp(1)%vars%eta
 
-if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
-  if (params%orbit_model(1:2).eq.'FO') then
+if (params%orbit_model(1:2).eq.'FO') then
 
 #ifdef ACC
-    if (params%field_model(1:3).eq.'ANA') then
-      call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
-    else if (params%field_model(10:13).eq.'MARS') then
-      call FO_init_mars_ACC(params,F,spp,.true.,.false.)
-    else if (params%field_model(10:14).eq.'AORSA') then
-      call FO_init_aorsa_ACC(params,F,spp,.true.,.false.)
-    end if
+  if (params%field_model(1:3).eq.'ANA') then
+    call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(10:13).eq.'MARS') then
+    call FO_init_mars_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(10:14).eq.'AORSA') then
+    call FO_init_aorsa_ACC(params,F,spp,.true.,.false.)
+  end if
 #else
-    call FO_init(params,F,spp,.true.,.false.)
+  call FO_init(params,F,spp,.true.,.false.)
 #endif ACC
 
   else if (params%orbit_model(1:2).eq.'GC') then
 
-    call GC_init(params,F,spp)
+    if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
+      call GC_init(params,F,spp)
+    else
 
-  end if
-
-else
-
-  call get_fields(params,spp(1)%vars,F)
+      call get_fields(params,spp(1)%vars,F)
+  
+    end if
 
 end if
+
+
 
   !write(6,*) 'V',spp(1)%vars%V
   !write(6,*) 'eta',spp(1)%vars%eta
@@ -484,12 +485,14 @@ end if
 #ifdef PSPLINE
 if (params%orbit_model(1:2).eq.'FO'.and. &
   params%field_model(10:13).eq.'MARS') then
+  if (.NOT.(params%restart.OR.params%proceed)) then
 #ifdef ACC
-  call FO_init_mars_ACC(params,F,spp,.false.,.true.)
+    call FO_init_mars_ACC(params,F,spp,.false.,.true.)
 #else
-  call FO_init(params,F,spp,.false.,.true.)
+    call FO_init(params,F,spp,.false.,.true.)
 #endif ACC
     ! Initial half-time particle push
+  endif
 
   do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
