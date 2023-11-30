@@ -14,7 +14,7 @@ class Korc(CMakePackage):
     version("0.0.1", sha256="b2eb25f42ed428250ad22e7462c628cb630e17ba4c08f38745161b0acffd9e2f")
 
     depends_on("gcc@13.1.0")
-    depends_on("hdf5+fortran+mpi")
+    depends_on("hdf5+fortran+mpi %gcc@13.1.0")
 
     def cmake_args(self):
         # FIXME: Add arguments other than
