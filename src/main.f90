@@ -312,15 +312,15 @@ if (params%orbit_model(1:2).eq.'FO') then
   call FO_init(params,F,spp,.true.,.false.)
 #endif ACC
 
-  else if (params%orbit_model(1:2).eq.'GC') then
+else if (params%orbit_model(1:2).eq.'GC') then
 
-    if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
-      call GC_init(params,F,spp)
-    else
+  if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
+    call GC_init(params,F,spp)
+  else
 
-      call get_fields(params,spp(1)%vars,F)
-  
-    end if
+    call get_fields(params,spp(1)%vars,F)
+
+  end if
 
 end if
 

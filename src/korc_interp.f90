@@ -1351,7 +1351,8 @@ subroutine check_if_in_fields_domain(F,Y,flag)
             cycle
           end if
 
-          DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+          !DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+          DiMESsurf=(DiMESloc_cart(3)-(DiMESdims(1)-DiMESdims(2)))+sqrt(DiMESrad)
 
           if (ztmp.le.DiMESsurf) flag(pp)=0_is
 
@@ -1569,7 +1570,8 @@ subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
                   cycle
                end if
 
-               DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+               !DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+               DiMESsurf=(DiMESloc_cart(3)-(DiMESdims(1)-DiMESdims(2)))+sqrt(DiMESrad)
 
                if (ztmp.le.DiMESsurf) flag(pp)=0_is
 
@@ -1674,7 +1676,8 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
           return
         end if
 
-        DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+        !DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+        DiMESsurf=(DiMESloc_cart(3)-(DiMESdims(1)-DiMESdims(2)))+sqrt(DiMESrad)
 
         if (ztmp.le.DiMESsurf) flag=0_is
 
