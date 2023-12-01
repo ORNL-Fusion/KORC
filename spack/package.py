@@ -1,6 +1,3 @@
-from spack.package import *
-
-
 class Korc(CMakePackage):
     """KORC - Kinetic Orbit Runaway Code"""
 
@@ -14,12 +11,18 @@ class Korc(CMakePackage):
     version("0.0.1", sha256="b2eb25f42ed428250ad22e7462c628cb630e17ba4c08f38745161b0acffd9e2f")
 
     depends_on("gcc@13.1.0")
+    depends_on("cmake %gcc@13.1.0")
     depends_on("hdf5+fortran+mpi %gcc@13.1.0")
 
     def cmake_args(self):
-        # FIXME: Add arguments other than
-        # FIXME: CMAKE_INSTALL_PREFIX and CMAKE_BUILD_TYPE
-        # FIXME: If not needed delete this function
-        args = []
+        args = [
+            '-DUSE_PSPLINE=OFF'
+            '-DUSE_FIO=OFF'
+            '-DCMAKE_Fortran_FLAGS="-O3 -DHDF5_DOUBLE_PRESICION -fopenmp -malign-double -fconvert=\'big-endian\'"'
+            '-DCMAKE_C_FLAGS="-O3 -fopenmp -malign-double"'
+            '-DCMAKE_CXX_FLAGS="-O3 -fopenmp -malign-double"'
+            '-DCMAKE_Fortran_FLAGS_DEBUG="-g -ffpe-trap=invalid,zero,overflow -fbacktrace -Werror"'
+            '-DCMAKE_C_FLAGS_DEBUG="-g -g3"'
+            '-DCMAKE_CXX_FLAGS_DEBUG="-g -g3"'
+        ]
         return args
-
