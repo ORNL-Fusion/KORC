@@ -20,6 +20,7 @@ jobs:
           mkdir -p ./spack/var/spack/repos/builtin/packages/korc
           cp ./spackpack/package.py ./spack/var/spack/repos/builtin/packages/korc
           spack list korc
+          spack install korc
           ls -la
           pwd
 
