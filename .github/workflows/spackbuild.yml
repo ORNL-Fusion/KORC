@@ -14,10 +14,12 @@ jobs:
           repository: spack/spack
           path: ./spack
 
-      - name: yield readybake image
+      - name: spack build
         run: |
+          set -x
           . ./spack/share/spack/setup-env.sh
           spack find
           ls -la
+          pwd
 
 
