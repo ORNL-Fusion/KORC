@@ -17,7 +17,7 @@ jobs:
       - name: spack build
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack list zlib
+          spack install zlib
           spack find
           ls -la
           pwd
