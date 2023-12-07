@@ -26,3 +26,7 @@ class Korc(CMakePackage):
             '-DCMAKE_CXX_FLAGS_DEBUG="-g -g3"'
         ]
         return args
+
+    def install(self, spec, prefix):
+        mkdirp(prefix.bin)
+        install('../spack-build/korc', prefix.bin)
