@@ -1,0 +1,23 @@
+name: spackbuild
+on: [ workflow_dispatch ]
+
+jobs:
+  job_one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+
+      - name: grab spack
+        uses: actions/checkout@v2
+        with:
+          repository: spack/spack
+          path: ./spack
+
+      - name: yield readybake image
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack find
+          ls -la
+
+
