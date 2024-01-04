@@ -14,7 +14,7 @@ jobs:
           repository: spack/spack
           path: ./spack
 
-      - name: spack build
+      - name: spack setup
         run: |
           ls -la
           ls -la ./spack/share/spack/
@@ -22,5 +22,8 @@ jobs:
           which spack
           spack env list
 
+      - name: spack test
+        run: |
+          spack env list
 
 
