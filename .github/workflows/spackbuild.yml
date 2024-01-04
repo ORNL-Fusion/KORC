@@ -20,10 +20,10 @@ jobs:
           ls -la ./spack/share/spack/
           . ./spack/share/spack/setup-env.sh
           which spack
-          spack env list
+          spack --version
 
       - name: spack test
         run: |
-          spack env list
-
+          . ./spack/share/spack/setup-env.sh
+          spack --version
 
