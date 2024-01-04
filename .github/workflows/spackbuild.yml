@@ -18,7 +18,6 @@ jobs:
         run: |
           . ./spack/share/spack/setup-env.sh
           pwd
-          cd KORC
           spacktivate -p ./spackenv-nacho
           pwd
           spack install
