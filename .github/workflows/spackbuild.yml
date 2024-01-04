@@ -16,6 +16,7 @@ jobs:
 
       - name: spack build
         run: |
+          ls -la
           . ./spack/share/spack/setup-env.sh
           pwd
           spacktivate -p ./spackenv-nacho
