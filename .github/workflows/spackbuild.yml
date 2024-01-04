@@ -27,3 +27,9 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack --version
 
+      - name: spack build
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack env activate -d ./spackenv-nacho
+          spack find
+
