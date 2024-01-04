@@ -16,7 +16,6 @@ jobs:
 
       - name: spack build
         run: |
-          set -x
           ls -la
           ls -la ./spack/share/spack/
           . ./spack/share/spack/setup-env.sh
