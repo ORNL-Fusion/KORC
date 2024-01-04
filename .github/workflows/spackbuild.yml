@@ -32,4 +32,5 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env activate -d ./spackenv-nacho
           spack find
+          spack install
 
