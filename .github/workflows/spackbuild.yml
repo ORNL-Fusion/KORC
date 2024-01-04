@@ -20,11 +20,8 @@ jobs:
           ls -la
           ls -la ./spack/share/spack/
           . ./spack/share/spack/setup-env.sh
-          pwd
-          spacktivate -p ./spackenv-nacho
-          pwd
-          spack install
-          spack load
+          which spack
+          spack env list
 
 
 
