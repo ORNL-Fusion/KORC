@@ -17,11 +17,12 @@ jobs:
       - name: spack build
         run: |
           . ./spack/share/spack/setup-env.sh
-          mkdir -p ./spack/var/spack/repos/builtin/packages/korc
-          cp ./spackpack/package.py ./spack/var/spack/repos/builtin/packages/korc
-          spack list korc
-          spack install korc
-          ls -la
           pwd
+          cd KORC
+          spacktivate -p ./spackenv-nacho
+          pwd
+          spack install
+          spack load
+
 
 
