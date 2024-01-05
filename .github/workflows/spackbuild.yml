@@ -51,6 +51,6 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/thunderclap-mirror
-          key: thunderclap-${{ runner.os }}-${{ hashFiles('~/thunderclap-mirror') }}
+          key: thunderclap-${{ runner.os }}-${{ hashFiles("~/thunderclap-mirror") }}
           
         
