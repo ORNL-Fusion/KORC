@@ -16,21 +16,23 @@ jobs:
 
       - name: spack setup
         run: |
-          ls -la
           ls -la ./spack/share/spack/
           . ./spack/share/spack/setup-env.sh
           which spack
           spack --version
 
-      - name: spack test
-        run: |
-          . ./spack/share/spack/setup-env.sh
-          spack --version
-
-      - name: spack build
+      - name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env activate -d ./spackenv-nacho
           spack find
           spack install
+
+      - name: spack mirror
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack mirror list
+          spack mirror create -d ./mirror-nacho --all
+          spack mirror list
+          
 
