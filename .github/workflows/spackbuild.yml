@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/nacho-mirror
-          key: nacho-mirror
+          key: nacho-mirror2
 
       - if: ${{ steps.spack-mirror-cache.outputs.cache-hit != 'true' }}
         name: create mirror
