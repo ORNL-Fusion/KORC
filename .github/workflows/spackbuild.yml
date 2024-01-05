@@ -27,18 +27,18 @@ jobs:
           findmnt
 
 
-#      - name: spack install
-#        run: |
-#          . ./spack/share/spack/setup-env.sh
+      - name: spack install
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack find
+          spack install gcc@13.1.0
+
+      - name: spack mirror
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack mirror list
+          spack mirror create -d ./mirror-nacho --all
+          spack mirror list
+
+
 #          spack env activate -d ./spackenv-nacho
-#          spack find
-#          spack install
-
-#      - name: spack mirror
-#        run: |
-#          . ./spack/share/spack/setup-env.sh
-#          spack mirror list
-#          spack mirror create -d ./mirror-nacho --all
-#          spack mirror list
-          
-
