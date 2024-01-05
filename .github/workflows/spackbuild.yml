@@ -20,19 +20,23 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           which spack
           spack --version
+          set -x
+          df -h
+          lsblk
+          findmnt
 
-      - name: spack install
-        run: |
-          . ./spack/share/spack/setup-env.sh
-          spack env activate -d ./spackenv-nacho
-          spack find
-          spack install
+#      - name: spack install
+#        run: |
+#          . ./spack/share/spack/setup-env.sh
+#          spack env activate -d ./spackenv-nacho
+#          spack find
+#          spack install
 
-      - name: spack mirror
-        run: |
-          . ./spack/share/spack/setup-env.sh
-          spack mirror list
-          spack mirror create -d ./mirror-nacho --all
-          spack mirror list
+#      - name: spack mirror
+#        run: |
+#          . ./spack/share/spack/setup-env.sh
+#          spack mirror list
+#          spack mirror create -d ./mirror-nacho --all
+#          spack mirror list
           
 
