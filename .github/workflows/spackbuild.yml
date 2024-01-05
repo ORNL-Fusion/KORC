@@ -14,14 +14,14 @@ jobs:
           repository: spack/spack
           path: ./spack
 
-      - name: restore cache
-        id: restore-cache-attempt
+      - name: spack mirror cache
+        id: spack-mirror-cache
         uses: actions/cache@v3
         with:
           path: ~/arcflash-mirror
           key: arcflash-mirror
 
-      - if: ${{ steps.restore-cache-attempt.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.spack-mirror-cache.outputs.cache-hit != 'true' }}
         name: create mirror
         run: |
           . ./spack/share/spack/setup-env.sh
