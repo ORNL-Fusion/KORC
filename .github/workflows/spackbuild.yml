@@ -26,7 +26,6 @@ jobs:
           lsblk
           findmnt
 
-
       - name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
@@ -35,6 +34,7 @@ jobs:
           spack find
           spack add zlib
           spack install
+          spack env deactivate
 
       - name: spack mirror
         run: |
@@ -42,8 +42,7 @@ jobs:
           spack env activate -p -d ~/thunderclap-spackenv
           spack env status
           spack mirror list
-
-
-
-#          spack mirror create -d ~/thunderclap-mirror --all
-#          spack env activate -d ./spackenv-nacho
+          spack mirror create       -d ~/thunderclap-mirror --all
+          spack mirror add thunderclap ~/thunderclap-mirror
+          spack mirror list
+          spack env deactivate
