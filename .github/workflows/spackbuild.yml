@@ -14,43 +14,35 @@ jobs:
           repository: spack/spack
           path: ./spack
 
-      - name: spack setup
+      - name: restore cache
+        id: restore-cache-attempt
+        uses: actions/cache@v3
+        with:
+          path: ~/arcflash-mirror
+          key: arcflash-mirror
+
+      - if: ${{ steps.restore-cache-attempt.outputs.cache-hit != 'true' }}
+        name: create mirror
         run: |
-          ls -la ./spack/share/spack/
           . ./spack/share/spack/setup-env.sh
-          which spack
-          spack --version
-          set -x
-          df -h
-          pwd -P
-          lsblk
-          findmnt
+          spack env create      -d ~/arcflash-spackenv
+          spack env activate -p -d ~/arcflash-spackenv
+          spack add zlib
+          spack install
+          spack mirror create   -d ~/arcflash-mirror --all
+          spack env deactivate
 
       - name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env create      -d ~/thunderclap-spackenv
-          spack env activate -p -d ~/thunderclap-spackenv
-          spack find
+          spack mirror add arcflash ~/arcflash-mirror
+          spack mirror list
           spack add zlib
           spack install
+          spack find
           spack env deactivate
 
-      - name: spack mirror
-        run: |
-          . ./spack/share/spack/setup-env.sh
-          spack env activate -p -d ~/thunderclap-spackenv
-          spack env status
-          spack mirror list
-          spack mirror create       -d ~/thunderclap-mirror --all
-          spack mirror add thunderclap ~/thunderclap-mirror
-          spack mirror list
-          spack env deactivate
 
-      - name: cache spack mirror
-        uses: actions/cache@v3
-        with:
-          path: ~/thunderclap-mirror
-          key: thunderclap-${{ runner.os }}-${{ hashFiles('/home/runner/thunderclap-mirror') }}
           
         
