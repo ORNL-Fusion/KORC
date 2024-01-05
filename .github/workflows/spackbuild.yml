@@ -25,7 +25,6 @@ jobs:
         name: create mirror
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack env create      -d ~/nacho-spackenv
           spack env activate -p -d ~/nacho-spackenv
           spack add
           spack install
