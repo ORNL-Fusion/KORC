@@ -39,8 +39,8 @@ jobs:
       - name: spack mirror
         run: |
           . ./spack/share/spack/setup-env.sh
+          spack env activate -p -d ~/thunderclap-spackenv
           spack env status
-          echo ---------------------
           spack mirror list
 
 
