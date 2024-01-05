@@ -27,7 +27,7 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env create      -d ~/nacho-spackenv
           spack env activate -p -d ~/nacho-spackenv
-          spack add gcc@13.1.0
+          spack add
           spack install
           spack mirror create   -d ~/nacho-mirror --all
           spack env deactivate
@@ -39,7 +39,7 @@ jobs:
           spack env activate -p -d ~/thunderclap-spackenv
           spack mirror add nacho ~/nacho-mirror
           spack mirror list
-          spack add gcc@13.1.0
+          spack add
           spack install
           spack find
           set -x
