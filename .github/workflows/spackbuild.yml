@@ -46,3 +46,11 @@ jobs:
           spack mirror add thunderclap ~/thunderclap-mirror
           spack mirror list
           spack env deactivate
+
+      - name: cache spack mirror
+        uses: actions/cache@v3
+        with:
+          path: ~/thunderclap-mirror
+          key: thunderclap-${{ runner.os }}-${{ hashFiles('~/thunderclap-mirror') }}
+          
+        
