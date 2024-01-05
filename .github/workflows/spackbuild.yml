@@ -22,8 +22,10 @@ jobs:
           spack --version
           set -x
           df -h
+          pwd -P
           lsblk
           findmnt
+
 
 #      - name: spack install
 #        run: |
