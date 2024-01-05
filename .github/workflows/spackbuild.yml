@@ -30,15 +30,20 @@ jobs:
       - name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
+          spack env create      -d ~/thunderclap-spackenv
+          spack env activate -p -d ~/thunderclap-spackenv
           spack find
-          spack install gcc@13.1.0
+          spack add zlib
+          spack install
 
       - name: spack mirror
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack mirror list
-          spack mirror create -d ./mirror-nacho --all
+          spack env status
+          echo ---------------------
           spack mirror list
 
 
+
+#          spack mirror create -d ~/thunderclap-mirror --all
 #          spack env activate -d ./spackenv-nacho
