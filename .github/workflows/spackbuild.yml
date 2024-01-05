@@ -36,6 +36,7 @@ jobs:
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env create      -d ~/thunderclap-spackenv
+          spack env activate -p -d ~/thunderclap-spackenv
           spack mirror add arcflash ~/arcflash-mirror
           spack mirror list
           spack add zlib
