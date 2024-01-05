@@ -18,18 +18,18 @@ jobs:
         id: spack-mirror-cache
         uses: actions/cache@v3
         with:
-          path: ~/arcflash-mirror
-          key: arcflash-mirror
+          path: ~/nacho-mirror
+          key: nacho-mirror
 
       - if: ${{ steps.spack-mirror-cache.outputs.cache-hit != 'true' }}
         name: create mirror
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack env create      -d ~/arcflash-spackenv
-          spack env activate -p -d ~/arcflash-spackenv
-          spack add zlib
+          spack env create      -d ~/nacho-spackenv
+          spack env activate -p -d ~/nacho-spackenv
+          spack add gcc@13.1.0
           spack install
-          spack mirror create   -d ~/arcflash-mirror --all
+          spack mirror create   -d ~/nacho-mirror --all
           spack env deactivate
 
       - name: spack install
@@ -37,11 +37,14 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env create      -d ~/thunderclap-spackenv
           spack env activate -p -d ~/thunderclap-spackenv
-          spack mirror add arcflash ~/arcflash-mirror
+          spack mirror add nacho ~/nacho-mirror
           spack mirror list
-          spack add zlib
+          spack add gcc@13.1.0
           spack install
           spack find
+          set -x
+          which gfortran
+          set +x
           spack env deactivate
 
 
