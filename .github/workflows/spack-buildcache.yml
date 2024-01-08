@@ -1,5 +1,5 @@
 name: spack-buildcache
-on: [ push, workflow_dispatch ]
+#on: [ push, workflow_dispatch ]
 
 jobs:
   job_one:
@@ -14,46 +14,29 @@ jobs:
           repository: spack/spack
           path: ./spack
 
-      - name: spack buildcache
-        id: spack-mirror-cache
+      - name: spack binary cache
+        id: spack-buildcache
         uses: actions/cache@v3
         with:
-          path: ~/nacho-mirror
-          key: nacho-mirror2
+          path: ~/mirror
+          key: spack-buildcache-1
 
-      - if: ${{ steps.spack-mirror-cache.outputs.cache-hit != 'true' }}
-        name: create mirror
+      - if: ${{ steps.spack-buildcache.outputs.cache-hit != 'true' }}
+        name: create buildcache
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack env activate -p -d ./nacho-spackenv
+          spack env activate -p -d ./
           spack add
           spack install
-          spack mirror create   -d ~/nacho-mirror --all
-          spack env deactivate
-
-      - if: "false"
-        name: spack install
-        run: |
-          . ./spack/share/spack/setup-env.sh
-          spack env create      -d ~/thunderclap-spackenv
-          spack env activate -p -d ~/thunderclap-spackenv
-          spack mirror add nacho ~/nacho-mirror
-          spack mirror list
-          spack add
-          spack install
-          spack find
-          set -x
-          which cmake
-          which gfortran
-          set +x
+          spack mirror create -d ~/mirror --all
           spack env deactivate
 
 
       - name: build korc
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack env activate -p -d ./nacho-spackenv
-          spack mirror add nacho ~/nacho-mirror
+          spack env activate -p -d ./
+          spack mirror add nacho ~/mirror
           spack mirror remove spack-public
           spack mirror list
           spack add
