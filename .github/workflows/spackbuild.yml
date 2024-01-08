@@ -31,7 +31,8 @@ jobs:
           spack mirror create   -d ~/nacho-mirror --all
           spack env deactivate
 
-      - name: spack install
+      - if: "false"
+        name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env create      -d ~/thunderclap-spackenv
@@ -48,5 +49,8 @@ jobs:
           spack env deactivate
 
 
-          
-        
+      - name: build korc
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack env activate -p -d ~/thunderclap-spackenv
+
