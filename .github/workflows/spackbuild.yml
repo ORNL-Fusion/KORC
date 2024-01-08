@@ -42,6 +42,7 @@ jobs:
           spack install
           spack find
           set -x
+          which cmake
           which gfortran
           set +x
           spack env deactivate
