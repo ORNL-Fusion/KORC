@@ -52,5 +52,15 @@ jobs:
       - name: build korc
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack env activate -p -d ~/thunderclap-spackenv
-
+          spack env activate -p -d ./nacho-spackenv
+          spack mirror add nacho ~/nacho-mirror
+          spack mirror list
+          spack add
+          spack install
+          spack find
+          set -x
+          which cmake
+          which gfortran
+          gfortran --version
+          set +x
+          spack env deactivate
