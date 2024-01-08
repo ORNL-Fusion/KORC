@@ -1,5 +1,5 @@
-name: spackbuild
-on: [ push, workflow_dispatch ]
+name: spack-src-cache
+#on: [ push, workflow_dispatch ]
 
 jobs:
   job_one:
