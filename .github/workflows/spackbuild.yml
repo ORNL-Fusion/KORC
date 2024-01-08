@@ -54,6 +54,7 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env activate -p -d ./nacho-spackenv
           spack mirror add nacho ~/nacho-mirror
+          spack mirror remove spack-public
           spack mirror list
           spack add
           spack install
