@@ -25,7 +25,8 @@ jobs:
         name: create spack cache
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack env activate -p -d ./
+          spack env create -d .
+          spack env activate -p -d .
           spack add gcc@13.1.0
           spack install --no-cache
           spack load gcc@13.1.0
