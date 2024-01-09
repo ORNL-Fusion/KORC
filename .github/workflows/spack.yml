@@ -36,6 +36,25 @@ jobs:
           spack load hdf5+fortran+mpi %gcc@13.1.0
 
           spack mirror create -d ~/mirror --all
+          spack mirror add nacho ~/mirror
+
+          spack config add "config:install_tree:padded_length:128"
+
+          spack gpg create "My Name" "<my.email@my.domain.com>"
+
+          #mkdir ~/private_gpg_backup
+          #cp ~/spack/opt/spack/gpg/*.gpg ~/private_gpg_backup
+          #cp ~/spack/opt/spack/gpg/pubring.* ~/mirror
+
+          spack buildcache push ~/mirror
+
+          spack buildcache keys --install --trust --force
+
+          spack bootstrap mirror --binary-packages ~/mirror
+
+          #spack bootstrap add --trust local-sources <final-path>/metadata/sources
+          #spack bootstrap add --trust local-binaries <final-path>/metadata/binaries
+
           spack env deactivate
 
 
