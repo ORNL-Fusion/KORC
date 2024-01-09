@@ -104,4 +104,6 @@ jobs:
           gfortran --version
           set +x
 
+          ./build.sh
+
           spack env deactivate
