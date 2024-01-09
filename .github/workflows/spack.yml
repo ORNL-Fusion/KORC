@@ -65,6 +65,7 @@ jobs:
 
 
   job_two:
+    needs: job_one
     runs-on: ubuntu-latest
     steps:
       - name: grab main project
