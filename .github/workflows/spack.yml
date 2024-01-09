@@ -70,7 +70,7 @@ jobs:
           spack mirror remove spack-public
           spack mirror list
           spack add
-          spack install
+          spack install --no-check-signature
           spack find
           set -x
           which cmake
