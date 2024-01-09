@@ -1,4 +1,4 @@
-name: spack-buildcache
+name: spack
 #on: [ push, workflow_dispatch ]
 
 jobs:
@@ -14,20 +14,27 @@ jobs:
           repository: spack/spack
           path: ./spack
 
-      - name: spack binary cache
-        id: spack-buildcache
+      - name: spack cache
+        id: spack-cache
         uses: actions/cache@v3
         with:
           path: ~/mirror
-          key: spack-buildcache-1
+          key: spack-cache-1
 
-      - if: ${{ steps.spack-buildcache.outputs.cache-hit != 'true' }}
-        name: create buildcache
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: create spack cache
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env activate -p -d ./
-          spack add
-          spack install
+          spack add gcc@13.1.0
+          spack install --no-cache
+          spack load gcc@13.1.0
+          spack compiler find
+
+          spack add hdf5+fortran+mpi %gcc@13.1.0
+          spack install --no-cache
+          spack load hdf5+fortran+mpi %gcc@13.1.0
+
           spack mirror create -d ~/mirror --all
           spack env deactivate
 
