@@ -27,6 +27,9 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env create -d .
           spack env activate -p -d .
+
+          spack config add "config:install_tree:padded_length:128"
+
           spack add gcc@13.1.0
           spack install --no-cache
           spack load gcc@13.1.0
@@ -36,10 +39,10 @@ jobs:
           spack install --no-cache
           spack load hdf5+fortran+mpi %gcc@13.1.0
 
+          rm -rf ~/mirror
+
           spack mirror create -d ~/mirror --all
           spack mirror add nacho ~/mirror
-
-          spack config add "config:install_tree:padded_length:128"
 
           spack gpg create "My Name" "<my.email@my.domain.com>"
 
