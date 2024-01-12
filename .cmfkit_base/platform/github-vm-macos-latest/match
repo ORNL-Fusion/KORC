@@ -1,4 +1,0 @@
-#!/bin/bash
-
-_debug "match $(pwd)"
-
