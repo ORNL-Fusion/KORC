@@ -7,52 +7,50 @@
 
 ## Quick-Start
 
-1. Find your platform under the `.cmfkit/platform` directory
+Spack provides an easy way to setup the gfortran compiler toolchain and other dependencies without the headache of managing them through the OS.  Here's how to build KORC on a Linux workstation using Spack:
+
+1. Grab the spack software using git, and source the `setup-env.sh` script from within the spack installation.
 
 ```bash
-[user@localhost korc]$ tree .cmfkit/platform/
-
-.cmfkit/platform/
-├── github-vm-macos-latest
-│   ├── match
-│   └── setup
-├── github-vm-ubuntu-latest
-│   ├── match
-│   └── setup
-├── github-vm-windows-latest
-│   ├── match
-│   └── setup
-├── metal-macos-12
-│   ├── match
-│   └── setup
-├── readybake
-│   └── Dockerfile
-├── readybake-alpine
-│   └── Dockerfile
-├── readybake-centos
-│   └── Dockerfile
-├── readybake-debian
-│   └── Dockerfile
-└── readybake-ubuntu
-    └── Dockerfile
-
+[user@localhost KORC]$ git clone --depth=100 --branch=releases/v0.21 https://github.com/spack/spack.git ~/spack
+[user@localhost KORC]$ . ~/spack/share/spack/setup-env.sh
 ```
 
-
-2. Create a `cmfkit_vars` file at the base directory of the project and set the `CMFKIT_PLATFORM` variable to match the platform name.
+2. Create and activate a new spack environment
 
 ```bash
-
-CMFKIT_PLATFORM='metal-macos-12'
-CMFKIT_SCENARIO='basic'
+[KORC] [user@localhost KORC]$ spack env create -d .
+[KORC] [user@localhost KORC]$ spack env activate -p -d .
 ```
 
 
-3. Run the launcher script under the .cmfkit_base directory
+3. Configure spack and bootstrap the compiler
 
+```bash
+[KORC] [user@localhost KORC]$ spack config add "config:install_tree:padded_length:128"
+
+[KORC] [user@localhost KORC]$ spack install --no-cache --add gcc@13.1.0
+[KORC] [user@localhost KORC]$ spack load gcc@13.1.0
+[KORC] [user@localhost KORC]$ spack compiler find
+
+[KORC] [user@localhost KORC]$ spack install --no-cache --add cmake %gcc@13.1.0
+[KORC] [user@localhost KORC]$ spack load cmake %gcc@13.1.0
+
+[KORC] [user@localhost KORC]$ spack install --no-cache --add hdf5+fortran+mpi %gcc@13.1.0
+[KORC] [user@localhost KORC]$ spack load hdf5+fortran+mpi %gcc@13.1.0
 ```
-[user@localhost korc]$ ./.cmfkit_base/launch build
+
+
+4. Verify gfortan, cmake and Build KORC
+
+```bash
+[KORC] [user@localhost KORC]$ which cmake
+[KORC] [user@localhost KORC]$ which gfortran
+[KORC] [user@localhost KORC]$ gfortran --version
+
+[KORC] [user@localhost KORC]$ ./build.sh
 ```
+
 
 
 ## More Info
