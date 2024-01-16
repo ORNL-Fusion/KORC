@@ -51,6 +51,11 @@ Spack provides an easy way to setup the gfortran compiler toolchain and other de
 [KORC] [user@localhost KORC]$ ./build.sh
 ```
 
+5. Exit the spack environment
+
+```bash
+[KORC] [user@localhost KORC]$ spack env deactivate
+```
 
 
 ## More Info
