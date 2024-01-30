@@ -43,7 +43,7 @@ then
     cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
       -DMPI_Fortran_LINK_FLAGS="-ld_classic -Wl,-flat_namespace -Wl,-commons,use_dylibs -L/usr/local/Cellar/hwloc/2.10.0/lib -L/usr/local/Cellar/libevent/2.1.12_1/lib" \
       -DUSE_OMP=ON \
-      -DUSE_PSPLINE=ON \
+      -DUSE_PSPLINE=OFF \
       -DUSE_FIO=OFF \
       -DCORI_DIR=OFF \
       -DKORC_TEST=OFF \
