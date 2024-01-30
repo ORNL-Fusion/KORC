@@ -208,7 +208,7 @@ CONTAINS
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
     !! An instance of the derived type SPECIES containing all the parameters and 
     !! simulation variables of the different species in the simulation.
-    INTEGER 							:: ii
+    INTEGER 							:: ii,pp
     !! Species iterator.
     INTEGER 							:: mpierr
     !! MPI error status.
@@ -312,6 +312,14 @@ CONTAINS
 
           spp(ii)%vars%eta = (spp(ii)%etao_lims(2) - &
                spp(ii)%etao_lims(1))*spp(ii)%vars%eta + spp(ii)%etao_lims(1)
+
+
+        !do pp=1_idef,spp(ii)%ppp
+        !  if (spp(ii)%vars%eta(pp).gt.20._rp) then 
+        !    write(6,*) 'part_init',pp,spp(ii)%vars%eta(pp)
+        !  endif
+        !enddo
+
        CASE ('AVALANCHE-4D')
           spp(ii)%vars%eta = spp(ii)%etao
           !Monopitch from input file until sampled in Avalanche_4D
@@ -363,7 +371,7 @@ CONTAINS
     !! An instance of the derived type SPECIES containing all the
     !! parameters and 
     !! simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(:,:), ALLOCATABLE	:: b1
+    REAL(rp), DIMENSION(:,:), ALLOCATABLE	:: b1,b_tmp
     !! Basis vector pointing along the local magnetic field, that is,
     !!  along \(\mathbf{b} = \mathbf{B}/B\).
     REAL(rp), DIMENSION(:,:), ALLOCATABLE	:: b2
@@ -381,7 +389,8 @@ CONTAINS
     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
     !! Uniform random number in the interval \([0,2\pi]\) 
     !! representing the gyro-angle.
-    INTEGER 				:: jj
+    INTEGER 				:: jj,pp
+    REAL :: eta_tmp,bmag,vmag
     !! Particle iterator.
     TYPE(C_PTR), DIMENSION(:), ALLOCATABLE    :: hint
     
@@ -390,6 +399,7 @@ CONTAINS
     ALLOCATE(V2(spp%ppp))
     ALLOCATE(V3(spp%ppp))
     ALLOCATE(b1(spp%ppp,3))
+    ALLOCATE(b_tmp(spp%ppp,3))
     ALLOCATE(b2(spp%ppp,3))
     ALLOCATE(b3(spp%ppp,3))
     ALLOCATE(hint(spp%ppp))
@@ -415,6 +425,8 @@ CONTAINS
     V2 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*COS(theta)
     V3 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*SIN(theta)
 
+
+
     !write(6,*) 'V123',V1,V2,V3
     
     !do jj=1_idef,spp%ppp
@@ -422,7 +434,7 @@ CONTAINS
     !        spp%vars%X(jj,:)*params%cpp%length
     !end do
     call unitVectors(params,spp%vars%X,F,b1,b2,b3,spp%vars%flagCon, &
-         spp%vars%cart,hint)
+         spp%vars%cart,hint,b_tmp)
     !! Call to subroutine [[unitVectors]] in [[korc_fields]].
 
     !
@@ -444,6 +456,17 @@ CONTAINS
     !write(6,'("Vy: ",E17.10)') spp%vars%V(:,2)
     !write(6,'("Vz: ",E17.10)') spp%vars%V(:,3)
     
+    !do pp=1_idef,spp%ppp
+      
+    !    vmag=sqrt(spp%vars%V(pp,1)*spp%vars%V(pp,1)+spp%vars%V(pp,2)*spp%vars%V(pp,2)+spp%vars%V(pp,3)*spp%vars%V(pp,3))
+    !    bmag=sqrt(b_tmp(pp,1)*b_tmp(pp,1)+b_tmp(pp,2)*b_tmp(pp,2)+b_tmp(pp,3)*b_tmp(pp,3))
+
+    !    eta_tmp = 180.0_rp/C_PI* &
+    !    ACOS((b_tmp(pp,1)*spp%vars%V(pp,1)+b_tmp(pp,2)*spp%vars%V(pp,2)+b_tmp(pp,3)*spp%vars%V(pp,3))/(bmag*vmag))  
+
+    !    write(6,*) 'vel_init',pp,'B',b_tmp(pp,1),b_tmp(pp,2),b_tmp(pp,3)
+   !enddo
+
     DEALLOCATE(theta)
     DEALLOCATE(Vo)
     DEALLOCATE(V1)

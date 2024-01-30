@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.8)
+cmake_minimum_required (VERSION 3.5)
 
 project (korc_proj C CXX Fortran)
 
@@ -14,14 +14,22 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build/lib)
 add_definitions (-DDOUBLE_PRECISION)
 add_definitions (-DPARALLEL_RANDOM)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-   add_definitions (-DDBG_CHECK)
+#   add_definitions (-DDBG_CHECK)
 endif()
-
 
 #  Configure OpenMP
 find_package (OpenMP)
 set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_Fortran_FLAGS}")
+option (USE_OMP "Use OpenOMP" OFF)
+if (${USE_OMP})
+    add_definitions (-DOMP)
+endif()
+
+option (USE_ACC "Use OpenACC" OFF)
+if (${USE_ACC})
+   add_definitions (-DACC)
+endif()
 
 #  Configure MPI
 find_package (MPI REQUIRED)
@@ -36,8 +44,8 @@ include_directories (${HDF5_INCLUDE_DIRS})
 #  Configure EZspline
 option (USE_PSPLINE "Use PSPLINE interpolation" OFF)
 if (${USE_PSPLINE})
-   include_directories (${EZSpline_INCLUDE_PATH})
-   set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EZSpline_LINK_FLAGS}")
+   #include_directories (${EZSpline_INCLUDE_PATH})
+   #set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${EZSpline_LINK_FLAGS}")
    add_definitions (-DPSPLINE)
 endif ()
 

@@ -746,7 +746,6 @@ FUNCTION indicator(psi,psi_max)
 
 END FUNCTION indicator
 
-
 FUNCTION random_norm(mean,sigma)
 	REAL(rp), INTENT(IN) :: mean
 	REAL(rp), INTENT(IN) :: sigma
@@ -1322,7 +1321,7 @@ subroutine MH_psi(params,spp,F)
   !! Present sample of Z location
   REAL(rp) 				:: PHI_test
 
-  REAL(rp) 				:: psi_max,psi_max_buff
+  REAL(rp) 				:: psi_max,psi_min,psi_max_buff
   REAL(rp)  :: PSIp_lim,PSIP0,PSIN,PSIN0,PSIN1,sigma,psi0,psi1
 
   REAL(rp) 				:: rand_unif
@@ -1337,7 +1336,7 @@ subroutine MH_psi(params,spp,F)
   !! mpi error indicator
 
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
+  INTEGER,DIMENSION(34) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'
@@ -1364,7 +1363,9 @@ subroutine MH_psi(params,spp,F)
      max_Z=maxval(F%X%Z)
 
      PSIp0=F%PSIP_min
+     
      psi_max = spp%psi_max
+     psi_min = spp%psi_min
      psi_max_buff = spp%psi_max*2._rp
   end if
 
@@ -1416,10 +1417,6 @@ subroutine MH_psi(params,spp,F)
         !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
         !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
         Z_test = Z_buffer + get_random_N()*spp%dZ
-
-
-
-
 
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
            !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
@@ -1517,7 +1514,7 @@ subroutine MH_psi(params,spp,F)
 
         if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
         ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
-             indicator(PSIN1,psi_max)* &
+             indicator(PSIN1,psi_max)*indicator(psi_min,PSIN1)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 
@@ -1625,7 +1622,7 @@ subroutine MH_psi(params,spp,F)
 
         if (.not.F%useLCFS) spp%vars%initLCFS(1)=1_is
         ratio = real(spp%vars%flagCon(1))*real(spp%vars%initLCFS(1))* &
-             indicator(PSIN1,psi_max)* &
+             indicator(PSIN1,psi_max)*indicator(psi_min,PSIN1)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
 
@@ -1656,7 +1653,7 @@ subroutine MH_psi(params,spp,F)
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
         IF ((INT(indicator(PSIN1,psi_max)).EQ.1).AND. &
-             ACCEPTED) THEN
+          (INT(indicator(psi_min,PSIN1)).EQ.1).AND.ACCEPTED) THEN
            R_samples(ii) = R_buffer
            Z_samples(ii) = Z_buffer
            PHI_samples(ii) = PHI_buffer

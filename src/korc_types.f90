@@ -481,7 +481,7 @@ module korc_types
      REAL(rp)                            :: theta_gauss
      !! Angle of counter-clockwise rotation (in degrees) of 2D Gaussian
      !! distribution relative to R,Z
-     REAL(rp)                            :: psi_max
+     REAL(rp)                            :: psi_max,psi_min
      !! Maximum value of the argument of the 2D gaussian exponential, used
      !! for an indicator function that limits the region of MH sampling
      REAL(rp)                            :: Spong_b
@@ -515,6 +515,10 @@ module korc_types
      !! the values of \(q_0\) and \(q(r)\)
      !! at the plasma edge \(r=r_{edge}\).
 
+    LOGICAL         :: perturb
+    REAL(rp)        :: l_mn
+    REAL(rp)        :: sigma_mn
+    REAL(rp)        :: eps_mn
      REAL(rp) 			:: Bo
      !! Magnitude of the toroidal magnetic field \(B_0\).
      REAL(rp) 			:: a
@@ -621,9 +625,9 @@ module korc_types
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
-     REAL(rp)  :: AORSA_nmode
+     REAL(rp)  :: AORSA_nmode,AORSA_mmode
      !! interpolated E field
-     CHARACTER(30) :: Analytic_IWL
+     LOGICAL :: Analytic_D3D_IWL
      INTEGER :: ntiles
      REAL(rp) :: circumradius
      INTEGER 			:: res_double

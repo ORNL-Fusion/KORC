@@ -8,6 +8,7 @@ module korc_coords
 
   PUBLIC :: cart_to_cyl,&
        cart_to_cyl_p,&
+       cart_to_cyl_p_ACC,&
        cart_to_tor_check_if_confined,&
        cart_to_tor_p,&
        cyl_to_cart,&
@@ -102,6 +103,24 @@ CONTAINS
     !$OMP END SIMD
 
   end subroutine cart_to_cyl_p
+
+subroutine cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+  !$acc routine seq
+  implicit none
+  REAL(rp), INTENT(IN)      :: X_X
+  REAL(rp), INTENT(IN)      :: X_Y
+  REAL(rp), INTENT(IN)      :: X_Z
+
+  REAL(rp), INTENT(OUT)   :: Y_R
+  REAL(rp), INTENT(OUT)   :: Y_PHI
+  REAL(rp), INTENT(OUT)   :: Y_Z
+
+  Y_R = SQRT(X_X*X_X + X_Y*X_Y)
+  Y_PHI = ATAN2(X_Y, X_X)
+  Y_PHI = MODULO(Y_PHI, 2.0_rp*C_PI)
+  Y_Z = X_Z
+
+end subroutine cart_to_cyl_p_ACC
 
   subroutine cyl_to_cart(Xcyl,X)
     !! @note  Subroutine that converts the position of simulated particles
@@ -338,5 +357,29 @@ CONTAINS
     !$OMP END SIMD
     
   end subroutine cart_to_tor_check_if_confined_p
+
+subroutine cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+  T_R,T_T,T_Z,flag_cache)
+  !$acc routine seq
+  REAL(rp),  INTENT(IN)      :: R0,ar
+  REAL(rp),  INTENT(IN)      :: X_X,X_Y,X_Z
+  REAL(rp),  INTENT(OUT)      :: T_R,T_T,T_Z
+  INTEGER(is),  INTENT(INOUT)      :: flag_cache
+  REAL(rp)   :: RR
+  !! Particle chunk iterator.
+
+  RR=SQRT(X_X*X_X + X_Y*X_Y) - R0
+
+  T_R = SQRT( RR*RR + X_Z*X_Z )
+  T_T = ATAN2(X_Z, RR)
+  T_T = MODULO(T_T,2.0_rp*C_PI)
+  T_Z = ATAN2(X_X,X_Y)
+  T_Z = MODULO(T_Z,2.0_rp*C_PI)
+
+  if (T_R .GT. ar) then
+    flag_cache = 0_is
+  end if
+
+end subroutine cart_to_tor_check_if_confined_p_ACC
   
 end module korc_coords

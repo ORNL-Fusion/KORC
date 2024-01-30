@@ -316,6 +316,14 @@ CONTAINS
 
     call initialize_mpi(params)
 
+    if (params%mpi_params%rank.EQ.0) then
+#ifdef ACC
+      write(output_unit_write,'(/," Running on GPUs")')
+#else
+      write(output_unit_write,'(/," Running on CPUs")')
+#endif
+    endif
+
     !$OMP PARALLEL SHARED(params)
     params%num_omp_threads = OMP_GET_NUM_THREADS()
     !$OMP END PARALLEL

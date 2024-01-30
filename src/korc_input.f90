@@ -114,7 +114,7 @@ module korc_input
   REAL(rp), DIMENSION(:), ALLOCATABLE :: sigmaR
   REAL(rp), DIMENSION(:), ALLOCATABLE :: sigmaZ
   REAL(rp), DIMENSION(:), ALLOCATABLE :: theta_gauss
-  REAL(rp), DIMENSION(:), ALLOCATABLE :: psi_max
+  REAL(rp), DIMENSION(:), ALLOCATABLE :: psi_max,psi_min
     !! Maximum value of the argument of the 2D gaussian exponential, used for an
     !! indicator function that limits the region of MH sampling
     ! goes as R^2 for HOLLMANN-3D, is psiN_max for HOLLMANN-3D-PSI
@@ -182,6 +182,10 @@ module korc_input
   !location of Er
   REAL(rp) :: sigmamn=1.E-2
   ! half width of Er perturbation
+  LOGICAL  :: perturb = .FALSE.
+  REAL(rp) :: l_mn = 0.005
+  REAL(rp) :: sigma_mn = 0.02
+  REAL(rp) :: eps_mn = 2.75E-4
 
   !! -----------------------------------------------
   !! externalPlasmaModel
@@ -211,7 +215,8 @@ module korc_input
   REAL(rp)  :: AORSA_AMP_Scale=1.0
   REAL(rp)  :: AORSA_freq=0.0
   REAL(rp)  :: AORSA_nmode=0.0
-  CHARACTER(30) :: Analytic_IWL='NONE'
+  REAL(rp)  :: AORSA_mmode=0.0
+  LOGICAL :: Analytic_D3D_IWL=.FALSE.
   INTEGER :: ntiles=42
   REAL(rp) :: circumradius=1.016
   LOGICAL :: useLCFS = .FALSE.
@@ -450,16 +455,17 @@ CONTAINS
     NAMELIST /plasma_species/ ppp,q,m,Eno,etao,Eo_lims,etao_lims,runaway, &
          spatial_distribution,energy_distribution,pitch_distribution,Ro, &
          PHIo,Zo,r_inner,r_outter,falloff_rate,shear_factor,sigmaR,sigmaZ, &
-         theta_gauss,psi_max,Xtrace,Spong_b,Spong_w,Spong_dlam,dth,dR,dZ,dgam,&
+         theta_gauss,psi_max,psi_min,Xtrace,Spong_b,Spong_w,Spong_dlam,dth,dR,dZ,dgam,&
          pinit
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
-         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn,E_edge
+         E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn,E_edge, &
+         perturb,l_mn,sigma_mn,eps_mn
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
-         ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_IWL, &
-         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,E1field, &
+         ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_D3D_IWL, &
+         ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,AORSA_mmode,E1field, &
          useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
@@ -552,6 +558,7 @@ CONTAINS
              ALLOCATE(sigmaZ(num_species))
              ALLOCATE(theta_gauss(num_species))
              ALLOCATE(psi_max(num_species))
+             ALLOCATE(psi_min(num_species))
              ALLOCATE(falloff_rate(num_species))
              ALLOCATE(energy_distribution(num_species))
              ALLOCATE(pitch_distribution(num_species))
@@ -584,7 +591,8 @@ CONTAINS
                 sigmaR = 1.e6
                 sigmaZ = 0.2
                 theta_gauss = 0.0
-                psi_max=.8446
+                psi_max=1.
+                psi_min=0.
                 falloff_rate = 0.0
                 energy_distribution = 'MONOENERGETIC'
                 pitch_distribution = 'MONOPITCH'

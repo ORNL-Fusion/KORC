@@ -16,6 +16,16 @@ module korc_ppusher
 
   IMPLICIT NONE
 
+#ifdef PSPLINE
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
+  TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
+#endif 
   REAL(rp), PRIVATE :: E0
   !! Dimensionless vacuum permittivity \(\epsilon_0 \times (m_{ch}^2
   !! v_{ch}^3/q_{ch}^3 B_{ch})\), see [[korc_units]].
@@ -23,8 +33,7 @@ module korc_ppusher
   PRIVATE :: cross,&
        radiation_force_p,&
        GCEoM_p,&
-       GCEoM1_p,&
-       aux_fields
+       GCEoM1_p
   PUBLIC :: initialize_particle_pusher,&
        GC_init,&
        FO_init,&
@@ -34,19 +43,14 @@ module korc_ppusher
 #ifdef PSPLINE
        adv_FOinterp_top,&
        adv_FOinterp_mars_top,&
+       adv_FOinterp_mars_top_ACC,&
        adv_FOinterp_aorsa_top,&
        advance_FOinterp_vars,&
+       advance_FO_vars_ACC,&
        advance_GCinterp_psi_vars,&
-       advance_GCinterp_B_vars,&
        adv_GCinterp_psi_top,&
        adv_GCinterp_psiwE_top,&
        adv_GCinterp_psi2x1t_top,&
-       adv_GCinterp_psi_top_FS,&
-       adv_GCinterp_B_top,&
-       adv_GCinterp_B2D_top,&
-       adv_GCinterp_2DBdB_top,&
-       adv_GCinterp_3DBdB_top,&
-       adv_GCinterp_3DBdB1_top,&
 #endif
        adv_FOeqn_top,&
        advance_FOeqn_vars,&
@@ -55,44 +59,39 @@ module korc_ppusher
 
 contains
 
+subroutine initialize_particle_pusher(params)
+  !! @note This subroutine initializes all the variables needed for advancing
+  !! the particles' position and velocity. @endnote
+  !! This subroutine is specially useful when we need to define or initialize
+  !! values of parameters used to calculate derived quantities.
+  !! The intent of this subroutine is to work as a constructor of the module.
+  TYPE(KORC_PARAMS), INTENT(IN)  :: params
+  !! Core KORC simulation parameters.
 
+  E0 = C_E0*(params%cpp%mass**2*params%cpp%velocity**3)/ &
+      (params%cpp%charge**3*params%cpp%Bo)
 
-  subroutine initialize_particle_pusher(params)
-    !! @note This subroutine initializes all the variables needed for advancing
-    !! the particles' position and velocity. @endnote
-    !! This subroutine is specially useful when we need to define or initialize
-    !! values of parameters used to calculate derived quantities.
-    !! The intent of this subroutine is to work as a constructor of the module.
-    TYPE(KORC_PARAMS), INTENT(IN)  :: params
-    !! Core KORC simulation parameters.
+end subroutine initialize_particle_pusher
 
-    E0 = C_E0*(params%cpp%mass**2*params%cpp%velocity**3)/ &
-         (params%cpp%charge**3*params%cpp%Bo)
+pure function cross(a,b)
+  !! @note Function that calculates and returns the cross product
+  !! \(\mathbf{a}\times \mathbf{b}\). These vectors are in Cartesian
+  !! coordinates. @endnote
+  !! @note Notice that all the variables in this subroutine have been
+  !! normalized using the characteristic scales in [[korc_units]]. @endnote
+  REAL(rp), DIMENSION(3), INTENT(IN) :: a
+  !! Vector \(\mathbf{a}\).
+  REAL(rp), DIMENSION(3), INTENT(IN) :: b
+  !! Vector \(\mathbf{b}\).
+  REAL(rp), DIMENSION(3)             :: cross
+  !!Value of \(\mathbf{a}\times \mathbf{b}\)
 
-  end subroutine initialize_particle_pusher
+  cross(1) = a(2)*b(3) - a(3)*b(2)
+  cross(2) = a(3)*b(1) - a(1)*b(3)
+  cross(3) = a(1)*b(2) - a(2)*b(1)
+end function cross
 
-
-  pure function cross(a,b)
-    !! @note Function that calculates and returns the cross product
-    !! \(\mathbf{a}\times \mathbf{b}\). These vectors are in Cartesian
-    !! coordinates. @endnote
-    !! @note Notice that all the variables in this subroutine have been
-    !! normalized using the characteristic scales in [[korc_units]]. @endnote
-    REAL(rp), DIMENSION(3), INTENT(IN) :: a
-    !! Vector \(\mathbf{a}\).
-    REAL(rp), DIMENSION(3), INTENT(IN) :: b
-    !! Vector \(\mathbf{b}\).
-    REAL(rp), DIMENSION(3)             :: cross
-    !!Value of \(\mathbf{a}\times \mathbf{b}\)
-
-    cross(1) = a(2)*b(3) - a(3)*b(2)
-    cross(2) = a(3)*b(1) - a(1)*b(3)
-    cross(3) = a(1)*b(2) - a(2)*b(1)
-  end function cross
-
-
-
-  subroutine radiation_force_p(pchunk,q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
+subroutine radiation_force_p(pchunk,q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
        B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
     INTEGER, INTENT(IN)  :: pchunk
     REAL(rp), INTENT(IN)                       :: m_cache,q_cache
@@ -178,536 +177,1351 @@ contains
     end do
     !$OMP END SIMD
 
-  end subroutine radiation_force_p
+end subroutine radiation_force_p
+
+subroutine FO_init(params,F,spp,output,step)
+  TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+
+  REAL(rp)                                      :: dt
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+
+  REAL(rp), DIMENSION(params%pchunk)               :: Bmag
+  REAL(rp), DIMENSION(params%pchunk)               :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp), DIMENSION(params%pchunk)               :: v,vpar,vperp
+  REAL(rp), DIMENSION(params%pchunk)               :: tmp
+  REAL(rp), DIMENSION(params%pchunk)               :: g
+  REAL(rp), DIMENSION(params%pchunk)               :: cross_X,cross_Y,cross_Z
+  REAL(rp), DIMENSION(params%pchunk)               :: vec_X,vec_Y,vec_Z
+  INTEGER                                      :: ii
+  !! Species iterator.
+  INTEGER                                      :: pp
+  !! Particles iterator.
+  INTEGER                                      :: cc,pchunk
+  !! Chunk iterator.
+
+  LOGICAL,intent(in) :: output
+  LOGICAL,intent(in) :: step
+
+  REAL(rp),DIMENSION(params%pchunk) :: X_X,X_Y,X_Z
+  REAL(rp),DIMENSION(params%pchunk) :: V_X,V_Y,V_Z
+  REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
+  REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
+  REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
+  REAL(rp),DIMENSION(params%pchunk) :: PSIp
+  REAL(rp) :: m_cache,q_cache,B0,EF0,lam,R0,q0,ar,eta_tmp
+  TYPE(C_PTR),DIMENSION(params%pchunk) :: hint
+  INTEGER(is) ,DIMENSION(params%pchunk) :: flagCon,flagCol
+
+  pchunk=params%pchunk
+
+  B0=F%Bo
+  EF0=F%Eo
+  lam=F%AB%lambda
+  R0=F%AB%Ro
+  q0=F%AB%qo
+  ar=F%AB%a
+
+  do ii = 1_idef,params%num_species
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+
+    if(output) then
+
+      !$OMP PARALLEL DO default(none) &
+      !$OMP firstprivate(E0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk) &
+      !$OMP& shared(params,ii,spp,F) &
+      !$OMP& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
+      !$OMP& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
+      !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
+      !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,eta_tmp)
+      do pp=1_idef,spp(ii)%ppp,pchunk
+
+        !$OMP SIMD
+        do cc=1_idef,pchunk
+          X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
+          X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
+          X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
+
+          V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
+          V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
+          V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
+
+          Y_R(cc)=0._rp
+          Y_PHI(cc)=0._rp
+          Y_Z(cc)=0._rp
+
+          B_X(cc)=0._rp
+          B_Y(cc)=0._rp
+          B_Z(cc)=0._rp
+
+          E_X(cc)=0._rp
+          E_Y(cc)=0._rp
+          E_Z(cc)=0._rp
+
+          PSIp(cc)=100._rp
+
+          flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+          flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+        end do
+        !$OMP END SIMD
+
+#ifdef FIO
+        if (TRIM(params%field_model).eq.'M3D_C1'.or. &
+          (TRIM(params%field_model).eq.'NIMROD')) then
+          !$OMP SIMD
+          do cc=1_idef,pchunk
+            hint(cc)=spp(ii)%vars%hint(pp-1+cc)
+          end do
+          !$OMP END SIMD
+        end if
+#endif FIO
+
+        call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+        if (params%field_model(1:3).eq.'ANA') then
+          call analytical_fields_p(params,pchunk,F, &
+            X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+        else if (params%field_model(1:3).eq.'UNI') then
+          call uniform_fields_p(pchunk,F, &
+            B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+#ifdef PSPLINE
+        else if (F%axisymmetric_fields.and. &
+          (params%orbit_model(3:3).eq.'B')) then
+          call interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
+            E_X,E_Y,E_Z,PSIp,flagCon)
+        else if ((.not.F%axisymmetric_fields).and. &
+            (params%orbit_model(3:3).eq.'B')) then
+          call interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+            B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+        else if (params%orbit_model(3:5).eq.'psi') then
+          call interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
+            E_X,E_Y,E_Z,PSIp,flagCon)
+        else if (params%field_model(10:13).eq.'MARS') then
+          call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+            B_X,B_Y,B_Z,PSIp,flagCon)
+        else if (params%field_model(10:14).eq.'AORSA') then
+          call interp_FOfields_aorsa_p(0._rp,params,pchunk,F, &
+            Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp,flagCon)
+#endif PSPLINE
+#ifdef FIO
+        else if (TRIM(params%field_model).eq.'M3D_C1'.or. &
+          TRIM(params%field_model).eq.'NIMROD') then
+          call get_fio_FOmagnetic_fields_p(params,F,Y_R,Y_PHI,Y_Z, &
+            B_X,B_Y,B_Z,flagCon,hint)
+          if (F%FIO_E .ge. 0) then
+            call get_fio_FOelectric_fields_p(params,F, &
+              Y_R,Y_PHI,Y_Z,E_X,E_Y,E_Z,flagCon,hint)
+          end if
+          if (F%FIO_A .ge. 0) then
+            call get_fio_vector_potential_p(params,F,Y_R,Y_PHI,Y_Z, &
+              PSIp,flagCon,hint)
+          end if
+#endif FIO
+        end if
+
+        !$OMP SIMD
+        do cc=1_idef,pchunk
+          spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
+          spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
+          spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+
+          spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
+          spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
+          spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
+
+          spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+        end do
+        !$OMP END SIMD
+
+#ifdef FIO
+        if (TRIM(params%field_model).eq.'M3D_C1'.or. &
+            TRIM(params%field_model).eq.'NIMROD') then
+          !$OMP SIMD
+          do cc=1_idef,pchunk
+              spp(ii)%vars%hint(pp-1+cc) = hint(cc)
+          end do
+          !$OMP END SIMD
+        end if
+#endif FIO
+
+        !$OMP SIMD
+        do cc=1_idef,pchunk
+          !Derived output data
+          Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
+
+          ! Parallel unit vector
+          b_unit_X(cc) = B_X(cc)/Bmag(cc)
+          b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
+          b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
+
+          !write(6,*) 'X',X_X,X_Y,X_Z
+          !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
+
+          v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
+          if (v(cc).GT.korc_zero) then
+            ! Parallel and perpendicular components of velocity
+            vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
+                V_Z(cc)*b_unit_Z(cc))
+
+            vperp(cc) =  v(cc)**2 - vpar(cc)**2
+            if ( vperp(cc) .GE. korc_zero ) then
+              vperp(cc) = SQRT( vperp(cc) )
+            else
+              vperp(cc) = 0.0_rp
+            end if
+
+            !write(6,*) 'v,vpar,vperp',v(cc),vpar(cc),vperp(cc)
+
+            ! Pitch angle
+            !spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
+            !  MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+             
+            eta_tmp=180.0_rp/C_PI* &
+              ACOS((B_X(cc)*V_X(cc)+B_Y(cc)*V_Y(cc)+B_Z(cc)*V_Z(cc))/(Bmag(cc)*v(cc)))
+
+            if ((eta_tmp.gt.20._rp).or. &
+              ((spp(ii)%vars%eta(pp-1+cc)-eta_tmp)/spp(ii)%vars%eta(pp-1+cc).gt.0.01)) then 
+                write(6,*) 'abberation',pp
+                write(6,*) pp,spp(ii)%vars%eta(pp-1+cc),eta_tmp,'B', &
+                  spp(ii)%vars%B(pp-1+cc,:),'PSI_P',spp(ii)%vars%PSI_P(pp-1+cc)
+  
+            endif  
+
+            spp(ii)%vars%eta(pp-1+cc) = eta_tmp 
 
 
+            ! Magnetic moment
+            spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
+              g(cc)**2*vperp(cc)**2/Bmag(cc)
+            ! See Northrop's book (The adiabatic motion of charged
+            ! particles)
+
+            ! Radiated power
+            tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+            cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
+            cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
+            cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
+
+            vec_X(cc) = E_X(cc) + cross_X(cc)
+            vec_Y(cc) = E_Y(cc) + cross_Y(cc)
+            vec_Z(cc) = E_Z(cc) + cross_Z(cc)
+
+            spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
+              ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
+              cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
+              cross_Z(cc)*E_Z(cc) + g(cc)**2* &
+              ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
+              - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
+              vec_Z(cc)*vec_Z(cc)) )
+
+            ! Input power due to electric field
+            spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
+              E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
+          else
+              spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
+              spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
+              spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
+              spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
+          end if
+
+        end do
+        !$OMP END SIMD
+
+      end do
+      !$OMP END PARALLEL DO
+
+    endif !(if output)
+
+    if(step.and.(.not.params%FokPlan)) then
+      dt=0.5_rp*params%dt
 
 
-  subroutine FO_init(params,F,spp,output,step)
-    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    !! An instance of the KORC derived type FIELDS.
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
+      !$OMP PARALLEL DO FIRSTPRIVATE(dt) PRIVATE(pp,cc) &
+      !$OMP& SHARED(ii,spp,params)
+      do pp=1_idef,spp(ii)%ppp,pchunk
 
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
+        !$OMP SIMD
+        do cc=1_idef,pchunk
+          spp(ii)%vars%X(pp-1+cc,1) = spp(ii)%vars%X(pp-1+cc,1) + &
+            dt*spp(ii)%vars%V(pp-1+cc,1)
+          spp(ii)%vars%X(pp-1+cc,2) = spp(ii)%vars%X(pp-1+cc,2) + &
+            dt*spp(ii)%vars%V(pp-1+cc,2)
+          spp(ii)%vars%X(pp-1+cc,3) = spp(ii)%vars%X(pp-1+cc,3) + &
+            dt*spp(ii)%vars%V(pp-1+cc,3)
+        end do
+        !$OMP END SIMD
 
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp), DIMENSION(params%pchunk)               :: b_unit_X,b_unit_Y,b_unit_Z
-    REAL(rp), DIMENSION(params%pchunk)               :: v,vpar,vperp
-    REAL(rp), DIMENSION(params%pchunk)               :: tmp
-    REAL(rp), DIMENSION(params%pchunk)               :: g
-    REAL(rp), DIMENSION(params%pchunk)               :: cross_X,cross_Y,cross_Z
-    REAL(rp), DIMENSION(params%pchunk)               :: vec_X,vec_Y,vec_Z
-    INTEGER                                      :: ii
-    !! Species iterator.
-    INTEGER                                      :: pp
-    !! Particles iterator.
-    INTEGER                                      :: cc,pchunk
-    !! Chunk iterator.
+      end do
+      !$OMP END PARALLEL DO
 
-    LOGICAL,intent(in) :: output
-    LOGICAL,intent(in) :: step
+    end if !(if step)
 
-    REAL(rp),DIMENSION(params%pchunk) :: X_X,X_Y,X_Z
-    REAL(rp),DIMENSION(params%pchunk) :: V_X,V_Y,V_Z
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp) :: m_cache,q_cache,B0,EF0,lam,R0,q0,ar
-    TYPE(C_PTR),DIMENSION(params%pchunk) :: hint
-    INTEGER(is) ,DIMENSION(params%pchunk) :: flagCon,flagCol
+  end do ! over species
 
-    pchunk=params%pchunk
+end subroutine FO_init
+
+subroutine FO_init_eqn_ACC(params,F,spp,output,step)
+  TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp)                                      :: dt
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+  REAL(rp)               :: Bmag
+  REAL(rp)              :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp)              :: v,vpar,vperp
+  REAL(rp)               :: tmp
+  REAL(rp)              :: g
+  REAL(rp)              :: cross_X,cross_Y,cross_Z
+  REAL(rp)            :: vec_X,vec_Y,vec_Z
+  INTEGER                                      :: ii
+  !! Species iterator.
+  INTEGER                                      :: pp
+  !! Particles iterator.
+  LOGICAL,intent(in) :: output
+  LOGICAL,intent(in) :: step
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: T_R,T_T,T_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  REAL(rp) :: PSIp
+  REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar,cpp_B,cpp_len
+  INTEGER(is) :: flagCon,flagCol
+
+  !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
+  !$acc routine (analytical_fields_p_ACC) seq
+
+  do ii = 1_idef,params%num_species
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
 
     B0=F%Bo
-    EF0=F%Eo
+    E0=F%Eo
     lam=F%AB%lambda
     R0=F%AB%Ro
     q0=F%AB%qo
     ar=F%AB%a
 
-    do ii = 1_idef,params%num_species
-
-       m_cache=spp(ii)%m
-       q_cache=spp(ii)%q
-
-       if(output) then
-
-          !$OMP PARALLEL DO default(none) &
-          !$OMP firstprivate(E0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk) &
-          !$OMP& shared(params,ii,spp,F) &
-          !$OMP& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
-          !$OMP& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
-          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-          !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g)
-          do pp=1_idef,spp(ii)%ppp,pchunk
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
-                X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
-                X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
-
-                V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
-                V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
-                V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
-
-                Y_R(cc)=0._rp
-                Y_PHI(cc)=0._rp
-                Y_Z(cc)=0._rp
-
-                B_X(cc)=0._rp
-                B_Y(cc)=0._rp
-                B_Z(cc)=0._rp
-
-                E_X(cc)=0._rp
-                E_Y(cc)=0._rp
-                E_Z(cc)=0._rp
-
-                PSIp(cc)=100._rp
-
-                flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-                flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-             end do
-             !$OMP END SIMD
-
-#ifdef FIO
-             if (TRIM(params%field_model).eq.'M3D_C1'.or. &
-                  (TRIM(params%field_model).eq.'NIMROD')) then
-                !$OMP SIMD
-                do cc=1_idef,pchunk
-                   hint(cc)=spp(ii)%vars%hint(pp-1+cc)
-                end do
-                !$OMP END SIMD
-             end if
-#endif
-
-             call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
-
-             if (params%field_model(1:3).eq.'ANA') then
-                call analytical_fields_p(params,pchunk,F, &
-                     X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
-             else if (params%field_model(1:3).eq.'UNI') then
-                call uniform_fields_p(pchunk,F, &
-                    B_X,B_Y,B_Z,E_X,E_Y,E_Z)
-#ifdef PSPLINE
-             else if (F%axisymmetric_fields.and. &
-                  (params%orbit_model(3:3).eq.'B')) then
-                call interp_FOfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
-                     E_X,E_Y,E_Z,PSIp,flagCon)
-             else if ((.not.F%axisymmetric_fields).and. &
-                  (params%orbit_model(3:3).eq.'B')) then
-                call interp_FO3Dfields_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
-                     B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
-             else if (params%orbit_model(3:5).eq.'psi') then
-                call interp_FOfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z, &
-                     E_X,E_Y,E_Z,PSIp,flagCon)
-             else if (params%field_model(10:13).eq.'MARS') then
-                call interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z, &
-                     B_X,B_Y,B_Z,PSIp,flagCon)
-             else if (params%field_model(10:14).eq.'AORSA') then
-                call interp_FOfields_aorsa_p(0._rp,params,pchunk,F, &
-                     Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp,flagCon)
-#endif
-#ifdef FIO
-             else if (TRIM(params%field_model).eq.'M3D_C1'.or. &
-                  TRIM(params%field_model).eq.'NIMROD') then
-                call get_fio_FOmagnetic_fields_p(params,F,Y_R,Y_PHI,Y_Z, &
-                     B_X,B_Y,B_Z,flagCon,hint)
-                if (F%FIO_E .ge. 0) then
-                   call get_fio_FOelectric_fields_p(params,F, &
-                        Y_R,Y_PHI,Y_Z,E_X,E_Y,E_Z,flagCon,hint)
-                end if
-                if (F%FIO_A .ge. 0) then
-                   call get_fio_vector_potential_p(params,F,Y_R,Y_PHI,Y_Z, &
-                        PSIp,flagCon,hint)
-                end if
-#endif
-             end if
-
-             !write(6,'("Y_R: ",E17.10)') Y_R*params%cpp%length
-             !write(6,'("Y_PHI: ",E17.10)') Y_PHI
-             !write(6,'("Y_Z: ",E17.10)') Y_Z*params%cpp%length
-             !write(6,*) 'r_sam',sqrt((Y_R-spp(ii)%Ro)**2+Y_Z**2)*params%cpp%length
-
-             !write(6,'("B_X: ",E17.10)') B_X*params%cpp%Bo
-             !write(6,'("B_Y: ",E17.10)') B_Y*params%cpp%Bo
-             !write(6,'("B_Z: ",E17.10)') B_Z*params%cpp%Bo
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
-                spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
-                spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
-
-                spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-             end do
-             !$OMP END SIMD
-
-#ifdef FIO
-             if (TRIM(params%field_model).eq.'M3D_C1'.or. &
-                  TRIM(params%field_model).eq.'NIMROD') then
-                !$OMP SIMD
-                do cc=1_idef,pchunk
-                   spp(ii)%vars%hint(pp-1+cc) = hint(cc)
-                end do
-                !$OMP END SIMD
-             end if
-#endif
-
-             !$OMP SIMD
-             !          !$OMP& aligned(Bmag,B_X,B_Y,B_Z, &
-             !          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,V_X,V_Y,V_Z,vpar, &
-             !          !$OMP& vperp,tmp,cross_X,cross_Y,cross_Z, &
-             !          !$OMP& vec_X,vec_Y,vec_Z,E_X,E_Y,E_Z)
-             do cc=1_idef,pchunk
-                !Derived output data
-                Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
-
-                ! Parallel unit vector
-                b_unit_X(cc) = B_X(cc)/Bmag(cc)
-                b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
-                b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
-
-                !write(6,*) 'X',X_X,X_Y,X_Z
-                !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
-
-                v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
-                if (v(cc).GT.korc_zero) then
-                   ! Parallel and perpendicular components of velocity
-                   vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
-                        V_Z(cc)*b_unit_Z(cc))
-
-                   vperp(cc) =  v(cc)**2 - vpar(cc)**2
-                   if ( vperp(cc) .GE. korc_zero ) then
-                      vperp(cc) = SQRT( vperp(cc) )
-                   else
-                      vperp(cc) = 0.0_rp
-                   end if
-
-                   !write(6,*) 'v,vpar,vperp',v(cc),vpar(cc),vperp(cc)
-
-                   ! Pitch angle
-                   spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
-                        MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
-
-                   ! Magnetic moment
-                   spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
-                        g(cc)**2*vperp(cc)**2/Bmag(cc)
-                   ! See Northrop's book (The adiabatic motion of charged
-                   ! particles)
-
-                   ! Radiated power
-                   tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
-
-                   cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
-                   cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
-                   cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
-
-                   vec_X(cc) = E_X(cc) + cross_X(cc)
-                   vec_Y(cc) = E_Y(cc) + cross_Y(cc)
-                   vec_Z(cc) = E_Z(cc) + cross_Z(cc)
-
-                   spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
-                        ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
-                        cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
-                        cross_Z(cc)*E_Z(cc) + g(cc)**2* &
-                        ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
-                        - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
-                        vec_Z(cc)*vec_Z(cc)) )
-
-                   ! Input power due to electric field
-                   spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
-                        E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
-                else
-                   spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
-                   spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
-                   spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
-                   spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
-                end if
-
-             end do
-             !$OMP END SIMD
-
-          end do
-          !$OMP END PARALLEL DO
-
-       end if !(if output)
-
-       if(step.and.(.not.params%FokPlan)) then
-          dt=0.5_rp*params%dt
-
-          !$OMP PARALLEL DO FIRSTPRIVATE(dt) PRIVATE(pp,cc) &
-          !$OMP& SHARED(ii,spp,params)
-          do pp=1_idef,spp(ii)%ppp,pchunk
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%X(pp-1+cc,1) = spp(ii)%vars%X(pp-1+cc,1) + &
-                     dt*spp(ii)%vars%V(pp-1+cc,1)
-                spp(ii)%vars%X(pp-1+cc,2) = spp(ii)%vars%X(pp-1+cc,2) + &
-                     dt*spp(ii)%vars%V(pp-1+cc,2)
-                spp(ii)%vars%X(pp-1+cc,3) = spp(ii)%vars%X(pp-1+cc,3) + &
-                     dt*spp(ii)%vars%V(pp-1+cc,3)
-             end do
-             !$OMP END SIMD
-
-          end do
-          !$OMP END PARALLEL DO
-
-       end if !(if step)
-
-    end do ! over species
-
-  end subroutine FO_init
-
-  subroutine adv_FOeqn_top(params,F,P,spp)
-
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    !! An instance of the KORC derived type FIELDS.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    !! An instance of the KORC derived type PROFILES.
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp), DIMENSION(params%pchunk)               :: b_unit_X,b_unit_Y,b_unit_Z
-    REAL(rp), DIMENSION(params%pchunk)               :: v,vpar,vperp
-    REAL(rp), DIMENSION(params%pchunk)               :: tmp
-    REAL(rp), DIMENSION(params%pchunk)               :: g
-    REAL(rp), DIMENSION(params%pchunk)               :: cross_X,cross_Y,cross_Z
-    REAL(rp), DIMENSION(params%pchunk)               :: vec_X,vec_Y,vec_Z
-    REAL(rp),DIMENSION(params%pchunk) :: X_X,X_Y,X_Z
-    REAL(rp),DIMENSION(params%pchunk) :: V_X,V_Y,V_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z,PSIp
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-
-    REAL(rp) :: B0,EF0,R0,q0,lam,ar
-    REAL(rp) :: a,m_cache,q_cache
-    REAL(rp) :: ne0,Te0,Zeff0
-
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
-
-
-    do ii = 1_idef,params%num_species
-
-       pchunk=params%pchunk
-       m_cache=spp(ii)%m
-       q_cache=spp(ii)%q
-       a = params%dt
-
-       !write(6,*) 'q,m,dt,a',q_cache,m_cache,params%dt,a
-
-       B0=F%Bo
-       EF0=F%Eo
-       lam=F%AB%lambda
-       R0=F%AB%Ro
-       q0=F%AB%qo
-       ar=F%AB%a
-
-
-
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(E0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
-       !$OMP& shared(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
-       !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-       !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,flagCon,flagCol,PSIp)
-       do pp=1_idef,spp(ii)%ppp,pchunk
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
-             X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
-             X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
-
-             V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
-             V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
-
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-             g(cc)=spp(ii)%vars%g(pp-1+cc)
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
-
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-
-                !write(6,*) 'tt',tt
-
-                if (params%field_model(1:3).eq.'ANA') then
-                   call analytical_fields_p(params,pchunk,F, &
-                        X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
-                else if (params%field_model(1:3).eq.'UNI') then
-                   call uniform_fields_p(pchunk,F, &
-                        B_X,B_Y,B_Z,E_X,E_Y,E_Z)
-                end if
-
-                call advance_FOeqn_vars(tt,a,q_cache,m_cache,params, &
-                     X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-                     P,F,g,flagCon,flagCol,PSIp)
-             end do !timestep iterator
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%X(pp-1+cc,1)=X_X(cc)
-                spp(ii)%vars%X(pp-1+cc,2)=X_Y(cc)
-                spp(ii)%vars%X(pp-1+cc,3)=X_Z(cc)
-
-                spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
-                spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
-
-                spp(ii)%vars%g(pp-1+cc) = g(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc) = flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc) = flagCol(cc)
-
-                spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
-                spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
-                spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
-             end do
-             !$OMP END SIMD
+    eps_mn = F%AB%eps_mn
+    l_mn = F%AB%l_mn
+    sigma_mn = F%AB%sigma_mn
+    perturb=F%AB%perturb
+    cpp_len=params%cpp%length
+    cpp_B=params%cpp%Bo
 
+    if(output) then
+
+      !$acc  parallel loop
+      do pp=1_idef,spp(ii)%ppp
+
+        X_X=spp(ii)%vars%X(pp,1)
+        X_Y=spp(ii)%vars%X(pp,2)
+        X_Z=spp(ii)%vars%X(pp,3)
+
+        V_X=spp(ii)%vars%V(pp,1)
+        V_Y=spp(ii)%vars%V(pp,2)
+        V_Z=spp(ii)%vars%V(pp,3)
+
+        B_X=0._rp
+        B_Y=0._rp
+        B_Z=0._rp
+
+        E_X=0._rp
+        E_Y=0._rp
+        E_Z=0._rp
+
+        flagCon=spp(ii)%vars%flagCon(pp)
+
+        call cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+          T_R,T_T,T_Z,flagCon)
+
+        call analytical_fields_p_ACC(T_R,T_T,T_Z, &
+        B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
+
+        spp(ii)%vars%B(pp,1) = B_X
+        spp(ii)%vars%B(pp,2) = B_Y
+        spp(ii)%vars%B(pp,3) = B_Z
+
+        spp(ii)%vars%E(pp,1) = E_X
+        spp(ii)%vars%E(pp,2) = E_Y
+        spp(ii)%vars%E(pp,3) = E_Z
+
+        !Derived output data
+        Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+        ! Parallel unit vector
+        b_unit_X = B_X/Bmag
+        b_unit_Y = B_Y/Bmag
+        b_unit_Z = B_Z/Bmag
+
+        !write(6,*) 'X',X_X,X_Y,X_Z
+        !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
+
+        v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+        if (v.GT.korc_zero) then
+          ! Parallel and perpendicular components of velocity
+          vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+            V_Z*b_unit_Z)
+
+          vperp =  v**2 - vpar**2
+          if ( vperp .GE. korc_zero ) then
+            vperp = SQRT( vperp )
           else
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                B_X(cc)=spp(ii)%vars%B(pp-1+cc,1)
-                B_Y(cc)=spp(ii)%vars%B(pp-1+cc,2)
-                B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-                E_X(cc)=spp(ii)%vars%E(pp-1+cc,1)
-                E_Y(cc)=spp(ii)%vars%E(pp-1+cc,2)
-                E_Z(cc)=spp(ii)%vars%E(pp-1+cc,3)
-             end do
-             !$OMP END SIMD
-
-             call advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
-                  g,m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-                  P,F,flagCon,flagCol,PSIp)
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-
-                spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
-                spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
-
-                spp(ii)%vars%g(pp-1+cc) = g(cc)
-
-                flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-             end do
-             !$OMP END SIMD
-
+            vperp = 0.0_rp
           end if
 
-          !$OMP SIMD
-          !          !$OMP& aligned(Bmag,B_X,B_Y,B_Z, &
-          !          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,V_X,V_Y,V_Z,vpar, &
-          !          !$OMP& vperp,tmp,cross_X,cross_Y,cross_Z, &
-          !          !$OMP& vec_X,vec_Y,vec_Z,E_X,E_Y,E_Z)
-          do cc=1_idef,pchunk
-             !Derived output data
-             Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
+          !write(6,*) 'v,vpar,vperp',v,vpar,vperp
 
-             ! Parallel unit vector
-             b_unit_X(cc) = B_X(cc)/Bmag(cc)
-             b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
-             b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
+          ! Pitch angle
+          spp(ii)%vars%eta(pp) = 180.0_rp* &
+            MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
 
-             v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
-             if (v(cc).GT.korc_zero) then
-                ! Parallel and perpendicular components of velocity
-                vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
-                     V_Z(cc)*b_unit_Z(cc))
+          ! Magnetic moment
+          spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+            g**2*vperp**2/Bmag
+          ! See Northrop's book (The adiabatic motion of charged
+          ! particles)
 
-                vperp(cc) =  v(cc)**2 - vpar(cc)**2
-                if ( vperp(cc) .GE. korc_zero ) then
-                   vperp(cc) = SQRT( vperp(cc) )
-                else
-                   vperp(cc) = 0.0_rp
-                end if
+          ! Radiated power
+          tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
 
-                ! Pitch angle
-                spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
-                     MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+          cross_X = V_Y*B_Z-V_Z*B_Y
+          cross_Y = V_Z*B_X-V_X*B_Z
+          cross_Z = V_X*B_Y-V_Y*B_X
 
-                ! Magnetic moment
-                spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
-                     g(cc)**2*vperp(cc)**2/Bmag(cc)
-                ! See Northrop's book (The adiabatic motion of charged
-                ! particles)
+          vec_X = E_X + cross_X
+          vec_Y = E_Y + cross_Y
+          vec_Z = E_Z + cross_Z
 
-                ! Radiated power
-                tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+          spp(ii)%vars%Prad(pp) = tmp* &
+            ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+            cross_X*E_X+cross_Y*E_Y+ &
+            cross_Z*E_Z + g**2* &
+            ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+            - vec_X*vec_X-vec_Y*vec_Y- &
+            vec_Z*vec_Z) )
 
-                cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
-                cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
-                cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
+          ! Input power due to electric field
+          spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+            E_Y*V_Y+E_Z*V_Z)
+        else
+            spp(ii)%vars%eta(pp) = 0.0_rp
+            spp(ii)%vars%mu(pp) = 0.0_rp
+            spp(ii)%vars%Prad(pp) = 0.0_rp
+            spp(ii)%vars%Pin(pp) = 0.0_rp
+        end if
 
-                vec_X(cc) = E_X(cc) + cross_X(cc)
-                vec_Y(cc) = E_Y(cc) + cross_Y(cc)
-                vec_Z(cc) = E_Z(cc) + cross_Z(cc)
+      enddo
+      !$acc end parallel loop
 
-                spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
-                     ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
-                     cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
-                     cross_Z(cc)*E_Z(cc) + g(cc)**2* &
-                     ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
-                     - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
-                     vec_Z(cc)*vec_Z(cc)) )
+    endif !(if output)
 
-                ! Input power due to electric field
-                spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
-                     E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
-             else
-                spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
-                spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
-                spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
-                spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
-             end if
+    if(step.and.(.not.params%FokPlan)) then
+      dt=0.5_rp*params%dt
 
-          end do
-          !$OMP END SIMD
+      !$acc  parallel loop
+      do pp=1_idef,spp(ii)%ppp
+
+        spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
+          dt*spp(ii)%vars%V(pp,1)
+        spp(ii)%vars%X(pp,2) = spp(ii)%vars%X(pp,2) + &
+          dt*spp(ii)%vars%V(pp,2)
+        spp(ii)%vars%X(pp,3) = spp(ii)%vars%X(pp,3) + &
+          dt*spp(ii)%vars%V(pp,3)
+
+      end do
+      !$acc end parallel loop
+
+    endif !(if step)
+
+  enddo ! over species
+
+end subroutine FO_init_eqn_ACC
+
+subroutine FO_init_mars_ACC(params,F,spp,output,step)
+  TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp)                                      :: dt
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+  REAL(rp)               :: Bmag
+  REAL(rp)              :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp)              :: v,vpar,vperp
+  REAL(rp)               :: tmp
+  REAL(rp)              :: g
+  REAL(rp)              :: cross_X,cross_Y,cross_Z
+  REAL(rp)            :: vec_X,vec_Y,vec_Z
+  INTEGER                                      :: ii
+  !! Species iterator.
+  INTEGER                                      :: pp
+  !! Particles iterator.
+  LOGICAL,intent(in) :: output
+  LOGICAL,intent(in) :: step
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  REAL(rp) :: PSIp
+  REAL(rp) :: m_cache,q_cache,psip_conv,amp,phase,Ro,Bo,circumradius,ntiles,nmode,mmode,omega
+  INTEGER(is) :: flagCon,flagCol
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
+  REAL(rp),DIMENSION(2) :: DiMESdims
+  REAL(rp),DIMENSION(3) :: DiMESloc_cyl
+
+  !$acc routine (cart_to_cyl_p_ACC) seq
+  !$acc routine (interp_FOfields_mars_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
+
+  do ii = 1_idef,params%num_species
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+
+    psip_conv=F%psip_conv
+    amp=F%AMP
+    phase=F%MARS_phase
+    nmode=F%AORSA_nmode
+    omega=2*C_PI*F%AORSA_freq
+    mmode=F%AORSA_mmode
+    Ro=F%Ro
+    Bo=F%Bo
+
+    Dim2x1t=F%Dim2x1t
+    Analytic_D3D_IWL=F%Analytic_D3D_IWL
+    circumradius=F%circumradius
+    ntiles=F%ntiles
+    useDiMES=F%useDiMES
+    DiMESloc_cyl=F%DiMESloc
+    DiMESdims=F%DiMESdims
+
+    if(output) then
 
 
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
+      call provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+        fields_domain_local)
 
-    end do !species iterator
 
-  end subroutine adv_FOeqn_top
+      !$acc  enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+      !$acc& fields_domain_local)
 
-  subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
+      !$acc  parallel loop
+      do pp=1_idef,spp(ii)%ppp
+
+        X_X=spp(ii)%vars%X(pp,1)
+        X_Y=spp(ii)%vars%X(pp,2)
+        X_Z=spp(ii)%vars%X(pp,3)
+
+        V_X=spp(ii)%vars%V(pp,1)
+        V_Y=spp(ii)%vars%V(pp,2)
+        V_Z=spp(ii)%vars%V(pp,3)
+
+        Y_R=0._rp
+        Y_PHI=0._rp
+        Y_Z=0._rp
+
+        B_X=0._rp
+        B_Y=0._rp
+        B_Z=0._rp
+
+        E_X=0._rp
+        E_Y=0._rp
+        E_Z=0._rp
+
+        PSIp=100._rp
+
+        flagCon=spp(ii)%vars%flagCon(pp)
+        flagCol=spp(ii)%vars%flagCol(pp)
+
+        call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+#ifdef PSPLINE
+
+        call check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
+          ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
+
+
+        call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+          psip_conv,amp,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+
+
+#endif PSPLINE
+
+        spp(ii)%vars%B(pp,1) = B_X
+        spp(ii)%vars%B(pp,2) = B_Y
+        spp(ii)%vars%B(pp,3) = B_Z
+
+        spp(ii)%vars%E(pp,1) = E_X
+        spp(ii)%vars%E(pp,2) = E_Y
+        spp(ii)%vars%E(pp,3) = E_Z
+
+        spp(ii)%vars%PSI_P(pp) = PSIp
+
+        !Derived output data
+        Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+        ! Parallel unit vector
+        b_unit_X = B_X/Bmag
+        b_unit_Y = B_Y/Bmag
+        b_unit_Z = B_Z/Bmag
+
+        !write(6,*) 'X',X_X,X_Y,X_Z
+        !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
+
+        v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+        if (v.GT.korc_zero) then
+          ! Parallel and perpendicular components of velocity
+          vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+            V_Z*b_unit_Z)
+
+          vperp =  v**2 - vpar**2
+          if ( vperp .GE. korc_zero ) then
+            vperp = SQRT( vperp )
+          else
+            vperp = 0.0_rp
+          end if
+
+          !write(6,*) 'v,vpar,vperp',v,vpar,vperp
+
+          ! Pitch angle
+          spp(ii)%vars%eta(pp) = 180.0_rp* &
+            MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+
+          ! Magnetic moment
+          spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+            g**2*vperp**2/Bmag
+          ! See Northrop's book (The adiabatic motion of charged
+          ! particles)
+
+          ! Radiated power
+          tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+          cross_X = V_Y*B_Z-V_Z*B_Y
+          cross_Y = V_Z*B_X-V_X*B_Z
+          cross_Z = V_X*B_Y-V_Y*B_X
+
+          vec_X = E_X + cross_X
+          vec_Y = E_Y + cross_Y
+          vec_Z = E_Z + cross_Z
+
+          spp(ii)%vars%Prad(pp) = tmp* &
+            ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+            cross_X*E_X+cross_Y*E_Y+ &
+            cross_Z*E_Z + g**2* &
+            ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+            - vec_X*vec_X-vec_Y*vec_Y- &
+            vec_Z*vec_Z) )
+
+          ! Input power due to electric field
+          spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+            E_Y*V_Y+E_Z*V_Z)
+        else
+            spp(ii)%vars%eta(pp) = 0.0_rp
+            spp(ii)%vars%mu(pp) = 0.0_rp
+            spp(ii)%vars%Prad(pp) = 0.0_rp
+            spp(ii)%vars%Pin(pp) = 0.0_rp
+        end if
+
+      enddo
+      !$acc end parallel loop
+
+      !$acc  exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+      !$acc& fields_domain_local)
+
+    endif !(if output)
+
+    if(step.and.(.not.params%FokPlan)) then
+      dt=0.5_rp*params%dt
+
+      !$acc  parallel loop
+      do pp=1_idef,spp(ii)%ppp
+
+        spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
+          dt*spp(ii)%vars%V(pp,1)
+        spp(ii)%vars%X(pp,2) = spp(ii)%vars%X(pp,2) + &
+          dt*spp(ii)%vars%V(pp,2)
+        spp(ii)%vars%X(pp,3) = spp(ii)%vars%X(pp,3) + &
+          dt*spp(ii)%vars%V(pp,3)
+
+      end do
+      !$acc end parallel loop
+
+    endif !(if step)
+
+  enddo ! over species
+
+end subroutine FO_init_mars_ACC
+
+subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
+  TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp)                                      :: dt
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+  REAL(rp)               :: Bmag
+  REAL(rp)              :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp)              :: v,vpar,vperp
+  REAL(rp)               :: tmp
+  REAL(rp)              :: g
+  REAL(rp)              :: cross_X,cross_Y,cross_Z
+  REAL(rp)            :: vec_X,vec_Y,vec_Z
+  INTEGER                                      :: ii
+  !! Species iterator.
+  INTEGER                                      :: pp
+  !! Particles iterator.
+  LOGICAL,intent(in) :: output
+  LOGICAL,intent(in) :: step
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  REAL(rp) :: PSIp
+  REAL(rp) :: m_cache,q_cache,psip_conv,amp,phase,Ro,Bo,circumradius,ntiles,nmode,mmode,omega
+  INTEGER(is) :: flagCon,flagCol
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
+  REAL(rp),DIMENSION(2) :: DiMESdims
+  REAL(rp),DIMENSION(3) :: DiMESloc_cyl
+
+  !$acc routine (cart_to_cyl_p_ACC) seq
+  !$acc routine (interp_FOfields_aorsa_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
+
+  do ii = 1_idef,params%num_species
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+
+    psip_conv=F%psip_conv
+    amp=F%AMP
+    phase=F%MARS_phase
+    nmode=F%AORSA_nmode
+    omega=2*C_PI*F%AORSA_freq
+    mmode=F%AORSA_mmode
+    Ro=F%Ro
+    Bo=F%Bo
+
+    Dim2x1t=F%Dim2x1t
+    Analytic_D3D_IWL=F%Analytic_D3D_IWL
+    circumradius=F%circumradius
+    ntiles=F%ntiles
+    useDiMES=F%useDiMES
+    DiMESloc_cyl=F%DiMESloc
+    DiMESdims=F%DiMESdims
+
+    if(output) then
+
+
+      call provide_ezspline_aorsa_ACC(bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+        e1Refield_2dx_local,e1Imfield_2dx_local,fields_domain_local)
+
+
+      !$acc  enter data copyin(bfield_2d_local, &
+      !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
+      !$acc& fields_domain_local)
+
+      !$acc  parallel loop
+      do pp=1_idef,spp(ii)%ppp
+
+        X_X=spp(ii)%vars%X(pp,1)
+        X_Y=spp(ii)%vars%X(pp,2)
+        X_Z=spp(ii)%vars%X(pp,3)
+
+        V_X=spp(ii)%vars%V(pp,1)
+        V_Y=spp(ii)%vars%V(pp,2)
+        V_Z=spp(ii)%vars%V(pp,3)
+
+        Y_R=0._rp
+        Y_PHI=0._rp
+        Y_Z=0._rp
+
+        B_X=0._rp
+        B_Y=0._rp
+        B_Z=0._rp
+
+        E_X=0._rp
+        E_Y=0._rp
+        E_Z=0._rp
+
+        PSIp=100._rp
+
+        flagCon=spp(ii)%vars%flagCon(pp)
+        flagCol=spp(ii)%vars%flagCol(pp)
+
+        call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+#ifdef PSPLINE
+
+        call check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
+          ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
+
+
+        call interp_FOfields_aorsa_p_ACC(0._rp,bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+          e1Refield_2dx_local,e1Imfield_2dx_local,psip_conv,amp,nmode,omega,Bo,Ro, &
+          Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+
+
+#endif PSPLINE
+
+        spp(ii)%vars%B(pp,1) = B_X
+        spp(ii)%vars%B(pp,2) = B_Y
+        spp(ii)%vars%B(pp,3) = B_Z
+
+        spp(ii)%vars%E(pp,1) = E_X
+        spp(ii)%vars%E(pp,2) = E_Y
+        spp(ii)%vars%E(pp,3) = E_Z
+
+        spp(ii)%vars%PSI_P(pp) = PSIp
+
+        !Derived output data
+        Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+        ! Parallel unit vector
+        b_unit_X = B_X/Bmag
+        b_unit_Y = B_Y/Bmag
+        b_unit_Z = B_Z/Bmag
+
+        !write(6,*) 'X',X_X,X_Y,X_Z
+        !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
+
+        v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+        if (v.GT.korc_zero) then
+          ! Parallel and perpendicular components of velocity
+          vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+            V_Z*b_unit_Z)
+
+          vperp =  v**2 - vpar**2
+          if ( vperp .GE. korc_zero ) then
+            vperp = SQRT( vperp )
+          else
+            vperp = 0.0_rp
+          end if
+
+          !write(6,*) 'v,vpar,vperp',v,vpar,vperp
+
+          ! Pitch angle
+          spp(ii)%vars%eta(pp) = 180.0_rp* &
+            MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+
+          if (spp(ii)%vars%eta(pp).gt.20._rp) then 
+            write(6,*) 'FO_init',pp,spp(ii)%vars%eta(pp)
+          endif
+
+
+          ! Magnetic moment
+          spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+            g**2*vperp**2/Bmag
+          ! See Northrop's book (The adiabatic motion of charged
+          ! particles)
+
+          ! Radiated power
+          tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+          cross_X = V_Y*B_Z-V_Z*B_Y
+          cross_Y = V_Z*B_X-V_X*B_Z
+          cross_Z = V_X*B_Y-V_Y*B_X
+
+          vec_X = E_X + cross_X
+          vec_Y = E_Y + cross_Y
+          vec_Z = E_Z + cross_Z
+
+          spp(ii)%vars%Prad(pp) = tmp* &
+            ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+            cross_X*E_X+cross_Y*E_Y+ &
+            cross_Z*E_Z + g**2* &
+            ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+            - vec_X*vec_X-vec_Y*vec_Y- &
+            vec_Z*vec_Z) )
+
+          ! Input power due to electric field
+          spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+            E_Y*V_Y+E_Z*V_Z)
+        else
+            spp(ii)%vars%eta(pp) = 0.0_rp
+            spp(ii)%vars%mu(pp) = 0.0_rp
+            spp(ii)%vars%Prad(pp) = 0.0_rp
+            spp(ii)%vars%Pin(pp) = 0.0_rp
+        end if
+
+      enddo
+      !$acc end parallel loop
+
+      !$acc  exit data delete(bfield_2d_local, &
+      !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
+      !$acc& fields_domain_local)
+
+    endif !(if output)
+
+    if(step.and.(.not.params%FokPlan)) then
+      dt=0.5_rp*params%dt
+
+      !$acc  parallel loop
+      do pp=1_idef,spp(ii)%ppp
+
+        spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
+          dt*spp(ii)%vars%V(pp,1)
+        spp(ii)%vars%X(pp,2) = spp(ii)%vars%X(pp,2) + &
+          dt*spp(ii)%vars%V(pp,2)
+        spp(ii)%vars%X(pp,3) = spp(ii)%vars%X(pp,3) + &
+          dt*spp(ii)%vars%V(pp,3)
+
+      end do
+      !$acc end parallel loop
+
+    endif !(if step)
+
+  enddo ! over species
+
+end subroutine FO_init_aorsa_ACC
+
+subroutine adv_FOeqn_top(params,F,P,spp)
+
+  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)                                 :: P
+  !! An instance of the KORC derived type PROFILES.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp), DIMENSION(params%pchunk)               :: Bmag
+  REAL(rp), DIMENSION(params%pchunk)               :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp), DIMENSION(params%pchunk)               :: v,vpar,vperp
+  REAL(rp), DIMENSION(params%pchunk)               :: tmp
+  REAL(rp), DIMENSION(params%pchunk)               :: g
+  REAL(rp), DIMENSION(params%pchunk)               :: cross_X,cross_Y,cross_Z
+  REAL(rp), DIMENSION(params%pchunk)               :: vec_X,vec_Y,vec_Z
+  REAL(rp),DIMENSION(params%pchunk) :: X_X,X_Y,X_Z
+  REAL(rp),DIMENSION(params%pchunk) :: V_X,V_Y,V_Z
+  REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
+  REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z,PSIp
+  INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
+
+  REAL(rp) :: B0,EF0,R0,q0,lam,ar
+  REAL(rp) :: a,m_cache,q_cache
+  REAL(rp) :: ne0,Te0,Zeff0
+
+
+
+  INTEGER                                                    :: ii
+  !! Species iterator.
+  INTEGER                                                    :: pp
+  !! Particles iterator.
+  INTEGER                                                    :: cc,pchunk
+  !! Chunk iterator.
+  INTEGER(ip)                                                    :: tt
+  !! time iterator.
+
+
+  do ii = 1_idef,params%num_species
+
+     pchunk=params%pchunk
+     m_cache=spp(ii)%m
+     q_cache=spp(ii)%q
+     a = q_cache/abs(q_cache)*params%dt
+
+     !write(6,*) 'q,m,dt,a',q_cache,m_cache,params%dt,a
+
+     B0=F%Bo
+     EF0=F%Eo
+     lam=F%AB%lambda
+     R0=F%AB%Ro
+     q0=F%AB%qo
+     ar=F%AB%a
+
+
+
+     !$OMP PARALLEL DO default(none) &
+     !$OMP& FIRSTPRIVATE(E0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
+     !$OMP& shared(params,ii,spp,P,F) &
+     !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
+     !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
+     !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,flagCon,flagCol,PSIp)
+     do pp=1_idef,spp(ii)%ppp,pchunk
+
+        !$OMP SIMD
+        do cc=1_idef,pchunk
+           X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
+           X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
+           X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
+
+           V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
+           V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
+           V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
+
+           PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
+
+           g(cc)=spp(ii)%vars%g(pp-1+cc)
+           flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+           flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+        end do
+        !$OMP END SIMD
+
+        if (.not.params%FokPlan) then
+           do tt=1_ip,params%t_skip
+
+              !write(6,*) 'tt',tt
+
+              if (params%field_model(1:3).eq.'ANA') then
+                 call analytical_fields_p(params,pchunk,F, &
+                      X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+              else if (params%field_model(1:3).eq.'UNI') then
+                 call uniform_fields_p(pchunk,F, &
+                      B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+              end if
+
+              call advance_FOeqn_vars(tt,a,q_cache,m_cache,params, &
+                   X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+                   P,F,g,flagCon,flagCol,PSIp)
+           end do !timestep iterator
+
+           !$OMP SIMD
+           do cc=1_idef,pchunk
+              spp(ii)%vars%X(pp-1+cc,1)=X_X(cc)
+              spp(ii)%vars%X(pp-1+cc,2)=X_Y(cc)
+              spp(ii)%vars%X(pp-1+cc,3)=X_Z(cc)
+
+              spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
+              spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
+              spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
+
+              spp(ii)%vars%g(pp-1+cc) = g(cc)
+
+              spp(ii)%vars%flagCon(pp-1+cc) = flagCon(cc)
+              spp(ii)%vars%flagCol(pp-1+cc) = flagCol(cc)
+
+              spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
+              spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
+              spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+
+              spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
+              spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
+              spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
+           end do
+           !$OMP END SIMD
+
+        else
+
+           !$OMP SIMD
+           do cc=1_idef,pchunk
+              B_X(cc)=spp(ii)%vars%B(pp-1+cc,1)
+              B_Y(cc)=spp(ii)%vars%B(pp-1+cc,2)
+              B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
+
+              E_X(cc)=spp(ii)%vars%E(pp-1+cc,1)
+              E_Y(cc)=spp(ii)%vars%E(pp-1+cc,2)
+              E_Z(cc)=spp(ii)%vars%E(pp-1+cc,3)
+           end do
+           !$OMP END SIMD
+
+           call advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
+                g,m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+                P,F,flagCon,flagCol,PSIp)
+
+           !$OMP SIMD
+           do cc=1_idef,pchunk
+
+              spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
+              spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
+              spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
+
+              spp(ii)%vars%g(pp-1+cc) = g(cc)
+
+              flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+           end do
+           !$OMP END SIMD
+
+        end if
+
+        !$OMP SIMD
+        !          !$OMP& aligned(Bmag,B_X,B_Y,B_Z, &
+        !          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,V_X,V_Y,V_Z,vpar, &
+        !          !$OMP& vperp,tmp,cross_X,cross_Y,cross_Z, &
+        !          !$OMP& vec_X,vec_Y,vec_Z,E_X,E_Y,E_Z)
+        do cc=1_idef,pchunk
+           !Derived output data
+           Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
+
+           ! Parallel unit vector
+           b_unit_X(cc) = B_X(cc)/Bmag(cc)
+           b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
+           b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
+
+           v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
+           if (v(cc).GT.korc_zero) then
+              ! Parallel and perpendicular components of velocity
+              vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
+                   V_Z(cc)*b_unit_Z(cc))
+
+              vperp(cc) =  v(cc)**2 - vpar(cc)**2
+              if ( vperp(cc) .GE. korc_zero ) then
+                 vperp(cc) = SQRT( vperp(cc) )
+              else
+                 vperp(cc) = 0.0_rp
+              end if
+
+              ! Pitch angle
+              spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
+                   MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+
+              ! Magnetic moment
+              spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
+                   g(cc)**2*vperp(cc)**2/Bmag(cc)
+              ! See Northrop's book (The adiabatic motion of charged
+              ! particles)
+
+              ! Radiated power
+              tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+              cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
+              cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
+              cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
+
+              vec_X(cc) = E_X(cc) + cross_X(cc)
+              vec_Y(cc) = E_Y(cc) + cross_Y(cc)
+              vec_Z(cc) = E_Z(cc) + cross_Z(cc)
+
+              spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
+                   ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
+                   cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
+                   cross_Z(cc)*E_Z(cc) + g(cc)**2* &
+                   ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
+                   - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
+                   vec_Z(cc)*vec_Z(cc)) )
+
+              ! Input power due to electric field
+              spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
+                   E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
+           else
+              spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
+              spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
+              spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
+              spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
+           end if
+
+        end do
+        !$OMP END SIMD
+
+
+     end do !particle chunk iterator
+     !$OMP END PARALLEL DO
+
+  end do !species iterator
+
+end subroutine adv_FOeqn_top
+
+subroutine adv_FOeqn_top_ACC(params,F,P,spp)
+  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)                                 :: P
+  !! An instance of the KORC derived type PROFILES.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp) :: Bmag
+  REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp) :: v,vpar,vperp
+  REAL(rp) :: tmp
+  REAL(rp) :: g
+  REAL(rp) :: cross_X,cross_Y,cross_Z
+  REAL(rp) :: vec_X,vec_Y,vec_Z
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: T_R,T_T,T_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  INTEGER(is) :: flagCon,flagCol
+  INTEGER(ip) :: tskip
+  REAL(rp) :: a,m_cache,q_cache,dt
+  REAL(rp) :: R0,B0,E0,lam,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B
+  LOGICAL :: perturb
+  INTEGER  :: ii,pp,ss,tt,ppp
+
+  !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
+  !$acc routine (analytical_fields_p_ACC) seq
+
+  ss=params%num_species
+
+  do ii = 1_idef,ss
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+    a = q_cache/abs(q_cache)*params%dt
+    tskip=params%t_skip
+    ppp=spp(ii)%ppp
+    dt=params%dt
+
+    B0=F%Bo
+    E0=F%Eo
+    lam=F%AB%lambda
+    R0=F%AB%Ro
+    q0=F%AB%qo
+    ar=F%AB%a
+
+    eps_mn = F%AB%eps_mn
+    l_mn = F%AB%l_mn
+    sigma_mn = F%AB%sigma_mn
+    perturb=F%AB%perturb
+    cpp_len=params%cpp%length
+    cpp_B=params%cpp%Bo
+
+    !$acc parallel loop 
+    do pp=1_idef,ppp
+
+      X_X=spp(ii)%vars%X(pp,1)
+      X_Y=spp(ii)%vars%X(pp,2)
+      X_Z=spp(ii)%vars%X(pp,3)
+
+      T_R=0._rp
+      T_T=0._rp
+      T_Z=0._rp
+
+      V_X=spp(ii)%vars%V(pp,1)
+      V_Y=spp(ii)%vars%V(pp,2)
+      V_Z=spp(ii)%vars%V(pp,3)
+
+      B_X=spp(ii)%vars%B(pp,1)
+      B_Y=spp(ii)%vars%B(pp,2)
+      B_Z=spp(ii)%vars%B(pp,3)
+
+      E_X=spp(ii)%vars%E(pp,1)
+      E_Y=spp(ii)%vars%E(pp,2)
+      E_Z=spp(ii)%vars%E(pp,3)
+
+      g=spp(ii)%vars%g(pp)
+
+      flagCon=spp(ii)%vars%flagCon(pp)
+      flagCol=spp(ii)%vars%flagCol(pp)
+      
+      !$acc loop seq
+      do tt=1_ip,tskip
+
+        call cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+          T_R,T_T,T_Z,flagCon)
+
+        call analytical_fields_p_ACC(T_R,T_T,T_Z, &
+          B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
+
+        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+            X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            g,flagCon,flagCol)
+      end do !timestep iterator
+
+      spp(ii)%vars%X(pp,1)=X_X
+      spp(ii)%vars%X(pp,2)=X_Y
+      spp(ii)%vars%X(pp,3)=X_Z
+
+      spp(ii)%vars%V(pp,1)=V_X
+      spp(ii)%vars%V(pp,2)=V_Y
+      spp(ii)%vars%V(pp,3)=V_Z
+
+      spp(ii)%vars%g(pp) = g
+      spp(ii)%vars%flagCon(pp) = flagCon
+      spp(ii)%vars%flagCol(pp) = flagCol
+
+      spp(ii)%vars%B(pp,1) = B_X
+      spp(ii)%vars%B(pp,2) = B_Y
+      spp(ii)%vars%B(pp,3) = B_Z
+
+      spp(ii)%vars%E(pp,1) = E_X
+      spp(ii)%vars%E(pp,2) = E_Y
+      spp(ii)%vars%E(pp,3) = E_Z
+
+      !Derived output data
+      Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+      ! Parallel unit vector
+      b_unit_X = B_X/Bmag
+      b_unit_Y = B_Y/Bmag
+      b_unit_Z = B_Z/Bmag
+
+      v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+      if (v.GT.korc_zero) then
+        ! Parallel and perpendicular components of velocity
+        vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+          V_Z*b_unit_Z)
+
+        vperp =  v**2 - vpar**2
+        if ( vperp .GE. korc_zero ) then
+          vperp = SQRT( vperp )
+        else
+          vperp = 0.0_rp
+        end if
+
+        ! Pitch angle
+        spp(ii)%vars%eta(pp) = 180.0_rp* &
+          MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+
+        ! Magnetic moment
+        spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+          g**2*vperp**2/Bmag
+        ! See Northrop's book (The adiabatic motion of charged
+        ! particles)
+
+        ! Radiated power
+        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+        cross_X = V_Y*B_Z-V_Z*B_Y
+        cross_Y = V_Z*B_X-V_X*B_Z
+        cross_Z = V_X*B_Y-V_Y*B_X
+
+        vec_X = E_X + cross_X
+        vec_Y = E_Y + cross_Y
+        vec_Z = E_Z + cross_Z
+
+        spp(ii)%vars%Prad(pp) = tmp* &
+          ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+          cross_X*E_X+cross_Y*E_Y+ &
+          cross_Z*E_Z + g**2* &
+          ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+          - vec_X*vec_X+vec_Y*vec_Y+ &
+          vec_Z*vec_Z) )
+
+        ! Input power due to electric field
+        spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+          E_Y*V_Y+E_Z*V_Z)
+      else
+        spp(ii)%vars%eta(pp) = 0.0_rp
+        spp(ii)%vars%mu(pp) = 0.0_rp
+        spp(ii)%vars%Prad(pp) = 0.0_rp
+        spp(ii)%vars%Pin(pp) = 0.0_rp
+      end if
+
+    end do !particle iterator
+    !$acc end parallel loop
+
+  end do !species iterator
+
+end subroutine adv_FOeqn_top_ACC
+
+
+subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,P,F,g,flagCon,flagCol,PSIp)
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
@@ -927,9 +1741,9 @@ contains
     end do
     !$OMP END SIMD
 
-  end subroutine advance_FOeqn_vars
+end subroutine advance_FOeqn_vars
 
-  subroutine advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
+subroutine advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
        m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
        P,F,flagCon,flagCol,PSIp)
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -982,10 +1796,11 @@ contains
     end do
     !$OMP END SIMD
 
-  end subroutine advance_FP3Deqn_vars
+end subroutine advance_FP3Deqn_vars
 
 #ifdef FIO
-  subroutine adv_FOfio_top(params,F,P,spp)
+
+subroutine adv_FOfio_top(params,F,P,spp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
     TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -1026,7 +1841,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = params%dt
+       a = q_cache/abs(q_cache)*params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -1246,11 +2061,13 @@ contains
 
     end do !species iterator
 
-  end subroutine adv_FOfio_top
-#endif
+end subroutine adv_FOfio_top
+
+#endif FIO
 
 #ifdef PSPLINE
-  subroutine adv_FOinterp_top(params,F,P,spp)
+
+subroutine adv_FOinterp_top(params,F,P,spp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
     TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -1289,7 +2106,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = params%dt
+       a = q_cache/abs(q_cache)*params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -1495,216 +2312,408 @@ contains
 
     end do !species iterator
 
-  end subroutine adv_FOinterp_top
+end subroutine adv_FOinterp_top
 
-  subroutine adv_FOinterp_mars_top(params,F,P,spp)
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    !! An instance of the KORC derived type FIELDS.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    !! An instance of the KORC derived type PROFILES.
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk) :: Bmag
-    REAL(rp), DIMENSION(params%pchunk) :: b_unit_X,b_unit_Y,b_unit_Z
-    REAL(rp), DIMENSION(params%pchunk) :: v,vpar,vperp
-    REAL(rp), DIMENSION(params%pchunk) :: tmp
-    REAL(rp), DIMENSION(params%pchunk) :: g
-    REAL(rp), DIMENSION(params%pchunk) :: cross_X,cross_Y,cross_Z
-    REAL(rp), DIMENSION(params%pchunk) :: vec_X,vec_Y,vec_Z
-    REAL(rp), DIMENSION(params%pchunk) :: X_X,X_Y,X_Z
-    REAL(rp), DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp), DIMENSION(params%pchunk) :: V_X,V_Y,V_Z
-    REAL(rp), DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
-    REAL(rp), DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
-    REAL(rp), DIMENSION(params%pchunk) :: PSIp
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: a,m_cache,q_cache
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp,pchunk
-    !! Particles iterator.
-    INTEGER                                                    :: cc
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
+subroutine adv_FOinterp_mars_top(params,F,P,spp)
+  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)                                 :: P
+  !! An instance of the KORC derived type PROFILES.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp), DIMENSION(params%pchunk) :: Bmag
+  REAL(rp), DIMENSION(params%pchunk) :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp), DIMENSION(params%pchunk) :: v,vpar,vperp
+  REAL(rp), DIMENSION(params%pchunk) :: tmp
+  REAL(rp), DIMENSION(params%pchunk) :: g
+  REAL(rp), DIMENSION(params%pchunk) :: cross_X,cross_Y,cross_Z
+  REAL(rp), DIMENSION(params%pchunk) :: vec_X,vec_Y,vec_Z
+  REAL(rp), DIMENSION(params%pchunk) :: X_X,X_Y,X_Z
+  REAL(rp), DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
+  REAL(rp), DIMENSION(params%pchunk) :: V_X,V_Y,V_Z
+  REAL(rp), DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
+  REAL(rp), DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
+  REAL(rp), DIMENSION(params%pchunk) :: PSIp
+  INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
+  REAL(rp) :: a,m_cache,q_cache
+  INTEGER                                                    :: ii
+  !! Species iterator.
+  INTEGER                                                    :: pp,pchunk
+  !! Particles iterator.
+  INTEGER                                                    :: cc
+  !! Chunk iterator.
+  INTEGER(ip)                                                    :: tt
+  !! time iterator.
 
-    do ii = 1_idef,params%num_species
+  do ii = 1_idef,params%num_species
 
-       pchunk=params%pchunk
-       m_cache=spp(ii)%m
-       q_cache=spp(ii)%q
-       a =params%dt
+    pchunk=params%pchunk
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+    a = q_cache/abs(q_cache)*params%dt
+
+#ifdef OMP
+    !$OMP PARALLEL DO default(none) &
+    !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
+    !$OMP& shared(params,ii,spp,P,F) &
+    !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
+    !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
+    !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
+    !$OMP& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp)
+
+    do pp=1_idef,spp(ii)%ppp,pchunk
+
+      !$OMP SIMD
+      do cc=1_idef,pchunk
+          X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
+          X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
+          X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
+
+          Y_R(cc)=0._rp
+          Y_PHI(cc)=0._rp
+          Y_Z(cc)=0._rp
+
+          V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
+          V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
+          V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
+
+          B_X(cc)=spp(ii)%vars%B(pp-1+cc,1)
+          B_Y(cc)=spp(ii)%vars%B(pp-1+cc,2)
+          B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
+
+          E_X(cc)=spp(ii)%vars%E(pp-1+cc,1)
+          E_Y(cc)=spp(ii)%vars%E(pp-1+cc,2)
+          E_Z(cc)=spp(ii)%vars%E(pp-1+cc,3)
+
+          PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
+
+          g(cc)=spp(ii)%vars%g(pp-1+cc)
+
+          flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+          flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+      end do
+      !$OMP END SIMD
+
+      do tt=1_ip,params%t_skip
+
+        call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+        call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+            B_X,B_Y,B_Z,PSIp,flagCon)
+
+        call advance_FOinterp_vars(tt,a,q_cache,m_cache,params, &
+            X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            g,flagCon,flagCol,P,F,PSIp)
+      end do !timestep iterator
+
+      !$OMP SIMD
+      do cc=1_idef,pchunk
+          spp(ii)%vars%X(pp-1+cc,1)=X_X(cc)
+          spp(ii)%vars%X(pp-1+cc,2)=X_Y(cc)
+          spp(ii)%vars%X(pp-1+cc,3)=X_Z(cc)
+
+          spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
+          spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
+          spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
+
+          spp(ii)%vars%g(pp-1+cc) = g(cc)
+          spp(ii)%vars%flagCon(pp-1+cc) = flagCon(cc)
+          spp(ii)%vars%flagCol(pp-1+cc) = flagCol(cc)
+
+          spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
+          spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
+          spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+
+          spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
+          spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
+          spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
+
+          spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+      end do
+      !$OMP END SIMD
+
+      !$OMP SIMD
+      do cc=1_idef,pchunk
+          !Derived output data
+          Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
+
+          ! Parallel unit vector
+          b_unit_X(cc) = B_X(cc)/Bmag(cc)
+          b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
+          b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
+
+          v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
+          if (v(cc).GT.korc_zero) then
+            ! Parallel and perpendicular components of velocity
+            vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
+              V_Z(cc)*b_unit_Z(cc))
+
+            vperp(cc) =  v(cc)**2 - vpar(cc)**2
+            if ( vperp(cc) .GE. korc_zero ) then
+              vperp(cc) = SQRT( vperp(cc) )
+            else
+              vperp(cc) = 0.0_rp
+            end if
+
+            ! Pitch angle
+            spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
+              MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+
+            ! Magnetic moment
+            spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
+              g(cc)**2*vperp(cc)**2/Bmag(cc)
+            ! See Northrop's book (The adiabatic motion of charged
+            ! particles)
+
+            ! Radiated power
+            tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+            cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
+            cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
+            cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
+
+            vec_X(cc) = E_X(cc) + cross_X(cc)
+            vec_Y(cc) = E_Y(cc) + cross_Y(cc)
+            vec_Z(cc) = E_Z(cc) + cross_Z(cc)
+
+            spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
+              ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
+              cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
+              cross_Z(cc)*E_Z(cc) + g(cc)**2* &
+              ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
+              - vec_X(cc)*vec_X(cc)+vec_Y(cc)*vec_Y(cc)+ &
+              vec_Z(cc)*vec_Z(cc)) )
+
+            ! Input power due to electric field
+            spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
+              E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
+          else
+            spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
+            spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
+            spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
+            spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
+          end if
+
+      end do
+      !$OMP END SIMD
+
+      end do !particle chunk iterator
+      !$OMP END PARALLEL DO
+#endif OMP
+
+  end do !species iterator
+
+end subroutine adv_FOinterp_mars_top
+
+subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
+  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)                                 :: P
+  !! An instance of the KORC derived type PROFILES.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp) :: Bmag
+  REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp) :: v,vpar,vperp
+  REAL(rp) :: tmp
+  REAL(rp) :: g
+  REAL(rp) :: cross_X,cross_Y,cross_Z
+  REAL(rp) :: vec_X,vec_Y,vec_Z
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  REAL(rp) :: PSIp
+  INTEGER(is) :: flagCon,flagCol
+  INTEGER(ip) :: tskip
+  REAL(rp) :: a,m_cache,q_cache,psip_conv,amp,phase
+  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt
+  INTEGER  :: ii,pp,ss,tt,ppp
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
+  REAL(rp),DIMENSION(2) :: DiMESdims
+  REAL(rp),DIMENSION(3) :: DiMESloc_cyl
+
+  !$acc routine (cart_to_cyl_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
+  !$acc routine (interp_FOfields_mars_p_ACC) seq
+  !$acc routine (advance_FO_vars_ACC) seq
+
+  ss=params%num_species
+
+  do ii = 1_idef,ss
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+    a = q_cache/abs(q_cache)*params%dt
+    tskip=params%t_skip
+    ppp=spp(ii)%ppp
+    dt=params%dt
+
+    psip_conv=F%psip_conv
+    amp=F%AMP
+    phase=F%MARS_phase
+    Ro=F%Ro
+    Bo=F%Bo
+
+    Dim2x1t=F%Dim2x1t
+    Analytic_D3D_IWL=F%Analytic_D3D_IWL
+    circumradius=F%circumradius
+    ntiles=F%ntiles
+    useDiMES=F%useDiMES
+    DiMESloc_cyl=F%DiMESloc
+    DiMESdims=F%DiMESdims
+
+    !$acc  enter data copyin(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+    !$acc& fields_domain_local)
+
+    !$acc parallel loop 
+    do pp=1_idef,ppp
+
+      X_X=spp(ii)%vars%X(pp,1)
+      X_Y=spp(ii)%vars%X(pp,2)
+      X_Z=spp(ii)%vars%X(pp,3)
+
+      Y_R=0._rp
+      Y_PHI=0._rp
+      Y_Z=0._rp
+
+      V_X=spp(ii)%vars%V(pp,1)
+      V_Y=spp(ii)%vars%V(pp,2)
+      V_Z=spp(ii)%vars%V(pp,3)
+
+      B_X=spp(ii)%vars%B(pp,1)
+      B_Y=spp(ii)%vars%B(pp,2)
+      B_Z=spp(ii)%vars%B(pp,3)
+
+      E_X=spp(ii)%vars%E(pp,1)
+      E_Y=spp(ii)%vars%E(pp,2)
+      E_Z=spp(ii)%vars%E(pp,3)
+
+      PSIp=spp(ii)%vars%PSI_P(pp)
+
+      g=spp(ii)%vars%g(pp)
+
+      flagCon=spp(ii)%vars%flagCon(pp)
+      flagCol=spp(ii)%vars%flagCol(pp)
+      
+      !$acc loop seq
+      do tt=1_ip,tskip
+
+        call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+        call check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
+          ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
+
+        call interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+          psip_conv,amp,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+
+        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+            X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            g,flagCon,flagCol)
+      end do !timestep iterator
 
 
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-       !$OMP& shared(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
-       !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-       !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
-       !$OMP& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp)
-       do pp=1_idef,spp(ii)%ppp,pchunk
+      spp(ii)%vars%X(pp,1)=X_X
+      spp(ii)%vars%X(pp,2)=X_Y
+      spp(ii)%vars%X(pp,3)=X_Z
 
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
-             X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
-             X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
+      spp(ii)%vars%V(pp,1)=V_X
+      spp(ii)%vars%V(pp,2)=V_Y
+      spp(ii)%vars%V(pp,3)=V_Z
 
-             Y_R(cc)=0._rp
-             Y_PHI(cc)=0._rp
-             Y_Z(cc)=0._rp
+      spp(ii)%vars%g(pp) = g
+      spp(ii)%vars%flagCon(pp) = flagCon
+      spp(ii)%vars%flagCol(pp) = flagCol
 
-             V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
-             V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
+      spp(ii)%vars%B(pp,1) = B_X
+      spp(ii)%vars%B(pp,2) = B_Y
+      spp(ii)%vars%B(pp,3) = B_Z
 
-             B_X(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_Y(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
+      spp(ii)%vars%E(pp,1) = E_X
+      spp(ii)%vars%E(pp,2) = E_Y
+      spp(ii)%vars%E(pp,3) = E_Z
 
-             E_X(cc)=spp(ii)%vars%E(pp-1+cc,1)
-             E_Y(cc)=spp(ii)%vars%E(pp-1+cc,2)
-             E_Z(cc)=spp(ii)%vars%E(pp-1+cc,3)
+      spp(ii)%vars%PSI_P(pp) = PSIp
 
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
+      !Derived output data
+      Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
 
-             g(cc)=spp(ii)%vars%g(pp-1+cc)
+      ! Parallel unit vector
+      b_unit_X = B_X/Bmag
+      b_unit_Y = B_Y/Bmag
+      b_unit_Z = B_Z/Bmag
 
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
+      v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+      if (v.GT.korc_zero) then
+        ! Parallel and perpendicular components of velocity
+        vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+          V_Z*b_unit_Z)
 
+        vperp =  v**2 - vpar**2
+        if ( vperp .GE. korc_zero ) then
+          vperp = SQRT( vperp )
+        else
+          vperp = 0.0_rp
+        end if
 
-          do tt=1_ip,params%t_skip
+        ! Pitch angle
+        spp(ii)%vars%eta(pp) = 180.0_rp* &
+          MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
 
-             call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+        ! Magnetic moment
+        spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+          g**2*vperp**2/Bmag
+        ! See Northrop's book (The adiabatic motion of charged
+        ! particles)
 
-             call interp_FOfields_mars_p(params,pchunk,F,Y_R,Y_PHI,Y_Z, &
-                  B_X,B_Y,B_Z,PSIp,flagCon)
+        ! Radiated power
+        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
 
+        cross_X = V_Y*B_Z-V_Z*B_Y
+        cross_Y = V_Z*B_X-V_X*B_Z
+        cross_Z = V_X*B_Y-V_Y*B_X
 
+        vec_X = E_X + cross_X
+        vec_Y = E_Y + cross_Y
+        vec_Z = E_Z + cross_Z
 
-             !               write(output_unit_write,'("B_X: ",E17.10)') B_X(1)
-             !               write(output_unit_write,'("B_Y: ",E17.10)') B_Y(1)
-             !               write(output_unit_write,'("B_Z: ",E17.10)') B_Z(1)
+        spp(ii)%vars%Prad(pp) = tmp* &
+          ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+          cross_X*E_X+cross_Y*E_Y+ &
+          cross_Z*E_Z + g**2* &
+          ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+          - vec_X*vec_X+vec_Y*vec_Y+ &
+          vec_Z*vec_Z) )
 
-             call advance_FOinterp_vars(tt,a,q_cache,m_cache,params, &
-                  X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-                  g,flagCon,flagCol,P,F,PSIp)
-          end do !timestep iterator
+        ! Input power due to electric field
+        spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+          E_Y*V_Y+E_Z*V_Z)
+      else
+        spp(ii)%vars%eta(pp) = 0.0_rp
+        spp(ii)%vars%mu(pp) = 0.0_rp
+        spp(ii)%vars%Prad(pp) = 0.0_rp
+        spp(ii)%vars%Pin(pp) = 0.0_rp
+      end if
 
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             spp(ii)%vars%X(pp-1+cc,1)=X_X(cc)
-             spp(ii)%vars%X(pp-1+cc,2)=X_Y(cc)
-             spp(ii)%vars%X(pp-1+cc,3)=X_Z(cc)
+    end do !particle iterator
+    !$acc end parallel loop
 
-             spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
-             spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
-             spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
+    !$acc  exit data delete(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
+    !$acc& fields_domain_local)
 
-             spp(ii)%vars%g(pp-1+cc) = g(cc)
-             spp(ii)%vars%flagCon(pp-1+cc) = flagCon(cc)
-             spp(ii)%vars%flagCol(pp-1+cc) = flagCol(cc)
+  end do !species iterator
 
-             spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
-             spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
-             spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+end subroutine adv_FOinterp_mars_top_ACC
 
-             spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
-             spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
-             spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
-
-             spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-          end do
-          !$OMP END SIMD
-
-
-          !$OMP SIMD
-          !          !$OMP& aligned(Bmag,B_X,B_Y,B_Z, &
-          !          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,V_X,V_Y,V_Z,vpar, &
-          !          !$OMP& vperp,tmp,cross_X,cross_Y,cross_Z, &
-          !          !$OMP& vec_X,vec_Y,vec_Z,E_X,E_Y,E_Z)
-          do cc=1_idef,pchunk
-             !Derived output data
-             Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
-
-             ! Parallel unit vector
-             b_unit_X(cc) = B_X(cc)/Bmag(cc)
-             b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
-             b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
-
-             v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
-             if (v(cc).GT.korc_zero) then
-                ! Parallel and perpendicular components of velocity
-                vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
-                     V_Z(cc)*b_unit_Z(cc))
-
-                vperp(cc) =  v(cc)**2 - vpar(cc)**2
-                if ( vperp(cc) .GE. korc_zero ) then
-                   vperp(cc) = SQRT( vperp(cc) )
-                else
-                   vperp(cc) = 0.0_rp
-                end if
-
-                ! Pitch angle
-                spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
-                     MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
-
-                ! Magnetic moment
-                spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
-                     g(cc)**2*vperp(cc)**2/Bmag(cc)
-                ! See Northrop's book (The adiabatic motion of charged
-                ! particles)
-
-
-
-                ! Radiated power
-                tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
-
-                cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
-                cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
-                cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
-
-                vec_X(cc) = E_X(cc) + cross_X(cc)
-                vec_Y(cc) = E_Y(cc) + cross_Y(cc)
-                vec_Z(cc) = E_Z(cc) + cross_Z(cc)
-
-                spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
-                     ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
-                     cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
-                     cross_Z(cc)*E_Z(cc) + g(cc)**2* &
-                     ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
-                     - vec_X(cc)*vec_X(cc)+vec_Y(cc)*vec_Y(cc)+ &
-                     vec_Z(cc)*vec_Z(cc)) )
-
-                ! Input power due to electric field
-                spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
-                     E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
-             else
-                spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
-                spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
-                spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
-                spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
-             end if
-
-          end do
-          !$OMP END SIMD
-
-
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
-
-    end do !species iterator
-
-  end subroutine adv_FOinterp_mars_top
-
-  subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
+subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
     TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -1743,7 +2752,7 @@ contains
        pchunk=params%pchunk
        m_cache=spp(ii)%m
        q_cache=spp(ii)%q
-       a = params%dt
+       a = q_cache/abs(q_cache)*params%dt
 
 
        !$OMP PARALLEL DO default(none) &
@@ -1911,9 +2920,225 @@ contains
 
     end do !species iterator
 
-  end subroutine adv_FOinterp_aorsa_top
+end subroutine adv_FOinterp_aorsa_top
 
-  subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
+subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
+  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  !! An instance of the KORC derived type FIELDS.
+  TYPE(PROFILES), INTENT(IN)                                 :: P
+  !! An instance of the KORC derived type PROFILES.
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+  !! An instance of the derived type SPECIES containing all the parameters
+  !! and simulation variables of the different species in the simulation.
+  REAL(rp) :: Bmag
+  REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
+  REAL(rp) :: v,vpar,vperp
+  REAL(rp) :: tmp
+  REAL(rp) :: g
+  REAL(rp) :: cross_X,cross_Y,cross_Z
+  REAL(rp) :: vec_X,vec_Y,vec_Z
+  REAL(rp) :: X_X,X_Y,X_Z
+  REAL(rp) :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: V_X,V_Y,V_Z
+  REAL(rp) :: B_X,B_Y,B_Z
+  REAL(rp) :: E_X,E_Y,E_Z
+  REAL(rp) :: PSIp
+  INTEGER(is) :: flagCon,flagCol
+  INTEGER(ip) :: tskip
+  REAL(rp) :: a,m_cache,q_cache,psip_conv,amp,phase,nmode,mmode,omega
+  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,time,t0,tnorm
+  INTEGER  :: ii,pp,ss,tt,ppp
+  LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
+  REAL(rp),DIMENSION(2) :: DiMESdims
+  REAL(rp),DIMENSION(3) :: DiMESloc_cyl
+
+  !$acc routine (cart_to_cyl_p_ACC) seq
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
+  !$acc routine (interp_FOfields_aorsa_p_ACC) seq
+  !$acc routine (advance_FO_vars_ACC) seq
+
+  ss=params%num_species
+
+  do ii = 1_idef,ss
+
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+    a = q_cache/abs(q_cache)*params%dt
+    tskip=params%t_skip
+    ppp=spp(ii)%ppp
+    dt=params%dt
+    t0=params%time
+    tnorm=params%cpp%time
+  
+
+    psip_conv=F%psip_conv
+    amp=F%AMP
+    phase=F%MARS_phase
+    nmode=F%AORSA_nmode
+    omega=2*C_PI*F%AORSA_freq
+    mmode=F%AORSA_mmode
+    Ro=F%Ro
+    Bo=F%Bo
+
+    Dim2x1t=F%Dim2x1t
+    Analytic_D3D_IWL=F%Analytic_D3D_IWL
+    circumradius=F%circumradius
+    ntiles=F%ntiles
+    useDiMES=F%useDiMES
+    DiMESloc_cyl=F%DiMESloc
+    DiMESdims=F%DiMESdims
+
+    !$acc  enter data copyin(bfield_2d_local, &
+    !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
+    !$acc& fields_domain_local)
+
+    !$acc parallel loop 
+    do pp=1_idef,ppp
+
+      X_X=spp(ii)%vars%X(pp,1)
+      X_Y=spp(ii)%vars%X(pp,2)
+      X_Z=spp(ii)%vars%X(pp,3)
+
+      Y_R=0._rp
+      Y_PHI=0._rp
+      Y_Z=0._rp
+
+      V_X=spp(ii)%vars%V(pp,1)
+      V_Y=spp(ii)%vars%V(pp,2)
+      V_Z=spp(ii)%vars%V(pp,3)
+
+      B_X=spp(ii)%vars%B(pp,1)
+      B_Y=spp(ii)%vars%B(pp,2)
+      B_Z=spp(ii)%vars%B(pp,3)
+
+      E_X=spp(ii)%vars%E(pp,1)
+      E_Y=spp(ii)%vars%E(pp,2)
+      E_Z=spp(ii)%vars%E(pp,3)
+
+      PSIp=spp(ii)%vars%PSI_P(pp)
+
+      g=spp(ii)%vars%g(pp)
+
+      flagCon=spp(ii)%vars%flagCon(pp)
+      flagCol=spp(ii)%vars%flagCol(pp)
+
+      !$acc loop seq
+      do tt=1_ip,tskip
+
+        time=(t0+dt*tt)*tnorm
+
+        call cart_to_cyl_p_ACC(X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+        call check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
+          Dim2x1t,Analytic_D3D_IWL,circumradius, &
+          ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
+
+        call interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,b1Imfield_2dx_local, &
+          e1Refield_2dx_local,e1Imfield_2dx_local,psip_conv,amp,nmode,omega,Bo,Ro, &
+          Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+
+        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+            X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            g,flagCon,flagCol)
+      end do !timestep iterator
+
+
+      spp(ii)%vars%X(pp,1)=X_X
+      spp(ii)%vars%X(pp,2)=X_Y
+      spp(ii)%vars%X(pp,3)=X_Z
+
+      spp(ii)%vars%V(pp,1)=V_X
+      spp(ii)%vars%V(pp,2)=V_Y
+      spp(ii)%vars%V(pp,3)=V_Z
+
+      spp(ii)%vars%g(pp) = g
+      spp(ii)%vars%flagCon(pp) = flagCon
+      spp(ii)%vars%flagCol(pp) = flagCol
+
+      spp(ii)%vars%B(pp,1) = B_X
+      spp(ii)%vars%B(pp,2) = B_Y
+      spp(ii)%vars%B(pp,3) = B_Z
+
+      spp(ii)%vars%E(pp,1) = E_X
+      spp(ii)%vars%E(pp,2) = E_Y
+      spp(ii)%vars%E(pp,3) = E_Z
+
+      spp(ii)%vars%PSI_P(pp) = PSIp
+
+      !Derived output data
+      Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+      ! Parallel unit vector
+      b_unit_X = B_X/Bmag
+      b_unit_Y = B_Y/Bmag
+      b_unit_Z = B_Z/Bmag
+
+      v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+      if (v.GT.korc_zero) then
+        ! Parallel and perpendicular components of velocity
+        vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+          V_Z*b_unit_Z)
+
+        vperp =  v**2 - vpar**2
+        if ( vperp .GE. korc_zero ) then
+          vperp = SQRT( vperp )
+        else
+          vperp = 0.0_rp
+        end if
+
+        ! Pitch angle
+        spp(ii)%vars%eta(pp) = 180.0_rp* &
+          MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+
+        ! Magnetic moment
+        spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+          g**2*vperp**2/Bmag
+        ! See Northrop's book (The adiabatic motion of charged
+        ! particles)
+
+        ! Radiated power
+        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+
+        cross_X = V_Y*B_Z-V_Z*B_Y
+        cross_Y = V_Z*B_X-V_X*B_Z
+        cross_Z = V_X*B_Y-V_Y*B_X
+
+        vec_X = E_X + cross_X
+        vec_Y = E_Y + cross_Y
+        vec_Z = E_Z + cross_Z
+
+        spp(ii)%vars%Prad(pp) = tmp* &
+          ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+          cross_X*E_X+cross_Y*E_Y+ &
+          cross_Z*E_Z + g**2* &
+          ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+          - vec_X*vec_X+vec_Y*vec_Y+ &
+          vec_Z*vec_Z) )
+
+        ! Input power due to electric field
+        spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+          E_Y*V_Y+E_Z*V_Z)
+      else
+        spp(ii)%vars%eta(pp) = 0.0_rp
+        spp(ii)%vars%mu(pp) = 0.0_rp
+        spp(ii)%vars%Prad(pp) = 0.0_rp
+        spp(ii)%vars%Pin(pp) = 0.0_rp
+      end if
+
+    end do !particle iterator
+    !$acc end parallel loop
+
+  end do !species iterator
+
+  !$acc  exit data delete(bfield_2d_local, &
+  !$acc& b1Refield_2dx_local,b1Imfield_2dx_local,e1Refield_2dx_local,e1Imfield_2dx_local, &
+  !$acc& fields_domain_local)
+
+end subroutine adv_FOinterp_aorsa_top_ACC
+
+subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,P,F,PSIp)
     TYPE(KORC_PARAMS), INTENT(IN)                              :: params
     !! Core KORC simulation parameters.
@@ -2126,11 +3351,184 @@ contains
     end do
     !$OMP END SIMD
 
-  end subroutine advance_FOinterp_vars
-#endif
+end subroutine advance_FOinterp_vars
+
+subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
+  V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol)
+  !$acc routine seq
+  INTEGER, INTENT(IN)                                       :: tt
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+  REAL(rp)                                      :: dt
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+  REAL(rp), INTENT(IN)                                       :: m_cache,q_cache
+  !! Time step used in the leapfrog step (\(\Delta t\)).
+  REAL(rp)                                :: Bmag
+  REAL(rp),INTENT(in)                                       :: a
+  !! This variable is used to simplify notation in the code, and
+  !! is given by \(a=q\Delta t/m\),
+  REAL(rp)                                  :: sigma
+  !! This variable is \(\sigma = \gamma'^2 - \tau^2\) in the above equations.
+  REAL(rp)                             :: us
+  !! This variable is \(u^{*} = p^{*}/m\) where \( p^{*} =
+  !! \mathbf{p}'\cdot \mathbf{\tau}/mc\).
+  !! Variable 'u^*' in Vay, J.-L. PoP (2008).
+  REAL(rp),INTENT(INOUT)                 :: g
+  REAL(rp) :: gp,g0
+  !! Relativistic factor \(\gamma\).
+  REAL(rp)                               :: s
+  !! This variable is \(s = 1/(1+t^2)\) in the equations above.
+  !! Variable 's' in Vay, J.-L. PoP (200params%pchunk).
+  REAL(rp)                          :: U_hs_X,U_hs_Y,U_hs_Z
+  !! Is \(\mathbf{u}=\mathbf{p}/m\) at half-time step (\(i+1/2\)) in
+  !! the absence of radiation losses or collisions. \(\mathbf{u}^{i+1/2} =
+  !! \mathbf{u}^i + \frac{q\Delta t}{2m}\left( \mathbf{E}^{i+1/2} +
+  !! \mathbf{v}^i\times \mathbf{B}^{i+1/2} \right)\).
+  REAL(rp)                         :: tau_X,tau_Y,tau_Z
+  !! This variable is \(\mathbf{\tau} = (q\Delta t/2)\mathbf{B}^{i+1/2}\).
+  REAL(rp)                          :: up_X,up_Y,up_Z
+  !! This variable is \(\mathbf{u}'= \mathbf{p}'/m\), where \(\mathbf{p}'
+  !! = \mathbf{p}^i + q\Delta t \left( \mathbf{E}^{i+1/2} +
+  !! \frac{\mathbf{v}^i}{2} \times \mathbf{B}^{i+1/2} \right)\).
+  REAL(rp)                                   :: t_X,t_Y,t_Z
+  !! This variable is \(\mathbf{t} = {\mathbf \tau}/\gamma^{i+1}\).
+  REAL(rp),INTENT(INOUT)                     :: X_X,X_Y,X_Z
+  REAL(rp)                  :: Y_R,Y_PHI,Y_Z
+  REAL(rp),INTENT(INOUT)                      :: V_X,V_Y,V_Z
+  REAL(rp),INTENT(IN)                      :: B_X,B_Y,B_Z
+  REAL(rp),INTENT(IN)                     :: E_X,E_Y,E_Z
+  REAL(rp)                   :: U_L_X,U_L_Y,U_L_Z
+  REAL(rp)                   :: U_X,U_Y,U_Z
+  REAL(rp)                   :: U_RC_X,U_RC_Y,U_RC_Z
+  REAL(rp)                   :: U_os_X,U_os_Y,U_os_Z
+  !! This variable is \(\mathbf{u}^{i+1}= \mathbf{p}^{i+1}/m\).
+  REAL(rp)                        :: cross_X,cross_Y,cross_Z
+
+  REAL(rp)                     :: Frad_X,Frad_Y,Frad_Z
+  !! Synchrotron radiation reaction force of each particle.
+  REAL(rp) :: ne,Te,Zeff
+  INTEGER                                      :: cc,pchunk
+  !! Chunk iterator.
+
+  INTEGER(is),intent(inout)                   :: flagCon,flagCol
+
+  g0=g
+
+  U_X = g*V_X
+  U_Y = g*V_Y
+  U_Z = g*V_Z
+
+  ! Magnitude of magnetic field
+  Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+
+  U_L_X=U_X
+  U_L_Y=U_Y
+  U_L_Z=U_Z
+
+  U_RC_X=U_X
+  U_RC_Y=U_Y
+  U_RC_Z=U_Z
+
+  ! LEAP-FROG SCHEME FOR LORENTZ FORCE !
+
+  cross_X=V_Y*B_Z-V_Z*B_Y
+  cross_Y=V_Z*B_X-V_X*B_Z
+  cross_Z=V_X*B_Y-V_Y*B_X
+
+  U_hs_X = U_L_X + 0.5_rp*a*(E_X +cross_X)
+  U_hs_Y = U_L_Y + 0.5_rp*a*(E_Y +cross_Y)
+  U_hs_Z = U_L_Z + 0.5_rp*a*(E_Z +cross_Z)
+
+  tau_X = 0.5_rp*a*B_X
+  tau_Y = 0.5_rp*a*B_Y
+  tau_Z = 0.5_rp*a*B_Z
+
+  up_X = U_hs_X + 0.5_rp*a*E_X
+  up_Y = U_hs_Y + 0.5_rp*a*E_Y
+  up_Z = U_hs_Z + 0.5_rp*a*E_Z
+
+  gp = SQRT( 1.0_rp + up_X*up_X+up_Y*up_Y+ &
+      up_Z*up_Z )
+
+  sigma = gp*gp - (tau_X*tau_X+ &
+      tau_Y*tau_Y+tau_Z*tau_Z)
+
+  us = up_X*tau_X+up_Y*tau_Y+ &
+      up_Z*tau_Z
+
+  ! variable 'u^*' in Vay, J.-L. PoP (2008)
+  g = SQRT( 0.5_rp*(sigma + SQRT(sigma*sigma + &
+      4.0_rp*(tau_X*tau_X+tau_Y*tau_Y+ &
+      tau_Z*tau_Z + us*us))) )
+
+  t_X = tau_X/g
+  t_Y = tau_Y/g
+  t_Z = tau_Z/g
+
+  s = 1.0_rp/(1.0_rp + t_X*t_X+t_Y*t_Y+ &
+      t_Z*t_Z)
+  ! variable 's' in Vay, J.-L. PoP (2008)
+
+  cross_X=up_Y*t_Z-up_Z*t_Y
+  cross_Y=up_Z*t_X-up_X*t_Z
+  cross_Z=up_X*t_Y-up_Y*t_X
+
+  U_L_X = s*(up_X + (up_X*t_X+ &
+      up_Y*t_Y+up_Z*t_Z)*t_X + cross_X)
+  U_L_Y = s*(up_Y + (up_X*t_X+ &
+      up_Y*t_Y+up_Z*t_Z)*t_Y + cross_Y)
+  U_L_Z = s*(up_Z + (up_X*t_X+ &
+      up_Y*t_Y+up_Z*t_Z)*t_Z + cross_Z)
+  ! LEAP-FROG SCHEME FOR LORENTZ FORCE !
+
+  U_os_X = 0.5_rp*(U_L_X + U_X)
+  U_os_Y = 0.5_rp*(U_L_Y + U_Y)
+  U_os_Z = 0.5_rp*(U_L_Z + U_Z)
+  ! Splitting operator for including radiation
+
+  !if (params%radiation) then
+  !  !! Calls [[radiation_force_p]] in [[korc_ppusher]].
+  !  call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
+  !        E_X,E_Y,E_Z,B_Z,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+  !  U_RC_X = U_RC_X + a*Frad_X/q_cache
+  !  U_RC_Y = U_RC_Y + a*Frad_Y/q_cache
+  !  U_RC_Z = U_RC_Z + a*Frad_Z/q_cache
+  !end if
+  ! Splitting operator for including radiation
+
+  U_X = U_L_X + U_RC_X - U_X
+  U_Y = U_L_Y + U_RC_Y - U_Y
+  U_Z = U_L_Z + U_RC_Z - U_Z
+
+  !if (params%collisions) then
+  !  call include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
+  !      U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,P,F,flagCon,flagCol,PSIp)
+  !end if
+
+  !if (params%radiation.or.params%collisions) then
+  !  do cc=1_idef,pchunk
+  !    g(cc)=sqrt(1._rp+U_X(cc)*U_X(cc)+U_Y(cc)*U_Y(cc)+U_Z(cc)*U_Z(cc))
+  !  end do
+  !end if
+
+  if ((flagCon.eq.0_is).or.(flagCol.eq.0_is)) then
+    g=g0
+  else
+    V_X = U_X/g
+    V_Y = U_Y/g
+    V_Z = U_Z/g
+  end if
+
+  X_X = X_X + dt*V_X*REAL(flagCon)*REAL(flagCol)
+  X_Y = X_Y + dt*V_Y*REAL(flagCon)*REAL(flagCol)
+  X_Z = X_Z + dt*V_Z*REAL(flagCon)*REAL(flagCol)
+
+end subroutine advance_FO_vars_ACC
+
+#endif PSPLINE
 
 #ifdef FIO
-  subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
+
+subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,P,F,PSIp,hint)
     TYPE(KORC_PARAMS), INTENT(IN)                              :: params
     !! Core KORC simulation parameters.
@@ -2344,10 +3742,11 @@ contains
     end do
     !$OMP END SIMD
 
-  end subroutine advance_FOfio_vars
-#endif
+end subroutine advance_FOfio_vars
 
-  subroutine advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
+#endif FIO
+
+subroutine advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
        m_cache,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,flagCol,P,F,PSIp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
@@ -2398,10 +3797,10 @@ contains
     end do
     !$OMP END SIMD
 
-  end subroutine advance_FP3Dinterp_vars
+end subroutine advance_FP3Dinterp_vars
 
 
-  subroutine GC_init(params,F,spp)
+subroutine GC_init(params,F,spp)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -2721,23 +4120,23 @@ contains
 
     end do ! loop over particle species
 
-  end subroutine GC_init
+end subroutine GC_init
 
-  FUNCTION deg2rad(x)
-    REAL(rp), INTENT(IN) :: x
-    REAL(rp) :: deg2rad
+FUNCTION deg2rad(x)
+     REAL(rp), INTENT(IN) :: x
+     REAL(rp) :: deg2rad
 
-    deg2rad = C_PI*x/180.0_rp
-  END FUNCTION deg2rad
+     deg2rad = C_PI*x/180.0_rp
+END FUNCTION deg2rad
 
-  FUNCTION rad2deg(x)
-    REAL(rp), INTENT(IN) :: x
-    REAL(rp) :: rad2deg
+FUNCTION rad2deg(x)
+     REAL(rp), INTENT(IN) :: x
+     REAL(rp) :: rad2deg
 
-    rad2deg = x*180.0_rp/C_PI
-  END FUNCTION rad2deg
+     rad2deg = x*180.0_rp/C_PI
+END FUNCTION rad2deg
 
-  subroutine adv_GCeqn_top(params,F,P,spp)
+subroutine adv_GCeqn_top(params,F,P,spp)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
@@ -2832,12 +4231,6 @@ contains
                               Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
                               F,P,E_PHI,ne,PSIp)
 
-                      end if
-
-                      if (params%SC_E) then
-                         call calculate_SC_p(params,F,B_R,B_PHI,B_Z,Y_R,Y_Z, &
-                              V_PLL,V_MU,m_cache,flagCon,flagCol,Vden)
-                         Vdenave=(Vdenave*REAL(tt-1_ip)+Vden)/REAL(tt)
                       end if
 
                    end do !timestep iterator
@@ -3153,17 +4546,11 @@ contains
 
        end do
 
-       if (params%SC_E) then
-          call calculate_SC_E1D(params,F,VdenOMP)
-       end if
-
-
-
     end do !species iterator
 
-  end subroutine adv_GCeqn_top
+end subroutine adv_GCeqn_top
 
-  subroutine advance_GCeqn_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
+subroutine advance_GCeqn_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
        flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,F,P,PSIp,E_PHI)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
@@ -3235,12 +4622,6 @@ contains
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
 
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
-
     !    write(output_unit_write,'("ER:",E17.10)') E_R
     !    write(output_unit_write,'("EPHI:",E17.10)') E_PHI
     !    write(output_unit_write,'("EZ:",E17.10)') E_Z
@@ -3285,12 +4666,6 @@ contains
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
 
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
-
     call GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,q_cache,m_cache)
@@ -3320,12 +4695,6 @@ contains
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
 
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
-
     call GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,q_cache,m_cache)
@@ -3354,12 +4723,6 @@ contains
     call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
-
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
 
     call GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
@@ -3393,12 +4756,6 @@ contains
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
 
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
-
     call GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,q_cache,m_cache)
@@ -3430,12 +4787,6 @@ contains
     call analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
-
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
 
     call GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
@@ -3485,15 +4836,9 @@ contains
          Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
          gradB_R,gradB_PHI,gradB_Z,PSIp)
 
-    if (params%SC_E_add) then
-#ifdef PSPLINE
-       call add_interp_SCE_p(params,F,Y_R,Y_PHI,Y_Z,E_PHI)
-#endif
-    end if
+end subroutine advance_GCeqn_vars
 
-  end subroutine advance_GCeqn_vars
-
-  subroutine advance_FPeqn_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
+subroutine advance_FPeqn_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
        m_cache,F,P,PSIp)
 
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -3518,194 +4863,11 @@ contains
 
     end do
 
-
-
-
-  end subroutine advance_FPeqn_vars
+end subroutine advance_FPeqn_vars
 
 #ifdef PSPLINE
-  subroutine adv_GCinterp_psi_top_FS(params,spp,P,F)
 
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(INOUT)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    INTEGER(ip)                                                    :: ttt
-    !! time iterator.
-
-    real(rp),dimension(F%dim_1D) :: Vden,Vdenave,VdenOMP
-    !! time iterator.
-
-
-    do ii = 1_idef,params%num_species
-
-       pchunk=params%pchunk
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
-
-       do ttt=1_ip,params%t_it_SC
-
-          VdenOMP=0._rp
-
-          !$OMP PARALLEL DO default(none) &
-          !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-          !$OMP& SHARED(params,ii,spp,P,F) &
-          !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-          !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-          !$OMP& gradB_R,gradB_PHI,gradB_Z,ne, &
-          !$OMP& Vden,Vdenave) &
-          !$OMP& REDUCTION(+:VdenOMP)
-          do pp=1_idef,spp(ii)%ppp,pchunk
-
-             !          write(output_unit_write,'("pp: ",I16)') pp
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-                Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-                Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
-
-                V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-                V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-
-                PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-                flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-                flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-             end do
-             !$OMP END SIMD
-
-             if (.not.params%FokPlan) then
-                Vdenave=0._rp
-                do tt=1_ip,params%t_skip
-
-                   call advance_GCinterp_psi_vars_FS(spp(ii)%vars,pp,tt, &
-                        params, &
-                        Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                        F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
-                        curlb_Z,gradB_R,gradB_PHI,gradB_Z)
-
-                   call calculate_SC_p_FS(params,F,B_R,B_PHI,B_Z,PSIp, &
-                        V_PLL,V_MU,m_cache,flagCon,flagCol,Vden)
-
-                   !                   write(output_unit_write,*) 'pre-Vdenave',Vdenave(F%dim_1D)
-                   Vdenave=(Vdenave*REAL(tt-1_ip)+Vden)/REAL(tt)
-
-                   !                   write(output_unit_write,*) 'Vden',Vden(F%dim_1D)
-                   !                   write(output_unit_write,*) 'post-Vdenave',Vdenave(F%dim_1D)
-                   !                   if (pp.eq.9_idef) write(output_unit_write,*) 'Vdenave',Vdenave(F%dim_1D)
-
-                end do !timestep iterator
-
-                !                write(output_unit_write,*) 'Vdenave',Vdenave(F%dim_1D)
-
-                VdenOMP=VdenOMP+Vdenave
-
-                !                write(output_unit_write,*) 'VdenOMP',VdenOMP(F%dim_1D)
-
-                !$OMP SIMD
-                do cc=1_idef,pchunk
-                   spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                   spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                   spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                   spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                   spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                   spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                   spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                   spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                   spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                   spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                   spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                   spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                   spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                   spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                   spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                   spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
-                   spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-                   spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-                end do
-                !$OMP END SIMD
-
-             else
-
-                call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                     Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-                !$OMP SIMD
-                do cc=1_idef,pchunk
-                   spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                   spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                   spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                   spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-                end do
-                !$OMP END SIMD
-
-             end if
-
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-                B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-                B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-                Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
-
-                spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                     2*V_MU(cc)*Bmag(cc))
-
-                spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                     spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                     180.0_rp/C_PI
-             end do
-             !$OMP END SIMD
-
-          end do !particle chunk iterator
-          !$OMP END PARALLEL DO
-
-          !write(output_unit_write,*) 'VdenOMP',VdenOMP(F%dim_1D)
-
-
-          call calculate_SC_E1D_FS(params,F,VdenOMP)
-
-
-       end do
-
-    end do !species iterator
-
-  end subroutine adv_GCinterp_psi_top_FS
-
-  subroutine adv_GCinterp_psi_top(params,spp,P,F)
+subroutine adv_GCinterp_psi_top(params,spp,P,F)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
@@ -4011,11 +5173,13 @@ contains
 
     end do !species iterator
 
-  end subroutine adv_GCinterp_psi_top
-#endif
+end subroutine adv_GCinterp_psi_top
+
+#endif PSPLINE
 
 #ifdef FIO
-  subroutine adv_GCinterp_fio_top(params,spp,P,F)
+
+subroutine adv_GCinterp_fio_top(params,spp,P,F)
 
     USE omp_lib
     IMPLICIT NONE
@@ -4203,12 +5367,14 @@ contains
 
     end do !species iterator
 
-  end subroutine adv_GCinterp_fio_top
-#endif
+end subroutine adv_GCinterp_fio_top
+
+#endif FIO
 
 
 #ifdef PSPLINE
-  subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
+
+subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
     USE omp_lib
     IMPLICIT NONE
@@ -4430,7 +5596,7 @@ contains
     !            write(6,*) 'before loop load:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
     !            write(6,*) 'before loop load:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
     !         end if
-# endif
+# endif DBG_CHECK
 
              !if (modulo(tt,params%coll_per_dump/10).eq.0) &
              !     write(6,*) 'mpi',params%mpi_params%rank,', Coll step',tt
@@ -4491,7 +5657,7 @@ contains
                       call korc_abort(25)
                    endif
                 end do
-#endif
+#endif DBG_CHECK
 
                 !if (params%t_skip.ge.10) then
                 !   if(mod(tt,params%t_skip/10).eq.0) then
@@ -4518,7 +5684,7 @@ contains
                          call korc_abort(25)
                       endif
                    end do
-# endif
+# endif DBG_CHECK
 
                    call advance_GCinterp_psiwE_vars(spp(ii),achunk, &
                         pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
@@ -4540,7 +5706,7 @@ contains
                       call korc_abort(25)
                    endif
                 end do
-# endif
+# endif DBG_CHECK
 
                 call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
                      tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
@@ -4561,7 +5727,7 @@ contains
                 if((params%mpi_params%rank.eq.6).and.(pp.eq.1)) then
                    write(6,*) 'before loop save:ppll',V_PLL,'mu',V_MU
                 end if
-#endif
+#endif DBG_CHECK
 
                 !$OMP SIMD
                 do cc=1_idef,achunk
@@ -4605,7 +5771,7 @@ contains
           !         write(6,*) 'after loop save 1:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
           !         write(6,*) 'after loop save 1:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
           !      end if
-#endif
+#endif DBG_CHECK
 
              end do !particle chunk iterator
              !$OMP END PARALLEL DO
@@ -4615,7 +5781,7 @@ contains
           !      write(6,*) 'after loop save 2:ppll',spp(ii)%vars%V(1:8,1),'mu',spp(ii)%vars%V(1:8,2)
           !      write(6,*) 'after loop save 2:R',spp(ii)%vars%Y(1:8,1),'PHI',spp(ii)%vars%Y(1:8,2),'Z',spp(ii)%vars%Y(1:8,3)
           !   end if
-#endif
+#endif DBG_CHECK
 
           end do !timestep iterator
 
@@ -4662,1281 +5828,193 @@ contains
 
     end do !species iterator
 
-  end subroutine adv_GCinterp_psiwE_top
+end subroutine adv_GCinterp_psiwE_top
 
-  subroutine adv_GCinterp_psi2x1t_top(params,spp,P,F)
+subroutine adv_GCinterp_psi2x1t_top(params,spp,P,F)
 
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(INOUT)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar,time
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    INTEGER(ip)                                                    :: ttt
-    !! time iterator.
+TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+!! Core KORC simulation parameters.
+TYPE(PROFILES), INTENT(IN)                                 :: P
+TYPE(FIELDS), INTENT(INOUT)                                   :: F
+TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+!! An instance of the derived type SPECIES containing all the parameters
+!! and simulation variables of the different species in the simulation.
+REAL(rp), DIMENSION(params%pchunk)               :: Bmag
+REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
+REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
+REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
+REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
+REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
+REAL(rp),DIMENSION(params%pchunk) :: PSIp
+REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
+REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
+INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
+REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar,time
 
 
-
-    do ii = 1_idef,params%num_species
-
-       pchunk=params%pchunk
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
-
-
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-       !$OMP& SHARED(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-       !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-       !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,time,E_R,E_Z)
-
-       do pp=1_idef,spp(ii)%ppp,pchunk
-
-          !          write(output_unit_write,'("pp: ",I16)') pp
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-             Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
-
-             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
-
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-                call advance_GCinterp_psi2x1t_vars(spp(ii)%vars,pp,tt, &
-                     params, &
-                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                     F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
-                     curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
+INTEGER                                                    :: ii
+!! Species iterator.
+INTEGER                                                    :: pp
+!! Particles iterator.
+INTEGER                                                    :: cc,pchunk
+!! Chunk iterator.
+INTEGER(ip)                                                    :: tt
+INTEGER(ip)                                                    :: ttt
+!! time iterator.
 
 
-             end do !timestep iterator
+
+do ii = 1_idef,params%num_species
+
+     pchunk=params%pchunk
+     q_cache=spp(ii)%q
+     m_cache=spp(ii)%m
 
 
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
+     !$OMP PARALLEL DO default(none) &
+     !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
+     !$OMP& SHARED(params,ii,spp,P,F) &
+     !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
+     !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
+     !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,time,E_R,E_Z)
 
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
+     do pp=1_idef,spp(ii)%ppp,pchunk
 
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+     !          write(output_unit_write,'("pp: ",I16)') pp
 
-                spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
+     !$OMP SIMD
+     do cc=1_idef,pchunk
+          Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
+          Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
+          Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
 
-                spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
+          V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+          V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
 
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-                spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+          PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
 
-                spp(ii)%vars%ne(pp-1+cc) = ne(cc)
-             end do
-             !$OMP END SIMD
+          flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+          flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+     end do
+     !$OMP END SIMD
 
-          else if (params%FokPlan.and.params%collisions) then
+     if (.not.params%FokPlan) then
+          do tt=1_ip,params%t_skip
+               call advance_GCinterp_psi2x1t_vars(spp(ii)%vars,pp,tt, &
+                    params, &
+                    Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
+                    F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
+                    curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
 
-             call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                  Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-
-                spp(ii)%vars%ne(pp-1+cc) = ne(cc)
-             end do
-             !$OMP END SIMD
-
-          else
-             do tt=1_ip,params%t_skip
-                time=params%init_time+(params%it-1+tt)* &
-                     params%dt
-
-                call calculate_GCfields_2x1t_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
-                     E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-                     gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp,time)
-             end do
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-                spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-             end do
-             !$OMP END SIMD
-
-          end if
+          end do !timestep iterator
 
 
           !$OMP SIMD
           do cc=1_idef,pchunk
-             B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
+               spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
+               spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
+               spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
+               spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
+               spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
 
-             Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
-                  B_Z(cc)*B_Z(cc))
+               spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
+               spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
 
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
+               spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
+               spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
+               spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
 
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+               spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
+               spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
+               spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
+
+               spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
+               spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
+               spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
+
+               spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
+               spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
+
+               spp(ii)%vars%ne(pp-1+cc) = ne(cc)
           end do
           !$OMP END SIMD
 
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
+     else if (params%FokPlan.and.params%collisions) then
 
-
-
-
-    end do !species iterator
-
-  end subroutine adv_GCinterp_psi2x1t_top
-
-  subroutine adv_GCinterp_B_top(params,spp,P,F)
-
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
-
-
-    do ii = 1_idef,params%num_species
-
-       pchunk=params%pchunk
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
-
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-       !$OMP& SHARED(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-       !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-       !$OMP& gradB_R,gradB_PHI,gradB_Z,ne)
-       do pp=1_idef,spp(ii)%ppp,pchunk
-
-          !          write(output_unit_write,'("pp: ",I16)') pp
+          call advance_FPinterp_vars(params,Y_R,Y_PHI, &
+               Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
           !$OMP SIMD
           do cc=1_idef,pchunk
-             Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-             Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
+               spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
+               spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
 
-             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
+               spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
 
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
+               spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
 
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+               spp(ii)%vars%ne(pp-1+cc) = ne(cc)
           end do
           !$OMP END SIMD
 
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-                call advance_GCinterp_B_vars(spp(ii)%vars,pp,tt,params, &
-                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                     F,P,B_R,B_PHI,B_Z,E_PHI,curlb_R,curlb_PHI,curlb_Z, &
-                     gradB_R,gradB_PHI,gradB_Z,PSIp)
-             end do !timestep iterator
+     else
+          do tt=1_ip,params%t_skip
+               time=params%init_time+(params%it-1+tt)* &
+                    params%dt
 
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          else
-
-             call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                  Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          end if
-
+               call calculate_GCfields_2x1t_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
+                    E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+                    gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp,time)
+          end do
 
           !$OMP SIMD
           do cc=1_idef,pchunk
-             B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
+               spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
+               spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
+               spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
 
-             Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
-
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
-
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
+               spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
+               spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
           end do
           !$OMP END SIMD
 
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
+     end if
 
-    end do !species iterator
 
-  end subroutine adv_GCinterp_B_top
+     !$OMP SIMD
+     do cc=1_idef,pchunk
+          B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
+          B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
+          B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
 
-  subroutine adv_GCinterp_B2D_top(params,spp,P,F)
+          Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+ &
+               B_Z(cc)*B_Z(cc))
 
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
+          spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
+               2*V_MU(cc)*Bmag(cc))
 
+          spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
+               spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
+               180.0_rp/C_PI
+     end do
+     !$OMP END SIMD
 
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
+     end do !particle chunk iterator
+     !$OMP END PARALLEL DO
 
 
-    do ii = 1_idef,params%num_species
 
-       pchunk=params%pchunk
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
 
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-       !$OMP& SHARED(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-       !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-       !$OMP& gradB_R,gradB_PHI,gradB_Z,ne)
-       do pp=1_idef,spp(ii)%ppp,pchunk
+end do !species iterator
 
-          !          write(output_unit_write,'("pp: ",I16)') pp
+end subroutine adv_GCinterp_psi2x1t_top
 
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-             Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
-
-             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
-
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-                call advance_GCinterp_B2D_vars(spp(ii)%vars,pp,tt,params, &
-                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                     F,P,B_R,B_PHI,B_Z,E_PHI,curlb_R,curlb_PHI,curlb_Z, &
-                     gradB_R,gradB_PHI,gradB_Z,PSIp)
-             end do !timestep iterator
-
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          else
-
-             call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                  Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          end if
-
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-             Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
-
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
-
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
-          end do
-          !$OMP END SIMD
-
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
-
-    end do !species iterator
-
-  end subroutine adv_GCinterp_B2D_top
-
-  subroutine adv_GCinterp_2DBdB_top(params,spp,P,F)
-
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
-
-
-    do ii = 1_idef,params%num_species
-
-       pchunk=params%pchunk
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
-
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-       !$OMP& SHARED(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-       !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-       !$OMP& gradB_R,gradB_PHI,gradB_Z,ne)
-       do pp=1_idef,spp(ii)%ppp,pchunk
-
-          !          write(output_unit_write,'("pp: ",I16)') pp
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-             Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
-
-             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
-
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-                call advance_GCinterp_2DBdB_vars(spp(ii)%vars,pp,tt,params, &
-                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                     F,P,B_R,B_PHI,B_Z,E_PHI,curlb_R,curlb_PHI,curlb_Z, &
-                     gradB_R,gradB_PHI,gradB_Z,PSIp)
-             end do !timestep iterator
-
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-                spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-             end do
-             !$OMP END SIMD
-
-          else
-
-             call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                  Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          end if
-
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-             Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
-
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
-
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
-          end do
-          !$OMP END SIMD
-
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
-
-    end do !species iterator
-
-  end subroutine adv_GCinterp_2DBdB_top
-
-  subroutine adv_GCinterp_3DBdB1_top(params,spp,P,F)
-
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
-
-
-    do ii = 1_idef,params%num_species
-
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
-       pchunk=params%pchunk
-
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-       !$OMP& SHARED(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-       !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-       !$OMP& gradB_R,gradB_PHI,gradB_Z,ne)
-       do pp=1_idef,spp(ii)%ppp,pchunk
-
-          !          write(output_unit_write,'("pp: ",I16)') pp
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-             Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
-
-             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
-
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-                call advance_GCinterp_3DBdB1_vars(spp(ii)%vars,pp,tt,params, &
-                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                     F,P,B_R,B_PHI,B_Z,E_PHI,curlb_R,curlb_PHI,curlb_Z, &
-                     gradB_R,gradB_PHI,gradB_Z,PSIp)
-             end do !timestep iterator
-
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-                spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
-             end do
-             !$OMP END SIMD
-
-          else
-
-             call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                  Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          end if
-
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-             Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
-
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
-
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
-          end do
-          !$OMP END SIMD
-
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
-
-    end do !species iterator
-
-  end subroutine adv_GCinterp_3DBdB1_top
-
-  subroutine adv_GCinterp_3DBdB_top(params,spp,P,F)
-
-    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
-    !! Core KORC simulation parameters.
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_PHI,E_Z
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-    REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU,PSIp
-    REAL(rp),DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
-
-
-    INTEGER                                                    :: ii
-    !! Species iterator.
-    INTEGER                                                    :: pp
-    !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip)                                                    :: tt
-    !! time iterator.
-
-
-    do ii = 1_idef,params%num_species
-
-       q_cache=spp(ii)%q
-       m_cache=spp(ii)%m
-       pchunk=params%pchunk
-
-       !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-       !$OMP& SHARED(params,ii,spp,P,F) &
-       !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
-       !$OMP& flagCon,flagCol,E_PHI,curlb_R,curlb_PHI,curlb_Z, &
-       !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,PSIp)
-       do pp=1_idef,spp(ii)%ppp,pchunk
-
-          !          write(output_unit_write,'("pp: ",I16)') pp
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-             Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
-
-             V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-             V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
-
-             PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
-
-             flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-             flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-          end do
-          !$OMP END SIMD
-
-          if (.not.params%FokPlan) then
-             do tt=1_ip,params%t_skip
-                call advance_GCinterp_3DBdB_vars(spp(ii)%vars,pp,tt,params, &
-                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-                     F,P,B_R,B_PHI,B_Z,E_PHI,curlb_R,curlb_PHI,curlb_Z, &
-                     gradB_R,gradB_PHI,gradB_Z,PSIp)
-             end do !timestep iterator
-
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%Y(pp-1+cc,1)=Y_R(cc)
-                spp(ii)%vars%Y(pp-1+cc,2)=Y_PHI(cc)
-                spp(ii)%vars%Y(pp-1+cc,3)=Y_Z(cc)
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCon(pp-1+cc)=flagCon(cc)
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%B(pp-1+cc,1) = B_R(cc)
-                spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
-                spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
-
-                spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          else
-
-             call advance_FPinterp_vars(params,Y_R,Y_PHI, &
-                  Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%V(pp-1+cc,1)=V_PLL(cc)
-                spp(ii)%vars%V(pp-1+cc,2)=V_MU(cc)
-
-                spp(ii)%vars%flagCol(pp-1+cc)=flagCol(cc)
-
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          end if
-
-
-          !$OMP SIMD
-          do cc=1_idef,pchunk
-             B_R(cc)=spp(ii)%vars%B(pp-1+cc,1)
-             B_PHI(cc)=spp(ii)%vars%B(pp-1+cc,2)
-             B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-             Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
-
-             spp(ii)%vars%g(pp-1+cc)=sqrt(1+V_PLL(cc)**2+ &
-                  2*V_MU(cc)*Bmag(cc))
-
-             spp(ii)%vars%eta(pp-1+cc) = atan2(sqrt(2*m_cache*Bmag(cc)* &
-                  spp(ii)%vars%V(pp-1+cc,2)),spp(ii)%vars%V(pp-1+cc,1))* &
-                  180.0_rp/C_PI
-          end do
-          !$OMP END SIMD
-
-       end do !particle chunk iterator
-       !$OMP END PARALLEL DO
-
-    end do !species iterator
-
-  end subroutine adv_GCinterp_3DBdB_top
-
-
-  subroutine advance_GCinterp_psi_vars_FS(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z)
-    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
-    !! @endnote
-    !! Comment this section further with evolution equations, numerical
-    !! methods, and descriptions of both.
-    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
-
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip),intent(in)                                      :: tt
-    !! time iterator.
-    INTEGER,intent(in)                                  :: pp
-
-
-    REAL(rp),DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp)              :: a1 = 1./5._rp
-    REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
-    REAL(rp) :: a31 = 3./10._rp,a32=-9./10._rp,a33=6./5._rp
-    REAL(rp) :: a41 = -11./54._rp,a42=5./2._rp,a43=-70./27._rp,a44=35./27._rp
-    REAL(rp) :: a51 = 1631./55296._rp,a52=175./512._rp,a53=575./13824._rp,a54=44275./110592._rp,a55=253./4096._rp
-    REAL(rp) :: b1=37./378._rp,b2=0._rp,b3=250./621._rp,b4=125./594._rp,b5=0._rp,b6=512./1771._rp
-
-    REAL(rp),DIMENSION(params%pchunk) :: k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU
-    REAL(rp),DIMENSION(params%pchunk) :: Y0_R,Y0_PHI,Y0_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: PSIp
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
-    REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-
-    INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
-    REAL(rp),intent(IN)  :: q_cache,m_cache
-
-    dt=params%dt
-    pchunk=params%pchunk
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU)
-    do cc=1_idef,pchunk
-
-       Y0_R(cc)=Y_R(cc)
-       Y0_PHI(cc)=Y_PHI(cc)
-       Y0_Z(cc)=Y_Z(cc)
-       V0_PLL(cc)=V_PLL(cc)
-       V0_MU(cc)=V_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !    write(output_unit_write,*) 'R',Y_R(1)
-    !    write(output_unit_write,*) 'PHI',Y_PHI(1)
-    !    write(output_unit_write,*) 'Z',Y_Z(1)
-    !    write(output_unit_write,*) 'PPLL',V_PLL(1)
-    !    write(output_unit_write,*) 'MU',V_MU(1)
-
-    !    write(output_unit_write,*) 'BR',B_R(1)
-    !    write(output_unit_write,*) 'BPHI',B_PHI(1)
-    !    write(output_unit_write,*) 'BZ',B_Z(1)
-
-    !    write(output_unit_write,*) 'gradBR',gradB_R(1)
-    !    write(output_unit_write,*) 'gradBPHI',gradB_PHI(1)
-    !    write(output_unit_write,*) 'gradBZ',gradB_Z(1)
-
-    !    write(output_unit_write,*) 'curlBR',curlB_R(1)
-    !    write(output_unit_write,*) 'curlBPHI',curlB_PHI(1)
-    !    write(output_unit_write,*) 'curlBZ',curlB_Z(1)
-
-    !    write(output_unit_write,*) 'RHS_R',RHS_R(1)
-    !    write(output_unit_write,*) 'RHS_PHI',RHS_PHI(1)
-    !    write(output_unit_write,*) 'RHS_Z',RHS_Z(1)
-    !    write(output_unit_write,*) 'RHS_PLL',RHS_PLL(1)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU)
-    do cc=1_idef,pchunk
-       k1_R(cc)=dt*RHS_R(cc)
-       k1_PHI(cc)=dt*RHS_PHI(cc)
-       k1_Z(cc)=dt*RHS_Z(cc)
-       k1_PLL(cc)=dt*RHS_PLL(cc)
-       k1_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a1*k1_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a1*k1_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a1*k1_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a1*k1_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a1*k1_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU)
-    do cc=1_idef,pchunk
-       k2_R(cc)=dt*RHS_R(cc)
-       k2_PHI(cc)=dt*RHS_PHI (cc)
-       k2_Z(cc)=dt*RHS_Z(cc)
-       k2_PLL(cc)=dt*RHS_PLL(cc)
-       k2_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a21*k1_R(cc)+a22*k2_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a21*k1_PHI(cc)+a22*k2_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a21*k1_Z(cc)+a22*k2_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a21*k1_PLL(cc)+a22*k2_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a21*k1_MU(cc)+a22*k2_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU)
-    do cc=1_idef,pchunk
-       k3_R(cc)=dt*RHS_R(cc)
-       k3_PHI(cc)=dt*RHS_PHI(cc)
-       k3_Z(cc)=dt*RHS_Z(cc)
-       k3_PLL(cc)=dt*RHS_PLL(cc)
-       k3_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a31*k1_R(cc)+a32*k2_R(cc)+a33*k3_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a31*k1_PHI(cc)+a32*k2_PHI(cc)+ &
-            a33*k3_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a31*k1_Z(cc)+a32*k2_Z(cc)+a33*k3_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a31*k1_PLL(cc)+a32*k2_PLL(cc)+a33*k3_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a31*k1_MU(cc)+a32*k2_MU(cc)+a33*k3_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU)
-    do cc=1_idef,pchunk
-       k4_R(cc)=dt*RHS_R(cc)
-       k4_PHI(cc)=dt*RHS_PHI(cc)
-       k4_Z(cc)=dt*RHS_Z(cc)
-       k4_PLL(cc)=dt*RHS_PLL(cc)
-       k4_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a41*k1_R(cc)+a42*k2_R(cc)+a43*k3_R(cc)+ &
-            a44*k4_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a41*k1_PHI(cc)+a42*k2_PHI(cc)+ &
-            a43*k3_PHI(cc)+a44*k4_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a41*k1_Z(cc)+a42*k2_Z(cc)+a43*k3_Z(cc)+ &
-            a44*k4_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a41*k1_PLL(cc)+a42*k2_PLL(cc)+ &
-            a43*k3_PLL(cc)+a44*k4_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a41*k1_MU(cc)+a42*k2_MU(cc)+ &
-            a43*k3_MU(cc)+a44*k4_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-    !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU)
-    do cc=1_idef,pchunk
-       k5_R(cc)=dt*RHS_R(cc)
-       k5_PHI(cc)=dt*RHS_PHI(cc)
-       k5_Z(cc)=dt*RHS_Z(cc)
-       k5_PLL(cc)=dt*RHS_PLL(cc)
-       k5_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a51*k1_R(cc)+a52*k2_R(cc)+a53*k3_R(cc)+ &
-            a54*k4_R(cc)+a55*k5_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a51*k1_PHI(cc)+a52*k2_PHI(cc)+ &
-            a53*k3_PHI(cc)+a54*k4_PHI(cc)+a55*k5_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a51*k1_Z(cc)+a52*k2_Z(cc)+a53*k3_Z(cc)+ &
-            a54*k4_Z(cc)+a55*k5_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a51*k1_PLL(cc)+a52*k2_PLL(cc)+ &
-            a53*k3_PLL(cc)+a54*k4_PLL(cc)+a55*k5_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a51*k1_MU(cc)+a52*k2_MU(cc)+ &
-            a53*k3_MU(cc)+a54*k4_MU(cc)+a55*k5_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU)
-    do cc=1_idef,pchunk
-       k6_R(cc)=dt*RHS_R(cc)
-       k6_PHI(cc)=dt*RHS_PHI(cc)
-       k6_Z(cc)=dt*RHS_Z(cc)
-       k6_PLL(cc)=dt*RHS_PLL(cc)
-       k6_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+b1*k1_R(cc)+b2*k2_R(cc)+ &
-            b3*k3_R(cc)+b4*k4_R(cc)+b5*k5_R(cc)+b6*k6_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+b1*k1_PHI(cc)+b2*k2_PHI(cc)+ &
-            b3*k3_PHI(cc)+b4*k4_PHI(cc)+b5*k5_PHI(cc)+b6*k6_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+b1*k1_Z(cc)+b2*k2_Z(cc)+ &
-            b3*k3_Z(cc)+b4*k4_Z(cc)+b5*k5_Z(cc)+b6*k6_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)+b1*k1_PLL(cc)+b2*k2_PLL(cc)+ &
-            b3*k3_PLL(cc)+b4*k4_PLL(cc)+b5*k5_PLL(cc)+b6*k6_PLL(cc)
-       V_MU(cc)=V0_MU(cc)+b1*k1_MU(cc)+b2*k2_MU(cc)+ &
-            b3*k3_MU(cc)+b4*k4_MU(cc)+b5*k5_MU(cc)+b6*k6_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,V_MU,Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU)
-    do cc=1_idef,pchunk
-
-       if ((flagCon(cc).eq.0_is).or.(flagCol(cc).eq.0_is)) then
-          Y_R(cc)=Y0_R(cc)
-          Y_PHI(cc)=Y0_PHI(cc)
-          Y_Z(cc)=Y0_Z(cc)
-          V_PLL(cc)=V0_PLL(cc)
-          V_MU(cc)=V0_MU(cc)
-       end if
-
-    end do
-    !$OMP END SIMD
-
-    call calculate_GCfields_p_FS(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%SC_E_add) then
-       call add_interp_SCE_p_FS(params,F,PSIp,E_PHI)
-    end if
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    if (params%collisions) then
-
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-    end if
-
-
-  end subroutine advance_GCinterp_psi_vars_FS
-
-  subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
-       Y_R0,Y_PHI0,Y_Z0)
+ 
+subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+     V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
+     curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
+     Y_R0,Y_PHI0,Y_Z0)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -6375,15 +6453,14 @@ contains
        spp%vars%RHS(pp-1+cc,5)=RHS_MU(cc)
     end do
     !$OMP END SIMD
-#endif
+#endif DBG_CHECK
+end subroutine advance_GCinterp_psi_vars
 
-
-
-  end subroutine advance_GCinterp_psi_vars
-#endif
+#endif PSPLINE
 
 #ifdef FIO
-  subroutine advance_GCinterp_fio_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+
+subroutine advance_GCinterp_fio_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z, &
        E_R,E_PHI,E_Z,PSIp,curlb_R,curlb_PHI,curlb_Z, &
        gradB_R,gradB_PHI,gradB_Z,ne,ni,Te,Zeff,nimp,hint)
@@ -6789,14 +6866,16 @@ contains
     end if
 
 
-  end subroutine advance_GCinterp_fio_vars
-#endif
+end subroutine advance_GCinterp_fio_vars
+
+#endif FIO
 
 #ifdef PSPLINE
-  subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
-       Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
+
+subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+     V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
+     curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
+     Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -7199,60 +7278,58 @@ contains
        spp%vars%RHS(pp-1+cc,5)=RHS_MU(cc)
     end do
     !$OMP END SIMD
-#endif
+#endif DBG_CHECK
+end subroutine advance_GCinterp_psiwE_vars
 
+FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
+     REAL(rp), INTENT(IN) 	:: rm
+     INTEGER :: Nr_a
+     REAL(rp), INTENT(IN),dimension(Nr_a) 	:: r_a,nRE
+     REAL(rp) 				:: fRE_BMC
+     REAL(rp) 				:: D
+     REAL(rp) 				:: g0
+     REAL(rp) 				:: g1
+     REAL(rp) 				:: f0
+     REAL(rp) 				:: f1
+     REAL(rp) 				:: m
+     INTEGER 				:: index
 
-  end subroutine advance_GCinterp_psiwE_vars
+     !write(6,*) r_a(Nr_a),rm
 
-  FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
-    REAL(rp), INTENT(IN) 	:: rm
-    INTEGER :: Nr_a
-    REAL(rp), INTENT(IN),dimension(Nr_a) 	:: r_a,nRE
-    REAL(rp) 				:: fRE_BMC
-    REAL(rp) 				:: D
-    REAL(rp) 				:: g0
-    REAL(rp) 				:: g1
-    REAL(rp) 				:: f0
-    REAL(rp) 				:: f1
-    REAL(rp) 				:: m
-    INTEGER 				:: index
+     index = MINLOC(ABS(r_a - rm),1)
+     ! index of gamma supplied to function in Hollmann input gamma range
+     D = r_a(index) - rm
 
-    !write(6,*) r_a(Nr_a),rm
+     !write(6,*) index
+     !write(6,*) ''
 
-    index = MINLOC(ABS(r_a - rm),1)
-    ! index of gamma supplied to function in Hollmann input gamma range
-    D = r_a(index) - rm
+     ! linear interpolation of Hollmann input gamma range to gamma supplied
+     ! to function
+     if (D.GT.0) then
+          f0 = nRE(index-1)
+          g0 = r_a(index-1)
 
-    !write(6,*) index
-    !write(6,*) ''
+          f1 = nRE(index)
+          g1 = r_a(index)
+     else
+          f0 = nRE(index)
+          g0 = r_a(index)
 
-    ! linear interpolation of Hollmann input gamma range to gamma supplied
-    ! to function
-    if (D.GT.0) then
-       f0 = nRE(index-1)
-       g0 = r_a(index-1)
+          f1 = nRE(index+1)
+          g1 = r_a(index+1)
+     end if
 
-       f1 = nRE(index)
-       g1 = r_a(index)
-    else
-       f0 = nRE(index)
-       g0 = r_a(index)
+     m = (f1-f0)/(g1-g0)
 
-       f1 = nRE(index+1)
-       g1 = r_a(index+1)
-    end if
+     fRE_BMC = f0 + m*(rm - g0)
+     ! end of linear interpolation, fRE_H is evaluation of input Hollmann energy
+     ! distribution PDF at gamma supplied to function
 
-    m = (f1-f0)/(g1-g0)
+END FUNCTION fRE_BMC
 
-    fRE_BMC = f0 + m*(rm - g0)
-    ! end of linear interpolation, fRE_H is evaluation of input Hollmann energy
-    ! distribution PDF at gamma supplied to function
-
-  END FUNCTION fRE_BMC
-
-  subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
+subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+     V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
+     curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -7631,1605 +7708,12 @@ contains
 
     end if
 
+end subroutine advance_GCinterp_psi2x1t_vars
 
-  end subroutine advance_GCinterp_psi2x1t_vars
+#endif PSPLINE
 
-  subroutine advance_GCinterp_B2D_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
-    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
-    !! @endnote
-    !! Comment this section further with evolution equations, numerical
-    !! methods, and descriptions of both.
-    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
-
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip),intent(in)                                      :: tt
-    !! time iterator.
-    INTEGER,intent(in)                                  :: pp
-
-
-    REAL(rp),DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp)              :: a1 = 1./5._rp
-    REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
-    REAL(rp) :: a31 = 3./10._rp,a32=-9./10._rp,a33=6./5._rp
-    REAL(rp) :: a41 = -11./54._rp,a42=5./2._rp,a43=-70./27._rp,a44=35./27._rp
-    REAL(rp) :: a51 = 1631./55296._rp,a52=175./512._rp,a53=575./13824._rp,a54=44275./110592._rp,a55=253./4096._rp
-    REAL(rp) :: b1=37./378._rp,b2=0._rp,b3=250./621._rp,b4=125./594._rp,b5=0._rp,b6=512./1771._rp
-
-    REAL(rp),DIMENSION(params%pchunk) :: k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU
-    REAL(rp),DIMENSION(params%pchunk) :: Y0_R,Y0_PHI,Y0_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: Y_R,Y_PHI,Y_Z,PSIp
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
-    REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-
-    INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
-    REAL(rp),intent(IN)  :: q_cache,m_cache
-
-    dt=params%dt
-    pchunk=params%pchunk
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU)
-    do cc=1_idef,pchunk
-
-       Y0_R(cc)=Y_R(cc)
-       Y0_PHI(cc)=Y_PHI(cc)
-       Y0_Z(cc)=Y_Z(cc)
-       V0_PLL(cc)=V_PLL(cc)
-       V0_MU(cc)=V_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU)
-    do cc=1_idef,pchunk
-       k1_R(cc)=dt*RHS_R(cc)
-       k1_PHI(cc)=dt*RHS_PHI(cc)
-       k1_Z(cc)=dt*RHS_Z(cc)
-       k1_PLL(cc)=dt*RHS_PLL(cc)
-       k1_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a1*k1_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a1*k1_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a1*k1_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a1*k1_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a1*k1_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU)
-    do cc=1_idef,pchunk
-       k2_R(cc)=dt*RHS_R(cc)
-       k2_PHI(cc)=dt*RHS_PHI (cc)
-       k2_Z(cc)=dt*RHS_Z(cc)
-       k2_PLL(cc)=dt*RHS_PLL(cc)
-       k2_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a21*k1_R(cc)+a22*k2_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a21*k1_PHI(cc)+a22*k2_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a21*k1_Z(cc)+a22*k2_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a21*k1_PLL(cc)+a22*k2_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a21*k1_MU(cc)+a22*k2_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU)
-    do cc=1_idef,pchunk
-       k3_R(cc)=dt*RHS_R(cc)
-       k3_PHI(cc)=dt*RHS_PHI(cc)
-       k3_Z(cc)=dt*RHS_Z(cc)
-       k3_PLL(cc)=dt*RHS_PLL(cc)
-       k3_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a31*k1_R(cc)+a32*k2_R(cc)+a33*k3_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a31*k1_PHI(cc)+a32*k2_PHI(cc)+ &
-            a33*k3_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a31*k1_Z(cc)+a32*k2_Z(cc)+a33*k3_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a31*k1_PLL(cc)+a32*k2_PLL(cc)+a33*k3_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a31*k1_MU(cc)+a32*k2_MU(cc)+a33*k3_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU)
-    do cc=1_idef,pchunk
-       k4_R(cc)=dt*RHS_R(cc)
-       k4_PHI(cc)=dt*RHS_PHI(cc)
-       k4_Z(cc)=dt*RHS_Z(cc)
-       k4_PLL(cc)=dt*RHS_PLL(cc)
-       k4_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a41*k1_R(cc)+a42*k2_R(cc)+a43*k3_R(cc)+ &
-            a44*k4_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a41*k1_PHI(cc)+a42*k2_PHI(cc)+ &
-            a43*k3_PHI(cc)+a44*k4_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a41*k1_Z(cc)+a42*k2_Z(cc)+a43*k3_Z(cc)+ &
-            a44*k4_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a41*k1_PLL(cc)+a42*k2_PLL(cc)+ &
-            a43*k3_PLL(cc)+a44*k4_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a41*k1_MU(cc)+a42*k2_MU(cc)+ &
-            a43*k3_MU(cc)+a44*k4_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU)
-    do cc=1_idef,pchunk
-       k5_R(cc)=dt*RHS_R(cc)
-       k5_PHI(cc)=dt*RHS_PHI(cc)
-       k5_Z(cc)=dt*RHS_Z(cc)
-       k5_PLL(cc)=dt*RHS_PLL(cc)
-       k5_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a51*k1_R(cc)+a52*k2_R(cc)+a53*k3_R(cc)+ &
-            a54*k4_R(cc)+a55*k5_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a51*k1_PHI(cc)+a52*k2_PHI(cc)+ &
-            a53*k3_PHI(cc)+a54*k4_PHI(cc)+a55*k5_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a51*k1_Z(cc)+a52*k2_Z(cc)+a53*k3_Z(cc)+ &
-            a54*k4_Z(cc)+a55*k5_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a51*k1_PLL(cc)+a52*k2_PLL(cc)+ &
-            a53*k3_PLL(cc)+a54*k4_PLL(cc)+a55*k5_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a51*k1_MU(cc)+a52*k2_MU(cc)+ &
-            a53*k3_MU(cc)+a54*k4_MU(cc)+a55*k5_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU)
-    do cc=1_idef,pchunk
-       k6_R(cc)=dt*RHS_R(cc)
-       k6_PHI(cc)=dt*RHS_PHI(cc)
-       k6_Z(cc)=dt*RHS_Z(cc)
-       k6_PLL(cc)=dt*RHS_PLL(cc)
-       k6_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+b1*k1_R(cc)+b2*k2_R(cc)+ &
-            b3*k3_R(cc)+b4*k4_R(cc)+b5*k5_R(cc)+b6*k6_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+b1*k1_PHI(cc)+b2*k2_PHI(cc)+ &
-            b3*k3_PHI(cc)+b4*k4_PHI(cc)+b5*k5_PHI(cc)+b6*k6_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+b1*k1_Z(cc)+b2*k2_Z(cc)+ &
-            b3*k3_Z(cc)+b4*k4_Z(cc)+b5*k5_Z(cc)+b6*k6_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)+b1*k1_PLL(cc)+b2*k2_PLL(cc)+ &
-            b3*k3_PLL(cc)+b4*k4_PLL(cc)+b5*k5_PLL(cc)+b6*k6_PLL(cc)
-       V_MU(cc)=V0_MU(cc)+b1*k1_MU(cc)+b2*k2_MU(cc)+ &
-            b3*k3_MU(cc)+b4*k4_MU(cc)+b5*k5_MU(cc)+b6*k6_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,V_MU,Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU)
-    do cc=1_idef,pchunk
-
-       if ((flagCon(cc).eq.0_is).or.(flagCol(cc).eq.0_is)) then
-          Y_R(cc)=Y0_R(cc)
-          Y_PHI(cc)=Y0_PHI(cc)
-          Y_Z(cc)=Y0_Z(cc)
-          V_PLL(cc)=V0_PLL(cc)
-          V_MU(cc)=V0_MU(cc)
-       end if
-
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%collisions) then
-
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-    end if
-
-
-  end subroutine advance_GCinterp_B2D_vars
-
-  subroutine advance_GCinterp_2DBdB_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
-    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
-    !! @endnote
-    !! Comment this section further with evolution equations, numerical
-    !! methods, and descriptions of both.
-    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
-
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip),intent(in)                                      :: tt
-    !! time iterator.
-    INTEGER,intent(in)                                  :: pp
-
-
-    REAL(rp),DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp)              :: a1 = 1./5._rp
-    REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
-    REAL(rp) :: a31 = 3./10._rp,a32=-9./10._rp,a33=6./5._rp
-    REAL(rp) :: a41 = -11./54._rp,a42=5./2._rp,a43=-70./27._rp,a44=35./27._rp
-    REAL(rp) :: a51 = 1631./55296._rp,a52=175./512._rp,a53=575./13824._rp,a54=44275./110592._rp,a55=253./4096._rp
-    REAL(rp) :: b1=37./378._rp,b2=0._rp,b3=250./621._rp,b4=125./594._rp,b5=0._rp,b6=512./1771._rp
-
-    REAL(rp),DIMENSION(params%pchunk) :: k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU
-    REAL(rp),DIMENSION(params%pchunk) :: Y0_R,Y0_PHI,Y0_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI,PSIp
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
-    REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-
-    INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
-    REAL(rp),intent(IN)  :: q_cache,m_cache
-
-    dt=params%dt
-    pchunk=params%pchunk
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU)
-    do cc=1_idef,pchunk
-
-       Y0_R(cc)=Y_R(cc)
-       Y0_PHI(cc)=Y_PHI(cc)
-       Y0_Z(cc)=Y_Z(cc)
-       V0_PLL(cc)=V_PLL(cc)
-       V0_MU(cc)=V_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !write(output_unit_write,*) 'R',Y_R(1)
-    !write(output_unit_write,*) 'PHI',Y_PHI(1)
-    !write(output_unit_write,*) 'Z',Y_Z(1)
-    !write(output_unit_write,*) 'PPLL',V_PLL(1)
-    !write(output_unit_write,*) 'MU',V_MU(1)
-
-    !write(output_unit_write,*) 'BR',B_R(1)
-    !write(output_unit_write,*) 'BPHI',B_PHI(1)
-    !write(output_unit_write,*) 'BZ',B_Z(1)
-
-    !write(output_unit_write,*) 'gradBR',gradB_R(1)
-    !write(output_unit_write,*) 'gradBPHI',gradB_PHI(1)
-    !write(output_unit_write,*) 'gradBZ',gradB_Z(1)
-
-    !write(output_unit_write,*) 'curlBR',curlB_R(1)
-    !write(output_unit_write,*) 'curlBPHI',curlB_PHI(1)
-    !write(output_unit_write,*) 'curlBZ',curlB_Z(1)
-
-    !write(output_unit_write,*) 'RHS_R',RHS_R(1)
-    !write(output_unit_write,*) 'RHS_PHI',RHS_PHI(1)
-    !write(output_unit_write,*) 'RHS_Z',RHS_Z(1)
-    !write(output_unit_write,*) 'RHS_PLL',RHS_PLL(1)
-
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU)
-    do cc=1_idef,pchunk
-       k1_R(cc)=dt*RHS_R(cc)
-       k1_PHI(cc)=dt*RHS_PHI(cc)
-       k1_Z(cc)=dt*RHS_Z(cc)
-       k1_PLL(cc)=dt*RHS_PLL(cc)
-       k1_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a1*k1_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a1*k1_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a1*k1_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a1*k1_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a1*k1_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU)
-    do cc=1_idef,pchunk
-       k2_R(cc)=dt*RHS_R(cc)
-       k2_PHI(cc)=dt*RHS_PHI (cc)
-       k2_Z(cc)=dt*RHS_Z(cc)
-       k2_PLL(cc)=dt*RHS_PLL(cc)
-       k2_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a21*k1_R(cc)+a22*k2_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a21*k1_PHI(cc)+a22*k2_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a21*k1_Z(cc)+a22*k2_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a21*k1_PLL(cc)+a22*k2_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a21*k1_MU(cc)+a22*k2_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU)
-    do cc=1_idef,pchunk
-       k3_R(cc)=dt*RHS_R(cc)
-       k3_PHI(cc)=dt*RHS_PHI(cc)
-       k3_Z(cc)=dt*RHS_Z(cc)
-       k3_PLL(cc)=dt*RHS_PLL(cc)
-       k3_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a31*k1_R(cc)+a32*k2_R(cc)+a33*k3_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a31*k1_PHI(cc)+a32*k2_PHI(cc)+ &
-            a33*k3_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a31*k1_Z(cc)+a32*k2_Z(cc)+a33*k3_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a31*k1_PLL(cc)+a32*k2_PLL(cc)+a33*k3_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a31*k1_MU(cc)+a32*k2_MU(cc)+a33*k3_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU)
-    do cc=1_idef,pchunk
-       k4_R(cc)=dt*RHS_R(cc)
-       k4_PHI(cc)=dt*RHS_PHI(cc)
-       k4_Z(cc)=dt*RHS_Z(cc)
-       k4_PLL(cc)=dt*RHS_PLL(cc)
-       k4_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a41*k1_R(cc)+a42*k2_R(cc)+a43*k3_R(cc)+ &
-            a44*k4_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a41*k1_PHI(cc)+a42*k2_PHI(cc)+ &
-            a43*k3_PHI(cc)+a44*k4_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a41*k1_Z(cc)+a42*k2_Z(cc)+a43*k3_Z(cc)+ &
-            a44*k4_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a41*k1_PLL(cc)+a42*k2_PLL(cc)+ &
-            a43*k3_PLL(cc)+a44*k4_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a41*k1_MU(cc)+a42*k2_MU(cc)+ &
-            a43*k3_MU(cc)+a44*k4_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU)
-    do cc=1_idef,pchunk
-       k5_R(cc)=dt*RHS_R(cc)
-       k5_PHI(cc)=dt*RHS_PHI(cc)
-       k5_Z(cc)=dt*RHS_Z(cc)
-       k5_PLL(cc)=dt*RHS_PLL(cc)
-       k5_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a51*k1_R(cc)+a52*k2_R(cc)+a53*k3_R(cc)+ &
-            a54*k4_R(cc)+a55*k5_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a51*k1_PHI(cc)+a52*k2_PHI(cc)+ &
-            a53*k3_PHI(cc)+a54*k4_PHI(cc)+a55*k5_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a51*k1_Z(cc)+a52*k2_Z(cc)+a53*k3_Z(cc)+ &
-            a54*k4_Z(cc)+a55*k5_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a51*k1_PLL(cc)+a52*k2_PLL(cc)+ &
-            a53*k3_PLL(cc)+a54*k4_PLL(cc)+a55*k5_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a51*k1_MU(cc)+a52*k2_MU(cc)+ &
-            a53*k3_MU(cc)+a54*k4_MU(cc)+a55*k5_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU)
-    do cc=1_idef,pchunk
-       k6_R(cc)=dt*RHS_R(cc)
-       k6_PHI(cc)=dt*RHS_PHI(cc)
-       k6_Z(cc)=dt*RHS_Z(cc)
-       k6_PLL(cc)=dt*RHS_PLL(cc)
-       k6_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+b1*k1_R(cc)+b2*k2_R(cc)+ &
-            b3*k3_R(cc)+b4*k4_R(cc)+b5*k5_R(cc)+b6*k6_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+b1*k1_PHI(cc)+b2*k2_PHI(cc)+ &
-            b3*k3_PHI(cc)+b4*k4_PHI(cc)+b5*k5_PHI(cc)+b6*k6_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+b1*k1_Z(cc)+b2*k2_Z(cc)+ &
-            b3*k3_Z(cc)+b4*k4_Z(cc)+b5*k5_Z(cc)+b6*k6_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)+b1*k1_PLL(cc)+b2*k2_PLL(cc)+ &
-            b3*k3_PLL(cc)+b4*k4_PLL(cc)+b5*k5_PLL(cc)+b6*k6_PLL(cc)
-       V_MU(cc)=V0_MU(cc)+b1*k1_MU(cc)+b2*k2_MU(cc)+ &
-            b3*k3_MU(cc)+b4*k4_MU(cc)+b5*k5_MU(cc)+b6*k6_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,V_MU,Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU)
-    do cc=1_idef,pchunk
-
-       if ((flagCon(cc).eq.0_is).or.(flagCol(cc).eq.0_is)) then
-          Y_R(cc)=Y0_R(cc)
-          Y_PHI(cc)=Y0_PHI(cc)
-          Y_Z(cc)=Y0_Z(cc)
-          V_PLL(cc)=V0_PLL(cc)
-          V_MU(cc)=V0_MU(cc)
-       end if
-
-    end do
-    !$OMP END SIMD
-
-    call calculate_2DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%collisions) then
-
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-    end if
-
-
-  end subroutine advance_GCinterp_2DBdB_vars
-
-  subroutine advance_GCinterp_3DBdB_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
-    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
-    !! @endnote
-    !! Comment this section further with evolution equations, numerical
-    !! methods, and descriptions of both.
-    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
-
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip),intent(in)                                      :: tt
-    !! time iterator.
-    INTEGER,intent(in)                                  :: pp
-
-
-    REAL(rp),DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp)              :: a1 = 1./5._rp
-    REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
-    REAL(rp) :: a31 = 3./10._rp,a32=-9./10._rp,a33=6./5._rp
-    REAL(rp) :: a41 = -11./54._rp,a42=5./2._rp,a43=-70./27._rp,a44=35./27._rp
-    REAL(rp) :: a51 = 1631./55296._rp,a52=175./512._rp,a53=575./13824._rp,a54=44275./110592._rp,a55=253./4096._rp
-    REAL(rp) :: b1=37./378._rp,b2=0._rp,b3=250./621._rp,b4=125./594._rp,b5=0._rp,b6=512./1771._rp
-
-    REAL(rp),DIMENSION(params%pchunk) :: k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU
-    REAL(rp),DIMENSION(params%pchunk) :: Y0_R,Y0_PHI,Y0_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: Y_R,Y_PHI,Y_Z,PSIp
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
-    REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-
-    INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
-    REAL(rp),intent(IN)  :: q_cache,m_cache
-
-    dt=params%dt
-    pchunk=params%pchunk
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU)
-    do cc=1_idef,pchunk
-
-       Y0_R(cc)=Y_R(cc)
-       Y0_PHI(cc)=Y_PHI(cc)
-       Y0_Z(cc)=Y_Z(cc)
-       V0_PLL(cc)=V_PLL(cc)
-       V0_MU(cc)=V_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !write(output_unit_write,*) 'R',Y_R(1)
-    !write(output_unit_write,*) 'PHI',Y_PHI(1)
-    !write(output_unit_write,*) 'Z',Y_Z(1)
-    !write(output_unit_write,*) 'PPLL',V_PLL(1)
-    !write(output_unit_write,*) 'MU',V_MU(1)
-
-    !write(output_unit_write,*) 'BR',B_R(1)
-    !write(output_unit_write,*) 'BPHI',B_PHI(1)
-    !write(output_unit_write,*) 'BZ',B_Z(1)
-
-    !write(output_unit_write,*) 'gradBR',gradB_R(1)
-    !write(output_unit_write,*) 'gradBPHI',gradB_PHI(1)
-    !write(output_unit_write,*) 'gradBZ',gradB_Z(1)
-
-    !write(output_unit_write,*) 'curlBR',curlB_R(1)
-    !write(output_unit_write,*) 'curlBPHI',curlB_PHI(1)
-    !write(output_unit_write,*) 'curlBZ',curlB_Z(1)
-
-    !write(output_unit_write,*) 'RHS_R',RHS_R(1)
-    !write(output_unit_write,*) 'RHS_PHI',RHS_PHI(1)
-    !write(output_unit_write,*) 'RHS_Z',RHS_Z(1)
-    !write(output_unit_write,*) 'RHS_PLL',RHS_PLL(1)
-
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU)
-    do cc=1_idef,pchunk
-       k1_R(cc)=dt*RHS_R(cc)
-       k1_PHI(cc)=dt*RHS_PHI(cc)
-       k1_Z(cc)=dt*RHS_Z(cc)
-       k1_PLL(cc)=dt*RHS_PLL(cc)
-       k1_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a1*k1_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a1*k1_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a1*k1_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a1*k1_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a1*k1_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU)
-    do cc=1_idef,pchunk
-       k2_R(cc)=dt*RHS_R(cc)
-       k2_PHI(cc)=dt*RHS_PHI (cc)
-       k2_Z(cc)=dt*RHS_Z(cc)
-       k2_PLL(cc)=dt*RHS_PLL(cc)
-       k2_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a21*k1_R(cc)+a22*k2_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a21*k1_PHI(cc)+a22*k2_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a21*k1_Z(cc)+a22*k2_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a21*k1_PLL(cc)+a22*k2_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a21*k1_MU(cc)+a22*k2_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU)
-    do cc=1_idef,pchunk
-       k3_R(cc)=dt*RHS_R(cc)
-       k3_PHI(cc)=dt*RHS_PHI(cc)
-       k3_Z(cc)=dt*RHS_Z(cc)
-       k3_PLL(cc)=dt*RHS_PLL(cc)
-       k3_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a31*k1_R(cc)+a32*k2_R(cc)+a33*k3_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a31*k1_PHI(cc)+a32*k2_PHI(cc)+ &
-            a33*k3_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a31*k1_Z(cc)+a32*k2_Z(cc)+a33*k3_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a31*k1_PLL(cc)+a32*k2_PLL(cc)+a33*k3_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a31*k1_MU(cc)+a32*k2_MU(cc)+a33*k3_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU)
-    do cc=1_idef,pchunk
-       k4_R(cc)=dt*RHS_R(cc)
-       k4_PHI(cc)=dt*RHS_PHI(cc)
-       k4_Z(cc)=dt*RHS_Z(cc)
-       k4_PLL(cc)=dt*RHS_PLL(cc)
-       k4_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a41*k1_R(cc)+a42*k2_R(cc)+a43*k3_R(cc)+ &
-            a44*k4_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a41*k1_PHI(cc)+a42*k2_PHI(cc)+ &
-            a43*k3_PHI(cc)+a44*k4_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a41*k1_Z(cc)+a42*k2_Z(cc)+a43*k3_Z(cc)+ &
-            a44*k4_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a41*k1_PLL(cc)+a42*k2_PLL(cc)+ &
-            a43*k3_PLL(cc)+a44*k4_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a41*k1_MU(cc)+a42*k2_MU(cc)+ &
-            a43*k3_MU(cc)+a44*k4_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU)
-    do cc=1_idef,pchunk
-       k5_R(cc)=dt*RHS_R(cc)
-       k5_PHI(cc)=dt*RHS_PHI(cc)
-       k5_Z(cc)=dt*RHS_Z(cc)
-       k5_PLL(cc)=dt*RHS_PLL(cc)
-       k5_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a51*k1_R(cc)+a52*k2_R(cc)+a53*k3_R(cc)+ &
-            a54*k4_R(cc)+a55*k5_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a51*k1_PHI(cc)+a52*k2_PHI(cc)+ &
-            a53*k3_PHI(cc)+a54*k4_PHI(cc)+a55*k5_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a51*k1_Z(cc)+a52*k2_Z(cc)+a53*k3_Z(cc)+ &
-            a54*k4_Z(cc)+a55*k5_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a51*k1_PLL(cc)+a52*k2_PLL(cc)+ &
-            a53*k3_PLL(cc)+a54*k4_PLL(cc)+a55*k5_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a51*k1_MU(cc)+a52*k2_MU(cc)+ &
-            a53*k3_MU(cc)+a54*k4_MU(cc)+a55*k5_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU)
-    do cc=1_idef,pchunk
-       k6_R(cc)=dt*RHS_R(cc)
-       k6_PHI(cc)=dt*RHS_PHI(cc)
-       k6_Z(cc)=dt*RHS_Z(cc)
-       k6_PLL(cc)=dt*RHS_PLL(cc)
-       k6_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+b1*k1_R(cc)+b2*k2_R(cc)+ &
-            b3*k3_R(cc)+b4*k4_R(cc)+b5*k5_R(cc)+b6*k6_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+b1*k1_PHI(cc)+b2*k2_PHI(cc)+ &
-            b3*k3_PHI(cc)+b4*k4_PHI(cc)+b5*k5_PHI(cc)+b6*k6_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+b1*k1_Z(cc)+b2*k2_Z(cc)+ &
-            b3*k3_Z(cc)+b4*k4_Z(cc)+b5*k5_Z(cc)+b6*k6_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)+b1*k1_PLL(cc)+b2*k2_PLL(cc)+ &
-            b3*k3_PLL(cc)+b4*k4_PLL(cc)+b5*k5_PLL(cc)+b6*k6_PLL(cc)
-       V_MU(cc)=V0_MU(cc)+b1*k1_MU(cc)+b2*k2_MU(cc)+ &
-            b3*k3_MU(cc)+b4*k4_MU(cc)+b5*k5_MU(cc)+b6*k6_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,V_MU,Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU)
-    do cc=1_idef,pchunk
-
-       if ((flagCon(cc).eq.0_is).or.(flagCol(cc).eq.0_is)) then
-          Y_R(cc)=Y0_R(cc)
-          Y_PHI(cc)=Y0_PHI(cc)
-          Y_Z(cc)=Y0_Z(cc)
-          V_PLL(cc)=V0_PLL(cc)
-          V_MU(cc)=V0_MU(cc)
-       end if
-
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%collisions) then
-
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-    end if
-
-
-  end subroutine advance_GCinterp_3DBdB_vars
-
-
-  subroutine advance_GCinterp_3DBdB1_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
-    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
-    !! @endnote
-    !! Comment this section further with evolution equations, numerical
-    !! methods, and descriptions of both.
-    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
-
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip),intent(in)                                      :: tt
-    !! time iterator.
-    INTEGER,intent(in)                                  :: pp
-
-
-    REAL(rp),DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp)              :: a1 = 1./5._rp
-    REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
-    REAL(rp) :: a31 = 3./10._rp,a32=-9./10._rp,a33=6./5._rp
-    REAL(rp) :: a41 = -11./54._rp,a42=5./2._rp,a43=-70./27._rp,a44=35./27._rp
-    REAL(rp) :: a51 = 1631./55296._rp,a52=175./512._rp,a53=575./13824._rp,a54=44275./110592._rp,a55=253./4096._rp
-    REAL(rp) :: b1=37./378._rp,b2=0._rp,b3=250./621._rp,b4=125./594._rp,b5=0._rp,b6=512./1771._rp
-
-    REAL(rp),DIMENSION(params%pchunk) :: k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU
-    REAL(rp),DIMENSION(params%pchunk) :: Y0_R,Y0_PHI,Y0_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: Y_R,Y_PHI,Y_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI,PSIp
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
-    REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-
-    INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
-    REAL(rp),intent(IN)  :: q_cache,m_cache
-
-    dt=params%dt
-    pchunk=params%pchunk
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU)
-    do cc=1_idef,pchunk
-
-       Y0_R(cc)=Y_R(cc)
-       Y0_PHI(cc)=Y_PHI(cc)
-       Y0_Z(cc)=Y_Z(cc)
-       V0_PLL(cc)=V_PLL(cc)
-       V0_MU(cc)=V_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !write(output_unit_write,*) 'R',Y_R(1)
-    !write(output_unit_write,*) 'PHI',Y_PHI(1)
-    !write(output_unit_write,*) 'Z',Y_Z(1)
-    !write(output_unit_write,*) 'PPLL',V_PLL(1)
-    !write(output_unit_write,*) 'MU',V_MU(1)
-
-    !write(output_unit_write,*) 'BR',B_R(1)
-    !write(output_unit_write,*) 'BPHI',B_PHI(1)
-    !write(output_unit_write,*) 'BZ',B_Z(1)
-
-    !write(output_unit_write,*) 'gradBR',gradB_R(1)
-    !write(output_unit_write,*) 'gradBPHI',gradB_PHI(1)
-    !write(output_unit_write,*) 'gradBZ',gradB_Z(1)
-
-    !write(output_unit_write,*) 'curlBR',curlB_R(1)
-    !write(output_unit_write,*) 'curlBPHI',curlB_PHI(1)
-    !write(output_unit_write,*) 'curlBZ',curlB_Z(1)
-
-    !write(output_unit_write,*) 'RHS_R',RHS_R(1)
-    !write(output_unit_write,*) 'RHS_PHI',RHS_PHI(1)
-    !write(output_unit_write,*) 'RHS_Z',RHS_Z(1)
-    !write(output_unit_write,*) 'RHS_PLL',RHS_PLL(1)
-
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU)
-    do cc=1_idef,pchunk
-       k1_R(cc)=dt*RHS_R(cc)
-       k1_PHI(cc)=dt*RHS_PHI(cc)
-       k1_Z(cc)=dt*RHS_Z(cc)
-       k1_PLL(cc)=dt*RHS_PLL(cc)
-       k1_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a1*k1_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a1*k1_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a1*k1_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a1*k1_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a1*k1_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU)
-    do cc=1_idef,pchunk
-       k2_R(cc)=dt*RHS_R(cc)
-       k2_PHI(cc)=dt*RHS_PHI (cc)
-       k2_Z(cc)=dt*RHS_Z(cc)
-       k2_PLL(cc)=dt*RHS_PLL(cc)
-       k2_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a21*k1_R(cc)+a22*k2_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a21*k1_PHI(cc)+a22*k2_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a21*k1_Z(cc)+a22*k2_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a21*k1_PLL(cc)+a22*k2_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a21*k1_MU(cc)+a22*k2_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU)
-    do cc=1_idef,pchunk
-       k3_R(cc)=dt*RHS_R(cc)
-       k3_PHI(cc)=dt*RHS_PHI(cc)
-       k3_Z(cc)=dt*RHS_Z(cc)
-       k3_PLL(cc)=dt*RHS_PLL(cc)
-       k3_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a31*k1_R(cc)+a32*k2_R(cc)+a33*k3_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a31*k1_PHI(cc)+a32*k2_PHI(cc)+ &
-            a33*k3_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a31*k1_Z(cc)+a32*k2_Z(cc)+a33*k3_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a31*k1_PLL(cc)+a32*k2_PLL(cc)+a33*k3_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a31*k1_MU(cc)+a32*k2_MU(cc)+a33*k3_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU)
-    do cc=1_idef,pchunk
-       k4_R(cc)=dt*RHS_R(cc)
-       k4_PHI(cc)=dt*RHS_PHI(cc)
-       k4_Z(cc)=dt*RHS_Z(cc)
-       k4_PLL(cc)=dt*RHS_PLL(cc)
-       k4_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a41*k1_R(cc)+a42*k2_R(cc)+a43*k3_R(cc)+ &
-            a44*k4_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a41*k1_PHI(cc)+a42*k2_PHI(cc)+ &
-            a43*k3_PHI(cc)+a44*k4_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a41*k1_Z(cc)+a42*k2_Z(cc)+a43*k3_Z(cc)+ &
-            a44*k4_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a41*k1_PLL(cc)+a42*k2_PLL(cc)+ &
-            a43*k3_PLL(cc)+a44*k4_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a41*k1_MU(cc)+a42*k2_MU(cc)+ &
-            a43*k3_MU(cc)+a44*k4_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU)
-    do cc=1_idef,pchunk
-       k5_R(cc)=dt*RHS_R(cc)
-       k5_PHI(cc)=dt*RHS_PHI(cc)
-       k5_Z(cc)=dt*RHS_Z(cc)
-       k5_PLL(cc)=dt*RHS_PLL(cc)
-       k5_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a51*k1_R(cc)+a52*k2_R(cc)+a53*k3_R(cc)+ &
-            a54*k4_R(cc)+a55*k5_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a51*k1_PHI(cc)+a52*k2_PHI(cc)+ &
-            a53*k3_PHI(cc)+a54*k4_PHI(cc)+a55*k5_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a51*k1_Z(cc)+a52*k2_Z(cc)+a53*k3_Z(cc)+ &
-            a54*k4_Z(cc)+a55*k5_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a51*k1_PLL(cc)+a52*k2_PLL(cc)+ &
-            a53*k3_PLL(cc)+a54*k4_PLL(cc)+a55*k5_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a51*k1_MU(cc)+a52*k2_MU(cc)+ &
-            a53*k3_MU(cc)+a54*k4_MU(cc)+a55*k5_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU)
-    do cc=1_idef,pchunk
-       k6_R(cc)=dt*RHS_R(cc)
-       k6_PHI(cc)=dt*RHS_PHI(cc)
-       k6_Z(cc)=dt*RHS_Z(cc)
-       k6_PLL(cc)=dt*RHS_PLL(cc)
-       k6_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+b1*k1_R(cc)+b2*k2_R(cc)+ &
-            b3*k3_R(cc)+b4*k4_R(cc)+b5*k5_R(cc)+b6*k6_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+b1*k1_PHI(cc)+b2*k2_PHI(cc)+ &
-            b3*k3_PHI(cc)+b4*k4_PHI(cc)+b5*k5_PHI(cc)+b6*k6_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+b1*k1_Z(cc)+b2*k2_Z(cc)+ &
-            b3*k3_Z(cc)+b4*k4_Z(cc)+b5*k5_Z(cc)+b6*k6_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)+b1*k1_PLL(cc)+b2*k2_PLL(cc)+ &
-            b3*k3_PLL(cc)+b4*k4_PLL(cc)+b5*k5_PLL(cc)+b6*k6_PLL(cc)
-       V_MU(cc)=V0_MU(cc)+b1*k1_MU(cc)+b2*k2_MU(cc)+ &
-            b3*k3_MU(cc)+b4*k4_MU(cc)+b5*k5_MU(cc)+b6*k6_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,V_MU,Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU)
-    do cc=1_idef,pchunk
-
-       if ((flagCon(cc).eq.0_is).or.(flagCol(cc).eq.0_is)) then
-          Y_R(cc)=Y0_R(cc)
-          Y_PHI(cc)=Y0_PHI(cc)
-          Y_Z(cc)=Y0_Z(cc)
-          V_PLL(cc)=V0_PLL(cc)
-          V_MU(cc)=V0_MU(cc)
-       end if
-
-    end do
-    !$OMP END SIMD
-
-    call calculate_3DBdBfields1_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%collisions) then
-
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-    end if
-
-
-  end subroutine advance_GCinterp_3DBdB1_vars
-
-  subroutine advance_GCinterp_B_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-       V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI, &
-       curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
-    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
-    !! @endnote
-    !! Comment this section further with evolution equations, numerical
-    !! methods, and descriptions of both.
-    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
-    !! Core KORC simulation parameters.
-    TYPE(PARTICLES), INTENT(INOUT)     :: vars
-    TYPE(PROFILES), INTENT(IN)                                 :: P
-    TYPE(FIELDS), INTENT(IN)                                   :: F
-    REAL(rp)                                      :: dt
-    !! Time step used in the leapfrog step (\(\Delta t\)).
-
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    INTEGER(ip),intent(in)                                      :: tt
-    !! time iterator.
-    INTEGER,intent(in)                                  :: pp
-
-
-    REAL(rp),DIMENSION(params%pchunk)               :: Bmag
-    REAL(rp)              :: a1 = 1./5._rp
-    REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
-    REAL(rp) :: a31 = 3./10._rp,a32=-9./10._rp,a33=6./5._rp
-    REAL(rp) :: a41 = -11./54._rp,a42=5./2._rp,a43=-70./27._rp,a44=35./27._rp
-    REAL(rp) :: a51 = 1631./55296._rp,a52=175./512._rp,a53=575./13824._rp,a54=44275./110592._rp,a55=253./4096._rp
-    REAL(rp) :: b1=37./378._rp,b2=0._rp,b3=250./621._rp,b4=125./594._rp,b5=0._rp,b6=512./1771._rp
-
-    REAL(rp),DIMENSION(params%pchunk) :: k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU
-    REAL(rp),DIMENSION(params%pchunk) :: k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU
-    REAL(rp),DIMENSION(params%pchunk) :: Y0_R,Y0_PHI,Y0_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: Y_R,Y_PHI,Y_Z,PSIp
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: B_R,B_PHI,B_Z
-    REAL(rp),DIMENSION(params%pchunk) :: E_R,E_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: E_PHI
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
-    REAL(rp),DIMENSION(params%pchunk),INTENT(INOUT) :: V_PLL,V_MU
-    REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
-    REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
-    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
-
-    INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
-    REAL(rp),intent(IN)  :: q_cache,m_cache
-
-    dt=params%dt
-    pchunk=params%pchunk
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU)
-    do cc=1_idef,pchunk
-
-       Y0_R(cc)=Y_R(cc)
-       Y0_PHI(cc)=Y_PHI(cc)
-       Y0_Z(cc)=Y_Z(cc)
-       V0_PLL(cc)=V_PLL(cc)
-       V0_MU(cc)=V_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k1_R,k1_PHI,k1_Z,k1_PLL,k1_MU)
-    do cc=1_idef,pchunk
-       k1_R(cc)=dt*RHS_R(cc)
-       k1_PHI(cc)=dt*RHS_PHI(cc)
-       k1_Z(cc)=dt*RHS_Z(cc)
-       k1_PLL(cc)=dt*RHS_PLL(cc)
-       k1_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a1*k1_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a1*k1_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a1*k1_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a1*k1_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a1*k1_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k2_R,k2_PHI,k2_Z,k2_PLL,k2_MU)
-    do cc=1_idef,pchunk
-       k2_R(cc)=dt*RHS_R(cc)
-       k2_PHI(cc)=dt*RHS_PHI (cc)
-       k2_Z(cc)=dt*RHS_Z(cc)
-       k2_PLL(cc)=dt*RHS_PLL(cc)
-       k2_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a21*k1_R(cc)+a22*k2_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a21*k1_PHI(cc)+a22*k2_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a21*k1_Z(cc)+a22*k2_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a21*k1_PLL(cc)+a22*k2_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a21*k1_MU(cc)+a22*k2_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k3_R,k3_PHI,k3_Z,k3_PLL,k3_MU)
-    do cc=1_idef,pchunk
-       k3_R(cc)=dt*RHS_R(cc)
-       k3_PHI(cc)=dt*RHS_PHI(cc)
-       k3_Z(cc)=dt*RHS_Z(cc)
-       k3_PLL(cc)=dt*RHS_PLL(cc)
-       k3_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a31*k1_R(cc)+a32*k2_R(cc)+a33*k3_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a31*k1_PHI(cc)+a32*k2_PHI(cc)+ &
-            a33*k3_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a31*k1_Z(cc)+a32*k2_Z(cc)+a33*k3_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a31*k1_PLL(cc)+a32*k2_PLL(cc)+a33*k3_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a31*k1_MU(cc)+a32*k2_MU(cc)+a33*k3_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k4_R,k4_PHI,k4_Z,k4_PLL,k4_MU)
-    do cc=1_idef,pchunk
-       k4_R(cc)=dt*RHS_R(cc)
-       k4_PHI(cc)=dt*RHS_PHI(cc)
-       k4_Z(cc)=dt*RHS_Z(cc)
-       k4_PLL(cc)=dt*RHS_PLL(cc)
-       k4_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a41*k1_R(cc)+a42*k2_R(cc)+a43*k3_R(cc)+ &
-            a44*k4_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a41*k1_PHI(cc)+a42*k2_PHI(cc)+ &
-            a43*k3_PHI(cc)+a44*k4_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a41*k1_Z(cc)+a42*k2_Z(cc)+a43*k3_Z(cc)+ &
-            a44*k4_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a41*k1_PLL(cc)+a42*k2_PLL(cc)+ &
-            a43*k3_PLL(cc)+a44*k4_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a41*k1_MU(cc)+a42*k2_MU(cc)+ &
-            a43*k3_MU(cc)+a44*k4_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k5_R,k5_PHI,k5_Z,k5_PLL,k5_MU)
-    do cc=1_idef,pchunk
-       k5_R(cc)=dt*RHS_R(cc)
-       k5_PHI(cc)=dt*RHS_PHI(cc)
-       k5_Z(cc)=dt*RHS_Z(cc)
-       k5_PLL(cc)=dt*RHS_PLL(cc)
-       k5_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+a51*k1_R(cc)+a52*k2_R(cc)+a53*k3_R(cc)+ &
-            a54*k4_R(cc)+a55*k5_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+a51*k1_PHI(cc)+a52*k2_PHI(cc)+ &
-            a53*k3_PHI(cc)+a54*k4_PHI(cc)+a55*k5_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+a51*k1_Z(cc)+a52*k2_Z(cc)+a53*k3_Z(cc)+ &
-            a54*k4_Z(cc)+a55*k5_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)   +a51*k1_PLL(cc)+a52*k2_PLL(cc)+ &
-            a53*k3_PLL(cc)+a54*k4_PLL(cc)+a55*k5_PLL(cc)
-       V_MU(cc)=V0_MU(cc)   +a51*k1_MU(cc)+a52*k2_MU(cc)+ &
-            a53*k3_MU(cc)+a54*k4_MU(cc)+a55*k5_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-    !    !$OMP& RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-    !    !$OMP& k6_R,k6_PHI,k6_Z,k6_PLL,k6_MU)
-    do cc=1_idef,pchunk
-       k6_R(cc)=dt*RHS_R(cc)
-       k6_PHI(cc)=dt*RHS_PHI(cc)
-       k6_Z(cc)=dt*RHS_Z(cc)
-       k6_PLL(cc)=dt*RHS_PLL(cc)
-       k6_MU(cc)=dt*RHS_MU(cc)
-
-       Y_R(cc)=Y0_R(cc)+b1*k1_R(cc)+b2*k2_R(cc)+ &
-            b3*k3_R(cc)+b4*k4_R(cc)+b5*k5_R(cc)+b6*k6_R(cc)
-       Y_PHI(cc)=Y0_PHI(cc)+b1*k1_PHI(cc)+b2*k2_PHI(cc)+ &
-            b3*k3_PHI(cc)+b4*k4_PHI(cc)+b5*k5_PHI(cc)+b6*k6_PHI(cc)
-       Y_Z(cc)=Y0_Z(cc)+b1*k1_Z(cc)+b2*k2_Z(cc)+ &
-            b3*k3_Z(cc)+b4*k4_Z(cc)+b5*k5_Z(cc)+b6*k6_Z(cc)
-       V_PLL(cc)=V0_PLL(cc)+b1*k1_PLL(cc)+b2*k2_PLL(cc)+ &
-            b3*k3_PLL(cc)+b4*k4_PLL(cc)+b5*k5_PLL(cc)+b6*k6_PLL(cc)
-       V_MU(cc)=V0_MU(cc)+b1*k1_MU(cc)+b2*k2_MU(cc)+ &
-            b3*k3_MU(cc)+b4*k4_MU(cc)+b5*k5_MU(cc)+b6*k6_MU(cc)
-    end do
-    !$OMP END SIMD
-
-    !$OMP SIMD
-    !    !$OMP& aligned(Y_R,Y_PHI,Y_Z,V_PLL,V_MU,Y0_R,Y0_PHI,Y0_Z,V0_PLL,V0_MU)
-    do cc=1_idef,pchunk
-
-       if ((flagCon(cc).eq.0_is).or.(flagCol(cc).eq.0_is)) then
-          Y_R(cc)=Y0_R(cc)
-          Y_PHI(cc)=Y0_PHI(cc)
-          Y_Z(cc)=Y0_Z(cc)
-          V_PLL(cc)=V0_PLL(cc)
-          V_MU(cc)=V0_MU(cc)
-       end if
-
-    end do
-    !$OMP END SIMD
-
-    call interp_fields_3D_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon)
-
-    call GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flagCon)
-
-    !$OMP SIMD
-    do cc=1_idef,pchunk
-       vars%RHS(pp-1+cc,1)=RHS_R(cc)
-       vars%RHS(pp-1+cc,2)=RHS_PHI(cc)
-       vars%RHS(pp-1+cc,3)=RHS_Z(cc)
-       vars%RHS(pp-1+cc,4)=RHS_PLL(cc)
-       vars%RHS(pp-1+cc,5)=RHS_MU(cc)
-    end do
-    !$OMP END SIMD
-
-
-
-    call add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
-
-    if (params%collisions) then
-
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
-
-    end if
-
-
-  end subroutine advance_GCinterp_B_vars
-#endif
-
-  subroutine advance_FPinterp_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-       m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+subroutine advance_FPinterp_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
+     m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -9256,13 +7740,13 @@ contains
     !    write(output_unit_write,'("V_PLL: ",E17.10)') V_PLL
     !    write(output_unit_write,'("V_MU: ",E17.10)') V_MU
 
-  end subroutine advance_FPinterp_vars
+end subroutine advance_FPinterp_vars
 
 
 
-  subroutine GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
-       B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI, &
-       gradB_Z,V_PLL,V_MU,Y_R,q_cache,m_cache)
+subroutine GCEoM_p(params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,B_R,B_PHI, &
+     B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI, &
+     gradB_Z,V_PLL,V_MU,Y_R,q_cache,m_cache)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
     REAL(rp),DIMENSION(params%pchunk)  :: Bmag,bhat_R,bhat_PHI,bhat_Z,Bst_R,Bst_PHI
@@ -9335,11 +7819,11 @@ contains
     !    write(output_unit_write,*) 'RHS_Z: ',RHS_Z(1)
     !    write(output_unit_write,*) 'RHS_PLL: ',RHS_PLL(1)
 
-  end subroutine GCEoM_p
+end subroutine GCEoM_p
 
-  subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-       B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-       gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flag_cache)
+subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+     gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flag_cache)
 
     USE omp_lib
     IMPLICIT NONE
@@ -9579,13 +8063,14 @@ contains
     !    write(output_unit_write,*) 'RHS_PLL: ',RHS_PLL(1)
     !    write(output_unit_write,*) 'RHS_MU: ',RHS_MU(1)
 
-  end subroutine GCEoM1_p
+end subroutine GCEoM1_p
 
 #ifdef FIO
-  subroutine GCEoM1_fio_p(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
-       B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-       gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp, &
-       ne,ni,nimp,Te,Zeff,flagCon,flagCol,hint)
+
+subroutine GCEoM1_fio_p(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+     gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp, &
+     ne,ni,nimp,Te,Zeff,flagCon,flagCol,hint)
 
     USE omp_lib
     IMPLICIT NONE
@@ -9619,25 +8104,25 @@ contains
 
     thread_num = OMP_GET_THREAD_NUM()
 
-!    !$OMP SIMD
-!    do cc=1_idef,pchunk
-!       if(isnan(B_R(cc))) then
-!          write(6,*) thread_num,'0Y',Y_R(cc)*params%cpp%length,Y_PHI(cc),Y_Z(cc)*params%cpp%length
-!          write(6,*) thread_num,'0B',B_R(cc),B_PHI(cc),B_Z(cc)
-!          write(6,*) thread_num,'0E',E_R(cc),E_PHI(cc),E_Z(cc)
-!          write(6,*) thread_num,'0gradB',gradB_R(cc),gradB_PHI(cc),gradB_Z(cc)
-!          write(6,*) thread_num,'0curlb',curlb_R(cc),curlb_PHI(cc),curlb_Z(cc)
-!          write(6,*) thread_num,'0V',V_PLL(cc),V_MU(cc)
-!          write(6,*) 'Exb',Ecrossb_R(cc)
-!          write(6,*) 'bxgradB',bcrossgradB_R(cc)
-!          write(6,*) 'Bst',Bst_R(cc)
-!          write(6,*) 'bdotBst',bdotBst(cc)
-!          write(6,*) thread_num,'0gamma',gamgc(cc)
+     !    !$OMP SIMD
+     !    do cc=1_idef,pchunk
+     !       if(isnan(B_R(cc))) then
+     !          write(6,*) thread_num,'0Y',Y_R(cc)*params%cpp%length,Y_PHI(cc),Y_Z(cc)*params%cpp%length
+     !          write(6,*) thread_num,'0B',B_R(cc),B_PHI(cc),B_Z(cc)
+     !          write(6,*) thread_num,'0E',E_R(cc),E_PHI(cc),E_Z(cc)
+     !          write(6,*) thread_num,'0gradB',gradB_R(cc),gradB_PHI(cc),gradB_Z(cc)
+     !          write(6,*) thread_num,'0curlb',curlb_R(cc),curlb_PHI(cc),curlb_Z(cc)
+     !          write(6,*) thread_num,'0V',V_PLL(cc),V_MU(cc)
+     !          write(6,*) 'Exb',Ecrossb_R(cc)
+     !          write(6,*) 'bxgradB',bcrossgradB_R(cc)
+     !          write(6,*) 'Bst',Bst_R(cc)
+     !          write(6,*) 'bdotBst',bdotBst(cc)
+     !          write(6,*) thread_num,'0gamma',gamgc(cc)
 
-!          stop 'B_R is a NaN'
-!       endif
-!    end do
-!    !$OMP END SIMD
+     !          stop 'B_R is a NaN'
+     !       endif
+     !    end do
+     !    !$OMP END SIMD
 
 
     !$OMP SIMD
@@ -9849,45 +8334,8 @@ contains
     !    write(output_unit_write,*) 'RHS_PLL: ',RHS_PLL(1)
     !    write(output_unit_write,*) 'RHS_MU: ',RHS_MU(1)
 
-  end subroutine GCEoM1_fio_p
-#endif
+end subroutine GCEoM1_fio_p
 
-  subroutine aux_fields(pp,spp,gradB,curlb,Bmag)
-    TYPE(SPECIES), INTENT(IN)    :: spp
-    !! An instance of the derived type SPECIES containing all the parameters
-    !! and simulation variables of the different species in the simulation.
-    REAL(rp),DIMENSION(3),INTENT(INOUT) :: gradB
-    REAL(rp),DIMENSION(3),INTENT(INOUT) :: curlb
-    REAL(rp),INTENT(IN) :: Bmag
-    REAL(rp) :: dRB
-    REAL(rp) :: dPHIB
-    REAL(rp) :: dZB
-    INTEGER  :: pp
-
-    dRB=(spp%vars%B(pp,1)*spp%vars%BR(pp,1)+ &
-         spp%vars%B(pp,2)*spp%vars%BPHI(pp,1)+ &
-         spp%vars%B(pp,3)*spp%vars%BZ(pp,1))/Bmag
-    dPHIB=(spp%vars%B(pp,1)*spp%vars%BR(pp,2)+ &
-         spp%vars%B(pp,2)*spp%vars%BPHI(pp,2)+ &
-         spp%vars%B(pp,3)*spp%vars%BZ(pp,2))/Bmag
-    dZB=(spp%vars%B(pp,1)*spp%vars%BR(pp,3)+ &
-         spp%vars%B(pp,2)*spp%vars%BPHI(pp,3)+ &
-         spp%vars%B(pp,3)*spp%vars%BZ(pp,3))/Bmag
-
-    gradB(1)=dRB
-    gradB(2)=dPHIB/spp%vars%Y(pp,1)
-    gradB(3)=dZB
-
-    curlb(1)=((Bmag*spp%vars%BZ(pp,2)-spp%vars%B(pp,3)*dPHIB)/spp%vars%Y(pp,1)- &
-         (Bmag*spp%vars%BPHI(pp,3)-spp%vars%B(pp,2)*dZB))/Bmag**2
-    curlb(2)=((Bmag*spp%vars%BR(pp,3)-spp%vars%B(pp,1)*dZB)- &
-         (Bmag*spp%vars%BZ(pp,1)-spp%vars%B(pp,3)*dRB))/Bmag**2
-    curlb(3)=((Bmag*spp%vars%BPHI(pp,1)-spp%vars%B(pp,2)*dRB) - &
-         (Bmag*spp%vars%BPHI(pp,1)-spp%vars%B(pp,1)*dPHIB)/ &
-         spp%vars%Y(pp,1))/Bmag**2+ &
-         spp%vars%B(pp,2)/(Bmag*spp%vars%Y(pp,1))
-
-  end subroutine aux_fields
-
+#endif FIO
 
 end module korc_ppusher
