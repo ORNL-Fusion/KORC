@@ -1,0 +1,117 @@
+name: spack
+on: [ push, workflow_dispatch ]
+
+jobs:
+  job_one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+
+      - name: grab spack
+        uses: actions/checkout@v2
+        with:
+          repository: spack/spack
+          path: ./spack
+
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/mirror
+          key: spack-cache-2
+
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: create spack cache
+        run: |
+          . ./spack/share/spack/setup-env.sh
+
+          spack env create -d .
+          spack env activate -p -d .
+
+          spack config add "config:install_tree:padded_length:128"
+
+          spack install --no-cache --add gcc@13.1.0
+          spack load gcc@13.1.0
+          spack compiler find
+
+          spack install --no-cache --add cmake %gcc@13.1.0
+          spack load cmake %gcc@13.1.0
+
+          spack install --no-cache --add hdf5+fortran+mpi %gcc@13.1.0
+          spack load hdf5+fortran+mpi %gcc@13.1.0
+
+          rm -rf ~/mirror
+
+          spack mirror create -d ~/mirror --all
+          spack mirror add nacho ~/mirror
+
+          spack gpg create "My Name" "<my.email@my.domain.com>"
+
+          #mkdir ~/private_gpg_backup
+          #cp ~/spack/opt/spack/gpg/*.gpg ~/private_gpg_backup
+          #cp ~/spack/opt/spack/gpg/pubring.* ~/mirror
+
+          spack buildcache push ~/mirror
+
+          spack buildcache keys --install --trust --force
+
+          spack bootstrap mirror --binary-packages ~/mirror
+
+          #spack bootstrap add --trust local-sources <final-path>/metadata/sources
+          #spack bootstrap add --trust local-binaries <final-path>/metadata/binaries
+
+          spack env deactivate
+
+
+  job_two:
+    needs: job_one
+    runs-on: ubuntu-latest
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v2
+
+      - name: grab spack
+        uses: actions/checkout@v2
+        with:
+          repository: spack/spack
+          path: ./spack
+
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/mirror
+          key: spack-cache-2
+
+      - name: build korc
+        run: |
+          . ./spack/share/spack/setup-env.sh
+
+          spack env create -d .
+          spack env activate -p -d ./
+
+          spack config add "config:install_tree:padded_length:128"
+
+          spack mirror add nacho ~/mirror
+          spack mirror list
+
+          spack install --no-check-signature --add gcc@13.1.0
+          spack load gcc@13.1.0
+          spack compiler find
+
+          spack install --no-check-signature --add cmake %gcc@13.1.0
+          spack load cmake %gcc@13.1.0
+
+          spack install --no-check-signature --add hdf5+fortran+mpi %gcc@13.1.0
+          spack load hdf5+fortran+mpi %gcc@13.1.0
+
+          set -x
+          which cmake
+          which gfortran
+          gfortran --version
+          set +x
+
+          ./build.sh
+
+          spack env deactivate

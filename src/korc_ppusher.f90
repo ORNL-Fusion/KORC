@@ -651,6 +651,7 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
 
 end subroutine FO_init_eqn_ACC
 
+#ifdef PSPLINE
 subroutine FO_init_mars_ACC(params,F,spp,output,step)
   TYPE(KORC_PARAMS), INTENT(IN)                              :: params
   !! Core KORC simulation parameters.
@@ -1096,6 +1097,7 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
   enddo ! over species
 
 end subroutine FO_init_aorsa_ACC
+#endif
 
 subroutine adv_FOeqn_top(params,F,P,spp)
 
@@ -2508,6 +2510,7 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
 
 end subroutine adv_FOinterp_mars_top
 
+#ifdef PSPLINE
 subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
@@ -2712,6 +2715,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   end do !species iterator
 
 end subroutine adv_FOinterp_mars_top_ACC
+#endif
 
 subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
@@ -2922,6 +2926,7 @@ subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
 
 end subroutine adv_FOinterp_aorsa_top
 
+#ifdef PSPLINE
 subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
@@ -3137,6 +3142,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   !$acc& fields_domain_local)
 
 end subroutine adv_FOinterp_aorsa_top_ACC
+#endif
 
 subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,P,F,PSIp)
@@ -3353,6 +3359,8 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
 end subroutine advance_FOinterp_vars
 
+#endif PSPLINE
+
 subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol)
   !$acc routine seq
@@ -3523,8 +3531,6 @@ subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   X_Z = X_Z + dt*V_Z*REAL(flagCon)*REAL(flagCol)
 
 end subroutine advance_FO_vars_ACC
-
-#endif PSPLINE
 
 #ifdef FIO
 
