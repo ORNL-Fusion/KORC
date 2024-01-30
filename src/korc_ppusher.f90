@@ -16,6 +16,7 @@ module korc_ppusher
 
   IMPLICIT NONE
 
+#ifdef PSPLINE
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local
@@ -24,6 +25,7 @@ module korc_ppusher
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
+#endif 
   REAL(rp), PRIVATE :: E0
   !! Dimensionless vacuum permittivity \(\epsilon_0 \times (m_{ch}^2
   !! v_{ch}^3/q_{ch}^3 B_{ch})\), see [[korc_units]].
