@@ -20,8 +20,6 @@ module korc_interp
   use ieee_arithmetic
 #endif
 
-  !$ use OMP_LIB
-
   IMPLICIT NONE
 
 #ifdef PSPLINE
@@ -3964,7 +3962,6 @@ end subroutine finalize_interpolants
 #ifdef FIO
   !!  @note FIXME Add documentation
 subroutine get_fio_magnetic_fields(prtcls, F, params)
-  USE omp_lib
   IMPLICIT NONE
 
     TYPE(PARTICLES), INTENT(INOUT) :: prtcls
@@ -4011,8 +4008,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
        !$OMP& FIRSTPRIVATE(Btmp)
        do pp = 1, SIZE(prtcls%hint)
 
-          thread_num = OMP_GET_THREAD_NUM()
-
+          thread_num = get_thread_number()
           if (prtcls%flagCon(pp) .EQ. 1_is) then
              x(1) = prtcls%Y(pp,1)*params%cpp%length
              x(2) = prtcls%Y(pp,2)

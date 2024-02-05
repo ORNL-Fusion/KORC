@@ -1,21 +1,18 @@
-#  Append all source files to variable korc_sources. As new files are added,
-#  this must be updated.
+add_executable (xtest)
+target_sources(xtest
 
-add_library (fruit fruit/fruit.f90)
+               PRIVATE
 
-set (korc_tests "")
-list (APPEND korc_tests
-     korc_test.f90
-     test_io.f90
-     test_hpc.f90
+               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_test.f90>
+               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test_io.f90>
+               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/test_hpc.f90>
 )
+target_link_libraries (xtest
 
-add_executable (xtest ${korc_tests})
-set_property(TARGET xtest PROPERTY LINKER_LANGUAGE Fortran)
+                       PUBLIC
 
-target_link_libraries (xtest fruit korc ${MPI_Fortran_LIBRARIES})
-target_link_libraries (xtest ${HDF5_LIBRARIES})
-target_link_libraries (xtest ${KORCSRC_LIBRARIES})
+                       korc
+)
 
 add_test (NAME egyro_test
           COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
@@ -24,4 +21,3 @@ add_test (NAME egyro_test
 add_test (NAME unit_testing
           COMMAND xtest TEST_OUT
           WORKING_DIRECTORY build/bin)
-

@@ -324,16 +324,14 @@ CONTAINS
 #endif
     endif
 
-    !$OMP PARALLEL SHARED(params)
-    params%num_omp_threads = OMP_GET_NUM_THREADS()
-    !$OMP END PARALLEL
+    params%num_omp_threads = get_num_threads()
 
     if (params%mpi_params%rank.EQ.0) then
        write(output_unit_write,'(/,"* * * * * * * OMP SET-UP * * * * * * *")')
        !$OMP PARALLEL
        !$OMP MASTER
-       write(output_unit_write,'(/,"OMP threads per MPI process: ",I3)') OMP_GET_NUM_THREADS()
-       write(output_unit_write,'(/,"Cores available per MPI process: ",I3)') OMP_GET_NUM_PROCS()
+       write(output_unit_write,'(/,"OMP threads per MPI process: ",I3)') params%num_omp_threads
+       write(output_unit_write,'(/,"Cores available per MPI process: ",I3)') get_thread_number()
        !$OMP END MASTER
        !$OMP END PARALLEL
 #ifdef GNU
@@ -346,4 +344,47 @@ CONTAINS
     end if
   end subroutine initialize_communications
 
+!! @brief Get the number of threads used.
+  function get_num_threads()
+
+     implicit none
+
+     integer :: get_num_threads
+#if defined(_OPENMP)
+!$OMP PARALLEL
+     get_num_threads = OMP_GET_NUM_THREADS()
+!$OMP END PARALLEL
+#else
+     get_num_threads = 1
+#endif
+  end function
+
+!! @brief Get the maximum number of threads.
+   function get_max_threads()
+
+      implicit none
+
+      integer :: get_max_threads
+#if defined(_OPENMP)
+      get_max_threads = OMP_GET_NUM_THREADS()
+#else
+      get_max_threads = 1
+#endif
+   end function
+
+!! @brief Get the current thread number.
+!!
+!!  Must be called from inside a PARALLEL section.
+  function get_thread_number()
+
+     implicit none
+
+     integer :: get_thread_number
+
+#if defined(_OPENMP)
+     get_thread_number = OMP_GET_NUM_PROCS()
+#else
+     get_thread_number = 0
+#endif
+  end function
 end module korc_hpc

@@ -6,6 +6,7 @@ MODULE korc_random
   USE korc_types
   !    use mkl_vsl_type
   !    use mkl_vsl
+  USE korc_hpc, ONLY : get_thread_number, get_max_threads
 
   IMPLICIT NONE
 
@@ -107,26 +108,24 @@ MODULE korc_random
 CONTAINS
 
   SUBROUTINE initialize_random(seed)
-    USE omp_lib
     IMPLICIT NONE
 
     INTEGER, INTENT(IN) :: seed
     INTEGER             :: num_threads
     INTEGER             :: thread_num
 
-    num_threads = OMP_GET_MAX_THREADS()
+    num_threads = get_max_threads()
     IF (.NOT. ALLOCATED(states)) THEN
        ALLOCATE(states(0:num_threads - 1))
     END IF
 
     !$OMP PARALLEL PRIVATE(thread_num)
-    thread_num = OMP_GET_THREAD_NUM()
+    thread_num = get_thread_number()
     states(thread_num) = random_construct_U(seed + thread_num)
     !$OMP END PARALLEL
   END SUBROUTINE initialize_random
 
   SUBROUTINE initialize_random_U(seed)
-    USE omp_lib
     IMPLICIT NONE
 
     INTEGER, INTENT(IN) :: seed
@@ -136,7 +135,6 @@ CONTAINS
   END SUBROUTINE initialize_random_U
 
   SUBROUTINE initialize_random_N(seed)
-    USE omp_lib
     IMPLICIT NONE
 
     INTEGER, INTENT(IN) :: seed
@@ -146,16 +144,14 @@ CONTAINS
   END SUBROUTINE initialize_random_N
   
   FUNCTION get_random()
-    USE omp_lib
     IMPLICIT NONE
 
     REAL(rp)            :: get_random
 
-    get_random = random_get_number(states(OMP_GET_THREAD_NUM()))
+    get_random = random_get_number(states(get_thread_number()))
   END FUNCTION get_random
 
   FUNCTION get_random_U()
-    USE omp_lib
     IMPLICIT NONE
 
     REAL(rp)            :: get_random_U
@@ -164,7 +160,6 @@ CONTAINS
   END FUNCTION get_random_U
 
   FUNCTION get_random_N()
-    USE omp_lib
     IMPLICIT NONE
 
     REAL(rp)            :: get_random_N
@@ -173,7 +168,6 @@ CONTAINS
   END FUNCTION get_random_N
 
   SUBROUTINE get_randoms(nums)
-    USE omp_lib
     IMPLICIT NONE
 
     REAL(rp), DIMENSION(:), INTENT(OUT) :: nums
@@ -188,14 +182,13 @@ CONTAINS
   END SUBROUTINE get_randoms
 
   SUBROUTINE set_random_dist(low, high)
-    USE omp_lib
     IMPLICIT NONE
 
     REAL(rp), INTENT(IN) :: low
     REAL(rp), INTENT(IN) :: high
 
     !$OMP PARALLEL DEFAULT(SHARED)
-    CALL random_set_dist(states(OMP_GET_THREAD_NUM()), low, high)
+    CALL random_set_dist(states(get_thread_number()), low, high)
     !$OMP END PARALLEL
 
   END SUBROUTINE set_random_dist

@@ -117,3 +117,13 @@ jobs:
           ctest --verbose
 
           spack env deactivate
+
+      - name: Show Cache
+        if: failure()
+        shell: bash
+        working-directory: ${{runner.workspace}}/KORC
+        run: |
+          tree -L 2
+          pwd
+          ls -la
+          cat CMakeCache.txt
