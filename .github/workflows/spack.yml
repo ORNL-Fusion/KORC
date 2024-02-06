@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/mirror
-          key: spack-cache-2
+          key: spack-cache-sandlot-1
 
       - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
         name: create spack cache
@@ -82,7 +82,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/mirror
-          key: spack-cache-2
+          key: spack-cache-sandlot-1
 
       - name: build korc
         run: |
