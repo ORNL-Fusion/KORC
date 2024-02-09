@@ -17,6 +17,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 #   add_definitions (-DDBG_CHECK)
 endif()
 
+option(KORC_BUILD_TESTS "Build tests for KORC" ON)
+
 #  Configure OpenMP
 find_package (OpenMP)
 set (CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
@@ -91,4 +93,11 @@ else ()
 
 endif ()
 
+if (KORC_BUILD_TESTS)
+ enable_testing()
+
+ add_test (NAME egyro_test
+           COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
+           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
+endif ()
 

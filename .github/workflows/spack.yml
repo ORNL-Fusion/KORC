@@ -114,4 +114,6 @@ jobs:
 
           ./build.sh
 
+          ctest
+
           spack env deactivate

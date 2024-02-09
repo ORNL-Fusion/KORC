@@ -1,0 +1,89 @@
+&input_parameters
+  restart = F
+    ! Restart simulation that exited before simulation_time reached
+  proceed = F
+    ! Append simulation results after previous simulation_time reached
+  reinit = F
+    ! Begin a new simulation, reinitializing from restart file state
+  simulation_time = 1.E-10
+    ! Total aimed simulation time in seconds   
+    ! Run 10 mu s If transients exist put 5 extra mu s.
+  snapshot_frequency = 4.8E-13
+    ! Time between snapshots in seconds
+  dt = 1.e-2
+    ! Time step as fraction of relativistic gyro-period
+  num_species = 1
+  minimum_particle_energy = 1.0E5 
+    ! Minimum energy of simulated particles in eV
+  radiation = F
+  GC_rad_model='SDE'
+  collisions = F
+  LargeCollisions = F	
+  collisions_model = 'SINGLE_SPECIES' 
+    ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
+  bound_electron_model = 'NO_BOUND' 
+    ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
+  field_model = 'UNIFORM'	
+  profile_model = 'ANALYTICAL'	
+    ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
+    ! For 'ANALYTICAL', the magnetic field is calculated based on
+    ! the parameters given in the "analytic_mag_field_params" section.
+    ! For 'EXTERNAL', the magnetic field is loaded from the file
+    ! specified in "filename".
+    ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
+    ! velocity.
+  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,flagRE}' 
+    ! List of outputs
+    !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,
+    !  curlb,ne,Te,Zeff,PSIp,nimp}'
+  orbit_model = 'FO'
+    ! 'FO' for full orbit, 'GCpre' for guiding center with pre-computed
+    ! auxiliary fields, 'GCgrad' for guiding center with auxiliary
+    ! fields computed with PSPLINE.
+  field_eval = 'eqn'
+    ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
+    ! where 'eqn' evaluates particle fields at particle positions and
+    ! 'interp' interpolates precomputed fields.
+  pchunk = 1
+/
+
+&plasma_species
+  ppp = 1
+  pinit = 1
+  q = -1.0
+    ! Electric charge
+  m = 1.0
+    ! In units of electron mass
+  spatial_distribution = 'TRACER'
+    ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
+    ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
+    ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
+    ! 'AVALANCHE-4D','TRACER','SPONG-3D','HOLLMANN-3D'
+  energy_distribution = 'MONOENERGETIC'
+    ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
+    ! 'EXPERIMENTAL', and 'UNIFORM'
+  pitch_distribution = 'MONOPITCH'
+    ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
+  Eno = 1.E6
+    ! Lower and upper limit of simulated energy range, in eV.
+  etao = 90.0
+    ! Lower and upper limit of simulated pitch-angle range, in degrees.
+  Xtrace = 2.,0.,0.
+/
+
+&analytical_fields_params
+  Eo = 0e0 
+    ! In V/m
+  current_direction = 'PARALLEL' 
+    ! 'PARALLEL' or 'ANTI-PARALLEL'
+  Bo = 2.2
+    ! In Teslas. ITER: 5.42 DIII-D: 2.19 JET: 3.39
+  major_radius = 1.6 
+    ! Major radius in meters. ITER: 6.5 DIII-D: 1.6 JET:2.6
+  minor_radius = .6
+  qo = 2.1
+  qa = 4.1
+/
+
+
+
