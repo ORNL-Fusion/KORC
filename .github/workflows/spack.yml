@@ -6,28 +6,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: grab main project
-        uses: actions/checkout@v2
-
-      - name: grab spack
-        uses: actions/checkout@v2
-        with:
-          repository: spack/spack
-          path: ./spack
+        uses: actions/checkout@v4
 
       - name: spack cache
         id: spack-cache
         uses: actions/cache@v3
         with:
-          path: ~/mirror
-          key: spack-cache-sandlot-1
+          key: spack-cache-sandlot-4
+          path: |
+            ./spack
+            ./spack_sandlot_mirror
+            ./spack_sandlot_env
+
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: grab spack
+        uses: actions/checkout@v4
+        with:
+          repository: 'spack/spack'
+          ref: 'v0.21.1'
+          path: './spack'
+      #
+      #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+      #
 
       - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
         name: create spack cache
         run: |
           . ./spack/share/spack/setup-env.sh
 
-          spack env create -d .
-          spack env activate -p -d .
+          spack env create      -d ./spack_sandlot_env
+          spack env activate -p -d ./spack_sandlot_env
 
           spack config add "config:install_tree:padded_length:128"
 
@@ -38,13 +46,16 @@ jobs:
           spack install --no-cache --add cmake %gcc@13.1.0
           spack load cmake %gcc@13.1.0
 
+          spack concretize -f
           spack install --no-cache --add hdf5+fortran+mpi %gcc@13.1.0
           spack load hdf5+fortran+mpi %gcc@13.1.0
 
-          rm -rf ~/mirror
+          spack gc -y
 
-          spack mirror create -d ~/mirror --all
-          spack mirror add nacho ~/mirror
+          rm -rf ./spack_sandlot_mirror
+
+          spack mirror create -d ./spack_sandlot_mirror --all
+          spack mirror add sandlot ./spack_sandlot_mirror
 
           spack gpg create "My Name" "<my.email@my.domain.com>"
 
@@ -52,11 +63,11 @@ jobs:
           #cp ~/spack/opt/spack/gpg/*.gpg ~/private_gpg_backup
           #cp ~/spack/opt/spack/gpg/pubring.* ~/mirror
 
-          spack buildcache push ~/mirror
+          spack buildcache push ./spack_sandlot_mirror
 
           spack buildcache keys --install --trust --force
 
-          spack bootstrap mirror --binary-packages ~/mirror
+          spack bootstrap mirror --binary-packages ./spack_sandlot_mirror
 
           #spack bootstrap add --trust local-sources <final-path>/metadata/sources
           #spack bootstrap add --trust local-binaries <final-path>/metadata/binaries
@@ -71,40 +82,37 @@ jobs:
       - name: grab main project
         uses: actions/checkout@v2
 
-      - name: grab spack
-        uses: actions/checkout@v2
-        with:
-          repository: spack/spack
-          path: ./spack
-
       - name: spack cache
         id: spack-cache
         uses: actions/cache@v3
         with:
-          path: ~/mirror
-          key: spack-cache-sandlot-1
+          key: spack-cache-sandlot-4
+          path: |
+            ./spack
+            ./spack_sandlot_mirror
+            ./spack_sandlot_env
 
       - name: build korc
         run: |
           . ./spack/share/spack/setup-env.sh
 
-          spack env create -d .
-          spack env activate -p -d ./
+          spack env activate -p -d ./spack_sandlot_env
 
-          spack config add "config:install_tree:padded_length:128"
-
-          spack mirror add nacho ~/mirror
           spack mirror list
 
-          spack install --no-check-signature --add gcc@13.1.0
-          spack load gcc@13.1.0
-          spack compiler find
+          #spack install --no-check-signature --add gcc@13.1.0
+          #spack load gcc@13.1.0
+          #spack compiler find
 
-          spack install --no-check-signature --add cmake %gcc@13.1.0
-          spack load cmake %gcc@13.1.0
+          #spack install --no-check-signature --add cmake %gcc@13.1.0
+          #spack load cmake %gcc@13.1.0
 
-          spack install --no-check-signature --add hdf5+fortran+mpi %gcc@13.1.0
-          spack load hdf5+fortran+mpi %gcc@13.1.0
+          #spack install --no-check-signature --add hdf5+fortran+mpi %gcc@13.1.0
+          #spack load hdf5+fortran+mpi %gcc@13.1.0
+
+          spack find -ldf
+
+          spack find -l
 
           set -x
           which cmake
@@ -127,3 +135,4 @@ jobs:
           pwd
           ls -la
           cat CMakeCache.txt
+

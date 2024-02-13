@@ -1,4 +1,4 @@
-name: machine
+name: inert_machine
 
 on: [ workflow_dispatch ]
 #on: [ push, workflow_dispatch ]
