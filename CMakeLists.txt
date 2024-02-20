@@ -68,13 +68,5 @@ if (KORC_BUILD_TESTS)
  enable_testing()
 
  add_subdirectory (test)
-
- add_test (NAME egyro_test
-           COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
-           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
-
- add_test (NAME unit_testing
-           COMMAND xtest TEST_OUT
-           WORKING_DIRECTORY build/bin)
 endif ()
 
