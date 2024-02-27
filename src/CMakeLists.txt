@@ -26,10 +26,17 @@ list (APPEND korc_sources
     korc_fio_interface.f90
     korc_input.f90
     korc_pspline.f90
-    main.f90
 )
 
-add_executable (xkorc ${korc_sources})
+
+add_library(korc ${korc_sources})
+set_property(TARGET korc PROPERTY LINKER_LANGUAGE Fortran)
+
+add_executable(xkorc)
+target_sources(xkorc PRIVATE
+               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main.f90>
+              )
+target_link_libraries(xkorc korc)
 set_property(TARGET xkorc PROPERTY LINKER_LANGUAGE Fortran)
 
 option (CORI_DIR "Use Cori directories" OFF)
