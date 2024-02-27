@@ -1851,9 +1851,6 @@ subroutine unitVectors_p(pchunk,b_unit_X,b_unit_Y,b_unit_Z,b1_X,b1_Y,b1_Z, &
 end subroutine unitVectors_p
 
 subroutine check_collisions_params(spp)
-#ifdef PARALLEL_RANDOM
-    USE omp_lib
-#endif PARALLEL_RANDOM
     TYPE(SPECIES), INTENT(IN) :: spp
     INTEGER aux
 

@@ -5187,7 +5187,6 @@ end subroutine adv_GCinterp_psi_top
 
 subroutine adv_GCinterp_fio_top(params,spp,P,F)
 
-    USE omp_lib
     IMPLICIT NONE
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
@@ -5244,7 +5243,7 @@ subroutine adv_GCinterp_fio_top(params,spp,P,F)
 
        do pp=1_idef,spp(ii)%ppp,pchunk
 
-          thread_num = OMP_GET_THREAD_NUM()
+          thread_num = get_thread_number()
 
           !write(6,*) thread_num,'3Y_R',spp(ii)%vars%Y(pp,1)*params%cpp%length
           !write(6,*) thread_num,'3(p/mc)',spp(ii)%vars%V(pp,1)
@@ -5382,7 +5381,6 @@ end subroutine adv_GCinterp_fio_top
 
 subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
-    USE omp_lib
     IMPLICIT NONE
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
@@ -5435,7 +5433,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
           do pp=1_idef,spp(ii)%ppp,pchunk
 
-             thread_num = OMP_GET_THREAD_NUM()
+             thread_num = get_thread_number()
 
              !          write(output_unit_write,'("pp: ",I16)') pp
 
@@ -5618,7 +5616,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
              do pp=1_idef,spp(ii)%pRE,pchunk
 
-                thread_num = OMP_GET_THREAD_NUM()
+                thread_num = get_thread_number()
 
                 if ((spp(ii)%pRE-pp).lt.pchunk) then
                    achunk=spp(ii)%pRE-pp+1
@@ -6471,7 +6469,6 @@ subroutine advance_GCinterp_fio_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        E_R,E_PHI,E_Z,PSIp,curlb_R,curlb_PHI,curlb_Z, &
        gradB_R,gradB_PHI,gradB_Z,ne,ni,Te,Zeff,nimp,hint)
 
-    USE omp_lib
     IMPLICIT NONE
 
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
@@ -6529,7 +6526,7 @@ subroutine advance_GCinterp_fio_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     INTEGER             :: thread_num
 
 
-    thread_num = OMP_GET_THREAD_NUM()
+    thread_num = get_thread_number()
 
 
     dt=params%dt
@@ -7831,7 +7828,6 @@ subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
      B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
      gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,ne,flag_cache)
 
-    USE omp_lib
     IMPLICIT NONE
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
@@ -7861,7 +7857,7 @@ subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     INTEGER             :: thread_num
 
 
-    thread_num = OMP_GET_THREAD_NUM()
+    thread_num = get_thread_number()
 
     !$OMP SIMD
     !    !$OMP& aligned(gradB_R,gradB_PHI,gradB_Z,curlb_R,curlb_Z, &
@@ -8078,7 +8074,6 @@ subroutine GCEoM1_fio_p(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
      gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp, &
      ne,ni,nimp,Te,Zeff,flagCon,flagCol,hint)
 
-    USE omp_lib
     IMPLICIT NONE
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
@@ -8108,7 +8103,7 @@ subroutine GCEoM1_fio_p(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
 
     pchunk=params%pchunk
 
-    thread_num = OMP_GET_THREAD_NUM()
+    thread_num = get_thread_number()
 
      !    !$OMP SIMD
      !    do cc=1_idef,pchunk
