@@ -81,14 +81,6 @@ set (EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set (CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/modules)
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
-<<<<<<< HEAD
-#  Set definitions.
-add_definitions (-DDOUBLE_PRECISION)
-add_definitions (-DPARALLEL_RANDOM)
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-#   add_definitions (-DDBG_CHECK)
-endif()
-
 option(KORC_BUILD_TESTS "Build tests for KORC" ON)
 
 #  Configure OpenMP
@@ -178,7 +170,7 @@ add_subdirectory (src)
 #-------------------------------------------------------------------------------
 #  Testing
 #-------------------------------------------------------------------------------
-if (${KORC_TEST})
+if (${KORC_BUILD_TESTS})
     enable_testing ()
 
     add_library (korc_test INTERFACE)
