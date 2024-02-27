@@ -1,3 +1,5 @@
+add_library(fruit ${CMAKE_CURRENT_SOURCE_DIR}/fruit/fruit.f90)
+
 add_executable (xtest)
 target_sources(xtest
 
@@ -12,12 +14,13 @@ target_link_libraries (xtest
                        PUBLIC
 
                        korc
+                       fruit
 )
 
 add_test (NAME egyro_test
           COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
-          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
+          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_test (NAME unit_testing
           COMMAND xtest TEST_OUT
-          WORKING_DIRECTORY build/bin)
+          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

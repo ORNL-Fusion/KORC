@@ -172,23 +172,5 @@ add_subdirectory (src)
 #-------------------------------------------------------------------------------
 if (${KORC_BUILD_TESTS})
     enable_testing ()
-
-    add_library (korc_test INTERFACE)
-
-    target_include_directories (korc_test
-
-                                INTERFACE
-
-                                ${FRUIT_INCLUDE_PATH}
-                                ${KORCSRC_INCLUDE_PATH}
-    )
-    target_link_options (korc_depends
-
-                     INTERFACE
-
-                     ${FRUIT_LINK_FLAGS}
-                     ${KORCSRC_LINK_FLAGS}
-    )
-
     add_subdirectory (test)
 endif ()
