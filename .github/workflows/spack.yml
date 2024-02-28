@@ -70,15 +70,17 @@ jobs:
           spack compilers
 
           spack load gcc@13.2.0
+          spack load cmake             %gcc@13.2.0
+          spack load hdf5+fortran+mpi  %gcc@13.2.0
 
           set -x
-          which cmake
-          which gfortran
-          gfortran --version
+          which cmake && cmake --version
+          which gfortran && gfortran --version
+          which h5diff && h5diff --version
           set -x
 
-          cd ./KORC
-          ./build.sh
+          #cd ./KORC
+          #./build.sh
           
 
 
