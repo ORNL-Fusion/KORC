@@ -5,14 +5,37 @@ jobs:
   job_one:
     runs-on: ubuntu-latest
     steps:
-      - name: grab main project
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          key: spack-cache-sandlot-5
+          path: |
+            ./spack
+            ~/.spack
+
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: grab spack
         uses: actions/checkout@v4
         with:
-          path: ${{ github.workspace }}/../../
+          repository: 'spack/spack'
+          ref: 'v0.21.1'
+          path: './spack'
+        #
+        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+        #
 
-      - run: |
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: spack install
+        run: |
+          . ./spack/share/spack/setup-env.sh
 
-          pwd
-          ls -la
-          tree -L 2
+          spack config add config:install_tree:padded_length:128
+
+          spack compiler find
+          spack install --no-cache gcc@13.2.0
+          spack compiler add $(spack location -i gcc@13.2.0)
+
+          spack install --no-cache cmake %gcc@13.2.0
+          spack install --no-cache hdf5+fortran+mpi %gcc@13.2.0
 
