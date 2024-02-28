@@ -83,7 +83,14 @@ jobs:
 
           cd ./KORC
           ./build.sh
-          
 
+      - name: Show Cache
+        if: failure()
+        shell: bash
+        run: |
+          tree -L 2
+          pwd
+          ls -la
+          cat ./KORC/CMakeCache.txt
 
 
