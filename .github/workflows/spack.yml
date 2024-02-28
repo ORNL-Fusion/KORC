@@ -65,7 +65,9 @@ jobs:
           tree -L 2
 
           . ./spack/share/spack/setup-env.sh
+
           spack find -ldf
+          spack compilers
 
           set -x
           which cmake
