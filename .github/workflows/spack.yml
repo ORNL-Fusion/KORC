@@ -74,9 +74,9 @@ jobs:
           spack load hdf5+fortran+mpi  %gcc@13.2.0
 
           set -x
-          which cmake && cmake --version
-          which gfortran && gfortran --version
-          which h5diff && h5diff --version
+          which cmake     && cmake     --version
+          which gfortran  && gfortran  --version
+          which h5diff    && h5diff    --version
           set -x
 
           #cd ./KORC
