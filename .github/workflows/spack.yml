@@ -39,6 +39,8 @@ jobs:
           spack install --no-cache cmake %gcc@13.2.0
           spack install --no-cache hdf5+fortran+mpi %gcc@13.2.0
 
+          spack gc -y
+
 
   job_two:
     needs: job_one
@@ -65,8 +67,6 @@ jobs:
           tree -L 2
 
           . ./spack/share/spack/setup-env.sh
-
-          spack gc -y
 
           #spack find -ldf
           spack compilers
