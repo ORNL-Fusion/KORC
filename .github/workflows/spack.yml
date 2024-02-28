@@ -69,6 +69,8 @@ jobs:
           spack find -ldf
           spack compilers
 
+          spack load gcc@13.2.0
+
           set -x
           which cmake
           which gfortran
