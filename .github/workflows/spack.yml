@@ -66,6 +66,8 @@ jobs:
 
           . ./spack/share/spack/setup-env.sh
 
+          spack gc -y
+
           #spack find -ldf
           spack compilers
 
