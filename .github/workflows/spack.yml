@@ -39,3 +39,39 @@ jobs:
           spack install --no-cache cmake %gcc@13.2.0
           spack install --no-cache hdf5+fortran+mpi %gcc@13.2.0
 
+
+  job_two:
+    needs: job_one
+    runs-on: ubuntu-latest
+    steps:
+      - name: grab main project
+        uses: actions/checkout@v4
+        with:
+          path: './KORC'
+
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          key: spack-cache-sandlot-5
+          path: |
+            ./spack
+            ~/.spack
+
+      - name: korc build
+        run: |
+
+          pwd
+          tree -L 2
+
+          . ./spack/share/spack/setup-env.sh
+          spack find -ldf
+
+          set -x
+          which cmake
+          which gfortran
+          gfortran --version
+          set -x
+
+
+
