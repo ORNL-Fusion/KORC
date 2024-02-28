@@ -5,8 +5,13 @@ jobs:
   job_one:
     runs-on: ubuntu-latest
     steps:
+      - name: grab main project
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.workspace }}/../../
+
       - run: |
-          env | sort
+
           pwd
           ls -la
           tree -L 2
