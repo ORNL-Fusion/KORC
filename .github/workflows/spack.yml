@@ -9,7 +9,7 @@ jobs:
         id: spack-cache
         uses: actions/cache@v3
         with:
-          key: spack-cache-sandlot-5
+          key: spack-cache-sandlot-6
           path: |
             ./spack
             ~/.spack
@@ -55,7 +55,7 @@ jobs:
         id: spack-cache
         uses: actions/cache@v3
         with:
-          key: spack-cache-sandlot-5
+          key: spack-cache-sandlot-6
           path: |
             ./spack
             ~/.spack
