@@ -79,8 +79,8 @@ jobs:
           which h5diff    && h5diff    --version
           set -x
 
-          #cd ./KORC
-          #./build.sh
+          cd ./KORC
+          ./build.sh
           
 
 
