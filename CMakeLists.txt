@@ -102,7 +102,7 @@ target_link_libraries (korc_depends
                        INTERFACE
 
                        sanitizer
-                       $<$<BOOL:${OpenMP_Fortran_FOUND}>:OpenMP::OpenMP_Fortran>
+		       $<$<BOOL:${OpenMP_Fortran_FOUND}>:OpenMP::OpenMP_Fortran>
                        $<$<BOOL:${MPI_Fortran_FOUND}>:MPI::MPI_Fortran>
                        $<$<BOOL:${HDF5_FOUND}>:hdf5::hdf5_fortran>
                        $<$<BOOL:${USE_FIO}>:${FIO_LIBRARIES}>

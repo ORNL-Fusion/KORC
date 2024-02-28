@@ -15,7 +15,7 @@ cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
       -DCMAKE_Fortran_FLAGS="-DHDF5_DOUBLE_PRESICION -malign-double -fconvert='big-endian'" \
       -DCMAKE_C_FLAGS="-malign-double"  \
       -DCMAKE_CXX_FLAGS="-malign-double" \
-      -DCMAKE_Fortran_FLAGS_DEBUG="-ffpe-trap=zero,overflow -fbacktrace -Werror" \
+      -DCMAKE_Fortran_FLAGS_DEBUG="-g3 -ffpe-trap=zero,overflow -fbacktrace" \
       -DCMAKE_C_FLAGS_DEBUG="-g3" \
       -DCMAKE_CXX_FLAGS_DEBUG="-g3" ../
 
