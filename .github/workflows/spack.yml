@@ -11,7 +11,7 @@ jobs:
           path: './KORC'
 
       - run: |
-        pwd
-        ls -la
-        tree -L 2
+          pwd
+          ls -la
+          tree -L 2
 
