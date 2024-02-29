@@ -366,7 +366,7 @@ CONTAINS
 
       integer :: get_max_threads
 #if defined(_OPENMP)
-      get_max_threads = OMP_GET_NUM_THREADS()
+      get_max_threads = OMP_GET_MAX_THREADS()
 #else
       get_max_threads = 1
 #endif
@@ -382,7 +382,7 @@ CONTAINS
      integer :: get_thread_number
 
 #if defined(_OPENMP)
-     get_thread_number = OMP_GET_NUM_PROCS()
+     get_thread_number = OMP_GET_THREAD_NUM()
 #else
      get_thread_number = 0
 #endif
