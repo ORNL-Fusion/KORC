@@ -718,13 +718,15 @@ CONTAINS
     !write(6,*) TRIM(magnetic_field_filename),len(TRIM(magnetic_field_filename))
 
     tmp=len(TRIM(magnetic_field_filename))
-    if (magnetic_field_filename(tmp-2:tmp).ne.'.h5') then
-       if(params%mpi_params%rank.eq.0) then
-          write(6,*) &
-               'Check that enough characters are allocated for&
-               & magnetic field filename!'
+    if (tmp.lt.3 .or. magnetic_field_filename(tmp-2:tmp).ne.'.h5') then
+       if(tmp.lt.6 .or. magnetic_field_filename(tmp-5:tmp-5).ne.'.') then
+          if(params%mpi_params%rank.eq.0) then
+             write(6,*) &
+                  'Check that enough characters are allocated for&
+                  & magnetic field filename!'
+          end if
+          call korc_abort(13)
        end if
-       call korc_abort(13)
     end if
 
     end subroutine read_namelist
