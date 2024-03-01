@@ -36,6 +36,7 @@ Spack provides an easy way to setup the gfortran compiler toolchain and other de
 [KORC] [user@localhost KORC]$ spack install --no-cache --add cmake %gcc@13.1.0
 [KORC] [user@localhost KORC]$ spack load cmake %gcc@13.1.0
 
+[KORC] [user@localhost KORC]$ spack concretize -f
 [KORC] [user@localhost KORC]$ spack install --no-cache --add hdf5+fortran+mpi %gcc@13.1.0
 [KORC] [user@localhost KORC]$ spack load hdf5+fortran+mpi %gcc@13.1.0
 ```

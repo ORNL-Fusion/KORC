@@ -5,63 +5,41 @@ jobs:
   job_one:
     runs-on: ubuntu-latest
     steps:
-      - name: grab main project
-        uses: actions/checkout@v2
-
-      - name: grab spack
-        uses: actions/checkout@v2
-        with:
-          repository: spack/spack
-          path: ./spack
-
       - name: spack cache
         id: spack-cache
         uses: actions/cache@v3
         with:
-          path: ~/mirror
-          key: spack-cache-2
+          key: spack-cache-sandlot-6
+          path: |
+            ./spack
+            ~/.spack
 
       - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
-        name: create spack cache
+        name: grab spack
+        uses: actions/checkout@v4
+        with:
+          repository: 'spack/spack'
+          ref: 'v0.21.1'
+          path: './spack'
+        #
+        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+        #
+
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
 
-          spack env create -d .
-          spack env activate -p -d .
+          spack config add config:install_tree:padded_length:128
 
-          spack config add "config:install_tree:padded_length:128"
-
-          spack install --no-cache --add gcc@13.1.0
-          spack load gcc@13.1.0
           spack compiler find
+          spack install --no-cache gcc@13.2.0
+          spack compiler add $(spack location -i gcc@13.2.0)
 
-          spack install --no-cache --add cmake %gcc@13.1.0
-          spack load cmake %gcc@13.1.0
+          spack install --no-cache cmake %gcc@13.2.0
+          spack install --no-cache hdf5+fortran+mpi %gcc@13.2.0
 
-          spack install --no-cache --add hdf5+fortran+mpi %gcc@13.1.0
-          spack load hdf5+fortran+mpi %gcc@13.1.0
-
-          rm -rf ~/mirror
-
-          spack mirror create -d ~/mirror --all
-          spack mirror add nacho ~/mirror
-
-          spack gpg create "My Name" "<my.email@my.domain.com>"
-
-          #mkdir ~/private_gpg_backup
-          #cp ~/spack/opt/spack/gpg/*.gpg ~/private_gpg_backup
-          #cp ~/spack/opt/spack/gpg/pubring.* ~/mirror
-
-          spack buildcache push ~/mirror
-
-          spack buildcache keys --install --trust --force
-
-          spack bootstrap mirror --binary-packages ~/mirror
-
-          #spack bootstrap add --trust local-sources <final-path>/metadata/sources
-          #spack bootstrap add --trust local-binaries <final-path>/metadata/binaries
-
-          spack env deactivate
+          spack gc -y
 
 
   job_two:
@@ -69,61 +47,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: grab main project
-        uses: actions/checkout@v2
-
-      - name: grab spack
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
-          repository: spack/spack
-          path: ./spack
+          path: './KORC'
 
       - name: spack cache
         id: spack-cache
         uses: actions/cache@v3
         with:
-          path: ~/mirror
-          key: spack-cache-2
+          key: spack-cache-sandlot-6
+          path: |
+            ./spack
+            ~/.spack
 
       - name: build korc
         run: |
+
+          pwd
+          tree -L 2
+
           . ./spack/share/spack/setup-env.sh
 
-          spack env create -d .
-          spack env activate -p -d ./
+          #spack find -ldf
+          spack compilers
 
-          spack config add "config:install_tree:padded_length:128"
-
-          spack mirror add nacho ~/mirror
-          spack mirror list
-
-          spack install --no-check-signature --add gcc@13.1.0
-          spack load gcc@13.1.0
-          spack compiler find
-
-          spack install --no-check-signature --add cmake %gcc@13.1.0
-          spack load cmake %gcc@13.1.0
-
-          spack install --no-check-signature --add hdf5+fortran+mpi %gcc@13.1.0
-          spack load hdf5+fortran+mpi %gcc@13.1.0
+          spack load gcc@13.2.0
+          spack load cmake             %gcc@13.2.0
+          spack load hdf5+fortran+mpi  %gcc@13.2.0
 
           set -x
-          which cmake
-          which gfortran
-          gfortran --version
-          set +x
+          which cmake     && cmake     --version
+          which gfortran  && gfortran  --version
+          which h5diff    && h5diff    --version
+          set -x
 
+          cd ./KORC
           ./build.sh
-
-          ctest --verbose
-
-          spack env deactivate
 
       - name: Show Cache
         if: failure()
         shell: bash
-        working-directory: ${{runner.workspace}}/KORC
         run: |
           tree -L 2
           pwd
           ls -la
-          cat CMakeCache.txt
+          cat ./KORC/CMakeCache.txt
+
+
