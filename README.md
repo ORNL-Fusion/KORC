@@ -1,6 +1,6 @@
 
 # KORC
-
+[![CI-CPU](https://github.com/ORNL-Fusion/KORC/actions/workflows/spack.yml/badge.svg)](https://github.com/ORNL-Fusion/KORC/actions/workflows/spack.yml)
 
  the Kinetic Orbit Runaway electrons Code (KORC) follows relativistic electrons in general electric and magnetic fields under the full Lorentz force, collisions, and radiation losses.
 
