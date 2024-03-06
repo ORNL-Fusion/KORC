@@ -939,6 +939,9 @@ CONTAINS
 
  !   write(output_unit_write,'("sampled eta: ",E17.10)') eta
     
+     if (.not.params%SameRandSeed) then
+        call finalize_random_seed
+     end if
   END SUBROUTINE sample_Hollmann_distribution
 
 FUNCTION PSI_ROT_exp(R,R0,sigR,Z,Z0,sigZ,theta)
@@ -1383,7 +1386,10 @@ subroutine sample_Hollmann_distribution_3D(params,spp,F)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
-     
+  
+     if (.not.params%SameRandSeed) then
+        call finalize_random_seed
+     end if
   end if
 
 
@@ -1971,7 +1977,10 @@ subroutine sample_Hollmann_distribution_3D_psi(params,spp,F)
      if (TRIM(h_params%current_direction) .EQ. 'PARALLEL') then
         eta_samples = 180.0_rp - eta_samples
      end if
-     
+  
+     if (.not.params%SameRandSeed) then
+        call finalize_random_seed
+     end if
   end if
 
   params%GC_coords=.FALSE.
@@ -2506,7 +2515,10 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
      if (TRIM(h_params%current_direction) .EQ. 'PARALLEL') then
         eta_samples = 180.0_rp - eta_samples
      end if
-     
+  
+     if (.not.params%SameRandSeed) then
+        call finalize_random_seed
+     end if
   end if
 
   params%GC_coords=.FALSE.

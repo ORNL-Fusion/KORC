@@ -1161,6 +1161,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
 
    !write(output_unit_write,*) 'out unitVectors'
 
+   call finalize_random_seed
+
 end subroutine unitVectors
 
 

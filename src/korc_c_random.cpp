@@ -58,11 +58,11 @@ extern "C" {
         return static_cast<class random_N *> (r)->get_number_N();
     }
   
-    void random_N_destroy(void *r) {
+    void random_destroy_N(void *r) {
         delete  static_cast<class random_N *> (r);
     }
   
-    void random_U_destroy(void *r) {
+    void random_destroy_U(void *r) {
         delete  static_cast<class random_U *> (r);
     }
 

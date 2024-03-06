@@ -738,4 +738,14 @@ CONTAINS
 
   end subroutine set_up_particles_ic
 
+  subroutine take_down_particles_ic(params)
+    implicit none
+
+    TYPE(KORC_PARAMS), INTENT(INOUT)                 :: params
+    !! Core KORC simulation parameters.
+
+    if (params%restart.OR.params%proceed.or.params%reinit) then
+       call finalize_random_seed
+    end if
+  end subroutine
 end module korc_initialize
