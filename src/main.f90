@@ -727,6 +727,9 @@ end if
   call timing_KORC(params)
 
   ! * * * FINALIZING SIMULATION * * *
+
+  call take_down_particles_ic(params)
+
   call finalize_HDF5()
 
 #ifdef PSPLINE

@@ -100,12 +100,15 @@ subroutine disk(params,spp)
 
   call init_random_seed(params)
   call RANDOM_NUMBER(theta)
+  call finalize_random_seed
 
   theta = 2.0_rp*C_PI*theta
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(r)
+  call finalize_random_seed
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
   spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*COS(spp%PHIo)
@@ -162,6 +165,8 @@ subroutine torus(params,spp)
     DEALLOCATE(theta)
     DEALLOCATE(zeta)
     DEALLOCATE(r)
+
+    call finalize_random_seed
 end subroutine torus
 
 !subroutine torus(params,spp)
@@ -312,14 +317,19 @@ subroutine elliptic_torus(params,spp)
   call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
+  call finalize_random_seed
 
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
+  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(r)
+  call finalize_random_seed
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
@@ -426,14 +436,19 @@ subroutine exponential_torus(params,spp)
   call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
+  call finalize_random_seed
 
   call init_random_seed(params)
+!  FIXME: Is it really necessary to reset the seed here?
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
+  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
   call init_random_seed(params)
+!  FIXME: Is it really necessary to reset the seed here?
   call RANDOM_NUMBER(r)
+  call finalize_random_seed
 
   ! Newton-Raphson applied here for finding the radial distribution
   do pp=1_idef,spp%ppp
@@ -542,14 +557,19 @@ subroutine exponential_elliptic_torus(params,spp)
   call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
+  call finalize_random_seed
 
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
+  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(r)
+  call finalize_random_seed
 
   do pp=1_idef,spp%ppp
      rl = 0.0_rp
@@ -662,14 +682,19 @@ subroutine gaussian_elliptic_torus(params,spp)
   call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
+  call finalize_random_seed
 
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
+  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(r)
+  call finalize_random_seed
 
   sigma = 1.0_rp/SQRT(2.0_rp*(spp%falloff_rate/params%cpp%length))
   sigma = sigma/params%cpp%length
@@ -951,14 +976,19 @@ subroutine gaussian_torus(params,spp)
   call init_random_seed(params)
   call RANDOM_NUMBER(theta)
   theta = 2.0_rp*C_PI*theta
+  call finalize_random_seed
 
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(zeta)
   zeta = 2.0_rp*C_PI*zeta
+  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
+!  FIXME: Is it really necessary to reset the seed here?
   call init_random_seed(params)
   call RANDOM_NUMBER(r)
+  call finalize_random_seed
 
   sigma = 1.0_rp/SQRT(2.0_rp*(spp%falloff_rate/params%cpp%length))
   sigma = sigma/params%cpp%length
@@ -1685,6 +1715,9 @@ subroutine MH_psi(params,spp,F)
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
 
+     if (.not.params%SameRandSeed) then
+        call init_random_seed(params)
+     end if
   end if
 
   params%GC_coords=.FALSE.
@@ -2153,6 +2186,9 @@ subroutine FIO_therm(params,spp,F,P)
      G_samples=1/sqrt(1-V_samples**2)
      ETA_samples=acos(XI_samples)*180/C_PI
 
+     if (.not.params%SameRandSeed) then
+        call init_random_seed(params)
+     end if
   end if
 
   params%GC_coords=.FALSE.
@@ -2633,6 +2669,9 @@ subroutine BMC_radial(params,spp,F,P)
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
 
+     if (.not.params%SameRandSeed) then
+        call init_random_seed(params)
+     end if
   end if
 
   params%GC_coords=.FALSE.

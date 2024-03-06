@@ -104,6 +104,7 @@ MODULE korc_random
   END INTERFACE
   
   PUBLIC :: initialize_random
+  PUBLIC :: finalize_random
 
 CONTAINS
 
@@ -125,6 +126,16 @@ CONTAINS
     !$OMP END PARALLEL
   END SUBROUTINE initialize_random
 
+  SUBROUTINE finalize_random
+    IMPLICIT NONE
+
+    INTEGER             :: thread_num
+    !$OMP PARALLEL
+    thread_num = get_thread_number()
+    CALL random_destroy_U(states(thread_num))
+    !$OMP END PARALLEL
+  END SUBROUTINE
+
   SUBROUTINE initialize_random_U(seed)
     IMPLICIT NONE
 
@@ -134,6 +145,12 @@ CONTAINS
 
   END SUBROUTINE initialize_random_U
 
+  SUBROUTINE finalize_random_U
+    IMPLICIT NONE
+
+    CALL random_destroy_U(state)
+  END SUBROUTINE
+
   SUBROUTINE initialize_random_N(seed)
     IMPLICIT NONE
 
@@ -142,7 +159,13 @@ CONTAINS
     state = random_construct_N(seed)
 
   END SUBROUTINE initialize_random_N
-  
+
+  SUBROUTINE finalize_random_N
+    IMPLICIT NONE
+
+    CALL random_destroy_N(state)
+  END SUBROUTINE
+
   FUNCTION get_random()
     IMPLICIT NONE
 

@@ -476,6 +476,8 @@ CONTAINS
     DEALLOCATE(b2)
     DEALLOCATE(b3)
     DEALLOCATE(hint)
+
+    call finalize_random_seed
   end subroutine gyro_distribution
 
 

@@ -183,4 +183,19 @@ contains
   end function lcg
 end subroutine init_random_seed
 
+subroutine finalize_random_seed
+#ifdef PARALLEL_RANDOM
+  use korc_random
+#endif
+
+implicit none
+
+#ifdef PARALLEL_RANDOM
+call finalize_random
+call finalize_random_U
+call finalize_random_N
+#endif
+
+end subroutine
+
 end module korc_rnd_numbers
