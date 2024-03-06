@@ -11,7 +11,8 @@ MODULE korc_random
   IMPLICIT NONE
 
   TYPE(C_PTR), DIMENSION(:), ALLOCATABLE , PRIVATE :: states
-  TYPE(C_PTR),  PRIVATE :: state
+  TYPE(C_PTR),  PRIVATE :: state_u
+  TYPE(C_PTR),  PRIVATE :: state_n
   !    TYPE(VSL_STREAM_STATE), PRIVATE :: stream
 
   INTERFACE
@@ -130,10 +131,13 @@ CONTAINS
     IMPLICIT NONE
 
     INTEGER             :: thread_num
-    !$OMP PARALLEL
+
+    !$OMP PARALLEL PRIVATE(thread_num)
     thread_num = get_thread_number()
     CALL random_destroy_U(states(thread_num))
     !$OMP END PARALLEL
+
+    DEALLOCATE (states)
   END SUBROUTINE
 
   SUBROUTINE initialize_random_U(seed)
@@ -141,14 +145,14 @@ CONTAINS
 
     INTEGER, INTENT(IN) :: seed
 
-    state = random_construct_U(seed)
+    state_u = random_construct_U(seed)
 
   END SUBROUTINE initialize_random_U
 
   SUBROUTINE finalize_random_U
     IMPLICIT NONE
 
-    CALL random_destroy_U(state)
+    CALL random_destroy_U(state_u)
   END SUBROUTINE
 
   SUBROUTINE initialize_random_N(seed)
@@ -156,14 +160,14 @@ CONTAINS
 
     INTEGER, INTENT(IN) :: seed
 
-    state = random_construct_N(seed)
+    state_n = random_construct_N(seed)
 
   END SUBROUTINE initialize_random_N
 
   SUBROUTINE finalize_random_N
     IMPLICIT NONE
 
-    CALL random_destroy_N(state)
+    CALL random_destroy_N(state_n)
   END SUBROUTINE
 
   FUNCTION get_random()
@@ -179,7 +183,7 @@ CONTAINS
 
     REAL(rp)            :: get_random_U
 
-    get_random_U = random_get_number_U(state)
+    get_random_U = random_get_number_U(state_u)
   END FUNCTION get_random_U
 
   FUNCTION get_random_N()
@@ -187,7 +191,7 @@ CONTAINS
 
     REAL(rp)            :: get_random_N
 
-    get_random_N = random_get_number_N(state)
+    get_random_N = random_get_number_N(state_n)
   END FUNCTION get_random_N
 
   SUBROUTINE get_randoms(nums)

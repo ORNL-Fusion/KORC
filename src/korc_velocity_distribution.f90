@@ -415,6 +415,7 @@ CONTAINS
 
     call init_random_seed(params)
     call RANDOM_NUMBER(theta)
+    call finalize_random_seed
     theta = 2.0_rp*C_PI*theta
     
     if (spp%spatial_distribution.eq.'TRACER') theta=2.0*C_PI
@@ -476,8 +477,6 @@ CONTAINS
     DEALLOCATE(b2)
     DEALLOCATE(b3)
     DEALLOCATE(hint)
-
-    call finalize_random_seed
   end subroutine gyro_distribution
 
 
