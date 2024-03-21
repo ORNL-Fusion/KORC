@@ -316,7 +316,7 @@ TYPE(KORC_INTERPOLANT_DOMAIN)      :: profiles_domain
 INTEGER                                        :: ezerr
 !! Error status during PSPLINE interpolations.
 
-#endif PSPLINE
+#endif
 
 #ifdef PSPLINE
 PUBLIC :: interp_fields,&
@@ -1755,7 +1755,7 @@ subroutine check_if_in_LCFS(F,Y,inLCFS)
          !write(6,'("IZ: ",I16)') IZ
          !call KORC_ABORT(23)
       end if
-#endif DBG_CHECK
+#endif
 
       !write(output_unit_write,'("IR: ",I16)') IR
       !write(output_unit_write,'("IZ: ",I16)') IZ
@@ -2465,7 +2465,6 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
-  !$OMP SIMD
   do cc=1_idef,pchunk      
     call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
           b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
@@ -2495,7 +2494,7 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
     B_Y(cc) = B_R*sP + B_PHI*cP
 
   end do
-  !$OMP END SIMD
+
 
 end subroutine interp_FOfields_mars_p
 
@@ -2578,6 +2577,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    REAL(rp)   :: B0_R,B0_PHI,B0_Z
    REAL(rp)  :: B0_X,B0_Y
    REAL(rp)   :: B1_X,B1_Y,B1_Z
+   REAL(rp)   :: Btot_X,Btot_Y,Btot_Z
    REAL(rp)   :: B1Re_X,B1Re_Y,B1Re_Z
    REAL(rp)  :: B1Im_X,B1Im_Y,B1Im_Z
    REAL(rp)  :: E1Re_X,E1Re_Y,E1Re_Z
@@ -2641,10 +2641,22 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
 
       B0_X = B0_R*cP - B0_PHI*sP
       B0_Y = B0_R*sP + B0_PHI*cP
-      prtcls%B(pp,3) = B0_Z+B1_Z
 
-      prtcls%B(pp,1) = B0_X+B1_X
-      prtcls%B(pp,2) = B0_Y+B1_Y
+      Btot_X=B0_X+B1_X
+      Btot_Y=B0_Y+B1_Y
+      Btot_Z=B0_Z+B1_Z
+
+      prtcls%B(pp,1) = Btot_X
+      prtcls%B(pp,2) = Btot_Y
+      prtcls%B(pp,3) = Btot_Z
+
+      prtcls%BR(pp,1) = B0_X
+      prtcls%BR(pp,2) = B0_Y
+      prtcls%BR(pp,3) = B0_Z
+
+      prtcls%BPHI(pp,1) = B1_X
+      prtcls%BPHI(pp,2) = B1_Y
+      prtcls%BPHI(pp,3) = B1_Z
 
       !write(6,*) '(R,PHI,Z)',Y_R*params%cpp%length,Y_PHI, &
       !     Y_Z*params%cpp%length
@@ -2661,6 +2673,10 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
 
       !write(6,*) 'unitvectors',pp,prtcls%B(pp,:)
 
+      !if ((prtcls%B(pp,1).ne.prtcls%BR(pp,1)).or.(prtcls%B(pp,2).ne.prtcls%BR(pp,2)).or.(prtcls%B(pp,3).ne.prtcls%BR(pp,3))) then
+      !   write(6,*) 'interp',pp,prtcls%BR(pp,1),prtcls%BR(pp,2),prtcls%BR(pp,3),prtcls%B(pp,1),prtcls%B(pp,2),prtcls%B(pp,3)
+      !endif
+
    end do
 
    
@@ -2675,8 +2691,8 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
   REAL(rp),INTENT(OUT)   :: E_X,E_Y,E_Z
-  REAL(rp)   :: B0_R,B0_PHI,B0_Z,B0_X,B0_Y
-  REAL(rp)   :: B1_X,B1_Y,B1_Z
+  REAL(rp)   :: B0_R,B0_PHI
+  REAL(rp)   :: B1_X,B1_Y,B1_Z,B0_Z,B0_X,B0_Y
   REAL(rp)   :: B1Re_X,B1Re_Y,B1Re_Z
   REAL(rp)   :: B1Im_X,B1Im_Y,B1Im_Z
   REAL(rp)   :: E1Re_X,E1Re_Y,E1Re_Z
@@ -2695,12 +2711,13 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
   !$acc routine (EZspline_interp2_FOaorsa) seq
   !$acc routine (EZspline_error) seq
 
-  call EZspline_interp2_FOaorsa(bfield_2d_local%A,b1Refield_2dx_local%X,b1Refield_2dx_local%Y, &
-        b1Refield_2dx_local%Z,b1Imfield_2dx_local%X,b1Imfield_2dx_local%Y,b1Imfield_2dx_local%Z, &
-        e1Refield_2dx_local%X,e1Refield_2dx_local%Y,e1Refield_2dx_local%Z, &
-        e1Imfield_2dx_local%X,e1Imfield_2dx_local%Y,e1Imfield_2dx_local%Z, &
-        Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
-        E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr_local)
+  call EZspline_interp2_FOaorsa(bfield_2d_local%A, &
+      b1Refield_2dx_local%X,b1Refield_2dx_local%Y,b1Refield_2dx_local%Z, &
+      b1Imfield_2dx_local%X,b1Imfield_2dx_local%Y,b1Imfield_2dx_local%Z, &
+      e1Refield_2dx_local%X,e1Refield_2dx_local%Y,e1Refield_2dx_local%Z, &
+      e1Imfield_2dx_local%X,e1Imfield_2dx_local%Y,e1Imfield_2dx_local%Z, &
+      Y_R,Y_Z,A,B1Re_X,B1Re_Y,B1Re_Z,B1Im_X,B1Im_Y,B1Im_Z, &
+      E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
 
 
@@ -2766,7 +2783,6 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
    call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
-   !$OMP SIMD
    do cc=1_idef,pchunk
       call EZspline_interp2_FOaorsa(bfield_2d%A,b1Refield_2dx%X,b1Refield_2dx%Y, &
             b1Refield_2dx%Z,b1Imfield_2dx%X,b1Imfield_2dx%Y,b1Imfield_2dx%Z, &
@@ -2807,7 +2823,6 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
 
    end do
-   !$OMP END SIMD
 
 #if DBG_CHECK
   !write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
@@ -2998,7 +3013,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
    A=0._rp
 
    if(F%Dim2x1t.and.(.not.F%ReInterp_2x1t)) then
-      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
+      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr,Atmp) &
       !$OMP& SHARED(F,Y,A,B,flag,bfield_2X1T,PSI_P)
       do pp=1_idef,ss
 
@@ -3067,7 +3082,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
 
 
    else
-      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
+      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr,Atmp) &
       !$OMP& SHARED(F,Y,A,B,flag,bfield_2d,PSI_P)
       do pp=1_idef,ss
 
@@ -3533,7 +3548,7 @@ subroutine interp_3D_efields(params,Y,E,flag)
    DEALLOCATE(F)
 end subroutine interp_3D_efields
 
-#endif PSPLINE
+#endif
 
 subroutine interp_fields(params,prtcls,F)
   !! @note Subroutine that works as an interface for calling the
@@ -3559,7 +3574,7 @@ subroutine interp_fields(params,prtcls,F)
    call check_if_in_fields_domain(F,prtcls%Y, prtcls%flagCon)
 
    if (F%useLCFS) call check_if_in_LCFS(F,prtcls%Y, prtcls%initLCFS)
-#endif PSPLINE
+#endif
 #ifdef FIO
   if (TRIM(params%field_model) .eq. 'M3D_C1'.or. &
       TRIM(params%field_model) .eq. 'NIMROD') then
@@ -3589,7 +3604,7 @@ subroutine interp_fields(params,prtcls,F)
     end do
 
   end if
-#endif FIO
+#endif
 #ifdef PSPLINE
   if (params%field_model(10:13).eq.'MARS') then
     call interp_FOfields_mars(prtcls, F, params)
@@ -3602,6 +3617,7 @@ subroutine interp_fields(params,prtcls,F)
   if (((ALLOCATED(F%PSIp).and.F%Bflux).or. &
     F%ReInterp_2x1t).and.(.not.((TRIM(params%field_model).eq.'M3D_C1').or. &
     (params%field_model(10:13).eq.'MARS').or. &
+    (params%field_model(10:14).eq.'AORSA').or. &
     (TRIM(params%field_model).eq.'NIMROD')))) then
 
   !     write(output_unit_write,'("3 size of PSI_P: ",I16)') size(prtcls%PSI_P)
@@ -3665,7 +3681,7 @@ subroutine interp_fields(params,prtcls,F)
   !     write(output_unit_write,*) 'interpolated efield'
   end if
 
-#endif PSPLINE
+#endif
 end subroutine interp_fields
 
 #ifdef PSPLINE

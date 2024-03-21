@@ -82,7 +82,7 @@ jobs:
           set -x
 
           cd ./KORC
-          ./build.sh
+          ./build_gnu.sh
 
       - name: Show Cache
         if: failure()

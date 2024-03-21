@@ -882,6 +882,24 @@ subroutine uniform_magnetic_field(F,B)
    B(:,2:3) = 0.0_rp
 end subroutine uniform_magnetic_field
 
+subroutine uniform_fields_p_ACC(Bo,Eo,B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+   !$acc routine seq
+   REAL(rp), INTENT(IN)   :: Bo,Eo
+   REAL(rp), INTENT(OUT)   :: B_X,B_Y,B_Z
+   REAL(rp), INTENT(OUT)   :: E_X,E_Y,E_Z
+   !! Magnetic field components in Cartesian coordinates;
+   !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
+
+   B_X = Bo
+   B_Y = 0._rp
+   B_Z = 0._rp
+
+   E_X = Eo
+   E_Y = 0._rp
+   E_Z = 0._rp
+
+end subroutine uniform_fields_p_ACC
+
 subroutine uniform_fields_p(pchunk,F,B_X,B_Y,B_Z,E_X,E_Y,E_Z)
    INTEGER, INTENT(IN) :: pchunk
    !! @note Subroutine that returns the value of a uniform magnetic
@@ -1075,6 +1093,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    ALLOCATE( vars%X(ppp,3) )
    ALLOCATE( vars%Y(ppp,3) )
    ALLOCATE( vars%B(ppp,3) )
+   ALLOCATE( vars%BR(ppp,3) ) !using for B0 in MARS field evaluation
+   ALLOCATE( vars%BPHI(ppp,3) ) !using for B1 in MARS field evaluation
    ALLOCATE( vars%gradB(ppp,3) )
    ALLOCATE( vars%curlb(ppp,3) )
    ALLOCATE( vars%PSI_P(ppp) )
@@ -1093,6 +1113,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    vars%flagCon = flag
    vars%initLCFS = 0_is
    vars%B=0._rp
+   vars%BR=0._rp
+   vars%BPHI=0._rp
    vars%PSI_P=0._rp
    vars%cart=.false.
 
@@ -1112,11 +1134,14 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
 
       !write(output_unit_write,*) 'before b1,b2,b3 calculation'
 
-    Bo=vars%B
-
    tmpvec=(/1.0_rp,1.0_rp,1.0_rp/)
 
    do ii=1_idef,ppp
+
+      !if ((vars%B(ii,1).ne.vars%BR(ii,1)).or.(vars%B(ii,2).ne.vars%BR(ii,2)).or.(vars%B(ii,3).ne.vars%BR(ii,3))) then
+      !   write(6,*) 'fields',ii,vars%B(ii,1),vars%B(ii,2),vars%B(ii,3),vars%BR(ii,1),vars%BR(ii,2),vars%BR(ii,3),vars%BPHI(ii,1),vars%BPHI(ii,2),vars%BPHI(ii,3)
+      !endif
+
       !write(6,*) 'ii',ii
       if ( vars%flagCon(ii) .EQ. 1_idef ) then
          b1tmp = vars%B(ii,:)/sqrt(vars%B(ii,1)*vars%B(ii,1)+ &
@@ -1150,6 +1175,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    DEALLOCATE( vars%X )
    DEALLOCATE( vars%Y )
    DEALLOCATE( vars%B )
+   DEALLOCATE( vars%BR )
+   DEALLOCATE( vars%BPHI )
    DEALLOCATE( vars%PSI_P )
    DEALLOCATE( vars%gradB )
    DEALLOCATE( vars%curlb )

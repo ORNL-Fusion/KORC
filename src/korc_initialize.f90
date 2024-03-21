@@ -536,6 +536,8 @@ CONTAINS
        ALLOCATE( spp(ii)%vars%Yborn(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%E(spp(ii)%ppp,3) )
        ALLOCATE( spp(ii)%vars%B(spp(ii)%ppp,3) )
+       ALLOCATE( spp(ii)%vars%BR(spp(ii)%ppp,3) ) !dummies for MARS interp debug
+       ALLOCATE( spp(ii)%vars%BPHI(spp(ii)%ppp,3) ) !dummies for MARS interp debug
        ALLOCATE( spp(ii)%vars%PSI_P(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%ne(spp(ii)%ppp) )
        ALLOCATE( spp(ii)%vars%ni(spp(ii)%ppp) )
@@ -564,6 +566,8 @@ CONTAINS
        spp(ii)%vars%Yborn = 0.0_rp
        spp(ii)%vars%E = 0.0_rp
        spp(ii)%vars%B = 0.0_rp
+       spp(ii)%vars%BR = 0.0_rp
+       spp(ii)%vars%BPHI = 0.0_rp
        spp(ii)%vars%PSI_P = 0.0_rp
        spp(ii)%vars%ne = 0.0_rp
        spp(ii)%vars%ni = 0.0_rp
@@ -726,6 +730,7 @@ CONTAINS
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
+       flush(output_unit_write)
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING VELOCITY COMPONENTS * * * *")')
@@ -734,6 +739,7 @@ CONTAINS
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
+       flush(output_unit_write)
     end if
 
   end subroutine set_up_particles_ic

@@ -17,6 +17,8 @@ target_link_libraries (xtest
                        fruit
 )
 
+set_property(TARGET xtest PROPERTY LINKER_LANGUAGE Fortran)
+
 add_test (NAME egyro_test
           COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

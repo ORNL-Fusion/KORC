@@ -26,7 +26,7 @@ rm -rf CMakeFiles
 echo
 if [ $MACHINE_ID == "MBP115573"     ]
 then
-    #  Config for Matt Beidler's ORNL machine.
+    #  Config for Matt Beidler's ORNL MacBook
 
     rm -f CMakeCache.txt
     rm -rf CMakeFiles
@@ -84,6 +84,79 @@ then
       -DNIMLAP_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/liblapack_dummy.a \
       -DNIMSLU_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/libsslu_dummy.a \
       -DNIMLUD_LIBRARIES=/Users/21b/Desktop/NIMROD/NIMUW/externals/libslud_dummy.a \
+
+elif [ $MACHINE_ID == "LAP141014" ]
+then
+    # Config for Matt Beidler's WSL2/Ubuntu build
+
+    rm -f CMakeCache.txt
+    rm -rf CMakeFiles
+
+    rm -rf ./build && mkdir $_ && cd $_
+
+    COMPILER_TYPE=NV
+    HARDWARE_TYPE=CPU
+
+    if [ "$COMPILER_TYPE" == GNU ]
+    then
+
+      export FC=/home/21b/KORC/build_gnu/.spack-env/view/bin/gfortran
+      export CC=/home/21b/KORC/build_gnu/.spack-env/view/bin/gcc
+      export CXX=/home/21b/KORC/build_gnu/.spack-env/view/bin/g++
+
+      cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+        -DUSE_OMP=ON \
+        -DUSE_PSPLINE=ON \
+        -DUSE_FIO=OFF \
+        -DCORI_DIR=OFF \
+        -DKORC_TEST=OFF \
+        -DCMAKE_Fortran_FLAGS="-O3 -DHDF5_DOUBLE_PRESICION -fopenmp" \
+        -DCMAKE_C_FLAGS="-O3 -fopenmp"  \
+        -DCMAKE_CXX_FLAGS="-O3 -fopenmp" \
+        -DCMAKE_Fortran_FLAGS_DEBUG="-g3 -ffpe-trap=zero,overflow -fbacktrace" \
+        -DCMAKE_C_FLAGS_DEBUG="-g3" \
+        -DCMAKE_CXX_FLAGS_DEBUG="-g3" \
+        ..
+
+    elif [ "$COMPILER_TYPE" == NV ]
+    then
+      if [ "$HARDWARE_TYPE" == CPU ]
+      then
+        cmake \
+          -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+          -DUSE_OMP=ON \
+          -DCMAKE_Fortran_FLAGS="-Mfree -Mpreprocess -fPIC -O3 -mp -Mvect=simd:256 -c++libs -Mbyteswapio -DHDF5_DOUBLE_PRESICION" \
+          -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minstrument -traceback -lnvhpcwrapnvtx" \
+          -DCMAKE_C_FLAGS="-O3 -mp -Mvect=simd:256" \
+          -DCMAKE_C_FLAGS_DEBUG="-g -traceback" \
+          -DCMAKE_CXX_FLAGS="-O3 -std=c++11 -mp -Mvect=simd:256" \
+          -DCMAKE_CXX_FLAGS_DEBUG="-g -traceback" \
+          -DUSE_PSPLINE=ON \
+          ..
+
+      elif [ "$HARDWARE_TYPE" == GPU ]
+      then
+        cmake \
+          -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
+          -DUSE_OMP=OFF \
+          -DUSE_ACC=ON \
+          -DUSE_PSPLINE=ON \
+          -DCMAKE_Fortran_FLAGS="-acc=gpu -gpu=deepcopy,debug -Mfree -fPIC -c++libs -Mpreprocess -DHDF5_DOUBLE_PRESICION" \
+          -DCMAKE_Fortran_FLAGS_DEBUG="-g -Minfo=all -Minstrument -traceback -lnvhpcwrapnvtx" \
+          -DCMAKE_C_FLAGS="-mp" \
+          -DCMAKE_C_FLAGS_DEBUG="-g -G -Minfo=all -traceback" \
+          -DCMAKE_CXX_FLAGS="-std=c++11 -mp" \
+          -DCMAKE_CXX_FLAGS_DEBUG="-g -Minfo=all -traceback" 
+      
+      else
+        echo " choose a valid hardware type "
+      fi
+
+
+    else
+      echo " choose a valid compiler type "
+    fi
+
 
 elif [ $LMOD_SYSTEM_NAME == "perlmutter"   ]
 then

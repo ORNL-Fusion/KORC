@@ -190,7 +190,7 @@ type EZspline1
   integer :: nguard
 end type EZspline1
 
-#endif PSPLINE
+#endif
   
   CONTAINS
   
@@ -7400,6 +7400,6 @@ subroutine EZspline_error(ier)
    return
 end subroutine EZspline_error
   
-#endif PSPLINE
+#endif
     
 end module korc_pspline
