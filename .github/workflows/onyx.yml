@@ -1,0 +1,28 @@
+---
+
+name: onyx
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  excl-milan0:
+    if: |
+      github.repository_owner == 'ORNL-Fusion' &&
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, 'Test this please')
+
+    runs-on: [ self-hosted, Linux, X64, ornl-excl-milan0 ]
+
+    steps:
+      # Only trigger CI for certain "actors" (those commenting the PR, not the PR originator)
+      - name: Verify Actor
+        env:
+          ACTOR_TOKEN: ${{ secrets.TOKENIZER }}${{ github.actor }}${{ secrets.TOKENIZER }}
+          ACTOR_ALLOW: ${{ secrets.ACTORLIST }}
+        if: contains( env.ACTOR_ALLOW, env.ACTOR_TOKEN )
+        id: check
+        run: |
+          echo "triggered=true" >> $GITHUB_OUTPUT
+
