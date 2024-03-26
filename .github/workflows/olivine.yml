@@ -1,0 +1,25 @@
+---
+
+name: olivine
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  job_one:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: print vars
+        run: |
+          env | sort
+
+      - name: Verify Actor
+        env:
+          ACTOR_TOKEN: ${{ secrets.TOKENIZER }}${{ github.actor }}${{ secrets.TOKENIZER }}
+          ACTOR_ALLOW: ${{ secrets.ACTORLIST }}
+        if: contains( env.ACTOR_ALLOW, env.ACTOR_TOKEN )
+        id: check
+        run: |
+          echo "triggered=true" >> $GITHUB_OUTPUT
+
