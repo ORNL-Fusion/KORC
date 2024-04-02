@@ -7,12 +7,10 @@ on:
 
 jobs:
   job_one:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: print vars
-        run: |
-          env | sort
+
 
       - name: Verify Actor
         env:
@@ -22,4 +20,18 @@ jobs:
         id: check
         run: |
           echo "triggered=true" >> $GITHUB_OUTPUT
+
+      - name: print vars
+        run: |
+          echo "$(date)" > olivine.txt
+
+#      - name: GitHub API Request
+#          if: steps.check.outputs.triggered == 'true'
+#          id: request
+#          uses: octokit/request-action@v2.1.9
+#          with:
+#            route: ${{github.event.issue.pull_request.url}}
+#          env:
+#            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
