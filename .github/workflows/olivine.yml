@@ -11,7 +11,6 @@ jobs:
 
     steps:
 
-
       - name: Verify Actor
         env:
           ACTOR_TOKEN: ${{ secrets.TOKENIZER }}${{ github.actor }}${{ secrets.TOKENIZER }}
@@ -21,9 +20,10 @@ jobs:
         run: |
           echo "triggered=true" >> $GITHUB_OUTPUT
 
-      - name: print vars
+      - name: CI Debug
+        if: steps.check.outputs.triggered == 'true'
         run: |
-          echo "$(date)" > olivine.txt
+          env -0 | while IFS='' read -d '' line ; do printf '%s\t: %s\n' "${line%%=*}" "${line#*=}" | expand -t 30 | sed ':a;N;$!ba;s/\n/ /g'; done | LC_COLLATE=C sort -b > ./env_out.txt
 
 #      - name: GitHub API Request
 #          if: steps.check.outputs.triggered == 'true'
@@ -34,4 +34,12 @@ jobs:
 #          env:
 #            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
+#      - name: Create PR status
+#          if: steps.check.outputs.triggered == 'true'
+#          uses: geekdude/github-status-action-v2@v1.1.10
+#          with:
+#            authToken: ${{ secrets.GITHUB_TOKEN }}
+#            context: "ci-gpu-AMD ${{ matrix.jobname }}"
+#            state: "pending"
+#            sha: ${{fromJson(steps.request.outputs.data).head.sha}}
+#            target_url: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
