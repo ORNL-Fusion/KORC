@@ -20,10 +20,10 @@ jobs:
         run: |
           echo "triggered=true" >> $GITHUB_OUTPUT
 
-      - name: CI Debug
-        if: steps.check.outputs.triggered == 'true'
-        run: |
-          env -0 | while IFS='' read -d '' line ; do printf '%s\t: %s\n' "${line%%=*}" "${line#*=}" | expand -t 30 | sed ':a;N;$!ba;s/\n/ /g'; done | LC_COLLATE=C sort -b > ./env_out.txt
+      #- name: CI Debug
+      #  if: steps.check.outputs.triggered == 'true'
+      #  run: |
+      #    env -0 | while IFS='' read -d '' line ; do printf '%s\t: %s\n' "${line%%=*}" "${line#*=}" | expand -t 30 | sed ':a;N;$!ba;s/\n/ /g'; done | LC_COLLATE=C sort -b > ./env_out.txt
 
       - name: GitHub API Request
           if: steps.check.outputs.triggered == 'true'
