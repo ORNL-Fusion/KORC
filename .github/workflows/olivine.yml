@@ -25,39 +25,39 @@ jobs:
         run: |
           env -0 | while IFS='' read -d '' line ; do printf '%s\t: %s\n' "${line%%=*}" "${line#*=}" | expand -t 30 | sed ':a;N;$!ba;s/\n/ /g'; done | LC_COLLATE=C sort -b > ./env_out.txt
 
-#      - name: GitHub API Request
-#          if: steps.check.outputs.triggered == 'true'
-#          id: request
-#          uses: octokit/request-action@v2.1.9
-#          with:
-#            route: ${{github.event.issue.pull_request.url}}
-#          env:
-#            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Create PR status
-#          if: steps.check.outputs.triggered == 'true'
-#          uses: geekdude/github-status-action-v2@v1.1.10
-#          with:
-#            authToken: ${{ secrets.GITHUB_TOKEN }}
-#            context: "olivine self-hosted"
-#            state: "pending"
-#            sha: ${{fromJson(steps.request.outputs.data).head.sha}}
-#            target_url: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
-#
-#      - name: Get PR information
-#        if: steps.check.outputs.triggered == 'true'
-#        id: pr_data
-#        run: |
-#          echo "branch=${{ fromJson(steps.request.outputs.data).head.ref }}" >> $GITHUB_OUTPUT
-#          echo "repo_name=${{ fromJson(steps.request.outputs.data).head.repo.full_name }}" >> $GITHUB_OUTPUT
-#          echo "repo_clone_url=${{ fromJson(steps.request.outputs.data).head.repo.clone_url }}" >> $GITHUB_OUTPUT
-#          echo "repo_ssh_url=${{ fromJson(steps.request.outputs.data).head.repo.ssh_url }}" >> $GITHUB_OUTPUT
-#
-#      - name: Checkout PR branch
-#        if: steps.check.outputs.triggered == 'true'
-#        uses: actions/checkout@v4
-#        with:
-#          token: ${{secrets.GITHUB_TOKEN}}
-#          repository: ${{fromJson(steps.request.outputs.data).head.repo.full_name}}
-#          ref: ${{steps.pr_data.outputs.branch}}
-#
+      - name: GitHub API Request
+        if: steps.check.outputs.triggered == 'true'
+        id: request
+        uses: octokit/request-action@v2.1.9
+        with:
+          route: ${{github.event.issue.pull_request.url}}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create PR status
+        if: steps.check.outputs.triggered == 'true'
+        uses: geekdude/github-status-action-v2@v1.1.10
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: "olivine self-hosted"
+          state: "pending"
+          sha: ${{fromJson(steps.request.outputs.data).head.sha}}
+          target_url: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
+
+      - name: Get PR information
+        if: steps.check.outputs.triggered == 'true'
+        id: pr_data
+        run: |
+          echo "branch=${{ fromJson(steps.request.outputs.data).head.ref }}" >> $GITHUB_OUTPUT
+          echo "repo_name=${{ fromJson(steps.request.outputs.data).head.repo.full_name }}" >> $GITHUB_OUTPUT
+          echo "repo_clone_url=${{ fromJson(steps.request.outputs.data).head.repo.clone_url }}" >> $GITHUB_OUTPUT
+          echo "repo_ssh_url=${{ fromJson(steps.request.outputs.data).head.repo.ssh_url }}" >> $GITHUB_OUTPUT
+
+      - name: Checkout PR branch
+        if: steps.check.outputs.triggered == 'true'
+        uses: actions/checkout@v4
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          repository: ${{fromJson(steps.request.outputs.data).head.repo.full_name}}
+          ref: ${{steps.pr_data.outputs.branch}}
+
