@@ -36,8 +36,8 @@ jobs:
         uses: octokit/request-action@v2.1.9
         with:
           route: ${{github.event.issue.pull_request.url}}
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create PR status
         if: steps.check.outputs.triggered == 'true'
