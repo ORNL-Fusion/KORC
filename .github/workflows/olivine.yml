@@ -27,8 +27,6 @@ jobs:
 
       - name: grab main project
         uses: actions/checkout@v4
-        with:
-          path: './KORC'
 
       - name: GitHub API Request
         if: steps.check.outputs.triggered == 'true'
