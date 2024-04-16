@@ -2357,7 +2357,6 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
     q_cache=spp(ii)%q
     a = q_cache/abs(q_cache)*params%dt
 
-#ifdef OMP
     !$OMP PARALLEL DO default(none) &
     !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
     !$OMP& shared(params,ii,spp,P,F) &
@@ -2504,7 +2503,6 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
 
       end do !particle chunk iterator
       !$OMP END PARALLEL DO
-#endif OMP
 
   end do !species iterator
 
