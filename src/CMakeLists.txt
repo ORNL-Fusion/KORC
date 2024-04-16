@@ -36,6 +36,7 @@ target_link_libraries (korc
                        korc_depends
 )
 
+
 add_executable (xkorc)
 target_sources (xkorc
 
@@ -49,3 +50,7 @@ target_link_libraries (xkorc
 
                        korc
 )
+
+
+set_property(TARGET xkorc PROPERTY LINKER_LANGUAGE Fortran)
+
