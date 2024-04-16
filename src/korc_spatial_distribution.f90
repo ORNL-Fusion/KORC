@@ -1333,7 +1333,7 @@ subroutine MH_psi(params,spp,F)
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: PHI_samples
   !! Azimuithal angle of all samples
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Z_samples
-  !! Vertical location of all samples
+  !! Vertical location of all samplesMH_psi
 
   REAL(rp) 				:: min_R,max_R
   REAL(rp) 				:: min_Z,max_Z
@@ -1427,7 +1427,15 @@ subroutine MH_psi(params,spp,F)
      if (.not.params%SameRandSeed) then
         call init_random_seed(params)
      else
-        call random_seed(put=seed)
+#ifdef PARALLEL_RANDOM
+      call initialize_random(seed(1))
+      call initialize_random_U(seed(1))
+      call initialize_random_N(seed(1))
+    
+    !  call initialize_random_mkl(seed(1))
+#else
+      call random_seed(put=seed)
+#endif
      end if
 
      write(output_unit_write,'("Begin burn: ",I10)')

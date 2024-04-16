@@ -7,6 +7,7 @@ MODULE korc_velocity_distribution
   USE korc_hpc
   use korc_fields
   use korc_rnd_numbers
+  use korc_random
   use korc_hammersley_generator
   use korc_avalanche
   use korc_experimental_pdf
@@ -413,9 +414,15 @@ CONTAINS
 
     ! * * * * INITIALIZE VELOCITY * * * *
 
-    call init_random_seed(params)
-    call RANDOM_NUMBER(theta)
-    call finalize_random_seed
+    if (.not.params%SameRandSeed) then
+      call init_random_seed(params)
+      call RANDOM_NUMBER(theta)
+      call finalize_random_seed
+    else
+      do pp=1_idef,spp%ppp
+         theta(pp)=get_random_U()
+      enddo
+    endif
     theta = 2.0_rp*C_PI*theta
     
     if (spp%spatial_distribution.eq.'TRACER') theta=2.0*C_PI
