@@ -250,8 +250,6 @@ call initialize_profiles_interpolant(params,P)
   (params%field_eval.eq.'interp')).and. &
   (.not.TRIM(params%field_model).eq.'M3D_C1'.and. &
   .not.TRIM(params%field_model).eq.'NIMROD')) call KORC_ABORT(27)
-
-  endif
 #endif
   !! <h4>16\. Initialize Profiles Interpolant</h4>
   !!
