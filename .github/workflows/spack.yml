@@ -84,6 +84,11 @@ jobs:
           cd ./KORC
           ./build.sh
 
+      - name: test korc
+        run: |
+       
+          cd ./build && ctest --output-on-failure
+
       - name: Show Cache
         if: failure()
         shell: bash

@@ -72,7 +72,7 @@ jobs:
       - name: CTEST
         if: steps.check.outputs.triggered == 'true'
         run: |
-          cd ./build && ctest
+          cd ./build && ctest --output-on-failure
 
       - name: Report PR status
         if: always() && steps.check.outputs.triggered == 'true'
