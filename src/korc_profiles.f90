@@ -255,6 +255,7 @@ CONTAINS
        
        P%filename = TRIM(filename)
        P%axisymmetric = axisymmetric
+       P%ReInterp_2x1t = F%ReInterp_2x1t
 
        call load_profiles_data_from_hdf5(params,P)
     else if (params%profile_model.eq.'UNIFORM') then
@@ -790,7 +791,7 @@ CONTAINS
     call load_from_hdf5(h5file_id,dset,rdatum)
     P%dims(1) = INT(rdatum)
 
-    if (P%axisymmetric) then
+    if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        P%dims(2) = 0
     else
        dset = "/NPHI"
@@ -802,7 +803,7 @@ CONTAINS
     call load_from_hdf5(h5file_id,dset,rdatum)
     P%dims(3) = INT(rdatum)
 
-    if (P%axisymmetric) then
+    if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        call ALLOCATE_2D_PROFILES_ARRAYS(params,P)
     else
        call ALLOCATE_3D_PROFILES_ARRAYS(P)
@@ -811,7 +812,7 @@ CONTAINS
     dset = "/R"
     call load_array_from_hdf5(h5file_id,dset,P%X%R)
 
-    if (.NOT.P%axisymmetric) then
+    if (.NOT.P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        dset = "/PHI"
        call load_array_from_hdf5(h5file_id,dset,P%X%PHI)
     end if
@@ -820,21 +821,21 @@ CONTAINS
     call load_array_from_hdf5(h5file_id,dset,P%X%Z)
 
     dset = "/FLAG"
-    if (P%axisymmetric) then
+    if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        call load_array_from_hdf5(h5file_id,dset,P%FLAG2D)
     else
        call load_array_from_hdf5(h5file_id,dset,P%FLAG3D)
     end if
 
     dset = "/ne"
-    if (P%axisymmetric) then
+    if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        call load_array_from_hdf5(h5file_id,dset,P%ne_2D)
     else
        call load_array_from_hdf5(h5file_id,dset,P%ne_3D)
     end if
 
     dset = "/Te"
-    if (P%axisymmetric) then
+    if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        call load_array_from_hdf5(h5file_id,dset,P%Te_2D)
        P%Te_2D = P%Te_2D*C_E
     else
@@ -845,31 +846,52 @@ CONTAINS
     !write(output_unit_write,'("Te: ",E17.10)') P%Te_2D(1,1)
 
     dset = "/Zeff"
-    if (P%axisymmetric) then
+    if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        call load_array_from_hdf5(h5file_id,dset,P%Zeff_2D)
     else
        call load_array_from_hdf5(h5file_id,dset,P%Zeff_3D)
     end if
 
     if (params%profile_model(10:10).eq.'H') then
-
-       dset = "/RHON"
-       call load_array_from_hdf5(h5file_id,dset,P%RHON)
-       dset = "/nRE"
-       call load_array_from_hdf5(h5file_id,dset,P%nRE_2D)
-       dset = "/nAr0"
-       call load_array_from_hdf5(h5file_id,dset,P%nAr0_2D)
-       dset = "/nAr1"
-       call load_array_from_hdf5(h5file_id,dset,P%nAr1_2D)
-       dset = "/nAr2"
-       call load_array_from_hdf5(h5file_id,dset,P%nAr2_2D)
-       dset = "/nAr3"
-       call load_array_from_hdf5(h5file_id,dset,P%nAr3_2D)
-       dset = "/nD"
-       call load_array_from_hdf5(h5file_id,dset,P%nD_2D)
-       dset = "/nD1"
-       call load_array_from_hdf5(h5file_id,dset,P%nD1_2D)
-       
+      if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
+         dset = "/RHON"
+         call load_array_from_hdf5(h5file_id,dset,P%RHON_2D)
+         dset = "/nRE"
+         call load_array_from_hdf5(h5file_id,dset,P%nRE_2D)
+         dset = "/nAr0"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr0_2D)
+         dset = "/nAr1"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr1_2D)
+         dset = "/nAr2"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr2_2D)
+         dset = "/nAr3"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr3_2D)
+         dset = "/nAr4"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr4_2D)
+         dset = "/nD"
+         call load_array_from_hdf5(h5file_id,dset,P%nD_2D)
+         dset = "/nD1"
+         call load_array_from_hdf5(h5file_id,dset,P%nD1_2D)
+      else
+         dset = "/RHON"
+         call load_array_from_hdf5(h5file_id,dset,P%RHON_3D)
+         dset = "/nRE"
+         call load_array_from_hdf5(h5file_id,dset,P%nRE_3D)
+         dset = "/nAr0"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr0_3D)
+         dset = "/nAr1"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr1_3D)
+         dset = "/nAr2"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr2_3D)
+         dset = "/nAr3"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr3_3D)
+         dset = "/nAr4"
+         call load_array_from_hdf5(h5file_id,dset,P%nAr4_3D)
+         dset = "/nD"
+         call load_array_from_hdf5(h5file_id,dset,P%nD_2D)
+         dset = "/nD1"
+         call load_array_from_hdf5(h5file_id,dset,P%nD1_2D)
+      endif
     end if
    
     call h5fclose_f(h5file_id, h5error)
@@ -895,12 +917,13 @@ CONTAINS
     ALLOCATE(P%Zeff_2D(P%dims(1),P%dims(3)))
 
     if (params%profile_model(10:10).eq.'H') then
-       ALLOCATE(P%RHON(P%dims(1),P%dims(3)))
+       ALLOCATE(P%RHON_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nRE_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nAr0_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nAr1_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nAr2_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nAr3_2D(P%dims(1),P%dims(3)))
+       ALLOCATE(P%nAr4_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nD_2D(P%dims(1),P%dims(3)))
        ALLOCATE(P%nD1_2D(P%dims(1),P%dims(3)))
     end if
@@ -921,6 +944,18 @@ CONTAINS
     ALLOCATE(P%ne_3D(P%dims(1),P%dims(2),P%dims(3)))
     ALLOCATE(P%Te_3D(P%dims(1),P%dims(2),P%dims(3)))
     ALLOCATE(P%Zeff_3D(P%dims(1),P%dims(2),P%dims(3)))
+
+    if (params%profile_model(10:10).eq.'H') then
+      ALLOCATE(P%RHON_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nRE_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nAr0_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nAr1_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nAr2_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nAr3_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nAr4_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nD_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nD1_3D(P%dims(1),P%dims(2),P%dims(3)))
+   end if
   end subroutine ALLOCATE_3D_PROFILES_ARRAYS
 
   subroutine DEALLOCATE_PROFILES_ARRAYS(P)
@@ -946,6 +981,7 @@ CONTAINS
     if (ALLOCATED(P%nAr1_2D)) DEALLOCATE(P%nAr1_2D)
     if (ALLOCATED(P%nAr2_2D)) DEALLOCATE(P%nAr2_2D)
     if (ALLOCATED(P%nAr3_2D)) DEALLOCATE(P%nAr3_2D)
+    if (ALLOCATED(P%nAr4_2D)) DEALLOCATE(P%nAr4_2D)
     if (ALLOCATED(P%nD_2D)) DEALLOCATE(P%nD_2D)
     if (ALLOCATED(P%nD1_2D)) DEALLOCATE(P%nD1_2D)
     
