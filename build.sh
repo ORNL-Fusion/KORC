@@ -9,7 +9,7 @@ rm -rf ./build && mkdir $_
 cd build
 
 cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
-      -DUSE_PSPLINE=OFF \
+      -DUSE_PSPLINE=ON \
       -DUSE_FIO=OFF \
       -DKORC_TEST=OFF \
       -DCMAKE_Fortran_FLAGS="-DHDF5_DOUBLE_PRESICION -malign-double -fconvert='big-endian'" \
