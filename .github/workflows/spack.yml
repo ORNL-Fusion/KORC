@@ -87,7 +87,7 @@ jobs:
       - name: test korc
         run: |
        
-          cd ./build && ctest --output-on-failure
+          cd ./KORC/build && ctest --output-on-failure
 
       - name: Show Cache
         if: failure()
