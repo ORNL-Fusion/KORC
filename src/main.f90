@@ -245,6 +245,11 @@ if (params%mpi_params%rank .EQ. 0) then
 end if
 
 call initialize_profiles_interpolant(params,P)
+#else
+  if (((params%field_model(1:8) .EQ. 'EXTERNAL').or. &
+  (params%field_eval.eq.'interp')).and. &
+  (.not.TRIM(params%field_model).eq.'M3D_C1'.and. &
+  .not.TRIM(params%field_model).eq.'NIMROD')) call KORC_ABORT(27)
 #endif
   !! <h4>16\. Initialize Profiles Interpolant</h4>
   !!
