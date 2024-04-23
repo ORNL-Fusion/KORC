@@ -83,6 +83,7 @@ jobs:
 
           cd ./KORC
           ./build.sh
+          cd ./build && ctest --output-on-failure
 
       - name: Show Cache
         if: failure()
