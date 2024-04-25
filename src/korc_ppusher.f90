@@ -93,7 +93,9 @@ end function cross
 
 subroutine radiation_force_p(q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
        B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
-!$omp declare simd(radiation_force_p) uniform(m_cache,q_cache)       
+#if __GNUC__ > 12 || (__GNUC__ == 12 && __GNUC_MINOR__ > 2)
+!$omp declare simd(radiation_force_p) uniform(m_cache,q_cache)
+#endif
     REAL(rp), INTENT(IN)     :: m_cache,q_cache
     REAL(rp), INTENT(IN)     :: U_X,U_Y,U_Z
     !! \(\mathbf{u} = \gamma \mathbf{v}\), where \(\mathbf{v}\) is the
