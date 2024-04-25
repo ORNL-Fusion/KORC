@@ -91,91 +91,78 @@ pure function cross(a,b)
   cross(3) = a(1)*b(2) - a(2)*b(1)
 end function cross
 
-subroutine radiation_force_p(pchunk,q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
+subroutine radiation_force_p(q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
        B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
-    INTEGER, INTENT(IN)  :: pchunk
-    REAL(rp), INTENT(IN)                       :: m_cache,q_cache
-
-    REAL(rp), DIMENSION(pchunk), INTENT(IN)     :: U_X,U_Y,U_Z
+!$omp declare simd(radiation_force_p) uniform(m_cache,q_cache)       
+    REAL(rp), INTENT(IN)     :: m_cache,q_cache
+    REAL(rp), INTENT(IN)     :: U_X,U_Y,U_Z
     !! \(\mathbf{u} = \gamma \mathbf{v}\), where \(\mathbf{v}\) is the
     !! particle's velocity.
-    REAL(rp), DIMENSION(pchunk), INTENT(IN)     :: E_X,E_Y,E_Z
+    REAL(rp), INTENT(IN)     :: E_X,E_Y,E_Z
     !! Electric field \(\mathbf{E}\) seen by each particle. This is given
     !! in Cartesian coordinates.
-    REAL(rp), DIMENSION(pchunk), INTENT(IN)     :: B_X,B_Y,B_Z
+    REAL(rp), INTENT(IN)     :: B_X,B_Y,B_Z
     !! Magnetic field \(\mathbf{B}\) seen by each particle. This is given
     !! in Cartesian coordinates.
-    REAL(rp), DIMENSION(pchunk), INTENT(OUT)    :: Frad_X,Frad_Y,Frad_Z
+    REAL(rp), INTENT(OUT)    :: Frad_X,Frad_Y,Frad_Z
     !! The calculated synchrotron radiation reaction force \(\mathbf{F}_R\).
-    REAL(rp), DIMENSION(3)                 :: F1
+    REAL(rp), DIMENSION(3)   :: F1
     !! The component \(\mathbf{F}_1\) of \(\mathbf{F}_R\).
-    REAL(rp), DIMENSION(pchunk)                 :: F2_X,F2_Y,F2_Z
+    REAL(rp)                 :: F2_X,F2_Y,F2_Z
     !! The component \(\mathbf{F}_2\) of \(\mathbf{F}_R\).
-    REAL(rp), DIMENSION(pchunk)                 :: F3_X,F3_Y,F3_Z
+    REAL(rp)                :: F3_X,F3_Y,F3_Z
     !! The component \(\mathbf{F}_3\) of \(\mathbf{F}_R\).
-    REAL(rp), DIMENSION(pchunk)                 :: V_X,V_Y,V_Z
+    REAL(rp)                 :: V_X,V_Y,V_Z
     !! The particle's velocity \(\mathbf{v}\).
-    REAL(rp), DIMENSION(pchunk)                 :: vec_X,vec_Y,vec_Z
-    REAL(rp), DIMENSION(pchunk)                 :: cross_EB_X,cross_EB_Y,cross_EB_Z
-    REAL(rp), DIMENSION(pchunk)                 :: cross_BV_X,cross_BV_Y,cross_BV_Z
-    REAL(rp), DIMENSION(pchunk)                 :: cross_BBV_X,cross_BBV_Y,cross_BBV_Z
-    REAL(rp), DIMENSION(pchunk)                 :: dot_EV,dot_vecvec
+    REAL(rp)                 :: vec_X,vec_Y,vec_Z
+    REAL(rp)                 :: cross_EB_X,cross_EB_Y,cross_EB_Z
+    REAL(rp)                 :: cross_BV_X,cross_BV_Y,cross_BV_Z
+    REAL(rp)                 :: cross_BBV_X,cross_BBV_Y,cross_BBV_Z
+    REAL(rp)                 :: dot_EV,dot_vecvec
     !! An auxiliary 3-D vector.
-    REAL(rp),DIMENSION(pchunk)                               :: g
+    REAL(rp)                 :: g
     !! The relativistic \(\gamma\) factor of the particle.
-    REAL(rp)                               :: tmp
-    INTEGER :: cc
+    REAL(rp)                 :: tmp
 
-    !$OMP SIMD
-    !    !$OMP& aligned(g,U_X,U_Y,U_Z,V_X,V_Y,V_Z, &
-    !    !$OMP& cross_EB_X,cross_EB_Y,cross_EB_Z,E_X,E_Y,E_Z,B_X,B_Y,B_Z, &
-    !    !$OMP& dot_EV,cross_BV_X,cross_BV_Y,cross_BV_Z, &
-    !    !$OMP& cross_BBV_X,cross_BBV_Y,cross_BBV_Z,F2_X,F2_Y,F2_Z, &
-    !    !$OMP& vec_X,vec_Y,vec_Z,dot_vecvec,F3_X,F3_Y,F3_Z, &
-    !    !$OMP& Frad_X,Frad_Y,Frad_Z)
-    do cc=1_idef,pchunk
-       g(cc) = SQRT(1.0_rp + U_X(cc)*U_X(cc)+ U_Y(cc)*U_Y(cc)+ U_Z(cc)*U_Z(cc))
+    g = SQRT(1.0_rp + U_X*U_X+ U_Y*U_Y+ U_Z*U_Z)
 
-       V_X(cc) = U_X(cc)/g(cc)
-       V_Y(cc) = U_Y(cc)/g(cc)
-       V_Z(cc) = U_Z(cc)/g(cc)
+    V_X = U_X/g
+    V_Y = U_Y/g
+    V_Z = U_Z/g
 
-       tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+    tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
 
-       cross_EB_X(cc)=E_Y(cc)*B_Z(cc)-E_Z(cc)*B_Y(cc)
-       cross_EB_Y(cc)=E_Z(cc)*B_X(cc)-E_X(cc)*B_Z(cc)
-       cross_EB_Z(cc)=E_X(cc)*B_Y(cc)-E_Y(cc)*B_X(cc)
+    cross_EB_X=E_Y*B_Z-E_Z*B_Y
+    cross_EB_Y=E_Z*B_X-E_X*B_Z
+    cross_EB_Z=E_X*B_Y-E_Y*B_X
 
-       dot_EV(cc)=E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc)
+    dot_EV=E_X*V_X+E_Y*V_Y+E_Z*V_Z
 
-       cross_BV_X(cc)=B_Y(cc)*V_Z(cc)-B_Z(cc)*V_Y(cc)
-       cross_BV_Y(cc)=B_Z(cc)*V_X(cc)-B_X(cc)*V_Z(cc)
-       cross_BV_Z(cc)=B_X(cc)*V_Y(cc)-B_Y(cc)*V_X(cc)
+    cross_BV_X=B_Y*V_Z-B_Z*V_Y
+    cross_BV_Y=B_Z*V_X-B_X*V_Z
+    cross_BV_Z=B_X*V_Y-B_Y*V_X
 
-       cross_BBV_X(cc)=B_Y(cc)*cross_BV_Z(cc)-B_Z(cc)*cross_BV_Y(cc)
-       cross_BBV_Y(cc)=B_Z(cc)*cross_BV_X(cc)-B_X(cc)*cross_BV_Z(cc)
-       cross_BBV_Z(cc)=B_X(cc)*cross_BV_Y(cc)-B_Y(cc)*cross_BV_X(cc)
+    cross_BBV_X=B_Y*cross_BV_Z-B_Z*cross_BV_Y
+    cross_BBV_Y=B_Z*cross_BV_X-B_X*cross_BV_Z
+    cross_BBV_Z=B_X*cross_BV_Y-B_Y*cross_BV_X
 
-       F2_X(cc) = tmp*( dot_EV(cc)*E_X(cc) + cross_EB_X(cc) + cross_BBV_X(cc) )
-       F2_Y(cc) = tmp*( dot_EV(cc)*E_Y(cc) + cross_EB_Y(cc) + cross_BBV_Y(cc) )
-       F2_Z(cc) = tmp*( dot_EV(cc)*E_Z(cc) + cross_EB_Z(cc) + cross_BBV_Z(cc) )
+    F2_X = tmp*( dot_EV*E_X + cross_EB_X + cross_BBV_X )
+    F2_Y = tmp*( dot_EV*E_Y + cross_EB_Y + cross_BBV_Y )
+    F2_Z = tmp*( dot_EV*E_Z + cross_EB_Z + cross_BBV_Z )
 
-       vec_X(cc) = E_X(cc) - cross_BV_X(cc)
-       vec_Y(cc) = E_Y(cc) - cross_BV_Y(cc)
-       vec_Z(cc) = E_Z(cc) - cross_BV_Z(cc)
+    vec_X = E_X - cross_BV_X
+    vec_Y = E_Y - cross_BV_Y
+    vec_Z = E_Z - cross_BV_Z
 
-       dot_vecvec(cc)=vec_X(cc)*vec_X(cc)+vec_Y(cc)*vec_Y(cc)+vec_Z(cc)*vec_Z(cc)
+    dot_vecvec=vec_X*vec_X+vec_Y*vec_Y+vec_Z*vec_Z
 
-       F3_X(cc) = (tmp*g(cc)**2)*( dot_EV(cc)**2 - dot_vecvec(cc) )*V_X(cc)
-       F3_Y(cc) = (tmp*g(cc)**2)*( dot_EV(cc)**2 - dot_vecvec(cc) )*V_Y(cc)
-       F3_Z(cc) = (tmp*g(cc)**2)*( dot_EV(cc)**2 - dot_vecvec(cc) )*V_Z(cc)
+    F3_X = (tmp*g**2)*( dot_EV**2 - dot_vecvec )*V_X
+    F3_Y = (tmp*g**2)*( dot_EV**2 - dot_vecvec )*V_Y
+    F3_Z = (tmp*g**2)*( dot_EV**2 - dot_vecvec )*V_Z
 
-       Frad_X(cc) = F2_X(cc) + F3_X(cc)
-       Frad_Y(cc) = F2_Y(cc) + F3_Y(cc)
-       Frad_Z(cc) = F2_Z(cc) + F3_Z(cc)
-
-    end do
-    !$OMP END SIMD
+    Frad_X = F2_X + F3_X
+    Frad_Y = F2_Y + F3_Y
+    Frad_Z = F2_Z + F3_Z
 
 end subroutine radiation_force_p
 
@@ -1585,7 +1572,7 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff,Y_R,Y_PHI,Y_Z
 
-    INTEGER                                      :: cc,pchunk
+    INTEGER                                      :: cc,dd,pchunk
     !! Chunk iterator.
 
     INTEGER(is),DIMENSION(params%pchunk),intent(inout)             :: flagCon,flagCol
@@ -1691,8 +1678,11 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
-          call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-               E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+          !$OMP SIMD
+          do dd=1_idef,pchunk
+             call radiation_force_p(q_cache,m_cache,U_os_X(dd),U_os_Y(dd),U_os_Z(dd), &
+                  E_X(dd),E_Y(dd),E_Z(dd),B_X(dd),B_Y(dd),B_Z(dd),Frad_X(dd),Frad_Y(dd),Frad_Z(dd))
+          end do
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
@@ -3202,7 +3192,7 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
 
-    INTEGER                                      :: cc,pchunk
+    INTEGER                                      :: cc,dd,pchunk
     !! Chunk iterator.
 
     INTEGER(is) ,DIMENSION(params%pchunk),intent(inout)                   :: flagCon,flagCol
@@ -3303,8 +3293,11 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
-          call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-               E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+          !$OMP SIMD
+          do dd=1_idef,pchunk
+             call radiation_force_p(q_cache,m_cache,U_os_X(dd),U_os_Y(dd),U_os_Z(dd), &
+                  E_X(dd),E_Y(dd),E_Z(dd),B_X(dd),B_Y(dd),B_Z(dd),Frad_X(dd),Frad_Y(dd),Frad_Z(dd))
+          end do
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
@@ -3592,7 +3585,7 @@ subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
 
-    INTEGER                                      :: cc,pchunk
+    INTEGER                                      :: cc,dd,pchunk
     !! Chunk iterator.
 
     INTEGER(is) ,DIMENSION(params%pchunk),intent(inout)                   :: flagCon,flagCol
@@ -3694,8 +3687,11 @@ subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
-          call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-               E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+          !$OMP SIMD
+          do dd=1_idef,pchunk
+             call radiation_force_p(q_cache,m_cache,U_os_X(dd),U_os_Y(dd),U_os_Z(dd), &
+                  E_X(dd),E_Y(dd),E_Z(dd),B_X(dd),B_Y(dd),B_Z(dd),Frad_X(dd),Frad_Y(dd),Frad_Z(dd))
+          end do
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
