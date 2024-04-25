@@ -91,7 +91,7 @@ pure function cross(a,b)
   cross(3) = a(1)*b(2) - a(2)*b(1)
 end function cross
 
-subroutine radiation_force_p(q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
+elemental subroutine radiation_force_p(q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
        B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
 !$omp declare simd(radiation_force_p) uniform(m_cache,q_cache)       
     REAL(rp), INTENT(IN)     :: m_cache,q_cache
@@ -1572,7 +1572,7 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff,Y_R,Y_PHI,Y_Z
 
-    INTEGER                                      :: cc,dd,pchunk
+    INTEGER                                      :: cc,pchunk
     !! Chunk iterator.
 
     INTEGER(is),DIMENSION(params%pchunk),intent(inout)             :: flagCon,flagCol
@@ -1678,11 +1678,8 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
-          !$OMP SIMD
-          do dd=1_idef,pchunk
-             call radiation_force_p(q_cache,m_cache,U_os_X(dd),U_os_Y(dd),U_os_Z(dd), &
-                  E_X(dd),E_Y(dd),E_Z(dd),B_X(dd),B_Y(dd),B_Z(dd),Frad_X(dd),Frad_Y(dd),Frad_Z(dd))
-          end do
+          call radiation_force_p(q_cache,m_cache,U_os_X(:),U_os_Y(:),U_os_Z(:), &
+             E_X(:),E_Y(:),E_Z(:),B_X(:),B_Y(:),B_Z(:),Frad_X(:),Frad_Y(:),Frad_Z(:))
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
@@ -3293,11 +3290,8 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
-          !$OMP SIMD
-          do dd=1_idef,pchunk
-             call radiation_force_p(q_cache,m_cache,U_os_X(dd),U_os_Y(dd),U_os_Z(dd), &
-                  E_X(dd),E_Y(dd),E_Z(dd),B_X(dd),B_Y(dd),B_Z(dd),Frad_X(dd),Frad_Y(dd),Frad_Z(dd))
-          end do
+          call radiation_force_p(q_cache,m_cache,U_os_X(:),U_os_Y(:),U_os_Z(:), &
+               E_X(:),E_Y(:),E_Z(:),B_X(:),B_Y(:),B_Z(:),Frad_X(:),Frad_Y(:),Frad_Z(:))
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
@@ -3687,11 +3681,9 @@ subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
-          !$OMP SIMD
-          do dd=1_idef,pchunk
-             call radiation_force_p(q_cache,m_cache,U_os_X(dd),U_os_Y(dd),U_os_Z(dd), &
-                  E_X(dd),E_Y(dd),E_Z(dd),B_X(dd),B_Y(dd),B_Z(dd),Frad_X(dd),Frad_Y(dd),Frad_Z(dd))
-          end do
+          call radiation_force_p(q_cache,m_cache,U_os_X(:),U_os_Y(:),U_os_Z(:), &
+             E_X(:),E_Y(:),E_Z(:),B_X(:),B_Y(:),B_Z(:),Frad_X(:),Frad_Y(:),Frad_Z(:))
+
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
