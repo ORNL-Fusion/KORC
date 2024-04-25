@@ -3189,7 +3189,7 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
 
-    INTEGER                                      :: cc,dd,pchunk
+    INTEGER                                      :: cc,pchunk
     !! Chunk iterator.
 
     INTEGER(is) ,DIMENSION(params%pchunk),intent(inout)                   :: flagCon,flagCol
@@ -3579,7 +3579,7 @@ subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
 
-    INTEGER                                      :: cc,dd,pchunk
+    INTEGER                                      :: cc,pchunk
     !! Chunk iterator.
 
     INTEGER(is) ,DIMENSION(params%pchunk),intent(inout)                   :: flagCon,flagCol
