@@ -209,6 +209,7 @@ TYPE, PRIVATE :: KORC_2D_PROFILES_INTERPOLANT
   TYPE(EZspline2)    :: nAr1
   TYPE(EZspline2)    :: nAr2
   TYPE(EZspline2)    :: nAr3
+  TYPE(EZspline2)    :: nAr4  
   TYPE(EZspline2)    :: nD
   TYPE(EZspline2)    :: nD1
 
@@ -1797,56 +1798,85 @@ subroutine initialize_profiles_interpolant(params,P)
             write(output_unit_write,'("* * * * INITIALIZING PROFILES INTERPOLANT * * * *")')
          end if
 
-         if (P%axisymmetric) then
+         if (P%axisymmetric.and.P%ReInterp_2x1t) then
 
             if (params%mpi_params%rank .EQ. 0) then
                write(output_unit_write,*) '2D ne, Te, Zeff'
                flush(output_unit_write)
             end if
 
-            profiles_2d%NR = P%dims(1)
-            profiles_2d%NZ = P%dims(3)
+            if (.not.(EZspline_allocated2(profiles_2d%ne))) then
+               profiles_2d%NR = P%dims(1)
+               profiles_2d%NZ = P%dims(3)
 
-            !write(output_unit_write,'("NR",I15)') profiles_2d%NR
-            !write(output_unit_write,'("NZ",I15)') profiles_2d%NR
+               !write(output_unit_write,'("NR",I15)') profiles_2d%NR
+               !write(output_unit_write,'("NZ",I15)') profiles_2d%NR
 
-            ! Initializing ne
-            call EZspline_init2(profiles_2d%ne,profiles_2d%NR,profiles_2d%NZ, &
-               profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+               ! Initializing ne
+               call EZspline_init2(profiles_2d%ne,profiles_2d%NR,profiles_2d%NZ, &
+                  profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+               call EZspline_error(ezerr)
+
+               profiles_2d%ne%x1 = P%X%R
+               profiles_2d%ne%x2 = P%X%Z
+            endif
+
+            if (P%ReInterp_2x1t) then
+               call EZspline_setup2(profiles_2d%ne, P%ne_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+
+               
+               !write(6,*) 'ne',P%ne_3D(12,P%ind_2x1t,15)*params%cpp%density
+               !write(6,*) 'ne_spline',profiles_2d%ne%fspl(1,12,15)*params%cpp%density
+
+            else
+               call EZspline_setup2(profiles_2d%ne, P%ne_2D, ezerr, .TRUE.)
+            endif
             call EZspline_error(ezerr)
 
-            profiles_2d%ne%x1 = P%X%R
-            profiles_2d%ne%x2 = P%X%Z
 
-            call EZspline_setup2(profiles_2d%ne, P%ne_2D, ezerr, .TRUE.)
-            call EZspline_error(ezerr)
 
             ! Initializing Te
-            call EZspline_init2(profiles_2d%Te,profiles_2d%NR,profiles_2d%NZ, &
-               profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-            call EZspline_error(ezerr)
+            if (.not.(EZspline_allocated2(profiles_2d%Te))) then
+               call EZspline_init2(profiles_2d%Te,profiles_2d%NR,profiles_2d%NZ, &
+                  profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+               call EZspline_error(ezerr)
 
-            profiles_2d%Te%x1 = P%X%R
-            profiles_2d%Te%x2 = P%X%Z
+               profiles_2d%Te%x1 = P%X%R
+               profiles_2d%Te%x2 = P%X%Z
+            endif
 
             !write(output_unit_write,'("Te_interp_R",E17.10)') profiles_2d%Te%x1
             !write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
 
             !write(output_unit_write,'("Te",E17.10)') P%Te_2D(10,:)
 
-            call EZspline_setup2(profiles_2d%Te, P%Te_2D, ezerr, .TRUE.)
+            if (P%ReInterp_2x1t) then
+               call EZspline_setup2(profiles_2d%Te, P%Te_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+
+               !write(6,*) 'Te',P%Te_3D(:,P%ind_2x1t,:)*params%cpp%temperature/C_E
+               !write(6,*) 'Te_spline',profiles_2d%Te%fspl(1,:,:)*params%cpp%temperature/C_E
+
+            else
+               call EZspline_setup2(profiles_2d%Te, P%Te_2D, ezerr, .TRUE.)
+            endif
             call EZspline_error(ezerr)
 
 
             ! Initializing Zeff
-            call EZspline_init2(profiles_2d%Zeff,profiles_2d%NR, &
-               profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-            call EZspline_error(ezerr)
+            if (.not.(EZspline_allocated2(profiles_2d%Zeff))) then
+               call EZspline_init2(profiles_2d%Zeff,profiles_2d%NR, &
+                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+               call EZspline_error(ezerr)
 
-            profiles_2d%Zeff%x1 = P%X%R
-            profiles_2d%Zeff%x2 = P%X%Z
+               profiles_2d%Zeff%x1 = P%X%R
+               profiles_2d%Zeff%x2 = P%X%Z
+            endif
 
-            call EZspline_setup2(profiles_2d%Zeff, P%Zeff_2D, ezerr, .TRUE.)
+            if (P%ReInterp_2x1t) then
+               call EZspline_setup2(profiles_2d%Zeff, P%Zeff_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+            else
+               call EZspline_setup2(profiles_2d%Zeff, P%Zeff_2D, ezerr, .TRUE.)
+            endif
             call EZspline_error(ezerr)
 
             if (params%profile_model(10:10) .EQ. 'H') then
@@ -1857,102 +1887,170 @@ subroutine initialize_profiles_interpolant(params,P)
                end if
 
                ! Initializing RHON
-               call EZspline_init2(profiles_2d%RHON,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%RHON))) then
+                  call EZspline_init2(profiles_2d%RHON,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%RHON%x1 = P%X%R
-               profiles_2d%RHON%x2 = P%X%Z
+                  profiles_2d%RHON%x1 = P%X%R
+                  profiles_2d%RHON%x2 = P%X%Z
+               endif
 
-               call EZspline_setup2(profiles_2d%RHON, P%RHON, ezerr, .TRUE.)
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%RHON, P%RHON_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%RHON, P%RHON_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
                !write(output_unit_write,'("profiles_2d%RHON: ",E17.10)') profiles_2d%RHON%fspl(1,:,:)
 
                ! Initializing nRE
-               call EZspline_init2(profiles_2d%nRE,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nRE))) then
+                  call EZspline_init2(profiles_2d%nRE,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%nRE%x1 = P%X%R
-               profiles_2d%nRE%x2 = P%X%Z
+                  profiles_2d%nRE%x1 = P%X%R
+                  profiles_2d%nRE%x2 = P%X%Z
 
-               call EZspline_setup2(profiles_2d%nRE, P%nRE_2D, ezerr, .TRUE.)
-               call EZspline_error(ezerr)
+                  call EZspline_setup2(profiles_2d%nRE, P%nRE_2D, ezerr, .TRUE.)
+                  call EZspline_error(ezerr)
+               endif
 
                ! Initializing nAr0
-               call EZspline_init2(profiles_2d%nAr0,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nAr0))) then
+                  call EZspline_init2(profiles_2d%nAr0,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%nAr0%x1 = P%X%R
-               profiles_2d%nAr0%x2 = P%X%Z
+                  profiles_2d%nAr0%x1 = P%X%R
+                  profiles_2d%nAr0%x2 = P%X%Z
+               endif
 
-               call EZspline_setup2(profiles_2d%nAr0, P%nAr0_2D, ezerr, .TRUE.)
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nAr0, P%nAr0_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nAr0, P%nAr0_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
                ! Initializing nAr1
-               call EZspline_init2(profiles_2d%nAr1,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nAr1))) then
+                  call EZspline_init2(profiles_2d%nAr1,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%nAr1%x1 = P%X%R
-               profiles_2d%nAr1%x2 = P%X%Z
+                  profiles_2d%nAr1%x1 = P%X%R
+                  profiles_2d%nAr1%x2 = P%X%Z
+               endif
 
-               call EZspline_setup2(profiles_2d%nAr1, P%nAr1_2D, ezerr, .TRUE.)
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nAr1, P%nAr1_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nAr1, P%nAr1_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
                ! Initializing nAr2
-               call EZspline_init2(profiles_2d%nAr2,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nAr2))) then
+                  call EZspline_init2(profiles_2d%nAr2,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%nAr2%x1 = P%X%R
-               profiles_2d%nAr2%x2 = P%X%Z
+                  profiles_2d%nAr2%x1 = P%X%R
+                  profiles_2d%nAr2%x2 = P%X%Z
+               endif
 
-               call EZspline_setup2(profiles_2d%nAr2, P%nAr2_2D, ezerr, .TRUE.)
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nAr2, P%nAr2_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nAr2, P%nAr2_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
                ! Initializing nAr3
-               call EZspline_init2(profiles_2d%nAr3,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nAr3))) then
+                  call EZspline_init2(profiles_2d%nAr3,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
+
+                  profiles_2d%nAr3%x1 = P%X%R
+                  profiles_2d%nAr3%x2 = P%X%Z
+               endif
+
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nAr3, P%nAr3_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nAr3, P%nAr3_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
-               profiles_2d%nAr3%x1 = P%X%R
-               profiles_2d%nAr3%x2 = P%X%Z
+               ! Initializing nAr4
+               if (.not.(EZspline_allocated2(profiles_2d%nAr4))) then
+                  call EZspline_init2(profiles_2d%nAr4,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               call EZspline_setup2(profiles_2d%nAr3, P%nAr3_2D, ezerr, .TRUE.)
+                  profiles_2d%nAr4%x1 = P%X%R
+                  profiles_2d%nAr4%x2 = P%X%Z
+               endif
+
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nAr4, P%nAr4_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nAr4, P%nAr4_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
                ! Initializing nD
-               call EZspline_init2(profiles_2d%nD,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nD))) then
+                  call EZspline_init2(profiles_2d%nD,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%nD%x1 = P%X%R
-               profiles_2d%nD%x2 = P%X%Z
+                  profiles_2d%nD%x1 = P%X%R
+                  profiles_2d%nD%x2 = P%X%Z
+               endif
 
-               call EZspline_setup2(profiles_2d%nD, P%nD_2D, ezerr, .TRUE.)
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nD, P%nD_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nD, P%nD_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
                ! Initializing nD1
-               call EZspline_init2(profiles_2d%nD1,profiles_2d%NR, &
-                  profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
-               call EZspline_error(ezerr)
+               if (.not.(EZspline_allocated2(profiles_2d%nD1))) then
+                  call EZspline_init2(profiles_2d%nD1,profiles_2d%NR, &
+                     profiles_2d%NZ,profiles_2d%BCSR,profiles_2d%BCSZ,ezerr)
+                  call EZspline_error(ezerr)
 
-               profiles_2d%nD1%x1 = P%X%R
-               profiles_2d%nD1%x2 = P%X%Z
+                  profiles_2d%nD1%x1 = P%X%R
+                  profiles_2d%nD1%x2 = P%X%Z
+               endif
 
-               call EZspline_setup2(profiles_2d%nD1, P%nD1_2D, ezerr, .TRUE.)
+               if (P%ReInterp_2x1t) then
+                  call EZspline_setup2(profiles_2d%nD1, P%nD1_3D(:,P%ind_2x1t,:), ezerr, .TRUE.)
+               else
+                  call EZspline_setup2(profiles_2d%nD1, P%nD1_2D, ezerr, .TRUE.)
+               endif
                call EZspline_error(ezerr)
 
             end if
 
-            ALLOCATE(profiles_domain%FLAG2D(profiles_2d%NR,profiles_2d%NZ))
-            profiles_domain%FLAG2D = P%FLAG2D
+            if (.not.ALLOCATED(profiles_domain%FLAG2D)) then
+               ALLOCATE(profiles_domain%FLAG2D(profiles_2d%NR,profiles_2d%NZ))
+               
+               if (P%ReInterp_2x1t) then
+                  profiles_domain%FLAG2D = P%FLAG3D(:,1,:)
+               else
+                  profiles_domain%FLAG2D = P%FLAG2D
+               endif
 
-            profiles_domain%DR = ABS(P%X%R(2) - P%X%R(1))
-            profiles_domain%DZ = ABS(P%X%Z(2) - P%X%Z(1))
+               profiles_domain%DR = ABS(P%X%R(2) - P%X%R(1))
+               profiles_domain%DZ = ABS(P%X%Z(2) - P%X%Z(1))
+            endif
          else
 
             if (params%mpi_params%rank .EQ. 0) then
@@ -2998,7 +3096,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
    A=0._rp
 
    if(F%Dim2x1t.and.(.not.F%ReInterp_2x1t)) then
-      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
+      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr,Atmp) &
       !$OMP& SHARED(F,Y,A,B,flag,bfield_2X1T,PSI_P)
       do pp=1_idef,ss
 
@@ -3067,7 +3165,7 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
 
 
    else
-      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
+      !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr,Atmp) &
       !$OMP& SHARED(F,Y,A,B,flag,bfield_2d,PSI_P)
       do pp=1_idef,ss
 
@@ -3118,10 +3216,14 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
                B(pp,1) = A(pp,1)*COS(Y(pp,2)) - A(pp,2)*SIN(Y(pp,2))
                B(pp,2) = A(pp,1)*SIN(Y(pp,2)) + A(pp,2)*COS(Y(pp,2))
                B(pp,3) = A(pp,3)
+
+               !write(6,*) 'R',Y(pp,1)*params%cpp%length,'Z',Y(pp,3)*params%cpp%length,'PSIP', & 
+               !   PSI_P(pp)*(params%cpp%Bo*params%cpp%length**2)
             else
                B(pp,1) = A(pp,1)
                B(pp,2) = A(pp,2)
                B(pp,3) = A(pp,3)
+
             end if
 
 
@@ -3129,6 +3231,12 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
       end do
       !$OMP END PARALLEL DO
    end if
+
+   !if (params%GC_coords) then
+   !   write(6,*) 'R',Y(:,1)*params%cpp%length,'Z',Y(:,3)*params%cpp%length,'PSIP', &
+   !      PSI_P(:)*(params%cpp%Bo*params%cpp%length**2),'BR',B(:,1)*params%cpp%Bo, &
+   !      'BZ',B(:,3)*params%cpp%Bo
+   !endif
 
    !  write(output_unit_write,'("calculate_fields")')
 
@@ -3669,12 +3777,13 @@ subroutine interp_fields(params,prtcls,F)
 end subroutine interp_fields
 
 #ifdef PSPLINE
-subroutine interp_Hcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-  nAr0,nAr1,nAr2,nAr3,nD,nD1,flag_cache)
+subroutine interp_Hcollision_p(params,pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+  nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flag_cache)
+  TYPE(KORC_PARAMS), INTENT(IN) 		:: params
   INTEGER, INTENT(IN)  :: pchunk
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: ne,Te,Zeff
-  REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nD,nD1
+  REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   INTEGER :: cc
 
@@ -3687,21 +3796,25 @@ subroutine interp_Hcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
   !  write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
 
   do cc=1_idef,pchunk
-    call EZspline_interp2_collision(profiles_2d%ne,profiles_2d%Te,profiles_2d%Zeff, &
-      profiles_2d%nAr0,profiles_2d%nAr1,profiles_2d%nAr2,profiles_2d%nAr3, &
+    call EZspline_interp2_Hcollision(profiles_2d%ne,profiles_2d%Te,profiles_2d%Zeff, &
+      profiles_2d%nAr0,profiles_2d%nAr1,profiles_2d%nAr2,profiles_2d%nAr3,profiles_2d%nAr4, &
       profiles_2d%nD,profiles_2d%nD1,Y_R(cc),Y_Z(cc),ne(cc),Te(cc),Zeff(cc), &
-      nAr0(cc),nAr1(cc),nAr2(cc),nAr3(cc),nD(cc),nD1(cc),ezerr)
+      nAr0(cc),nAr1(cc),nAr2(cc),nAr3(cc),nAr4(cc),nD(cc),nD1(cc),ezerr)
     call EZspline_error(ezerr)
   end do
+
+   !write(6,*) 'interp ne%fspl',profiles_2d%ne%fspl(1,12,15)*params%cpp%density
+
+  !write(6,*) 'interp ne',ne(1)
 
 end subroutine interp_Hcollision_p
 
 subroutine interp_nRE(params,Y_R,Y_PHI,Y_Z,PSIp,EPHI,ne,Te,nRE, &
-  nAr0,nAr1,nAr2,nAr3,nD,nD1,g_test,fRE_out,rho1D)
+  nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,g_test,fRE_out,rho1D)
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z,g_test
   REAL(rp),INTENT(OUT)   :: PSIp,EPHI,ne,Te,nRE,fRE_out
-  REAL(rp),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nD,nD1
+  REAL(rp),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
   REAL(rp)   :: RHON,dummy
   INTEGER(is),DIMENSION(1)   :: flag_cache
   REAL(rp), INTENT(IN),optional  :: rho1D
@@ -3715,10 +3828,12 @@ subroutine interp_nRE(params,Y_R,Y_PHI,Y_Z,PSIp,EPHI,ne,Te,nRE, &
     call EZspline_interp2_FOaorsa(bfield_2d%A,efield_2d%PHI, &
       profiles_2d%ne,profiles_2d%Te, &
       profiles_2d%nRE,profiles_2d%nAr0,profiles_2d%nAr1, &
-      profiles_2d%nAr2,profiles_2d%nAr3,profiles_2d%nD,profiles_2d%nD1, &
-      profiles_2d%RHON,bfield_2d%A,Y_R,Y_Z, &
-      A,EPHI,ne,Te,nRE,nAr0,nAr1,nAr2,nAr3,nD,nD1,RHON,dummy,ezerr)
+      profiles_2d%nAr2,profiles_2d%nAr3,profiles_2d%nAr4,profiles_2d%nD,profiles_2d%nD1, &
+      profiles_2d%RHON,Y_R,Y_Z, &
+      A,EPHI,ne,Te,nRE,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,RHON,ezerr)
     call EZspline_error(ezerr)
+
+   !write(6,*) 'EPHI',EPHI
 
     PSIp=A(1)
 

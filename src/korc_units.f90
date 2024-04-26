@@ -209,15 +209,27 @@ subroutine normalize_variables(params,spp,F,P)
      if (ALLOCATED(P%ne_3D)) P%ne_3D = P%ne_3D/params%cpp%density
      if (ALLOCATED(P%Te_3D)) P%Te_3D = P%Te_3D/params%cpp%temperature
 
-     if (params%profile_model(10:10).eq.'H') then
+     if (params%profile_model(10:11).eq.'H0') then
         if (ALLOCATED(P%nRE_2D)) P%nRE_2D = P%nRE_2D/params%cpp%density
         if (ALLOCATED(P%nAr0_2D)) P%nAr0_2D = P%nAr0_2D/params%cpp%density
         if (ALLOCATED(P%nAr1_2D)) P%nAr1_2D = P%nAr1_2D/params%cpp%density
         if (ALLOCATED(P%nAr2_2D)) P%nAr2_2D = P%nAr2_2D/params%cpp%density
         if (ALLOCATED(P%nAr3_2D)) P%nAr3_2D = P%nAr3_2D/params%cpp%density
+        if (ALLOCATED(P%nAr3_2D)) P%nAr4_2D = P%nAr4_2D/params%cpp%density
         if (ALLOCATED(P%nD_2D)) P%nD_2D = P%nD_2D/params%cpp%density
         if (ALLOCATED(P%nD1_2D)) P%nD1_2D = P%nD1_2D/params%cpp%density
      endif
+
+     if (params%profile_model(10:12).eq.'Hdt') then
+          if (ALLOCATED(P%nRE_2D)) P%nRE_2D = P%nRE_2D/params%cpp%density
+          if (ALLOCATED(P%nAr0_3D)) P%nAr0_3D = P%nAr0_3D/params%cpp%density
+          if (ALLOCATED(P%nAr1_3D)) P%nAr1_3D = P%nAr1_3D/params%cpp%density
+          if (ALLOCATED(P%nAr2_3D)) P%nAr2_3D = P%nAr2_3D/params%cpp%density
+          if (ALLOCATED(P%nAr3_3D)) P%nAr3_3D = P%nAr3_3D/params%cpp%density
+          if (ALLOCATED(P%nAr3_3D)) P%nAr4_3D = P%nAr4_3D/params%cpp%density
+          if (ALLOCATED(P%nD_3D)) P%nD_3D = P%nD_3D/params%cpp%density
+          if (ALLOCATED(P%nD1_3D)) P%nD1_3D = P%nD1_3D/params%cpp%density
+       endif
 
   end if
 

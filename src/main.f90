@@ -320,7 +320,7 @@ if (params%orbit_model(1:2).eq.'FO') then
 else if (params%orbit_model(1:2).eq.'GC') then
 
   if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
-    call GC_init(params,F,spp)
+    call GC_init(params,F,P,spp)
   else
 
     call get_fields(params,spp(1)%vars,F)
@@ -644,11 +644,13 @@ end if
         call save_simulation_outputs(params,spp,F)
 
         F%ind_2x1t=F%ind_2x1t+1_ip
+        P%ind_2x1t=F%ind_2x1t
         if (params%mpi_params%rank .EQ. 0) then
            write(output_unit_write,*) 'KORC time',params%time*params%cpp%time
            write(output_unit_write,*) '2x1t_ind time',F%X%PHI(F%ind_2x1t)*params%cpp%time
         end if
         call initialize_fields_interpolant(params,F)
+        call initialize_profiles_interpolant(params,P)
 
         if (params%LargeCollisions) then
            call initialize_collision_params(params,spp,P,F,.false.)

@@ -256,8 +256,14 @@ CONTAINS
        P%filename = TRIM(filename)
        P%axisymmetric = axisymmetric
        P%ReInterp_2x1t = F%ReInterp_2x1t
+       P%ind_2x1t=F%ind_2x1t
 
        call load_profiles_data_from_hdf5(params,P)
+
+       !write(6,*) 'profiles ne',P%ne_3D(13,1,16)
+       !write(6,*) 'Te(:,1,:)',P%Te_3D(:,1,:)/C_E
+       !write(6,*) 'Te(:,1,:)',P%Zeff_3D(:,1,:)
+
     else if (params%profile_model.eq.'UNIFORM') then
        !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
        !     status='OLD',form='formatted')
@@ -806,7 +812,7 @@ CONTAINS
     if (P%axisymmetric.and.(.not.P%ReInterp_2x1t)) then
        call ALLOCATE_2D_PROFILES_ARRAYS(params,P)
     else
-       call ALLOCATE_3D_PROFILES_ARRAYS(P)
+       call ALLOCATE_3D_PROFILES_ARRAYS(params,P)
     end if
 
     dset = "/R"
@@ -876,7 +882,7 @@ CONTAINS
          dset = "/RHON"
          call load_array_from_hdf5(h5file_id,dset,P%RHON_3D)
          dset = "/nRE"
-         call load_array_from_hdf5(h5file_id,dset,P%nRE_3D)
+         call load_array_from_hdf5(h5file_id,dset,P%nRE_2D)
          dset = "/nAr0"
          call load_array_from_hdf5(h5file_id,dset,P%nAr0_3D)
          dset = "/nAr1"
@@ -888,9 +894,9 @@ CONTAINS
          dset = "/nAr4"
          call load_array_from_hdf5(h5file_id,dset,P%nAr4_3D)
          dset = "/nD"
-         call load_array_from_hdf5(h5file_id,dset,P%nD_2D)
+         call load_array_from_hdf5(h5file_id,dset,P%nD_3D)
          dset = "/nD1"
-         call load_array_from_hdf5(h5file_id,dset,P%nD1_2D)
+         call load_array_from_hdf5(h5file_id,dset,P%nD1_3D)
       endif
     end if
    
@@ -930,9 +936,10 @@ CONTAINS
     
   end subroutine ALLOCATE_2D_PROFILES_ARRAYS
 
-  subroutine ALLOCATE_3D_PROFILES_ARRAYS(P)
+  subroutine ALLOCATE_3D_PROFILES_ARRAYS(params,P)
     !! @note Subroutine that allocates the mesh information and 3-D arrays
     !! for keeping the data of pre-computed plasma profiles. @endnote
+    TYPE(KORC_PARAMS), INTENT(IN)  :: params
     TYPE(PROFILES), INTENT(INOUT) :: P
     !! @param[out] P An instance of KORC's derived type PROFILES containing
     !! all the information about the plasma profiles used in the
@@ -947,7 +954,7 @@ CONTAINS
 
     if (params%profile_model(10:10).eq.'H') then
       ALLOCATE(P%RHON_3D(P%dims(1),P%dims(2),P%dims(3)))
-      ALLOCATE(P%nRE_3D(P%dims(1),P%dims(2),P%dims(3)))
+      ALLOCATE(P%nRE_2D(P%dims(1),P%dims(3)))
       ALLOCATE(P%nAr0_3D(P%dims(1),P%dims(2),P%dims(3)))
       ALLOCATE(P%nAr1_3D(P%dims(1),P%dims(2),P%dims(3)))
       ALLOCATE(P%nAr2_3D(P%dims(1),P%dims(2),P%dims(3)))
@@ -975,7 +982,7 @@ CONTAINS
     if (ALLOCATED(P%Te_3D)) DEALLOCATE(P%Te_3D)
     if (ALLOCATED(P%Zeff_3D)) DEALLOCATE(P%Zeff_3D)
 
-    if (ALLOCATED(P%RHON)) DEALLOCATE(P%RHON)
+    if (ALLOCATED(P%RHON_2D)) DEALLOCATE(P%RHON_2D)
     if (ALLOCATED(P%nRE_2D)) DEALLOCATE(P%nRE_2D)
     if (ALLOCATED(P%nAr0_2D)) DEALLOCATE(P%nAr0_2D)
     if (ALLOCATED(P%nAr1_2D)) DEALLOCATE(P%nAr1_2D)
@@ -984,6 +991,15 @@ CONTAINS
     if (ALLOCATED(P%nAr4_2D)) DEALLOCATE(P%nAr4_2D)
     if (ALLOCATED(P%nD_2D)) DEALLOCATE(P%nD_2D)
     if (ALLOCATED(P%nD1_2D)) DEALLOCATE(P%nD1_2D)
+
+    if (ALLOCATED(P%RHON_3D)) DEALLOCATE(P%RHON_3D)
+    if (ALLOCATED(P%nAr0_3D)) DEALLOCATE(P%nAr0_3D)
+    if (ALLOCATED(P%nAr1_3D)) DEALLOCATE(P%nAr1_3D)
+    if (ALLOCATED(P%nAr2_3D)) DEALLOCATE(P%nAr2_3D)
+    if (ALLOCATED(P%nAr3_3D)) DEALLOCATE(P%nAr3_3D)
+    if (ALLOCATED(P%nAr4_3D)) DEALLOCATE(P%nAr4_3D)
+    if (ALLOCATED(P%nD_3D)) DEALLOCATE(P%nD_3D)
+    if (ALLOCATED(P%nD1_3D)) DEALLOCATE(P%nD1_3D)
     
 #ifdef FIO
     if (ALLOCATED(P%FIO_nimp)) DEALLOCATE(P%FIO_nimp)

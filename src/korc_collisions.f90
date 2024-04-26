@@ -228,8 +228,8 @@ contains
     !close(output_unit_write)
 
     if (params%profile_model(10:10).eq.'H') then
-       cparams_ms%num_impurity_species = 6
-       params%num_impurity_species = 6
+       cparams_ms%num_impurity_species = 7
+       params%num_impurity_species = 7
     else
        cparams_ms%num_impurity_species = num_impurity_species
        params%num_impurity_species = num_impurity_species
@@ -265,10 +265,12 @@ contains
        cparams_ms%Zo(3)=18
        cparams_ms%Zj(4)=3
        cparams_ms%Zo(4)=18
-       cparams_ms%Zj(5)=0
-       cparams_ms%Zo(5)=1
-       cparams_ms%Zj(6)=1
+       cparams_ms%Zj(5)=4
+       cparams_ms%Zo(5)=18
+       cparams_ms%Zj(6)=0
        cparams_ms%Zo(6)=1
+       cparams_ms%Zj(7)=1
+       cparams_ms%Zo(7)=1
 
        cparams_ms%nz(1) = nz_mult(1)
 
@@ -309,10 +311,12 @@ contains
        cparams_ms%aZj(3) = cparams_ms%aAr(3)
        cparams_ms%IZj(4) = C_E*cparams_ms%IAr(4)
        cparams_ms%aZj(4) = cparams_ms%aAr(4)
-       cparams_ms%IZj(5) = C_E*cparams_ms%IH(1)
-       cparams_ms%aZj(5) = cparams_ms%aH(1)
-       cparams_ms%IZj(6) = C_E*cparams_ms%IH(2)
-       cparams_ms%aZj(6) = cparams_ms%aH(2)
+       cparams_ms%IZj(5) = C_E*cparams_ms%IAr(5)
+       cparams_ms%aZj(5) = cparams_ms%aAr(5)
+       cparams_ms%IZj(6) = C_E*cparams_ms%IH(1)
+       cparams_ms%aZj(6) = cparams_ms%aH(1)
+       cparams_ms%IZj(7) = C_E*cparams_ms%IH(2)
+       cparams_ms%aZj(7) = cparams_ms%aH(2)
     endif
 
     cparams_ms%nef = ne_mult + sum(cparams_ms%Zj*cparams_ms%nz)
@@ -2298,7 +2302,7 @@ end subroutine include_CoulombCollisions_FOfio_p
 #endif FIO
 
 subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-   Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+   Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
    TYPE(PROFILES), INTENT(IN)                                 :: P
    TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -2310,13 +2314,12 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
    REAL(rp), DIMENSION(params%pchunk) :: curlb_R,curlb_PHI,curlb_Z
    REAL(rp), DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
    REAL(rp), DIMENSION(params%pchunk) 	:: E_R,E_Z
-   REAL(rp), DIMENSION(params%pchunk), INTENT(OUT) 	:: E_PHI,ne,PSIp
+   REAL(rp), DIMENSION(params%pchunk), INTENT(OUT) 	:: E_PHI,ne,PSIp,Te,Zeff
    REAL(rp), DIMENSION(params%pchunk), INTENT(IN) 			:: Y_R,Y_PHI,Y_Z
    INTEGER(is), DIMENSION(params%pchunk), INTENT(INOUT) 	:: flagCol
    INTEGER(is), DIMENSION(params%pchunk), INTENT(INOUT) 	:: flagCon
    REAL(rp), INTENT(IN) 			:: me
-   REAL(rp), DIMENSION(params%pchunk) 			:: Te,Zeff
-   REAL(rp), DIMENSION(params%pchunk) 			:: nAr0,nAr1,nAr2,nAr3
+   REAL(rp), DIMENSION(params%pchunk) 			:: nAr0,nAr1,nAr2,nAr3,nAr4
    REAL(rp), DIMENSION(params%pchunk) 			:: nD,nD1
    REAL(rp), DIMENSION(params%pchunk,2) 			:: dW
    REAL(rp), DIMENSION(params%pchunk,2) 			:: rnd1
@@ -2335,7 +2338,7 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
    REAL(rp) 					:: kappa
    integer :: cc,pchunk
    integer(ip),INTENT(IN) :: tt
-   REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
+   REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species), INTENT(OUT) 	:: nimp
    REAL(rp), DIMENSION(params%pchunk) 	:: E_PHI_tmp
 
    pchunk=params%pchunk
@@ -2376,16 +2379,20 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
       else if (params%profile_model(1:8).eq.'EXTERNAL') then
 #ifdef PSPLINE
          if (params%profile_model(10:10).eq.'H') then
-            call interp_Hcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-               nAr0,nAr1,nAr2,nAr3,nD,nD1,flagCon)
+            call interp_Hcollision_p(params,pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+               nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
             do cc=1_idef,pchunk
                nimp(cc,1)=nAr0(cc)
                nimp(cc,2)=nAr1(cc)
                nimp(cc,3)=nAr2(cc)
                nimp(cc,4)=nAr3(cc)
-               nimp(cc,5)=nD(cc)
-               nimp(cc,6)=nD1(cc)
+               nimp(cc,5)=nAr4(cc)
+               nimp(cc,6)=nD(cc)
+               nimp(cc,7)=nD1(cc)
             end do
+
+            !write(6,*) 'collisions ne',ne(1)*params%cpp%density
+
          else
             call interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flagCon)
          endif
@@ -2424,8 +2431,8 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
        do cc=1_idef,pchunk
 
 #ifdef PARALLEL_RANDOM
-          rnd1(cc,1) = get_random()
-          rnd1(cc,2) = get_random()
+          rnd1(cc,1) = get_random_U()
+          rnd1(cc,2) = get_random_U()
           !       rnd1(:,1) = get_random_mkl()
           !       rnd1(:,2) = get_random_mkl()
 #else
@@ -2600,7 +2607,7 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
    INTEGER(is), DIMENSION(achunk), INTENT(INOUT) 	:: flagCon
    REAL(rp), INTENT(IN) 			:: me
    REAL(rp), DIMENSION(achunk) 			:: Zeff
-   REAL(rp), DIMENSION(achunk) 			:: nAr0,nAr1,nAr2,nAr3
+   REAL(rp), DIMENSION(achunk) 			:: nAr0,nAr1,nAr2,nAr3,nAr4
    REAL(rp), DIMENSION(achunk) 			:: nD,nD1
    REAL(rp), DIMENSION(achunk,2) 			:: dW
    REAL(rp), DIMENSION(achunk,2) 			:: rnd1
@@ -2656,16 +2663,17 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
          ne,Te,Zeff,PSIp)
    else if (params%profile_model(1:8).eq.'EXTERNAL') then
 #ifdef PSPLINE
-      if (params%profile_model(10:10).eq.'H') then
-         call interp_Hcollision_p(achunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-            nAr0,nAr1,nAr2,nAr3,nD,nD1,flagCon)
+      if (params%profile_model(10:11).eq.'H') then
+         call interp_Hcollision_p(params,achunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+            nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
          do cc=1_idef,achunk
             nimp(cc,1)=nAr0(cc)
             nimp(cc,2)=nAr1(cc)
             nimp(cc,3)=nAr2(cc)
             nimp(cc,4)=nAr3(cc)
-            nimp(cc,5)=nD(cc)
-            nimp(cc,6)=nD1(cc)
+            nimp(cc,5)=nAr4(cc)
+            nimp(cc,6)=nD(cc)
+            nimp(cc,7)=nD1(cc)
          end do
       else
          call interp_FOcollision_p(achunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flagCon)

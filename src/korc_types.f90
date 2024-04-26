@@ -819,15 +819,14 @@ module korc_types
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr4_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD1_2D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: RHON_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nRE_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr0_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr1_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr2_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr3_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr4_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD_3D
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD1_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: RHON_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr0_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr1_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr2_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr3_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr4_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nD_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nD1_3D
 
 #ifdef FIO
      INTEGER (C_INT)                         :: FIO_ne
@@ -838,6 +837,7 @@ module korc_types
 #endif
 
       LOGICAL  :: ReInterp_2x1t
+      INTEGER  :: ind_2x1t
   END TYPE PROFILES
 
 end module korc_types

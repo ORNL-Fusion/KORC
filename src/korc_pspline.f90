@@ -2800,6 +2800,49 @@ subroutine EZspline_interp2_collision(spline_oBR, spline_oBPHI, &
 
 end subroutine EZspline_interp2_collision
 
+subroutine EZspline_interp2_Hcollision(spline_oBR, spline_oBPHI, &
+   spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ,spline_oEZ1, &
+   spline_one, spline_oTe, spline_oZeff, p1, p2, fBR, &
+   fBPHI, fBZ, fER, fEPHI, fEZ, fEZ1, fne, fTe, fZeff, ier)
+   !$acc routine seq
+   type(EZspline2) spline_oBR,spline_oBPHI,spline_oBZ
+   type(EZspline2) spline_oER,spline_oEPHI,spline_oEZ,spline_oEZ1
+   type(EZspline2) spline_one,spline_oTe,spline_oZeff
+   real(fp), intent(in) :: p1, p2
+   real(fp), intent(out):: fBR, fBPHI, fBZ
+   real(fp), intent(out):: fER, fEPHI, fEZ, fEZ1
+   real(fp), intent(out):: fne, fTe, fZeff
+   integer, intent(out) :: ier
+   integer :: ifail
+   integer:: iwarn = 0
+
+   !$acc routine (EZspline_allocated2) seq
+   !$acc routine (evbicub_Hcollision) seq
+
+   ier = 0
+   ifail = 0
+
+   if( .not.EZspline_allocated2(spline_oBR) .or. spline_oBR%isReady /= 1) then
+      ier = 94
+      return
+   endif
+
+   call evbicub_Hcollision(p1, p2,  &
+      spline_oBR%x1(1), spline_oBR%n1, &
+      spline_oBR%x2(1), spline_oBR%n2, &
+      spline_oBR%ilin1, spline_oBR%ilin2, &
+      spline_oBR%fspl(1,1,1), spline_oBPHI%fspl(1,1,1), &
+      spline_oBZ%fspl(1,1,1), spline_oER%fspl(1,1,1), &
+      spline_oEPHI%fspl(1,1,1), spline_oEZ%fspl(1,1,1), spline_oEZ1%fspl(1,1,1), &
+      spline_one%fspl(1,1,1), &
+      spline_oTe%fspl(1,1,1), spline_oZeff%fspl(1,1,1), &
+      spline_oBR%n1, &
+      fBR, fBPHI, fBZ, fER, fEPHI, fEZ, fEZ1, fne, fTe, fZeff, ifail)
+
+   if(ifail /= 0) ier = 97
+
+end subroutine EZspline_interp2_Hcollision
+
 subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
    spline_oBZ, spline_oER, spline_oEPHI, spline_oEZ, p1, p2, fA, fBR, &
    fBPHI, fBZ, fER, fEPHI, fEZ, ier)
@@ -3618,6 +3661,166 @@ subroutine evbicub_collision(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !
    return
 end subroutine evbicub_collision
+
+subroutine evbicub_Hcollision(xget,yget,x,nx,y,ny,ilinx,iliny, &
+   fBR,fBPHI,fBZ,fER,fEPHI,fEZ,fEZ1,fne,fTe,fZeff,inf2,fvalBR,fvalBPHI,fvalBZ, &
+   fvalER,fvalEPHI,fvalEZ,fvalEZ1,fvalne,fvalTe,fvalZeff,ier)
+   !$acc routine seq
+   !
+   !  evaluate a 2d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in both directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm2xy  -- find cell containing (xget,yget)
+   !     fvbicub  -- evaluate interpolant function and (optionally) derivatives
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer inf2
+   !============
+   integer,intent(in) :: nx,ny                     ! grid sizes
+   real(fp) :: xget,yget                    ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   !
+   real(fp) :: fBR(0:3,inf2,ny)               ! function data
+   real(fp) :: fBPHI(0:3,inf2,ny)
+   real(fp) :: fBZ(0:3,inf2,ny)
+   real(fp) :: fER(0:3,inf2,ny)
+   real(fp) :: fEPHI(0:3,inf2,ny)
+   real(fp) :: fEZ(0:3,inf2,ny)
+   real(fp) :: fEZ1(0:3,inf2,ny)
+   real(fp) :: fne(0:3,inf2,ny)
+   real(fp) :: fTe(0:3,inf2,ny)
+   real(fp) :: fZeff(0:3,inf2,ny)
+   !
+   !       f 2nd dimension inf2 must be .ge. nx
+   !       contents of f:
+   !
+   !  f(0,i,j) = f @ x(i),y(j)
+   !  f(1,i,j) = d2f/dx2 @ x(i),y(j)
+   !  f(2,i,j) = d2f/dy2 @ x(i),y(j)
+   !  f(3,i,j) = d4f/dx2dy2 @ x(i),y(j)
+   !
+   !      (these are spline coefficients selected for continuous 2-
+   !      diffentiability, see mkbicub[w].f90)
+   !
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return d2f/dx2  (0, don't)
+   !  ict(5)=1 -- return d2f/dy2  (0, don't)
+   !  ict(6)=1 -- return d2f/dxdy (0, don't)
+   !                   the number of non zero values ict(1:6)
+   !                   determines the number of outputs...
+   !
+   !  new dmc December 2005 -- access to higher derivatives (even if not
+   !  continuous-- but can only go up to 3rd derivatives on any one coordinate.
+   !     if ict(1)=3 -- want 3rd derivatives
+   !          ict(2)=1 for d3f/dx3
+   !          ict(3)=1 for d3f/dx2dy
+   !          ict(4)=1 for d3f/dxdy2
+   !          ict(5)=1 for d3f/dy3
+   !               number of non-zero values ict(2:5) gives no. of outputs
+   !     if ict(1)=4 -- want 4th derivatives
+   !          ict(2)=1 for d4f/dx3dy
+   !          ict(3)=1 for d4f/dx2dy2
+   !          ict(4)=1 for d4f/dxdy3
+   !               number of non-zero values ict(2:4) gives no. of outputs
+   !     if ict(1)=5 -- want 5th derivatives
+   !          ict(2)=1 for d5f/dx3dy2
+   !          ict(3)=1 for d5f/dx2dy3
+   !               number of non-zero values ict(2:3) gives no. of outputs
+   !     if ict(1)=6 -- want 6th derivatives
+   !          d6f/dx3dy3 -- one value is returned.
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalBR                      ! output data
+   real(fp) :: fvalBPHI
+   real(fp) :: fvalBZ
+   real(fp) :: fvalER
+   real(fp) :: fvalEPHI
+   real(fp) :: fvalEZ
+   real(fp) :: fvalEZ1
+   real(fp) :: fvalne
+   real(fp) :: fvalTe
+   real(fp) :: fvalZeff
+
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the fourth output (depends on ict(...) spec)
+   !  fval(5) receives the fourth output (depends on ict(...) spec)
+   !  fval(6) receives the fourth output (depends on ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,0,0,1]
+   !   on output fval= [f,df/dx,df/dy,d2f/dxdy], elements 5 & 6 not referenced.
+   !
+   !    on input ict = [1,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,0,1,1,0]
+   !   on output fval= [d2f/dx2,d2f/dy2] ... elements 3 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,1,0,0,0]
+   !   on output fval= [df/dy] ... elements 2 -- 6 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j                      ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !
+   real(fp) :: xparam,yparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy
+   real(fp) :: hxi,hyi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !
+   !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
+   !---------------------------------------------------------------------
+   !$acc routine (herm2xy) seq
+   !$acc routine (fvbicub) seq
+   !
+   i=0
+   j=0
+   call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
+      i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
+   if(ier.ne.0) return
+   !
+   call fvbicub(fvalBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fBR,inf2,ny)
+   call fvbicub(fvalBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fBPHI,inf2,ny)
+   call fvbicub(fvalBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fBZ,inf2,ny)
+   call fvbicub(fvalER,i,j,xparam,yparam,hx,hxi,hy,hyi,fER,inf2,ny)
+   call fvbicub(fvalEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fEPHI,inf2,ny)
+   call fvbicub(fvalEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fEZ,inf2,ny)
+   call fvbicub(fvalEZ1,i,j,xparam,yparam,hx,hxi,hy,hyi,fEZ1,inf2,ny)
+   call fvbicub(fvalne,i,j,xparam,yparam,hx,hxi,hy,hyi,fne,inf2,ny)
+   call fvbicub(fvalTe,i,j,xparam,yparam,hx,hxi,hy,hyi,fTe,inf2,ny)
+   call fvbicub(fvalZeff,i,j,xparam,yparam,hx,hxi,hy,hyi,fZeff,inf2,ny)
+   !
+   return
+end subroutine evbicub_Hcollision
 
 subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    fA,fBR,fBPHI,fBZ,fER,fEPHI,fEZ,inf2,fvalA,fvalBR,fvalBPHI,fvalBZ, &

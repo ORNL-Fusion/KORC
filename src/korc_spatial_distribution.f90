@@ -2727,6 +2727,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
   INTEGER 						  :: ss
   !! Species iterator.
   INTEGER 				:: mpierr
+  INTEGER,DIMENSION(34) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   do ss=1_idef,params%num_species
      SELECT CASE (TRIM(spp(ss)%spatial_distribution))
@@ -2757,6 +2758,19 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
         spp(ss)%vars%X(:,1)=spp(ss)%Xtrace(1)
         spp(ss)%vars%X(:,2)=spp(ss)%Xtrace(2)
         spp(ss)%vars%X(:,3)=spp(ss)%Xtrace(3)
+
+        if (.not.params%SameRandSeed) then
+          call init_random_seed(params)
+        else
+#ifdef PARALLEL_RANDOM
+          call initialize_random(seed(1))
+          call initialize_random_U(seed(1))
+          call initialize_random_N(seed(1))
+#else
+          call random_seed(put=seed)
+#endif
+        end if
+
      CASE ('SPONG-3D')
         call Spong_3D(params,spp(ss))
      CASE ('HOLLMANN-3D')

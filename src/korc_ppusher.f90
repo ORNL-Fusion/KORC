@@ -3804,7 +3804,7 @@ subroutine advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
 end subroutine advance_FP3Dinterp_vars
 
 
-subroutine GC_init(params,F,spp)
+subroutine GC_init(params,F,P,spp)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -3813,7 +3813,7 @@ subroutine GC_init(params,F,spp)
     !! Core KORC simulation parameters.
     TYPE(FIELDS), INTENT(INOUT)                                   :: F
     !! An instance of the KORC derived type FIELDS.
-
+    TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
     !! An instance of the derived type SPECIES containing all the parameters
     !! and simulation variables of the different species in the simulation.
@@ -3833,9 +3833,11 @@ subroutine GC_init(params,F,spp)
     REAL(rp), DIMENSION(params%pchunk) :: E_PHI
     REAL(rp),DIMENSION(:),ALLOCATABLE               :: RVphi
 
-    REAL(rp),DIMENSION(params%pchunk) :: rm8,Y_R,Y_Z,V_PLL,vpll,gam
+    REAL(rp),DIMENSION(params%pchunk) :: rm8,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,vpll,gam,ne,Te,Zeff,PSIp
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
+    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
     real(rp),dimension(F%dim_1D) :: Vpart,Vpartave,VpartOMP
-    real(rp) :: dr
+    real(rp) :: dr,m_cache
     integer :: rind
 
     !    write(output_unit_write,'("eta",E17.10)') spp(ii)%vars%eta(pp)
@@ -4053,11 +4055,15 @@ subroutine GC_init(params,F,spp)
           call get_fields(params,spp(ii)%vars,F)
           !write(6,*) 'after second get fields'
 
+          !write(6,*) 'R',spp(ii)%vars%Y(:,1)*params%cpp%length,'Z',spp(ii)%vars%Y(:,3)*params%cpp%length
+          !write(6,*) 'BR',spp(ii)%vars%B(:,1)*params%cpp%Bo,'BZ',spp(ii)%vars%B(:,3)*params%cpp%Bo
+
           !write(output_unit_write,*) spp(1)%vars%PSI_P
 
           !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmag1)
 
           do pp=1_idef,spp(ii)%ppp
+
              !             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
 
              !                write(output_unit_write,'("BR: ",E17.10)') spp(ii)%vars%B(pp,1)
@@ -4093,14 +4099,25 @@ subroutine GC_init(params,F,spp)
           end do ! loop over particles on an mpi process
           !$OMP END PARALLEL DO
 
+          m_cache=spp(ii)%m
+
           !$OMP PARALLEL DO shared(F,params,spp) &
-          !$OMP& PRIVATE(pp,cc,E_PHI,Y_R) firstprivate(pchunk)
+          !$OMP& PRIVATE(pp,cc,E_PHI,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,ne,Te,Zeff,nimp) &
+          !$OMP& firstprivate(pchunk,m_cache)
           do pp=1_idef,spp(ii)%ppp,pchunk
 
              !$OMP SIMD
              do cc=1_idef,pchunk
                 E_PHI(cc)=spp(ii)%vars%E(pp-1+cc,2)
                 Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
+                Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
+                Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
+
+                V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+                V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
+
+                flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+                flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
              end do
              !$OMP END SIMD
 
@@ -4115,14 +4132,38 @@ subroutine GC_init(params,F,spp)
              end do
              !$OMP END SIMD
 
+             if (params%collisions) then
+
+               call include_CoulombCollisions_GC_p(0_ip,params, &
+                    Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
+                    flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
+
+                    !$OMP SIMD
+                    do cc=1_idef,pchunk
+                         spp(ii)%vars%ne(pp-1+cc) = ne(cc)
+                         spp(ii)%vars%Te(pp-1+cc) = Te(cc)
+                         spp(ii)%vars%Zeff(pp-1+cc) = Zeff(cc)
+                         spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
+                    end do
+                    !$OMP END SIMD
+
+             end if
+
           end do
           !$OMP END PARALLEL DO
+
+
 
        end if
 
        spp(ii)%vars%Yborn=spp(ii)%vars%Y
 
     end do ! loop over particle species
+
+    !write(6,*) 'R',spp(1)%vars%Y(1,1)*params%cpp%length
+    !write(6,*) 'Z',spp(1)%vars%Y(1,3)*params%cpp%length
+    !write(6,*) 'ppusher ne',spp(1)%vars%ne(1)*params%cpp%density
+
 
 end subroutine GC_init
 
@@ -4154,7 +4195,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
     REAL(rp), DIMENSION(params%pchunk)               :: Bmag
     REAL(rp),DIMENSION(params%pchunk) :: Y_R,Y_PHI,Y_Z
     REAL(rp),DIMENSION(params%pchunk) :: B_R,B_PHI,B_Z,E_PHI
-    REAL(rp),DIMENSION(params%pchunk) :: PSIp,ne,Te
+    REAL(rp),DIMENSION(params%pchunk) :: PSIp
     REAL(rp),DIMENSION(params%pchunk) :: V_PLL,V_MU
     REAL(rp) :: B0,EF0,R0,q0,lam,ar,m_cache,q_cache,ne0,Te0,Zeff0
     INTEGER(is),DIMENSION(params%pchunk)  :: flagCon,flagCol,flagRE
@@ -4174,6 +4215,8 @@ subroutine adv_GCeqn_top(params,F,P,spp)
     !! time iterator.
     real(rp),dimension(F%dim_1D) :: Vden,Vdenave,VdenOMP
     INTEGER :: newREs
+    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
 
 
     do ii = 1_idef,params%num_species
@@ -4193,7 +4236,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
              !$OMP& FIRSTPRIVATE(E0,q_cache,m_cache,pchunk) &
              !$OMP& shared(F,P,params,ii,spp) &
              !$OMP& PRIVATE(pp,tt,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-             !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
+             !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne,Te,Zeff,nimp, &
              !$OMP& Vden,Vdenave) &
              !$OMP& REDUCTION(+:VdenOMP)
              do pp=1_idef,spp(ii)%ppp,pchunk
@@ -4233,7 +4276,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
 
                          call include_CoulombCollisions_GC_p(tt+params%t_skip*(ttt-1),params, &
                               Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
-                              F,P,E_PHI,ne,PSIp)
+                              F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
                       end if
 
@@ -4276,7 +4319,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
 
                       call include_CoulombCollisions_GC_p(tt,params, &
                            Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
-                           F,P,E_PHI,ne,PSIp)
+                           F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
                    end do
 
@@ -4856,12 +4899,13 @@ subroutine advance_FPeqn_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
     REAL(rp),DIMENSION(params%pchunk)  :: E_PHI
     INTEGER(is),DIMENSION(params%pchunk), INTENT(INOUT)  :: flagCon,flagCol
     REAL(rp),intent(in) :: m_cache
-    REAL(rp),DIMENSION(params%pchunk) :: ne
+    REAL(rp),DIMENSION(params%pchunk) :: ne,Te,Zeff
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
 
     do tt=1_ip,params%t_skip
 
        call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
        !       write(output_unit_write,'("Collision Loop in FP")')
 
@@ -4892,6 +4936,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
     REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
     INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
     REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
 
 
     INTEGER                                                    :: ii
@@ -4919,7 +4964,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
           !$OMP& SHARED(params,ii,spp,P,F) &
           !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
           !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-          !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z, &
+          !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,Te,Zeff,nimp,E_R,E_Z, &
           !$OMP& Y_R0,Y_PHI0,Y_Z0)
 
           do pp=1_idef,spp(ii)%ppp,pchunk
@@ -4957,7 +5002,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
                    if (params%collisions) then
                       call include_CoulombCollisions_GC_p(tt,params, &
                            Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
-                           F,P,E_PHI,ne,PSIp)
+                           F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
                    end if
 
                 end do !timestep iterator
@@ -5401,6 +5446,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
     REAL(rp),DIMENSION(params%pchunk) :: gradB_R,gradB_PHI,gradB_Z
     INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
     REAL(rp) :: m_cache,q_cache,B0,EF0,R0,q0,lam,ar
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
 
 
     INTEGER                                                    :: ii
@@ -5426,7 +5472,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
           !$OMP& SHARED(params,ii,spp,P,F) &
           !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
           !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-          !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,thread_num, &
+          !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,Te,Zeff,nimp,E_R,E_Z,thread_num, &
           !$OMP& Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
 
           do pp=1_idef,spp(ii)%ppp,pchunk
@@ -5481,7 +5527,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
                       call include_CoulombCollisions_GC_p(tt,params, &
                            Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
-                           flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+                           flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
                    end if
 
@@ -5511,18 +5557,13 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
                    spp(ii)%vars%B(pp-1+cc,2) = B_PHI(cc)
                    spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
 
-                   spp(ii)%vars%gradB(pp-1+cc,1) = gradB_R(cc)
-                   spp(ii)%vars%gradB(pp-1+cc,2) = gradB_PHI(cc)
-                   spp(ii)%vars%gradB(pp-1+cc,3) = gradB_Z(cc)
-
-                   spp(ii)%vars%curlb(pp-1+cc,1) = curlb_R(cc)
-                   spp(ii)%vars%curlb(pp-1+cc,2) = curlb_PHI(cc)
-                   spp(ii)%vars%curlb(pp-1+cc,3) = curlb_Z(cc)
-
                    spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
                    spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
 
                    spp(ii)%vars%ne(pp-1+cc) = ne(cc)
+                   spp(ii)%vars%Te(pp-1+cc) = Te(cc)
+                   spp(ii)%vars%Zeff(pp-1+cc) = Zeff(cc)
+                   spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
                 end do
                 !$OMP END SIMD
 
@@ -5530,7 +5571,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
                 do tt=1_ip,params%t_skip
                    call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-                        V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+                        V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
                 end do
 
@@ -5609,7 +5650,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
              !$OMP& PRIVATE(pp,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
              !$OMP& B_R,B_PHI,B_Z,achunk, &
              !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
-             !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,Te,E_R,E_Z,thread_num, &
+             !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,Te,Zeff,nimp,E_R,E_Z,thread_num, &
              !$OMP& Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
 
              do pp=1_idef,spp(ii)%pRE,pchunk
@@ -5765,6 +5806,9 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
                    spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
 
                    spp(ii)%vars%ne(pp-1+cc) = ne(cc)
+                   spp(ii)%vars%Te(pp-1+cc) = Te(cc)
+                   spp(ii)%vars%Zeff(pp-1+cc) = Zeff(cc)
+                   spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
                 end do
                 !$OMP END SIMD
 
@@ -7377,6 +7421,7 @@ subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     REAL(rp),DIMENSION(params%pchunk) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
     REAL(rp),DIMENSION(params%pchunk) :: V0_PLL,V0_MU
     REAL(rp),DIMENSION(params%pchunk) :: Te,Zeff
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
 
     INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
     REAL(rp),intent(IN)  :: q_cache,m_cache
@@ -7705,7 +7750,7 @@ subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     if (params%collisions) then
 
        call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
     end if
 
@@ -7727,12 +7772,14 @@ subroutine advance_FPinterp_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
     REAL(rp),intent(in) :: m_cache
     INTEGER(is),DIMENSION(params%pchunk),intent(INOUT) :: flagCon,flagCol
     REAL(rp),DIMENSION(params%pchunk), INTENT(OUT) :: ne
+    REAL(rp),DIMENSION(params%pchunk) :: Te,Zeff
+    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
 
     !    write(output_unit_write,'("E_PHI_FP: ",E17.10)') E_PHI
 
     do tt=1_ip,params%t_skip
        call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
-            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
+            V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
        !       write(output_unit_write,'("Collision Loop in FP")')
 
