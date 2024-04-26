@@ -40,7 +40,7 @@ endif ()
 #  Build Options
 #-------------------------------------------------------------------------------
 option (USE_ACC "Use OpenACC" OFF)
-option (USE_PSPLINE "Use PSPLINE interpolation" OFF)
+option (USE_PSPLINE "Use PSPLINE interpolation" ON)
 option (USE_FIO "Use FIO interpolation support" OFF)
 
 #-------------------------------------------------------------------------------

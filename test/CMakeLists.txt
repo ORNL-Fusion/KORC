@@ -23,6 +23,12 @@ add_test (NAME egyro_test
           COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+if(USE_PSPLINE)
+  add_test (NAME mars_test
+            COMMAND ${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh ${CMAKE_SOURCE_DIR}/test/mars
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif()
+
 add_test (NAME unit_testing
           COMMAND xtest TEST_OUT
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

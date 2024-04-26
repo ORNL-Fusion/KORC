@@ -1692,7 +1692,7 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
           call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-               E_X,E_Y,E_Z,B_Z,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+               E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
@@ -3304,7 +3304,7 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
           call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-               E_X,E_Y,E_Z,B_Z,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+               E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
@@ -3494,7 +3494,7 @@ subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   !if (params%radiation) then
   !  !! Calls [[radiation_force_p]] in [[korc_ppusher]].
   !  call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-  !        E_X,E_Y,E_Z,B_Z,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+  !        E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
   !  U_RC_X = U_RC_X + a*Frad_X/q_cache
   !  U_RC_Y = U_RC_Y + a*Frad_Y/q_cache
   !  U_RC_Z = U_RC_Z + a*Frad_Z/q_cache
@@ -3695,7 +3695,7 @@ subroutine advance_FOfio_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
        if (params%radiation) then
           !! Calls [[radiation_force_p]] in [[korc_ppusher]].
           call radiation_force_p(pchunk,q_cache,m_cache,U_os_X,U_os_Y,U_os_Z, &
-               E_X,E_Y,E_Z,B_Z,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
+               E_X,E_Y,E_Z,B_X,B_Y,B_Z,Frad_X,Frad_Y,Frad_Z)
           U_RC_X(cc) = U_RC_X(cc) + a*Frad_X(cc)/q_cache
           U_RC_Y(cc) = U_RC_Y(cc) + a*Frad_Y(cc)/q_cache
           U_RC_Z(cc) = U_RC_Z(cc) + a*Frad_Z(cc)/q_cache
