@@ -3187,7 +3187,7 @@ CONTAINS
        call h5fclose_f(h5file_id, h5error)
     end if
 
-    CALL MPI_BCAST(params%prev_iter_2x1t,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(params%prev_iter_2x1t,1,MPI_INTEGER8,0,MPI_COMM_WORLD,mpierr)
 
   end subroutine load_prev_iter
 
