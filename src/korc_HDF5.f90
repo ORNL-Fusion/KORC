@@ -2776,21 +2776,28 @@ CONTAINS
     !! procces.
     !! Variable used by MPI to count the amount of data received by the main
     !! MPI procces.
+    LOGICAL :: exist
 
 
 !    if ( MODULO(params%it,params%restart_output_cadence) .EQ. 0_ip ) then 
     if (params%mpi_params%rank.EQ.0_idef) then
 
-       write(output_unit_write,'("Saving restart: ",I15)') &
-            params%it/(params%t_skip*params%t_it_SC)
-
-       call execute_command_line("rm " // TRIM(params%path_to_outputs) // "restart_file.h5",exitstat=exei)
-       IF (exei/=0) then
-          write(6,*) 'Error removing restart_file.h5'
-          call korc_abort(28)
-       end if
+     write(output_unit_write,'("Saving restart: ",I15)') &
+          params%it/(params%t_skip*params%t_it_SC)
 
        filename = TRIM(params%path_to_outputs) // "restart_file.h5"
+
+       inquire(FILE=filename,exist=exist)
+
+       if (exist) then   
+          call execute_command_line("rm " // TRIM(params%path_to_outputs) // "restart_file.h5",exitstat=exei)
+          IF (exei/=0) then
+               write(6,*) 'Error removing restart_file.h5'
+               call korc_abort(28)
+          end if
+       end if
+
+     
        call h5fcreate_f(TRIM(filename), H5F_ACC_TRUNC_F, h5file_id, h5error)
 
        dset = "it"
