@@ -2771,7 +2771,7 @@ CONTAINS
     !! Iterator for reading all the entried of params::outputs_list.
     INTEGER 							:: mpierr
     !! MPI error status.
-    INTEGER 					:: numel_send, numel_receive
+    INTEGER 					:: numel_send, numel_receive,exei
     !! Variable used by MPI to count the amount of data sent by each MPI
     !! procces.
     !! Variable used by MPI to count the amount of data received by the main
@@ -2783,6 +2783,12 @@ CONTAINS
 
        write(output_unit_write,'("Saving restart: ",I15)') &
             params%it/(params%t_skip*params%t_it_SC)
+
+       call execute_command_line("rm " // TRIM(params%path_to_outputs) // "restart_file.h5",exitstat=exei)
+       IF (exei/=0) then
+          write(6,*) 'Error removing restart_file.h5'
+          call korc_abort(28)
+       end if
 
        filename = TRIM(params%path_to_outputs) // "restart_file.h5"
        call h5fcreate_f(TRIM(filename), H5F_ACC_TRUNC_F, h5file_id, h5error)
