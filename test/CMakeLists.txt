@@ -19,18 +19,24 @@ target_link_libraries (xtest
 
 set_property(TARGET xtest PROPERTY LINKER_LANGUAGE Fortran)
 
+configure_file(${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh.in ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh)
+
 add_test (NAME egyro_test
-          COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh ${CMAKE_SOURCE_DIR}/test/egyro
+          COMMAND ${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh 1
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 if(USE_PSPLINE)
   add_test (NAME mars_test
-            COMMAND ${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh ${CMAKE_SOURCE_DIR}/test/mars
+            COMMAND ${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh 1
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
 foreach(RANK IN ITEMS 1 2 4 8 16)
   if(${RANK} LESS_EQUAL ${MPIEXEC_MAX_NUMPROCS})
+    add_test (NAME egyro_test_${RANK}
+	      COMMAND ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh ${RANK}
+              WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
     add_test (NAME unit_testing_${RANK}
               COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${RANK} ./xtest TEST_OUT
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
