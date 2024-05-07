@@ -29,6 +29,9 @@ if(USE_PSPLINE)
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
-add_test (NAME unit_testing
-          COMMAND xtest TEST_OUT
-          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+foreach(RANK RANGE 1 ${MPIEXEC_MAX_NUMPROCS})
+  add_test (NAME unit_testing_${RANK}
+            COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${RANK} ./xtest TEST_OUT
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endforeach()
+
