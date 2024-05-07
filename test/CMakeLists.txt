@@ -29,9 +29,11 @@ if(USE_PSPLINE)
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
-foreach(RANK RANGE 1 ${MPIEXEC_MAX_NUMPROCS})
-  add_test (NAME unit_testing_${RANK}
-            COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${RANK} ./xtest TEST_OUT
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+foreach(RANK IN ITEMS 1 2 4 8 16)
+  if(${RANK} LESS_EQUAL ${MPIEXEC_MAX_NUMPROCS})
+    add_test (NAME unit_testing_${RANK}
+              COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${RANK} ./xtest TEST_OUT
+              WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  endif()
 endforeach()
 
