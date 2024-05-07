@@ -12,7 +12,7 @@ if [ ! -d $OUT_DIR ]; then
   mkdir -p $OUT_DIR
 fi
 if [ ! -f D3D_191366_1762ms_MARS.h5 ]; then
-  ln -s $1/D3D_191366_1762ms_MARS.h5 D3D_191366_1762ms_MARS.h5
+  ln -s ${CMAKE_SOURCE_DIR}/test/mars/D3D_191366_1762ms_MARS.h5 D3D_191366_1762ms_MARS.h5
 fi
 
 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
