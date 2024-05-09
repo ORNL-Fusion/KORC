@@ -27,16 +27,19 @@ foreach(RANK IN ITEMS 1 2 4 8 16)
     add_test (NAME egyro_test_${RANK}
 	      COMMAND ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh ${RANK}
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    set_tests_properties (egyro_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
     if(USE_PSPLINE)
-       add_test (NAME mars_test_${RANK}
-                 COMMAND ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh ${RANK}
-                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-    endif()
+      add_test (NAME mars_test_${RANK}
+                COMMAND ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh ${RANK}
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+      set_tests_properties (mars_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
+   endif()
 
     add_test (NAME unit_testing_${RANK}
               COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${RANK} ./xtest TEST_OUT
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+   set_tests_properties (unit_testing_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
   endif()
 endforeach()
 
