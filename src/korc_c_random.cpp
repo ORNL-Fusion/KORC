@@ -1,5 +1,6 @@
-#include <random>
 #include <chrono>
+#include <random>
+#include <stdexcept>
 
 #ifdef DOUBLE_PRECISION
 typedef double real_type;

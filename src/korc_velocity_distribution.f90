@@ -389,7 +389,6 @@ CONTAINS
       do pp=1_idef,spp%ppp
          theta(pp)=random%uniform%get()
       enddo
-      call finalize_random()
     endif
     theta = 2.0_rp*C_PI*theta
     
