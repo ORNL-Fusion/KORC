@@ -5,13 +5,14 @@ set -ex
 #define input file
 INPUT_FILE="${CMAKE_SOURCE_DIR}/test/egyro/input_file_egyro.korc"
 #define output directory
-OUT_DIR="egyro_test"
+OUT_DIR="egyro_test/rank_$1"
 
 #check that output directory doesn't exist so bash doesn't complain
-mkdir -p $OUT_DIR
+if [ ! -d $OUT_DIR ]; then
+  mkdir -p $OUT_DIR
+fi
 
 #assumes binary directory ../KORC/build/bin was added to path
 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
 
 h5diff -r -d 0.000001 $OUT_DIR/file_0.h5 ${CMAKE_SOURCE_DIR}/test/egyro/file_0.h5
-
