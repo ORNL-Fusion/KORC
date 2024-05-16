@@ -419,12 +419,9 @@ CONTAINS
       call RANDOM_NUMBER(theta)
       call finalize_random_seed
     else
-      call initialize_random(1)
-      call initialize_random_U(1)
       do pp=1_idef,spp%ppp
          theta(pp)=get_random_U()
       enddo
-      call finalize_random()
     endif
     theta = 2.0_rp*C_PI*theta
     
