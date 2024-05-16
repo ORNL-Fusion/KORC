@@ -1422,7 +1422,7 @@ subroutine MH_psi(params,spp,F)
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
      PHI_buffer = 0._rp
-
+  end if
 
      if (.not.params%SameRandSeed) then
         call init_random_seed(params)
@@ -1438,6 +1438,7 @@ subroutine MH_psi(params,spp,F)
 #endif
      end if
 
+   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,'("Begin burn: ",I10)')
      accepted=.false.
      ii=1_idef
@@ -1722,11 +1723,11 @@ subroutine MH_psi(params,spp,F)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
+   end if
 
      if (.not.params%SameRandSeed) then
         call init_random_seed(params)
      end if
-  end if
 
   params%GC_coords=.FALSE.
 
