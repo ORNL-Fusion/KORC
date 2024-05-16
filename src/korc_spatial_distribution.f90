@@ -1347,7 +1347,6 @@ subroutine MH_psi(params,random,spp,F)
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
      PHI_buffer = 0._rp
-
      write(output_unit_write,'("Begin burn: ",I10)')
      accepted=.false.
      ii=1_idef
