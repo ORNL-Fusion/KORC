@@ -2586,6 +2586,176 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
 
 end subroutine include_CoulombCollisions_GC_p
 
+subroutine include_CoulombCollisions_GC_p_ACC(tt,params,Y_R,Y_PHI,Y_Z, &
+   Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
+   !$acc routine seq
+   TYPE(PROFILES), INTENT(IN)                                 :: P
+   TYPE(FIELDS), INTENT(IN)                                   :: F
+   TYPE(KORC_PARAMS), INTENT(INOUT) 		:: params
+   REAL(rp), INTENT(INOUT) 	:: Ppll
+   REAL(rp), INTENT(INOUT) 	:: Pmu
+   REAL(rp)  			:: Bmag
+   REAL(rp)  	:: B_R,B_PHI,B_Z
+   REAL(rp)  :: curlb_R,curlb_PHI,curlb_Z
+   REAL(rp)  :: gradB_R,gradB_PHI,gradB_Z
+   REAL(rp)  	:: E_R,E_Z
+   REAL(rp), INTENT(OUT) 	:: E_PHI,ne,PSIp,Te,Zeff
+   REAL(rp), INTENT(IN) 			:: Y_R,Y_PHI,Y_Z
+   INTEGER(is), INTENT(INOUT) 	:: flagCol
+   INTEGER(is), INTENT(INOUT) 	:: flagCon
+   REAL(rp),INTENT(IN) 			:: me
+   REAL(rp)  			:: nAr0,nAr1,nAr2,nAr3,nAr4
+   REAL(rp)  			:: nD,nD1
+   REAL(rp),DIMENSION(2) 			:: dW
+   REAL(rp),DIMENSION(2) 			:: rnd1
+   REAL(rp) 					:: dt,time
+   REAL(rp)  					:: pm
+   REAL(rp)   					:: dp
+   REAL(rp)   					:: xi
+   REAL(rp)   					:: dxi
+   REAL(rp)   					:: v,gam
+   !! speed of particle
+   REAL(rp)  					:: CAL
+   REAL(rp) 					:: dCAL
+   REAL(rp)  					:: CFL
+   REAL(rp)  					:: CBL
+   REAL(rp)  	:: SC_p,SC_mu,BREM_p
+   REAL(rp) 					:: kappa
+   integer(ip),INTENT(IN) :: tt
+   REAL(rp), DIMENSION(params%num_impurity_species), INTENT(OUT) 	:: nimp
+   REAL(rp) 	:: E_PHI_tmp
+
+   !$acc routine (calculate_GCfieldswE_p_ACC) seq
+   !$acc routine (interp_Hcollision_p_ACC) seq
+
+   pchunk=params%pchunk
+
+   if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
+      dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
+      time=params%init_time+(params%it-1+tt)*params%dt
+
+#ifdef PSPLINE
+
+   call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
+      E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+      gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp)
+
+#endif PSPLINE
+
+#ifdef PSPLINE
+
+   call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+      nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
+
+      nimp(1)=nAr0
+      nimp(2)=nAr1
+      nimp(3)=nAr2
+      nimp(4)=nAr3
+      nimp(5)=nAr4
+      nimp(6)=nD
+      nimp(7)=nD1
+
+
+            !write(6,*) 'collisions ne',ne(1)*params%cpp%density
+
+
+#endif PSPLINE
+
+
+      E_PHI_tmp=E_PHI
+      if (.not.params%FokPlan) E_PHI=0._rp
+
+         Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+         ! Transform p_pll,mu to P,eta
+         pm = SQRT(Ppll*Ppll+2*me*Bmag*Pmu)
+         xi = Ppll/pm
+
+         gam = sqrt(1+pm*pm)
+
+         v = pm/gam
+         ! normalized speed (v_K=v_P/c)
+
+
+#ifdef PARALLEL_RANDOM
+          rnd1(1) = get_random_U()
+          rnd1(2) = get_random_U()
+          !       rnd1(:,1) = get_random_mkl()
+          !       rnd1(:,2) = get_random_mkl()
+#else
+          call RANDOM_NUMBER(rnd1)
+#endif PARALLEL_RANDOM
+
+          dW(1) = SQRT(3*dt)*(-1+2*rnd1(1))
+          dW(2) = SQRT(3*dt)*(-1+2*rnd1(2))
+
+   !          write(output_unit_write,'("dW1: ",E17.10)') dW(cc,1)
+   !          write(output_unit_write,'("dW2: ",E17.10)') dW(cc,2)
+
+          if (params%profile_model(10:10).eq.'H') then
+             CAL = CA_SD(v,ne,Te)
+             dCAL= dCA_SD(v,me,ne,Te)
+             CFL = CF_SD_FIO(params,v,ne,Te,nimp)
+             CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
+                  CB_ei_SD_FIO(params,v,ne,Te,nimp,Zeff))
+          else
+             CAL = CA_SD(v,ne,Te)
+             dCAL= dCA_SD(v,me,ne,Te)
+             CFL = CF_SD(params,v,ne,Te,P,Y_R,Y_Z)
+             CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
+                  CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z))
+          endif
+
+          if (.not.cparams_ss%slowing_down) CFL=0._rp
+          if (.not.cparams_ss%pitch_diffusion) CBL=0._rp
+          if (.not.cparams_ss%energy_diffusion) THEN
+             CAL=0._rp
+             dCAL=0._rp
+          ENDIF
+
+          dp=REAL(flagCol)*REAL(flagCon)* &
+               ((-CFL+dCAL+E_PHI*xi)*dt+ &
+               sqrt(2.0_rp*CAL)*dW(1))
+
+          dxi=REAL(flagCol)*REAL(flagCon)* &
+               ((-2*xi*CBL/(pm*pm)+ &
+               E_PHI*(1-xi*xi)/pm)*dt- &
+               sqrt(2.0_rp*CBL*(1-xi*xi))/pm*dW(2))
+
+
+          pm=pm+dp
+          xi=xi+dxi
+
+
+
+
+          if (xi>1) then
+
+             xi=1-mod(xi,1._rp)
+          else if (xi<-1) then
+             xi=-1-mod(xi,-1._rp)
+
+          endif
+
+
+
+          ! Transform P,xi to p_pll,mu
+          Ppll=pm*xi
+          Pmu=(pm*pm-Ppll*Ppll)/(2*me*Bmag)
+
+
+
+          if ((pm.lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
+               p_therm)).and.flagCol.eq.1_ip) then
+             flagCol=0_ip
+          end if
+
+
+       if (.not.params%FokPlan) E_PHI=E_PHI_tmp
+
+    end if
+
+end subroutine include_CoulombCollisions_GC_p_ACC
+
 subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
    Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
 

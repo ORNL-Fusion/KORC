@@ -3367,6 +3367,76 @@ subroutine calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI
 
 end subroutine calculate_GCfieldswE_p
 
+subroutine calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
+   curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,flag_cache,PSIp)
+   !$acc routine seq
+   REAL(rp), INTENT(IN)      :: Y_R,Y_PHI,Y_Z
+   TYPE(FIELDS), INTENT(IN)                               :: F
+   REAL(rp),  INTENT(OUT)   :: B_R,B_PHI,B_Z
+   REAL(rp),  INTENT(OUT)   :: gradB_R,gradB_PHI,gradB_Z
+   REAL(rp),  INTENT(OUT)   :: curlb_R,curlb_PHI,curlb_Z
+   REAL(rp),  INTENT(OUT)   :: E_R,E_PHI,E_Z
+   REAL(rp)   :: Bmag,EPHI
+   INTEGER                                                :: cc
+   REAL(rp),INTENT(OUT)  :: PSIp
+   REAL(rp), DIMENSION(6)  :: A
+   INTEGER(is),INTENT(INOUT)   :: flag_cache
+   REAL(rp) :: psip_conv
+
+   !$acc routine (EZspline_interp2_GCvarswE) seq
+   !$acc routine (EZspline_error) seq
+
+   psip_conv=F%psip_conv
+
+      call EZspline_interp2_GCvarswE(bfield_2d%A, efield_2d%PHI, Y_R, Y_Z, A, &
+         EPHI, ezerr)
+      call EZspline_error(ezerr)
+
+      !A(:,1) = PSIp
+      !A(:,2) = dPSIp/dR
+      !A(:,3) = dPSIp/dZ
+      !A(:,4) = d^2PSIp/dR^2
+      !A(:,5) = d^2PSIp/dZ^2
+      !A(:,6) = d^2PSIp/dRdZ
+
+      PSIp=A(1)
+
+      B_R = psip_conv*A(3)/Y_R
+      ! BR = (dA/dZ)/R
+      B_PHI = -F%Bo*F%Ro/Y_R
+      ! BPHI = Fo*Ro/R
+      B_Z = -psip_conv*A(2)/Y_R
+      ! BR = -(dA/dR)/R
+
+
+
+      Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+
+      gradB_R=(B_R*psip_conv*A(6)-B_Z*psip_conv*A(4)- &
+            Bmag*Bmag)/(Y_R*Bmag)
+      gradB_PHI=0._rp
+      gradB_Z=(B_R*psip_conv*A(5)-B_Z*psip_conv*A(6))/ &
+            (Y_R*Bmag)
+
+      curlb_R=B_PHI*gradB_Z/(Bmag*Bmag)
+      curlb_PHI=(Bmag/Y_R*(B_Z+psip_conv*A(4)+ &
+            psip_conv*A(5))-B_R*gradB_Z+B_Z*gradB_R)/ &
+            (Bmag*Bmag)
+      curlb_Z=-B_PHI*gradB_R/(Bmag*Bmag)
+
+      if (F%E_2x1t) then
+         E_R = 0._rp
+         E_PHI = EPHI
+         E_Z = 0._rp
+      else
+         E_R = 0._rp
+         E_PHI = 0._rp
+         E_Z = 0._rp
+      end if
+
+
+end subroutine calculate_GCfieldswE_p_ACC
+
 subroutine calculate_GCfields_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
    E_R,E_PHI,E_Z, &
    curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,flag_cache,PSIp)
@@ -3778,36 +3848,63 @@ end subroutine interp_fields
 
 #ifdef PSPLINE
 subroutine interp_Hcollision_p(params,pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+   nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flag_cache)
+   TYPE(KORC_PARAMS), INTENT(IN) 		:: params
+   INTEGER, INTENT(IN)  :: pchunk
+   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
+   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: ne,Te,Zeff
+   REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
+   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
+   INTEGER :: cc
+ 
+   call check_if_in_profiles_domain_p(pchunk,Y_R,Y_PHI,Y_Z,flag_cache)
+   !  write(output_unit_write,'("YR: ",E17.10)') Y_R(1)
+   !  write(output_unit_write,'("YPHI: ",E17.10)') Y_PHI(1)
+   !  write(output_unit_write,'("YZ: ",E17.10)') Y_Z(1)
+ 
+   !  write(output_unit_write,'("Te_interp_R",E17.10)') profiles_2d%Te%x1
+   !  write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
+ 
+   do cc=1_idef,pchunk
+     call EZspline_interp2_Hcollision(profiles_2d%ne,profiles_2d%Te,profiles_2d%Zeff, &
+       profiles_2d%nAr0,profiles_2d%nAr1,profiles_2d%nAr2,profiles_2d%nAr3,profiles_2d%nAr4, &
+       profiles_2d%nD,profiles_2d%nD1,Y_R(cc),Y_Z(cc),ne(cc),Te(cc),Zeff(cc), &
+       nAr0(cc),nAr1(cc),nAr2(cc),nAr3(cc),nAr4(cc),nD(cc),nD1(cc),ezerr)
+     call EZspline_error(ezerr)
+   end do
+ 
+    !write(6,*) 'interp ne%fspl',profiles_2d%ne%fspl(1,12,15)*params%cpp%density
+ 
+   !write(6,*) 'interp ne',ne(1)
+ 
+ end subroutine interp_Hcollision_p
+
+subroutine interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
   nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flag_cache)
+  !$acc routine seq
   TYPE(KORC_PARAMS), INTENT(IN) 		:: params
-  INTEGER, INTENT(IN)  :: pchunk
-  REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
-  REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: ne,Te,Zeff
-  REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
-  INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
-  INTEGER :: cc
+  REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
+  REAL(rp),INTENT(OUT)   :: ne,Te,Zeff
+  REAL(rp),INTENT(OUT)   :: nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
+  INTEGER(is),INTENT(INOUT)   :: flag_cache
 
-  call check_if_in_profiles_domain_p(pchunk,Y_R,Y_PHI,Y_Z,flag_cache)
-  !  write(output_unit_write,'("YR: ",E17.10)') Y_R(1)
-  !  write(output_unit_write,'("YPHI: ",E17.10)') Y_PHI(1)
-  !  write(output_unit_write,'("YZ: ",E17.10)') Y_Z(1)
 
-  !  write(output_unit_write,'("Te_interp_R",E17.10)') profiles_2d%Te%x1
-  !  write(output_unit_write,'("Te_interp_Z",E17.10)') profiles_2d%Te%x2
+  !$acc routine (EZspline_interp2_Hcollision) seq
+   !$acc routine (EZspline_error) seq
 
-  do cc=1_idef,pchunk
+
     call EZspline_interp2_Hcollision(profiles_2d%ne,profiles_2d%Te,profiles_2d%Zeff, &
       profiles_2d%nAr0,profiles_2d%nAr1,profiles_2d%nAr2,profiles_2d%nAr3,profiles_2d%nAr4, &
-      profiles_2d%nD,profiles_2d%nD1,Y_R(cc),Y_Z(cc),ne(cc),Te(cc),Zeff(cc), &
-      nAr0(cc),nAr1(cc),nAr2(cc),nAr3(cc),nAr4(cc),nD(cc),nD1(cc),ezerr)
+      profiles_2d%nD,profiles_2d%nD1,Y_R,Y_Z,ne,Te,Zeff, &
+      nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,ezerr)
     call EZspline_error(ezerr)
-  end do
+
 
    !write(6,*) 'interp ne%fspl',profiles_2d%ne%fspl(1,12,15)*params%cpp%density
 
   !write(6,*) 'interp ne',ne(1)
 
-end subroutine interp_Hcollision_p
+end subroutine interp_Hcollision_p_ACC
 
 subroutine interp_nRE(params,Y_R,Y_PHI,Y_Z,PSIp,EPHI,ne,Te,nRE, &
   nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,g_test,fRE_out,rho1D)
