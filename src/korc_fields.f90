@@ -1155,6 +1155,7 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    DEALLOCATE( vars%curlb )
    DEALLOCATE( vars%E )
    DEALLOCATE( vars%flagCon )
+   DEALLOCATE( vars%initLCFS )
 #ifdef FIO
    DEALLOCATE( vars%hint)
 #endif

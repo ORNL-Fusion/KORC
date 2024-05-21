@@ -3312,9 +3312,9 @@ subroutine calculate_GCfieldswE_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI
 
    call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
-   !$OMP SIMD
-   !    !$OMP& aligned(PSIp,A,B_R,Y_R,B_PHI,B_Z,Bmag,gradB_R,gradB_PHI,gradB_Z, &
-   !    !$OMP& curlb_R,curlb_PHI,curlb_Z,E_R,E_PHI,E_Z)
+   !!$OMP SIMD
+   !!    !$OMP& aligned(PSIp,A,B_R,Y_R,B_PHI,B_Z,Bmag,gradB_R,gradB_PHI,gradB_Z, &
+   !!    !$OMP& curlb_R,curlb_PHI,curlb_Z,E_R,E_PHI,E_Z)
    do cc=1_idef,pchunk
       call EZspline_interp2_GCvarswE(bfield_2d%A, efield_2d%PHI, Y_R(cc), Y_Z(cc), A, &
          EPHI, ezerr)

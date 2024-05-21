@@ -333,7 +333,7 @@ CONTAINS
        !$OMP PARALLEL
        !$OMP MASTER
        write(output_unit_write,'(/,"OMP threads per MPI process: ",I3)') params%num_omp_threads
-       write(output_unit_write,'(/,"Cores available per MPI process: ",I3)') get_thread_number()
+       write(output_unit_write,'(/,"Cores available per MPI process: ",I3)') get_max_threads()
        !$OMP END MASTER
        !$OMP END PARALLEL
 #ifdef GNU
