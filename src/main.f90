@@ -628,8 +628,11 @@ end if
      end if
 
      do it=params%ito,params%t_steps,params%t_skip
+#ifdef ACC
         call adv_GCinterp_psiwE_top(params,spp,P,F)
-
+#else
+        call adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
+#endif
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &
                 +REAL(it-1_ip+params%t_skip,rp)*params%dt
