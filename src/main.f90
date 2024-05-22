@@ -320,7 +320,12 @@ if (params%orbit_model(1:2).eq.'FO') then
 else if (params%orbit_model(1:2).eq.'GC') then
 
   if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
+
+#ifdef ACC
+    call GC_init_ACC(params,F,P,spp)
+#else
     call GC_init(params,F,P,spp)
+#endif
   else
 
     call get_fields(params,spp(1)%vars,F)
@@ -629,9 +634,9 @@ end if
 
      do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-        call adv_GCinterp_psiwE_top(params,spp,P,F)
-#else
         call adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
+#else
+        call adv_GCinterp_psiwE_top(params,spp,P,F)
 #endif
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &

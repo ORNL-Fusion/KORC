@@ -3803,8 +3803,370 @@ subroutine advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
 
 end subroutine advance_FP3Dinterp_vars
 
-
 subroutine GC_init(params,F,P,spp)
+     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
+     !! @endnote
+     !! Comment this section further with evolution equations, numerical
+     !! methods, and descriptions of both.
+     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+     !! Core KORC simulation parameters.
+     TYPE(FIELDS), INTENT(INOUT)                                   :: F
+     !! An instance of the KORC derived type FIELDS.
+     TYPE(PROFILES), INTENT(IN)                                 :: P
+     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+     !! An instance of the derived type SPECIES containing all the parameters
+     !! and simulation variables of the different species in the simulation.
+ 
+     INTEGER                                                    :: ii
+     !! Species iterator.
+     INTEGER                                                    :: pp
+     !! Particles iterator.
+     INTEGER                                                    :: cc,pchunk
+     !! Chunk iterator.
+     REAL(rp)               :: Bmag1,pmag
+     REAL(rp)               :: Bmagc
+     REAL(rp)               :: rm
+     REAL(rp),DIMENSION(:,:),ALLOCATABLE               :: RAphi
+     REAL(rp), DIMENSION(3) :: bhat
+     REAL(rp), DIMENSION(3) :: bhatc
+     REAL(rp), DIMENSION(params%pchunk) :: E_PHI
+     REAL(rp),DIMENSION(:),ALLOCATABLE               :: RVphi
+ 
+     REAL(rp),DIMENSION(params%pchunk) :: rm8,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,vpll,gam,ne,Te,Zeff,PSIp
+     REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
+     INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
+     real(rp),dimension(F%dim_1D) :: Vpart,Vpartave,VpartOMP
+     real(rp) :: dr,m_cache
+     integer :: rind
+ 
+     !    write(output_unit_write,'("eta",E17.10)') spp(ii)%vars%eta(pp)
+     !    write(output_unit_write,'("gam",E17.10)') spp(ii)%vars%g(pp)
+ 
+     do ii = 1_idef,params%num_species
+ 
+        pchunk=params%pchunk
+ 
+        if (spp(ii)%spatial_distribution.eq.'TRACER'.and. &
+             params%FO_GC_compare) then
+           call get_fields(params,spp(ii)%vars,F)
+           !! Calls [[get_fields]] in [[korc_fields]].
+           ! Interpolates fields at local particles' position and keeps in
+           ! spp%vars. Fields in (R,\(\phi\),Z) coordinates.
+ 
+           ALLOCATE(RAphi(spp(ii)%ppp,2))
+           ALLOCATE(RVphi(spp(ii)%ppp))
+           RAphi=0.0_rp
+ 
+           call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
+ 
+           !$OMP PARALLEL DO SHARED(params,ii,spp,F,RAphi,RVphi) &
+           !$OMP&  PRIVATE(pp,Bmag1,bhat,rm)
+           ! Call OpenMP to calculate p_par and mu for each particle and
+           ! put into spp%vars%V
+           do pp=1_idef,spp(ii)%ppp
+              if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
+ 
+                 RVphi(pp)=(-sin(spp(ii)%vars%Y(pp,2))*spp(ii)%vars%V(pp,1)+ &
+                      cos(spp(ii)%vars%Y(pp,2))*spp(ii)%vars%V(pp,2))* &
+                      spp(ii)%vars%Y(pp,1)
+ 
+                 Bmag1 = SQRT(spp(ii)%vars%B(pp,1)*spp(ii)%vars%B(pp,1)+ &
+                      spp(ii)%vars%B(pp,2)*spp(ii)%vars%B(pp,2)+ &
+                      spp(ii)%vars%B(pp,3)*spp(ii)%vars%B(pp,3))
+ 
+                 !             write(output_unit_write,'("pp: ",I16)') pp
+                 !             write(output_unit_write,'("Bmag: ",E17.10)') Bmag
+ 
+ 
+                 bhat = spp(ii)%vars%B(pp,:)/Bmag1
+ 
+                 if (params%field_model(1:10).eq.'ANALYTICAL') then
+                    rm=sqrt((spp(ii)%vars%Y(pp,1)-F%AB%Ro)**2+ &
+                         (spp(ii)%vars%Y(pp,3))**2)
+ 
+                    RAphi(pp,1)=-F%AB%lambda**2*F%AB%Bo/(2*F%AB%qo)* &
+                         log(1+(rm/F%AB%lambda)**2)
+ 
+                 else if (params%field_model(1:8).eq.'EXTERNAL') then
+ 
+                    RAphi(pp,1)=spp(ii)%vars%PSI_P(pp)/(2*C_PI)
+ 
+                 end if
+ 
+                 !             write(output_unit_write,'("bhat: ",E17.10)') bhat
+                 !             write(output_unit_write,'("V: ",E17.10)') spp(ii)%vars%V(pp,:)
+ 
+ 
+                 spp(ii)%vars%X(pp,:)=spp(ii)%vars%X(pp,:)- &
+                      spp(ii)%m*spp(ii)%vars%g(pp)* &
+                      cross(bhat,spp(ii)%vars%V(pp,:))/(spp(ii)%q*Bmag1)
+ 
+                 ! transforming from particle location to associated
+                 ! GC location
+ 
+              end if ! if particle in domain, i.e. spp%vars%flagCon==1
+           end do ! loop over particles on an mpi process
+           !$OMP END PARALLEL DO
+ 
+           call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
+           call get_fields(params,spp(ii)%vars,F)
+ 
+           !$OMP PARALLEL DO SHARED(params,ii,spp,F,RAphi,RVphi) &
+           !$OMP&  PRIVATE(pp,rm)
+           ! Call OpenMP to calculate p_par and mu for each particle and
+           ! put into spp%vars%V
+           do pp=1_idef,spp(ii)%ppp
+              if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
+ 
+                 if (params%field_model(1:10).eq.'ANALYTICAL') then
+                    rm=sqrt((spp(ii)%vars%Y(pp,1)-F%AB%Ro)**2+ &
+                         (spp(ii)%vars%Y(pp,3))**2)
+                    RAphi(pp,2)=-F%AB%lambda**2*F%AB%Bo/(2*F%AB%qo)* &
+                         log(1+(rm/F%AB%lambda)**2)
+ 
+                 else if (params%field_model(1:8).eq.'EXTERNAL') then
+ 
+                    RAphi(pp,2)=spp(ii)%vars%PSI_P(pp)/(2*C_PI)
+ 
+                 end if
+ 
+                 write(output_unit_write,'("RAphi1: ",E17.10)') RAphi(pp,1)
+                 write(output_unit_write,'("RAphi2: ",E17.10)') RAphi(pp,2)
+ 
+                 spp(ii)%vars%V(pp,1)=(spp(ii)%m*spp(ii)%vars%g(pp)* &
+                      RVphi(pp)+spp(ii)%q*(RAphi(pp,1)-RAphi(pp,2)))/ &
+                      spp(ii)%vars%Y(pp,1)
+                 !GC ppar
+ 
+              end if ! if particle in domain, i.e. spp%vars%flagCon==1
+           end do ! loop over particles on an mpi process
+           !$OMP END PARALLEL DO
+ 
+           !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmagc,bhatc)
+           ! Call OpenMP to calculate p_par and mu for each particle and
+           ! put into spp%vars%V
+           do pp=1_idef,spp(ii)%ppp
+              if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
+ 
+                 Bmagc = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
+                      spp(ii)%vars%B(pp,:)))
+ 
+                 bhatc = spp(ii)%vars%B(pp,:)/Bmagc
+ 
+                 spp(ii)%vars%V(pp,1)=spp(ii)%vars%V(pp,1)/ &
+                      bhatc(2)
+                 !GC ppar
+ 
+                 spp(ii)%vars%V(pp,2)=spp(ii)%m/(2*Bmagc)* &
+                      (spp(ii)%vars%g(pp)**2- &
+                      (1+(spp(ii)%vars%V(pp,1)/spp(ii)%m)**2))
+                 !GC mu
+ 
+ 
+              end if ! if particle in domain, i.e. spp%vars%flagCon==1
+           end do ! loop over particles on an mpi process
+           !$OMP END PARALLEL DO
+ 
+           params%GC_coords=.TRUE.
+           DEALLOCATE(RAphi)
+           DEALLOCATE(RVphi)
+ 
+           !Preparing Output Data
+           call get_fields(params,spp(ii)%vars,F)
+ 
+           !$OMP PARALLEL DO shared(F,params,spp) &
+           !$OMP& PRIVATE(cc,pp,E_PHI,Y_R) firstprivate(pchunk)
+           do pp=1_idef,spp(ii)%ppp,pchunk
+ 
+              !$OMP SIMD
+              do cc=1_idef,pchunk
+                 E_PHI(cc)=spp(ii)%vars%E(pp-1+cc,2)
+                 Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
+              end do
+              !$OMP END SIMD
+ 
+              call add_analytical_E_p(params,int8(0),F,E_PHI,Y_R,Y_Z)
+ 
+ 
+              !$OMP SIMD
+              do cc=1_idef,pchunk
+                 spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
+              end do
+              !$OMP END SIMD
+ 
+           end do
+           !$OMP END PARALLEL DO
+ 
+ 
+           !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmag1)
+           ! Call OpenMP to calculate p_par and mu for each particle and
+           ! put into spp%vars%V
+           do pp=1_idef,spp(ii)%ppp
+              if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
+ 
+                 Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
+                      spp(ii)%vars%B(pp,:)))
+ 
+                 spp(ii)%vars%g(pp)=sqrt(1+(spp(ii)%vars%V(pp,1))**2+ &
+                      2*spp(ii)%vars%V(pp,2)*Bmag1)
+ 
+                 !                write(output_unit_write,'("Bmag:",E17.10)') Bmag1
+                 !                write(output_unit_write,'("PPLL:",E17.10)') spp(ii)%vars%V(pp,1)
+                 !                write(output_unit_write,'("MU:",E17.10)') spp(ii)%vars%V(pp,2)
+ 
+                 spp(ii)%vars%eta(pp) = atan2(sqrt(2*spp(ii)%m*Bmag1* &
+                      spp(ii)%vars%V(pp,2)),spp(ii)%vars%V(pp,1))*180.0_rp/C_PI
+ 
+                 !                             write(output_unit_write,'("BR",E17.10)') spp(ii)%vars%B(pp,1)
+                 !                             write(output_unit_write,'("BPHI",E17.10)') spp(ii)%vars%B(pp,2)
+                 !                             write(output_unit_write,'("BZ",E17.10)') spp(ii)%vars%B(pp,3)
+ 
+                 !             write(output_unit_write,'("ppll",E17.10)') spp(ii)%vars%V(pp,1)
+                 !             write(output_unit_write,'("pperp",E17.10)') sqrt(2*spp(ii)%m*Bmag1* &
+                 !                  spp(ii)%vars%V(pp,2))
+ 
+                 !                             write(output_unit_write,'("eta GCinit",E17.10)') spp(ii)%vars%eta(pp)
+                 !             write(output_unit_write,'("gam",E17.10)') spp(ii)%vars%g(pp)
+ 
+ 
+              end if ! if particle in domain, i.e. spp%vars%flagCon==1
+           end do ! loop over particles on an mpi process
+           !$OMP END PARALLEL DO
+        else
+ 
+           if ((spp(ii)%spatial_distribution.eq.'TRACER').or. &
+                (spp(ii)%spatial_distribution.eq.'TORUS').or. &
+                (spp(ii)%spatial_distribution.eq.'DISK').or. &
+                (spp(ii)%spatial_distribution.eq. &
+                '2D-GAUSSIAN-ELLIPTIC-TORUS-MH')) &
+                call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
+ 
+           params%GC_coords=.TRUE.
+ 
+           do pp=1_idef,spp(ii)%ppp
+              spp(ii)%vars%E(pp,1)=0._rp
+              spp(ii)%vars%E(pp,2)=0._rp
+              spp(ii)%vars%E(pp,3)=0._rp
+           end do
+ 
+ 
+           !write(6,*) 'before second get fields'
+           call get_fields(params,spp(ii)%vars,F)
+           !write(6,*) 'after second get fields'
+ 
+           !write(6,*) 'R',spp(ii)%vars%Y(:,1)*params%cpp%length,'Z',spp(ii)%vars%Y(:,3)*params%cpp%length
+           !write(6,*) 'BR',spp(ii)%vars%B(:,1)*params%cpp%Bo,'BZ',spp(ii)%vars%B(:,3)*params%cpp%Bo
+ 
+           !write(output_unit_write,*) spp(1)%vars%PSI_P
+ 
+           !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmag1)
+ 
+           do pp=1_idef,spp(ii)%ppp
+ 
+              !             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
+ 
+              !                write(output_unit_write,'("BR: ",E17.10)') spp(ii)%vars%B(pp,1)
+              !                write(output_unit_write,'("BPHI: ",E17.10)') spp(ii)%vars%B(pp,2)
+              !                write(output_unit_write,'("BZ: ",E17.10)') spp(ii)%vars%B(pp,3)
+ 
+              Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
+                   spp(ii)%vars%B(pp,:)))
+ 
+              pmag=sqrt(spp(ii)%vars%g(pp)**2-1)
+ 
+              spp(ii)%vars%V(pp,1)=pmag*cos(deg2rad(spp(ii)%vars%eta(pp)))
+ 
+              !write(6,*)  'GC_init'
+              !write(6,*) spp(ii)%m,Bmag1
+ 
+              spp(ii)%vars%V(pp,2)=(pmag* &
+                   sin(deg2rad(spp(ii)%vars%eta(pp))))**2/ &
+                   (2*spp(ii)%m*Bmag1)
+ 
+              !    write(output_unit_write,'("BR",E17.10)') spp(ii)%vars%B(pp,1)
+              !    write(output_unit_write,'("BPHI",E17.10)') spp(ii)%vars%B(pp,2)
+              !    write(output_unit_write,'("BZ",E17.10)') spp(ii)%vars%B(pp,3)
+ 
+              !write(output_unit_write,'("ppll",E17.10)') spp(ii)%vars%V(pp,1)
+              !write(output_unit_write,'("mu",E17.10)') spp(ii)%vars%V(pp,2)
+ 
+              !     write(output_unit_write,'("eta",E17.10)') spp(ii)%vars%eta(pp)
+              !     write(output_unit_write,'("gam",E17.10)') spp(ii)%vars%g(pp)
+ 
+ 
+              !             end if ! if particle in domain, i.e. spp%vars%flagCon==1
+           end do ! loop over particles on an mpi process
+           !$OMP END PARALLEL DO
+ 
+           m_cache=spp(ii)%m
+ 
+           !$OMP PARALLEL DO shared(F,params,spp) &
+           !$OMP& PRIVATE(pp,cc,E_PHI,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,ne,Te,Zeff,nimp) &
+           !$OMP& firstprivate(pchunk,m_cache)
+           do pp=1_idef,spp(ii)%ppp,pchunk
+ 
+              !$OMP SIMD
+              do cc=1_idef,pchunk
+                 E_PHI(cc)=spp(ii)%vars%E(pp-1+cc,2)
+                 Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
+                 Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
+                 Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
+ 
+                 V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
+                 V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
+ 
+                 flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+                 flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+              end do
+              !$OMP END SIMD
+ 
+              if (params%field_model(1:8).eq.'EXTERNAL') then
+                 call add_analytical_E_p(params,int8(0),F,E_PHI,Y_R,Y_Z)
+              end if
+ 
+              !$OMP SIMD
+              do cc=1_idef,pchunk
+ 
+                 spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
+              end do
+              !$OMP END SIMD
+ 
+              if (params%collisions) then
+ 
+                call include_CoulombCollisions_GC_p(0_ip,params, &
+                     Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
+                     flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
+ 
+                     !$OMP SIMD
+                     do cc=1_idef,pchunk
+                          spp(ii)%vars%ne(pp-1+cc) = ne(cc)
+                          spp(ii)%vars%Te(pp-1+cc) = Te(cc)
+                          spp(ii)%vars%Zeff(pp-1+cc) = Zeff(cc)
+                          spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
+                     end do
+                     !$OMP END SIMD
+ 
+              end if
+ 
+           end do
+           !$OMP END PARALLEL DO
+ 
+ 
+ 
+        end if
+ 
+        spp(ii)%vars%Yborn=spp(ii)%vars%Y
+ 
+     end do ! loop over particle species
+ 
+     !write(6,*) 'R',spp(1)%vars%Y(1,1)*params%cpp%length
+     !write(6,*) 'Z',spp(1)%vars%Y(1,3)*params%cpp%length
+     !write(6,*) 'ppusher ne',spp(1)%vars%ne(1)*params%cpp%density
+ 
+ 
+ end subroutine GC_init
+
+subroutine GC_init_ACC(params,F,P,spp)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
     !! Comment this section further with evolution equations, numerical
@@ -3822,350 +4184,87 @@ subroutine GC_init(params,F,P,spp)
     !! Species iterator.
     INTEGER                                                    :: pp
     !! Particles iterator.
-    INTEGER                                                    :: cc,pchunk
-    !! Chunk iterator.
-    REAL(rp)               :: Bmag1,pmag
-    REAL(rp)               :: Bmagc
-    REAL(rp)               :: rm
-    REAL(rp),DIMENSION(:,:),ALLOCATABLE               :: RAphi
-    REAL(rp), DIMENSION(3) :: bhat
-    REAL(rp), DIMENSION(3) :: bhatc
-    REAL(rp), DIMENSION(params%pchunk) :: E_PHI
-    REAL(rp),DIMENSION(:),ALLOCATABLE               :: RVphi
+    REAL(rp)               :: Bmag,pmag
+    REAL(rp) :: Y_R,Y_PHI,Y_Z,V_PLL,V_MU,vpll,gam,ne,Te,Zeff,PSIp
+    REAL(rp) :: B_R,B_PHI,B_Z,E_R,E_PHI,E_Z
+    REAL(rp) :: curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z
+    REAL(rp), DIMENSION(params%num_impurity_species) 	:: nimp
+    INTEGER(is) :: flagCon,flagCol
+    real(rp) :: m_cache
 
-    REAL(rp),DIMENSION(params%pchunk) :: rm8,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,vpll,gam,ne,Te,Zeff,PSIp
-    REAL(rp), DIMENSION(params%pchunk,params%num_impurity_species) 	:: nimp
-    INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-    real(rp),dimension(F%dim_1D) :: Vpart,Vpartave,VpartOMP
-    real(rp) :: dr,m_cache
-    integer :: rind
-
-    !    write(output_unit_write,'("eta",E17.10)') spp(ii)%vars%eta(pp)
-    !    write(output_unit_write,'("gam",E17.10)') spp(ii)%vars%g(pp)
+    !$acc routine (calculate_GCfieldswE_p_ACC) seq
+    !$acc routine (cart_to_cyl_p_ACC) seq
 
     do ii = 1_idef,params%num_species
 
-       pchunk=params%pchunk
-
-       if (spp(ii)%spatial_distribution.eq.'TRACER'.and. &
-            params%FO_GC_compare) then
-          call get_fields(params,spp(ii)%vars,F)
-          !! Calls [[get_fields]] in [[korc_fields]].
-          ! Interpolates fields at local particles' position and keeps in
-          ! spp%vars. Fields in (R,\(\phi\),Z) coordinates.
-
-          ALLOCATE(RAphi(spp(ii)%ppp,2))
-          ALLOCATE(RVphi(spp(ii)%ppp))
-          RAphi=0.0_rp
-
-          call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
-
-          !$OMP PARALLEL DO SHARED(params,ii,spp,F,RAphi,RVphi) &
-          !$OMP&  PRIVATE(pp,Bmag1,bhat,rm)
-          ! Call OpenMP to calculate p_par and mu for each particle and
-          ! put into spp%vars%V
-          do pp=1_idef,spp(ii)%ppp
-             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
-
-                RVphi(pp)=(-sin(spp(ii)%vars%Y(pp,2))*spp(ii)%vars%V(pp,1)+ &
-                     cos(spp(ii)%vars%Y(pp,2))*spp(ii)%vars%V(pp,2))* &
-                     spp(ii)%vars%Y(pp,1)
-
-                Bmag1 = SQRT(spp(ii)%vars%B(pp,1)*spp(ii)%vars%B(pp,1)+ &
-                     spp(ii)%vars%B(pp,2)*spp(ii)%vars%B(pp,2)+ &
-                     spp(ii)%vars%B(pp,3)*spp(ii)%vars%B(pp,3))
-
-                !             write(output_unit_write,'("pp: ",I16)') pp
-                !             write(output_unit_write,'("Bmag: ",E17.10)') Bmag
-
-
-                bhat = spp(ii)%vars%B(pp,:)/Bmag1
-
-                if (params%field_model(1:10).eq.'ANALYTICAL') then
-                   rm=sqrt((spp(ii)%vars%Y(pp,1)-F%AB%Ro)**2+ &
-                        (spp(ii)%vars%Y(pp,3))**2)
-
-                   RAphi(pp,1)=-F%AB%lambda**2*F%AB%Bo/(2*F%AB%qo)* &
-                        log(1+(rm/F%AB%lambda)**2)
-
-                else if (params%field_model(1:8).eq.'EXTERNAL') then
-
-                   RAphi(pp,1)=spp(ii)%vars%PSI_P(pp)/(2*C_PI)
-
-                end if
-
-                !             write(output_unit_write,'("bhat: ",E17.10)') bhat
-                !             write(output_unit_write,'("V: ",E17.10)') spp(ii)%vars%V(pp,:)
-
-
-                spp(ii)%vars%X(pp,:)=spp(ii)%vars%X(pp,:)- &
-                     spp(ii)%m*spp(ii)%vars%g(pp)* &
-                     cross(bhat,spp(ii)%vars%V(pp,:))/(spp(ii)%q*Bmag1)
-
-                ! transforming from particle location to associated
-                ! GC location
-
-             end if ! if particle in domain, i.e. spp%vars%flagCon==1
-          end do ! loop over particles on an mpi process
-          !$OMP END PARALLEL DO
-
-          call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
-          call get_fields(params,spp(ii)%vars,F)
-
-          !$OMP PARALLEL DO SHARED(params,ii,spp,F,RAphi,RVphi) &
-          !$OMP&  PRIVATE(pp,rm)
-          ! Call OpenMP to calculate p_par and mu for each particle and
-          ! put into spp%vars%V
-          do pp=1_idef,spp(ii)%ppp
-             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
-
-                if (params%field_model(1:10).eq.'ANALYTICAL') then
-                   rm=sqrt((spp(ii)%vars%Y(pp,1)-F%AB%Ro)**2+ &
-                        (spp(ii)%vars%Y(pp,3))**2)
-                   RAphi(pp,2)=-F%AB%lambda**2*F%AB%Bo/(2*F%AB%qo)* &
-                        log(1+(rm/F%AB%lambda)**2)
-
-                else if (params%field_model(1:8).eq.'EXTERNAL') then
-
-                   RAphi(pp,2)=spp(ii)%vars%PSI_P(pp)/(2*C_PI)
-
-                end if
-
-                write(output_unit_write,'("RAphi1: ",E17.10)') RAphi(pp,1)
-                write(output_unit_write,'("RAphi2: ",E17.10)') RAphi(pp,2)
-
-                spp(ii)%vars%V(pp,1)=(spp(ii)%m*spp(ii)%vars%g(pp)* &
-                     RVphi(pp)+spp(ii)%q*(RAphi(pp,1)-RAphi(pp,2)))/ &
-                     spp(ii)%vars%Y(pp,1)
-                !GC ppar
-
-             end if ! if particle in domain, i.e. spp%vars%flagCon==1
-          end do ! loop over particles on an mpi process
-          !$OMP END PARALLEL DO
-
-          !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmagc,bhatc)
-          ! Call OpenMP to calculate p_par and mu for each particle and
-          ! put into spp%vars%V
-          do pp=1_idef,spp(ii)%ppp
-             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
-
-                Bmagc = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
-                     spp(ii)%vars%B(pp,:)))
-
-                bhatc = spp(ii)%vars%B(pp,:)/Bmagc
-
-                spp(ii)%vars%V(pp,1)=spp(ii)%vars%V(pp,1)/ &
-                     bhatc(2)
-                !GC ppar
-
-                spp(ii)%vars%V(pp,2)=spp(ii)%m/(2*Bmagc)* &
-                     (spp(ii)%vars%g(pp)**2- &
-                     (1+(spp(ii)%vars%V(pp,1)/spp(ii)%m)**2))
-                !GC mu
-
-
-             end if ! if particle in domain, i.e. spp%vars%flagCon==1
-          end do ! loop over particles on an mpi process
-          !$OMP END PARALLEL DO
+          m_cache=spp(ii)%m
 
           params%GC_coords=.TRUE.
-          DEALLOCATE(RAphi)
-          DEALLOCATE(RVphi)
 
-          !Preparing Output Data
-          call get_fields(params,spp(ii)%vars,F)
-
-          !$OMP PARALLEL DO shared(F,params,spp) &
-          !$OMP& PRIVATE(cc,pp,E_PHI,Y_R) firstprivate(pchunk)
-          do pp=1_idef,spp(ii)%ppp,pchunk
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                E_PHI(cc)=spp(ii)%vars%E(pp-1+cc,2)
-                Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-             end do
-             !$OMP END SIMD
-
-             call add_analytical_E_p(params,int8(0),F,E_PHI,Y_R,Y_Z)
-
-
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-          end do
-          !$OMP END PARALLEL DO
-
-
-          !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmag1)
-          ! Call OpenMP to calculate p_par and mu for each particle and
-          ! put into spp%vars%V
+          !$acc parallel loop
           do pp=1_idef,spp(ii)%ppp
-             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
 
-                Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
-                     spp(ii)%vars%B(pp,:)))
-
-                spp(ii)%vars%g(pp)=sqrt(1+(spp(ii)%vars%V(pp,1))**2+ &
-                     2*spp(ii)%vars%V(pp,2)*Bmag1)
-
-                !                write(output_unit_write,'("Bmag:",E17.10)') Bmag1
-                !                write(output_unit_write,'("PPLL:",E17.10)') spp(ii)%vars%V(pp,1)
-                !                write(output_unit_write,'("MU:",E17.10)') spp(ii)%vars%V(pp,2)
-
-                spp(ii)%vars%eta(pp) = atan2(sqrt(2*spp(ii)%m*Bmag1* &
-                     spp(ii)%vars%V(pp,2)),spp(ii)%vars%V(pp,1))*180.0_rp/C_PI
-
-                !                             write(output_unit_write,'("BR",E17.10)') spp(ii)%vars%B(pp,1)
-                !                             write(output_unit_write,'("BPHI",E17.10)') spp(ii)%vars%B(pp,2)
-                !                             write(output_unit_write,'("BZ",E17.10)') spp(ii)%vars%B(pp,3)
-
-                !             write(output_unit_write,'("ppll",E17.10)') spp(ii)%vars%V(pp,1)
-                !             write(output_unit_write,'("pperp",E17.10)') sqrt(2*spp(ii)%m*Bmag1* &
-                !                  spp(ii)%vars%V(pp,2))
-
-                !                             write(output_unit_write,'("eta GCinit",E17.10)') spp(ii)%vars%eta(pp)
-                !             write(output_unit_write,'("gam",E17.10)') spp(ii)%vars%g(pp)
-
-
-             end if ! if particle in domain, i.e. spp%vars%flagCon==1
-          end do ! loop over particles on an mpi process
-          !$OMP END PARALLEL DO
-       else
-
-          if ((spp(ii)%spatial_distribution.eq.'TRACER').or. &
+               if ((spp(ii)%spatial_distribution.eq.'TRACER').or. &
                (spp(ii)%spatial_distribution.eq.'TORUS').or. &
                (spp(ii)%spatial_distribution.eq.'DISK').or. &
                (spp(ii)%spatial_distribution.eq. &
                '2D-GAUSSIAN-ELLIPTIC-TORUS-MH')) &
                call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
 
-          params%GC_coords=.TRUE.
+               Y_R=spp(ii)%vars%Y(pp,1)
+               Y_PHI=spp(ii)%vars%Y(pp,2)
+               Y_Z=spp(ii)%vars%Y(pp,3)
 
-          do pp=1_idef,spp(ii)%ppp
-             spp(ii)%vars%E(pp,1)=0._rp
-             spp(ii)%vars%E(pp,2)=0._rp
-             spp(ii)%vars%E(pp,3)=0._rp
-          end do
+               call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R, &
+                    E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
+                    flagCon,PSIp)
 
+               Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+ &
+                    B_Z*B_Z)
 
-          !write(6,*) 'before second get fields'
-          call get_fields(params,spp(ii)%vars,F)
-          !write(6,*) 'after second get fields'
+               pmag=sqrt(spp(ii)%vars%g(pp)**2-1)
 
-          !write(6,*) 'R',spp(ii)%vars%Y(:,1)*params%cpp%length,'Z',spp(ii)%vars%Y(:,3)*params%cpp%length
-          !write(6,*) 'BR',spp(ii)%vars%B(:,1)*params%cpp%Bo,'BZ',spp(ii)%vars%B(:,3)*params%cpp%Bo
-
-          !write(output_unit_write,*) spp(1)%vars%PSI_P
-
-          !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmag1)
-
-          do pp=1_idef,spp(ii)%ppp
-
-             !             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
-
-             !                write(output_unit_write,'("BR: ",E17.10)') spp(ii)%vars%B(pp,1)
-             !                write(output_unit_write,'("BPHI: ",E17.10)') spp(ii)%vars%B(pp,2)
-             !                write(output_unit_write,'("BZ: ",E17.10)') spp(ii)%vars%B(pp,3)
-
-             Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
-                  spp(ii)%vars%B(pp,:)))
-
-             pmag=sqrt(spp(ii)%vars%g(pp)**2-1)
-
-             spp(ii)%vars%V(pp,1)=pmag*cos(deg2rad(spp(ii)%vars%eta(pp)))
-
-             !write(6,*)  'GC_init'
-             !write(6,*) spp(ii)%m,Bmag1
-
-             spp(ii)%vars%V(pp,2)=(pmag* &
-                  sin(deg2rad(spp(ii)%vars%eta(pp))))**2/ &
-                  (2*spp(ii)%m*Bmag1)
-
-             !    write(output_unit_write,'("BR",E17.10)') spp(ii)%vars%B(pp,1)
-             !    write(output_unit_write,'("BPHI",E17.10)') spp(ii)%vars%B(pp,2)
-             !    write(output_unit_write,'("BZ",E17.10)') spp(ii)%vars%B(pp,3)
-
-             !write(output_unit_write,'("ppll",E17.10)') spp(ii)%vars%V(pp,1)
-             !write(output_unit_write,'("mu",E17.10)') spp(ii)%vars%V(pp,2)
-
-             !     write(output_unit_write,'("eta",E17.10)') spp(ii)%vars%eta(pp)
-             !     write(output_unit_write,'("gam",E17.10)') spp(ii)%vars%g(pp)
+               spp(ii)%vars%V(pp,1)=pmag*cos(deg2rad(spp(ii)%vars%eta(pp)))
 
 
-             !             end if ! if particle in domain, i.e. spp%vars%flagCon==1
-          end do ! loop over particles on an mpi process
-          !$OMP END PARALLEL DO
+               spp(ii)%vars%V(pp,2)=(pmag* &
+                    sin(deg2rad(spp(ii)%vars%eta(pp))))**2/ &
+                    (2*spp(ii)%m*Bmag)
 
-          m_cache=spp(ii)%m
+               E_PHI=spp(ii)%vars%E(pp,2)
+               Y_R=spp(ii)%vars%Y(pp,1)
+               Y_PHI=spp(ii)%vars%Y(pp,2)
+               Y_Z=spp(ii)%vars%Y(pp,3)
 
-          !$OMP PARALLEL DO shared(F,params,spp) &
-          !$OMP& PRIVATE(pp,cc,E_PHI,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,ne,Te,Zeff,nimp) &
-          !$OMP& firstprivate(pchunk,m_cache)
-          do pp=1_idef,spp(ii)%ppp,pchunk
+               V_PLL=spp(ii)%vars%V(pp,1)
+               V_MU=spp(ii)%vars%V(pp,2)
 
-             !$OMP SIMD
-             do cc=1_idef,pchunk
-                E_PHI(cc)=spp(ii)%vars%E(pp-1+cc,2)
-                Y_R(cc)=spp(ii)%vars%Y(pp-1+cc,1)
-                Y_PHI(cc)=spp(ii)%vars%Y(pp-1+cc,2)
-                Y_Z(cc)=spp(ii)%vars%Y(pp-1+cc,3)
+               flagCon=spp(ii)%vars%flagCon(pp)
+               flagCol=spp(ii)%vars%flagCol(pp)
 
-                V_PLL(cc)=spp(ii)%vars%V(pp-1+cc,1)
-                V_MU(cc)=spp(ii)%vars%V(pp-1+cc,2)
+               if (params%collisions) then
 
-                flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-                flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-             end do
-             !$OMP END SIMD
+                    call include_CoulombCollisions_GC_p_ACC(0_ip,params, &
+                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+                         flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
 
-             if (params%field_model(1:8).eq.'EXTERNAL') then
-                call add_analytical_E_p(params,int8(0),F,E_PHI,Y_R,Y_Z)
-             end if
 
-             !$OMP SIMD
-             do cc=1_idef,pchunk
+                         spp(ii)%vars%ne(pp) = ne
+                         spp(ii)%vars%Te(pp) = Te
+                         spp(ii)%vars%Zeff(pp) = Zeff
+                         spp(ii)%vars%nimp(pp,:) = nimp
 
-                spp(ii)%vars%E(pp-1+cc,2) = E_PHI(cc)
-             end do
-             !$OMP END SIMD
-
-             if (params%collisions) then
-
-               call include_CoulombCollisions_GC_p(0_ip,params, &
-                    Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
-                    flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
-
-                    !$OMP SIMD
-                    do cc=1_idef,pchunk
-                         spp(ii)%vars%ne(pp-1+cc) = ne(cc)
-                         spp(ii)%vars%Te(pp-1+cc) = Te(cc)
-                         spp(ii)%vars%Zeff(pp-1+cc) = Zeff(cc)
-                         spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
-                    end do
-                    !$OMP END SIMD
-
-             end if
+               end if
 
           end do
-          !$OMP END PARALLEL DO
+          !$acc end parallel loop
+
+          spp(ii)%vars%Yborn=spp(ii)%vars%Y
+
+     end do ! loop over particle species
 
 
-
-       end if
-
-       spp(ii)%vars%Yborn=spp(ii)%vars%Y
-
-    end do ! loop over particle species
-
-    !write(6,*) 'R',spp(1)%vars%Y(1,1)*params%cpp%length
-    !write(6,*) 'Z',spp(1)%vars%Y(1,3)*params%cpp%length
-    !write(6,*) 'ppusher ne',spp(1)%vars%ne(1)*params%cpp%density
-
-
-end subroutine GC_init
+end subroutine GC_init_ACC
 
 FUNCTION deg2rad(x)
      REAL(rp), INTENT(IN) :: x
