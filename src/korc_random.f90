@@ -121,10 +121,10 @@ CONTAINS
        ALLOCATE(states(0:num_threads - 1))
     END IF
 
-    !$OMP PARALLEL PRIVATE(thread_num)
+    !$acc parallel PRIVATE(thread_num)
     thread_num = get_thread_number()
     states(thread_num) = random_construct_U(seed + thread_num)
-    !$OMP END PARALLEL
+    !$acc END PARALLEL
   END SUBROUTINE initialize_random
 
   SUBROUTINE finalize_random
@@ -132,10 +132,10 @@ CONTAINS
 
     INTEGER             :: thread_num
 
-    !$OMP PARALLEL PRIVATE(thread_num)
+    !$acc PARALLEL PRIVATE(thread_num)
     thread_num = get_thread_number()
     CALL random_destroy_U(states(thread_num))
-    !$OMP END PARALLEL
+    !$acc END PARALLEL
 
     DEALLOCATE (states)
   END SUBROUTINE
@@ -179,6 +179,7 @@ CONTAINS
   END FUNCTION get_random
 
   FUNCTION get_random_U()
+    !$acc routine seq
     IMPLICIT NONE
 
     REAL(rp)            :: get_random_U

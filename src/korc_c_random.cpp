@@ -25,6 +25,8 @@ class random_U {
     
     public:
     random_U(uint64_t seed_U) : engine_U(seed_U), dist_U(0.0, 1.0) {};
+    
+    #pragma acc routine seq
     double get_number_U() {
         return dist_U(engine_U);
     }

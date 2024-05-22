@@ -1092,6 +1092,7 @@ contains
 
 
   function VTe(Te)
+   !$acc routine seq
     !! Dimensionless temperature
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: VTe
@@ -1112,11 +1113,14 @@ contains
 
 
   function Gammacee(v,ne,Te)
+   !$acc routine seq
     !! Dimensionless ne and Te
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: Gammacee
+
+   !$acc routine (CLogee) seq
 
     Gammacee = ne*CLogee(v,ne,Te)*cparams_ss%Gammaco
   end function Gammacee
@@ -1200,6 +1204,7 @@ contains
   end function CLog
 
   function CLog0(ne,Te) ! Dimensionless ne and Te
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: ne
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: CLog0
@@ -1209,7 +1214,7 @@ contains
   end function CLog0
 
   function CLogee(v,ne,Te)
-
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     !! ne is in m^-3 and below is converted to cm^-3
@@ -1218,6 +1223,8 @@ contains
     REAL(rp)  :: k=5._rp
     REAL(rp)  :: gam
     REAL(rp) :: gam_min
+
+      !$acc routine (CLog0) seq
 
     gam=1/sqrt(1-v**2)
     gam_min=cparams_ss%gam_min
@@ -1239,7 +1246,7 @@ contains
   end function CLogee
 
   function CLogei(v,ne,Te)
-
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     !! ne is in m^-3 and below is converted to cm^-3
@@ -1247,6 +1254,8 @@ contains
     REAL(rp) 				:: CLogei
     REAL(rp)  :: k=5._rp
     REAL(rp)  :: gam,p
+
+   !$acc routine (CLog0) seq
 
     gam=1/sqrt(1-v**2)
     p=gam*v
@@ -1260,14 +1269,18 @@ contains
   end function CLogei
 
   function delta(Te)
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: delta
+
+   !$acc routine (VTe) seq
 
     delta = VTe(Te)*cparams_ss%deltao
   end function delta
 
 
   function psi(x)
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: x
     REAL(rp) 				:: psi
 
@@ -1291,12 +1304,14 @@ contains
   end function CA
 
   function CA_SD(v,ne,Te)
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: CA_SD
     REAL(rp) 				:: x
 
+    !$acc routine (Gammacee) seq
  !   write(6,*) ne,Te
 
     x = v/VTe(Te)
@@ -1312,6 +1327,7 @@ contains
   end function CA_SD
 
   function dCA_SD(v,me,ne,Te)
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: me
     REAL(rp), INTENT(IN) 	:: ne
@@ -1319,6 +1335,8 @@ contains
     REAL(rp) 				:: dCA_SD
     REAL(rp) 				:: x
     real(rp)  :: gam
+
+   !$acc routine (Gammacee) seq
 
     gam=1/sqrt(1-v**2)
     x = v/VTe(Te)
@@ -1464,6 +1482,7 @@ contains
   end function CF_SD
 
   function CF_SD_FIO(params,v,ne,Te,nimp)
+   !$acc routine seq
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
@@ -1474,6 +1493,10 @@ contains
     REAL(rp) 				:: x
     INTEGER :: i
     REAL(rp)  :: k=5._rp
+
+   !$acc routine (Gammacee) seq
+    !$acc routine (CLogee) seq
+    !$acc routine (h_j) seq
 
     x = v/VTe(Te)
     CF_SD_FIO  = Gammacee(v,ne,Te)*psi(x)/Te
@@ -1585,12 +1608,17 @@ contains
   end function CB_ei_FIO
 
   function CB_ee_SD(v,ne,Te,Zeff)
+   !$acc routine seq
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp), INTENT(IN) 	:: Zeff
     REAL(rp) 				:: CB_ee_SD
     REAL(rp) 				:: x
+
+   !$acc routine (Gammacee) seq
+    !$acc routine (psi) seq
+   !$acc routine (delta) seq
 
     x = v/VTe(Te)
     CB_ee_SD  = (0.5_rp*Gammacee(v,ne,Te)/v)* &
@@ -1654,6 +1682,7 @@ function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
 end function CB_ei_SD
 
 function CB_ei_SD_FIO(params,v,ne,Te,nimp,Zeff)
+   !$acc routine seq
    TYPE(KORC_PARAMS), INTENT(IN) 	:: params
    REAL(rp), INTENT(IN) 	:: v
    REAL(rp), INTENT(IN) 	:: ne
@@ -1664,6 +1693,11 @@ function CB_ei_SD_FIO(params,v,ne,Te,nimp,Zeff)
    REAL(rp) 				:: CB_ei_temp
    REAL(rp) 				:: x
    INTEGER :: i
+
+   !$acc routine (Gammacee) seq
+   !$acc routine (CLogee) seq
+   !$acc routine (CLogei) seq
+   !$acc routine (g_j) seq
 
    x = v/VTe(Te)
    CB_ei_SD_FIO  = (0.5_rp*Gammacee(v,ne,Te)/v)* &
@@ -1710,6 +1744,7 @@ function nu_S_FIO(params,v)
 end function nu_S_FIO
 
 function h_j(i,v)
+      !$acc routine seq
    INTEGER, INTENT(IN) 	:: i
    REAL(rp), INTENT(IN) 	:: v
    REAL(rp)  :: gam
@@ -1724,6 +1759,7 @@ function h_j(i,v)
 end function h_j
 
 function g_j(i,v)
+   !$acc routine seq
    INTEGER, INTENT(IN) 	:: i
    REAL(rp), INTENT(IN) 	:: v
    REAL(rp)  :: gam
@@ -2586,7 +2622,7 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
 
 end subroutine include_CoulombCollisions_GC_p
 
-subroutine include_CoulombCollisions_GC_p_ACC(tt,params,Y_R,Y_PHI,Y_Z, &
+subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params,Y_R,Y_PHI,Y_Z, &
    Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
    !$acc routine seq
    TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -2622,13 +2658,18 @@ subroutine include_CoulombCollisions_GC_p_ACC(tt,params,Y_R,Y_PHI,Y_Z, &
    REAL(rp)  	:: SC_p,SC_mu,BREM_p
    REAL(rp) 					:: kappa
    integer(ip),INTENT(IN) :: tt
+   INTEGER,INTENT(IN) :: pp
    REAL(rp), DIMENSION(params%num_impurity_species), INTENT(OUT) 	:: nimp
    REAL(rp) 	:: E_PHI_tmp
 
    !$acc routine (calculate_GCfieldswE_p_ACC) seq
    !$acc routine (interp_Hcollision_p_ACC) seq
-
-   pchunk=params%pchunk
+   !$acc routine (CA_SD) seq
+   !$acc routine (dCA_SD) seq
+   !$acc routine (CF_SD_FIO) seq
+   !$acc routine (CB_ee_SD) seq
+   !$acc routine (CB_ei_SD_FIO) seq
+   !$acc routine (get_random_U) seq
 
    if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
@@ -2636,16 +2677,12 @@ subroutine include_CoulombCollisions_GC_p_ACC(tt,params,Y_R,Y_PHI,Y_Z, &
 
 #ifdef PSPLINE
 
-   call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
-      E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-      gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp)
+      call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
+         E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+         gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp)
 
-#endif PSPLINE
-
-#ifdef PSPLINE
-
-   call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-      nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
+      call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+         nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
 
       nimp(1)=nAr0
       nimp(2)=nAr1
@@ -2655,104 +2692,94 @@ subroutine include_CoulombCollisions_GC_p_ACC(tt,params,Y_R,Y_PHI,Y_Z, &
       nimp(6)=nD
       nimp(7)=nD1
 
-
-            !write(6,*) 'collisions ne',ne(1)*params%cpp%density
-
-
 #endif PSPLINE
 
 
       E_PHI_tmp=E_PHI
       if (.not.params%FokPlan) E_PHI=0._rp
 
-         Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
-         ! Transform p_pll,mu to P,eta
-         pm = SQRT(Ppll*Ppll+2*me*Bmag*Pmu)
-         xi = Ppll/pm
+      Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+      ! Transform p_pll,mu to P,eta
+      pm = SQRT(Ppll*Ppll+2*me*Bmag*Pmu)
+      xi = Ppll/pm
 
-         gam = sqrt(1+pm*pm)
+      gam = sqrt(1+pm*pm)
 
-         v = pm/gam
-         ! normalized speed (v_K=v_P/c)
+      v = pm/gam
+      ! normalized speed (v_K=v_P/c)
 
 
 #ifdef PARALLEL_RANDOM
-          rnd1(1) = get_random_U()
-          rnd1(2) = get_random_U()
+      rnd1(1) = get_random_U()
+      rnd1(2) = get_random_U()
           !       rnd1(:,1) = get_random_mkl()
           !       rnd1(:,2) = get_random_mkl()
 #else
-          call RANDOM_NUMBER(rnd1)
+      call RANDOM_NUMBER(rnd1)
 #endif PARALLEL_RANDOM
 
-          dW(1) = SQRT(3*dt)*(-1+2*rnd1(1))
-          dW(2) = SQRT(3*dt)*(-1+2*rnd1(2))
+
+
+      dW(1) = SQRT(3*dt)*(-1+2*rnd1(1))
+      dW(2) = SQRT(3*dt)*(-1+2*rnd1(2))
 
    !          write(output_unit_write,'("dW1: ",E17.10)') dW(cc,1)
    !          write(output_unit_write,'("dW2: ",E17.10)') dW(cc,2)
 
-          if (params%profile_model(10:10).eq.'H') then
-             CAL = CA_SD(v,ne,Te)
-             dCAL= dCA_SD(v,me,ne,Te)
-             CFL = CF_SD_FIO(params,v,ne,Te,nimp)
-             CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
-                  CB_ei_SD_FIO(params,v,ne,Te,nimp,Zeff))
-          else
-             CAL = CA_SD(v,ne,Te)
-             dCAL= dCA_SD(v,me,ne,Te)
-             CFL = CF_SD(params,v,ne,Te,P,Y_R,Y_Z)
-             CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
-                  CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z))
-          endif
+      if (params%profile_model(10:10).eq.'H') then
+         CAL = CA_SD(v,ne,Te)
+         dCAL= dCA_SD(v,me,ne,Te)
+         CFL = CF_SD_FIO(params,v,ne,Te,nimp)
+         CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
+            CB_ei_SD_FIO(params,v,ne,Te,nimp,Zeff))
+      else
+         CAL = CA_SD(v,ne,Te)
+         dCAL= dCA_SD(v,me,ne,Te)
+         CFL = CF_SD(params,v,ne,Te,P,Y_R,Y_Z)
+         CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
+            CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z))
+      endif
 
-          if (.not.cparams_ss%slowing_down) CFL=0._rp
-          if (.not.cparams_ss%pitch_diffusion) CBL=0._rp
-          if (.not.cparams_ss%energy_diffusion) THEN
-             CAL=0._rp
-             dCAL=0._rp
-          ENDIF
+      if (.not.cparams_ss%slowing_down) CFL=0._rp
+      if (.not.cparams_ss%pitch_diffusion) CBL=0._rp
+      if (.not.cparams_ss%energy_diffusion) THEN
+         CAL=0._rp
+         dCAL=0._rp
+      ENDIF
 
-          dp=REAL(flagCol)*REAL(flagCon)* &
-               ((-CFL+dCAL+E_PHI*xi)*dt+ &
-               sqrt(2.0_rp*CAL)*dW(1))
+      dp=REAL(flagCol)*REAL(flagCon)* &
+         ((-CFL+dCAL+E_PHI*xi)*dt+ &
+         sqrt(2.0_rp*CAL)*dW(1))
 
-          dxi=REAL(flagCol)*REAL(flagCon)* &
-               ((-2*xi*CBL/(pm*pm)+ &
-               E_PHI*(1-xi*xi)/pm)*dt- &
-               sqrt(2.0_rp*CBL*(1-xi*xi))/pm*dW(2))
-
-
-          pm=pm+dp
-          xi=xi+dxi
+      dxi=REAL(flagCol)*REAL(flagCon)* &
+         ((-2*xi*CBL/(pm*pm)+ &
+         E_PHI*(1-xi*xi)/pm)*dt- &
+         sqrt(2.0_rp*CBL*(1-xi*xi))/pm*dW(2))
 
 
+      pm=pm+dp
+      xi=xi+dxi
 
+      if (xi>1) then
 
-          if (xi>1) then
+         xi=1-mod(xi,1._rp)
+      else if (xi<-1) then
+         xi=-1-mod(xi,-1._rp)
 
-             xi=1-mod(xi,1._rp)
-          else if (xi<-1) then
-             xi=-1-mod(xi,-1._rp)
+      endif
 
-          endif
+      ! Transform P,xi to p_pll,mu
+      Ppll=pm*xi
+      Pmu=(pm*pm-Ppll*Ppll)/(2*me*Bmag)
 
+      if ((pm.lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
+         p_therm)).and.flagCol.eq.1_ip) then
+         flagCol=0_ip
+      end if
 
+      if (.not.params%FokPlan) E_PHI=E_PHI_tmp
 
-          ! Transform P,xi to p_pll,mu
-          Ppll=pm*xi
-          Pmu=(pm*pm-Ppll*Ppll)/(2*me*Bmag)
-
-
-
-          if ((pm.lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
-               p_therm)).and.flagCol.eq.1_ip) then
-             flagCol=0_ip
-          end if
-
-
-       if (.not.params%FokPlan) E_PHI=E_PHI_tmp
-
-    end if
+   end if
 
 end subroutine include_CoulombCollisions_GC_p_ACC
 

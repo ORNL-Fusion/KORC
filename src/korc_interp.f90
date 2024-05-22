@@ -1584,9 +1584,108 @@ subroutine check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag)
     end if
   end subroutine check_if_in_fields_domain_p
 
-subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
-  Dim2x1t,Analytic_D3D_IWL,circumradius, &
-  ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
+  subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_local, &
+   Dim2x1t,Analytic_D3D_IWL,circumradius, &
+   ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
+   !$acc routine seq
+   !! @note Subrotuine that checks if particles in the simulation are within
+   !! the spatial domain where interpolants and fields are known. @endnote
+   !! External fields and interpolants can have different spatial domains where
+   !! they are defined. Therefore, it is necessary to
+   !! check if a given particle has left these spatial domains to
+   !! stop following it, otherwise this will cause an error in the simulation.
+   REAL(rp),   INTENT(IN)      :: Y_R,Y_PHI,Y_Z
+   INTEGER(is),  INTENT(INOUT)  :: flag
+   !! Flag that determines whether particles are followed in the
+   !! simulation (flag=1), or not (flag=0).
+   INTEGER                                                :: IR
+   !! Variable used to localize the grid cell in the \((R,\phi,Z)\)
+   !! or \((R,Z)\) grid containing the fields data that corresponds
+   !! to the radial position of the particles.
+   INTEGER                                                :: IPHI
+   !! Variable used to localize the grid cell in the \((R,\phi,Z)\)
+   !! or \((R,Z)\) grid containing the fields data that corresponds
+   !! to the azimuthal position of the particles.
+   INTEGER                                                :: IZ
+   !! Variable used to localize the grid cell in the \((R,\phi,Z)\)
+   !! or \((R,Z)\) grid containing the fields data that corresponds
+   !! to the vertical position of the particles.
+ 
+   REAL(rp) :: Rwall,lscale,xtmp,ytmp,ztmp
+   REAL(rp) :: DiMESsurf,DiMESrad,DiMESloc_deg
+   REAL(rp),DIMENSION(3) :: DiMESloc_cart
+   REAL(rp),DIMENSION(3),INTENT(IN) :: DiMESloc_cyl
+   REAL(rp),DIMENSION(2),INTENT(IN) :: DiMESdims
+   REAL(rp),INTENT(IN) :: circumradius,ntiles
+   LOGICAL,INTENT(IN) :: Dim2x1t,Analytic_D3D_IWL,useDiMES
+   TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(IN)        :: fields_domain_local
+   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
+ 
+   IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
+         0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
+   IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
+         0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
+ 
+   if ((IR.lt.1).or.(IZ.lt.1).or. &
+         (IR.GT.bfield_2d_local%NR).OR.(IZ.GT.bfield_2d_local%NZ).or. &
+         (fields_domain_local%FLAG2D(IR,IZ).NE.1_is)) then
+ 
+     if (.not.Analytic_D3D_IWL) then
+       flag = 0_is
+     else if (Analytic_D3D_IWL) then
+       if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
+             (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
+             (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
+ 
+           Rwall=circumradius*cos(C_PI/ntiles)/ &
+               (cos(modulo(Y_PHI,2*C_PI/ntiles)-C_PI/ntiles))
+ 
+           !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
+           !write(6,*) 'Rwall',Rwall*lscale
+           !write(6,*) 'mod',modulo(Y_PHI,2*C_PI/F%ntiles)
+ 
+           if (Y_R.lt.Rwall) flag = 0_is
+ 
+       else
+           flag = 0_is
+       endif
+     endif
+ 
+   end if
+ 
+   if (useDiMES) THEN
+ 
+     DiMESloc_deg=C_PI*DiMESloc_cyl(2)/180._rp
+ 
+     if ((abs(Y_R-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
+           (abs(Y_Z-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
+           (abs(Y_PHI-DiMESloc_deg).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
+ 
+         xtmp=Y_R*cos(Y_PHI)
+         ytmp=Y_R*sin(Y_PHI)
+         ztmp=Y_Z
+ 
+         DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_deg)
+         DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_deg)
+         DiMESloc_cart(3)=DiMESloc_cyl(3)
+ 
+         DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
+ 
+         if (DiMESrad.le.0._rp) THEN
+           return
+         end if
+ 
+         !DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
+         DiMESsurf=(DiMESloc_cart(3)-(DiMESdims(1)-DiMESdims(2)))+sqrt(DiMESrad)
+ 
+         if (ztmp.le.DiMESsurf) flag=0_is
+ 
+     end if
+   endif !DiMES
+ 
+ end subroutine check_if_in_fields_domain_2D_p_ACC
+
+subroutine check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flag)
   !$acc routine seq
   !! @note Subrotuine that checks if particles in the simulation are within
   !! the spatial domain where interpolants and fields are known. @endnote
@@ -1596,6 +1695,7 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
   !! stop following it, otherwise this will cause an error in the simulation.
   REAL(rp),   INTENT(IN)      :: Y_R,Y_PHI,Y_Z
   INTEGER(is),  INTENT(INOUT)  :: flag
+  TYPE(FIELDS), INTENT(IN)                                   :: F
   !! Flag that determines whether particles are followed in the
   !! simulation (flag=1), or not (flag=0).
   INTEGER                                                :: IR
@@ -1613,32 +1713,26 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
 
   REAL(rp) :: Rwall,lscale,xtmp,ytmp,ztmp
   REAL(rp) :: DiMESsurf,DiMESrad,DiMESloc_deg
-  REAL(rp),DIMENSION(3) :: DiMESloc_cart
-  REAL(rp),DIMENSION(3),INTENT(IN) :: DiMESloc_cyl
-  REAL(rp),DIMENSION(2),INTENT(IN) :: DiMESdims
-  REAL(rp),INTENT(IN) :: circumradius,ntiles
-  LOGICAL,INTENT(IN) :: Dim2x1t,Analytic_D3D_IWL,useDiMES
-  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(IN)        :: fields_domain_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
+  REAL(rp),DIMENSION(3) :: DiMESloc_cart,DiMESloc_cyl
 
-  IR = INT(FLOOR((Y_R  - fields_domain_local%Ro + &
-        0.5_rp*fields_domain_local%DR)/fields_domain_local%DR) + 1.0_rp,idef)
-  IZ = INT(FLOOR((Y_Z  + ABS(fields_domain_local%Zo) + &
-        0.5_rp*fields_domain_local%DZ)/fields_domain_local%DZ) + 1.0_rp,idef)
+  IR = INT(FLOOR((Y_R  - fields_domain%Ro + &
+        0.5_rp*fields_domain%DR)/fields_domain%DR) + 1.0_rp,idef)
+  IZ = INT(FLOOR((Y_Z  + ABS(fields_domain%Zo) + &
+        0.5_rp*fields_domain%DZ)/fields_domain%DZ) + 1.0_rp,idef)
 
   if ((IR.lt.1).or.(IZ.lt.1).or. &
-        (IR.GT.bfield_2d_local%NR).OR.(IZ.GT.bfield_2d_local%NZ).or. &
-        (fields_domain_local%FLAG2D(IR,IZ).NE.1_is)) then
+        (IR.GT.bfield_2d%NR).OR.(IZ.GT.bfield_2d%NZ).or. &
+        (fields_domain%FLAG2D(IR,IZ).NE.1_is)) then
 
-    if (.not.Analytic_D3D_IWL) then
+    if (.not.F%Analytic_D3D_IWL) then
       flag = 0_is
-    else if (Analytic_D3D_IWL) then
-      if ((IR.lt.floor(bfield_2d_local%NR/6._rp)).and. &
-            (IZ.gt.floor(bfield_2d_local%NZ/5._rp)).and. &
-            (IZ.lt.floor(4._rp*bfield_2d_local%NZ/5._rp))) then
+    else if (F%Analytic_D3D_IWL) then
+      if ((IR.lt.floor(bfield_2d%NR/6._rp)).and. &
+            (IZ.gt.floor(bfield_2d%NZ/5._rp)).and. &
+            (IZ.lt.floor(4._rp*bfield_2d%NZ/5._rp))) then
 
-          Rwall=circumradius*cos(C_PI/ntiles)/ &
-              (cos(modulo(Y_PHI,2*C_PI/ntiles)-C_PI/ntiles))
+          Rwall=F%circumradius*cos(C_PI/F%ntiles)/ &
+              (cos(modulo(Y_PHI,2*C_PI/F%ntiles)-C_PI/F%ntiles))
 
           !write(6,*) 'Rc,nt',F%circumradius*lscale,F%ntiles
           !write(6,*) 'Rwall',Rwall*lscale
@@ -1653,37 +1747,7 @@ subroutine check_if_in_fields_domain_2D_p_ACC(fields_domain_local,bfield_2d_loca
 
   end if
 
-  if (useDiMES) THEN
-
-    DiMESloc_deg=C_PI*DiMESloc_cyl(2)/180._rp
-
-    if ((abs(Y_R-DiMESloc_cyl(1)).le.DiMESdims(1)).and. &
-          (abs(Y_Z-DiMESloc_cyl(3)).le.DiMESdims(2)).and.&
-          (abs(Y_PHI-DiMESloc_deg).le.asin(DiMESdims(1)/DiMESloc_cyl(1)))) THEN
-
-        xtmp=Y_R*cos(Y_PHI)
-        ytmp=Y_R*sin(Y_PHI)
-        ztmp=Y_Z
-
-        DiMESloc_cart(1)=DiMESloc_cyl(1)*cos(DiMESloc_deg)
-        DiMESloc_cart(2)=DiMESloc_cyl(1)*sin(DiMESloc_deg)
-        DiMESloc_cart(3)=DiMESloc_cyl(3)
-
-        DiMESrad=DiMESdims(1)**2-(xtmp-DiMESloc_cart(1))**2-(ytmp-DiMESloc_cart(2))**2
-
-        if (DiMESrad.le.0._rp) THEN
-          return
-        end if
-
-        !DiMESsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(DiMESrad)
-        DiMESsurf=(DiMESloc_cart(3)-(DiMESdims(1)-DiMESdims(2)))+sqrt(DiMESrad)
-
-        if (ztmp.le.DiMESsurf) flag=0_is
-
-    end if
-  endif !DiMES
-
-end subroutine check_if_in_fields_domain_2D_p_ACC
+end subroutine check_if_in_fields_domain_2D_ACC
 
 subroutine check_if_in_LCFS(F,Y,inLCFS)
    !! @note Subrotuine that checks if particles in the simulation are within
@@ -3402,13 +3466,12 @@ subroutine calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_
       PSIp=A(1)
 
       B_R = psip_conv*A(3)/Y_R
+
       ! BR = (dA/dZ)/R
       B_PHI = -F%Bo*F%Ro/Y_R
       ! BPHI = Fo*Ro/R
       B_Z = -psip_conv*A(2)/Y_R
       ! BR = -(dA/dR)/R
-
-
 
       Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
 

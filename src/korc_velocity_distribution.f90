@@ -422,6 +422,9 @@ CONTAINS
       do pp=1_idef,spp%ppp
          theta(pp)=get_random_U()
       enddo
+
+      write(6,*) pp,theta
+
     endif
     theta = 2.0_rp*C_PI*theta
     

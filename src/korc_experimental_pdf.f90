@@ -2384,7 +2384,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,spp,F)
           write(output_unit_write,'("Sample: ",I10)') ii
           !write(6,'("Sample: ",I10)') ii
        end if
-        
+
         R_test = R_buffer + get_random_N()*spp%dR
         Z_test = Z_buffer + get_random_N()*spp%dZ
         eta_test = eta_buffer + get_random_N()*spp%dth

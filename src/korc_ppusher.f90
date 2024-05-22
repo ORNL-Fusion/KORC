@@ -4188,12 +4188,13 @@ subroutine GC_init_ACC(params,F,P,spp)
     REAL(rp) :: Y_R,Y_PHI,Y_Z,V_PLL,V_MU,vpll,gam,ne,Te,Zeff,PSIp
     REAL(rp) :: B_R,B_PHI,B_Z,E_R,E_PHI,E_Z
     REAL(rp) :: curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z
-    REAL(rp), DIMENSION(params%num_impurity_species) 	:: nimp
+    REAL(rp) 	:: nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
     INTEGER(is) :: flagCon,flagCol
     real(rp) :: m_cache
 
     !$acc routine (calculate_GCfieldswE_p_ACC) seq
     !$acc routine (cart_to_cyl_p_ACC) seq
+    !$acc routine (interp_Hcollision_p_ACC) seq
 
     do ii = 1_idef,params%num_species
 
@@ -4201,7 +4202,7 @@ subroutine GC_init_ACC(params,F,P,spp)
 
           params%GC_coords=.TRUE.
 
-          !$acc parallel loop
+          !$acc parallel loop private(B_R,B_PHI,B_Z)
           do pp=1_idef,spp(ii)%ppp
 
                if ((spp(ii)%spatial_distribution.eq.'TRACER').or. &
@@ -4215,46 +4216,53 @@ subroutine GC_init_ACC(params,F,P,spp)
                Y_PHI=spp(ii)%vars%Y(pp,2)
                Y_Z=spp(ii)%vars%Y(pp,3)
 
+               flagCon=spp(ii)%vars%flagCon(pp)
+               flagCol=spp(ii)%vars%flagCol(pp)
+
                call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R, &
                     E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
                     flagCon,PSIp)
 
-               Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+ &
-                    B_Z*B_Z)
+               Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
 
                pmag=sqrt(spp(ii)%vars%g(pp)**2-1)
 
                spp(ii)%vars%V(pp,1)=pmag*cos(deg2rad(spp(ii)%vars%eta(pp)))
 
-
                spp(ii)%vars%V(pp,2)=(pmag* &
                     sin(deg2rad(spp(ii)%vars%eta(pp))))**2/ &
                     (2*spp(ii)%m*Bmag)
 
-               E_PHI=spp(ii)%vars%E(pp,2)
-               Y_R=spp(ii)%vars%Y(pp,1)
-               Y_PHI=spp(ii)%vars%Y(pp,2)
-               Y_Z=spp(ii)%vars%Y(pp,3)
+               spp(ii)%vars%B(pp,1) = B_R
+               spp(ii)%vars%B(pp,2) = B_PHI
+               spp(ii)%vars%B(pp,3) = B_Z
+
+               spp(ii)%vars%E(pp,2) = E_PHI
+               spp(ii)%vars%PSI_P(pp) = PSIp
 
                V_PLL=spp(ii)%vars%V(pp,1)
                V_MU=spp(ii)%vars%V(pp,2)
 
-               flagCon=spp(ii)%vars%flagCon(pp)
-               flagCol=spp(ii)%vars%flagCol(pp)
-
                if (params%collisions) then
 
-                    call include_CoulombCollisions_GC_p_ACC(0_ip,params, &
-                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
-                         flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
-
+                    call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+                         nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
 
                          spp(ii)%vars%ne(pp) = ne
                          spp(ii)%vars%Te(pp) = Te
                          spp(ii)%vars%Zeff(pp) = Zeff
-                         spp(ii)%vars%nimp(pp,:) = nimp
+                         spp(ii)%vars%nimp(pp,1) = nAr0
+                         spp(ii)%vars%nimp(pp,1) = nAr1
+                         spp(ii)%vars%nimp(pp,1) = nAr2
+                         spp(ii)%vars%nimp(pp,1) = nAr3
+                         spp(ii)%vars%nimp(pp,1) = nAr4
+                         spp(ii)%vars%nimp(pp,1) = nD
+                         spp(ii)%vars%nimp(pp,1) = nD1
 
                end if
+
+               spp(ii)%vars%flagCon(pp)=flagCon
+               spp(ii)%vars%flagCol(pp)=flagCol
 
           end do
           !$acc end parallel loop
@@ -5562,9 +5570,16 @@ subroutine adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
           q_cache=spp(ii)%q
           m_cache=spp(ii)%m
  
-          !$acc parallel loop
+          !write(6,*) q_cache,m_cache
+
+          call init_random_seed(params)
+
+          !$acc parallel loop firstprivate(m_cache) &
+          !$acc& private(Y_R,Y_PHI,Y_Z,Y_R0,Y_PHI0,Y_Z0, &
+          !$acc& Y_R1,Y_PHI1,Y_Z1,V_PLL,V_MU,flagCon,flagCol, &
+          !$acc& B_R,B_PHI,B_Z,PSIp,E_PHI,ne,Te,Zeff,nimp)
           do pp=1_idef,spp(ii)%ppp
- 
+
                Y_R=spp(ii)%vars%Y(pp,1)
                Y_PHI=spp(ii)%vars%Y(pp,2)
                Y_Z=spp(ii)%vars%Y(pp,3)
@@ -5585,18 +5600,17 @@ subroutine adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
                flagCol=spp(ii)%vars%flagCol(pp)
 
                do tt=1_ip,params%t_skip
-
  
                     call advance_GCinterp_psiwE_vars_ACC(spp(ii),pp,tt, &
                          params, &
-                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
+                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
                          F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
                          curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
                          Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
  
                     if (params%collisions) then
  
-                       call include_CoulombCollisions_GC_p_ACC(tt,params, &
+                       call include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
                             Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
                             flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
  
@@ -5604,7 +5618,6 @@ subroutine adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
  
  
                end do !timestep iterator
- 
 
                spp(ii)%vars%Y(pp,1)=Y_R
                spp(ii)%vars%Y(pp,2)=Y_PHI
@@ -5647,6 +5660,8 @@ subroutine adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
            end do
            !$acc end parallel loop
  
+           call finalize_random_seed
+
      end do !species iterator
  
  end subroutine adv_GCinterp_psiwE_top_ACC
@@ -7556,7 +7571,7 @@ subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
 end subroutine advance_GCinterp_psiwE_vars
 
 subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
-     V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
+     V_PLL,V_MU,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
      curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
      Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
      !$acc routine seq
@@ -7607,26 +7622,28 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
 
     INTEGER(is),intent(INOUT) :: flagCon,flagCol
     INTEGER(is) :: flagCon0
-    REAL(rp),intent(IN)  :: q_cache,m_cache
+    REAL(rp)  :: q_cache,m_cache
     LOGICAL :: accepted
     REAL(rp) :: Rmin,Rmax,Zmin,Zmax,Rtrial,Ztrial,rm_trial,pmag0,Bmag0,maxRnRE
     REAL(rp),dimension(spp%BMC_Nra) :: RnRE
 
+     !$acc routine (check_if_in_fields_domain_2D_ACC) seq
      !$acc routine (calculate_GCfieldswE_p_ACC) seq
-    !$acc routine (GCEoM1_p_ACC) seq
+     !$acc routine (GCEoM1_p_ACC) seq
 
-    dt=params%dt
+     dt=params%dt
+     q_cache=spp%q
+     m_cache=spp%m
 
 
 
-       Y0_R=Y_R
-       Y0_PHI=Y_PHI
-       Y0_Z=Y_Z
-       V0_PLL=V_PLL
-       V0_MU=V_MU
+     Y0_R=Y_R
+     Y0_PHI=Y_PHI
+     Y0_Z=Y_Z
+     V0_PLL=V_PLL
+     V0_MU=V_MU
 
-       flagCon0=flagCon
-
+     flagCon0=flagCon
 
 
     !    write(output_unit_write,*) 'R0',Y_R(1)
@@ -7635,16 +7652,16 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !    write(output_unit_write,*) 'PPLL0',V_PLL(1)
     !    write(output_unit_write,*) 'MU0',V_MU(1)
 
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
 
     !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
+     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
+          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
+          flagCon,PSIp)
 
-
-    call GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+     call GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
+          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
+          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
 
     !    write(output_unit_write,*) 'R0',Y_R(1)
     !    write(output_unit_write,*) 'PHI0',Y_PHI(1)
@@ -7672,17 +7689,20 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !    write(output_unit_write,*) 'RHS_MU',RHS_MU(1)
 
 
-       k1_R=dt*RHS_R
-       k1_PHI=dt*RHS_PHI
-       k1_Z=dt*RHS_Z
-       k1_PLL=dt*RHS_PLL
-       k1_MU=dt*RHS_MU
+     k1_R=dt*RHS_R
+     k1_PHI=dt*RHS_PHI
+     k1_Z=dt*RHS_Z
+     k1_PLL=dt*RHS_PLL
+     k1_MU=dt*RHS_MU
 
-       Y_R=Y0_R+a1*k1_R
-       Y_PHI=Y0_PHI+a1*k1_PHI
-       Y_Z=Y0_Z+a1*k1_Z
-       V_PLL=V0_PLL   +a1*k1_PLL
-       V_MU=V0_MU   +a1*k1_MU
+     !write(6,*) 'advance1_gceom',pp,q_cache,m_cache
+     !flush(6)
+
+     Y_R=Y0_R+a1*k1_R
+     Y_PHI=Y0_PHI+a1*k1_PHI
+     Y_Z=Y0_Z+a1*k1_Z
+     V_PLL=V0_PLL   +a1*k1_PLL
+     V_MU=V0_MU   +a1*k1_MU
 
 
     !    write(output_unit_write,*) 'R1',Y_R(1)
@@ -7691,15 +7711,19 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !   write(output_unit_write,*) 'PPLL1',V_PLL(1)
     !   write(output_unit_write,*) 'MU1',V_MU(1)
 
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
     !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-    call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
-         E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-         flagCon,PSIp)
+     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
+          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
+          flagCon,PSIp)
+
+          !write(6,*) 'advance2',pp,Y_R,Y_Z,B_R
+          !flush(6)
 
 
-    call GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
-         B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-         gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+     call GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
+          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
+          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
 
 
        k2_R=dt*RHS_R
@@ -7716,14 +7740,14 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
 
 
 
-
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
     !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
 
 
-    call GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
+    call GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
 
@@ -7742,13 +7766,13 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        V_PLL=V0_PLL   +a31*k1_PLL+a32*k2_PLL+a33*k3_PLL
        V_MU=V0_MU   +a31*k1_MU+a32*k2_MU+a33*k3_MU
 
-
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
     !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
 
-    call GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
+    call GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
 
@@ -7770,13 +7794,13 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
             a43*k3_MU+a44*k4_MU
 
 
-
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
     !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
 
-    call GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
+    call GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
 
@@ -7797,13 +7821,13 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        V_MU=V0_MU   +a51*k1_MU+a52*k2_MU+ &
             a53*k3_MU+a54*k4_MU+a55*k5_MU
 
-
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
     !    call interp_fields_p(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
 
-    call GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
+    call GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,B_R,B_PHI, &
          B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
          gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
 
@@ -7838,6 +7862,7 @@ subroutine advance_GCinterp_psiwE_vars_ACC(spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
        Y_PHI0=Y_PHI0+(Y0_PHI-Y_PHI0)*REAL(flagCon0)
        Y_Z0=Y_Z0+(Y0_Z-Y_Z0)*REAL(flagCon0)
 
+     call check_if_in_fields_domain_2D_ACC(F,Y_R,Y_PHI,Y_Z,flagCon)
     call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI, &
          E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
          flagCon,PSIp)
@@ -8630,7 +8655,7 @@ subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
 
 end subroutine GCEoM1_p
 
-subroutine GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+subroutine GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
      B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
      gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flag_cache)
 !$acc routine seq
@@ -8655,6 +8680,7 @@ subroutine GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     REAL(rp),INTENT(in) :: q_cache,m_cache
     INTEGER  :: cc
     INTEGER(ip),INTENT(IN)  :: tt
+    INTEGER,INTENT(IN) :: pp
     INTEGER(is),INTENT(OUT)  :: flag_cache
     REAL(rp)  :: time,re_cache,alpha_cache
     INTEGER             :: thread_num
@@ -8669,7 +8695,8 @@ subroutine GCEoM1_p_ACC(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
        Bst_PHI=q_cache*B_PHI+V_PLL*curlb_PHI
        Bst_Z=q_cache*B_Z+V_PLL*curlb_Z
 
-      ! write(output_unit_write,*) 'bmag',Bmag,'bhat',bhat_R,bhat_PHI,bhat_Z,'Bst',Bst_R,Bst_PHI,Bst_Z
+      !write(6,*) pp,'bmag',Bmag,'bhat',bhat_R,bhat_PHI,bhat_Z,'Bst',Bst_R,Bst_PHI,Bst_Z
+      !flush(6)
 
        bdotBst=bhat_R*Bst_R+bhat_PHI*Bst_PHI+ &
             bhat_Z*Bst_Z
