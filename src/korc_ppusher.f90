@@ -8682,8 +8682,14 @@ subroutine GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     INTEGER(ip),INTENT(IN)  :: tt
     INTEGER,INTENT(IN) :: pp
     INTEGER(is),INTENT(OUT)  :: flag_cache
+    INTEGER(is) :: flagCon
     REAL(rp)  :: time,re_cache,alpha_cache
     INTEGER             :: thread_num
+    REAL(rp) 	:: Zeff,Te,ne,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
+
+    ne=-1._rp
+    Te=-1._rp
+    Zeff=-1._rp
 
        Bmag = SQRT(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
 
@@ -8735,6 +8741,54 @@ subroutine GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
        RHS_PLL=(q_cache*BstdotE-V_MU*BstdotgradB/gamgc)/ &
             bdotBst
        RHS_MU=0._rp
+
+       if (params%radiation.and.(params%GC_rad_model.eq.'SDE')) then
+
+          !       write(output_unit_write,*) 'RHS_PLL',RHS_PLL(1)
+   
+          re_cache=C_RE/params%cpp%length
+          alpha_cache=C_a
+   
+          if (.not.params%LargeCollisions) then
+             time=params%init_time+(params%it-1+tt)*params%dt
+          else
+             time=params%init_time+params%it*params%dt+ &
+                  tt*params%coll_per_dump_dt
+          end if
+   
+          if (params%profile_model(1:10).eq.'ANALYTICAL') then
+               call analytical_profiles_p_ACC(time,params,Y_R,Y_Z, &
+                    P,F,ne,Te,Zeff,PSIp)
+#ifdef PSPLINE
+          else if (params%profile_model(10:10).eq.'H') then
+               call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z, &
+                    ne,Te,Zeff,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1, &
+                    flagCon)
+#endif
+          endif
+   
+          !write(6,*) 'Y: ',Y_R,Y_PHI,Y_Z
+          !write(6,*) 'Profs: ',ne,Te,Zeff
+
+          tau_R=6*C_PI*E0/(Bmag*Bmag)
+
+          SR_PLL=V_PLL*(1._rp-xi*xi)/tau_R* &
+               (1._rp/gamgc-gamgc)
+          SR_MU=-2._rp*V_MU/tau_R* &
+               (gamgc*(1-xi*xi)+xi*xi/gamgc)
+
+          !Normalizations done here
+          BREM_P=-4._rp*re_cache**2*ne* &
+               Zeff*(Zeff+1._rp)*alpha_cache* &
+               (gamgc-1._rp)*(log(2._rp*gamgc)-1._rp/3._rp)
+          BREM_PLL=xi*BREM_P
+          BREM_MU=(1._rp-xi*xi)*V_PLL/ &
+               (Bmag*xi)*BREM_P
+
+          RHS_PLL=RHS_PLL+SR_PLL+BREM_PLL
+          RHS_MU=SR_MU+BREM_MU
+   
+       end if
 
 end subroutine GCEoM1_p_ACC
 

@@ -3942,8 +3942,8 @@ subroutine interp_Hcollision_p(params,pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
  
  end subroutine interp_Hcollision_p
 
-subroutine interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-  nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flag_cache)
+subroutine interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z, &
+   ne,Te,Zeff,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flag_cache)
   !$acc routine seq
   TYPE(KORC_PARAMS), INTENT(IN) 		:: params
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z

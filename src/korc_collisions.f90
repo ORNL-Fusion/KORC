@@ -1419,6 +1419,7 @@ contains
   end function CF_FIO
 
   function CF_SD(params,v,ne,Te,P,Y_R,Y_Z)
+   !$acc routine seq
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
@@ -1430,6 +1431,12 @@ contains
     REAL(rp)  :: k=5._rp,ra
     TYPE(PROFILES), INTENT(IN)  :: P
     REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
+
+   !$acc routine (VTe) seq
+    !$acc routine (Gammacee) seq
+    !$acc routine (psi) seq
+    !$acc routine (h_j) seq
+    !$acc routine (CLogee) seq
 
     x = v/VTe(Te)
     CF_SD  = Gammacee(v,ne,Te)*psi(x)/Te
@@ -1627,6 +1634,7 @@ contains
   end function CB_ee_SD
 
 function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
+   !$acc routine seq
    TYPE(KORC_PARAMS), INTENT(IN) 	:: params
    REAL(rp), INTENT(IN) 	:: v
    REAL(rp), INTENT(IN) 	:: ne
@@ -1638,6 +1646,12 @@ function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
    INTEGER :: i
    TYPE(PROFILES), INTENT(IN)  :: P
    REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
+
+   !$acc routine (VTe) seq
+   !$acc routine (Gammacee) seq
+   !$acc routine (CLogei) seq
+   !$acc routine (CLogee) seq
+   !$acc routine (g_j) seq
 
    x = v/VTe(Te)
    CB_ei_SD  = (0.5_rp*Gammacee(v,ne,Te)/v)* &
@@ -2622,8 +2636,9 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
 
 end subroutine include_CoulombCollisions_GC_p
 
-subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params,Y_R,Y_PHI,Y_Z, &
-   Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
+subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
+   Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI, &
+   ne,Te,Zeff,nimp,PSIp)
    !$acc routine seq
    TYPE(PROFILES), INTENT(IN)                                 :: P
    TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -2663,12 +2678,15 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params,Y_R,Y_PHI,Y_Z, &
    REAL(rp) 	:: E_PHI_tmp
 
    !$acc routine (calculate_GCfieldswE_p_ACC) seq
+   !$acc routine (analytical_profiles_p_ACC) seq
    !$acc routine (interp_Hcollision_p_ACC) seq
    !$acc routine (CA_SD) seq
    !$acc routine (dCA_SD) seq
    !$acc routine (CF_SD_FIO) seq
+   !$acc routine (CF_SD) seq
    !$acc routine (CB_ee_SD) seq
    !$acc routine (CB_ei_SD_FIO) seq
+   !$acc routine (CB_ei_SD) seq
    !$acc routine (get_random_U) seq
 
    if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
@@ -2676,23 +2694,29 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params,Y_R,Y_PHI,Y_Z, &
       time=params%init_time+(params%it-1+tt)*params%dt
 
 #ifdef PSPLINE
+      call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z, &
+      B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
+      gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp)
+#endif
 
-      call calculate_GCfieldswE_p_ACC(F,Y_R,Y_PHI,Y_Z,B_R,B_PHI,B_Z, &
-         E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-         gradB_R,gradB_PHI,gradB_Z,flagCon,PSIp)
+      if (params%profile_model(1:10).eq.'ANALYTICAL') then
+         call analytical_profiles_p_ACC(time,params,Y_R,Y_Z, &
+            P,F,ne,Te,Zeff,PSIp)
+#ifdef PSPLINE
+      else if (params%profile_model(10:10).eq.'H') then
+         call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+            nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
 
-      call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-         nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
-
-      nimp(1)=nAr0
-      nimp(2)=nAr1
-      nimp(3)=nAr2
-      nimp(4)=nAr3
-      nimp(5)=nAr4
-      nimp(6)=nD
-      nimp(7)=nD1
+         nimp(1)=nAr0
+         nimp(2)=nAr1
+         nimp(3)=nAr2
+         nimp(4)=nAr3
+         nimp(5)=nAr4
+         nimp(6)=nD
+         nimp(7)=nD1
 
 #endif PSPLINE
+      endif
 
 
       E_PHI_tmp=E_PHI

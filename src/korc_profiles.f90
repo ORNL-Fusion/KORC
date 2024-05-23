@@ -320,6 +320,7 @@ CONTAINS
     vars%Zeff = P%Zeffo
   end subroutine uniform_profiles
 
+  
   subroutine analytical_profiles_p(pchunk,time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
     !! @note Subroutine that calculates the analytical plasma profiles at
     !! the particles' position. @endnote
@@ -344,7 +345,7 @@ CONTAINS
     REAL(rp) :: R0_RE,Z0_RE,sigmaR_RE,sigmaZ_RE,psimax_RE
     REAL(rp) :: n_REr0,n_tauion,n_lamfront,n_lamback,n_lamshelf
     REAL(rp) :: n_psifront,n_psiback,n_psishelf
-    REAL(rp) :: n_tauin,n_tauout,n_shelfdelay,n_shelf
+    REAL(rp) :: n_tauin,n_tauout,n_shelfdshelf
     REAL(rp) :: n0t,n_taut
     REAL(rp) :: PSIp0,PSIp_lim,psiN_0
     REAL(rp), DIMENSION(params%pchunk) :: r_a,rm,rm_RE,PSIpN,PSIp_temp
@@ -609,6 +610,189 @@ CONTAINS
 !    write(output_unit_write,'("rm_RE: "E17.10)') rm_RE(1)
     
   end subroutine analytical_profiles_p
+
+  subroutine analytical_profiles_p_ACC(time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
+   !$acc routine seq
+   !! @note Subroutine that calculates the analytical plasma profiles at
+   !! the particles' position. @endnote
+   TYPE(KORC_PARAMS), INTENT(IN)                           :: params
+   REAL(rp), INTENT(IN)  :: Y_R,Y_Z,PSIp
+   REAL(rp), INTENT(IN)  :: time
+   TYPE(PROFILES), INTENT(IN)                         :: P
+   !! An instance of KORC's derived type PROFILES containing all the
+   !! information about the plasma profiles used in the simulation.
+   !! See [[korc_types]] and [[korc_profiles]].
+   TYPE(FIELDS), INTENT(IN)      :: F
+   REAL(rp),INTENT(OUT) :: ne
+   !! Background electron density seen by simulated particles.
+   REAL(rp),INTENT(OUT) :: Te
+   !! Backgroun temperature density seen by simulated particles.
+   REAL(rp),INTENT(OUT) :: Zeff
+   !! Effective atomic charge seen by simulated particles.
+   INTEGER(ip)                                        :: cc
+   !! Particle iterator.
+   REAL(rp) :: R0,Z0,a,ne0,n_ne,Te0,n_Te,Zeff0,R0a
+   REAL(rp) :: R0_RE,Z0_RE,sigmaR_RE,sigmaZ_RE,psimax_RE
+   REAL(rp) :: n_REr0,n_tauion,n_lamfront,n_lamback,n_lamshelf
+   REAL(rp) :: n_psifront,n_psiback,n_psishelf
+   REAL(rp) :: n_tauin,n_tauout,n_shelfdshelf
+   REAL(rp) :: n0t,n_taut
+   REAL(rp) :: PSIp0,PSIp_lim,psiN_0
+   REAL(rp) :: r_a,rm,rm_RE,PSIpN,PSIp_temp
+   
+   R0=P%R0
+   Z0=P%Z0
+   a=P%a
+   R0a=F%AB%Ro
+   
+   ne0=P%neo
+   n_ne=P%n_ne
+
+   Te0=P%Teo
+   n_Te=P%n_Te
+
+   Zeff0=P%Zeffo
+
+   R0_RE=P%R0_RE
+   Z0_RE=P%Z0_RE
+   n_REr0=P%n_REr0
+   n_tauion=P%n_tauion
+   n_tauin=P%n_tauin
+   n_tauout=P%n_tauout
+   n_shelfdelay=P%n_shelfdelay
+   n_lamfront=P%n_lamfront
+   n_lamback=P%n_lamback
+   n_lamshelf=P%n_lamshelf
+   n_psifront=P%n_lamfront*params%cpp%length
+   n_psiback=P%n_lamback*params%cpp%length
+   n_psishelf=P%n_lamshelf*params%cpp%length
+   n_shelf=P%n_shelf
+   
+   PSIp_lim=F%PSIp_lim
+   PSIp0=F%PSIP_min
+   psiN_0=P%psiN_0
+   
+
+!    write(output_unit_write,*) 'PSIp',PSIp(1)*(params%cpp%Bo*params%cpp%length**2)
+!    write(output_unit_write,*) 'PSIp_lim',PSIp_lim*(params%cpp%Bo*params%cpp%length**2)   
+!    write(output_unit_write,*) 'PSIp0',PSIp0*(params%cpp%Bo*params%cpp%length**2)
+   
+!    write(output_unit_write,'("R0_RE: "E17.10)') R0_RE
+!    write(output_unit_write,'("Z0_RE: "E17.10)') Z0_RE
+!    write(output_unit_write,'("n_REr0: "E17.10)') n_REr0
+
+   
+   SELECT CASE (TRIM(P%ne_profile))
+   CASE('FLAT')
+         ne = ne0
+   CASE('FLAT-RAMP')
+         ne = n_ne+(ne0-n_ne)*time/n_tauion
+   CASE('TANH-RAMP')
+         ne = n_ne+(ne0-n_ne)/2*(tanh((time-n_shelfdelay)/n_tauion)+1._rp)
+   CASE('SINE')
+         ne = n_ne+(ne0-n_ne)*sin(time/n_tauion)
+   CASE('SPONG')
+         rm=sqrt((Y_R-R0)**2+(Y_Z-Z0)**2)
+         r_a=rm/a
+         ne = ne0*(1._rp-0.2*r_a**8)+n_ne
+   CASE('MST_FSA')       
+         rm=sqrt((Y_R-R0a)**2+(Y_Z-Z0)**2)
+         r_a=rm/a
+         ne = (ne0-n_ne)*(1._rp-r_a**4._rp)**4._rp+n_ne
+   CASE('RE-EVO')
+         rm_RE=sqrt((Y_R-R0_RE)**2+(Y_Z-Z0_RE)**2)
+         ne = (ne0-n_ne)/4._rp*(1+tanh((rm_RE+ &
+              n_REr0*(time/n_tauion-1))/n_lamfront))* &
+              (1+tanh(-(rm_RE-n_REr0)/n_lamback))+n_ne
+   CASE('RE-EVO1')
+         rm_RE=sqrt((Y_R-R0_RE)**2+(Y_Z-Z0_RE)**2)
+         ne = (ne0-n_ne)/8._rp*(1+tanh((rm_RE+ &
+              n_REr0*(time/n_tauion-1))/n_lamfront))* &
+              (1+tanh(-(rm_RE-n_REr0)/n_lamback))* &
+              (2*(n_shelf-n_ne)/(ne0-n_ne)+(ne0-n_shelf)/(ne0-n_ne)* &
+              (1-tanh((rm_RE+n_REr0*((time-n_shelfdelay)/n_tauin-1))/ &
+              n_lamshelf)))+n_ne
+   CASE('RE-EVO-PSI')
+         PSIpN=(PSIp-PSIp0)/(PSIp_lim-PSIp0)
+         ne = (ne0-n_ne)/8._rp*(1+tanh((sqrt(abs(PSIpN))+ &
+              sqrt(abs(psiN_0))*(time/n_tauion-1))/n_psifront))* &
+              (1+tanh(-(sqrt(abs(PSIpN))-sqrt(abs(psiN_0)))/n_psiback))* &
+              (2*(n_shelf-n_ne)/(ne0-n_ne)+(ne0-n_shelf)/(ne0-n_ne)* &
+              (1-tanh((sqrt(abs(PSIpN))+ sqrt(abs(psiN_0))* &
+              ((time-n_shelfdelay)/n_tauin-1))/n_psishelf)))+n_ne
+   CASE('RE-EVO-PSIN-SG')
+
+      n0t=(ne0-n_ne)/2._rp*(tanh(time/n_tauin)- &
+           tanh((time-n_shelfdelay)/n_tauin))
+      n_taut=n_psishelf*erf((time+params%dt/100._rp)/n_tauion)
+      
+      PSIpN=(PSIp-PSIp0)/(PSIp_lim-PSIp0)
+      ne = n0t*exp(-(sqrt(abs(PSIpN))-sqrt(abs(psiN_0)))**2._rp/ &
+            (2._rp*n_taut**2._rp))*(1._rp+erf(-10._rp* &
+            (sqrt(abs(PSIpN))-sqrt(abs(psiN_0)))/ &
+            (sqrt(2._rp)*n_taut)))/2._rp+n_ne
+   
+   CASE('RE-EVO-PSIP-G')
+
+      n0t=(ne0-n_ne)/2._rp*(tanh((time-n_tauin)/n_tauin)- &
+           tanh((time-n_shelfdelay)/n_tauout))
+      n_taut=n_psishelf*erf((time+params%dt/100._rp)/n_tauion)
+      
+      PSIp_temp=PSIp*(params%cpp%Bo*params%cpp%length**2)
+      ne = n0t*exp(-(sqrt(abs(PSIp_temp))-sqrt(abs(psiN_0)))**2._rp/ &
+            (2._rp*n_taut**2._rp))+n_ne
+
+   CASE('RE-EVO-PSIP-G1')
+
+!       write(output_unit_write,*) 'time: ',time*params%cpp%time
+      
+      n0t=(ne0-n_ne)/2._rp*(tanh((time-1.75*n_tauin)/n_tauin)- &
+           tanh((time-n_shelfdelay)/n_tauout))
+      n_taut=n_psishelf*erf((time+params%dt/100._rp)/n_tauion)
+
+      PSIp_temp=PSIp*(params%cpp%Bo*params%cpp%length**2)
+      ne = n0t*exp(-(sqrt(abs(PSIp_temp))-sqrt(abs(psiN_0)))**2._rp/ &
+            (2._rp*n_taut**2._rp))+n_ne
+
+   CASE DEFAULT
+         ne = ne0
+   END SELECT
+
+   SELECT CASE (TRIM(P%Te_profile))
+   CASE('FLAT')
+         Te = Te0
+   CASE('SPONG')
+         rm=sqrt((Y_R-R0)**2+(Y_Z-Z0)**2)
+         r_a=rm/a
+         Te = Te0*(1._rp-0.6*r_a**2)**2+Te0*n_Te
+   CASE('MST_FSA')
+
+         rm=sqrt((Y_R-R0a)**2+(Y_Z-Z0)**2)
+         r_a=rm/a
+         Te = (Te0-n_Te)*(1._rp-r_a**8._rp)**4._rp+n_Te
+
+   CASE DEFAULT
+
+         Te = P%Teo
+
+   END SELECT
+
+   SELECT CASE (TRIM(P%Zeff_profile))
+   CASE('FLAT')
+
+         Zeff = P%Zeffo
+
+   CASE('SPONG')
+
+         Zeff = P%Zeffo
+
+   CASE DEFAULT
+
+         Zeff = P%Zeffo
+
+   END SELECT
+   
+ end subroutine analytical_profiles_p_ACC
 
   subroutine get_analytical_profiles(P,Y,ne,Te,Zeff,flag)
     !! @note Subroutine that calculates the analytical plasma profiles at
