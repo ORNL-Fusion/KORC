@@ -8692,6 +8692,9 @@ subroutine GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     INTEGER             :: thread_num
     REAL(rp) 	:: Zeff,Te,ne,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
 
+     !$acc routine (analytical_profiles_p_ACC) seq
+    !$acc routine (interp_Hcollision_p_ACC) seq
+
     ne=-1._rp
     Te=-1._rp
     Zeff=-1._rp
