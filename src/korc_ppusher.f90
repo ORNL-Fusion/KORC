@@ -5604,6 +5604,7 @@ subroutine adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
                flagCon=spp(ii)%vars%flagCon(pp)
                flagCol=spp(ii)%vars%flagCol(pp)
 
+               !$acc loop seq
                do tt=1_ip,params%t_skip
  
                     call advance_GCinterp_psiwE_vars_ACC(spp(ii),pp,tt, &
@@ -8693,6 +8694,7 @@ subroutine GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     REAL(rp) 	:: Zeff,Te,ne,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
 
      !$acc routine (analytical_profiles_p_ACC) seq
+    !$acc routine (analytical_profiles_p_ACC_1) seq
     !$acc routine (interp_Hcollision_p_ACC) seq
 
     ne=-1._rp
@@ -8765,7 +8767,7 @@ subroutine GCEoM1_p_ACC(pp,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
           end if
    
           if (params%profile_model(1:10).eq.'ANALYTICAL') then
-               call analytical_profiles_p_ACC(time,params,Y_R,Y_Z, &
+               call analytical_profiles_p_ACC_1(time,params,Y_R,Y_Z, &
                     P,F,ne,Te,Zeff,PSIp)
 #ifdef PSPLINE
           else if (params%profile_model(10:10).eq.'H') then
