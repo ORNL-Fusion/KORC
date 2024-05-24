@@ -1590,11 +1590,10 @@ subroutine MH_psi(params,spp,F)
 
 !        write(output_unit_write,'("sample:",I15)') ii
 
-#if DBG_CHECK
      if (modulo(ii,nsamples/10).eq.0) then
         write(output_unit_write,'("Sample: ",I10)') ii
      end if
-#endif
+
 
         !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
         !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)

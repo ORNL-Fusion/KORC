@@ -353,9 +353,9 @@ CONTAINS
 
      integer :: get_num_threads
 #if defined(_OPENMP)
-!$acc PARALLEL
+!$omp PARALLEL
      get_num_threads = OMP_GET_NUM_THREADS()
-!$acc END PARALLEL
+!$omp END PARALLEL
 #else
      get_num_threads = 1
 #endif
@@ -367,7 +367,7 @@ CONTAINS
       implicit none
 
       integer :: get_max_threads
-#if defined(_OPENACC)
+#if defined(_OPENMP)
       get_max_threads = OMP_GET_MAX_THREADS()
 #else
       get_max_threads = 1
@@ -383,7 +383,7 @@ CONTAINS
 
      integer :: get_thread_number
 
-#if defined(_OPENACC)
+#if defined(_OPENMP)
      get_thread_number = OMP_GET_THREAD_NUM()
 #else
      get_thread_number = 0

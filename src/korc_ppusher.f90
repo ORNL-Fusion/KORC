@@ -4245,8 +4245,12 @@ subroutine GC_init_ACC(params,F,P,spp)
 
                if (params%collisions) then
 
-                    call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
-                         nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
+                    if (params%profile_model(1:10).eq.'ANALYTICAL') then
+                         call analytical_profiles_p_ACC(0._rp,params,Y_R,Y_Z, &
+                            P,F,ne,Te,Zeff,PSIp)
+                    else if (params%profile_model(10:10).eq.'H') then
+                         call interp_Hcollision_p_ACC(params,Y_R,Y_PHI,Y_Z,ne,Te,Zeff, &
+                              nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,flagCon)
 
                          spp(ii)%vars%ne(pp) = ne
                          spp(ii)%vars%Te(pp) = Te
@@ -4258,6 +4262,7 @@ subroutine GC_init_ACC(params,F,P,spp)
                          spp(ii)%vars%nimp(pp,1) = nAr4
                          spp(ii)%vars%nimp(pp,1) = nD
                          spp(ii)%vars%nimp(pp,1) = nD1
+                    endif
 
                end if
 
