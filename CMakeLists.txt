@@ -43,6 +43,18 @@ option (USE_ACC "Use OpenACC" OFF)
 option (USE_PSPLINE "Use PSPLINE interpolation" ON)
 option (USE_FIO "Use FIO interpolation support" OFF)
 
+set (VALID_PRECISIONS "FLOAT" "DOUBLE")
+set (HDF5_PRECISION "DOUBLE" CACHE STRING "FLOAT,DOUBLE")
+set_property (CACHE HDF5_PRECISION PROPERTY STRINGS ${VALID_PRECISIONS})
+
+if (HDF5_PRECISION STREQUAL "DOUBLE")
+  add_compile_options(-DHDF5_DOUBLE_PRESICION)
+elseif (HDF5_PRECISION STREQUAL "FLOAT")
+  add_compile_options(-DHDF5_FLOAT_PRESICION)
+else ()
+  message (FATAL_ERROR "HDF5_PRECISION value \"${HDF5_PRECISION}\" option set to something other than FLOAT or DOUBLE.")
+endif ()
+
 #-------------------------------------------------------------------------------
 #  Sanitizer options
 #-------------------------------------------------------------------------------
