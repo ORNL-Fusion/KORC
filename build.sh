@@ -12,7 +12,7 @@ cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
       -DUSE_PSPLINE=ON \
       -DUSE_FIO=OFF \
       -DKORC_TEST=OFF \
-      -DCMAKE_Fortran_FLAGS="-DHDF5_DOUBLE_PRESICION -malign-double -fconvert='big-endian'" \
+      -DCMAKE_Fortran_FLAGS="-malign-double -fconvert='big-endian'" \
       -DCMAKE_C_FLAGS="-malign-double"  \
       -DCMAKE_CXX_FLAGS="-malign-double" \
       -DCMAKE_Fortran_FLAGS_DEBUG="-g3 -ffpe-trap=zero,overflow -fbacktrace" \
