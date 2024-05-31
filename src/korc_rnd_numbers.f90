@@ -112,7 +112,7 @@ subroutine rand_real(rrand)
     rrand = rcoeff*REAL(irand64,rp) + 0.5_rp
 end subroutine rand_real
 
-
+! FIXME: This function is now defunct.
 subroutine init_random_seed(params)
 #ifdef PARALLEL_RANDOM
   use korc_random
@@ -157,15 +157,6 @@ subroutine init_random_seed(params)
         seed(i) = lcg(t)
      end do
   end if
-#ifdef PARALLEL_RANDOM
-  call initialize_random(seed(1))
-  call initialize_random_U(seed(1))
-  call initialize_random_N(seed(1))
-
-!  call initialize_random_mkl(seed(1))
-#else
-  call random_seed(put=seed)
-#endif
 contains
 
   ! This simple PRNG might not be good enough for real work, but is
@@ -182,20 +173,5 @@ contains
     lcg = int(mod(s, int(huge(0), 8)), kind(0))
   end function lcg
 end subroutine init_random_seed
-
-subroutine finalize_random_seed
-#ifdef PARALLEL_RANDOM
-  use korc_random
-#endif
-
-implicit none
-
-#ifdef PARALLEL_RANDOM
-call finalize_random
-call finalize_random_U
-call finalize_random_N
-#endif
-
-end subroutine
 
 end module korc_rnd_numbers

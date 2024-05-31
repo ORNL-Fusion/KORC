@@ -7,7 +7,8 @@ MODULE korc_avalanche
   USE korc_profiles
   USE korc_coords
   USE korc_input
-  
+  USE korc_random
+
   IMPLICIT NONE
 
   TYPE, PRIVATE :: AVALANCHE_PDF_PARAMS
@@ -71,14 +72,14 @@ MODULE korc_avalanche
        sample_distribution,&
        indicator,&
        PSI_ROT,&
-       random_norm,&
        update_avalanche_params,&
        Avalanche_4D
 
 CONTAINS
 
-  SUBROUTINE get_avalanche_distribution(params,g,eta,go,etao)
+  SUBROUTINE get_avalanche_distribution(params,random,g,eta,go,etao)
     TYPE(KORC_PARAMS), INTENT(IN) :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: g
     REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: eta
     REAL(rp), INTENT(OUT) :: go
@@ -88,11 +89,12 @@ CONTAINS
 
     call save_avalanche_params(params)
 
-    call sample_distribution(params,g,eta,go,etao)
+    call sample_distribution(params,random,g,eta,go,etao)
   END SUBROUTINE get_avalanche_distribution
 
-  SUBROUTINE get_Avalanche_4D(params,spp,P,F)
+  SUBROUTINE get_Avalanche_4D(params,random,spp,P,F)
     TYPE(KORC_PARAMS), INTENT(IN) :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(SPECIES), INTENT(INOUT)  :: spp
     TYPE(PROFILES), INTENT(IN)    :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -102,7 +104,7 @@ CONTAINS
 
     call save_avalanche_params(params)
 
-    call Avalanche_4D(params,spp,P,F)
+    call Avalanche_4D(params,random,spp,P,F)
   END SUBROUTINE get_Avalanche_4D
 
 
@@ -203,8 +205,9 @@ CONTAINS
   END FUNCTION log10fRE
 
 
-  SUBROUTINE sample_distribution(params,g,eta,go,etao)
+  SUBROUTINE sample_distribution(params,random,g,eta,go,etao)
     TYPE(KORC_PARAMS), INTENT(IN) :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: g
     REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: eta
     REAL(rp), INTENT(OUT) :: go
@@ -228,6 +231,7 @@ CONTAINS
     INTEGER :: ii,jj,ppp,nsamples
     INTEGER :: mpierr
 
+    CALL random%uniform%set(0.0_rp,1.0_rp)
 
     ppp = SIZE(g)
     nsamples = ppp*params%mpi_params%nmpi
@@ -276,30 +280,27 @@ CONTAINS
        ALLOCATE(eta_tmp(nsamples))
        ! Number of samples to distribute among all MPI processes
 
-       ! Transient !
-       call RANDOM_SEED()
-
-       call RANDOM_NUMBER(rand_unif)
        eta_buffer = aval_params%min_pitch_angle + (aval_params%max_pitch_angle  &
-            - aval_params%min_pitch_angle)*rand_unif
+            - aval_params%min_pitch_angle)*random%uniform%get()
 
-       call RANDOM_NUMBER(rand_unif)
        p_buffer = aval_params%min_p + (aval_params%max_p - aval_params%min_p)* &
-            rand_unif
+            random%uniform%get()
 
        ii=2_idef
        do while (ii .LE. 1000_idef)
-          eta_test = eta_buffer + random_norm(0.0_rp,deta)
+          CALL random%normal%set(0.0_rp,deta)
+          eta_test = eta_buffer + random%normal%get()
           do while ((ABS(eta_test) .GT. aval_params%max_pitch_angle).OR. &
                (ABS(eta_test) .LT. aval_params%min_pitch_angle))
-             eta_test = eta_buffer + random_norm(0.0_rp,deta)
+             eta_test = eta_buffer + random%normal%get()
           end do
           chi_test = COS(deg2rad(eta_test))
           chi = COS(deg2rad(eta_buffer))
 
-          p_test = p_buffer + random_norm(0.0_rp,dp)
+          CALL random%normal%set(0.0_rp,dp)
+          p_test = p_buffer + random%normal%get()
           do while ((p_test.LT.aval_params%min_p).OR.(p_test.GT.aval_params%max_p))
-             p_test = p_buffer + random_norm(0.0_rp,dp)
+             p_test = p_buffer + random%normal%get()
           end do
 
           ratio = fRE(chi_test,p_test)/fRE(chi,p_buffer)
@@ -308,9 +309,8 @@ CONTAINS
              p_buffer = p_test
              eta_buffer = eta_test
              ii = ii + 1_idef
-          else 
-             call RANDOM_NUMBER(rand_unif)
-             if (rand_unif .LT. ratio) then
+          else
+             if (random%uniform%get() .LT. ratio) then
                 p_buffer = p_test
                 eta_buffer = eta_test
                 ii = ii + 1_idef
@@ -319,10 +319,6 @@ CONTAINS
        end do
        ! Transient !
 
-
-       call RANDOM_SEED()
-       call RANDOM_NUMBER(rand_unif)
-
        eta_tmp(1) = eta_buffer
        p_tmp(1) = p_buffer
 
@@ -330,17 +326,19 @@ CONTAINS
        do while(num_accepted.LT.nsamples)
           ii=2_idef
           do while (ii .LE. nsamples)
-             eta_test = eta_tmp(ii-1) + random_norm(0.0_rp,deta)
+             CALL random%normal%set(0.0_rp,deta)
+             eta_test = eta_tmp(ii-1) + random%normal%get()
              do while ((ABS(eta_test) .GT. max_pitch_angle).OR.(ABS(eta_test) &
                   .LT. min_pitch_angle))
-                eta_test = eta_tmp(ii-1) + random_norm(0.0_rp,deta)
+                eta_test = eta_tmp(ii-1) + random%normal%get()
              end do
              chi_test = COS(deg2rad(eta_test))
              chi = COS(deg2rad(eta_tmp(ii-1)))
 
-             p_test = p_tmp(ii-1) + random_norm(0.0_rp,dp)
+             CALL random%normal%set(0.0_rp,dp)
+             p_test = p_tmp(ii-1) + random%normal%get()
              do while ((p_test.LT.min_p).OR.(p_test.GT.max_p))
-                p_test = p_tmp(ii-1) + random_norm(0.0_rp,dp)
+                p_test = p_tmp(ii-1) + random%normal%get()
              end do
 
              ratio = fRE(chi_test,p_test)/fRE(chi,p_tmp(ii-1))
@@ -349,9 +347,8 @@ CONTAINS
                 p_tmp(ii) = p_test
                 eta_tmp(ii) = eta_test
                 ii = ii + 1_idef
-             else 
-                call RANDOM_NUMBER(rand_unif)
-                if (rand_unif .LT. ratio) then
+             else
+                if (random%uniform%get() .LT. ratio) then
                    p_tmp(ii) = p_test
                    eta_tmp(ii) = eta_test
                    ii = ii + 1_idef
@@ -448,20 +445,6 @@ CONTAINS
 
   END FUNCTION indicator
 
-
-  FUNCTION random_norm(mean,sigma)
-    REAL(rp), INTENT(IN) :: mean
-    REAL(rp), INTENT(IN) :: sigma
-    REAL(rp)             :: random_norm
-    REAL(rp)             :: rand1, rand2
-
-    call RANDOM_NUMBER(rand1)
-    call RANDOM_NUMBER(rand2)
-
-    random_norm = mean+sigma*SQRT(-2.0_rp*LOG(rand1))*COS(2.0_rp*C_PI*rand2);
-  END FUNCTION random_norm
-
-
 SUBROUTINE update_avalanche_params(params,prtcls)
   !! Updates the avalanche parameters aval_params% at each step
   !! in the MCMC after the profiles are interpolated at the sampled
@@ -497,12 +480,13 @@ SUBROUTINE update_avalanche_params(params,prtcls)
   
 END SUBROUTINE update_avalanche_params
 
-subroutine Avalanche_4D(params,spp,P,F)
-  !! @note Subroutine that generates a 2D Gaussian distribution in an 
+subroutine Avalanche_4D(params,random,spp,P,F)
+  !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle 
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
@@ -572,6 +556,8 @@ subroutine Avalanche_4D(params,spp,P,F)
   INTEGER 				:: mpierr
   !! mpi error indicator
   
+  CALL random%uniform%set(0.0_rp, 1.0_rp)
+
   ALLOCATE(mom(spp%ppp))
   
   nsamples = spp%ppp*params%mpi_params%nmpi
@@ -633,13 +619,10 @@ subroutine Avalanche_4D(params,spp,P,F)
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
 
-     
-     call RANDOM_NUMBER(rand_unif)
      T_buffer = min_pitch_angle + (max_pitch_angle  &
-          - min_pitch_angle)*rand_unif
+          - min_pitch_angle)*random%uniform%get()
 
-     call RANDOM_NUMBER(rand_unif)
-     P_buffer = min_p + (max_p - min_p)*rand_unif
+     P_buffer = min_p + (max_p - min_p)*random%uniform%get()
 
 !     write(output_unit_write,'("length norm: ",E17.10)') params%cpp%length
      
@@ -647,22 +630,25 @@ subroutine Avalanche_4D(params,spp,P,F)
      do while (ii .LE. 1000_idef)
 
 !        write(output_unit_write,'("burn:",I15)') ii
-        
-        R_test = R_buffer + random_norm(0.0_rp,aval_params%dR)
-        Z_test = Z_buffer + random_norm(0.0_rp,aval_params%dZ)
-        P_test = P_buffer + random_norm(0.0_rp,aval_params%dp)
-        T_test = T_buffer + random_norm(0.0_rp,aval_params%dth)
 
+        CALL random%normal%set(0.0_rp, aval_params%dR)
+        R_test = R_buffer + random%normal%get()
+        CALL random%normal%set(0.0_rp, aval_params%dZ)
+        Z_test = Z_buffer + random%normal%get()
 
         ! Test that pitch angle and momentum are within chosen boundary
+        CALL random%normal%set(0.0_rp, aval_params%dth)
+        T_test = T_buffer + random%normal%get()
         do while ((T_test .GT. aval_params%max_pitch_angle).OR. &
              (T_test .LT. aval_params%min_pitch_angle))
-           T_test = T_buffer + random_norm(0.0_rp,aval_params%dth)
+           T_test = T_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp, aval_params%dp)
+        P_test = P_buffer + random%normal%get()
         do while ((P_test.LT.aval_params%min_p).OR. &
              (P_test.GT.aval_params%max_p))
-           P_test = P_buffer + random_norm(0.0_rp,aval_params%dp)
+           P_test = P_buffer + random%normal%get()
         end do
 
         ! initialize 2D gaussian argument and distribution function, or
@@ -727,8 +713,7 @@ subroutine Avalanche_4D(params,spp,P,F)
            T_buffer = T_test
            ii = ii + 1_idef
         else
-           call RANDOM_NUMBER(rand_unif)
-           if (rand_unif .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               R_buffer = R_test
               Z_buffer = Z_test
               P_buffer = P_test
@@ -747,28 +732,32 @@ subroutine Avalanche_4D(params,spp,P,F)
         if (modulo(ii,10000).eq.0) then
            write(output_unit_write,'("Sample: ",I10)') ii
         end if
-        
-        R_test = R_buffer + random_norm(0.0_rp,aval_params%dR)
-        Z_test = Z_buffer + random_norm(0.0_rp,aval_params%dZ)
-        P_test = P_buffer + random_norm(0.0_rp,aval_params%dp)
-        T_test = T_buffer + random_norm(0.0_rp,aval_params%dth)
+    
+        CALL random%normal%set(0.0_rp, aval_params%dR)
+        R_test = R_buffer + random%normal%get()
+        CALL random%normal%set(0.0_rp, aval_params%dZ)
+        Z_test = Z_buffer + random%normal%get()
 
         ! Selection boundary is set with buffer region
+        CALL random%normal%set(0.0_rp, aval_params%dth)
+        T_test = T_buffer + random%normal%get()
         do while ((T_test .GT. max_pitch_angle).OR. &
              (T_test .LT. min_pitch_angle))
            if (T_test.lt.0) then
               T_test=abs(T_test)
               exit
            end if
-           T_test = T_buffer + random_norm(0.0_rp,aval_params%dth)
+           T_test = T_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp, aval_params%dp)
+        P_test = P_buffer + random%normal%get()
         do while ((P_test.LT.min_p).OR.(P_test.GT.max_p))
            if (P_test.lt.0) then
               P_test=abs(P_test)
               exit
            end if
-           P_test = P_buffer + random_norm(0.0_rp,aval_params%dp)
+           P_test = P_buffer + random%normal%get()
         end do
 
         psi0=psi1
@@ -797,8 +786,7 @@ subroutine Avalanche_4D(params,spp,P,F)
            P_buffer = P_test
            T_buffer = T_test
         else
-           call RANDOM_NUMBER(rand_unif)
-           if (rand_unif .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               R_buffer = R_test
               Z_buffer = Z_test
               P_buffer = P_test
@@ -819,9 +807,8 @@ subroutine Avalanche_4D(params,spp,P,F)
            P_samples(ii) = P_buffer
            T_samples(ii) = T_buffer
            ! Sample phi location uniformly
-           call RANDOM_NUMBER(rand_unif)
-           PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
-           ii = ii + 1_idef 
+           PHI_samples(ii) = 2.0_rp*C_PI*random%uniform%get()
+           ii = ii + 1_idef
         END IF
 
         

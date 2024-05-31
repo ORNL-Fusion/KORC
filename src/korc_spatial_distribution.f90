@@ -55,7 +55,7 @@ subroutine uniform(spp)
 end subroutine uniform
 
 
-subroutine disk(params,spp)
+subroutine disk(params,random,spp)
   !! @note Subrotuine for generating a uniform disk/ring as the
   !! initial spatial condition of a given species of particles
   !! in the simulation. @endnote
@@ -81,6 +81,7 @@ subroutine disk(params,spp)
   !! - r_{min}^2)U + r_{min}^2}\), where \(U\) is a uniform deviate in \([0,1]\).
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
     !! An instance of the derived type SPECIES containing all
     !! the parameters and simulation variables of the different
@@ -94,21 +95,12 @@ subroutine disk(params,spp)
   ALLOCATE( theta(spp%ppp) )
   ALLOCATE( r(spp%ppp) )
 
-  ! Initial condition of uniformly distributed particles on a disk in the xz-plane
-  ! A unique velocity direction
-  call init_u_random(10986546_8)
-
-  call init_random_seed(params)
-  call RANDOM_NUMBER(theta)
-  call finalize_random_seed
-
-  theta = 2.0_rp*C_PI*theta
+  CALL random%uniform%set(0.0_rp, 2.0_rp*C_PI)
+  CALL random%uniform%get_array(theta)
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(r)
-  call finalize_random_seed
+  CALL random%uniform%set(0.0_rp, 1.0_rp)
+  CALL random%uniform%get_array(r)
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
   spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*COS(spp%PHIo)
@@ -119,8 +111,9 @@ subroutine disk(params,spp)
   DEALLOCATE(r)
 end subroutine disk
 
-subroutine torus(params,spp)
+subroutine torus(params,random,spp)
     TYPE(KORC_PARAMS), INTENT(IN)       :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(SPECIES), INTENT(INOUT)        :: spp
     REAL(rp), DIMENSION(:), ALLOCATABLE :: r
     REAL(rp), DIMENSION(:), ALLOCATABLE :: theta
@@ -132,27 +125,12 @@ subroutine torus(params,spp)
 
     ! Initial condition of uniformly distributed particles on a disk in the xz-plane
     ! A unique velocity direction
-!    call init_u_random(10986546_8)
+    call random%uniform%set(0.0_rp, 2.0_rp*C_PI)
+    call random%uniform%get_array(theta)
+    call random%uniform%get_array(zeta)
 
-    call init_random_seed(params)
-!    call RANDOM_NUMBER(theta)
-!    theta = 2.0_rp*C_PI*theta
-
-    call set_random_dist(0.0_rp, 2.0_rp*C_PI)
-    call get_randoms(theta)
-
-!    call init_random_seed(params)
-!    call RANDOM_NUMBER(zeta)
-!    zeta = 2.0_rp*C_PI*zeta
-
-    call get_randoms(zeta)
-!
-    ! Uniform distribution on a disk at a fixed azimuthal theta
-!    call init_random_seed(params)
-!    call RANDOM_NUMBER(r)
-
-    call set_random_dist(0.0_rp, 1.0_rp)
-    call get_randoms(r)
+    call random%uniform%set(0.0_rp, 1.0_rp)
+    call random%uniform%get_array(r)
 
     r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
@@ -165,8 +143,6 @@ subroutine torus(params,spp)
     DEALLOCATE(theta)
     DEALLOCATE(zeta)
     DEALLOCATE(r)
-
-    call finalize_random_seed
 end subroutine torus
 
 !subroutine torus(params,spp)
@@ -246,7 +222,7 @@ end subroutine torus
 !end subroutine torus
 
 
-subroutine elliptic_torus(params,spp)
+subroutine elliptic_torus(params,random,spp)
   !! @note Subroutine for generating a uniform elliptic torus as the initial
   !! spatial condition of a given particle species in the simulation. @endnote
   !! An initial spatial distribution following the uniform distribution of
@@ -279,6 +255,7 @@ subroutine elliptic_torus(params,spp)
   !! parallel to the \(Z\)-axis.
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
     !! An instance of the derived type SPECIES containing all the parameters
     !! and simulation variables of the different species in the simulation.
@@ -301,6 +278,8 @@ subroutine elliptic_torus(params,spp)
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Y1
     !! Auxiliary vector used in the coordinate transformations.
 
+  CALL random%uniform%set(0.0_rp, 1.0_rp)
+
   ALLOCATE(X1(spp%ppp))
   ALLOCATE(Y1(spp%ppp))
   ALLOCATE(X(spp%ppp))
@@ -312,24 +291,14 @@ subroutine elliptic_torus(params,spp)
 
   ! Initial condition of uniformly distributed particles on a disk in the xz-plane
   ! A unique velocity direction
-  call init_u_random(10986546_8)
-
-  call init_random_seed(params)
-  call RANDOM_NUMBER(theta)
+  call random%uniform%get_array(theta)
   theta = 2.0_rp*C_PI*theta
-  call finalize_random_seed
 
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(zeta)
+  call random%uniform%get_array(zeta)
   zeta = 2.0_rp*C_PI*zeta
-  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(r)
-  call finalize_random_seed
+  call random%uniform%get_array(r)
 
   r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
@@ -409,8 +378,9 @@ END FUNCTION fzero
 !! @param theta Uniform deviates in the range \([0,2\pi]\) representing the uniform poloidal angle \(\theta\) distribution of the particles.
 !! @param zeta Uniform deviates in the range \([0,2\pi]\) representing the uniform toroidal angle \(\zeta\) distribution of the particles.
 !! @param pp Particle iterator.
-subroutine exponential_torus(params,spp)
+subroutine exponential_torus(params, random,spp)
   TYPE(KORC_PARAMS), INTENT(IN) 		:: params
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   REAL(rp) 				:: fl
   REAL(rp) 				:: fr
@@ -431,24 +401,13 @@ subroutine exponential_torus(params,spp)
   ! Initial condition of uniformly distributed particles on a
   ! disk in the xz-plane
   ! A unique velocity direction
-  call init_u_random(10986546_8)
-
-  call init_random_seed(params)
-  call RANDOM_NUMBER(theta)
-  theta = 2.0_rp*C_PI*theta
-  call finalize_random_seed
-
-  call init_random_seed(params)
-!  FIXME: Is it really necessary to reset the seed here?
-  call RANDOM_NUMBER(zeta)
-  zeta = 2.0_rp*C_PI*zeta
-  call finalize_random_seed
+  CALL random%uniform%set(0.0_rp, 2.0_rp*C_PI)
+  call random%uniform%get_array(theta)
+  call random%uniform%get_array(zeta)
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-  call init_random_seed(params)
-!  FIXME: Is it really necessary to reset the seed here?
-  call RANDOM_NUMBER(r)
-  call finalize_random_seed
+  CALL random%uniform%set(0.0_rp, 1.0_rp)
+  call random%uniform%get_array(r)
 
   ! Newton-Raphson applied here for finding the radial distribution
   do pp=1_idef,spp%ppp
@@ -520,8 +479,9 @@ end subroutine exponential_torus
 !! @param X1 Auxiliary vector used in the coordinate transformations.
 !! @param Y1 Auxiliary vector used in the coordinate transformations.
 !! @param pp Particle iterator.
-subroutine exponential_elliptic_torus(params,spp)
+subroutine exponential_elliptic_torus(params,random,spp)
   TYPE(KORC_PARAMS), INTENT(IN) 		:: params
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 			:: spp
   REAL(rp) 					:: fl
   REAL(rp) 					:: fr
@@ -540,6 +500,8 @@ subroutine exponential_elliptic_torus(params,spp)
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: Y1
   INTEGER 				:: pp
 
+  CALL random%uniform%set(0.0_rp, 1.0_rp)
+
   ALLOCATE(X1(spp%ppp))
   ALLOCATE(Y1(spp%ppp))
   ALLOCATE(X(spp%ppp))
@@ -552,24 +514,14 @@ subroutine exponential_elliptic_torus(params,spp)
   ! Initial condition of uniformly distributed particles on a
   ! disk in the xz-plane
   ! A unique velocity direction
-  call init_u_random(10986546_8)
-
-  call init_random_seed(params)
-  call RANDOM_NUMBER(theta)
+  call random%uniform%get_array(theta)
   theta = 2.0_rp*C_PI*theta
-  call finalize_random_seed
 
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(zeta)
+  call random%uniform%get_array(zeta)
   zeta = 2.0_rp*C_PI*zeta
-  call finalize_random_seed
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(r)
-  call finalize_random_seed
+  call random%uniform%get_array(r)
 
   do pp=1_idef,spp%ppp
      rl = 0.0_rp
@@ -651,8 +603,9 @@ end subroutine exponential_elliptic_torus
 !! @param Y1 Auxiliary vector used in the coordinate transformations.
 !! @param sigma Standard deviation \(\sigma\) of the radial distribution function.
 !! @param pp Particle iterator.
-subroutine gaussian_elliptic_torus(params,spp)
+subroutine gaussian_elliptic_torus(params,random,spp)
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: rotation_angle
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: r
@@ -677,24 +630,13 @@ subroutine gaussian_elliptic_torus(params,spp)
   ! Initial condition of uniformly distributed particles on a
   ! disk in the xz-plane
   ! A unique velocity direction
-  call init_u_random(10986546_8)
-
-  call init_random_seed(params)
-  call RANDOM_NUMBER(theta)
-  theta = 2.0_rp*C_PI*theta
-  call finalize_random_seed
-
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(zeta)
-  zeta = 2.0_rp*C_PI*zeta
-  call finalize_random_seed
+  call random%uniform%set(0.0_rp, 2.0_rp*C_PI)
+  call random%uniform%get_array(theta)
+  call random%uniform%get_array(zeta)
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(r)
-  call finalize_random_seed
+  call random%uniform%set(0.0_rp, 1.0_rp)
+  call random%uniform%get_array(r)
 
   sigma = 1.0_rp/SQRT(2.0_rp*(spp%falloff_rate/params%cpp%length))
   sigma = sigma/params%cpp%length
@@ -771,24 +713,13 @@ FUNCTION indicator(psi,psi_max)
 
 END FUNCTION indicator
 
-FUNCTION random_norm(mean,sigma)
-	REAL(rp), INTENT(IN) :: mean
-	REAL(rp), INTENT(IN) :: sigma
-	REAL(rp)             :: random_norm
-	REAL(rp)             :: rand1, rand2
-
-	call RANDOM_NUMBER(rand1)
-	call RANDOM_NUMBER(rand2)
-
-	random_norm = mean+sigma*SQRT(-2.0_rp*LOG(rand1))*COS(2.0_rp*C_PI*rand2);
-END FUNCTION random_norm
-
-subroutine MH_gaussian_elliptic_torus(params,spp)
+subroutine MH_gaussian_elliptic_torus(params,random,spp)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
@@ -825,6 +756,8 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
   INTEGER 				:: mpierr
   LOGICAL :: accepted
 
+  CALL random%uniform%set(0.0_rp,1.0_rp)
+
   nsamples = spp%ppp*params%mpi_params%nmpi
 
   psi_max_buff = spp%psi_max*1.1_rp
@@ -846,8 +779,10 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
 
      ii=2_idef
      do while (ii .LE. 1000_idef)
-        R_test = R_buffer + random_norm(0.0_rp,spp%sigmaR)
-        Z_test = Z_buffer + random_norm(0.0_rp,spp%sigmaZ)
+        CALL random%normal%set(0.0_rp, spp%sigmaR)
+        R_test = R_buffer + random%normal%get()
+        CALL random%normal%set(0.0_rp, spp%sigmaZ)
+        Z_test = Z_buffer + random%normal%get()
 
         psi0=PSI_ROT(R_buffer,spp%Ro,spp%sigmaR,Z_buffer,spp%Zo, &
              spp%sigmaZ,theta_rad)
@@ -861,8 +796,7 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
            Z_buffer = Z_test
            ii = ii + 1_idef
         else
-           call RANDOM_NUMBER(rand_unif)
-           if (rand_unif .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               R_buffer = R_test
               Z_buffer = Z_test
               ii = ii + 1_idef
@@ -873,9 +807,10 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
 
      ii=1_idef
      do while (ii .LE. nsamples)
-
-        R_test = R_buffer + random_norm(0.0_rp,spp%sigmaR)
-        Z_test = Z_buffer + random_norm(0.0_rp,spp%sigmaZ)
+        CALL random%normal%set(0.0_rp, spp%sigmaR)
+        R_test = R_buffer + random%normal%get()
+        CALL random%normal%set(0.0_rp, spp%sigmaZ)
+        Z_test = Z_buffer + random%normal%get()
 
         psi0=PSI_ROT(R_buffer,spp%Ro,spp%sigmaR,Z_buffer,spp%Zo, &
              spp%sigmaZ,theta_rad)
@@ -889,8 +824,7 @@ subroutine MH_gaussian_elliptic_torus(params,spp)
            R_buffer = R_test
            Z_buffer = Z_test
         else
-           call RANDOM_NUMBER(rand_unif)
-           if (rand_unif .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -957,8 +891,9 @@ end subroutine MH_gaussian_elliptic_torus
 !! @param theta Uniform deviates in the range \([0,2\pi]\) representing the uniform poloidal angle \(\theta\) distribution of the particles.
 !! @param zeta Uniform deviates in the range \([0,2\pi]\) representing the uniform toroidal angle \(\zeta\) distribution of the particles.
 !! @param pp Particle iterator.
-subroutine gaussian_torus(params,spp)
+subroutine gaussian_torus(params,random,spp)
   TYPE(KORC_PARAMS), INTENT(IN) 			:: params
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 			:: spp
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
   REAL(rp), DIMENSION(:), ALLOCATABLE 	:: zeta
@@ -971,24 +906,13 @@ subroutine gaussian_torus(params,spp)
 
   ! Initial condition of uniformly distributed particles on a disk in the xz-plane
   ! A unique velocity direction
-  call init_u_random(10986546_8)
-
-  call init_random_seed(params)
-  call RANDOM_NUMBER(theta)
-  theta = 2.0_rp*C_PI*theta
-  call finalize_random_seed
-
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(zeta)
-  zeta = 2.0_rp*C_PI*zeta
-  call finalize_random_seed
+  CALL random%uniform%set(0.0_rp, 2.0_rp*C_PI)
+  call random%uniform%get_array(theta)
+  call random%uniform%get_array(zeta)
 
   ! Uniform distribution on a disk at a fixed azimuthal theta
-!  FIXME: Is it really necessary to reset the seed here?
-  call init_random_seed(params)
-  call RANDOM_NUMBER(r)
-  call finalize_random_seed
+  CALL random%uniform%set(0.0_rp, 1.0_rp)
+  call random%uniform%get_array(r)
 
   sigma = 1.0_rp/SQRT(2.0_rp*(spp%falloff_rate/params%cpp%length))
   sigma = sigma/params%cpp%length
@@ -1025,12 +949,13 @@ function Spong_2D(R0,b,w,dlam,R,Z,T)
 
 end function Spong_2D
 
-subroutine Spong_3D(params,spp)
+subroutine Spong_3D(params,random,spp)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
@@ -1092,6 +1017,7 @@ subroutine Spong_3D(params,spp)
   INTEGER 				:: mpierr
   !! mpi error indicator
 
+  CALL random%uniform%set(0.0_rp,1.0_rp)
 
   nsamples = spp%ppp*params%mpi_params%nmpi
 
@@ -1138,10 +1064,8 @@ subroutine Spong_3D(params,spp)
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
 
-
-     call RANDOM_NUMBER(rand_unif)
      T_buffer = min_pitch_angle + (max_pitch_angle  &
-          - min_pitch_angle)*rand_unif
+          - min_pitch_angle)*random%uniform%get()
 
 !     write(output_unit_write,'("length norm: ",E17.10)') params%cpp%length
 
@@ -1150,15 +1074,18 @@ subroutine Spong_3D(params,spp)
 
 !        write(output_unit_write,'("burn:",I15)') ii
 
-        R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        T_test = T_buffer + random_norm(0.0_rp,spp%dth)
+        CALL random%normal%set(0.0_rp, spp%dR)
+        R_test = R_buffer + random%normal%get()
+        CALL random%normal%set(0.0_rp, spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
 
 
         ! Test that pitch angle and momentum are within chosen boundary
+        CALL random%normal%set(0.0_rp, spp%dth)
+        T_test = T_buffer + random%normal%get()
         do while ((T_test .GT. spp%etao_lims(2)).OR. &
              (T_test .LT. spp%etao_lims(1)))
-           T_test = T_buffer + random_norm(0.0_rp,spp%dth)
+           T_test = T_buffer + random%normal%get()
         end do
 
         ! initialize 2D gaussian argument and distribution function, or
@@ -1202,8 +1129,7 @@ subroutine Spong_3D(params,spp)
            T_buffer = T_test
            ii = ii + 1_idef
         else
-           call RANDOM_NUMBER(rand_unif)
-           if (rand_unif .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               R_buffer = R_test
               Z_buffer = Z_test
               T_buffer = T_test
@@ -1222,18 +1148,21 @@ subroutine Spong_3D(params,spp)
            !write(output_unit_write,'("Sample: ",I10)') ii
         end if
 
-        R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        T_test = T_buffer + random_norm(0.0_rp,spp%dth)
+        CALL random%normal%set(0.0_rp, spp%dR)
+        R_test = R_buffer + random%normal%get()
+        CALL random%normal%set(0.0_rp, spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
 
         ! Selection boundary is set with buffer region
+        CALL random%normal%set(0.0_rp, spp%dth)
+        T_test = T_buffer + random%normal%get()
         do while ((T_test .GT. max_pitch_angle).OR. &
              (T_test .LT. min_pitch_angle))
            if (T_test.lt.0) then
               T_test=abs(T_test)
               exit
            end if
-           T_test = T_buffer + random_norm(0.0_rp,spp%dth)
+           T_test = T_buffer + random%normal%get()
         end do
 
 
@@ -1254,8 +1183,7 @@ subroutine Spong_3D(params,spp)
            Z_buffer = Z_test
            T_buffer = T_test
         else
-           call RANDOM_NUMBER(rand_unif)
-           if (rand_unif .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               R_buffer = R_test
               Z_buffer = Z_test
               T_buffer = T_test
@@ -1272,8 +1200,7 @@ subroutine Spong_3D(params,spp)
            Z_samples(ii) = Z_buffer
            T_samples(ii) = T_buffer
            ! Sample phi location uniformly
-           call RANDOM_NUMBER(rand_unif)
-           PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
+           PHI_samples(ii) = 2.0_rp*C_PI*random%uniform%get()
            ii = ii + 1_idef
         END IF
 
@@ -1317,12 +1244,13 @@ subroutine Spong_3D(params,spp)
 
 end subroutine Spong_3D
 
-subroutine MH_psi(params,spp,F)
+subroutine MH_psi(params,random,spp,F)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(in) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
@@ -1417,26 +1345,11 @@ subroutine MH_psi(params,spp,F)
 
   if (params%mpi_params%rank.EQ.0_idef) then
         ! Transient !
-
+     CALL random%uniform%set(0.0_rp,1.0_rp)
 
      R_buffer = spp%Ro
      Z_buffer = spp%Zo
      PHI_buffer = 0._rp
-
-
-     if (.not.params%SameRandSeed) then
-        call init_random_seed(params)
-     else
-#ifdef PARALLEL_RANDOM
-      call initialize_random(seed(1))
-      call initialize_random_U(seed(1))
-      call initialize_random_N(seed(1))
-    
-    !  call initialize_random_mkl(seed(1))
-#else
-      call random_seed(put=seed)
-#endif
-     end if
 
      write(output_unit_write,'("Begin burn: ",I10)')
      accepted=.false.
@@ -1448,26 +1361,18 @@ subroutine MH_psi(params,spp,F)
         end if
         !write(6,'("Burn: ",I10)') ii
 
-        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
-        R_test = R_buffer + get_random_N()*spp%dR
-
-        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
-        Z_test = Z_buffer + get_random_N()*spp%dZ
-
+        CALL random%normal%set(0.0_rp,spp%dR)
+        R_test = R_buffer + random%normal%get()
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           R_test = R_buffer + get_random_N()*spp%dR
+           R_test = R_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
         do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           Z_test = Z_buffer + get_random_N()*spp%dZ
+           Z_test = Z_buffer + random%normal%get()
         end do
-        PHI_test = 2.0_rp*C_PI*get_random_U()
+        PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
 
         ! initialize 2D gaussian argument and distribution function, or
@@ -1568,10 +1473,7 @@ subroutine MH_psi(params,spp,F)
 
            !write(output_unit_write,*) 'PSIN',PSIN1
         else
-!           call RANDOM_NUMBER(rand_unif)
-!           if (rand_unif .LT. ratio) then
-           !if (get_random_mkl_U() .LT. ratio) then
-           if (get_random_U() .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -1596,26 +1498,18 @@ subroutine MH_psi(params,spp,F)
      end if
 #endif
 
-        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
-        R_test = R_buffer + get_random_N()*spp%dR
+        PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
-        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
-        Z_test = Z_buffer + get_random_N()*spp%dZ
-
-        PHI_test = 2.0_rp*C_PI*get_random_U()
-
+        CALL random%normal%set(0.0_rp,spp%dR)
+        R_test = R_buffer + random%normal%get()
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           R_test = R_buffer + get_random_N()*spp%dR
+           R_test = R_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
         do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           Z_test = Z_buffer + get_random_N()*spp%dZ
+           Z_test = Z_buffer + random%normal%get()
         end do
 
         if (accepted) then
@@ -1673,10 +1567,7 @@ subroutine MH_psi(params,spp,F)
            Z_buffer = Z_test
            PHI_buffer = PHI_test
         else
-           !call RANDOM_NUMBER(rand_unif)
-           !if (rand_unif .LT. ratio) then
-           !if (get_random_mkl_U() .LT. ratio) then
-           if (get_random_U() .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -1702,10 +1593,6 @@ subroutine MH_psi(params,spp,F)
 
 !           write(output_unit_write,*) 'RS',R_buffer
 
-           ! Sample phi location uniformly
-           !call RANDOM_NUMBER(rand_unif)
-           !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
-           !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
            ii = ii + 1_idef
         END IF
 
@@ -1722,10 +1609,6 @@ subroutine MH_psi(params,spp,F)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
-
-     if (.not.params%SameRandSeed) then
-        call init_random_seed(params)
-     end if
   end if
 
   params%GC_coords=.FALSE.
@@ -1756,12 +1639,13 @@ subroutine MH_psi(params,spp,F)
 
 end subroutine MH_psi
 
-subroutine FIO_therm(params,spp,F,P)
+subroutine FIO_therm(params,random,spp,F,P)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
@@ -1908,12 +1792,6 @@ subroutine FIO_therm(params,spp,F,P)
      !write(output_unit_write,*) 'PSIN1',PSIN1
      !write(6,*) 'PSIN0',PSIN0
 
-     if (.not.params%SameRandSeed) then
-        call init_random_seed(params)
-     else
-        call random_seed(put=seed)
-     end if
-
      write(output_unit_write,'("Begin burn: ",I10)')
      accepted=.false.
      ii=1_idef
@@ -1923,39 +1801,27 @@ subroutine FIO_therm(params,spp,F,P)
            !write(output_unit_write,'("Burn: ",I10)') ii
         end if
 
-
-        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
-        R_test = R_buffer + get_random_N()*spp%dR
-
-        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
-        Z_test = Z_buffer + get_random_N()*spp%dZ
-
-        V_test=V_buffer+get_random_N()*spp%dgam
-
-
+        CALL random%normal%set(0.0_rp,spp%dR)
+        R_test = R_buffer + random%normal%get()
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           R_test = R_buffer + get_random_N()*spp%dR
+           R_test = R_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
         do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           Z_test = Z_buffer + get_random_N()*spp%dZ
+           Z_test = Z_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dgam)
+        V_test = V_buffer + random%normal%get()
         do while ((V_test.GT.max_V).OR.(V_test .LT. min_V))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           V_test = V_buffer + get_random_N()*spp%dgam
+           V_test = V_buffer + random%normal%get()
         end do
 
-        PHI_test = 2.0_rp*C_PI*get_random_U()
+        PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
-        XI_test = -1+2.0_rp*get_random_U()
+        XI_test = -1+2.0_rp*random%uniform%get()
 
 
         if (accepted) then
@@ -2025,10 +1891,7 @@ subroutine FIO_therm(params,spp,F,P)
 
            !write(output_unit_write,*) 'PSIN',PSIN1
         else
-!           call RANDOM_NUMBER(rand_unif)
-!           if (rand_unif .LT. ratio) then
-           !if (get_random_mkl_U() .LT. ratio) then
-           if (get_random_U() .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -2053,37 +1916,27 @@ subroutine FIO_therm(params,spp,F,P)
            !write(output_unit_write,'("Sample: ",I10)') ii
         end if
 
-        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
-        R_test = R_buffer + get_random_N()*spp%dR
+        PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
-        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
-        Z_test = Z_buffer + get_random_N()*spp%dZ
-
-        PHI_test = 2.0_rp*C_PI*get_random_U()
-
+        CALL random%normal%set(0.0_rp,spp%dR)
+        R_test = R_buffer + random%normal%get()
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           R_test = R_buffer + get_random_N()*spp%dR
+           R_test = R_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
         do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           Z_test = Z_buffer + get_random_N()*spp%dZ
+           Z_test = Z_buffer + random%normal%get()
         end do
 
-        V_test=V_buffer+get_random_N()*spp%dgam
-
+        CALL random%normal%set(0.0_rp,spp%dgam)
+        V_test = V_buffer + random%normal%get()
         do while ((V_test.GT.max_V).OR.(V_test .LT. min_V))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           V_test = V_buffer + get_random_N()*spp%dgam
+           V_test = V_buffer + random%normal%get()
         end do
 
-        XI_test = -1+2.0_rp*get_random_U()
+        XI_test = -1+2.0_rp*random%uniform%get()
 
         if (accepted) then
            PSIN0=PSIN1
@@ -2138,10 +1991,7 @@ subroutine FIO_therm(params,spp,F,P)
            V_buffer = V_test
            XI_buffer = XI_test
         else
-           !call RANDOM_NUMBER(rand_unif)
-           !if (rand_unif .LT. ratio) then
-           !if (get_random_mkl_U() .LT. ratio) then
-           if (get_random_U() .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -2171,9 +2021,6 @@ subroutine FIO_therm(params,spp,F,P)
 !           write(output_unit_write,*) 'RS',R_buffer
 
            ! Sample phi location uniformly
-           !call RANDOM_NUMBER(rand_unif)
-           !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
-           !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
            ii = ii + 1_idef
         END IF
 
@@ -2193,10 +2040,6 @@ subroutine FIO_therm(params,spp,F,P)
 
      G_samples=1/sqrt(1-V_samples**2)
      ETA_samples=acos(XI_samples)*180/C_PI
-
-     if (.not.params%SameRandSeed) then
-        call init_random_seed(params)
-     end if
   end if
 
   params%GC_coords=.FALSE.
@@ -2335,12 +2178,13 @@ FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
 
 END FUNCTION fRE_BMC
 
-subroutine BMC_radial(params,spp,F,P)
+subroutine BMC_radial(params,random,spp,F,P)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), INTENT(INOUT) 		:: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
@@ -2460,12 +2304,6 @@ subroutine BMC_radial(params,spp,F,P)
      !write(output_unit_write,*) 'PSIN1',PSIN1
      !write(6,*) 'PSIN0',PSIN0
 
-     if (.not.params%SameRandSeed) then
-        call init_random_seed(params)
-     else
-        call random_seed(put=seed)
-     end if
-
      write(output_unit_write,'("Begin burn: ",I10)')
      flush(output_unit_write)
      accepted=.false.
@@ -2477,28 +2315,19 @@ subroutine BMC_radial(params,spp,F,P)
         end if
         !write(6,'("Burn: ",I10)') ii
 
-
-        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
-        R_test = R_buffer + get_random_N()*spp%dR
-
-        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
-        Z_test = Z_buffer + get_random_N()*spp%dZ
-
+        CALL random%normal%set(0.0_rp,spp%dR)
+        R_test = R_buffer + random%normal%get()
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           R_test = R_buffer + get_random_N()*spp%dR
+           R_test = R_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
         do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           Z_test = Z_buffer + get_random_N()*spp%dZ
+           Z_test = Z_buffer + random%normal%get()
         end do
 
-        PHI_test = 2.0_rp*C_PI*get_random_U()
+        PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
         rm_buffer=sqrt((R_buffer-F%AB%Ro)**2+(Z_buffer)**2)/F%AB%a
         rm_test=sqrt((R_test-F%AB%Ro)**2+(Z_test)**2)/F%AB%a
@@ -2557,10 +2386,7 @@ subroutine BMC_radial(params,spp,F,P)
            !write(output_unit_write,*) 'PSIN',PSIN1
            !write(6,*) 'accepted'
         else
-!           call RANDOM_NUMBER(rand_unif)
-!           if (rand_unif .LT. ratio) then
-           !if (get_random_mkl_U() .LT. ratio) then
-           if (get_random_U() .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -2584,26 +2410,18 @@ subroutine BMC_radial(params,spp,F,P)
            !write(output_unit_write,'("Sample: ",I10)') ii
         end if
 
-        !R_test = R_buffer + random_norm(0.0_rp,spp%dR)
-        !R_test = R_buffer + get_random_mkl_N(0.0_rp,spp%dR)
-        R_test = R_buffer + get_random_N()*spp%dR
+        PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
-        !Z_test = Z_buffer + random_norm(0.0_rp,spp%dZ)
-        !Z_test = Z_buffer + get_random_mkl_N(0.0_rp,spp%dZ)
-        Z_test = Z_buffer + get_random_N()*spp%dZ
-
-        PHI_test = 2.0_rp*C_PI*get_random_U()
-
+        CALL random%normal%set(0.0_rp,spp%dR)
+        R_test = R_buffer + random%normal%get()
         do while ((R_test.GT.max_R).OR.(R_test .LT. min_R))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           R_test = R_buffer + get_random_N()*spp%dR
+           R_test = R_buffer + random%normal%get()
         end do
 
+        CALL random%normal%set(0.0_rp,spp%dZ)
+        Z_test = Z_buffer + random%normal%get()
         do while ((Z_test.GT.max_Z).OR.(Z_test .LT. min_Z))
-           !eta_test = eta_buffer + random_norm(0.0_rp,spp%dth)
-           !eta_test = eta_buffer + get_random_mkl_N(0.0_rp,spp%dth)
-           Z_test = Z_buffer + get_random_N()*spp%dZ
+           Z_test = Z_buffer + random%normal%get()
         end do
 
 
@@ -2628,10 +2446,7 @@ subroutine BMC_radial(params,spp,F,P)
            Z_buffer = Z_test
            PHI_buffer = PHI_test
         else
-           !call RANDOM_NUMBER(rand_unif)
-           !if (rand_unif .LT. ratio) then
-           !if (get_random_mkl_U() .LT. ratio) then
-           if (get_random_U() .LT. ratio) then
+           if (random%uniform%get() .LT. ratio) then
               accepted=.true.
               R_buffer = R_test
               Z_buffer = Z_test
@@ -2656,9 +2471,6 @@ subroutine BMC_radial(params,spp,F,P)
 !           write(output_unit_write,*) 'RS',R_buffer
 
            ! Sample phi location uniformly
-           !call RANDOM_NUMBER(rand_unif)
-           !PHI_samples(ii) = 2.0_rp*C_PI*rand_unif
-           !PHI_samples(ii) = 2.0_rp*C_PI*get_random_mkl_U()
            ii = ii + 1_idef
            !write(6,*) 'accepted'
         END IF
@@ -2676,10 +2488,6 @@ subroutine BMC_radial(params,spp,F,P)
 !     write(output_unit_write,*) 'Z_samples',Z_samples
 !     write(output_unit_write,*) 'G_samples',G_samples
 !     write(output_unit_write,*) 'eta_samples',eta_samples
-
-     if (.not.params%SameRandSeed) then
-        call init_random_seed(params)
-     end if
   end if
 
   params%GC_coords=.FALSE.
@@ -2711,12 +2519,13 @@ subroutine BMC_radial(params,spp,F,P)
 
 end subroutine BMC_radial
 
-subroutine intitial_spatial_distribution(params,spp,P,F)
+subroutine intitial_spatial_distribution(params,random,spp,P,F)
   !! @note Subroutine that contains calls to the different subroutines
   !! for initializing the simulated particles with various
   !! spatial distribution functions. @endnote
   TYPE(KORC_PARAMS), INTENT(INOUT) 			  :: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: spp
   !! An instance of the derived type SPECIES containing all the parameters and
   !! simulation variables of the different species in the simulation.
@@ -2733,23 +2542,23 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
      CASE ('UNIFORM')
         call uniform(spp(ss))
      CASE ('DISK')
-        call disk(params,spp(ss))
+        call disk(params,random,spp(ss))
      CASE ('TORUS')
-        call torus(params,spp(ss))
+        call torus(params,random,spp(ss))
      CASE ('EXPONENTIAL-TORUS')
-        call exponential_torus(params,spp(ss))
+        call exponential_torus(params,random,spp(ss))
      CASE ('GAUSSIAN-TORUS')
-        call gaussian_torus(params,spp(ss))
+        call gaussian_torus(params,random,spp(ss))
      CASE ('ELLIPTIC-TORUS')
-        call elliptic_torus(params,spp(ss))
+        call elliptic_torus(params,random,spp(ss))
      CASE ('EXPONENTIAL-ELLIPTIC-TORUS')
-        call exponential_elliptic_torus(params,spp(ss))
+        call exponential_elliptic_torus(params,random,spp(ss))
      CASE ('GAUSSIAN-ELLIPTIC-TORUS')
-        call gaussian_elliptic_torus(params,spp(ss))
+        call gaussian_elliptic_torus(params,random,spp(ss))
      CASE ('2D-GAUSSIAN-ELLIPTIC-TORUS-MH')
-        call MH_gaussian_elliptic_torus(params,spp(ss))
+        call MH_gaussian_elliptic_torus(params,random,spp(ss))
      CASE ('AVALANCHE-4D')
-        call get_Avalanche_4D(params,spp(ss),P,F)
+        call get_Avalanche_4D(params,random,spp(ss),P,F)
         !! In addition to spatial distribution function, [[Avalanche_4D]]
         !! samples the avalanche distribution function used to initialize
         !! the components of velocity for all particles.
@@ -2758,13 +2567,13 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
         spp(ss)%vars%X(:,2)=spp(ss)%Xtrace(2)
         spp(ss)%vars%X(:,3)=spp(ss)%Xtrace(3)
      CASE ('SPONG-3D')
-        call Spong_3D(params,spp(ss))
+        call Spong_3D(params,random,spp(ss))
      CASE ('HOLLMANN-3D')
-        call get_Hollmann_distribution_3D(params,spp(ss),F)
+        call get_Hollmann_distribution_3D(params,random,spp(ss),F)
      CASE ('HOLLMANN-3D-PSI')
-        call get_Hollmann_distribution_3D_psi(params,spp(ss),F)
+        call get_Hollmann_distribution_3D_psi(params,random,spp(ss),F)
      CASE ('HOLLMANN-1DTRANSPORT')
-        call get_Hollmann_distribution_1Dtransport(params,spp(ss),F)
+        call get_Hollmann_distribution_1Dtransport(params,random,spp(ss),F)
      CASE('MH_psi')
 
 #if DBG_CHECK
@@ -2784,7 +2593,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
         spp(ss)%vars%X(:,2)=0._rp
         spp(ss)%vars%X(:,3)=spp(ss)%Zo
 
-        call MH_psi(params,spp(ss),F)
+        call MH_psi(params,random,spp(ss),F)
      CASE('FIO_therm')
 
         if (spp(ss)%ppp*params%mpi_params%nmpi.lt.10) then
@@ -2796,7 +2605,7 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
            call korc_abort(19)
         end if
 
-        call FIO_therm(params,spp(ss),F,P)
+        call FIO_therm(params,random,spp(ss),F,P)
      CASE('BMC_radial')
 
         if (spp(ss)%ppp*params%mpi_params%nmpi.lt.10) then
@@ -2808,9 +2617,9 @@ subroutine intitial_spatial_distribution(params,spp,P,F)
            call korc_abort(19)
         end if
 
-        call BMC_radial(params,spp(ss),F,P)
+        call BMC_radial(params,random,spp(ss),F,P)
      CASE DEFAULT
-        call torus(params,spp(ss))
+        call torus(params,random,spp(ss))
      END SELECT
   end do
 end subroutine intitial_spatial_distribution

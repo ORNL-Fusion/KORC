@@ -1,9 +1,7 @@
 module korc_types
   !! @note Module containing the definition of KORC derived types and
   !! KORC variables, the building blocks of the code. @endnote
-#ifdef FIO
   USE, INTRINSIC :: iso_c_binding
-#endif
   implicit none
 
   ! * * * * * * * * * * * * * * * * * * * * !
@@ -298,7 +296,7 @@ module korc_types
      INTEGER  :: num_impurity_species
      REAL(rp), DIMENSION(:), ALLOCATABLE        :: Zj
      REAL(rp) :: gam_min
-     LOGICAL(rp) :: recycle_losses
+     LOGICAL :: recycle_losses
   END TYPE KORC_PARAMS
 
 
