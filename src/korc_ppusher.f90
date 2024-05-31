@@ -1149,7 +1149,7 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
 
      !$OMP PARALLEL DO default(none) &
      !$OMP& FIRSTPRIVATE(E0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
-     !$OMP& shared(params,ii,spp,P,F) &
+     !$OMP& shared(params,ii,spp,P,F,random) &
      !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
      !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
      !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,flagCon,flagCol,PSIp)
@@ -2105,7 +2105,7 @@ subroutine adv_FOinterp_top(params,random,F,P,spp)
 
        !$OMP PARALLEL DO default(none) &
        !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-       !$OMP& shared(params,ii,spp,P,F) &
+       !$OMP& shared(params,ii,spp,P,F,random) &
        !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
        !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
@@ -2352,7 +2352,7 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
 
     !$OMP PARALLEL DO default(none) &
     !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-    !$OMP& shared(params,ii,spp,P,F) &
+    !$OMP& shared(params,ii,spp,P,F,random) &
     !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
     !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
     !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
@@ -2753,7 +2753,7 @@ subroutine adv_FOinterp_aorsa_top(params,random,F,P,spp)
 
        !$OMP PARALLEL DO default(none) &
        !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-       !$OMP& shared(params,ii,spp,P,F) &
+       !$OMP& shared(params,ii,spp,P,F,random) &
        !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
        !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
@@ -4189,7 +4189,7 @@ subroutine adv_GCeqn_top(params,random,F,P,spp)
 
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(E0,q_cache,m_cache,pchunk) &
-             !$OMP& shared(F,P,params,ii,spp) &
+             !$OMP& shared(F,P,params,ii,spp,random) &
              !$OMP& PRIVATE(pp,tt,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
              !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
              !$OMP& Vden,Vdenave) &
@@ -4316,7 +4316,7 @@ subroutine adv_GCeqn_top(params,random,F,P,spp)
 
                 !$OMP PARALLEL DO default(none) &
                 !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
-                !$OMP& shared(F,P,params,ii,spp,tt) &
+                !$OMP& shared(F,P,params,ii,spp,tt,random) &
                 !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                 !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
                 !$OMP& achunk,Te)
@@ -4423,7 +4423,7 @@ subroutine adv_GCeqn_top(params,random,F,P,spp)
 
                 !$OMP PARALLEL DO default(none) &
                 !$OMP& FIRSTPRIVATE(m_cache,pchunk,q_cache) &
-                !$OMP& shared(F,P,params,ii,spp,tt) &
+                !$OMP& shared(F,P,params,ii,spp,tt,random) &
                 !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                 !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
                 !$OMP& achunk,tttt,Te)
@@ -4916,7 +4916,7 @@ subroutine adv_GCinterp_psi_top(params,random,spp,P,F)
 
           !$OMP PARALLEL DO default(none) &
           !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-          !$OMP& SHARED(params,ii,spp,P,F) &
+          !$OMP& SHARED(params,ii,spp,P,F,random) &
           !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
           !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
           !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z, &
@@ -5065,7 +5065,7 @@ subroutine adv_GCinterp_psi_top(params,random,spp,P,F)
           do tt=1_ip,params%coll_per_dump
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk,achunk) &
-             !$OMP& SHARED(params,ii,spp,P,F) &
+             !$OMP& SHARED(params,ii,spp,P,F,random) &
              !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
              !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
              !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,Te, &
@@ -5424,7 +5424,7 @@ subroutine adv_GCinterp_psiwE_top(params,random,spp,P,F)
 
           !$OMP PARALLEL DO default(none) &
           !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-          !$OMP& SHARED(params,ii,spp,P,F) &
+          !$OMP& SHARED(params,ii,spp,P,F,random) &
           !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
           !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
           !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,thread_num, &
@@ -5606,7 +5606,7 @@ subroutine adv_GCinterp_psiwE_top(params,random,spp,P,F)
 
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk,tt) &
-             !$OMP& SHARED(params,ii,spp,P,F) &
+             !$OMP& SHARED(params,ii,spp,P,F,random) &
              !$OMP& PRIVATE(pp,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
              !$OMP& B_R,B_PHI,B_Z,achunk, &
              !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
@@ -5877,7 +5877,7 @@ do ii = 1_idef,params%num_species
 
      !$OMP PARALLEL DO default(none) &
      !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-     !$OMP& SHARED(params,ii,spp,P,F) &
+     !$OMP& SHARED(params,ii,spp,P,F,random) &
      !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
      !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
      !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,time,E_R,E_Z)
