@@ -220,7 +220,7 @@ CONTAINS
 
 !  Start of executable code
   IF (ASSOCIATED(this%states)) THEN
-!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+!$OMP PARALLEL DEFAULT(SHARED)
      CALL random_destroy_U(this%states(get_thread_number()))
 !$OMP END PARALLEL
      DEALLOCATE(this%states)
@@ -237,7 +237,7 @@ CONTAINS
 
 !  Start of executable code
   IF (ASSOCIATED(this%states)) THEN
-!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+!$OMP PARALLEL DEFAULT(SHARED)
      CALL random_destroy_N(this%states(get_thread_number()))
 !$OMP END PARALLEL
      DEALLOCATE(this%states)
