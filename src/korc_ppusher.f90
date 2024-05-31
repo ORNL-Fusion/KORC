@@ -6380,9 +6380,9 @@ subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,random,Y_R,Y_PHI,Y_
 
     end do
 
-    CALL random%uniform%set(0.0_rp,1.0_rp)
-
     !$OMP END SIMD
+
+    CALL random%uniform%set(0.0_rp,1.0_rp)
 
     !write(6,*) 'Y',Y_R*params%cpp%length,Y_PHI,Y_Z*params%cpp%length
     !write(6,*) 'Y0',Y_R0*params%cpp%length,Y_PHI0,Y_Z0*params%cpp%length
