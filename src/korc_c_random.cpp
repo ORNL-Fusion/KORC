@@ -22,7 +22,7 @@ class random_dist {
     void set_dist(const real_type low, const real_type high) {
         dist = DIST(low, high);
     }
-    double get_number() {
+    real_type get_number() {
         return dist(engine);
     }
 };
@@ -39,11 +39,11 @@ extern "C" {
         return new random_N(static_cast<uint64_t> (seed));
     }
   
-    double random_get_number_U(void *r) {
+    real_type random_get_number_U(void *r) {
         return static_cast<random_U *> (r)->get_number();
     }
 
-    double random_get_number_N(void *r) {
+    real_type random_get_number_N(void *r) {
         return static_cast<random_N *> (r)->get_number();
     }
 
