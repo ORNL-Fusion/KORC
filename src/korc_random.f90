@@ -104,6 +104,28 @@ MODULE korc_random
      END SUBROUTINE random_set_dist_N
   END INTERFACE
 
+  INTERFACE
+     SUBROUTINE random_set_seed_U(r, seed) BIND(C, NAME='random_set_seed_U')
+       USE, INTRINSIC :: iso_c_binding
+
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE    :: r
+       INTEGER (C_INT), VALUE :: seed
+     END SUBROUTINE random_set_seed_U
+  END INTERFACE
+
+  INTERFACE
+     SUBROUTINE random_set_seed_N(r, seed) BIND(C, NAME='random_set_seed_N')
+       USE, INTRINSIC :: iso_c_binding
+
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE    :: r
+       INTEGER (C_INT), VALUE :: seed
+     END SUBROUTINE random_set_seed_N
+  END INTERFACE
+
 !*******************************************************************************
 !  Class Defintions
 !*******************************************************************************
@@ -117,6 +139,7 @@ MODULE korc_random
      PROCEDURE :: get => random_U_get_random
      PROCEDURE :: get_array => random_U_get_randoms
      PROCEDURE :: set => random_U_set_dist
+     PROCEDURE :: seed => random_U_set_seed
      FINAL     :: random_U_context_destruct
   END TYPE
 
@@ -125,6 +148,7 @@ MODULE korc_random
      PROCEDURE :: get => random_N_get_random
      PROCEDURE :: get_array => random_N_get_randoms
      PROCEDURE :: set => random_N_set_dist
+     PROCEDURE :: seed => random_N_set_seed
      FINAL     :: random_N_context_destruct
   END TYPE
 
@@ -360,5 +384,45 @@ CONTAINS
 !$OMP END PARALLEL
 
   END SUBROUTINE
+
+  SUBROUTINE random_U_set_seed(this, seed, mpi_rank)
+  IMPLICIT NONE
+
+!  Arguments
+  CLASS (random_U_context), INTENT(in) :: this
+  INTEGER, INTENT(in)                  :: seed
+  INTEGER, INTENT(IN)                  :: mpi_rank
+
+!  Local Variables
+  INTEGER                              :: thread_num
+
+!  Start of executable code
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+  thread_num = get_thread_number()
+  CALL random_set_seed_U(this%states(thread_num),                             &
+                         seed + mpi_rank*get_max_threads() + thread_num)
+!$OMP END PARALLEL
+
+  END SUBROUTINE
+
+  SUBROUTINE random_N_set_seed(this, seed, mpi_rank)
+  IMPLICIT NONE
+
+!  Arguments
+  CLASS (random_N_context), INTENT(in) :: this
+  INTEGER, INTENT(in)                  :: seed
+  INTEGER, INTENT(IN)                  :: mpi_rank
+
+!  Local Variables
+  INTEGER                              :: thread_num
+
+!  Start of executable code
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+   thread_num = get_thread_number()
+   CALL random_set_seed_N(this%states(thread_num),                             &
+                          seed + mpi_rank*get_max_threads() + thread_num)
+!$OMP END PARALLEL
+
+   END SUBROUTINE
 
 END MODULE korc_random

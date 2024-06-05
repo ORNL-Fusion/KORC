@@ -4,8 +4,7 @@ module korc_interp
   !! For a detailed documentation of the PSPLINE library we refer the
   !! user to "https://w3.pppl.gov/ntcc/PSPLINE/".
   use korc_types
-  use korc_coords
-  use korc_rnd_numbers
+  use korc_coords  
   use korc_hpc
 
 #ifdef PSPLINE

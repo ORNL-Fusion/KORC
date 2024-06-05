@@ -4,7 +4,6 @@ MODULE korc_experimental_pdf
   USE korc_HDF5
   USE korc_hpc
   use korc_coords
-  use korc_rnd_numbers
   use korc_random
   use korc_fields
   use korc_input
@@ -704,7 +703,6 @@ CONTAINS
     INTEGER 						:: ppp
     INTEGER 						:: nsamples
     INTEGER 						:: mpierr
-    INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
     
     nsamples = spp%ppp*params%mpi_params%nmpi
 
@@ -1028,7 +1026,6 @@ subroutine sample_Hollmann_distribution_3D(params,random,spp,F)
   !! mpi error indicator
   REAL(rp) 						:: dg,deta
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   CALL random%uniform%set(0.0_rp,1.0_rp)
 
@@ -1442,8 +1439,6 @@ subroutine sample_Hollmann_distribution_3D_psi(params,random,spp,F)
   !! mpi error indicator
   REAL(rp) 						:: dg,deta
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
-  
   
   nsamples = spp%ppp*params%mpi_params%nmpi
 
@@ -1973,7 +1968,6 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
   !! mpi error indicator
   REAL(rp) 						:: dgmin,dgmax,deta
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
   REAL(rp) 	:: EPHI,fRE_out,nAr0,nAr1,nAr2,nAr3,nD,nD1,ne,Te,Zeff,nRE
   
   

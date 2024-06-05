@@ -22,6 +22,9 @@ class random_dist {
     void set_dist(const real_type low, const real_type high) {
         dist = DIST(low, high);
     }
+    void set_seed(const uint64_t seed) {
+        engine.seed(seed);
+    }
     real_type get_number() {
         return dist(engine);
     }
@@ -65,5 +68,12 @@ extern "C" {
                            const real_type low,
                            const real_type high) {
         static_cast<random_N *> (r)->set_dist(low, high);
+    }
+    void random_set_seed_U(void *r, int seed) {
+        static_cast<random_U *> (r)->set_seed(static_cast<uint64_t> (seed));
+    }
+
+    void random_set_seed_N(void *r, int seed) {
+        static_cast<random_N *> (r)->set_seed(static_cast<uint64_t> (seed));
     }
 }

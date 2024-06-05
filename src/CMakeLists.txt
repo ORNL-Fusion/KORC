@@ -18,7 +18,6 @@ target_sources(korc
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_types.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_avalanche.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_hpc.f90>
-               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_rnd_numbers.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_units.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_experimental_pdf.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_initialize.f90>

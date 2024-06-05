@@ -94,6 +94,11 @@ call initialize_korc_parameters(params)
   !! initializes paths and KORC parameters through [[load_korc_params]]
   !! on MPI processes.
 
+if (params%SameRandSeed) then
+  call randoms%uniform%seed(1, params%mpi_params%rank)
+  call randoms%normal%seed(1, params%mpi_params%rank)
+end if
+
 if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
 end if

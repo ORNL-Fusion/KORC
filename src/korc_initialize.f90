@@ -6,7 +6,6 @@ module korc_initialize
   use korc_hpc
   use korc_HDF5
   use korc_fields
-  use korc_rnd_numbers
   use korc_spatial_distribution
   use korc_velocity_distribution
   use korc_coords

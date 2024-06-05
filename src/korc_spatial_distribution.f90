@@ -7,7 +7,6 @@ MODULE korc_spatial_distribution
   USE korc_hpc
   use korc_fields
   use korc_profiles
-  use korc_rnd_numbers
   use korc_random
   use korc_hammersley_generator
   use korc_avalanche
@@ -168,7 +167,6 @@ end subroutine torus
 !  REAL(rp), DIMENSION(:), ALLOCATABLE 	:: zeta
   !! Uniform deviates in the range \([0,2\pi]\) representing
   !! the uniform toroidal angle \(\zeta\) distribution of the particles.
-!  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
 !  ALLOCATE( theta(spp%ppp) )
 !  ALLOCATE( zeta(spp%ppp) )
@@ -1294,7 +1292,6 @@ subroutine MH_psi(params,random,spp,F)
   !! mpi error indicator
 
   LOGICAL :: accepted
-  INTEGER,DIMENSION(34) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'
@@ -1695,7 +1692,6 @@ subroutine FIO_therm(params,random,spp,F,P)
   !! mpi error indicator
 
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   if (params%mpi_params%rank.EQ.0_idef) then
      write(output_unit_write,*) '*** START SAMPLING ***'
@@ -2234,7 +2230,6 @@ subroutine BMC_radial(params,random,spp,F,P)
   !! mpi error indicator
 
   LOGICAL :: accepted
-  INTEGER,DIMENSION(33) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
   REAL(rp) :: rm_buffer,rm_test
   INTEGER :: Nr_a
   REAL(rp), ALLOCATABLE,DIMENSION(:) :: r_a,nRE
