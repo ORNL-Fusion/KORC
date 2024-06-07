@@ -130,6 +130,9 @@ jobs:
 
       - name: build korc
         run: |
+          module load nvhpc-openmpi3
+          module list
+
           cd ./KORC
           rm -f CMakeCache.txt
           rm -rf CMakeFiles
