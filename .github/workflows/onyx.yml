@@ -103,7 +103,7 @@ jobs:
         with:
           path: './KORC'
 
-        name: load nvhpc from environment module
+      - name: load nvhpc from environment module
         run: |
           module load nvhpc-openmpi3
 
