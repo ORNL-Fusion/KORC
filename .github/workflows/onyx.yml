@@ -105,6 +105,7 @@ jobs:
 
       - name: load nvhpc from environment module
         run: |
+          . /etc/profile.d/lmod.sh
           module load nvhpc-openmpi3
 
       - name: spack load
