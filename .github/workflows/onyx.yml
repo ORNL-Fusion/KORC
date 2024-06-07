@@ -123,15 +123,12 @@ jobs:
           module load nvhpc-openmpi3
           module list
 
-      - name: spack load
-        run: |
-          . ./spack/share/spack/setup-env.sh
-          spack load hdf5+fortran %nvhpc@24.5
-
       - name: build korc
         run: |
           module load nvhpc-openmpi3
           module list
+          . ./spack/share/spack/setup-env.sh
+          spack load hdf5 +fortran -mpi %nvhpc@24.5
 
           cd ./KORC
           rm -f CMakeCache.txt
