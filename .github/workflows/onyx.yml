@@ -53,6 +53,13 @@ jobs:
   job_setup_spack:
     runs-on: self-hosted
     needs: [ job_verify_actor ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
     steps:
       - name: show actor status
         run: |
@@ -100,6 +107,10 @@ jobs:
     defaults:
       run:
         shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
     steps:
       - name: grab main project
         uses: actions/checkout@v4
