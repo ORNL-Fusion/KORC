@@ -87,6 +87,7 @@ jobs:
         name: load nvhpc from environment module
         run: |
           module load nvhpc-openmpi3
+          module list
 
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
         name: spack install
@@ -119,7 +120,6 @@ jobs:
 
       - name: load nvhpc from environment module
         run: |
-
           module load nvhpc-openmpi3
           module list
 
