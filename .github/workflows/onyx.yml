@@ -97,6 +97,9 @@ jobs:
   job_build_gpu:
     runs-on: self-hosted
     needs: [ job_verify_actor, job_setup_spack ]
+    defaults:
+      run:
+        shell: bash -ieo pipefail {0}
     steps:
       - name: grab main project
         uses: actions/checkout@v4
@@ -105,8 +108,9 @@ jobs:
 
       - name: load nvhpc from environment module
         run: |
-          . /etc/profile.d/lmod.sh
+
           module load nvhpc-openmpi3
+          module list
 
       - name: spack load
         run: |
