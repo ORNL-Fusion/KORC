@@ -99,7 +99,7 @@ jobs:
     needs: [ job_verify_actor, job_setup_spack ]
     defaults:
       run:
-        shell: bash -ieo pipefail {0}
+        shell: bash -leo pipefail {0}
     steps:
       - name: grab main project
         uses: actions/checkout@v4
