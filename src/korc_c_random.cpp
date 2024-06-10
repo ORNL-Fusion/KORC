@@ -1,5 +1,6 @@
-#include <random>
 #include <chrono>
+#include <random>
+#include <stdexcept>
 
 class random {
     std::mt19937_64 engine;
@@ -51,10 +52,18 @@ extern "C" {
     }
   
     double random_get_number_U(void *r) {
+#ifndef NDEBUG
+        if(r == nullptr)
+          throw std::runtime_error("random_U object not initialized!");
+#endif
         return static_cast<class random_U *> (r)->get_number_U();
     }
 
     double random_get_number_N(void *r) {
+#ifndef NDEBUG
+        if(r == nullptr)
+          throw std::runtime_error("random_N object not initialized!");
+#endif
         return static_cast<class random_N *> (r)->get_number_N();
     }
   
