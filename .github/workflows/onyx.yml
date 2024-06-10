@@ -31,6 +31,10 @@ jobs:
     runs-on: self-hosted
     needs: [ job_verify_actor ]
     steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+
       - name: grab main project
         uses: actions/checkout@v4
         with:
@@ -154,7 +158,7 @@ jobs:
     steps:
       - name: ctest
         run: |
-          cd ./KORC/build && ctest --output-on-failure
+          cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
   job_test_gpu:
     runs-on: self-hosted
@@ -162,5 +166,5 @@ jobs:
     steps:
       - name: ctest
         run: |
-          cd ./KORC/build && ctest --output-on-failure
+          cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
