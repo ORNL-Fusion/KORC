@@ -27,9 +27,29 @@ jobs:
       allowed: ${{ steps.verify_actor.outputs.allowed }}
 
 
-  job_build_cpu:
+  job_setup_workdir:
     runs-on: self-hosted
     needs: [ job_verify_actor ]
+    steps:
+      - name: GitHub API Request
+        id: api_request
+        uses: octokit/request-action@v2.1.7
+        with:
+          route: ${{ github.event.issue.pull_request.url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          repository: "${{ fromJson(steps.api_request.outputs.data).head.repo.full_name }}"
+          ref: "${{ fromJson(steps.api_request.outputs.data).head.ref }}"
+
+
+  job_build_cpu:
+    runs-on: self-hosted
+    needs: [ job_verify_actor, job_setup_workdir ]
     steps:
       - name: grab main project
         uses: actions/checkout@v4
@@ -52,7 +72,7 @@ jobs:
 
   job_setup_spack:
     runs-on: self-hosted
-    needs: [ job_verify_actor ]
+    needs: [ job_verify_actor, job_setup_workdir ]
     defaults:
       run:
         shell: bash -leo pipefail {0}
@@ -104,7 +124,7 @@ jobs:
 
   job_build_gpu:
     runs-on: self-hosted
-    needs: [ job_verify_actor, job_setup_spack ]
+    needs: [ job_verify_actor, job_setup_spack, job_setup_workdir ]
     defaults:
       run:
         shell: bash -leo pipefail {0}
@@ -150,7 +170,7 @@ jobs:
 
   job_test_cpu:
     runs-on: self-hosted
-    needs: [ job_verify_actor, job_build_cpu ]
+    needs: [ job_verify_actor, job_build_cpu, job_setup_workdir ]
     steps:
       - name: Get number of CPU cores
         uses: SimenB/github-actions-cpu-cores@v2
@@ -162,7 +182,7 @@ jobs:
 
   job_test_gpu:
     runs-on: self-hosted
-    needs: [ job_verify_actor, job_setup_spack, job_build_gpu ]
+    needs: [ job_verify_actor, job_setup_spack, job_build_gpu, job_setup_workdir ]
     steps:
       - name: Get number of CPU cores
         uses: SimenB/github-actions-cpu-cores@v2
