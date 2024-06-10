@@ -45,17 +45,13 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
           repository: "${{ fromJson(steps.api_request.outputs.data).head.repo.full_name }}"
           ref: "${{ fromJson(steps.api_request.outputs.data).head.ref }}"
+          path: './KORC'
 
 
   job_build_cpu:
     runs-on: self-hosted
     needs: [ job_verify_actor, job_setup_workdir ]
     steps:
-      - name: grab main project
-        uses: actions/checkout@v4
-        with:
-          path: './KORC'
-
       - name: build korc
         run: |
           cd ./KORC
@@ -133,11 +129,6 @@ jobs:
     #    setting 'bash -leo pipefail {0}' will cause it to run interactively
     #
     steps:
-      - name: grab main project
-        uses: actions/checkout@v4
-        with:
-          path: './KORC'
-
       - name: load nvhpc from environment module
         run: |
           module load nvhpc-openmpi3
