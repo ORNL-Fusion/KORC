@@ -2636,10 +2636,11 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
 
 end subroutine include_CoulombCollisions_GC_p
 
-subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
+subroutine include_CoulombCollisions_GC_p_ACC(spp,pp,tt,params, &
    Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI, &
    ne,Te,Zeff,nimp,PSIp)
    !$acc routine seq
+   TYPE(SPECIES), INTENT(INOUT)    :: spp
    TYPE(PROFILES), INTENT(IN)                                 :: P
    TYPE(FIELDS), INTENT(IN)                                   :: F
    TYPE(KORC_PARAMS), INTENT(INOUT) 		:: params
@@ -2649,7 +2650,7 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
    REAL(rp)  	:: B_R,B_PHI,B_Z
    REAL(rp)  :: curlb_R,curlb_PHI,curlb_Z
    REAL(rp)  :: gradB_R,gradB_PHI,gradB_Z
-   REAL(rp)  	:: E_R,E_Z
+   REAL(rp)  	:: E_R,E_Z,E_PHI_LAC
    REAL(rp), INTENT(OUT) 	:: E_PHI,ne,PSIp,Te,Zeff
    REAL(rp), INTENT(IN) 			:: Y_R,Y_PHI,Y_Z
    INTEGER(is), INTENT(INOUT) 	:: flagCol
@@ -2675,7 +2676,8 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
    integer(ip),INTENT(IN) :: tt
    INTEGER,INTENT(IN) :: pp
    REAL(rp), DIMENSION(params%num_impurity_species), INTENT(OUT) 	:: nimp
-   REAL(rp) 	:: E_PHI_tmp
+   REAL(rp) 	:: E_PHI_tmp,ntot,ra
+   INTEGER :: ii
 
    !$acc routine (calculate_GCfieldswE_p_ACC) seq
    !$acc routine (analytical_profiles_p_ACC) seq
@@ -2688,6 +2690,7 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
    !$acc routine (CB_ei_SD_FIO) seq
    !$acc routine (CB_ei_SD) seq
    !$acc routine (get_random_U) seq
+   !$acc routine (large_angle_source_ACC) seq
 
    if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
       dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
@@ -2719,6 +2722,7 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
       endif
 
 
+      E_PHI_LAC=E_PHI
       E_PHI_tmp=E_PHI
       if (.not.params%FokPlan) E_PHI=0._rp
 
@@ -2799,6 +2803,46 @@ subroutine include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
       if ((pm.lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
          p_therm)).and.flagCol.eq.1_ip) then
          flagCol=0_ip
+      end if
+
+      if (cparams_ss%avalanche) then
+
+            ntot=ne
+            if (params%bound_electron_model.eq.'HESSLOW') then
+
+               if (params%profile_model(1:10).eq.'ANALYTICAL') then   
+                  if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'UNIFORM')) then
+                     ntot=ntot+cparams_ms%nz(1)* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                  else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'HOLLOW')) then
+                     ntot=ntot+max(cparams_ms%nz(1)-ne,0._rp)* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                  else if ((cparams_ms%Zj(1).eq.0.0).and. &
+                     (neut_prof.eq.'EDGE')) then
+                     ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
+                     ntot=ntot+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                  else
+                     ntot=ntot+ne*cparams_ms%nz(1)/cparams_ms%ne* &
+                        (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+                  endif
+   
+                  do ii=2,cparams_ms%num_impurity_species
+                     ntot=ntot+ne*cparams_ms%nz(ii)/cparams_ms%ne* &
+                        (cparams_ms%Zo(ii)-cparams_ms%Zj(ii))
+                  end do
+               else if (params%profile_model(10:10).eq.'H') then
+                  ntot=ntot+nimp(1)*18+nimp(2)*17+nimp(3)*16+nimp(4)*15+nimp(5)*14+ &
+                     nimp(6)
+               end if
+   
+            end if
+   
+         call large_angle_source_ACC(spp,params,F,Y_R,Y_PHI,Y_Z, &
+            pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon,B_R,B_PHI,B_Z)
+   
       end if
 
       if (.not.params%FokPlan) E_PHI=E_PHI_tmp
@@ -3961,6 +4005,383 @@ subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
 
 
   end subroutine large_angle_source
+
+  subroutine large_angle_source_ACC(spp,params,F,Y_R,Y_PHI,Y_Z, &
+      pm,xi,ne,netot,Te,Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z)
+   !$acc routine seq
+    TYPE(SPECIES), INTENT(INOUT)    :: spp
+    TYPE(KORC_PARAMS), INTENT(IN) 			:: params
+    TYPE(FIELDS), INTENT(IN)                                   :: F
+    REAL(rp), INTENT(INOUT) :: pm,xi
+    REAL(rp), INTENT(IN)  :: Y_R,Y_PHI,Y_Z
+    REAL(rp), INTENT(IN)  :: B_R,B_PHI,B_Z
+    REAL(rp), INTENT(IN)  :: ne,netot,Te
+    REAL(rp), INTENT(IN)  :: Bmag,E_PHI
+    INTEGER(is), INTENT(IN)  :: flagCol,flagCon
+    REAL(rp), INTENT(IN)  :: me
+    REAL(rp)  :: gam,prob0,prob1,pm0,xi0,gam0
+    REAL(rp) :: gam_min,p_min,gammax,dt,gamsecmax,psecmax,ptrial
+    REAL(rp) :: gamtrial,cosgam1,xirad,xip,xim,xitrial,sinsq1,cossq1,pitchprob1
+    REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c,pRE
+    INTEGER :: ngam1,neta1
+    INTEGER :: ii,jj,cc,seciter
+    REAL(rp), DIMENSION(cparams_ss%ngrid1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp,intpitchprob
+    REAL(rp), DIMENSION(cparams_ss%ngrid1-1) :: dpm1
+    REAL(rp), DIMENSION(cparams_ss%ngrid1) :: eta1,tmpsinsq,tmpcossq
+    REAL(rp), DIMENSION(cparams_ss%ngrid1-1) :: deta1
+    REAL(rp), DIMENSION(cparams_ss%ngrid1,cparams_ss%ngrid1) :: cosgam,sinsq,cossq,tmpcossq1,pitchprob,dsigdgam
+    REAL(rp), DIMENSION(cparams_ss%ngrid1,cparams_ss%ngrid1) :: secthreshgam,pm11,gam11,eta11,S_LA,pitchrad
+    LOGICAL :: accepted
+
+    !$acc routine (Gammacee) seq
+    !$acc routine (get_random) seq
+
+
+    dt=cparams_ss%coll_per_dump_dt*params%cpp%time
+    ngam1=cparams_ss%ngrid1
+    neta1=cparams_ss%ngrid1
+
+
+   pm0=pm
+   xi0=xi
+
+   gam = sqrt(1+pm*pm)
+   gam0=gam
+
+#ifdef PARALLEL_RANDOM
+   prob0 = get_random()
+#else
+   call RANDOM_NUMBER(prob0)
+#endif
+
+
+   vmin=1/sqrt(1+1/(cparams_ss%p_min*cparams_ss%pmin_scale)**2)
+
+   !! For each primary RE, calculating probability to generate a secondary RE
+
+   if ((flagCol.lt.1).or.(flagCon.lt.1)) return
+
+   if (.not.(cparams_ms%lowKE_REs)) then
+      E_C=netot/ne*Gammacee(vmin,ne,Te)
+   else
+      E_C=Gammacee(vmin,ne,Te)
+   end if
+
+   !write(6,*) 'E',E_PHI*params%cpp%Eo
+   !write(6,*) 'E_C',E_C*params%cpp%Eo
+   !write(6,*) 'E_c,min',cparams_ms%Ec_min*params%cpp%Eo
+   !write(6,*) 'ne',ne*params%cpp%density
+   !write(6,*) 'netot',netot*params%cpp%density
+   !write(6,*) 'Te',Te*params%cpp%temperature
+   !write(6,*) 'Clog',CLogee_wu(params,ne*params%cpp%density,Te*params%cpp%temperature)
+
+   if (.not.(cparams_ss%always_aval)) then
+      if (E_C.gt.abs(E_PHI)) return
+
+      p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI)/E_C-1)
+      gam_c=sqrt(1+p_c**2)
+
+      if(cparams_ss%min_secRE.eq.'THERM') then
+         gam_min=(gam_c+1)/2
+         p_min=sqrt(gam_min**2-1)
+      else
+         gam_min=gam_c
+         p_min=p_c
+      end if
+   else
+      p_min=cparams_ss%p_min*cparams_ss%pmin_scale
+      gam_min=sqrt(1+p_min**2)
+   endif
+
+   gammax=(gam+1._rp)/2._rp
+
+   if (gam_min.eq.1._rp) then
+      write(6,*) 'R',Y_R*params%cpp%length,'Z',Y_Z*params%cpp%length
+      write(6,*) 'vmin',vmin,'netot',netot*params%cpp%density,'Te',Te*params%cpp%temperature/C_E
+      write(6,*) 'E',E_PHI*params%cpp%Eo,'E_c',E_C*params%cpp%Eo
+      write(6,*) 'p_c',p_c,'gam_c',gam_c
+      write(6,*) 'p_min',p_min,'gam_min',gam_min
+      !write(6,*) 'LAC_gam_resolution: ',TRIM(cparams_ss%LAC_gam_resolution)
+      !write(6,*) 'gam_min,gammax',gam_min,gammax
+   end if
+
+   !! Generating 1D and 2D ranges for secondary RE distribution
+
+   if (TRIM(cparams_ss%LAC_gam_resolution).eq.'LIN') then
+      do ii=1,ngam1
+         gam1(ii)=gam_min+(gammax-gam_min)* &
+            REAL(ii-1)/REAL(ngam1-1)
+      end do
+   elseif (TRIM(cparams_ss%LAC_gam_resolution).eq.'EXP') then
+      do ii=1,ngam1
+         tmpgam1(ii)=log10(gam_min)+ &
+            (log10(gammax)-log10(gam_min))* &
+            REAL(ii-1)/REAL(ngam1-1)
+      end do
+      gam1=10**(tmpgam1)
+   elseif (TRIM(cparams_ss%LAC_gam_resolution).eq.'2EXP') then
+      do ii=1,ngam1
+         tmpgam1(ii)=log10(log10(gam_min))+ &
+            (log10(log10(gammax))-log10(log10(gam_min)))* &
+            REAL(ii-1)/REAL(ngam1-1)
+      end do
+      gam1=10**(10**(tmpgam1))
+   end if
+
+   !write(6,*) 'tmpgam1',tmpgam1
+   !write(6,*) 'gam1',gam1
+
+
+   pm1=sqrt(gam1**2-1)
+
+   do ii=1,ngam1-1
+      dpm1(ii)=pm1(ii+1)-pm1(ii)
+   end do
+
+   do ii=1,neta1
+      eta1(ii)=C_PI*(ii-1)/(neta1-1)
+   end do
+
+   !write(6,*) 'eta1',eta1
+
+   do ii=1,neta1-1
+      deta1(ii)=eta1(ii+1)-eta1(ii)
+   end do
+
+   do ii=1,neta1
+      pm11(:,ii)=pm1
+      gam11(:,ii)=gam1
+   end do
+
+   do ii=1,ngam1
+      eta11(ii,:)=eta1
+   end do
+
+
+   tmpcosgam=sqrt(((gam+1)*(gam1-1))/((gam-1)*(gam1+1)))
+   tmpdsigdgam=2*C_PI*C_RE**2/(gam**2-1)* &
+      (((gam-1)**2*gam**2)/((gam1-1)**2*(gam-gam1)**2)- &
+      (2*gam**2+2*gam-1)/((gam1-1)*(gam-gam1))+1)
+   tmpsecthreshgam=1._rp
+   where(gam1.gt.(gam+1)/2._rp) tmpsecthreshgam=0._rp
+
+   !write(6,*) 'tmpcosgam',tmpcosgam
+   !write(6,*) 'tmpdsigdgam',tmpdsigdgam
+   !write(6,*) 'tmpsecthreshgam',tmpsecthreshgam
+
+
+   do ii=1,neta1
+      cosgam(:,ii)=tmpcosgam
+      dsigdgam(:,ii)=tmpdsigdgam
+      secthreshgam(:,ii)=tmpsecthreshgam
+   end do
+
+   !if (cc.eq.1) then
+      !write(6,*) cosgam
+   !end if
+
+   tmpsinsq=(1-xi**2)*sin(eta1)**2
+   tmpcossq=xi*cos(eta1)
+
+   do ii=1,ngam1
+      sinsq(ii,:)=tmpsinsq
+      tmpcossq1(ii,:)=tmpcossq
+   end do
+
+   !if (cc.eq.1) then
+      !write(6,*) sinsq
+   !end if
+
+   cossq=(cosgam-tmpcossq1)**2
+
+   pitchrad=sinsq-cossq
+   where(pitchrad.lt.0) pitchrad=tiny(0._rp)
+
+   !if (cc.eq.1) then
+      !write(6,*) cossq
+      !write(6,*) 'sinsq-cossq',sqrt(sinsq-cossq)
+      !write(6,*) 'pitchrad',pitchrad
+   !end if
+
+   pitchprob=1/(C_PI*sqrt(pitchrad))
+
+   where(pitchprob.eq.1/(C_PI*sqrt(tiny(0._rp)))) pitchprob=0._rp
+
+   !if (cc.eq.1) then
+      !write(6,*) 'pitchprob',pitchprob
+   !end if
+
+   S_LA=netot*params%cpp%density*C_C/(2*C_PI)* &
+      (pm11/gam11)*(pm/gam)* &
+      pitchprob*dsigdgam*secthreshgam
+
+   !! Saving maximum secondary RE source for use in rejection-acceptance
+   !! sampling algorithm
+   S_LAmax=maxval(S_LA)
+
+   S_LA=S_LA*sin(eta11)
+
+   !! Trapezoidal integration of secondary RE source to find probabilty
+
+   do ii=1,ngam1
+      probtmp(ii)=S_LA(ii,1)*deta1(1)/2+S_LA(ii,neta1)*deta1(neta1-1)/2
+      !intpitchprob(ii)=pitchprob(ii,1)*sin(eta1(1))*deta1(1)/2+ &
+      !     pitchprob(ii,neta1)*sin(eta1(neta1))*deta1(neta1-1)/2
+      do jj=2,neta1-1
+         probtmp(ii)=probtmp(ii)+S_LA(ii,jj)*(deta1(jj)+deta1(jj-1))/2
+      !   intpitchprob(ii)=intpitchprob(ii)+ &
+      !        pitchprob(ii,jj)*sin(eta1(jj))*(deta1(jj)+deta1(jj-1))/2
+      end do
+   end do
+
+   prob1=probtmp(1)*dpm1(1)/2+probtmp(ngam1)*dpm1(ngam1-1)/2
+   do jj=2,ngam1-1
+      prob1=prob1+probtmp(jj)*(dpm1(jj)+dpm1(jj-1))/2
+   end do
+
+   !write(6,*) 'prob1pre',prob1,'flagCol',flagCol,'flagCon',flagCon,'dt',dt
+
+   !write(6,*) 'intpitchprob',intpitchprob
+
+   prob1=prob1*dt*2*C_PI
+
+#ifdef __NVCOMPILER
+   if (IEEE_IS_NAN(prob1)) then
+
+#else
+   if (ISNAN(prob1)) then
+#endif
+   write(6,*) 'NaN probability from secondary RE source'
+   write(6,*) 'p,xi',pm,xi
+   write(6,*) 'gam_min,gammax',gam_min,gammax
+   write(6,*) 'E',E_PHI*params%cpp%Eo
+   write(6,*) 'E_C',E_C*params%cpp%Eo
+   !write(6,*) 'pitchprob',pitchprob
+   !write(6,*) 'S_LA',S_LA
+   call korc_abort(24)
+   end if
+   
+   if (prob1.gt.1._rp) then
+      write(6,*) 'Multiple secondary REs generated in a collisional time step'
+      write(6,*) 'p,xi',pm,xi
+      write(6,*) 'gam_min,gammax',gam_min,gammax
+      write(6,*) 'E',E_PHI*params%cpp%Eo
+      write(6,*) 'E_C',E_C*params%cpp%Eo
+      call korc_abort(24)
+   end if
+
+   !write(6,*) 'gam',gam,'xi',xi
+   !write(6,*) 'prob1',prob1,'prob0',prob0
+
+   if (prob1.gt.prob0) then
+
+      !! If secondary RE generated, begin acceptance-rejection sampling
+      !! algorithm
+
+      !write(6,*) 'secondary RE from ',prob1,prob0
+
+      accepted=.false.
+
+      gamsecmax=(gam+1)/2
+      psecmax=sqrt(gamsecmax**2-1)
+
+      seciter=0
+      do while (.not.accepted)
+
+         ptrial=p_min+(psecmax-p_min)*get_random()
+         gamtrial=sqrt(1+ptrial*ptrial)
+
+         cosgam1=sqrt(((gam+1)*(gamtrial-1))/((gam-1)*(gamtrial+1)))
+
+         xitrial=-1+2*get_random()
+
+         sinsq1=(1-xi*xi)*(1-xitrial*xitrial)
+         cossq1=(cosgam1-xi*xitrial)**2
+
+         if ((sinsq1-cossq1).le.0._rp) cycle
+
+         pitchprob1=1/(C_PI*sqrt(sinsq1-cossq1))
+
+         !if (isnan(pitchprob1)) cycle
+
+         dsigdgam1=2*C_PI*C_RE**2/(gam**2-1)* &
+            (((gam-1)**2*gam**2)/ &
+            ((gamtrial-1)**2*(gam-gamtrial)**2)- &
+            (2*gam**2+2*gam-1)/ &
+            ((gamtrial-1)*(gam-gamtrial))+1)
+
+         S_LA1=netot*params%cpp%density*C_C/(2*C_PI)* &
+            (ptrial/gamtrial)*(pm/gam)* &
+            pitchprob1*dsigdgam1
+
+         if (S_LA1/S_LAmax.gt.get_random()) accepted=.true.
+
+         seciter=seciter+1
+
+         !if (mod(seciter,100).eq.0) then
+         !   write(6,*) 'iteration',seciter
+         !end if
+
+      end do
+
+      !! Write secondary RE degrees of freedom to particle derived type
+
+
+      !$acc ATOMIC UPDATE
+      spp%pRE=spp%pRE+1
+      !$acc ATOMIC WRITE
+      spp%vars%flagRE(spp%pRE)=1
+      !$acc ATOMIC WRITE
+      spp%vars%flagCon(spp%pRE)=1
+      !$acc ATOMIC WRITE
+      spp%vars%flagCol(spp%pRE)=1
+      !$acc ATOMIC WRITE
+      spp%vars%V(spp%pRE,1)=ptrial*xitrial
+      !$acc ATOMIC WRITE
+      spp%vars%V(spp%pRE,2)=ptrial*ptrial*(1-xitrial*xitrial)/ &
+         (2*me*Bmag)
+      !$acc ATOMIC WRITE
+      spp%vars%Y(spp%pRE,1)=Y_R
+      !$acc ATOMIC WRITE
+      spp%vars%Y(spp%pRE,2)=Y_PHI
+      !$acc ATOMIC WRITE
+      spp%vars%Y(spp%pRE,3)=Y_Z
+      !$acc ATOMIC WRITE
+      spp%vars%Yborn(spp%pRE,1)=Y_R
+      !$acc ATOMIC WRITE
+      spp%vars%Yborn(spp%pRE,2)=Y_PHI
+      !$acc ATOMIC WRITE
+      spp%vars%Yborn(spp%pRE,3)=Y_Z
+      !$acc ATOMIC WRITE
+      spp%vars%B(spp%pRE,1)=B_R
+      !$acc ATOMIC WRITE
+      spp%vars%B(spp%pRE,2)=B_PHI
+      !$acc ATOMIC WRITE
+      spp%vars%B(spp%pRE,3)=B_Z
+
+
+      !! Write changes to primary RE degrees of freedom to temporary
+      !! arrays for passing back out to particle derived type
+
+      if (cparams_ss%ConserveLA) then
+         tmppm=pm
+         gamvth=1/sqrt(1-2*Te)
+         gam=gam-gamtrial+gamvth
+         pm=sqrt(gam*gam-1)
+         xi=(tmppm*xi-ptrial*xitrial)/pm
+      end if
+
+      !$acc ATOMIC READ
+      pRE=spp%pRE
+
+      if (pRE.eq.spp%ppp) then
+         write(6,*) 'All REs allocated on proc',params%mpi_params%rank
+         call korc_abort(24)
+      end if
+
+   end if
+
+end subroutine large_angle_source_ACC
 
 
   subroutine save_params_ms(params)

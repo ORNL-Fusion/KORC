@@ -5579,92 +5579,189 @@ subroutine adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
 
           call init_random_seed(params)
 
-          !$acc parallel loop firstprivate(m_cache) &
-          !$acc& private(Y_R,Y_PHI,Y_Z,Y_R0,Y_PHI0,Y_Z0, &
-          !$acc& Y_R1,Y_PHI1,Y_Z1,V_PLL,V_MU,flagCon,flagCol, &
-          !$acc& B_R,B_PHI,B_Z,PSIp,E_PHI,ne,Te,Zeff,nimp)
-          do pp=1_idef,spp(ii)%ppp
+          if (.not.params%LargeCollisions) then
 
-               Y_R=spp(ii)%vars%Y(pp,1)
-               Y_PHI=spp(ii)%vars%Y(pp,2)
-               Y_Z=spp(ii)%vars%Y(pp,3)
+               !$acc parallel loop firstprivate(m_cache) &
+               !$acc& private(Y_R,Y_PHI,Y_Z,Y_R0,Y_PHI0,Y_Z0, &
+               !$acc& Y_R1,Y_PHI1,Y_Z1,V_PLL,V_MU,flagCon,flagCol, &
+               !$acc& B_R,B_PHI,B_Z,PSIp,E_PHI,ne,Te,Zeff,nimp)
+               do pp=1_idef,spp(ii)%ppp
 
-               Y_R0=spp(ii)%vars%Y0(pp,1)
-               Y_PHI0=spp(ii)%vars%Y0(pp,2)
-               Y_Z0=spp(ii)%vars%Y0(pp,3)
-               Y_R1=spp(ii)%vars%Y1(pp,1)
-               Y_PHI1=spp(ii)%vars%Y1(pp,2)
-               Y_Z1=spp(ii)%vars%Y1(pp,3)
+                    Y_R=spp(ii)%vars%Y(pp,1)
+                    Y_PHI=spp(ii)%vars%Y(pp,2)
+                    Y_Z=spp(ii)%vars%Y(pp,3)
 
-               V_PLL=spp(ii)%vars%V(pp,1)
-               V_MU=spp(ii)%vars%V(pp,2)
+                    Y_R0=spp(ii)%vars%Y0(pp,1)
+                    Y_PHI0=spp(ii)%vars%Y0(pp,2)
+                    Y_Z0=spp(ii)%vars%Y0(pp,3)
+                    Y_R1=spp(ii)%vars%Y1(pp,1)
+                    Y_PHI1=spp(ii)%vars%Y1(pp,2)
+                    Y_Z1=spp(ii)%vars%Y1(pp,3)
 
-               PSIp=spp(ii)%vars%PSI_P(pp)
+                    V_PLL=spp(ii)%vars%V(pp,1)
+                    V_MU=spp(ii)%vars%V(pp,2)
 
-               flagCon=spp(ii)%vars%flagCon(pp)
-               flagCol=spp(ii)%vars%flagCol(pp)
+                    PSIp=spp(ii)%vars%PSI_P(pp)
 
-               !$acc loop seq
-               do tt=1_ip,params%t_skip
- 
-                    call advance_GCinterp_psiwE_vars_ACC(spp(ii),pp,tt, &
-                         params, &
-                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
-                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
-                         curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
-                         Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
- 
-                    if (params%collisions) then
- 
-                       call include_CoulombCollisions_GC_p_ACC(pp,tt,params, &
-                            Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
-                            flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
- 
-                    end if
- 
- 
-               end do !timestep iterator
+                    flagCon=spp(ii)%vars%flagCon(pp)
+                    flagCol=spp(ii)%vars%flagCol(pp)
 
-               spp(ii)%vars%Y(pp,1)=Y_R
-               spp(ii)%vars%Y(pp,2)=Y_PHI
-               spp(ii)%vars%Y(pp,3)=Y_Z
-               spp(ii)%vars%V(pp,1)=V_PLL
-               spp(ii)%vars%V(pp,2)=V_MU
+                    !$acc loop seq
+                    do tt=1_ip,params%t_skip
+     
+                         call advance_GCinterp_psiwE_vars_ACC(spp(ii),pp,tt, &
+                              params, &
+                              Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
+                              F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
+                              curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
+                              Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
+     
+                         if (params%collisions) then
+     
+                         call include_CoulombCollisions_GC_p_ACC(spp(ii),pp,tt,params, &
+                              Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
+                              flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
+     
+                         end if
+     
+     
+                    end do !timestep iterator
 
-               spp(ii)%vars%Y0(pp,1)=Y_R0
-               spp(ii)%vars%Y0(pp,2)=Y_PHI0
-               spp(ii)%vars%Y0(pp,3)=Y_Z0
-               spp(ii)%vars%Y1(pp,1)=Y_R1
-               spp(ii)%vars%Y1(pp,2)=Y_PHI1
-               spp(ii)%vars%Y1(pp,3)=Y_Z1
+                    spp(ii)%vars%Y(pp,1)=Y_R
+                    spp(ii)%vars%Y(pp,2)=Y_PHI
+                    spp(ii)%vars%Y(pp,3)=Y_Z
+                    spp(ii)%vars%V(pp,1)=V_PLL
+                    spp(ii)%vars%V(pp,2)=V_MU
 
-               spp(ii)%vars%flagCon(pp)=flagCon
-               spp(ii)%vars%flagCol(pp)=flagCol
+                    spp(ii)%vars%Y0(pp,1)=Y_R0
+                    spp(ii)%vars%Y0(pp,2)=Y_PHI0
+                    spp(ii)%vars%Y0(pp,3)=Y_Z0
+                    spp(ii)%vars%Y1(pp,1)=Y_R1
+                    spp(ii)%vars%Y1(pp,2)=Y_PHI1
+                    spp(ii)%vars%Y1(pp,3)=Y_Z1
 
-               spp(ii)%vars%B(pp,1) = B_R
-               spp(ii)%vars%B(pp,2) = B_PHI
-               spp(ii)%vars%B(pp,3) = B_Z
+                    spp(ii)%vars%flagCon(pp)=flagCon
+                    spp(ii)%vars%flagCol(pp)=flagCol
 
-               spp(ii)%vars%E(pp,2) = E_PHI
-               spp(ii)%vars%PSI_P(pp) = PSIp
+                    spp(ii)%vars%B(pp,1) = B_R
+                    spp(ii)%vars%B(pp,2) = B_PHI
+                    spp(ii)%vars%B(pp,3) = B_Z
 
-               spp(ii)%vars%ne(pp) = ne
-               spp(ii)%vars%Te(pp) = Te
-               spp(ii)%vars%Zeff(pp) = Zeff
-               spp(ii)%vars%nimp(pp,:) = nimp
+                    spp(ii)%vars%E(pp,2) = E_PHI
+                    spp(ii)%vars%PSI_P(pp) = PSIp
 
-               Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+ &
-                    B_Z*B_Z)
+                    spp(ii)%vars%ne(pp) = ne
+                    spp(ii)%vars%Te(pp) = Te
+                    spp(ii)%vars%Zeff(pp) = Zeff
+                    spp(ii)%vars%nimp(pp,:) = nimp
 
-               spp(ii)%vars%g(pp)=sqrt(1+V_PLL**2+ &
-                    2*V_MU*Bmag)
+                    Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+ &
+                         B_Z*B_Z)
 
-               spp(ii)%vars%eta(pp) = atan2(sqrt(2*m_cache*Bmag* &
-                    spp(ii)%vars%V(pp,2)),spp(ii)%vars%V(pp,1))* &
-                    180.0_rp/C_PI
- 
-           end do
-           !$acc end parallel loop
+                    spp(ii)%vars%g(pp)=sqrt(1+V_PLL**2+ &
+                         2*V_MU*Bmag)
+
+                    spp(ii)%vars%eta(pp) = atan2(sqrt(2*m_cache*Bmag* &
+                         spp(ii)%vars%V(pp,2)),spp(ii)%vars%V(pp,1))* &
+                         180.0_rp/C_PI
+     
+               end do
+               !$acc end parallel loop
+
+          else if (params%LargeCollisions) then
+
+               do tt=1_ip,params%coll_per_dump
+
+                    !$acc parallel loop firstprivate(m_cache,tt) &
+                    !$acc& private(ttt,Y_R,Y_PHI,Y_Z,Y_R0,Y_PHI0,Y_Z0, &
+                    !$acc& Y_R1,Y_PHI1,Y_Z1,V_PLL,V_MU,flagCon,flagCol, &
+                    !$acc& B_R,B_PHI,B_Z,PSIp,E_PHI,ne,Te,Zeff,nimp)
+                    do pp=1_idef,spp(ii)%pRE
+
+                         Y_R=spp(ii)%vars%Y(pp,1)
+                         Y_PHI=spp(ii)%vars%Y(pp,2)
+                         Y_Z=spp(ii)%vars%Y(pp,3)
+
+                         Y_R0=spp(ii)%vars%Y0(pp,1)
+                         Y_PHI0=spp(ii)%vars%Y0(pp,2)
+                         Y_Z0=spp(ii)%vars%Y0(pp,3)
+                         Y_R1=spp(ii)%vars%Y1(pp,1)
+                         Y_PHI1=spp(ii)%vars%Y1(pp,2)
+                         Y_Z1=spp(ii)%vars%Y1(pp,3)
+
+                         V_PLL=spp(ii)%vars%V(pp,1)
+                         V_MU=spp(ii)%vars%V(pp,2)
+
+                         PSIp=spp(ii)%vars%PSI_P(pp)
+
+                         flagCon=spp(ii)%vars%flagCon(pp)
+                         flagCol=spp(ii)%vars%flagCol(pp)
+
+                         !$acc loop seq
+                         do ttt=1_ip,params%orbits_per_coll
+          
+                              call advance_GCinterp_psiwE_vars_ACC(spp(ii),pp,tt, &
+                                   params, &
+                                   Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
+                                   F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
+                                   curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
+                                   Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
+          
+                              if (params%collisions) then
+          
+                                   call include_CoulombCollisions_GC_p_ACC(spp(ii),pp,tt,params, &
+                                        Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
+                                        flagCon,flagCol,F,P,E_PHI,ne,Te,Zeff,nimp,PSIp)
+          
+                              end if
+          
+          
+                         end do !timestep iterator
+
+                         spp(ii)%vars%Y(pp,1)=Y_R
+                         spp(ii)%vars%Y(pp,2)=Y_PHI
+                         spp(ii)%vars%Y(pp,3)=Y_Z
+                         spp(ii)%vars%V(pp,1)=V_PLL
+                         spp(ii)%vars%V(pp,2)=V_MU
+
+                         spp(ii)%vars%Y0(pp,1)=Y_R0
+                         spp(ii)%vars%Y0(pp,2)=Y_PHI0
+                         spp(ii)%vars%Y0(pp,3)=Y_Z0
+                         spp(ii)%vars%Y1(pp,1)=Y_R1
+                         spp(ii)%vars%Y1(pp,2)=Y_PHI1
+                         spp(ii)%vars%Y1(pp,3)=Y_Z1
+
+                         spp(ii)%vars%flagCon(pp)=flagCon
+                         spp(ii)%vars%flagCol(pp)=flagCol
+
+                         spp(ii)%vars%B(pp,1) = B_R
+                         spp(ii)%vars%B(pp,2) = B_PHI
+                         spp(ii)%vars%B(pp,3) = B_Z
+
+                         spp(ii)%vars%E(pp,2) = E_PHI
+                         spp(ii)%vars%PSI_P(pp) = PSIp
+
+                         spp(ii)%vars%ne(pp) = ne
+                         spp(ii)%vars%Te(pp) = Te
+                         spp(ii)%vars%Zeff(pp) = Zeff
+                         spp(ii)%vars%nimp(pp,:) = nimp
+
+                         Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+ &
+                              B_Z*B_Z)
+
+                         spp(ii)%vars%g(pp)=sqrt(1+V_PLL**2+ &
+                              2*V_MU*Bmag)
+
+                         spp(ii)%vars%eta(pp) = atan2(sqrt(2*m_cache*Bmag* &
+                              spp(ii)%vars%V(pp,2)),spp(ii)%vars%V(pp,1))* &
+                              180.0_rp/C_PI
+          
+                    end do
+                    !$acc end parallel loop
+
+               end do
+
+          endif
  
            call finalize_random_seed
 

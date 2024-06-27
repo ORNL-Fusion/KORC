@@ -171,6 +171,7 @@ CONTAINS
   END SUBROUTINE
 
   FUNCTION get_random()
+    !$acc routine seq
     IMPLICIT NONE
 
     REAL(rp)            :: get_random
@@ -188,6 +189,7 @@ CONTAINS
   END FUNCTION get_random_U
 
   FUNCTION get_random_N()
+    !$acc routine seq
     IMPLICIT NONE
 
     REAL(rp)            :: get_random_N
