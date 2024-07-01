@@ -17,5 +17,5 @@ fi
 
 ./xkorc $INPUT_FILE $OUT_DIR/
 
-h5diff -r -d 0.007 $OUT_DIR/file_0.h5 $1/file_0.h5
+h5diff -r -d 0.007 $OUT_DIR/file_0.h5 $1/file_0_new_random.h5
 
