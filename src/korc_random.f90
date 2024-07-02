@@ -1,19 +1,14 @@
-!include 'mkl_vsl.f90'
-
 MODULE korc_random
 
   USE, INTRINSIC :: iso_c_binding
   USE korc_types
-  !    use mkl_vsl_type
-  !    use mkl_vsl
   USE korc_hpc, ONLY : get_thread_number, get_max_threads
 
   IMPLICIT NONE
 
-  TYPE(C_PTR), DIMENSION(:), ALLOCATABLE , PRIVATE :: states
-  TYPE(C_PTR),  PRIVATE :: state_u
-  TYPE(C_PTR),  PRIVATE :: state_n
-  !    TYPE(VSL_STREAM_STATE), PRIVATE :: stream
+!*******************************************************************************
+!  Interface binding for the c++ random functions.
+!*******************************************************************************
 
   INTERFACE
      TYPE (C_PTR) FUNCTION random_construct_U(seed) BIND(C, NAME='random_construct_U')
@@ -38,7 +33,8 @@ MODULE korc_random
   END INTERFACE
 
   INTERFACE
-     REAL (C_DOUBLE) FUNCTION random_get_number_U(r) BIND(C, NAME='random_get_number_U')
+     REAL (rp) FUNCTION random_get_number_U(r) BIND(C, NAME='random_get_number_U')
+       USE korc_types, ONLY : rp
        USE, INTRINSIC :: iso_c_binding
 
        IMPLICIT NONE
@@ -49,7 +45,8 @@ MODULE korc_random
   END INTERFACE
 
   INTERFACE
-     REAL (C_DOUBLE) FUNCTION random_get_number_N(r) BIND(C, NAME='random_get_number_N')
+     REAL (rp) FUNCTION random_get_number_N(r) BIND(C, NAME='random_get_number_N')
+       USE korc_types, ONLY : rp
        USE, INTRINSIC :: iso_c_binding
 
        IMPLICIT NONE
@@ -59,17 +56,6 @@ MODULE korc_random
      END FUNCTION random_get_number_N
   END INTERFACE
 
-  INTERFACE
-     REAL (C_DOUBLE) FUNCTION random_get_number(r) BIND(C, NAME='random_get_number')
-       USE, INTRINSIC :: iso_c_binding
-
-       IMPLICIT NONE
-
-       TYPE (C_PTR), VALUE :: r
-
-     END FUNCTION random_get_number
-  END INTERFACE
-  
   INTERFACE
      SUBROUTINE random_destroy_U(r) BIND(C, NAME='random_destroy_U')
        USE, INTRINSIC :: iso_c_binding
@@ -93,219 +79,350 @@ MODULE korc_random
   END INTERFACE
   
   INTERFACE
-     SUBROUTINE random_set_dist(r, low, high) BIND(C, NAME='random_set_dist')
+     SUBROUTINE random_set_dist_U(r, low, high) BIND(C, NAME='random_set_dist_U')
+       USE korc_types, ONLY : rp
+       USE, INTRINSIC :: iso_c_binding
+
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE :: r
+       REAL (rp), VALUE    :: low
+       REAL (rp), VALUE    :: high
+     END SUBROUTINE random_set_dist_U
+  END INTERFACE
+
+  INTERFACE
+     SUBROUTINE random_set_dist_N(r, low, high) BIND(C, NAME='random_set_dist_N')
+       USE korc_types, ONLY : rp
+       USE, INTRINSIC :: iso_c_binding
+
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE :: r
+       REAL (rp), VALUE    :: low
+       REAL (rp), VALUE    :: high
+     END SUBROUTINE random_set_dist_N
+  END INTERFACE
+
+  INTERFACE
+     SUBROUTINE random_set_seed_U(r, seed) BIND(C, NAME='random_set_seed_U')
        USE, INTRINSIC :: iso_c_binding
 
        IMPLICIT NONE
 
        TYPE (C_PTR), VALUE    :: r
-       REAL (C_DOUBLE), VALUE :: low
-       REAL (C_DOUBLE), VALUE :: high
-     END SUBROUTINE random_set_dist
+       INTEGER (C_INT), VALUE :: seed
+     END SUBROUTINE random_set_seed_U
   END INTERFACE
-  
-  PUBLIC :: initialize_random
-  PUBLIC :: finalize_random
+
+  INTERFACE
+     SUBROUTINE random_set_seed_N(r, seed) BIND(C, NAME='random_set_seed_N')
+       USE, INTRINSIC :: iso_c_binding
+
+       IMPLICIT NONE
+
+       TYPE (C_PTR), VALUE    :: r
+       INTEGER (C_INT), VALUE :: seed
+     END SUBROUTINE random_set_seed_N
+  END INTERFACE
+
+!*******************************************************************************
+!  Class Defintions
+!*******************************************************************************
+
+  TYPE :: random_base
+     TYPE(C_PTR), DIMENSION(:), POINTER :: states => null()
+  END TYPE
+
+  TYPE, EXTENDS(random_base) :: random_U_context
+  CONTAINS
+     PROCEDURE :: get => random_U_get_random
+     PROCEDURE :: get_array => random_U_get_randoms
+     PROCEDURE :: set => random_U_set_dist
+     PROCEDURE :: seed => random_U_set_seed
+     FINAL     :: random_U_context_destruct
+  END TYPE
+
+  TYPE, EXTENDS(random_base) :: random_N_context
+  CONTAINS
+     PROCEDURE :: get => random_N_get_random
+     PROCEDURE :: get_array => random_N_get_randoms
+     PROCEDURE :: set => random_N_set_dist
+     PROCEDURE :: seed => random_N_set_seed
+     FINAL     :: random_N_context_destruct
+  END TYPE
+
+  TYPE :: random_context
+     CLASS (random_U_context), POINTER :: uniform => null()
+     CLASS (random_N_context), POINTER :: normal => null()
+  CONTAINS
+     FINAL :: random_context_destruct
+  END TYPE
 
 CONTAINS
 
-  SUBROUTINE initialize_random(seed)
-    IMPLICIT NONE
+!*******************************************************************************
+!  Constructors
+!*******************************************************************************
 
-    INTEGER, INTENT(IN) :: seed
-    INTEGER             :: num_threads
-    INTEGER             :: thread_num
+  FUNCTION random_U_context_construct(seed, mpi_rank)
+  IMPLICIT NONE
 
-    num_threads = get_max_threads()
-    IF (.NOT. ALLOCATED(states)) THEN
-       ALLOCATE(states(0:num_threads - 1))
-    END IF
+!  Arguments
+  CLASS (random_U_context), POINTER :: random_U_context_construct
+  INTEGER, INTENT(IN)               :: seed
+  INTEGER, INTENT(IN)               :: mpi_rank
 
-    !$OMP PARALLEL PRIVATE(thread_num)
-    thread_num = get_thread_number()
-    states(thread_num) = random_construct_U(seed + thread_num)
-    !$OMP END PARALLEL
-  END SUBROUTINE initialize_random
+!  Local Variables
+  INTEGER                           :: num_threads
+  INTEGER                           :: thread_num
 
-  SUBROUTINE finalize_random
-    IMPLICIT NONE
+!  Start of executable code.
+  ALLOCATE(random_U_context_construct)
 
-    INTEGER             :: thread_num
+  num_threads = get_max_threads()
+  ALLOCATE(random_U_context_construct%states(0:num_threads))
 
-    !$OMP PARALLEL PRIVATE(thread_num)
-    thread_num = get_thread_number()
-    CALL random_destroy_U(states(thread_num))
-    !$OMP END PARALLEL
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+  thread_num = get_thread_number()
+  random_U_context_construct%states(thread_num) =                              &
+     random_construct_U(seed + mpi_rank*num_threads + thread_num)
+!$OMP END PARALLEL
+  END FUNCTION
 
-    DEALLOCATE (states)
+  FUNCTION random_N_context_construct(seed, mpi_rank)
+  IMPLICIT NONE
+
+!  Arguments
+  CLASS (random_N_context), POINTER :: random_N_context_construct
+  INTEGER, INTENT(IN)               :: seed
+  INTEGER, INTENT(IN)               :: mpi_rank
+
+!  Local Variables
+  INTEGER                           :: num_threads
+  INTEGER                           :: thread_num
+
+!  Start of executable code.
+  ALLOCATE(random_N_context_construct)
+
+  num_threads = get_max_threads()
+  ALLOCATE(random_N_context_construct%states(0:num_threads))
+
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+  thread_num = get_thread_number()
+  random_N_context_construct%states(thread_num) =                              &
+     random_construct_N(seed + mpi_rank*num_threads + thread_num)
+!$OMP END PARALLEL
+  END FUNCTION
+
+  FUNCTION random_context_construct(seed, mpi_rank)
+
+  IMPLICIT NONE
+
+!  Arguments
+  CLASS (random_context), POINTER :: random_context_construct
+  INTEGER, INTENT(IN)             :: seed
+  INTEGER, INTENT(IN)             :: mpi_rank
+
+!  Start of executable code.
+  ALLOCATE(random_context_construct)
+
+  random_context_construct%uniform => random_U_context_construct(seed, mpi_rank)
+  random_context_construct%normal => random_N_context_construct(seed, mpi_rank)
+
+  END FUNCTION
+
+!*******************************************************************************
+!  Destructors
+!*******************************************************************************
+
+  SUBROUTINE random_U_context_destruct(this)
+  IMPLICIT NONE
+
+!  Arguments
+  TYPE (random_U_context), INTENT(inout) :: this
+
+!  Start of executable code
+  IF (ASSOCIATED(this%states)) THEN
+!$OMP PARALLEL DEFAULT(SHARED)
+     CALL random_destroy_U(this%states(get_thread_number()))
+!$OMP END PARALLEL
+     DEALLOCATE(this%states)
+     this%states => null()
+  END IF
+
   END SUBROUTINE
 
-  SUBROUTINE initialize_random_U(seed)
-    IMPLICIT NONE
+  SUBROUTINE random_N_context_destruct(this)
+  IMPLICIT NONE
 
-    INTEGER, INTENT(IN) :: seed
+!  Arguments
+  TYPE (random_N_context), INTENT(inout) :: this
 
-    state_u = random_construct_U(seed)
+!  Start of executable code
+  IF (ASSOCIATED(this%states)) THEN
+!$OMP PARALLEL DEFAULT(SHARED)
+     CALL random_destroy_N(this%states(get_thread_number()))
+!$OMP END PARALLEL
+     DEALLOCATE(this%states)
+     this%states => null()
+  END IF
 
-  END SUBROUTINE initialize_random_U
-
-  SUBROUTINE finalize_random_U
-    IMPLICIT NONE
-
-    CALL random_destroy_U(state_u)
   END SUBROUTINE
 
-  SUBROUTINE initialize_random_N(seed)
-    IMPLICIT NONE
+  SUBROUTINE random_context_destruct(this)
+  IMPLICIT NONE
 
-    INTEGER, INTENT(IN) :: seed
+!  Arguments
+  TYPE (random_context), INTENT(inout) :: this
 
-    state_n = random_construct_N(seed)
+!  Start of executable code
+  IF (ASSOCIATED(this%uniform)) THEN
+     DEALLOCATE(this%uniform)
+     this%uniform => null()
+  END IF
 
-  END SUBROUTINE initialize_random_N
+  IF (ASSOCIATED(this%normal)) THEN
+     DEALLOCATE(this%normal)
+     this%normal => null()
+  END IF
 
-  SUBROUTINE finalize_random_N
-    IMPLICIT NONE
-
-    CALL random_destroy_N(state_n)
   END SUBROUTINE
 
-  FUNCTION get_random()
-    IMPLICIT NONE
+!*******************************************************************************
+!  Getters
+!*******************************************************************************
+  FUNCTION random_U_get_random(this)
+  IMPLICIT NONE
 
-    REAL(rp)            :: get_random
+!  Arguments
+  REAL(rp)                             :: random_U_get_random
+  CLASS (random_U_context), INTENT(in) :: this
 
-    get_random = random_get_number(states(get_thread_number()))
-  END FUNCTION get_random
+!  Start of executable code
+  random_U_get_random = random_get_number_U(this%states(get_thread_number()))
 
-  FUNCTION get_random_U()
-    IMPLICIT NONE
+  END FUNCTION
 
-    REAL(rp)            :: get_random_U
+  FUNCTION random_N_get_random(this)
+  IMPLICIT NONE
 
-    get_random_U = random_get_number_U(state_u)
-  END FUNCTION get_random_U
+!  Arguments
+  REAL(rp)                             :: random_N_get_random
+  CLASS (random_N_context), INTENT(in) :: this
 
-  FUNCTION get_random_N()
-    IMPLICIT NONE
+!  Start of executable code
+  random_N_get_random = random_get_number_N(this%states(get_thread_number()))
 
-    REAL(rp)            :: get_random_N
+  END FUNCTION
 
-    get_random_N = random_get_number_N(state_n)
-  END FUNCTION get_random_N
+  SUBROUTINE random_U_get_randoms(this, nums)
+  IMPLICIT NONE
 
-  SUBROUTINE get_randoms(nums)
-    IMPLICIT NONE
+!  Arguments
+  CLASS (random_U_context), INTENT(in) :: this
+  REAL(rp), DIMENSION(:), INTENT(out)  :: nums
 
-    REAL(rp), DIMENSION(:), INTENT(OUT) :: nums
+!  Local Variables
+  INTEGER                                    :: i
 
-    INTEGER                             :: i
+!  Start of executable code
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(i)
+  DO i = 1, SIZE(nums)
+     nums(i) = this%get()
+  END DO
+!$OMP END PARALLEL DO
+  END SUBROUTINE
 
-    !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(i)
-    DO i = 1, SIZE(nums)
-       nums(i) = get_random()
-    END DO
-    !$OMP END PARALLEL DO
-  END SUBROUTINE get_randoms
+  SUBROUTINE random_N_get_randoms(this, nums)
+  IMPLICIT NONE
 
-  SUBROUTINE set_random_dist(low, high)
-    IMPLICIT NONE
+!  Arguments
+  CLASS (random_N_context), INTENT(in) :: this
+  REAL(rp), DIMENSION(:), INTENT(out)  :: nums
 
-    REAL(rp), INTENT(IN) :: low
-    REAL(rp), INTENT(IN) :: high
+!  Local Variables
+  INTEGER                                    :: i
 
-    !$OMP PARALLEL DEFAULT(SHARED)
-    CALL random_set_dist(states(get_thread_number()), low, high)
-    !$OMP END PARALLEL
+!  Start of executable code
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(i)
+  DO i = 1, SIZE(nums)
+     nums(i) = this%get()
+  END DO
+!$OMP END PARALLEL DO
+  END SUBROUTINE
 
-  END SUBROUTINE set_random_dist
-  
-  !SUBROUTINE initialize_random_mkl(seed)
-  !    USE omp_lib
-  !    IMPLICIT NONE
+!*******************************************************************************
+!  Setters
+!*******************************************************************************
+  SUBROUTINE random_U_set_dist(this, low, high)
+  IMPLICIT NONE
 
-  !    INTEGER, INTENT(IN) :: seed
-  !    INTEGER             :: num_threads
-  !    INTEGER             :: thread_num
-  !    INTEGER         :: errcode
-  !    integer         :: brng
+!  Arguments
+  CLASS (random_U_context), INTENT(in) :: this
+  REAL(rp), INTENT(IN)                 :: low
+  REAL(rp), INTENT(IN)                 :: high
 
-  !    brng=VSL_BRNG_MT19937
-  !   brng=VSL_BRNG_MT2203
+!  Start of executable code
+!$OMP PARALLEL DEFAULT(SHARED)
+  CALL random_set_dist_U(this%states(get_thread_number()), low, high)
+!$OMP END PARALLEL
 
-  !    num_threads = OMP_GET_MAX_THREADS()
-  !    IF (.NOT. ALLOCATED(streams)) THEN
-  !        ALLOCATE(states(0:num_threads - 1))
-  !    END IF
+  END SUBROUTINE
 
-!!$OMP PARALLEL PRIVATE(thread_num)
-  !    thread_num = OMP_GET_THREAD_NUM()
-  !    errcode=vslnewstream(streams(thread_num),brng,seed)
-  !    errcode=vslnewstream(stream,brng,seed)
-!!$OMP END PARALLEL
-  !END SUBROUTINE
+  SUBROUTINE random_N_set_dist(this, low, high)
+  IMPLICIT NONE
 
-  !FUNCTION get_random_mkl()
-  !    USE omp_lib
-  !    IMPLICIT NONE
-  !
-  !    INTEGER, PARAMETER         :: n=8_idef
-  !    REAL(rp),DIMENSION(n)            :: get_random_mkl
-  !    INTEGER         :: errcode
-  !    INTEGER         :: method
+!  Arguments
+  CLASS (random_N_context), INTENT(in) :: this
+  REAL(rp), INTENT(IN)                 :: low
+  REAL(rp), INTENT(IN)                 :: high
 
-  !    real(rp)        :: mu,sigma
+!  Start of executable code
+!$OMP PARALLEL DEFAULT(SHARED)
+  CALL random_set_dist_N(this%states(get_thread_number()), low, high)
+!$OMP END PARALLEL
 
-  !    method=VSL_RNG_METHOD_GAUSSIAN_ICDF
+  END SUBROUTINE
 
-  !    mu=0._rp
-  !    sigma=1._rp
+  SUBROUTINE random_U_set_seed(this, seed, mpi_rank)
+  IMPLICIT NONE
 
-  !    errcode = vdrnggaussian(method,streams(OMP_GET_THREAD_NUM()),n, &
-  !         get_random_mkl,mu,sigma)
-  !END FUNCTION
+!  Arguments
+  CLASS (random_U_context), INTENT(in) :: this
+  INTEGER, INTENT(in)                  :: seed
+  INTEGER, INTENT(IN)                  :: mpi_rank
 
-  !FUNCTION get_random_mkl_N(mu,sigma)
-  !    USE omp_lib
-  !    IMPLICIT NONE
-  !
-  !    INTEGER, PARAMETER         :: n=8_idef
-  !    REAL(rp)            :: get_random_mkl_N
-  !    REAL(rp),dimension(2)            :: buffer
-  !    INTEGER         :: errcode
-  !    INTEGER         :: method
+!  Local Variables
+  INTEGER                              :: thread_num
 
-  !    real(rp),intent(in)        :: mu,sigma
+!  Start of executable code
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+  thread_num = get_thread_number()
+  CALL random_set_seed_U(this%states(thread_num),                             &
+                         seed + mpi_rank*get_max_threads() + thread_num)
+!$OMP END PARALLEL
 
-  !    method=VSL_RNG_METHOD_GAUSSIAN_BOXMULLER
+  END SUBROUTINE
 
-  !    mu=0._rp
-  !    sigma=1._rp
+  SUBROUTINE random_N_set_seed(this, seed, mpi_rank)
+  IMPLICIT NONE
 
-  !    errcode = vdrnggaussian(method,stream,2_idef, &
-  !         buffer,mu,sigma)
-  !    get_random_mkl_N=buffer(1)
-  !END FUNCTION
+!  Arguments
+  CLASS (random_N_context), INTENT(in) :: this
+  INTEGER, INTENT(in)                  :: seed
+  INTEGER, INTENT(IN)                  :: mpi_rank
 
-  !FUNCTION get_random_mkl_U()
-  !    USE omp_libvdrnggaussian
-  !    IMPLICIT NONE
-  !
-  !    INTEGER, PARAMETER         :: n=8_idef
-  !    REAL(rp)            :: get_random_mkl_U
-  !    REAL(rp),dimension(2)           :: buffer
-  !    INTEGER         :: errcode
-  !    INTEGER         :: method
+!  Local Variables
+  INTEGER                              :: thread_num
 
+!  Start of executable code
+!$OMP PARALLEL DEFAULT(SHARED) PRIVATE(thread_num)
+   thread_num = get_thread_number()
+   CALL random_set_seed_N(this%states(thread_num),                             &
+                          seed + mpi_rank*get_max_threads() + thread_num)
+!$OMP END PARALLEL
 
-  !    method=VSL_RNG_METHOD_UNIFORM_STD_ACCURATE
-
-  !    mu=0._rp
-  !    sigma=1._rp
-
-  !    errcode = vdrnguniform(method,stream,2_idef, &
-  !         buffer,0._rp,1._rp)
-  !    get_random_mkl_U=buffer(2)
-  !END FUNCTION
+   END SUBROUTINE
 
 END MODULE korc_random

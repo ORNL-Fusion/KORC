@@ -1088,10 +1088,11 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
 end subroutine FO_init_aorsa_ACC
 #endif
 
-subroutine adv_FOeqn_top(params,F,P,spp)
+subroutine adv_FOeqn_top(params,random,F,P,spp)
 
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(FIELDS), INTENT(IN)                                   :: F
   !! An instance of the KORC derived type FIELDS.
   TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -1148,7 +1149,7 @@ subroutine adv_FOeqn_top(params,F,P,spp)
 
      !$OMP PARALLEL DO default(none) &
      !$OMP& FIRSTPRIVATE(E0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
-     !$OMP& shared(params,ii,spp,P,F) &
+     !$OMP& shared(params,ii,spp,P,F,random) &
      !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
      !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
      !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,flagCon,flagCol,PSIp)
@@ -1185,7 +1186,7 @@ subroutine adv_FOeqn_top(params,F,P,spp)
                       B_X,B_Y,B_Z,E_X,E_Y,E_Z)
               end if
 
-              call advance_FOeqn_vars(tt,a,q_cache,m_cache,params, &
+              call advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random, &
                    X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
                    P,F,g,flagCon,flagCol,PSIp)
            end do !timestep iterator
@@ -1229,7 +1230,7 @@ subroutine adv_FOeqn_top(params,F,P,spp)
            end do
            !$OMP END SIMD
 
-           call advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
+           call advance_FP3Deqn_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
                 g,m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
                 P,F,flagCon,flagCol,PSIp)
 
@@ -1512,13 +1513,13 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
 end subroutine adv_FOeqn_top_ACC
 
 
-subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
+subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,P,F,g,flagCon,flagCol,PSIp)
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
     TYPE(KORC_PARAMS), INTENT(IN)                              :: params
     !! Core KORC simulation parameters.
-
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     INTEGER(ip), INTENT(IN)                                       :: tt
     !! Time step used in the leapfrog step (\(\Delta t\)).
     REAL(rp)                                      :: dt
@@ -1698,7 +1699,7 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     if (params%collisions) then
 
-       call include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
+       call include_CoulombCollisions_FO_p(tt,params,random,X_X,X_Y,X_Z, &
             U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,P,F,flagCon,flagCol,PSIp)
 
     end if
@@ -1734,13 +1735,14 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
 end subroutine advance_FOeqn_vars
 
-subroutine advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
+subroutine advance_FP3Deqn_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
        m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
        P,F,flagCon,flagCol,PSIp)
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     INTEGER                                                    :: cc,pchunk
     !! Chunk iterator.
     INTEGER(ip)                                                    :: tt
@@ -1770,7 +1772,7 @@ subroutine advance_FP3Deqn_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
 
     do tt=1_ip,params%t_skip
 
-       call include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
+       call include_CoulombCollisions_FO_p(tt,params,random,X_X,X_Y,X_Z, &
             U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,P,F,flagCon,flagCol,PSIp)
 
     end do
@@ -2058,9 +2060,10 @@ end subroutine adv_FOfio_top
 
 #ifdef PSPLINE
 
-subroutine adv_FOinterp_top(params,F,P,spp)
+subroutine adv_FOinterp_top(params,random,F,P,spp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN)                                   :: F
     !! An instance of the KORC derived type FIELDS.
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -2102,7 +2105,7 @@ subroutine adv_FOinterp_top(params,F,P,spp)
 
        !$OMP PARALLEL DO default(none) &
        !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-       !$OMP& shared(params,ii,spp,P,F) &
+       !$OMP& shared(params,ii,spp,P,F,random) &
        !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
        !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
@@ -2163,7 +2166,7 @@ subroutine adv_FOinterp_top(params,F,P,spp)
                 !               write(output_unit_write,'("B_Y: ",E17.10)') B_Y(1)
                 !               write(output_unit_write,'("B_Z: ",E17.10)') B_Z(1)
 
-                call advance_FOinterp_vars(tt,a,q_cache,m_cache,params, &
+                call advance_FOinterp_vars(tt,a,q_cache,m_cache,params,random, &
                      X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
                      g,flagCon,flagCol,P,F,PSIp)
              end do !timestep iterator
@@ -2211,7 +2214,7 @@ subroutine adv_FOinterp_top(params,F,P,spp)
              end do
              !$OMP END SIMD
 
-             call advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
+             call advance_FP3Dinterp_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
                   g,m_cache,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,flagCol,P,F,PSIp)
 
              !$OMP SIMD
@@ -2305,9 +2308,10 @@ subroutine adv_FOinterp_top(params,F,P,spp)
 
 end subroutine adv_FOinterp_top
 
-subroutine adv_FOinterp_mars_top(params,F,P,spp)
+subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(FIELDS), INTENT(IN)                                   :: F
   !! An instance of the KORC derived type FIELDS.
   TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -2348,7 +2352,7 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
 
     !$OMP PARALLEL DO default(none) &
     !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-    !$OMP& shared(params,ii,spp,P,F) &
+    !$OMP& shared(params,ii,spp,P,F,random) &
     !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
     !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
     !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
@@ -2394,7 +2398,7 @@ subroutine adv_FOinterp_mars_top(params,F,P,spp)
         call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
             B_X,B_Y,B_Z,PSIp,flagCon)
 
-        call advance_FOinterp_vars(tt,a,q_cache,m_cache,params, &
+        call advance_FOinterp_vars(tt,a,q_cache,m_cache,params,random, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
             g,flagCon,flagCol,P,F,PSIp)
       end do !timestep iterator
@@ -2704,9 +2708,10 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 end subroutine adv_FOinterp_mars_top_ACC
 #endif
 
-subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
+subroutine adv_FOinterp_aorsa_top(params,random,F,P,spp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN)                                   :: F
     !! An instance of the KORC derived type FIELDS.
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -2748,7 +2753,7 @@ subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
 
        !$OMP PARALLEL DO default(none) &
        !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-       !$OMP& shared(params,ii,spp,P,F) &
+       !$OMP& shared(params,ii,spp,P,F,random) &
        !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
        !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
@@ -2802,7 +2807,7 @@ subroutine adv_FOinterp_aorsa_top(params,F,P,spp)
              !               write(output_unit_write,'("B_Y: ",E17.10)') B_Y(1)
              !               write(output_unit_write,'("B_Z: ",E17.10)') B_Z(1)
 
-             call advance_FOinterp_vars(tt,a,q_cache,m_cache,params, &
+             call advance_FOinterp_vars(tt,a,q_cache,m_cache,params,random, &
                   X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
                   g,flagCon,flagCol,P,F,PSIp)
           end do !timestep iterator
@@ -3131,10 +3136,11 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
 end subroutine adv_FOinterp_aorsa_top_ACC
 #endif
 
-subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
+subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,random,X_X,X_Y,X_Z, &
        V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,P,F,PSIp)
     TYPE(KORC_PARAMS), INTENT(IN)                              :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
     INTEGER(ip), INTENT(IN)                                       :: tt
@@ -3309,7 +3315,7 @@ subroutine advance_FOinterp_vars(tt,a,q_cache,m_cache,params,X_X,X_Y,X_Z, &
 
     if (params%collisions) then
 
-       call include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
+       call include_CoulombCollisions_FO_p(tt,params,random,X_X,X_Y,X_Z, &
             U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,P,F,flagCon,flagCol,PSIp)
 
     end if
@@ -3740,10 +3746,11 @@ end subroutine advance_FOfio_vars
 
 #endif FIO
 
-subroutine advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
+subroutine advance_FP3Dinterp_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
        m_cache,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,flagCol,P,F,PSIp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
     INTEGER                                                    :: cc,pchunk
@@ -3774,7 +3781,7 @@ subroutine advance_FP3Dinterp_vars(params,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
 
     do tt=1_ip,params%t_skip
 
-       call include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
+       call include_CoulombCollisions_FO_p(tt,params,random,X_X,X_Y,X_Z, &
             U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,P,F,flagCon,flagCol,PSIp)
 
     end do
@@ -4130,10 +4137,11 @@ FUNCTION rad2deg(x)
      rad2deg = x*180.0_rp/C_PI
 END FUNCTION rad2deg
 
-subroutine adv_GCeqn_top(params,F,P,spp)
+subroutine adv_GCeqn_top(params,random,F,P,spp)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(INOUT)                                   :: F
     !! An instance of the KORC derived type FIELDS.
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -4181,7 +4189,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
 
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(E0,q_cache,m_cache,pchunk) &
-             !$OMP& shared(F,P,params,ii,spp) &
+             !$OMP& shared(F,P,params,ii,spp,random) &
              !$OMP& PRIVATE(pp,tt,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
              !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
              !$OMP& Vden,Vdenave) &
@@ -4222,7 +4230,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
                       if (params%collisions) then
 
                          call include_CoulombCollisions_GC_p(tt+params%t_skip*(ttt-1),params, &
-                              Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
+                              random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
                               F,P,E_PHI,ne,PSIp)
 
                       end if
@@ -4264,7 +4272,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
                       !endif
 
 
-                      call include_CoulombCollisions_GC_p(tt,params, &
+                      call include_CoulombCollisions_GC_p(tt,params,random, &
                            Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
                            F,P,E_PHI,ne,PSIp)
 
@@ -4308,7 +4316,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
 
                 !$OMP PARALLEL DO default(none) &
                 !$OMP& FIRSTPRIVATE(m_cache,pchunk) &
-                !$OMP& shared(F,P,params,ii,spp,tt) &
+                !$OMP& shared(F,P,params,ii,spp,tt,random) &
                 !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                 !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
                 !$OMP& achunk,Te)
@@ -4346,7 +4354,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
                       !endif
 
                       call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
-                           tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+                           tt,params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
                            flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
 
                    end if
@@ -4415,7 +4423,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
 
                 !$OMP PARALLEL DO default(none) &
                 !$OMP& FIRSTPRIVATE(m_cache,pchunk,q_cache) &
-                !$OMP& shared(F,P,params,ii,spp,tt) &
+                !$OMP& shared(F,P,params,ii,spp,tt,random) &
                 !$OMP& PRIVATE(pp,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                 !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,PSIp,ne, &
                 !$OMP& achunk,tttt,Te)
@@ -4460,7 +4468,7 @@ subroutine adv_GCeqn_top(params,F,P,spp)
                    endif
 
                    call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
-                        tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+                        tt,params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
                         flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
 
 
@@ -4832,13 +4840,14 @@ subroutine advance_GCeqn_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
 
 end subroutine advance_GCeqn_vars
 
-subroutine advance_FPeqn_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
+subroutine advance_FPeqn_vars(params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
        m_cache,F,P,PSIp)
 
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     INTEGER(ip)                                                    :: tt
     !! time iterator.
     REAL(rp),DIMENSION(params%pchunk), INTENT(INOUT)  :: Y_R,Y_PHI,Y_Z
@@ -4850,7 +4859,7 @@ subroutine advance_FPeqn_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol, &
 
     do tt=1_ip,params%t_skip
 
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
+       call include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
             V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
        !       write(output_unit_write,'("Collision Loop in FP")')
@@ -4861,10 +4870,11 @@ end subroutine advance_FPeqn_vars
 
 #ifdef PSPLINE
 
-subroutine adv_GCinterp_psi_top(params,spp,P,F)
+subroutine adv_GCinterp_psi_top(params,random,spp,P,F)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(INOUT)                                   :: F
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
@@ -4906,7 +4916,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
 
           !$OMP PARALLEL DO default(none) &
           !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-          !$OMP& SHARED(params,ii,spp,P,F) &
+          !$OMP& SHARED(params,ii,spp,P,F,random) &
           !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
           !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
           !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z, &
@@ -4939,13 +4949,13 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
              if (.not.params%FokPlan) then
                 do tt=1_ip,params%t_skip
                    call advance_GCinterp_psi_vars(pchunk,spp(ii),pp,tt, &
-                        params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache, &
+                        params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache, &
                         flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
                         curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
                         Y_R0,Y_PHI0,Y_Z0)
 
                    if (params%collisions) then
-                      call include_CoulombCollisions_GC_p(tt,params, &
+                      call include_CoulombCollisions_GC_p(tt,params,random, &
                            Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol, &
                            F,P,E_PHI,ne,PSIp)
                    end if
@@ -4993,7 +5003,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
 
              else if (params%FokPlan.and.params%collisions) then
 
-                call advance_FPinterp_vars(params,Y_R,Y_PHI, &
+                call advance_FPinterp_vars(params,random,Y_R,Y_PHI, &
                      Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
                 !$OMP SIMD
@@ -5055,7 +5065,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
           do tt=1_ip,params%coll_per_dump
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk,achunk) &
-             !$OMP& SHARED(params,ii,spp,P,F) &
+             !$OMP& SHARED(params,ii,spp,P,F,random) &
              !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
              !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
              !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,Te, &
@@ -5094,7 +5104,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
 
                 do ttt=1_ip,params%orbits_per_coll
                    call advance_GCinterp_psi_vars(achunk,spp(ii),pp,tt, &
-                        params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache, &
+                        params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache, &
                         flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
                         curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
@@ -5102,7 +5112,7 @@ subroutine adv_GCinterp_psi_top(params,spp,P,F)
                 end do
 
                 call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
-                     tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+                     tt,params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
                      flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
 
                 !$OMP SIMD
@@ -5367,12 +5377,13 @@ end subroutine adv_GCinterp_fio_top
 
 #ifdef PSPLINE
 
-subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
+subroutine adv_GCinterp_psiwE_top(params,random,spp,P,F)
 
     IMPLICIT NONE
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(INOUT)                                   :: F
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
@@ -5413,7 +5424,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
           !$OMP PARALLEL DO default(none) &
           !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-          !$OMP& SHARED(params,ii,spp,P,F) &
+          !$OMP& SHARED(params,ii,spp,P,F,random) &
           !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
           !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
           !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,E_R,E_Z,thread_num, &
@@ -5461,7 +5472,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
                    !end if
 
                    call advance_GCinterp_psiwE_vars(spp(ii),pchunk,pp,tt, &
-                        params, &
+                        params,random, &
                         Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
                         curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
@@ -5469,7 +5480,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
                    if (params%collisions) then
 
-                      call include_CoulombCollisions_GC_p(tt,params, &
+                      call include_CoulombCollisions_GC_p(tt,params,random, &
                            Y_R,Y_PHI,Y_Z, V_PLL,V_MU,m_cache, &
                            flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
@@ -5519,7 +5530,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
              else if (params%FokPlan.and.params%collisions) then
 
                 do tt=1_ip,params%t_skip
-                   call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
+                   call include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
                         V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
                 end do
@@ -5595,7 +5606,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
              !$OMP PARALLEL DO default(none) &
              !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk,tt) &
-             !$OMP& SHARED(params,ii,spp,P,F) &
+             !$OMP& SHARED(params,ii,spp,P,F,random) &
              !$OMP& PRIVATE(pp,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
              !$OMP& B_R,B_PHI,B_Z,achunk, &
              !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
@@ -5679,7 +5690,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 # endif DBG_CHECK
 
                    call advance_GCinterp_psiwE_vars(spp(ii),achunk, &
-                        pp,tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
+                        pp,tt,params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
                         q_cache,m_cache,flagCon,flagCol, &
                         F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
                         curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
@@ -5701,7 +5712,7 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 # endif DBG_CHECK
 
                 call include_CoulombCollisionsLA_GC_p(spp(ii),achunk, &
-                     tt,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+                     tt,params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
                      flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
 
 #if DBG_CHECK
@@ -5822,10 +5833,11 @@ subroutine adv_GCinterp_psiwE_top(params,spp,P,F)
 
 end subroutine adv_GCinterp_psiwE_top
 
-subroutine adv_GCinterp_psi2x1t_top(params,spp,P,F)
+subroutine adv_GCinterp_psi2x1t_top(params,random,spp,P,F)
 
 TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
 !! Core KORC simulation parameters.
+CLASS(random_context), POINTER, INTENT(INOUT) :: random
 TYPE(PROFILES), INTENT(IN)                                 :: P
 TYPE(FIELDS), INTENT(INOUT)                                   :: F
 TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
@@ -5865,7 +5877,7 @@ do ii = 1_idef,params%num_species
 
      !$OMP PARALLEL DO default(none) &
      !$OMP& FIRSTPRIVATE(q_cache,m_cache,pchunk) &
-     !$OMP& SHARED(params,ii,spp,P,F) &
+     !$OMP& SHARED(params,ii,spp,P,F,random) &
      !$OMP& PRIVATE(pp,tt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,B_R,B_PHI,B_Z, &
      !$OMP& flagCon,flagCol,E_PHI,PSIp,curlb_R,curlb_PHI,curlb_Z, &
      !$OMP& gradB_R,gradB_PHI,gradB_Z,ne,time,E_R,E_Z)
@@ -5893,7 +5905,7 @@ do ii = 1_idef,params%num_species
      if (.not.params%FokPlan) then
           do tt=1_ip,params%t_skip
                call advance_GCinterp_psi2x1t_vars(spp(ii)%vars,pp,tt, &
-                    params, &
+                    params,random, &
                     Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
                     F,P,B_R,B_PHI,B_Z,E_PHI,PSIp,curlb_R,curlb_PHI, &
                     curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
@@ -5934,7 +5946,7 @@ do ii = 1_idef,params%num_species
 
      else if (params%FokPlan.and.params%collisions) then
 
-          call advance_FPinterp_vars(params,Y_R,Y_PHI, &
+          call advance_FPinterp_vars(params,random,Y_R,Y_PHI, &
                Y_Z,V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
           !$OMP SIMD
@@ -6003,7 +6015,7 @@ end do !species iterator
 end subroutine adv_GCinterp_psi2x1t_top
 
  
-subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,random,Y_R,Y_PHI,Y_Z, &
      V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
      curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
      Y_R0,Y_PHI0,Y_Z0)
@@ -6013,6 +6025,7 @@ subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !! methods, and descriptions of both.
     INTEGER,intent(in)                                      :: pchunk
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     !! Core KORC simulation parameters.
     TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -6366,7 +6379,10 @@ subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
 
 
     end do
+
     !$OMP END SIMD
+
+    CALL random%uniform%set(0.0_rp,1.0_rp)
 
     !write(6,*) 'Y',Y_R*params%cpp%length,Y_PHI,Y_Z*params%cpp%length
     !write(6,*) 'Y0',Y_R0*params%cpp%length,Y_PHI0,Y_Z0*params%cpp%length
@@ -6383,8 +6399,8 @@ subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
              Zmax=maxval(F%X%Z)
 
              do while (.not.accepted)
-                Rtrial=Rmin+(Rmax-Rmin)*get_random()
-                Ztrial=Zmin+(Zmax-Zmin)*get_random()
+                Rtrial=Rmin+(Rmax-Rmin)*random%uniform%get()
+                Ztrial=Zmin+(Zmax-Zmin)*random%uniform%get()
 
                 rm_trial=sqrt((Rtrial-F%AB%Ro)**2+(Ztrial)**2)/F%AB%a
                 if (rm_trial.gt.1._rp) cycle
@@ -6394,12 +6410,12 @@ subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,Y_R,Y_PHI,Y_Z, &
                 end do
 
                 if (Rtrial*fRE_BMC(spp%BMC_Nra,spp%BMC_ra,spp%BMC_nRE,rm_trial)/maxval(RnRE) &
-                     .gt.get_random()) accepted=.true.
+                     .gt.random%uniform%get()) accepted=.true.
 
              end do
              Y_R(cc)=Rtrial
              Y_Z(cc)=Ztrial
-             Y_PHI(cc)=2.0_rp*C_PI*get_random_U()
+             Y_PHI(cc)=2.0_rp*C_PI*random%uniform%get()
 
              !write(6,*) 'resampled R,Z',Rtrial*params%cpp%length,Ztrial*params%cpp%length
 
@@ -6863,7 +6879,7 @@ end subroutine advance_GCinterp_fio_vars
 
 #ifdef PSPLINE
 
-subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,random,Y_R,Y_PHI,Y_Z, &
      V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
      curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne, &
      Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1)
@@ -6872,6 +6888,7 @@ subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !! Comment this section further with evolution equations, numerical
     !! methods, and descriptions of both.
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     !! Core KORC simulation parameters.
     TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(PROFILES), INTENT(IN)                                 :: P
@@ -7198,6 +7215,7 @@ subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !write(6,*) 'flagCon0,flagCon',flagCon0,flagCon
 
     if (params%recycle_losses) then
+       CALL random%uniform%set(0.0_rp,1.0_rp)
        do cc=1_idef,pchunk
           if ((flagCon(cc).eq.0_is).and.(pp-1+cc.le.spp%pinit)) then
              accepted=.false.
@@ -7208,8 +7226,8 @@ subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
              Zmax=maxval(F%X%Z)
 
              do while (.not.accepted)
-                Rtrial=Rmin+(Rmax-Rmin)*get_random()
-                Ztrial=Zmin+(Zmax-Zmin)*get_random()
+                Rtrial=Rmin+(Rmax-Rmin)*random%uniform%get()
+                Ztrial=Zmin+(Zmax-Zmin)*random%uniform%get()
 
                 rm_trial=sqrt((Rtrial-F%AB%Ro)**2+(Ztrial)**2)/F%AB%a
                 if (rm_trial.gt.1._rp) cycle
@@ -7219,12 +7237,12 @@ subroutine advance_GCinterp_psiwE_vars(spp,pchunk,pp,tt,params,Y_R,Y_PHI,Y_Z, &
                 end do
 
                 if (Rtrial*fRE_BMC(spp%BMC_Nra,spp%BMC_ra,spp%BMC_nRE,rm_trial)/maxval(RnRE) &
-                     .gt.get_random()) accepted=.true.
+                     .gt.random%uniform%get()) accepted=.true.
 
              end do
              Y_R(cc)=Rtrial
              Y_Z(cc)=Ztrial
-             Y_PHI(cc)=2.0_rp*C_PI*get_random_U()
+             Y_PHI(cc)=2.0_rp*C_PI*random%uniform%get()
 
              !write(6,*) 'resampled R,Z',Rtrial,Ztrial
 
@@ -7318,7 +7336,7 @@ FUNCTION fRE_BMC(Nr_a,r_a,nRE,rm)
 
 END FUNCTION fRE_BMC
 
-subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
+subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,random,Y_R,Y_PHI,Y_Z, &
      V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
      curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,ne)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
@@ -7327,6 +7345,7 @@ subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
     !! methods, and descriptions of both.
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(PARTICLES), INTENT(INOUT)     :: vars
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -7694,7 +7713,7 @@ subroutine advance_GCinterp_psi2x1t_vars(vars,pp,tt,params,Y_R,Y_PHI,Y_Z, &
 
     if (params%collisions) then
 
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
+       call include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
             V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
     end if
@@ -7703,9 +7722,10 @@ end subroutine advance_GCinterp_psi2x1t_vars
 
 #endif PSPLINE
 
-subroutine advance_FPinterp_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
+subroutine advance_FPinterp_vars(params,random,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
      m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
     TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     !! Core KORC simulation parameters.
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -7721,7 +7741,7 @@ subroutine advance_FPinterp_vars(params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
     !    write(output_unit_write,'("E_PHI_FP: ",E17.10)') E_PHI
 
     do tt=1_ip,params%t_skip
-       call include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
+       call include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
             V_PLL,V_MU,m_cache,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
        !       write(output_unit_write,'("Collision Loop in FP")')

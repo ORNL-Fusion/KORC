@@ -92,6 +92,6 @@ jobs:
           tree -L 2
           pwd
           ls -la
-          cat ./KORC/CMakeCache.txt
+          cat ./KORC/build/CMakeCache.txt
 
 

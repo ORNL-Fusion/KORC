@@ -11,9 +11,7 @@ module korc_collisions
   use korc_fio
 #endif
 
-#ifdef PARALLEL_RANDOM
   use korc_random
-#endif
 
 #ifdef __NVCOMPILER
   use ieee_arithmetic
@@ -1850,18 +1848,17 @@ subroutine unitVectors_p(pchunk,b_unit_X,b_unit_Y,b_unit_Z,b1_X,b1_Y,b1_Z, &
 
 end subroutine unitVectors_p
 
-subroutine check_collisions_params(spp)
+subroutine check_collisions_params(random,spp)
+    CLASS(random_context), POINTER, INTENT(inout) :: random
     TYPE(SPECIES), INTENT(IN) :: spp
     INTEGER aux
 
     aux = cparams_ss%rnd_num_count + 2_idef*INT(spp%ppp,idef)
 
+    CALL random%uniform%set(0.0_rp, 1.0_rp)
+
     if (aux.GE.cparams_ss%rnd_dim) then
-#ifdef PARALLEL_RANDOM
-       cparams_ss%rnd_num = get_random()
-#else
-       call RANDOM_NUMBER(cparams_ss%rnd_num)
-#endif PARALLEL_RANDOM
+       cparams_ss%rnd_num = random%uniform%get()
        cparams_ss%rnd_num_count = 1_idef
     end if
 end subroutine check_collisions_params
@@ -1871,7 +1868,7 @@ end subroutine check_collisions_params
 ! * * * * * * * * * * * *  * * * * * * * * * * * * * * * * * * * !
 
 
-subroutine include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
+subroutine include_CoulombCollisions_FO_p(tt,params,random,X_X,X_Y,X_Z, &
    U_X,U_Y,U_Z,B_X,B_Y,B_Z,me,P,F,flagCon,flagCol,PSIp)
     !! This subroutine performs a Stochastic collision process consistent
     !! with the Fokker-Planck model for relativitic electron colliding with
@@ -1885,6 +1882,7 @@ subroutine include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
     TYPE(KORC_PARAMS), INTENT(IN) 		:: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     REAL(rp), DIMENSION(params%pchunk), INTENT(IN) 	:: X_X,X_Y,X_Z,PSIp
     REAL(rp), DIMENSION(params%pchunk)  	:: Y_R,Y_PHI,Y_Z
     REAL(rp), DIMENSION(params%pchunk), INTENT(INOUT) 	:: U_X,U_Y,U_Z
@@ -1988,22 +1986,20 @@ subroutine include_CoulombCollisions_FO_p(tt,params,X_X,X_Y,X_Z, &
 
    !       write(output_unit_write,'("phi: ",E17.10)') phi
 
+       CALL random%uniform%set(0.0_rp, 1.0_rp)
+
        !$OMP SIMD
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,vm,ne,Te,Zeff,dpm, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,dphi,um,Ub_X,Ub_Y,Ub_Z,U_X,U_Y,U_Z, &
    !       !$OMP& b1_X,b1_Y,b1_Z,b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
        do cc=1_idef,pchunk
 
-#ifdef PARALLEL_RANDOM
           ! uses C library to generate normal_distribution random variables,
           ! preserving parallelization where Fortran random number generator
           ! does not
-          rnd1(cc,1) = get_random()
-          rnd1(cc,2) = get_random()
-          rnd1(cc,3) = get_random()
-#else
-          call RANDOM_NUMBER(rnd1)
-#endif
+          rnd1(cc,1) = random%uniform%get()
+          rnd1(cc,2) = random%uniform%get()
+          rnd1(cc,3) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2086,7 +2082,7 @@ end subroutine include_CoulombCollisions_FO_p
 
 #ifdef FIO
 
-subroutine include_CoulombCollisions_FOfio_p(tt,params,X_X,X_Y,X_Z, &
+subroutine include_CoulombCollisions_FOfio_p(tt,params,random,X_X,X_Y,X_Z, &
    U_X,U_Y,U_Z,B_X,B_Y,B_Z,me,P,F,flagCon,flagCol,PSIp,hint)
     !! This subroutine performs a Stochastic collision process consistent
     !! with the Fokker-Planck model for relativitic electron colliding with
@@ -2100,6 +2096,7 @@ subroutine include_CoulombCollisions_FOfio_p(tt,params,X_X,X_Y,X_Z, &
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)      :: F
     TYPE(KORC_PARAMS), INTENT(IN) 		:: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     REAL(rp), DIMENSION(params%pchunk), INTENT(IN) 	:: X_X,X_Y,X_Z,PSIp
     REAL(rp), DIMENSION(params%pchunk)  	:: Y_R,Y_PHI,Y_Z
     REAL(rp), DIMENSION(params%pchunk), INTENT(INOUT) 	:: U_X,U_Y,U_Z
@@ -2146,6 +2143,8 @@ subroutine include_CoulombCollisions_FOfio_p(tt,params,X_X,X_Y,X_Z, &
     integer :: cc,pchunk
 
     pchunk=params%pchunk
+
+    CALL random%uniform%set(0.0_rp,1.0_rp)
 
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
        dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
@@ -2211,16 +2210,12 @@ subroutine include_CoulombCollisions_FOfio_p(tt,params,X_X,X_Y,X_Z, &
    !       !$OMP& b1_X,b1_Y,b1_Z,b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
        do cc=1_idef,pchunk
 
-#ifdef PARALLEL_RANDOM
           ! uses C library to generate normal_distribution random variables,
           ! preserving parallelization where Fortran random number generator
           ! does not
-          rnd1(cc,1) = get_random()
-          rnd1(cc,2) = get_random()
-          rnd1(cc,3) = get_random()
-#else
-          call RANDOM_NUMBER(rnd1)
-#endif PARALLEL_RANDOM
+          rnd1(cc,1) = random%uniform%get()
+          rnd1(cc,2) = random%uniform%get()
+          rnd1(cc,3) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2297,12 +2292,13 @@ end subroutine include_CoulombCollisions_FOfio_p
 
 #endif FIO
 
-subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
+subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
    Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,PSIp)
 
    TYPE(PROFILES), INTENT(IN)                                 :: P
    TYPE(FIELDS), INTENT(IN)                                   :: F
    TYPE(KORC_PARAMS), INTENT(INOUT) 		:: params
+   CLASS(random_context), POINTER, INTENT(INOUT) :: random
    REAL(rp), DIMENSION(params%pchunk), INTENT(INOUT) 	:: Ppll
    REAL(rp), DIMENSION(params%pchunk), INTENT(INOUT) 	:: Pmu
    REAL(rp), DIMENSION(params%pchunk) 			:: Bmag
@@ -2417,20 +2413,15 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
    !       write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
 
+       CALL random%uniform%set(0.0_rp, 1.0_rp)
 
        !$OMP SIMD
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
 
-#ifdef PARALLEL_RANDOM
-          rnd1(cc,1) = get_random()
-          rnd1(cc,2) = get_random()
-          !       rnd1(:,1) = get_random_mkl()
-          !       rnd1(:,2) = get_random_mkl()
-#else
-          call RANDOM_NUMBER(rnd1)
-#endif PARALLEL_RANDOM
+          rnd1(cc,1) = random%uniform%get()
+          rnd1(cc,2) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2579,13 +2570,13 @@ subroutine include_CoulombCollisions_GC_p(tt,params,Y_R,Y_PHI,Y_Z, &
 
 end subroutine include_CoulombCollisions_GC_p
 
-subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
+subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
    Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,Te,PSIp)
-
    TYPE(SPECIES), INTENT(INOUT)    :: spp
    TYPE(PROFILES), INTENT(IN)                                 :: P
    TYPE(FIELDS), INTENT(IN)                                   :: F
    TYPE(KORC_PARAMS), INTENT(INOUT) 		:: params
+   CLASS(random_context), POINTER, INTENT(INOUT) :: random
    INTEGER, INTENT(IN) :: achunk
    REAL(rp), DIMENSION(achunk), INTENT(INOUT) 	:: Ppll
    REAL(rp), DIMENSION(achunk), INTENT(INOUT) 	:: Pmu
@@ -2700,20 +2691,15 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
    !       write(output_unit_write,'("xi: ",E17.10)') xi
    !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
 
+   CALL random%uniform%set(0.0_rp, 1.0_rp)
 
    !$OMP SIMD
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
    do cc=1_idef,achunk
 
-#ifdef PARALLEL_RANDOM
-      rnd1(cc,1) = get_random()
-      rnd1(cc,2) = get_random()
-      !       rnd1(:,1) = get_random_mkl()
-      !       rnd1(:,2) = get_random_mkl()
-#else
-      call RANDOM_NUMBER(rnd1)
-#endif PARALLEL_RANDOM
+      rnd1(cc,1) = random%uniform%get()
+      rnd1(cc,2) = random%uniform%get()
 
       dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
       dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2971,7 +2957,7 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
 
        !write(6,*) 'ntot',ntot*params%cpp%density
 
-      call large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
+      call large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
          pm,xi,ne,ntot,Te,Bmag,E_PHI_LAC,me,flagCol,flagCon,B_R,B_PHI,B_Z)
 
 #if DBG_CHECK
@@ -3033,12 +3019,13 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params, &
 end subroutine include_CoulombCollisionsLA_GC_p
 
 #ifdef FIO
-subroutine include_CoulombCollisions_GCfio_p(tt,params,Y_R,Y_PHI,Y_Z, &
+subroutine include_CoulombCollisions_GCfio_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
    Ppll,Pmu,me,flagCon,flagCol,F,P,E_PHI,ne,ni,Te,Zeff,nimp,PSIp,hint)
 
     TYPE(PROFILES), INTENT(IN)                                 :: P
     TYPE(FIELDS), INTENT(IN)                                   :: F
     TYPE(KORC_PARAMS), INTENT(INOUT) 		:: params
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     REAL(rp), DIMENSION(params%pchunk), INTENT(INOUT) 	:: Ppll
     REAL(rp), DIMENSION(params%pchunk), INTENT(INOUT) 	:: Pmu
     REAL(rp), DIMENSION(params%pchunk) 			:: Bmag
@@ -3077,6 +3064,7 @@ subroutine include_CoulombCollisions_GCfio_p(tt,params,Y_R,Y_PHI,Y_Z, &
 
     pchunk=params%pchunk
 
+    CALL random%uniform%set(0.0_rp,1.0_rp)
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
        dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
 
@@ -3139,15 +3127,8 @@ subroutine include_CoulombCollisions_GCfio_p(tt,params,Y_R,Y_PHI,Y_Z, &
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
-
-#ifdef PARALLEL_RANDOM
-          rnd1(cc,1) = get_random()
-          rnd1(cc,2) = get_random()
-          !       rnd1(:,1) = get_random_mkl()
-          !       rnd1(:,2) = get_random_mkl()
-#else
-          call RANDOM_NUMBER(rnd1)
-#endif PARALLEL_RANDOM
+          rnd1(cc,1) = random%uniform%get()
+          rnd1(cc,2) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -3311,10 +3292,11 @@ end subroutine include_CoulombCollisions_GCfio_p
 
 #endif
 
-subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
+subroutine large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
    pm,xi,ne,netot,Te,Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z)
     TYPE(SPECIES), INTENT(INOUT)    :: spp
     TYPE(KORC_PARAMS), INTENT(IN) 			:: params
+    CLASS(random_context), INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN)                                   :: F
     INTEGER, INTENT(IN) :: achunk
     REAL(rp), INTENT(INOUT), DIMENSION(achunk)  :: pm,xi
@@ -3343,6 +3325,7 @@ subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
     ngam1=cparams_ss%ngrid1
     neta1=cparams_ss%ngrid1
 
+    CALL random%uniform%set(0.0_rp, 1.0_rp)
 
     !$OMP SIMD
     do cc=1_idef,achunk
@@ -3352,11 +3335,7 @@ subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
        gam(cc) = sqrt(1+pm(cc)*pm(cc))
        gam0(cc)=gam(cc)
 
-#ifdef PARALLEL_RANDOM
-       prob0(cc) = get_random()
-#else
-       call RANDOM_NUMBER(prob0)
-#endif
+       prob0(cc) = random%uniform%get()
 
     end do
     !$OMP END SIMD
@@ -3600,7 +3579,7 @@ subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
           seciter=0
           do while (.not.accepted)
 
-             ptrial=p_min+(psecmax-p_min)*get_random()
+             ptrial=p_min+(psecmax-p_min)*random%uniform%get()
              gamtrial=sqrt(1+ptrial*ptrial)
 
              cosgam1=sqrt(((gam(cc)+1)*(gamtrial-1))/((gam(cc)-1)*(gamtrial+1)))
@@ -3615,8 +3594,7 @@ subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
              !xip=cosgam1*xi(cc)+xirad
              !xim=cosgam1*xi(cc)-xirad
 
-             !xitrial=xim+(xip-xim)*get_random()
-             xitrial=-1+2*get_random()
+             xitrial=-1+2*random%uniform%get()
 
              sinsq1=(1-xi(cc)*xi(cc))*(1-xitrial*xitrial)
              cossq1=(cosgam1-xi(cc)*xitrial)**2
@@ -3637,7 +3615,7 @@ subroutine large_angle_source(spp,params,achunk,F,Y_R,Y_PHI,Y_Z, &
                   (ptrial/gamtrial)*(pm(cc)/gam(cc))* &
                   pitchprob1*dsigdgam1
 
-             if (S_LA1/S_LAmax.gt.get_random()) accepted=.true.
+             if (S_LA1/S_LAmax.gt.random%uniform%get()) accepted=.true.
 
              seciter=seciter+1
 

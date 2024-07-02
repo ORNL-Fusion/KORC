@@ -1096,10 +1096,6 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    vars%PSI_P=0._rp
    vars%cart=.false.
 
-   !write(output_unit_write,*) 'before init_random_seed'
-
-   call init_random_seed(params)
-
 ! write(output_unit_write,*) 'before get_fields'
 
    !write(6,*) 'before first get fields'
@@ -1160,8 +1156,6 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
 #endif
 
    !write(output_unit_write,*) 'out unitVectors'
-
-   call finalize_random_seed
 
 end subroutine unitVectors
 
