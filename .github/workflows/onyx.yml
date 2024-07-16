@@ -2,7 +2,7 @@
 
 name: onyx
 on:
-  issue_comment: 
+  issue_comment:
     types: [ created ]
 
 jobs:
