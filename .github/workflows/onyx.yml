@@ -49,6 +49,7 @@ jobs:
 
 
   job_build_cpu:
+    if: false
     runs-on: self-hosted
     needs: [ job_verify_actor, job_setup_workdir ]
     steps:
@@ -67,7 +68,6 @@ jobs:
 
 
   job_setup_spack:
-    if: false
     runs-on: self-hosted
     needs: [ job_verify_actor, job_setup_workdir ]
     defaults:
@@ -120,7 +120,6 @@ jobs:
 
 
   job_build_gpu:
-    if: false
     runs-on: self-hosted
     needs: [ job_verify_actor, job_setup_spack, job_setup_workdir ]
     defaults:
@@ -162,6 +161,7 @@ jobs:
 
 
   job_test_cpu:
+    if: false
     runs-on: self-hosted
     needs: [ job_verify_actor, job_build_cpu, job_setup_workdir ]
     steps:
@@ -174,7 +174,6 @@ jobs:
           cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
   job_test_gpu:
-    if: false
     runs-on: self-hosted
     needs: [ job_verify_actor, job_setup_spack, job_build_gpu, job_setup_workdir ]
     steps:
