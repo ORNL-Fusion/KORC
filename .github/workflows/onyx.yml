@@ -58,8 +58,8 @@ jobs:
           cd ./KORC
           rm -f CMakeCache.txt
           rm -rf CMakeFiles
-          rm -rf ./build && mkdir $_
-          cd ./build
+          rm -rf ./build_cpu && mkdir $_
+          cd ./build_cpu
           cmake -DCMAKE_BUILD_TYPE:String=Debug \
               -DUSE_PSPLINE=ON \
               -DUSE_FIO=OFF \
@@ -147,8 +147,8 @@ jobs:
           cd ./KORC
           rm -f CMakeCache.txt
           rm -rf CMakeFiles
-          rm -rf ./build && mkdir $_
-          cd ./build
+          rm -rf ./build_gpu && mkdir $_
+          cd ./build_gpu
           cmake \
               -DCMAKE_BUILD_TYPE:String=Debug \
               -DUSE_PSPLINE=ON \
@@ -173,7 +173,7 @@ jobs:
 
       - name: ctest
         run: |
-          cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          cd ./KORC/build_cpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
   job_test_gpu:
     if: false
@@ -186,5 +186,5 @@ jobs:
 
       - name: ctest
         run: |
-          cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
