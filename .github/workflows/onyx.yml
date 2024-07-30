@@ -28,7 +28,7 @@ jobs:
 
 
   job_setup_workdir:
-    runs-on: [ self-hosted, milan2 ]
+    runs-on: [ self-hosted, milan0 ]
     needs: [ job_verify_actor ]
     steps:
       - name: GitHub API Request
@@ -50,7 +50,7 @@ jobs:
 
   job_build_cpu:
     if: true
-    runs-on: [ self-hosted, milan2 ]
+    runs-on: [ self-hosted, milan0 ]
     needs: [ job_verify_actor, job_setup_workdir ]
     steps:
       - name: build korc
@@ -69,7 +69,7 @@ jobs:
 
   job_setup_spack:
     if: false
-    runs-on: [ self-hosted, milan2 ]
+    runs-on: [ self-hosted, milan0 ]
     needs: [ job_verify_actor, job_setup_workdir ]
     defaults:
       run:
@@ -122,7 +122,7 @@ jobs:
 
   job_build_gpu:
     if: false
-    runs-on: [ self-hosted, milan2 ]
+    runs-on: [ self-hosted, milan0 ]
     needs: [ job_verify_actor, job_setup_spack, job_setup_workdir ]
     defaults:
       run:
@@ -164,7 +164,7 @@ jobs:
 
   job_test_cpu:
     if: true
-    runs-on: [ self-hosted, milan2 ]
+    runs-on: [ self-hosted, milan0 ]
     needs: [ job_verify_actor, job_build_cpu, job_setup_workdir ]
     steps:
       - name: Get number of CPU cores
@@ -177,7 +177,7 @@ jobs:
 
   job_test_gpu:
     if: false
-    runs-on: [ self-hosted, milan2 ]
+    runs-on: [ self-hosted, milan0 ]
     needs: [ job_verify_actor, job_setup_spack, job_build_gpu, job_setup_workdir ]
     steps:
       - name: Get number of CPU cores
