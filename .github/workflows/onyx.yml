@@ -179,6 +179,10 @@ jobs:
     if: true
     runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_setup_spack, job_build_gpu, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+
     steps:
       - name: Get number of CPU cores
         uses: SimenB/github-actions-cpu-cores@v2
