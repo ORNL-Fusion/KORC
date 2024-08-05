@@ -104,7 +104,7 @@ jobs:
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
         name: load nvhpc from environment module
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
 
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
@@ -134,12 +134,12 @@ jobs:
     steps:
       - name: load nvhpc from environment module
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
 
       - name: build korc
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
           . ./spack/share/spack/setup-env.sh
           spack load hdf5 +fortran -mpi %nvhpc@24.5
@@ -190,7 +190,7 @@ jobs:
 
       - name: ctest
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
           . ./spack/share/spack/setup-env.sh
           spack load hdf5 +fortran -mpi %nvhpc@24.5
