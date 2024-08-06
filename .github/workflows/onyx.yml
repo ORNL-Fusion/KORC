@@ -28,12 +28,12 @@ jobs:
 
 
   job_setup_workdir:
-    runs-on: self-hosted
+    runs-on: [ self-hosted ]
     needs: [ job_verify_actor ]
     steps:
       - name: GitHub API Request
         id: api_request
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.x
         with:
           route: ${{ github.event.issue.pull_request.url }}
         env:
@@ -49,7 +49,8 @@ jobs:
 
 
   job_build_cpu:
-    runs-on: self-hosted
+    if: true
+    runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_setup_workdir ]
     steps:
       - name: build korc
@@ -57,8 +58,8 @@ jobs:
           cd ./KORC
           rm -f CMakeCache.txt
           rm -rf CMakeFiles
-          rm -rf ./build && mkdir $_
-          cd ./build
+          rm -rf ./build_cpu && mkdir $_
+          cd ./build_cpu
           cmake -DCMAKE_BUILD_TYPE:String=Debug \
               -DUSE_PSPLINE=ON \
               -DUSE_FIO=OFF \
@@ -67,7 +68,8 @@ jobs:
 
 
   job_setup_spack:
-    runs-on: self-hosted
+    if: true
+    runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_setup_workdir ]
     defaults:
       run:
@@ -102,7 +104,7 @@ jobs:
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
         name: load nvhpc from environment module
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
 
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
@@ -119,7 +121,8 @@ jobs:
 
 
   job_build_gpu:
-    runs-on: self-hosted
+    if: true
+    runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_setup_spack, job_setup_workdir ]
     defaults:
       run:
@@ -131,12 +134,12 @@ jobs:
     steps:
       - name: load nvhpc from environment module
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
 
       - name: build korc
         run: |
-          module load nvhpc-openmpi3
+          module load nvhpc-hpcx/24.5
           module list
           . ./spack/share/spack/setup-env.sh
           spack load hdf5 +fortran -mpi %nvhpc@24.5
@@ -144,8 +147,8 @@ jobs:
           cd ./KORC
           rm -f CMakeCache.txt
           rm -rf CMakeFiles
-          rm -rf ./build && mkdir $_
-          cd ./build
+          rm -rf ./build_gpu && mkdir $_
+          cd ./build_gpu
           cmake \
               -DCMAKE_BUILD_TYPE:String=Debug \
               -DUSE_PSPLINE=ON \
@@ -160,7 +163,8 @@ jobs:
 
 
   job_test_cpu:
-    runs-on: self-hosted
+    if: true
+    runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_build_cpu, job_setup_workdir ]
     steps:
       - name: Get number of CPU cores
@@ -169,11 +173,16 @@ jobs:
 
       - name: ctest
         run: |
-          cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          cd ./KORC/build_cpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
   job_test_gpu:
-    runs-on: self-hosted
+    if: true
+    runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_setup_spack, job_build_gpu, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+
     steps:
       - name: Get number of CPU cores
         uses: SimenB/github-actions-cpu-cores@v2
@@ -181,5 +190,11 @@ jobs:
 
       - name: ctest
         run: |
-          cd ./KORC/build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          module load nvhpc-hpcx/24.5
+          module list
+          . ./spack/share/spack/setup-env.sh
+          spack load hdf5 +fortran -mpi %nvhpc@24.5
+
+
+          cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
