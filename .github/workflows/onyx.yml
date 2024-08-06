@@ -191,7 +191,8 @@ jobs:
 
       - name: ctest
         run: |
-          cd ./KORC/build_cpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          cd ./KORC/build_cpu && ctest --output-on-failure
+
 
   job_test_gpu:
     if: true
