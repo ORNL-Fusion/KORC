@@ -46,6 +46,9 @@ jobs:
     needs: job_one
     runs-on: ubuntu-latest
     steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
       - name: grab main project
         uses: actions/checkout@v4
         with:
@@ -83,7 +86,7 @@ jobs:
 
           cd ./KORC
           ./build.sh
-          cd ./build && ctest --output-on-failure
+          cd ./build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
       - name: Show Cache
         if: failure()
