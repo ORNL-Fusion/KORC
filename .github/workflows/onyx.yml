@@ -52,6 +52,14 @@ jobs:
     if: true
     runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
     steps:
       - name: build korc
         run: |
@@ -78,6 +86,7 @@ jobs:
     #    by default github actions will run commands in a non-interactive shell
     #    setting 'bash -leo pipefail {0}' will cause it to run interactively
     #
+
     steps:
       - name: show actor status
         run: |
@@ -131,6 +140,7 @@ jobs:
     #    by default github actions will run commands in a non-interactive shell
     #    setting 'bash -leo pipefail {0}' will cause it to run interactively
     #
+
     steps:
       - name: load nvhpc from environment module
         run: |
@@ -166,6 +176,14 @@ jobs:
     if: true
     runs-on: [ self-hosted ]
     needs: [ job_verify_actor, job_build_cpu, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
     steps:
       - name: Get number of CPU cores
         uses: SimenB/github-actions-cpu-cores@v2
@@ -182,6 +200,10 @@ jobs:
     defaults:
       run:
         shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
 
     steps:
       - name: Get number of CPU cores
