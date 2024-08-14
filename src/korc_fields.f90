@@ -1295,7 +1295,10 @@ subroutine initialize_fields(params,F)
    end if
 
    !    SELECT CASE (TRIM(params%field_model))
-   if (params%field_model(1:10).eq.'ANALYTICAL') then
+   if (params%field_model(1:10).eq.'UNIFORM') then
+      F%Bo=Bo
+      F%Eo=Eo
+   else if (params%field_model(1:10).eq.'ANALYTICAL') then
       !    CASE('ANALYTICAL')
       ! Load the parameters of the analytical magnetic field
       !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &

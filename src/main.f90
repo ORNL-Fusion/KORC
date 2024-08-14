@@ -318,7 +318,9 @@ end if
 if (params%orbit_model(1:2).eq.'FO') then
 
 #ifdef ACC
-  if (params%field_model(1:3).eq.'ANA') then
+  if (params%field_model(1:3).eq.'UNI') then
+    call FO_init_uni_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(1:3).eq.'ANA') then
     call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(10:13).eq.'MARS') then
     call FO_init_mars_ACC(params,F,spp,.true.,.false.)
@@ -380,7 +382,11 @@ end if
   if (params%orbit_model(1:2).eq.'FO'.and.((params%field_model(1:3).eq.'ANA') &
     .or.(params%field_model(1:3).eq.'UNI'))) then
 #ifdef ACC
-    call FO_init_eqn_ACC(params,F,spp,.false.,.true.)
+    if (params%field_model(1:3).eq.'ANA') then
+      call FO_init_eqn_ACC(params,F,spp,.false.,.true.)
+    else
+      call FO_init_uni_ACC(params,F,spp,.false.,.true.)
+    endif
 #else
     call FO_init(params,F,spp,.false.,.true.)
     ! Initial half-time particle push
@@ -388,7 +394,11 @@ end if
 
     do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-      call adv_FOeqn_top_ACC(params,F,P,spp)
+      if (params%field_model(1:3).eq.'ANA') then
+        call adv_FOeqn_top_ACC(params,F,P,spp)
+      else
+        call adv_FOuni_top_ACC(params,F,P,spp)
+      endif
 #else
       call adv_FOeqn_top(params,randoms,F,P,spp)
 #endif
