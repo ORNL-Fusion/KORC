@@ -154,7 +154,7 @@ jobs:
               -DUSE_PSPLINE=ON \
               -DUSE_ACC=ON \
               -DUSE_FIO=OFF \
-              -DCMAKE_Fortran_FLAGS="-acc=gpu -gpu=cc80 -c++libs" \
+              -DCMAKE_Fortran_FLAGS="-acc=gpu -gpu=deepcopy -c++libs" \
               -DCMAKE_CXX_FLAGS="-std=c++11 -mp" \
               -DCMAKE_C_FLAGS="-mp" \
             ../
