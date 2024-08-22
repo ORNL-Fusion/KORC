@@ -35,6 +35,9 @@ if(USE_PSPLINE)
 set_tests_properties (aorsa_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
 endif()
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/egyro_test)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_test)
+
 foreach(RANK IN ITEMS 1 2 4 8 16)
   if(${RANK} LESS_EQUAL ${MPIEXEC_MAX_NUMPROCS})
     add_test (NAME egyro_test_${RANK}
