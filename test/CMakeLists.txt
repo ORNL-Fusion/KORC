@@ -21,12 +21,18 @@ set_property(TARGET xtest PROPERTY LINKER_LANGUAGE Fortran)
 
 configure_file(${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh.in ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh.in ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh)
+configure_file(${CMAKE_SOURCE_DIR}/test/aorsa/korc_aorsa.sh.in ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh)
 
 if(USE_PSPLINE)
   add_test (NAME mars_test_1
             COMMAND ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh 1
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
   set_tests_properties (mars_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
+
+  add_test (NAME aorsa_test_1
+  COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 1
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set_tests_properties (aorsa_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
 endif()
 
 foreach(RANK IN ITEMS 1 2 4 8 16)

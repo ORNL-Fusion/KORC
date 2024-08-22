@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -ex
+
+#define input file
+INPUT_FILE="${CMAKE_SOURCE_DIR}/test/aorsa/input_file_D3D_171089_AORSA.korc"
+#define output directory
+OUT_DIR="aorsa_test/rank_$1"
+
+#check that output directory doesn't exist so bash doesn't complain
+if [ ! -d $OUT_DIR ]; then
+  mkdir -p $OUT_DIR
+fi
+if [ ! -f AORSA_D3D_171089_200MHz_EFITgrid.h5 ]; then
+  ln -s ${CMAKE_SOURCE_DIR}/test/aorsa/AORSA_D3D_171089_200MHz_EFITgrid.h5 AORSA_D3D_171089_200MHz_EFITgrid.h5
+fi
+
+${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
+
+h5diff -r -p 0.000008 $OUT_DIR/file_0.h5 ${CMAKE_SOURCE_DIR}/test/aorsa/file_0.h5
