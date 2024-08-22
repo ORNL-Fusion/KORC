@@ -2809,8 +2809,8 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
 
       PSIp(cc)=A(1)
-      radius=sqrt((Y_R-1.7)**2-Y_Z**2)
-      theta=atan2(Y_Z,(Y_R-F%AB%Ro))
+      radius=sqrt((Y_R(cc)-1.7)**2-Y_Z(cc)**2)
+      theta=atan2(Y_Z(cc),(Y_R(cc)-F%AB%Ro))
       psirr=F%psir
       widthh=F%width
 
@@ -2872,18 +2872,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
  ! write(output_unit_write,'("AMP")'),amp
   !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
   !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
-<<<<<<< HEAD
-  !write(output_unit_write,'("B1")')B1_X,B1_Y,B1_Zi
-!   write(6,*) 'B1', B1_X(1)*params%cpp%Bo,B1_Y(1)*params%cpp%Bo,B1_Z(1)*params%cpp%Bo 
-!   write(6,*) 'B0', B0_X(1)*params%cpp%Bo,B0_Y(1)*params%cpp%Bo,B0_Z(1)*params%cpp%Bo 
- !  write(6,*) 'E1X_pp', E_X(1)*params%cpp%Eo,'E1_Y_pp',E_Y(1)*params%cpp%Eo,'E1_Z_pp',E_Z(1)*params%cpp%Eo
-!#endif
-  
-=======
   !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
   !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
 #endif
->>>>>>> main
 end subroutine interp_FOfields_aorsa_p
 
 subroutine interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flag_cache)
