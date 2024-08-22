@@ -623,7 +623,10 @@ module korc_types
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
-     REAL(rp)  :: AORSA_nmode,AORSA_mmode
+     REAL(rp)  :: psir
+     REAL(rp)  :: width 
+     REAL(rp)  :: AORSA_nmode
+     REAL(rp)  :: AORSA_mmode
      !! interpolated E field
      LOGICAL :: Analytic_D3D_IWL
      INTEGER :: ntiles

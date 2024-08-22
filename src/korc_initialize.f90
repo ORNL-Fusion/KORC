@@ -276,8 +276,10 @@ CONTAINS
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
-       params%num_snapshots = params%t_steps/params%output_cadence
-
+       !params%num_snapshots = params%t_steps/params%output_cadence
+       params%num_snapshots = ceiling(params%simulation_time/ &
+            params%snapshot_frequency)
+       
        if (params%t_steps.gt.params%output_cadence) then
 #ifdef __NVCOMPILER
        params%dt=params%snapshot_frequency/real(params%output_cadence)
@@ -305,7 +307,9 @@ CONTAINS
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
-       params%num_snapshots = params%t_steps/params%output_cadence
+       !params%num_snapshots = params%t_steps/params%output_cadence
+       params%num_snapshots = ceiling(params%simulation_time/ &
+            params%snapshot_frequency)
 
        if (params%t_steps.gt.params%output_cadence) then
           if (params%snapshot_frequency.lt.params%dt) then
@@ -319,8 +323,8 @@ CONTAINS
 #endif
        endif
 
-       params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
-            params%dt,ip)
+       params%restart_output_cadence = &
+            CEILING(params%restart_overwrite_frequency/params%dt,ip)
 
        params%t_skip=min(params%t_steps,params%output_cadence)
        params%t_skip=max(1_ip,params%t_skip)
@@ -596,25 +600,18 @@ CONTAINS
           ALLOCATE( spp(ii)%vars%k4(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k5(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k6(spp(ii)%ppp,4) )
-          if (params%orbit_model(3:5)=='pre'.or. &
-               TRIM(params%field_model)=='M3D_C1'.or. &
-               TRIM(params%field_model)=='NIMROD') then
-             ALLOCATE( spp(ii)%vars%gradB(spp(ii)%ppp,3) )
-             ALLOCATE( spp(ii)%vars%curlb(spp(ii)%ppp,3) )
-
-             spp(ii)%vars%gradB = 0.0_rp
-             spp(ii)%vars%curlb = 0.0_rp
-          else if (params%orbit_model(3:6)=='grad') then
-             ALLOCATE( spp(ii)%vars%BR(spp(ii)%ppp,3) )
-             ALLOCATE( spp(ii)%vars%BPHI(spp(ii)%ppp,3) )
-             ALLOCATE( spp(ii)%vars%BZ(spp(ii)%ppp,3) )
-
-             spp(ii)%vars%BR = 0.0_rp
-             spp(ii)%vars%BPHI = 0.0_rp
-             spp(ii)%vars%BZ = 0.0_rp
-          end if
+          ALLOCATE( spp(ii)%vars%gradB(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%curlb(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%BR(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%BPHI(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%BZ(spp(ii)%ppp,3) )
           ALLOCATE( spp(ii)%vars%RHS(spp(ii)%ppp,5) )
 
+          spp(ii)%vars%gradB = 0.0_rp
+          spp(ii)%vars%curlb = 0.0_rp
+          spp(ii)%vars%BR = 0.0_rp
+          spp(ii)%vars%BPHI = 0.0_rp
+          spp(ii)%vars%BZ = 0.0_rp
           spp(ii)%vars%Y0 = 0.0_rp
           spp(ii)%vars%Y1 = 0.0_rp
           spp(ii)%vars%V0 = 0.0_rp

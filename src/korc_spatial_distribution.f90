@@ -30,6 +30,7 @@ MODULE korc_spatial_distribution
        fzero,&
        MH_gaussian_elliptic_torus,&
        indicator,&
+       indicatortwo,&
        PSI_ROT,&
        Spong_3D,&
        Spong_2D, &
@@ -711,7 +712,32 @@ FUNCTION indicator(psi,psi_max)
 
 END FUNCTION indicator
 
-subroutine MH_gaussian_elliptic_torus(params,random,spp)
+
+FUNCTION indicatortwo(psi,PSIp_min)
+
+  REAL(rp), INTENT(IN)  :: psi
+  REAL(rp), INTENT(IN)  :: PSIp_min
+  REAL(rp)              :: indicatortwo
+
+  IF (psi.GT.PSIp_min) THEN
+     indicatortwo=1
+  ELSE
+     indicatortwo=0
+  END IF
+  END FUNCTION indicatortwo 
+FUNCTION random_norm(mean,sigma)
+	REAL(rp), INTENT(IN) :: mean
+	REAL(rp), INTENT(IN) :: sigma
+	REAL(rp)             :: random_norm
+	REAL(rp)             :: rand1, rand2
+
+	call RANDOM_NUMBER(rand1)
+	call RANDOM_NUMBER(rand2)
+
+	random_norm = mean+sigma*SQRT(-2.0_rp*LOG(rand1))*COS(2.0_rp*C_PI*rand2);
+END FUNCTION random_norm
+
+subroutine MH_gaussian_elliptic_torus(params,spp)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
@@ -1301,7 +1327,7 @@ subroutine MH_psi(params,random,spp,F)
 
   params%GC_coords=.TRUE.
   PSIp_lim=F%PSIp_lim
-
+  !changed_YG
   if (params%field_model.eq.'M3D_C1') then
      min_R=params%rmin/params%cpp%length
      max_R=params%rmax/params%cpp%length
@@ -1322,11 +1348,15 @@ subroutine MH_psi(params,random,spp,F)
      psi_max = spp%psi_max
      psi_min = spp%psi_min
      psi_max_buff = spp%psi_max*2._rp
+     PSIp_min=spp%PSIp_min/(params%cpp%Bo*params%cpp%length**2)
+    ! psi_max=(psi_max-PSIp0)/(PSIp_lim-PSIp0)
+    ! PSIp_min=(PSIp_min-PSIp0)/(PSIp_lim-PSIp0)
+!    write(6,*)"psip0",PSIp0,"psi_max",psi_max,"PSIp_min",PSIp_min,"PSIp_lim", PSIp_lim
   end if
 
   sigma=spp%sigmaR*params%cpp%length
 
-  !write(output_unit_write,*) min_R,max_R
+  write(6,*) "sigma",sigma
   !write(output_unit_write,*) min_Z,max_Z
 
 
@@ -1457,7 +1487,6 @@ subroutine MH_psi(params,random,spp,F)
              indicator(PSIN1,psi_max)*indicator(psi_min,PSIN1)* &
              R_test*EXP(-PSIN1/sigma)/ &
              (R_buffer*EXP(-PSIN0/sigma))
-
 !        ratio = f1*sin(deg2rad(eta_test))/(f0*sin(deg2rad(eta_buffer)))
 
         accepted=.false.

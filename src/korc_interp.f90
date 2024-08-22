@@ -2575,8 +2575,9 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    TYPE(FIELDS), INTENT(IN)       :: F
    REAL(rp)   :: Y_R,Y_PHI,Y_Z
    REAL(rp)   :: B0_R,B0_PHI,B0_Z
-   REAL(rp)  :: B0_X,B0_Y
+   REAL(rp)  :: B0_X,B0_Y,theta
    REAL(rp)   :: B1_X,B1_Y,B1_Z
+   REAL(rp)   :: E1_X,E1_Y,E1_Z
    REAL(rp)   :: B1Re_X,B1Re_Y,B1Re_Z
    REAL(rp)  :: B1Im_X,B1Im_Y,B1Im_Z
    REAL(rp)  :: E1Re_X,E1Re_Y,E1Re_Z
@@ -2586,8 +2587,8 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    !  INTEGER(ip) :: ezerr
    INTEGER                                      :: pp,ss
    !! Particle chunk iterator.
-   REAL(rp) :: psip_conv
-   REAL(rp) :: amp,nmode
+   REAL(rp) :: psip_conv,psirr,widthh
+   REAL(rp) :: amp,nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
 
    if (size(prtcls%Y,1).eq.1) then
       ss = size(prtcls%Y,1)
@@ -2601,6 +2602,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
 
    psip_conv=F%psip_conv
    amp=F%AMP
+   mmode=F%AORSA_mmode
    nmode=F%AORSA_nmode
 
    do pp = 1,ss
@@ -2608,6 +2610,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       Y_R=prtcls%Y(pp,1)
       Y_PHI=prtcls%Y(pp,2)
       Y_Z=prtcls%Y(pp,3)
+      theta=atan2(Y_Z,(Y_R-1.7))
 
       call EZspline_interp2_FOaorsa(bfield_2d%A,&
          b1Refield_2dx%X,b1Refield_2dx%Y,b1Refield_2dx%Z, &
@@ -2619,6 +2622,8 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       call EZspline_error(ezerr)
 
       prtcls%PSI_P=A(1)
+      widthh=F%width
+      psirr=F%psir
 
       B0_R = psip_conv*A(3)/Y_R
       B0_PHI = -F%Bo*F%Ro/Y_R
@@ -2627,12 +2632,30 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       cnP=cos(nmode*Y_PHI)
       snP=sin(nmode*Y_PHI)
 
+      !cnP=cos(mmode*theta-nmode*Y_PHI)
+      !snP=sin(mmode*theta-nmode*Y_PHI)
+
       cP=cos(Y_PHI)
       sP=sin(Y_PHI)
+
+      !BXavg=6.95E-07/params%cpp%Bo
+      !BYavg=1.184E-06/params%cpp%Bo
+      !BZavg=1.118E-06/params%cpp%Bo 
+
+      !B1_X = amp*(BXavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
+      !B1_Y = amp*(BYavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*snp)
+      !B1_Z =-amp*(BZavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
 
       B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
       B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
       B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
+
+      !EXavg=76.2/params%cpp%Eo
+      !EYavg=57.7/params%cpp%Eo
+      !EZavg=9.25/params%cpp%Eo
+      !prtcls%E(pp,1)= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EXavg*snp
+      !prtcls%E(pp,2)= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EYavg*cnp
+      !prtcls%E(pp,3)=-amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EZavg*snp
 
       prtcls%E(pp,1) = amp*(E1Re_X*cnP-E1Im_X*snP)
       prtcls%E(pp,2) = amp*(E1Re_Y*cnP-E1Im_Y*snP)
@@ -2702,6 +2725,13 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
         E1Re_X,E1Re_Y,E1Re_Z,E1Im_X,E1Im_Y,E1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
 
+     !EXavg=76.2/params%cpp%Eo
+     !EYavg=57.7/params%cpp%Eo
+     !EZavg=9.25/params%cpp%Eo
+     !E_X(cc) = -amp*(EXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp(cc)
+     !E_Y(cc) = amp*(EYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp(cc)
+     !E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp(cc)
+     
 
   PSIp=A(1)
 
@@ -2748,6 +2778,7 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
    REAL(rp)   :: B1Im_X,B1Im_Y,B1Im_Z
    REAL(rp)  :: E1Re_X,E1Re_Y,E1Re_Z
    REAL(rp)   :: E1Im_X,E1Im_Y,E1Im_Z
+   REAL(rp)   :: radius,theta
    REAL(rp),DIMENSION(pchunk),INTENT(OUT)   :: PSIp
    REAL(rp)   :: cP,sP,cnP,snP
    REAL(rp), DIMENSION(3)  :: A
@@ -2755,13 +2786,14 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
    INTEGER                                      :: cc
    !! Particle chunk iterator.
    INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
-   REAL(rp) :: psip_conv
-   REAL(rp) :: amp,nmode,omega
+   REAL(rp) :: psip_conv,psirr,widthh
+   REAL(rp) :: amp,nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
 
    psip_conv=F%psip_conv
    amp=F%AMP
    nmode=F%AORSA_nmode
    omega=2*C_PI*F%AORSA_freq
+   mmode=F%AORSA_mmode
 
    call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
@@ -2777,6 +2809,10 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
 
 
       PSIp(cc)=A(1)
+      radius=sqrt((Y_R-1.7)**2-Y_Z**2)
+      theta=atan2(Y_Z,(Y_R-F%AB%Ro))
+      psirr=F%psir
+      widthh=F%width
 
       B0_R = psip_conv*A(3)/Y_R(cc)
       B0_PHI = -F%Bo*F%Ro/Y_R(cc)
@@ -2789,6 +2825,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
       B0_Y = B0_R*sP + B0_PHI*cP
 
 
+      !cnP=cos(mmode*theta-omega*time-nmode*Y_PHI(cc))
+      !snP=sin(mmode*theta-omega*time-nmode*Y_PHI(cc))
+
       cnP=cos(omega*time+nmode*Y_PHI(cc))
       snP=sin(omega*time+nmode*Y_PHI(cc))
 
@@ -2796,9 +2835,24 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
       B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
       B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
 
+      !BXavg=6.95E-07/params%cpp%Bo
+      !BYavg=1.184E-06/params%cpp%Bo
+      !BZavg=1.118E-06/params%cpp%Bo
+
+     !B1_X = amp*(BXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp
+     !B1_Y = amp*(BYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp
+     !B1_Z = -amp*(BZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp
+
       B_X(cc) = B0_X+B1_X
       B_Y(cc) = B0_Y+B1_Y
       B_Z(cc) = B0_Z+B1_Z
+
+      !EXavg=76.2/params%cpp%Eo
+      !EYavg=57.7/params%cpp%Eo
+      !EZavg=9.25/params%cpp%Eo
+      !E_X(cc) = -amp*(EXavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp
+      !E_Y(cc) = amp*(EYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp
+      !E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp
 
       E_X(cc) = amp*(E1Re_X*cnP-E1Im_X*snP)
       E_Y(cc) = amp*(E1Re_Y*cnP-E1Im_Y*snP)
@@ -2814,13 +2868,22 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
   !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
   !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
   !write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
-  !write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
-  !write(6,*) 'AMP',amp
+!  write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
+ ! write(output_unit_write,'("AMP")'),amp
   !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
   !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
+<<<<<<< HEAD
+  !write(output_unit_write,'("B1")')B1_X,B1_Y,B1_Zi
+!   write(6,*) 'B1', B1_X(1)*params%cpp%Bo,B1_Y(1)*params%cpp%Bo,B1_Z(1)*params%cpp%Bo 
+!   write(6,*) 'B0', B0_X(1)*params%cpp%Bo,B0_Y(1)*params%cpp%Bo,B0_Z(1)*params%cpp%Bo 
+ !  write(6,*) 'E1X_pp', E_X(1)*params%cpp%Eo,'E1_Y_pp',E_Y(1)*params%cpp%Eo,'E1_Z_pp',E_Z(1)*params%cpp%Eo
+!#endif
+  
+=======
   !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
   !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
 #endif
+>>>>>>> main
 end subroutine interp_FOfields_aorsa_p
 
 subroutine interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flag_cache)
