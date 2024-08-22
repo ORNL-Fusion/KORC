@@ -1,9 +1,7 @@
 module korc_types
   !! @note Module containing the definition of KORC derived types and
   !! KORC variables, the building blocks of the code. @endnote
-#ifdef FIO
   USE, INTRINSIC :: iso_c_binding
-#endif
   implicit none
 
   ! * * * * * * * * * * * * * * * * * * * * !
@@ -298,7 +296,7 @@ module korc_types
      INTEGER  :: num_impurity_species
      REAL(rp), DIMENSION(:), ALLOCATABLE        :: Zj
      REAL(rp) :: gam_min
-     LOGICAL(rp) :: recycle_losses
+     LOGICAL :: recycle_losses
   END TYPE KORC_PARAMS
 
 
@@ -481,7 +479,7 @@ module korc_types
      REAL(rp)                            :: theta_gauss
      !! Angle of counter-clockwise rotation (in degrees) of 2D Gaussian
      !! distribution relative to R,Z
-     REAL(rp)                            :: psi_max,PSIp_min
+     REAL(rp)                            :: psi_max,psi_min
      !! Maximum value of the argument of the 2D gaussian exponential, used
      !! for an indicator function that limits the region of MH sampling
      REAL(rp)                            :: Spong_b
@@ -515,6 +513,10 @@ module korc_types
      !! the values of \(q_0\) and \(q(r)\)
      !! at the plasma edge \(r=r_{edge}\).
 
+    LOGICAL         :: perturb
+    REAL(rp)        :: l_mn
+    REAL(rp)        :: sigma_mn
+    REAL(rp)        :: eps_mn
      REAL(rp) 			:: Bo
      !! Magnitude of the toroidal magnetic field \(B_0\).
      REAL(rp) 			:: a
@@ -618,6 +620,7 @@ module korc_types
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp)  :: AMP
      REAL(rp)  :: MARS_AMP_Scale
+     REAL(rp)  :: MARS_phase
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
      REAL(rp)  :: psir
@@ -625,7 +628,7 @@ module korc_types
      REAL(rp)  :: AORSA_nmode
      REAL(rp)  :: AORSA_mmode
      !! interpolated E field
-     CHARACTER(30) :: Analytic_IWL
+     LOGICAL :: Analytic_D3D_IWL
      INTEGER :: ntiles
      REAL(rp) :: circumradius
      INTEGER 			:: res_double
@@ -698,6 +701,9 @@ module korc_types
 #endif
      REAL(rp)  :: psip_conv
      LOGICAL :: useLCFS
+     LOGICAL :: useDiMES
+     REAL(rp),DIMENSION(3) :: DiMESloc
+     REAL(rp),DIMENSION(2) :: DiMESdims
 
   END TYPE FIELDS
 

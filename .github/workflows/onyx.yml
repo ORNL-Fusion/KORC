@@ -1,0 +1,223 @@
+---
+
+name: onyx
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+
+  job_verify_actor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Actor
+        id: verify_actor
+        env:
+          ACTOR_TOKEN: ${{ secrets.TOKENIZER }}${{ github.actor }}${{ secrets.TOKENIZER }}
+          ACTOR_ALLOW: ${{ secrets.ACTORLIST }}
+        if: contains( env.ACTOR_ALLOW, env.ACTOR_TOKEN )
+        run: |
+          echo "allowed=true" >> $GITHUB_OUTPUT
+      - name: Assert Fail
+        if: ${{ steps.verify_actor.outputs.allowed != 'true' }}
+        run: |
+          echo "Actor '${{ github.actor }}' not allowed"
+          exit 1
+    outputs:
+      allowed: ${{ steps.verify_actor.outputs.allowed }}
+
+
+  job_setup_workdir:
+    runs-on: [ self-hosted ]
+    needs: [ job_verify_actor ]
+    steps:
+      - name: GitHub API Request
+        id: api_request
+        uses: octokit/request-action@v2.x
+        with:
+          route: ${{ github.event.issue.pull_request.url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          repository: "${{ fromJson(steps.api_request.outputs.data).head.repo.full_name }}"
+          ref: "${{ fromJson(steps.api_request.outputs.data).head.ref }}"
+          path: './KORC'
+
+
+  job_build_cpu:
+    if: true
+    runs-on: [ self-hosted ]
+    needs: [ job_verify_actor, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
+    steps:
+      - name: build korc
+        run: |
+          cd ./KORC
+          rm -f CMakeCache.txt
+          rm -rf CMakeFiles
+          rm -rf ./build_cpu && mkdir $_
+          cd ./build_cpu
+          cmake -DCMAKE_BUILD_TYPE:String=Debug \
+              -DUSE_PSPLINE=ON \
+              -DUSE_FIO=OFF \
+            ../
+          make -j VERBOSE=1
+
+
+  job_setup_spack:
+    if: true
+    runs-on: [ self-hosted ]
+    needs: [ job_verify_actor, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
+    steps:
+      - name: show actor status
+        run: |
+          echo "${{ needs.job_verify_actor.outputs.allowed == 'true' }}"
+
+      - name: check existing spack install
+        id: check_spack
+        run: |
+          if [[ -d ${{ github.workspace }}/spack ]]; then
+            echo "exist=true" >> $GITHUB_OUTPUT
+          fi
+
+      - if: ${{ steps.check_spack.outputs.exist != 'true' }}
+        name: grab spack
+        uses: actions/checkout@v4
+        with:
+          repository: 'spack/spack'
+          ref: 'v0.21.1'
+          path: './spack'
+        #
+        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+        #
+
+      - if: ${{ steps.check_spack.outputs.exist != 'true' }}
+        name: load nvhpc from environment module
+        run: |
+          module load nvhpc-hpcx/24.5
+          module list
+
+      - if: ${{ steps.check_spack.outputs.exist != 'true' }}
+        name: spack install
+        run: |
+          . ./spack/share/spack/setup-env.sh
+          spack config add config:install_tree:padded_length:128
+          spack compiler find
+          spack compiler remove gcc@12.3.0
+          spack install hdf5 +fortran -mpi %nvhpc@24.5
+          spack load    hdf5 +fortran -mpi %nvhpc@24.5
+
+          spack gc -y
+
+
+  job_build_gpu:
+    if: true
+    runs-on: [ self-hosted ]
+    needs: [ job_verify_actor, job_setup_spack, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
+    steps:
+      - name: load nvhpc from environment module
+        run: |
+          module load nvhpc-hpcx/24.5
+          module list
+
+      - name: build korc
+        run: |
+          module load nvhpc-hpcx/24.5
+          module list
+          . ./spack/share/spack/setup-env.sh
+          spack load hdf5 +fortran -mpi %nvhpc@24.5
+
+          cd ./KORC
+          rm -f CMakeCache.txt
+          rm -rf CMakeFiles
+          rm -rf ./build_gpu && mkdir $_
+          cd ./build_gpu
+          cmake \
+              -DCMAKE_BUILD_TYPE:String=Debug \
+              -DUSE_PSPLINE=ON \
+              -DUSE_ACC=ON \
+              -DUSE_FIO=OFF \
+              -DCMAKE_Fortran_FLAGS="-acc=gpu -gpu=cc80" \
+            ../
+          make -j VERBOSE=1
+      #
+      #    -gpu=cc80 indicates that target gpu is Nvidia A100
+      #
+
+
+  job_test_cpu:
+    if: true
+    runs-on: [ self-hosted ]
+    needs: [ job_verify_actor, job_build_cpu, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
+    steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+
+      - name: ctest
+        run: |
+          cd ./KORC/build_cpu && ctest --output-on-failure
+
+
+  job_test_gpu:
+    if: true
+    runs-on: [ self-hosted ]
+    needs: [ job_verify_actor, job_setup_spack, job_build_gpu, job_setup_workdir ]
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    #
+    #    by default github actions will run commands in a non-interactive shell
+    #    setting 'bash -leo pipefail {0}' will cause it to run interactively
+    #
+
+    steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+
+      - name: ctest
+        run: |
+          module load nvhpc-hpcx/24.5
+          module list
+          . ./spack/share/spack/setup-env.sh
+          spack load hdf5 +fortran -mpi %nvhpc@24.5
+
+
+          cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+

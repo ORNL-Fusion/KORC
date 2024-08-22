@@ -6,22 +6,17 @@ MODULE korc_velocity_distribution
   USE korc_HDF5
   USE korc_hpc
   use korc_fields
-  use korc_rnd_numbers
+  use korc_random
   use korc_hammersley_generator
-
   use korc_avalanche
   use korc_experimental_pdf
-  use korc_energy_pdfs
-  use korc_simple_equilibrium_pdf
 
   IMPLICIT NONE
 
   PUBLIC :: initial_gyro_distribution,&
        thermal_distribution,&
        initial_energy_pitch_dist
-  PRIVATE :: fth_3V,&
-       random_norm,&
-       gyro_distribution
+  PRIVATE :: fth_3V, gyro_distribution
 
 CONTAINS
 
@@ -43,37 +38,7 @@ CONTAINS
     fth_3V = EXP(-0.5_rp*DOT_PRODUCT(V,V)/Vth**2.0_rp)
   END FUNCTION fth_3V
 
-
-  FUNCTION random_norm(mu,sigma)
-    !! @note Gaussian random number generator. @endnote
-    !! This function returns a deviate of a Gaussian distribution
-    !! $$f_G(x;\mu,\sigma) = 
-    !! \frac{1}{\sigma\sqrt{2\pi}} \exp{\left( -(x-\mu)^2/2\sigma^2 \right)},$$
-    !!
-    !! with mean \(\mu\), and standard deviation \(\sigma\).
-    !!
-    !! We use the Inverse Transform Sampling Method for sampling \(x\). 
-    !! With this method we get \(x = \sqrt{-2\log{(1-y)}}\cos(2\pi z)\),
-    !! where \(y\) and \(z\) are uniform random numbers in the interval \([0,1]\).
-    REAL(rp), INTENT(IN) 	:: mu
-    !! Mean value \(\mu\) of the Gaussian distribution.
-    REAL(rp), INTENT(IN) 	:: sigma
-    !! Standard deviation \(\sigma\) of the Gaussian distribution.
-    REAL(rp) 				:: random_norm
-    !! Sampled number \(x\) from the Gaussian distribution \(f_G(x;\mu,\sigma)\).
-    REAL(rp) 				:: rand1
-    !! Uniform random number in the interval \([0,1]\).
-    REAL(rp) 				:: rand2
-    !! Uniform random number in the interval \([0,1]\).
-
-    call RANDOM_NUMBER(rand1)
-    call RANDOM_NUMBER(rand2)
-
-    random_norm = SQRT(-2.0_rp*LOG(1.0_rp-rand1))*COS(2.0_rp*C_PI*rand2);
-  END FUNCTION random_norm
-
-
-  subroutine thermal_distribution(params,spp)
+  subroutine thermal_distribution(params,random,spp)
     !! @note Subroutine that samples a thermal distribution function
     !! of electrons for generating the initial condition of a set of
     !! simulated particles. @endnote
@@ -85,6 +50,7 @@ CONTAINS
     !! this function.
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(SPECIES), INTENT(INOUT) 	:: spp
     !! An instance of the derived type SPECIES containing all the
     !! parameters and simulation variables of the different species
@@ -115,7 +81,10 @@ CONTAINS
     !! Iterator.
     INTEGER 				:: ppp
     !! Number of particles per species.
-    
+
+    CALL random%uniform%set(0.0_rp, 1.0_rp)
+    CALL random%normal%set(0.0_rp, sv)
+
     Vmax = 0.9_rp
     Vth = SQRT(spp%Eo*ABS(spp%q)/spp%m)
     ppp = spp%ppp
@@ -125,19 +94,19 @@ CONTAINS
 
     ii=2_idef
     do while (ii .LE. 1000_idef)
-       U(1) = V(1) + random_norm(0.0_rp,sv)
+       U(1) = V(1) + random%normal%get()
        do while (ABS(U(1)) .GT. Vmax)
-          U(1) = V(1) + random_norm(0.0_rp,sv)
+          U(1) = V(1) + random%normal%get()
        end do
 
-       U(2) = V(2) + random_norm(0.0_rp,sv)
+       U(2) = V(2) + random%normal%get()
        do while (ABS(U(2)) .GT. Vmax)
-          U(2) = V(2) + random_norm(0.0_rp,sv)
+          U(2) = V(2) + random%normal%get()
        end do
 
-       U(3) = V(3) + random_norm(0.0_rp,sv)
+       U(3) = V(3) + random%normal%get()
        do while (ABS(U(3)) .GT. Vmax)
-          U(3) = V(3) + random_norm(0.0_rp,sv)
+          U(3) = V(3) + random%normal%get()
        end do
 
        ratio = fth_3V(Vth,U)/fth_3V(Vth,V)
@@ -146,8 +115,7 @@ CONTAINS
           V = U
           ii = ii + 1_idef
        else
-          call RANDOM_NUMBER(rand_unif)
-          if (ratio .GT. rand_unif) then
+          if (ratio .GT. random%uniform%get()) then
              V = U
              ii = ii + 1_idef
           end if
@@ -159,17 +127,17 @@ CONTAINS
     spp%vars%V(1,3) = V(3)
     ii=2_idef
     do while (ii .LE. ppp)
-       U(1) = spp%vars%V(ii-1,1) + random_norm(0.0_rp,sv)
+       U(1) = spp%vars%V(ii-1,1) + random%normal%get()
        do while (ABS(U(1)) .GT. Vmax)
-          U(1) = spp%vars%V(ii-1,1) + random_norm(0.0_rp,sv)
+          U(1) = spp%vars%V(ii-1,1) + random%normal%get()
        end do
-       U(2) = spp%vars%V(ii-1,2) + random_norm(0.0_rp,sv)
+       U(2) = spp%vars%V(ii-1,2) + random%normal%get()
        do while (ABS(U(2)) .GT. Vmax)
-          U(2) = spp%vars%V(ii-1,2) + random_norm(0.0_rp,sv)
+          U(2) = spp%vars%V(ii-1,2) + random%normal%get()
        end do
-       U(3) = spp%vars%V(ii-1,3) + random_norm(0.0_rp,sv)
+       U(3) = spp%vars%V(ii-1,3) + random%normal%get()
        do while (ABS(U(3)) .GT. Vmax)
-          U(3) = spp%vars%V(ii-1,3) + random_norm(0.0_rp,sv)
+          U(3) = spp%vars%V(ii-1,3) + random%normal%get()
        end do
 
        ratio = fth_3V(Vth,U)/fth_3V(Vth,spp%vars%V(ii-1,:))
@@ -180,8 +148,7 @@ CONTAINS
           spp%vars%V(ii,3) = U(3)
           ii = ii + 1_idef
        else
-          call RANDOM_NUMBER(rand_unif)
-          if (ratio .GT. rand_unif) then
+          if (ratio .GT. random%uniform%get()) then
              spp%vars%V(ii,1) = U(1)
              spp%vars%V(ii,2) = U(2)
              spp%vars%V(ii,3) = U(3)
@@ -203,15 +170,16 @@ CONTAINS
   end subroutine thermal_distribution
 
 
-  subroutine initial_energy_pitch_dist(params,spp)
-    !! @note Subroutine that calls subroutines of different modules to 
+  subroutine initial_energy_pitch_dist(params,random,spp)
+    !! @note Subroutine that calls subroutines of different modules to
     !! initialize the energy and pitch-angle distribution in various ways. @endnote
     TYPE(KORC_PARAMS), INTENT(IN) 				:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
     !! An instance of the derived type SPECIES containing all the parameters and 
     !! simulation variables of the different species in the simulation.
-    INTEGER 							:: ii
+    INTEGER 							:: ii,pp
     !! Species iterator.
     INTEGER 							:: mpierr
     !! MPI error status.
@@ -238,37 +206,22 @@ CONTAINS
           spp(ii)%Eo_lims = (/spp(ii)%Eo, spp(ii)%Eo /)
           
        CASE ('THERMAL')
-          call thermal_distribution(params,spp(ii))
+          call thermal_distribution(params,random,spp(ii))
 
           spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) - &
                spp(ii)%m*C_C**2, &
                spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
        CASE ('AVALANCHE')
-          call get_avalanche_distribution(params,spp(ii)%vars%g, &
+          call get_avalanche_distribution(params,random,spp(ii)%vars%g, &
                spp(ii)%vars%eta,spp(ii)%go,spp(ii)%etao)
           spp(ii)%Eo = spp(ii)%m*C_C**2*spp(ii)%go - spp(ii)%m*C_C**2
           spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
                - spp(ii)%m*C_C**2, &
                spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
        CASE ('HOLLMANN')
-          call get_Hollmann_distribution(params,spp(ii))          
+          call get_Hollmann_distribution(params,random,spp(ii))          
 !          spp(ii)%Eo = spp(ii)%m*C_C**2*spp(ii)%go - spp(ii)%m*C_C**2
           spp(ii)%go = (spp(ii)%Eo + spp(ii)%m*C_C**2)/(spp(ii)%m*C_C**2)
-          spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
-               - spp(ii)%m*C_C**2, &
-               spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
-       CASE ('EXPERIMENTAL-GAMMA')
-          call get_experimentalG_distribution(params,spp(ii)%vars%g, &
-               spp(ii)%vars%eta, &
-               spp(ii)%go,spp(ii)%etao)
-          spp(ii)%Eo = spp(ii)%m*C_C**2*spp(ii)%go - spp(ii)%m*C_C**2
-          spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
-               - spp(ii)%m*C_C**2, &
-               spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
-       CASE ('GAMMA')
-          call get_gamma_distribution(params,spp(ii)%vars%g,spp(ii)%go)
-
-          spp(ii)%Eo = spp(ii)%m*C_C**2*spp(ii)%go - spp(ii)%m*C_C**2
           spp(ii)%Eo_lims = (/spp(ii)%m*C_C**2*MINVAL(spp(ii)%vars%g) &
                - spp(ii)%m*C_C**2, &
                spp(ii)%m*C_C**2*MAXVAL(spp(ii)%vars%g) - spp(ii)%m*C_C**2 /)
@@ -325,20 +278,19 @@ CONTAINS
 !          spp(ii)%vars%eta = spp(ii)%etao
 !          spp(ii)%etao_lims = (/MINVAL(spp(ii)%vars%eta), &
 !               MAXVAL(spp(ii)%vars%eta)/)
-       CASE ('EXPERIMENTAL-GAMMA')
-          spp(ii)%etao_lims = (/MINVAL(spp(ii)%vars%eta), &
-               MAXVAL(spp(ii)%vars%eta)/)
        CASE ('UNIFORM')
           spp(ii)%etao = spp(ii)%etao_lims(1)
 
           spp(ii)%vars%eta = (spp(ii)%etao_lims(2) - &
                spp(ii)%etao_lims(1))*spp(ii)%vars%eta + spp(ii)%etao_lims(1)
-       CASE ('SIMPLE-EQUILIBRIUM')
-          call get_equilibrium_distribution(params,spp(ii)%vars%eta, &
-               spp(ii)%go,spp(ii)%etao)
 
-          spp(ii)%etao_lims = (/MINVAL(spp(ii)%vars%eta),&
-               MAXVAL(spp(ii)%vars%eta)/)
+
+        !do pp=1_idef,spp(ii)%ppp
+        !  if (spp(ii)%vars%eta(pp).gt.20._rp) then 
+        !    write(6,*) 'part_init',pp,spp(ii)%vars%eta(pp)
+        !  endif
+        !enddo
+
        CASE ('AVALANCHE-4D')
           spp(ii)%vars%eta = spp(ii)%etao
           !Monopitch from input file until sampled in Avalanche_4D
@@ -367,7 +319,7 @@ CONTAINS
   end subroutine initial_energy_pitch_dist
 
 
-  subroutine gyro_distribution(params,F,spp)
+  subroutine gyro_distribution(params,random,F,spp)
 
     USE, INTRINSIC :: iso_c_binding
     
@@ -383,6 +335,7 @@ CONTAINS
     !! here. @endnote
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN) 		:: F
     !! An instance of the KORC derived type FIELDS. This structure 
     !! has the information of the magnetic field.
@@ -390,7 +343,7 @@ CONTAINS
     !! An instance of the derived type SPECIES containing all the
     !! parameters and 
     !! simulation variables of the different species in the simulation.
-    REAL(rp), DIMENSION(:,:), ALLOCATABLE	:: b1
+    REAL(rp), DIMENSION(:,:), ALLOCATABLE	:: b1,b_tmp
     !! Basis vector pointing along the local magnetic field, that is,
     !!  along \(\mathbf{b} = \mathbf{B}/B\).
     REAL(rp), DIMENSION(:,:), ALLOCATABLE	:: b2
@@ -408,7 +361,8 @@ CONTAINS
     REAL(rp), DIMENSION(:), ALLOCATABLE 	:: theta
     !! Uniform random number in the interval \([0,2\pi]\) 
     !! representing the gyro-angle.
-    INTEGER 				:: jj
+    INTEGER 				:: jj,pp
+    REAL :: eta_tmp,bmag,vmag
     !! Particle iterator.
     TYPE(C_PTR), DIMENSION(:), ALLOCATABLE    :: hint
     
@@ -417,6 +371,7 @@ CONTAINS
     ALLOCATE(V2(spp%ppp))
     ALLOCATE(V3(spp%ppp))
     ALLOCATE(b1(spp%ppp,3))
+    ALLOCATE(b_tmp(spp%ppp,3))
     ALLOCATE(b2(spp%ppp,3))
     ALLOCATE(b3(spp%ppp,3))
     ALLOCATE(hint(spp%ppp))
@@ -429,9 +384,12 @@ CONTAINS
     ALLOCATE( theta(spp%ppp) )
 
     ! * * * * INITIALIZE VELOCITY * * * *
-
-    call init_random_seed()
-    call RANDOM_NUMBER(theta)
+    if (.not.params%SameRandSeed) then
+      CALL random%uniform%set(0.0_rp,1.0_rp)
+      do pp=1_idef,spp%ppp
+         theta(pp)=random%uniform%get()
+      enddo
+    endif
     theta = 2.0_rp*C_PI*theta
     
     if (spp%spatial_distribution.eq.'TRACER') theta=2.0*C_PI
@@ -442,6 +400,8 @@ CONTAINS
     V2 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*COS(theta)
     V3 = Vo*SIN(C_PI*spp%vars%eta/180.0_rp)*SIN(theta)
 
+
+
     !write(6,*) 'V123',V1,V2,V3
     
     !do jj=1_idef,spp%ppp
@@ -449,7 +409,7 @@ CONTAINS
     !        spp%vars%X(jj,:)*params%cpp%length
     !end do
     call unitVectors(params,spp%vars%X,F,b1,b2,b3,spp%vars%flagCon, &
-         spp%vars%cart,hint)
+         spp%vars%cart,hint,b_tmp)
     !! Call to subroutine [[unitVectors]] in [[korc_fields]].
 
     !
@@ -471,6 +431,17 @@ CONTAINS
     !write(6,'("Vy: ",E17.10)') spp%vars%V(:,2)
     !write(6,'("Vz: ",E17.10)') spp%vars%V(:,3)
     
+    !do pp=1_idef,spp%ppp
+      
+    !    vmag=sqrt(spp%vars%V(pp,1)*spp%vars%V(pp,1)+spp%vars%V(pp,2)*spp%vars%V(pp,2)+spp%vars%V(pp,3)*spp%vars%V(pp,3))
+    !    bmag=sqrt(b_tmp(pp,1)*b_tmp(pp,1)+b_tmp(pp,2)*b_tmp(pp,2)+b_tmp(pp,3)*b_tmp(pp,3))
+
+    !    eta_tmp = 180.0_rp/C_PI* &
+    !    ACOS((b_tmp(pp,1)*spp%vars%V(pp,1)+b_tmp(pp,2)*spp%vars%V(pp,2)+b_tmp(pp,3)*spp%vars%V(pp,3))/(bmag*vmag))  
+
+    !    write(6,*) 'vel_init',pp,'B',b_tmp(pp,1),b_tmp(pp,2),b_tmp(pp,3)
+   !enddo
+
     DEALLOCATE(theta)
     DEALLOCATE(Vo)
     DEALLOCATE(V1)
@@ -483,8 +454,8 @@ CONTAINS
   end subroutine gyro_distribution
 
 
-  subroutine initial_gyro_distribution(params,F,spp)
-    !! @note Subroutine that works as an interface for initializing various 
+  subroutine initial_gyro_distribution(params,random,F,spp)
+    !! @note Subroutine that works as an interface for initializing various
     !! gyro-angle distributions for the different simulated particle
     !! species. @endnote
     !! @todo At this moment this subroutine only calls the subroutine
@@ -492,6 +463,7 @@ CONTAINS
     !! a uniform gyro-angle distribution. This will be modified later. @endtodo
     TYPE(KORC_PARAMS), INTENT(IN) 				:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN) 					:: F
     !! An instance of the KORC derived type FIELDS. This structure has 
     !! the information of the magnetic field.
@@ -507,7 +479,7 @@ CONTAINS
           !Nothing, all was done in initialize_particles through
           !thermal_distribution
        CASE DEFAULT            
-          call gyro_distribution(params,F,spp(ss))
+          call gyro_distribution(params,random,F,spp(ss))
        END SELECT
     end do
   end subroutine initial_gyro_distribution

@@ -1,0 +1,100 @@
+name: spack
+on: [ push, workflow_dispatch ]
+
+jobs:
+  job_one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          key: spack-cache-sandlot-6
+          path: |
+            ./spack
+            ~/.spack
+
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: grab spack
+        uses: actions/checkout@v4
+        with:
+          repository: 'spack/spack'
+          ref: 'v0.21.1'
+          path: './spack'
+        #
+        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+        #
+
+      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
+        name: spack install
+        run: |
+          . ./spack/share/spack/setup-env.sh
+
+          spack config add config:install_tree:padded_length:128
+
+          spack compiler find
+          spack install --no-cache gcc@13.2.0
+          spack compiler add $(spack location -i gcc@13.2.0)
+
+          spack install --no-cache cmake %gcc@13.2.0
+          spack install --no-cache hdf5+fortran+mpi %gcc@13.2.0
+
+          spack gc -y
+
+
+  job_two:
+    needs: job_one
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+      - name: grab main project
+        uses: actions/checkout@v4
+        with:
+          path: './KORC'
+
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          key: spack-cache-sandlot-6
+          path: |
+            ./spack
+            ~/.spack
+
+      - name: build korc
+        run: |
+
+          pwd
+          tree -L 2
+
+          . ./spack/share/spack/setup-env.sh
+
+          #spack find -ldf
+          spack compilers
+
+          spack load gcc@13.2.0
+          spack load cmake             %gcc@13.2.0
+          spack load hdf5+fortran+mpi  %gcc@13.2.0
+
+          set -x
+          which cmake     && cmake     --version
+          which gfortran  && gfortran  --version
+          which h5diff    && h5diff    --version
+          set -x
+
+          cd ./KORC
+          ./build.sh
+          cd ./build && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+
+      - name: Show Cache
+        if: failure()
+        shell: bash
+        run: |
+          tree -L 2
+          pwd
+          ls -la
+          cat ./KORC/build/CMakeCache.txt
+
+

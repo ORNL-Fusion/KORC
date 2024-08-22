@@ -6,7 +6,6 @@ module korc_initialize
   use korc_hpc
   use korc_HDF5
   use korc_fields
-  use korc_rnd_numbers
   use korc_spatial_distribution
   use korc_velocity_distribution
   use korc_coords
@@ -282,8 +281,11 @@ CONTAINS
             params%snapshot_frequency)
        
        if (params%t_steps.gt.params%output_cadence) then
+#ifdef __NVCOMPILER
+       params%dt=params%snapshot_frequency/real(params%output_cadence)
+#else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
-          params%t_steps = FLOOR(params%simulation_time/params%dt,ip)
+#endif
        endif
 
        params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
@@ -314,10 +316,11 @@ CONTAINS
              params%t_steps = CEILING(params%simulation_time/params%snapshot_frequency,ip)
              params%num_snapshots = params%t_steps
           end if
+#ifdef __NVCOMPILER
+          params%dt=params%snapshot_frequency/real(params%output_cadence)
+#else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
-          params%t_steps = FLOOR(params%simulation_time/params%dt,ip)
-       else
-          params%dt=params%simulation_time/float(params%t_steps)
+#endif
        endif
 
        params%restart_output_cadence = &
@@ -351,13 +354,14 @@ CONTAINS
   ! * * * SUBROUTINES FOR INITIALIZING PARTICLES * * * !
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * !
 
-  subroutine initialize_particles(params,F,P,spp)
+  subroutine initialize_particles(params,random,F,P,spp)
     !! @note Subroutine that loads the information of the initial condition
     !! of the different particle species. This subroutine calls
     !! the subroutine that generates the initial energy and pitch angle
     !! distribution functions. @endnote
     TYPE(KORC_PARAMS), INTENT(IN) 				:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN) 					:: F
     !! An instance of KORC's derived type FIELDS containing all the information
     !! about the fields used in the simulation. See [[korc_types]]
@@ -509,7 +513,7 @@ CONTAINS
        spp(ii)%sigmaZ = sigmaZ(ii)
        spp(ii)%theta_gauss = theta_gauss(ii)
        spp(ii)%psi_max = psi_max(ii)
-       spp(ii)%PSIp_min=PSIp_min(ii)
+       spp(ii)%psi_min = psi_min(ii)
        spp(ii)%Spong_w = Spong_w(ii)
        spp(ii)%Spong_b = Spong_b(ii)
        spp(ii)%Spong_dlam = Spong_dlam(ii)
@@ -627,7 +631,7 @@ CONTAINS
     P%n_REr0=max(sqrt(spp(1)%psi_max*2*spp(1)%sigmaR**2), &
          sqrt(spp(1)%psi_max*2*spp(1)%sigmaZ**2))
 
-    call initial_energy_pitch_dist(params,spp)
+    call initial_energy_pitch_dist(params,random,spp)
 
 
     DEALLOCATE(ppp)
@@ -653,7 +657,7 @@ CONTAINS
     DEALLOCATE(sigmaZ)
     DEALLOCATE(theta_gauss)
     DEALLOCATE(psi_max)
-    DEALLOCATE(PSIp_min)
+    DEALLOCATE(psi_min)
     DEALLOCATE(Spong_b)
     DEALLOCATE(Spong_w)
     DEALLOCATE(Spong_dlam)
@@ -666,13 +670,14 @@ CONTAINS
   end subroutine initialize_particles
 
 
-  subroutine set_up_particles_ic(params,F,spp,P)
+  subroutine set_up_particles_ic(params,random,F,spp,P)
     !! @note Subroutine with calls to subroutines to load particles'
     !! information if it is a restarting simulation, or to initialize the
     !! spatial and velocity distribution of each species if it is a new
     !! simulation. @endnote
     TYPE(KORC_PARAMS), INTENT(INOUT) 				:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(INOUT) 					:: F
     !! An instance of KORC's derived type FIELDS containing all
     !! the information about the fields used in the simulation.
@@ -690,7 +695,11 @@ CONTAINS
 
        if(params%LargeCollisions.and.(.not.params%load_balance)) then
           do ii=1_idef,params%num_species
+#ifdef __NVCOMPILER
+             spp(ii)%pRE=int(sum(real(spp(ii)%vars%flagRE)))
+#else
              spp(ii)%pRE=int(sum(float(spp(ii)%vars%flagRE)))
+#endif
           end do
        end if
 
@@ -703,15 +712,13 @@ CONTAINS
 
        !write(6,*) 'flagRE',spp(1)%vars%flagRE
        !write(6,*) 'pRE',spp(1)%pRE
-
-       call init_random_seed()
     else
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING SPATIAL DISTRIBUTION * * * *")')
           flush(output_unit_write)
        end if
-       call intitial_spatial_distribution(params,spp,P,F)
+       call intitial_spatial_distribution(params,random,spp,P,F)
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
@@ -719,7 +726,7 @@ CONTAINS
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING VELOCITY COMPONENTS * * * *")')
        end if
-       call initial_gyro_distribution(params,F,spp)
+       call initial_gyro_distribution(params,random,F,spp)
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
@@ -727,4 +734,10 @@ CONTAINS
 
   end subroutine set_up_particles_ic
 
+  subroutine take_down_particles_ic(params)
+    implicit none
+
+    TYPE(KORC_PARAMS), INTENT(INOUT)                 :: params
+    !! Core KORC simulation parameters.
+  end subroutine
 end module korc_initialize

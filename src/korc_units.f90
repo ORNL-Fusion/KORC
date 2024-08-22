@@ -164,6 +164,9 @@ subroutine normalize_variables(params,spp,F,P)
   F%circumradius=F%circumradius/params%cpp%length
   F%AB%a = F%AB%a/params%cpp%length
   F%AB%Ro = F%AB%Ro/params%cpp%length
+  F%DiMESloc(1)=F%DiMESloc(1)/params%cpp%length
+  F%DiMESloc(3)=F%DiMESloc(3)/params%cpp%length
+  F%DiMESdims=F%DiMESdims/params%cpp%length
 
 
   P%a = P%a/params%cpp%length
@@ -223,6 +226,9 @@ subroutine normalize_variables(params,spp,F,P)
      F%AB%Bo = F%AB%Bo/params%cpp%Bo
      F%AB%lambda = F%AB%lambda/params%cpp%length
      F%AB%Bpo = F%AB%Bpo/params%cpp%Bo
+     F%AB%eps_mn = F%AB%eps_mn/params%cpp%length
+     F%AB%sigma_mn = F%AB%sigma_mn/params%cpp%length
+     F%AB%l_mn = F%AB%l_mn/params%cpp%length
 
 
      if (params%field_eval.eq.'interp') then
