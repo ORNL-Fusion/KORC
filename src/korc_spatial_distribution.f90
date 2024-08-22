@@ -1348,7 +1348,7 @@ subroutine MH_psi(params,random,spp,F)
      psi_max = spp%psi_max
      psi_min = spp%psi_min
      psi_max_buff = spp%psi_max*2._rp
-     PSIp_min=spp%PSIp_min/(params%cpp%Bo*params%cpp%length**2)
+     !PSIp_min=spp%PSIp_min/(params%cpp%Bo*params%cpp%length**2)
     ! psi_max=(psi_max-PSIp0)/(PSIp_lim-PSIp0)
     ! PSIp_min=(PSIp_min-PSIp0)/(PSIp_lim-PSIp0)
 !    write(6,*)"psip0",PSIp0,"psi_max",psi_max,"PSIp_min",PSIp_min,"PSIp_lim", PSIp_lim
