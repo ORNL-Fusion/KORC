@@ -457,6 +457,172 @@ subroutine FO_init(params,F,spp,output,step)
 
 end subroutine FO_init
 
+subroutine FO_init_uni_ACC(params,F,spp,output,step)
+     TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+     !! Core KORC simulation parameters.
+     TYPE(FIELDS), INTENT(IN)                                   :: F
+     !! An instance of the KORC derived type FIELDS.
+     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+     !! An instance of the derived type SPECIES containing all the parameters
+     !! and simulation variables of the different species in the simulation.
+     REAL(rp)                                      :: dt
+     !! Time step used in the leapfrog step (\(\Delta t\)).
+     REAL(rp)               :: Bmag
+     REAL(rp)              :: b_unit_X,b_unit_Y,b_unit_Z
+     REAL(rp)              :: v,vpar,vperp
+     REAL(rp)               :: tmp
+     REAL(rp)              :: g
+     REAL(rp)              :: cross_X,cross_Y,cross_Z
+     REAL(rp)            :: vec_X,vec_Y,vec_Z
+     INTEGER                                      :: ii
+     !! Species iterator.
+     INTEGER                                      :: pp
+     !! Particles iterator.
+     LOGICAL,intent(in) :: output
+     LOGICAL,intent(in) :: step
+     REAL(rp) :: X_X,X_Y,X_Z
+     REAL(rp) :: V_X,V_Y,V_Z
+     REAL(rp) :: T_R,T_T,T_Z
+     REAL(rp) :: B_X,B_Y,B_Z
+     REAL(rp) :: E_X,E_Y,E_Z
+     REAL(rp) :: PSIp
+     REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar,cpp_B,cpp_len
+     INTEGER(is) :: flagCon,flagCol
+   
+     do ii = 1_idef,params%num_species
+   
+       m_cache=spp(ii)%m
+       q_cache=spp(ii)%q
+   
+       B0=F%Bo
+       E0=F%Eo
+   
+       tmp=params%cpp%length
+   
+       if(output) then
+   
+         !$acc  parallel loop
+         do pp=1_idef,spp(ii)%ppp
+   
+           X_X=spp(ii)%vars%X(pp,1)
+           X_Y=spp(ii)%vars%X(pp,2)
+           X_Z=spp(ii)%vars%X(pp,3)
+   
+           V_X=spp(ii)%vars%V(pp,1)
+           V_Y=spp(ii)%vars%V(pp,2)
+           V_Z=spp(ii)%vars%V(pp,3)
+   
+           B_X=B0
+           B_Y=0._rp
+           B_Z=0._rp
+   
+           E_X=E0
+           E_Y=0._rp
+           E_Z=0._rp
+   
+           flagCon=spp(ii)%vars%flagCon(pp)
+
+   
+           spp(ii)%vars%B(pp,1) = B_X
+           spp(ii)%vars%B(pp,2) = B_Y
+           spp(ii)%vars%B(pp,3) = B_Z
+   
+           spp(ii)%vars%E(pp,1) = E_X
+           spp(ii)%vars%E(pp,2) = E_Y
+           spp(ii)%vars%E(pp,3) = E_Z
+   
+           !Derived output data
+           Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+   
+           ! Parallel unit vector
+           b_unit_X = B_X/Bmag
+           b_unit_Y = B_Y/Bmag
+           b_unit_Z = B_Z/Bmag
+   
+           !write(6,*) 'X',X_X,X_Y,X_Z
+           !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
+   
+           v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+           if (v.GT.korc_zero) then
+             ! Parallel and perpendicular components of velocity
+             vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+               V_Z*b_unit_Z)
+   
+             vperp =  v**2 - vpar**2
+             if ( vperp .GE. korc_zero ) then
+               vperp = SQRT( vperp )
+             else
+               vperp = 0.0_rp
+             end if
+   
+             !write(6,*) 'v,vpar,vperp',v,vpar,vperp
+   
+             ! Pitch angle
+             spp(ii)%vars%eta(pp) = 180.0_rp* &
+               MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+   
+             ! Magnetic moment
+             spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+               g**2*vperp**2/Bmag
+             ! See Northrop's book (The adiabatic motion of charged
+             ! particles)
+   
+             ! Radiated power
+             tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+   
+             cross_X = V_Y*B_Z-V_Z*B_Y
+             cross_Y = V_Z*B_X-V_X*B_Z
+             cross_Z = V_X*B_Y-V_Y*B_X
+   
+             vec_X = E_X + cross_X
+             vec_Y = E_Y + cross_Y
+             vec_Z = E_Z + cross_Z
+   
+             spp(ii)%vars%Prad(pp) = tmp* &
+               ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+               cross_X*E_X+cross_Y*E_Y+ &
+               cross_Z*E_Z + g**2* &
+               ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+               - vec_X*vec_X-vec_Y*vec_Y- &
+               vec_Z*vec_Z) )
+   
+             ! Input power due to electric field
+             spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+               E_Y*V_Y+E_Z*V_Z)
+           else
+               spp(ii)%vars%eta(pp) = 0.0_rp
+               spp(ii)%vars%mu(pp) = 0.0_rp
+               spp(ii)%vars%Prad(pp) = 0.0_rp
+               spp(ii)%vars%Pin(pp) = 0.0_rp
+           end if
+   
+         enddo
+         !$acc end parallel loop
+   
+       endif !(if output)
+   
+       if(step.and.(.not.params%FokPlan)) then
+         dt=0.5_rp*params%dt
+   
+         !$acc  parallel loop
+         do pp=1_idef,spp(ii)%ppp
+   
+           spp(ii)%vars%X(pp,1) = spp(ii)%vars%X(pp,1) + &
+             dt*spp(ii)%vars%V(pp,1)
+           spp(ii)%vars%X(pp,2) = spp(ii)%vars%X(pp,2) + &
+             dt*spp(ii)%vars%V(pp,2)
+           spp(ii)%vars%X(pp,3) = spp(ii)%vars%X(pp,3) + &
+             dt*spp(ii)%vars%V(pp,3)
+   
+         end do
+         !$acc end parallel loop
+   
+       endif !(if step)
+   
+     enddo ! over species
+   
+   end subroutine FO_init_uni_ACC
+
 subroutine FO_init_eqn_ACC(params,F,spp,output,step)
   TYPE(KORC_PARAMS), INTENT(IN)                              :: params
   !! Core KORC simulation parameters.
@@ -511,6 +677,10 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
     cpp_len=params%cpp%length
     cpp_B=params%cpp%Bo
 
+    tmp=params%cpp%length
+
+    write(6,*) R0*tmp,ar*tmp
+
     if(output) then
 
       !$acc  parallel loop
@@ -532,10 +702,14 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
         E_Y=0._rp
         E_Z=0._rp
 
+        write(6,*) X_X*tmp,X_Y*tmp,X_Z*tmp
+
         flagCon=spp(ii)%vars%flagCon(pp)
 
         call cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
           T_R,T_T,T_Z,flagCon)
+
+          write(6,*) T_R*tmp,T_T,T_Z,flagCon
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
         B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
@@ -547,6 +721,8 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
         spp(ii)%vars%E(pp,1) = E_X
         spp(ii)%vars%E(pp,2) = E_Y
         spp(ii)%vars%E(pp,3) = E_Z
+
+        write(6,*) B_X,B_Y,B_Z
 
         !Derived output data
         Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
@@ -1326,6 +1502,167 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
 
 end subroutine adv_FOeqn_top
 
+subroutine adv_FOuni_top_ACC(params,F,P,spp)
+     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+     !! Core KORC simulation parameters.
+     TYPE(FIELDS), INTENT(IN)                                   :: F
+     !! An instance of the KORC derived type FIELDS.
+     TYPE(PROFILES), INTENT(IN)                                 :: P
+     !! An instance of the KORC derived type PROFILES.
+     TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+     !! An instance of the derived type SPECIES containing all the parameters
+     !! and simulation variables of the different species in the simulation.
+     REAL(rp) :: Bmag
+     REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
+     REAL(rp) :: v,vpar,vperp
+     REAL(rp) :: tmp
+     REAL(rp) :: g
+     REAL(rp) :: cross_X,cross_Y,cross_Z
+     REAL(rp) :: vec_X,vec_Y,vec_Z
+     REAL(rp) :: X_X,X_Y,X_Z
+     REAL(rp) :: T_R,T_T,T_Z
+     REAL(rp) :: V_X,V_Y,V_Z
+     REAL(rp) :: B_X,B_Y,B_Z
+     REAL(rp) :: E_X,E_Y,E_Z
+     INTEGER(is) :: flagCon,flagCol
+     INTEGER(ip) :: tskip
+     REAL(rp) :: a,m_cache,q_cache,dt
+     REAL(rp) :: R0,B0,E0,lam,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B
+     LOGICAL :: perturb
+     INTEGER  :: ii,pp,ss,tt,ppp
+   
+     !$acc routine (advance_FO_vars_ACC) seq
+
+     ss=params%num_species
+   
+     do ii = 1_idef,ss
+   
+       m_cache=spp(ii)%m
+       q_cache=spp(ii)%q
+       a = q_cache/abs(q_cache)*params%dt
+       tskip=params%t_skip
+       ppp=spp(ii)%ppp
+       dt=params%dt
+   
+       !$acc parallel loop 
+       do pp=1_idef,ppp
+   
+         X_X=spp(ii)%vars%X(pp,1)
+         X_Y=spp(ii)%vars%X(pp,2)
+         X_Z=spp(ii)%vars%X(pp,3)
+   
+         V_X=spp(ii)%vars%V(pp,1)
+         V_Y=spp(ii)%vars%V(pp,2)
+         V_Z=spp(ii)%vars%V(pp,3)
+   
+         B_X=spp(ii)%vars%B(pp,1)
+         B_Y=spp(ii)%vars%B(pp,2)
+         B_Z=spp(ii)%vars%B(pp,3)
+   
+         E_X=spp(ii)%vars%E(pp,1)
+         E_Y=spp(ii)%vars%E(pp,2)
+         E_Z=spp(ii)%vars%E(pp,3)
+   
+         g=spp(ii)%vars%g(pp)
+   
+         flagCon=spp(ii)%vars%flagCon(pp)
+         flagCol=spp(ii)%vars%flagCol(pp)
+         
+         !$acc loop seq
+         do tt=1_ip,tskip
+   
+           call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+               X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+               g,flagCon,flagCol)
+         end do !timestep iterator
+   
+         spp(ii)%vars%X(pp,1)=X_X
+         spp(ii)%vars%X(pp,2)=X_Y
+         spp(ii)%vars%X(pp,3)=X_Z
+   
+         spp(ii)%vars%V(pp,1)=V_X
+         spp(ii)%vars%V(pp,2)=V_Y
+         spp(ii)%vars%V(pp,3)=V_Z
+   
+         spp(ii)%vars%g(pp) = g
+         spp(ii)%vars%flagCon(pp) = flagCon
+         spp(ii)%vars%flagCol(pp) = flagCol
+   
+         spp(ii)%vars%B(pp,1) = B_X
+         spp(ii)%vars%B(pp,2) = B_Y
+         spp(ii)%vars%B(pp,3) = B_Z
+   
+         spp(ii)%vars%E(pp,1) = E_X
+         spp(ii)%vars%E(pp,2) = E_Y
+         spp(ii)%vars%E(pp,3) = E_Z
+   
+         !Derived output data
+         Bmag = SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+   
+         ! Parallel unit vector
+         b_unit_X = B_X/Bmag
+         b_unit_Y = B_Y/Bmag
+         b_unit_Z = B_Z/Bmag
+   
+         v = SQRT(V_X*V_X+V_Y*V_Y+V_Z*V_Z)
+         if (v.GT.korc_zero) then
+           ! Parallel and perpendicular components of velocity
+           vpar = (V_X*b_unit_X+V_Y*b_unit_Y+ &
+             V_Z*b_unit_Z)
+   
+           vperp =  v**2 - vpar**2
+           if ( vperp .GE. korc_zero ) then
+             vperp = SQRT( vperp )
+           else
+             vperp = 0.0_rp
+           end if
+   
+           ! Pitch angle
+           spp(ii)%vars%eta(pp) = 180.0_rp* &
+             MODULO(ATAN2(vperp,vpar),2.0_rp*C_PI)/C_PI
+   
+           ! Magnetic moment
+           spp(ii)%vars%mu(pp) = 0.5_rp*m_cache* &
+             g**2*vperp**2/Bmag
+           ! See Northrop's book (The adiabatic motion of charged
+           ! particles)
+   
+           ! Radiated power
+           tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+   
+           cross_X = V_Y*B_Z-V_Z*B_Y
+           cross_Y = V_Z*B_X-V_X*B_Z
+           cross_Z = V_X*B_Y-V_Y*B_X
+   
+           vec_X = E_X + cross_X
+           vec_Y = E_Y + cross_Y
+           vec_Z = E_Z + cross_Z
+   
+           spp(ii)%vars%Prad(pp) = tmp* &
+             ( E_X*E_X+E_Y*E_Y+E_Z*E_Z + &
+             cross_X*E_X+cross_Y*E_Y+ &
+             cross_Z*E_Z + g**2* &
+             ((E_X*V_X+E_Y*V_Y+E_Z*V_Z)**2 &
+             - vec_X*vec_X+vec_Y*vec_Y+ &
+             vec_Z*vec_Z) )
+   
+           ! Input power due to electric field
+           spp(ii)%vars%Pin(pp) = q_cache*(E_X*V_X+ &
+             E_Y*V_Y+E_Z*V_Z)
+         else
+           spp(ii)%vars%eta(pp) = 0.0_rp
+           spp(ii)%vars%mu(pp) = 0.0_rp
+           spp(ii)%vars%Prad(pp) = 0.0_rp
+           spp(ii)%vars%Pin(pp) = 0.0_rp
+         end if
+   
+       end do !particle iterator
+       !$acc end parallel loop
+   
+     end do !species iterator
+   
+   end subroutine adv_FOuni_top_ACC
+
 subroutine adv_FOeqn_top_ACC(params,F,P,spp)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
@@ -1355,6 +1692,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
   LOGICAL :: perturb
   INTEGER  :: ii,pp,ss,tt,ppp
 
+  !$acc routine (advance_FO_vars_ACC) seq
   !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
   !$acc routine (analytical_fields_p_ACC) seq
 
