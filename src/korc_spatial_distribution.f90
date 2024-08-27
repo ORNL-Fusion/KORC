@@ -737,7 +737,7 @@ FUNCTION random_norm(mean,sigma)
 	random_norm = mean+sigma*SQRT(-2.0_rp*LOG(rand1))*COS(2.0_rp*C_PI*rand2);
 END FUNCTION random_norm
 
-subroutine MH_gaussian_elliptic_torus(params,spp)
+subroutine MH_gaussian_elliptic_torus(params,random,spp)
   !! @note Subroutine that generates a 2D Gaussian distribution in an
   !! elliptic torus as the initial spatial condition of a given particle
   !! species in the simulation. @endnote
@@ -1356,7 +1356,7 @@ subroutine MH_psi(params,random,spp,F)
 
   sigma=spp%sigmaR*params%cpp%length
 
-  write(6,*) "sigma",sigma
+  !write(6,*) "sigma",sigma
   !write(output_unit_write,*) min_Z,max_Z
 
 

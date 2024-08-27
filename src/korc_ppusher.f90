@@ -5278,7 +5278,7 @@ end subroutine advance_FPeqn_vars
 
 #ifdef PSPLINE
 
-  subroutine adv_GCinterp_psi_top(params,spp,P,F)
+  subroutine adv_GCinterp_psi_top(params,random,spp,P,F)
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
     !! Core KORC simulation parameters.
@@ -6420,6 +6420,8 @@ do ii = 1_idef,params%num_species
 
 
 end do !species iterator
+
+end subroutine adv_GCinterp_psi2x1t_top
  
 subroutine advance_GCinterp_psi_vars(pchunk,spp,pp,tt,params,random,Y_R,Y_PHI,Y_Z, &
      V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,PSIp, &
