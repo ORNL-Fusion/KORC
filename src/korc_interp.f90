@@ -2671,15 +2671,15 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !write(6,*) '(R,PHI,Z)',Y_R*params%cpp%length,Y_PHI, &
       !     Y_Z*params%cpp%length
       !write(6,*) 'amp',amp,'cP,sP',cP,sP,'cnP,snP',cnP,snP
-      !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
-      !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
-      !write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
+      !write(6,*) 'psi',A(1)*params%cpp%Bo*params%cpp%length**2
+      !write(6,*) 'dpsidR',A(2)*params%cpp%Bo*params%cpp%length
+      !write(6,*) 'dpsidZ',A(3)*params%cpp%Bo*params%cpp%length
       !write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
       !write(6,*) 'AMP',amp
       !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
       !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
       !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
-      !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
+      !write(6,*) 'B',(B0_X+B1_X)*params%cpp%Bo,(B0_Y+B1_Y)*params%cpp%Bo,(B0_Z+B1_Z)*params%cpp%Bo
 
       !write(6,*) 'unitvectors',pp,prtcls%B(pp,:)
 
@@ -2862,19 +2862,18 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
    end do
    !$OMP END SIMD
 
-#if DBG_CHECK
   !write(6,*) '(R,PHI,Z,time)',Y_R*params%cpp%length,Y_PHI, &
   !     Y_Z*params%cpp%length,time
   !write(6,*) 'psi',PSIp*params%cpp%Bo*params%cpp%length**2
-  !write(6,*) 'dpsidR',A(:,2)*params%cpp%Bo*params%cpp%length
-  !write(6,*) 'dpsidZ',A(:,3)*params%cpp%Bo*params%cpp%length
-!  write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
- ! write(output_unit_write,'("AMP")'),amp
+  !write(6,*) 'dpsidR',A(2)*params%cpp%Bo*params%cpp%length
+  !write(6,*) 'dpsidZ',A(3)*params%cpp%Bo*params%cpp%length
+  !write(6,*) 'B0',B0_R*params%cpp%Bo,B0_PHI*params%cpp%Bo,B0_Z*params%cpp%Bo
+  !write(6,*) 'AMP',amp
   !write(6,*) 'B1Re',B1Re_X*params%cpp%Bo,B1Re_Y*params%cpp%Bo,B1Re_Z*params%cpp%Bo
   !write(6,*) 'B1Im',B1Im_X*params%cpp%Bo,B1Im_Y*params%cpp%Bo,B1Im_Z*params%cpp%Bo
   !write(6,*) 'B1',B1_X*params%cpp%Bo,B1_Y*params%cpp%Bo,B1_Z*params%cpp%Bo
   !write(6,*) 'B',B_X*params%cpp%Bo,B_Y*params%cpp%Bo,B_Z*params%cpp%Bo
-#endif
+
 end subroutine interp_FOfields_aorsa_p
 
 subroutine interp_FOcollision_p(pchunk,Y_R,Y_PHI,Y_Z,ne,Te,Zeff,flag_cache)
@@ -3655,6 +3654,7 @@ subroutine interp_fields(params,prtcls,F)
   if (((ALLOCATED(F%PSIp).and.F%Bflux).or. &
     F%ReInterp_2x1t).and.(.not.((TRIM(params%field_model).eq.'M3D_C1').or. &
     (params%field_model(10:13).eq.'MARS').or. &
+    (params%field_model(10:14).eq.'AORSA').or. &
     (TRIM(params%field_model).eq.'NIMROD')))) then
 
   !     write(output_unit_write,'("3 size of PSI_P: ",I16)') size(prtcls%PSI_P)

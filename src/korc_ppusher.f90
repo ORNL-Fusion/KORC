@@ -377,9 +377,10 @@ subroutine FO_init(params,F,spp,output,step)
 
             if ((eta_tmp.gt.20._rp).or. &
               ((spp(ii)%vars%eta(pp-1+cc)-eta_tmp)/spp(ii)%vars%eta(pp-1+cc).gt.0.01)) then 
-                write(6,*) 'abberation',pp
+                write(6,*) '***ABBERATION***',pp
                 write(6,*) pp,spp(ii)%vars%eta(pp-1+cc),eta_tmp,'B', &
-                  spp(ii)%vars%B(pp-1+cc,:),'PSI_P',spp(ii)%vars%PSI_P(pp-1+cc)
+                  spp(ii)%vars%B(pp-1+cc,:)*params%cpp%Bo,'PSI_P',spp(ii)%vars%PSI_P(pp-1+cc)* &
+                  params%cpp%Bo*params%cpp%length**2
   
             endif  
 

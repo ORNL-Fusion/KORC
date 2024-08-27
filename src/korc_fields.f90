@@ -1172,7 +1172,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
       b2(ii,:)=b2tmp
       b3(ii,:)=b3tmp
 
-      !write(6,*) 'unitvectors',ii,'B',vars%B(ii,:),'psi',vars%PSI_P(ii)
+      !write(6,*) 'unitvectors',ii,'B',vars%B(ii,:)*params%cpp%Bo,'psi',vars%PSI_P(ii)* &
+      !   params%cpp%Bo*params%cpp%length**2
 
    end do
 
