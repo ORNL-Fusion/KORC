@@ -1,4 +1,4 @@
-name: spack
+name: agate
 on: [ push, workflow_dispatch ]
 
 jobs:
