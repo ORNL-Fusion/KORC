@@ -63,8 +63,7 @@ jobs:
     steps:
       - name: build korc
         run: |
-          pwd
-          ./ci_stub/onyx_job_build_cpu.sh
+          ./KORC/ci_stub/onyx_job_build_cpu.sh
 
   job_setup_spack:
     if: true
@@ -135,7 +134,7 @@ jobs:
     steps:
       - name: run ci_stub/onxy_job_build_gpu.sh
         run: |
-           ./ci_stub/onxy_job_build_gpu.sh
+           ./KORC/ci_stub/onxy_job_build_gpu.sh
 
   job_test_cpu:
     if: true
