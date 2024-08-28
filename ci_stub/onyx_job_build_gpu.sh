@@ -12,7 +12,7 @@ rm -rf CMakeFiles
 rm -rf ./build_gpu && mkdir $_
 cd ./build_gpu
 cmake \
-    -DCMAKE_BUILD_TYPE:String=Debug \
+    -DCMAKE_BUILD_TYPE:String=Release \
     -DUSE_PSPLINE=ON \
     -DUSE_ACC=ON \
     -DUSE_FIO=OFF \
