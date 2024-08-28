@@ -132,9 +132,9 @@ jobs:
     #
 
     steps:
-      - name: run ci_stub/onxy_job_build_gpu.sh
+      - name: run ci_stub/onyx_job_build_gpu.sh
         run: |
-           ./KORC/ci_stub/onxy_job_build_gpu.sh
+           ./KORC/ci_stub/onyx_job_build_gpu.sh
 
   job_test_cpu:
     if: true
