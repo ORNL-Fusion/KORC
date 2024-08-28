@@ -17,4 +17,4 @@ fi
 
 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
 
-h5diff -r -d 0.008 $OUT_DIR/file_0.h5 ${CMAKE_SOURCE_DIR}/test/mars/file_0_new_random.h5
+h5diff -r -p 0.000008 $OUT_DIR/file_0.h5 ${CMAKE_SOURCE_DIR}/test/mars/file_0_new_random.h5

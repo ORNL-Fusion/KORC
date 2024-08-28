@@ -15,4 +15,4 @@ fi
 #assumes binary directory ../KORC/build/bin was added to path
 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
 
-h5diff -r -d 0.000001 $OUT_DIR/file_0.h5 ${CMAKE_SOURCE_DIR}/test/egyro/file_0.h5
+h5diff -r -p 0.000008 $OUT_DIR/file_0.h5 ${CMAKE_SOURCE_DIR}/test/egyro/file_0.h5
