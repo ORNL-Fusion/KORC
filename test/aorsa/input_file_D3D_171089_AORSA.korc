@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 0.0E-12
+  simulation_time = 1.0E-7
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.0E-12
+  snapshot_frequency = 1.0E-8
     ! Time between snapshots in seconds
   restart_overwrite_frequency = 1.E-1	
     ! Time between overwritting of restart file in seconds
@@ -62,9 +62,9 @@
 
 &plasma_species
   runaway = T
-  ppp = 100
+  ppp = 1000
     ! Number of particles per process (mpi)
-!  pinit = 100
+!  pinit = 1000
   q = -1.0
     ! Electric charge
   m = 1.0
@@ -132,7 +132,7 @@
   psip_conv=-1
     ! sign appended to \nabla\phi\times\nabla\psi_p for definition of
     ! poloidal magnetic field. +1 for DIII-D, -1 for JET
-  AORSA_AMP_Scale=0.
+  AORSA_AMP_Scale=1.
   AORSA_freq=200e6
   AORSA_nmode=35
   useLCFS = T
