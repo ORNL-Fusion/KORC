@@ -321,6 +321,9 @@ CONTAINS
 #else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
 #endif
+
+         params%t_steps = CEILING(params%simulation_time/params%dt,ip)
+
        endif
 
        params%restart_output_cadence = &
