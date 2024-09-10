@@ -1,0 +1,28 @@
+---
+
+spack:
+
+  config:
+    install_tree:
+      padded_length: 128
+
+  specs:
+    - "hdf5 +fortran -mpi %nvhpc@24.5"
+
+  packages:
+    nvhpc:
+      version: [24.5]
+      buildable: false
+      externals:
+        - spec: nvhpc@24.5
+          modules:
+            - nvhpc-hpcx/24.5
+    hdf5:
+      buildable: true
+      compiler: []
+      providers: {}
+      target: []
+      variants: +fortran-mpi
+      version: []
+
+      
