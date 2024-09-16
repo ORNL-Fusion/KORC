@@ -94,29 +94,29 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'spack/spack'
-          ref: 'v0.21.1'
+          ref: 'v0.22.1'
           path: './spack'
         #
-        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+        #   git clone --depth=1 --single-branch --branch v0.22.1 https://github.com/spack/spack.git
         #
 
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
-        name: load nvhpc from environment module
-        run: |
-          module load nvhpc-hpcx/24.5
-          module list
-
-      - if: ${{ steps.check_spack.outputs.exist != 'true' }}
-        name: spack install
+        name: spack env activate
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack config add config:install_tree:padded_length:128
-          spack compiler find
-          spack compiler remove gcc@12.3.0
-          spack install hdf5 +fortran -mpi %nvhpc@24.5
+          spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
+          spack concretize
+          spack install
           spack load    hdf5 +fortran -mpi %nvhpc@24.5
-
+          which h5diff
           spack gc -y
+
+        #   module load nvhpc-hpcx/24.5
+        #   spack config add config:install_tree:padded_length:128
+        #   spack compiler find
+        #   spack compiler remove gcc@12.3.0
+        #   spack install hdf5 +fortran -mpi %nvhpc@24.5
+        #   spack load    hdf5 +fortran -mpi %nvhpc@24.5
 
 
   job_build_gpu:
@@ -134,7 +134,10 @@ jobs:
     steps:
       - name: run ci_stub/onyx_job_build_gpu.sh
         run: |
-           ./KORC/ci_stub/onyx_job_build_gpu.sh
+          . ./spack/share/spack/setup-env.sh
+          spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
+          spack load    hdf5 +fortran -mpi %nvhpc@24.5
+          ./KORC/ci_stub/onyx_job_build_gpu.sh
 
   job_test_cpu:
     if: true
