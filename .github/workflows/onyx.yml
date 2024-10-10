@@ -133,7 +133,7 @@ jobs:
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
-          ./KORC/ci_stub/onyx_job_build_gpu.sh
+          spack build-env hdf5%nvhpc@24.5+fortran~mpi -- ./KORC/ci_stub/onyx_job_build_gpu.sh
 
   job_test_cpu:
     if: true
