@@ -181,6 +181,7 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack load hdf5 +fortran -mpi %nvhpc@24.5
 
+          cd ./KORC/build_gpu && ctest -j 1 --output-on-failure
 
-          cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          # cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
