@@ -105,18 +105,15 @@ jobs:
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
-          spack concretize
+          spack concretize -f
           spack install
-          spack load    hdf5 +fortran -mpi %nvhpc@24.5
-          which h5diff
-          spack gc -y
 
-        #   module load nvhpc-hpcx/24.5
-        #   spack config add config:install_tree:padded_length:128
-        #   spack compiler find
-        #   spack compiler remove gcc@12.3.0
-        #   spack install hdf5 +fortran -mpi %nvhpc@24.5
-        #   spack load    hdf5 +fortran -mpi %nvhpc@24.5
+          which h5diff
+          which nvfortran
+          which cmake
+          module list
+
+          spack gc -y
 
 
   job_build_gpu:
@@ -136,7 +133,6 @@ jobs:
         run: |
           . ./spack/share/spack/setup-env.sh
           spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
-          spack load    hdf5 +fortran -mpi %nvhpc@24.5
           ./KORC/ci_stub/onyx_job_build_gpu.sh
 
   job_test_cpu:

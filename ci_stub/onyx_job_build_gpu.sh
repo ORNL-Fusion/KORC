@@ -1,10 +1,5 @@
 #!/bin/bash
 
-which h5diff
-which nvfortran
-which cmake
-module list
-
 cd ./KORC
 rm -f CMakeCache.txt
 rm -rf CMakeFiles
