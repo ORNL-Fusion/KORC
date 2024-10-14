@@ -94,10 +94,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'spack/spack'
-          ref: 'v0.22.1'
+          ref: 'v0.22.2'
           path: './spack'
         #
-        #   git clone --depth=1 --single-branch --branch v0.22.1 https://github.com/spack/spack.git
+        #   git clone --depth=1 --single-branch --branch v0.22.2 https://github.com/spack/spack.git
         #
 
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
@@ -106,8 +106,9 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
           spack concretize -f
-          spack install
-          spack gc -y
+          spack install --overwrite
+
+        # spack gc -y
 
 
   job_build_gpu:
@@ -177,5 +178,5 @@ jobs:
 
           cd ./KORC/build_gpu && ctest -j 1 --output-on-failure
 
-          # cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+        # cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
