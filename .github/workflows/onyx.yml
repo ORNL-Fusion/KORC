@@ -106,8 +106,9 @@ jobs:
           . ./spack/share/spack/setup-env.sh
           spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
           spack concretize -f
-          spack install --overwrite
+          spack install
 
+        # spack install --overwrite
         # spack gc -y
 
 
