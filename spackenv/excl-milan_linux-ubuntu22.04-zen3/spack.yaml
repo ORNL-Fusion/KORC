@@ -5,9 +5,9 @@
 spack:
   # add package specs to the `specs` list
   specs:
-  - hdf5%nvhpc@24.5+fortran~mpi
+  - "hdf5%nvhpc@24.5+fortran~mpi"
 
-  view: false
+  view: true
   concretizer:
     unify: true
   config:
