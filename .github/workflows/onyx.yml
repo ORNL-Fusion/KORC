@@ -61,9 +61,10 @@ jobs:
     #
 
     steps:
-      - name: build korc
+      - name: run ci_stub/onyx_job_build_cpu.sh
         run: |
           ./KORC/ci_stub/onyx_job_build_cpu.sh
+
 
   job_setup_spack:
     if: true
@@ -131,6 +132,7 @@ jobs:
           spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
           spack build-env hdf5%nvhpc@24.5+fortran~mpi -- ./KORC/ci_stub/onyx_job_build_gpu.sh
 
+
   job_test_cpu:
     if: true
     runs-on: [ self-hosted ]
@@ -148,10 +150,12 @@ jobs:
         uses: SimenB/github-actions-cpu-cores@v2
         id: cpu-cores
 
-      - name: ctest
+      - name: run ci_stub/onyx_job_test_cpu.sh
+        env:
+          JOB_COUNT: "${{ steps.cpu-cores.outputs.count }}"
         run: |
-          cd ./KORC/build_cpu && ctest -j 1 --output-on-failure
-        # cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          ./KORC/ci_stub/onyx_job_test_cpu.sh
+
 
   job_test_gpu:
     if: true
@@ -170,8 +174,10 @@ jobs:
         uses: SimenB/github-actions-cpu-cores@v2
         id: cpu-cores
 
-      - name: ctest
+      - name: run ci_stub/onyx_job_test_gpu.sh
+        env:
+          JOB_COUNT: "${{ steps.cpu-cores.outputs.count }}"
         run: |
-          cd ./KORC/build_gpu && ctest -j 1 --output-on-failure
-        # cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
+          ./KORC/ci_stub/onyx_job_test_gpu.sh
+
 
