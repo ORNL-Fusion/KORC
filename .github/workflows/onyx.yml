@@ -61,9 +61,10 @@ jobs:
     #
 
     steps:
-      - name: build korc
+      - name: run ci_stub/onyx_job_build_cpu.sh
         run: |
           ./KORC/ci_stub/onyx_job_build_cpu.sh
+
 
   job_setup_spack:
     if: true
@@ -94,29 +95,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'spack/spack'
-          ref: 'v0.21.1'
+          ref: 'v0.22.2'
           path: './spack'
         #
-        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
+        #   git clone --depth=1 --single-branch --branch v0.22.2 https://github.com/spack/spack.git
         #
 
       - if: ${{ steps.check_spack.outputs.exist != 'true' }}
-        name: load nvhpc from environment module
-        run: |
-          module load nvhpc-hpcx/24.5
-          module list
-
-      - if: ${{ steps.check_spack.outputs.exist != 'true' }}
-        name: spack install
+        name: spack env activate
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack config add config:install_tree:padded_length:128
-          spack compiler find
-          spack compiler remove gcc@12.3.0
-          spack install hdf5 +fortran -mpi %nvhpc@24.5
-          spack load    hdf5 +fortran -mpi %nvhpc@24.5
+          spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
+          spack concretize -f
+          spack install
 
-          spack gc -y
+        # spack install --overwrite
+        # spack gc -y
 
 
   job_build_gpu:
@@ -134,7 +128,11 @@ jobs:
     steps:
       - name: run ci_stub/onyx_job_build_gpu.sh
         run: |
-           ./KORC/ci_stub/onyx_job_build_gpu.sh
+          . ./spack/share/spack/setup-env.sh
+          spack env activate ./KORC/spackenv/excl-milan_linux-ubuntu22.04-zen3
+          spack install
+          spack build-env hdf5%nvhpc@24.5+fortran~mpi -- ./KORC/ci_stub/onyx_job_build_gpu.sh
+
 
   job_test_cpu:
     if: true
@@ -153,9 +151,11 @@ jobs:
         uses: SimenB/github-actions-cpu-cores@v2
         id: cpu-cores
 
-      - name: ctest
+      - name: run ci_stub/onyx_job_test_cpu.sh
+        env:
+          JOB_COUNT: "${{ steps.cpu-cores.outputs.count }}"
         run: |
-          cd ./KORC/build_cpu && ctest --output-on-failure
+          ./KORC/ci_stub/onyx_job_test_cpu.sh
 
 
   job_test_gpu:
@@ -175,13 +175,10 @@ jobs:
         uses: SimenB/github-actions-cpu-cores@v2
         id: cpu-cores
 
-      - name: ctest
+      - name: run ci_stub/onyx_job_test_gpu.sh
+        env:
+          JOB_COUNT: "${{ steps.cpu-cores.outputs.count }}"
         run: |
-          module load nvhpc-hpcx/24.5
-          module list
-          . ./spack/share/spack/setup-env.sh
-          spack load hdf5 +fortran -mpi %nvhpc@24.5
+          ./KORC/ci_stub/onyx_job_test_gpu.sh
 
-
-          cd ./KORC/build_gpu && ctest -j ${{ steps.cpu-cores.outputs.count }} --output-on-failure
 
