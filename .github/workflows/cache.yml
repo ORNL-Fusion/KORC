@@ -1,0 +1,28 @@
+#
+# Workflow runs weekly to prevent GH dependency cache eviction
+#
+
+name: cache
+on:
+  schedule: [ cron: '50 10 * * TUE' ]
+#
+# GitHub Actions run in UTC time
+#
+
+jobs:
+  job_one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: spack cache
+        id: spack-cache
+        uses: actions/cache@v3
+        with:
+          key: spack-cache-sandlot-6
+          path: |
+            ./spack
+            ~/.spack
+
+
+#
+# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#usage-limits-and-eviction-policy
+#
