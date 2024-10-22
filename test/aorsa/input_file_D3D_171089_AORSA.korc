@@ -1,0 +1,139 @@
+&input_parameters
+  restart = F
+    ! Restart simulation that exited before simulation_time reached
+  proceed = F
+    ! Append simulation results after previous simulation_time reached
+  reinit = F
+    ! Begin a new simulation, reinitializing from restart file state
+  simulation_time = 0.0E-12
+    ! Total aimed simulation time in seconds   
+    ! Run 10 mu s If transients exist put 5 extra mu s.
+  snapshot_frequency = 1.0E-12
+    ! Time between snapshots in seconds
+  restart_overwrite_frequency = 1.E-1	
+    ! Time between overwritting of restart file in seconds
+  dt = 1.E-2
+    ! Time step as fraction of relativistic gyro-period
+  num_species = 1
+  minimum_particle_energy = 1.0E2 
+    ! Minimum energy of simulated particles in eV
+  radiation = F
+  GC_rad_model='SDE'
+  collisions = F
+  collisions_model = 'SINGLE_SPECIES' 
+    ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
+  bound_electron_model = 'HESSLOW' 
+    ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
+  field_model = 'EXTERNAL-AORSA'
+  profile_model = 'ANALYTIC'	
+    ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
+    ! For 'ANALYTICAL', the magnetic field is calculated based on
+    ! the parameters given in the "analytic_mag_field_params" section.
+    ! For 'EXTERNAL', the magnetic field is loaded from the file
+    ! specified in "filename".
+    ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
+    ! velocity.
+  magnetic_field_filename = 'AORSA_D3D_171089_200MHz_EFITgrid.h5'
+  time_slice = 0
+  rmax = 2.1
+  rmin = 0.9
+  zmax = 0.6
+  zmin = -0.6
+  outputs_list = '{X,Y,V,B,E,g,eta,PSIp,flagCon,flagCol}' 
+    ! List of outputs
+    !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,
+    !  curlb,ne,Te,Zeff,PSIp,nimp}'
+  HDF5_error_handling = T
+  FO_GC_compare = F
+  orbit_model = 'FO'
+    ! 'FO' for full orbit, 'GCpre' for guiding center with pre-computed
+    ! auxiliary fields, 'GCgrad' for guiding center with auxiliary
+    ! fields computed with PSPLINE.
+  field_eval = 'interp'
+    ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
+    ! where 'eqn' evaluates particle fields at particle positions and
+    ! 'interp' interpolates precomputed fields.
+  FokPlan = F
+  SameRandSeed = F
+  SC_E = F
+  SC_E_add = F
+  pchunk = 1
+/
+
+&plasma_species
+  runaway = T
+  ppp = 100
+    ! Number of particles per process (mpi)
+!  pinit = 100
+  q = -1.0
+    ! Electric charge
+  m = 1.0
+    ! In units of electron mass
+  spatial_distribution = 'MH_psi'
+  !spatial_distribution = 'TRACER'
+    ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
+    ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
+    ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
+    ! 'AVALANCHE-4D','TRACER','SPONG-3D','HOLLMANN-3D'
+  Ro = 1.7
+  PHIo = 0.0
+    ! In degrees
+  Zo = 0.0
+  r_inner = 0.0
+  r_outter = 0.49
+  shear_factor = 0.35
+  sigmaR = 1.e6
+  sigmaZ = 0.2
+  theta_gauss = 0.0
+  psi_max=1
+    ! goes as R^2 for HOLLMANN-3D, is psiN_max for HOLLMANN-3D-PSI
+!  PSIp_min=0.01
+  falloff_rate = 0.0
+  energy_distribution = 'UNIFORM'
+    ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
+    ! 'EXPERIMENTAL', and 'MONOPITCH'
+  pitch_distribution = 'UNIFORM'
+    ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
+  Eno = 1.0E0
+    ! Initial energy in eV
+  etao = 2.0
+    ! Initial pitch angle
+  Eo_lims = 3.5E6,5.0E6
+    ! Lower and upper limit of simulated energy range, in eV.
+  etao_lims = 0.0,20.0
+    ! Lower and upper limit of simulated pitch-angle range, in degrees.
+  Xtrace = 1.7,0.0,0.0
+    ! Initial position of tracer particle for debugging with
+    ! spatial_distribution='TRACER'
+  Spong_b = 0.2
+  Spong_w = 0.1
+  Spong_dlam = 0.1
+  dth = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dgam = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dR = 0.1
+    ! Variance of sampling normal variate for R location
+  dZ = 0.1
+    ! Variance of sampling normal variate for Z location
+/
+
+&externalPlasmaModel
+  Bfield = F
+  B1field=T
+  E1field=T
+  dBfield = F
+  axisymmetric_fields = F
+  Bflux = T
+  Bflux3D = F
+  Efield = F
+  PSIp_lim=2.037510076503873e-01
+  PSIp_0=-4.932491356369065e-02
+  psip_conv=-1
+    ! sign appended to \nabla\phi\times\nabla\psi_p for definition of
+    ! poloidal magnetic field. +1 for DIII-D, -1 for JET
+  AORSA_AMP_Scale=0.
+  AORSA_freq=200e6
+  AORSA_nmode=35
+  useLCFS = T
+/

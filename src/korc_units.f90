@@ -151,7 +151,8 @@ subroutine normalize_variables(params,spp,F,P)
   F%Bo = F%Bo/params%cpp%Bo
   F%Eo = F%Eo/params%cpp%Eo
   F%AB%Ero = F%AB%Ero/params%cpp%Eo
-  F%AB%rmn=F%AB%rmn/params%cpp%length
+  !F%width=F%width/(params%cpp%length) 
+  F%AB%rmn=F%AB%rmn/(params%cpp%Bo*params%cpp%length**2)
   F%AB%sigmamn=F%AB%sigmamn/params%cpp%length
   F%Ro = F%Ro/params%cpp%length
   F%Zo = F%Zo/params%cpp%length
@@ -407,7 +408,9 @@ subroutine normalize_variables(params,spp,F,P)
                 params%cpp%Bo
 
         else if (params%field_model(10:14).eq.'AORSA') then
-
+             F%AORSA_freq=F%AORSA_freq*params%cpp%time
+             F%psir=F%psir/(params%cpp%Bo*params%cpp%length**2)
+             F%width=F%width/(params%cpp%Bo*params%cpp%length**2)
            if (ALLOCATED(F%B1Re_2DX%X)) F%B1Re_2DX%X = F%B1Re_2DX%X/ &
                 params%cpp%Bo
            if (ALLOCATED(F%B1Re_2DX%Y)) F%B1Re_2DX%Y = F%B1Re_2DX%Y/ &
