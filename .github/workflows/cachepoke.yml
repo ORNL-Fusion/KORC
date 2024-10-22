@@ -2,12 +2,13 @@
 #  Workflow runs weekly to prevent GH dependency cache eviction
 #
 #  GitHub Actions run in UTC time
-#  Trigger workflow every Saturday at 18:47 UTC
 #
 
 name: cachepoke
 on:
-  schedule: [ cron: '47 18 * * SAT' ]
+  schedule:
+    - cron: '47 18 * * SAT'  # Trigger workflow every Sat at 18:47 UTC
+    - cron: '05 12 * * TUE'  # Trigger workflow every Tue at 12:15 UTC
 
 jobs:
   job_one:
