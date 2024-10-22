@@ -8,7 +8,6 @@ name: cachepoke
 on:
   schedule:
     - cron: '47 18 * * SAT'  # Trigger workflow every Sat at 18:47 UTC
-    - cron: '05 12 * * TUE'  # Trigger workflow every Tue at 12:15 UTC
 
 jobs:
   job_one:
