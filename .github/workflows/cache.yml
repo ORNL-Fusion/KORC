@@ -4,7 +4,7 @@
 
 name: cache
 on:
-  schedule: [ cron: '/30 * * * *' ]
+  schedule: [ cron: '30 * * * *' ]
 #
 # GitHub Actions run in UTC time
 #
