@@ -375,13 +375,13 @@ subroutine FO_init(params,F,spp,output,step)
             eta_tmp=180.0_rp/C_PI* &
               ACOS((B_X(cc)*V_X(cc)+B_Y(cc)*V_Y(cc)+B_Z(cc)*V_Z(cc))/(Bmag(cc)*v(cc)))
 
-            if ((eta_tmp.gt.20._rp).or. &
-              ((spp(ii)%vars%eta(pp-1+cc)-eta_tmp)/spp(ii)%vars%eta(pp-1+cc).gt.0.01)) then 
-                write(6,*) 'abberation',pp
-                write(6,*) pp,spp(ii)%vars%eta(pp-1+cc),eta_tmp,'B', &
-                  spp(ii)%vars%B(pp-1+cc,:),'PSI_P',spp(ii)%vars%PSI_P(pp-1+cc)
+            !if ((eta_tmp.gt.20._rp).or. &
+            !  ((spp(ii)%vars%eta(pp-1+cc)-eta_tmp)/spp(ii)%vars%eta(pp-1+cc).gt.0.01)) then 
+            !    write(6,*) 'abberation',pp
+            !    write(6,*) pp,spp(ii)%vars%eta(pp-1+cc),eta_tmp,'B', &
+            !      spp(ii)%vars%B(pp-1+cc,:),'PSI_P',spp(ii)%vars%PSI_P(pp-1+cc)
   
-            endif  
+            !endif  
 
             spp(ii)%vars%eta(pp-1+cc) = eta_tmp 
 
