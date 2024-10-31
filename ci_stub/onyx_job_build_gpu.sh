@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# load nvhpc from environment module
-module load nvhpc-hpcx/24.5
+which h5diff
+which nvfortran
+which cmake
 module list
-. ./spack/share/spack/setup-env.sh
-spack load hdf5 +fortran -mpi %nvhpc@24.5
 
 cd ./KORC
 rm -f CMakeCache.txt
