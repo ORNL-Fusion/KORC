@@ -30,13 +30,14 @@ if(USE_PSPLINE)
   set_tests_properties (mars_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
 
   add_test (NAME aorsa_test_1
-  COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 1
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+            COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 1
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_tests_properties (aorsa_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
 endif()
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/egyro_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_test)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/aorsa_test)
 
 foreach(RANK IN ITEMS 1 2 4 8 16)
   if(${RANK} LESS_EQUAL ${MPIEXEC_MAX_NUMPROCS})

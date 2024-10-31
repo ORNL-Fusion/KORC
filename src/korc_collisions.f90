@@ -2443,6 +2443,13 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
                   CB_ei_SD(params,v(cc),ne(cc),Te(cc),Zeff(cc),P,Y_R(cc),Y_Z(cc)))
           endif
 
+          !write(6,*) 'v,xi,Te,ne',v*C_C,xi,Te*params%cpp%temperature/C_E, &
+          !  ne*params%cpp%density
+          !write(6,*) 'CAL',CAL/(params%cpp%time/(C_C*C_ME)**2)
+          !write(6,*) 'dCAL',dCAL/(sqrt(params%cpp%time)/(C_C*C_ME))
+          !write(6,*) 'CFL',CFL/(params%cpp%time/(C_C*C_ME))
+          !write(6,*) 'CBL',CBL/(params%cpp%time/(C_C*C_ME)**2)
+
           if (.not.cparams_ss%slowing_down) CFL(cc)=0._rp
           if (.not.cparams_ss%pitch_diffusion) CBL(cc)=0._rp
           if (.not.cparams_ss%energy_diffusion) THEN
