@@ -384,12 +384,12 @@ CONTAINS
     ALLOCATE( theta(spp%ppp) )
 
     ! * * * * INITIALIZE VELOCITY * * * *
-    if (.not.params%SameRandSeed) then
-      CALL random%uniform%set(0.0_rp,1.0_rp)
-      do pp=1_idef,spp%ppp
-         theta(pp)=random%uniform%get()
-      enddo
-    endif
+    !if (.not.params%SameRandSeed) then
+    CALL random%uniform%set(0.0_rp,1.0_rp)
+    do pp=1_idef,spp%ppp
+      theta(pp)=random%uniform%get()
+    enddo
+    !endif
     theta = 2.0_rp*C_PI*theta
     
     if (spp%spatial_distribution.eq.'TRACER') theta=2.0*C_PI
