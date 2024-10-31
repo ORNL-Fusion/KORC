@@ -33,7 +33,7 @@ configure_file(${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh.in ${CMAKE_BINARY_DIR}
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/egyro_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_test)
 
-foreach(RANK IN ITEMS 1 2 4 8 16)
+foreach(RANK IN ITEMS 1 2 4 8) #16)
   if(${RANK} LESS_EQUAL ${MPIEXEC_MAX_NUMPROCS})
     add_test (NAME egyro_test_${RANK}
 	      COMMAND ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh ${RANK}

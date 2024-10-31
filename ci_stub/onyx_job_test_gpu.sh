@@ -6,7 +6,7 @@ JOB_COUNT=1
 
 pushd ./KORC/build_gpu >/dev/null
 
-ctest -j ${JOB_COUNT:-1} --output-on-failure
+ctest -j --output-on-failure
 
 pushd ./bin >/dev/null
 
