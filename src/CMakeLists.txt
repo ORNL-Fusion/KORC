@@ -13,7 +13,6 @@ target_sources(korc
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_ppusher.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_HDF5.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_coords.f90>
-               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_hammersley_generator.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_profiles.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_types.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_avalanche.f90>

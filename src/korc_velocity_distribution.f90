@@ -7,7 +7,6 @@ MODULE korc_velocity_distribution
   USE korc_hpc
   use korc_fields
   use korc_random
-  use korc_hammersley_generator
   use korc_avalanche
   use korc_experimental_pdf
 
@@ -229,8 +228,10 @@ CONTAINS
           spp(ii)%Eo = spp(ii)%Eo_lims(1)
           spp(ii)%go = (spp(ii)%Eo + spp(ii)%m*C_C**2)/(spp(ii)%m*C_C**2)
 
-          call generate_2D_hammersley_sequence(params%mpi_params%rank, &
-               params%mpi_params%nmpi,spp(ii)%vars%g,spp(ii)%vars%eta)
+          CALL random%uniform%set(0.0_rp,1.0_rp)
+          do pp=1_idef,spp(ii)%ppp
+            spp(ii)%vars%g(pp)=random%uniform%get()
+          enddo
 
           spp(ii)%vars%g = (spp(ii)%Eo_lims(2) - & 
                spp(ii)%Eo_lims(1))*spp(ii)%vars%g/(spp(ii)%m*C_C**2) + &
@@ -280,6 +281,11 @@ CONTAINS
 !               MAXVAL(spp(ii)%vars%eta)/)
        CASE ('UNIFORM')
           spp(ii)%etao = spp(ii)%etao_lims(1)
+
+          CALL random%uniform%set(0.0_rp,1.0_rp)
+          do pp=1_idef,spp(ii)%ppp
+            spp(ii)%vars%eta(pp)=random%uniform%get()
+          enddo
 
           spp(ii)%vars%eta = (spp(ii)%etao_lims(2) - &
                spp(ii)%etao_lims(1))*spp(ii)%vars%eta + spp(ii)%etao_lims(1)
@@ -384,12 +390,12 @@ CONTAINS
     ALLOCATE( theta(spp%ppp) )
 
     ! * * * * INITIALIZE VELOCITY * * * *
-    if (.not.params%SameRandSeed) then
-      CALL random%uniform%set(0.0_rp,1.0_rp)
-      do pp=1_idef,spp%ppp
-         theta(pp)=random%uniform%get()
-      enddo
-    endif
+    !if (.not.params%SameRandSeed) then
+    CALL random%uniform%set(0.0_rp,1.0_rp)
+    do pp=1_idef,spp%ppp
+      theta(pp)=random%uniform%get()
+    enddo
+    !endif
     theta = 2.0_rp*C_PI*theta
     
     if (spp%spatial_distribution.eq.'TRACER') theta=2.0*C_PI

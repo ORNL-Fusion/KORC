@@ -8,7 +8,6 @@ MODULE korc_spatial_distribution
   use korc_fields
   use korc_profiles
   use korc_random
-  use korc_hammersley_generator
   use korc_avalanche
   use korc_experimental_pdf
   USE korc_input
