@@ -6,7 +6,8 @@ JOB_COUNT=1
 
 pushd ./KORC/build_gpu >/dev/null
 
-ctest -j --output-on-failure
+ctest --output-on-failure
+testexit=$?
 
 pushd ./bin >/dev/null
 
@@ -19,6 +20,12 @@ for j in "mars_test" "egyro_test"; do
   done
 done
 
+popd >/dev/null
+popd >/dev/null
 
-popd >/dev/null
-popd >/dev/null
+if [ $testexit -eq 0 ]
+then
+  exit 0
+else
+  exit 1
+fi

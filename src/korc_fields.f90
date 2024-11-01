@@ -911,6 +911,48 @@ subroutine uniform_fields_p(pchunk,F,B_X,B_Y,B_Z,E_X,E_Y,E_Z)
 
 end subroutine uniform_fields_p
 
+subroutine uniform_fields_GC_p(pchunk,F,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+   curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,PSIp)
+   INTEGER, INTENT(IN) :: pchunk
+   !! @note Subroutine that returns the value of a uniform magnetic
+   !! field. @endnote
+   !! This subroutine is used only when the simulation is ran for a
+   !! 'UNIFORM' plasma. As a convention, in a uniform plasma we
+   !! set \(\mathbf{B} = B_0 \hat{x}\).
+   TYPE(FIELDS), INTENT(IN)                               :: F
+   !! An instance of the KORC derived type FIELDS.
+   REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: B_X,B_Y,B_Z
+   REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: E_X,E_Y,E_Z
+   REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: curlb_R,curlb_PHI,curlb_Z
+   REAL(rp),DIMENSION(pchunk), INTENT(OUT)   :: gradB_R,gradB_PHI,gradB_Z,PSIp
+   !! Magnetic field components in Cartesian coordinates;
+   !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
+   integer(ip) :: cc
+
+   !$OMP SIMD
+   do cc=1_idef,pchunk
+      B_X(cc) = F%Bo
+      B_Y(cc) = 0._rp
+      B_Z(cc) = 0._rp
+
+      E_X(cc) = F%Eo
+      E_Y(cc) = 0._rp
+      E_Z(cc) = 0._rp
+
+      curlb_R(cc) = 0._rp
+      curlb_PHI(cc) = 0._rp
+      curlb_Z(cc) = 0._rp
+
+      gradB_R(cc) = 0._rp
+      gradB_PHI(cc) = 0._rp
+      gradB_Z(cc) = 0._rp
+      
+      PSIp(cc) = 0._rp
+   end do
+   !$OMP END SIMD
+
+end subroutine uniform_fields_GC_p
+
 subroutine uniform_electric_field(F,E)
    !! @note Subroutine that returns the value of a uniform electric
    !! field. @endnote
@@ -1130,7 +1172,8 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
       b2(ii,:)=b2tmp
       b3(ii,:)=b3tmp
 
-      !write(6,*) 'unitvectors',ii,'B',vars%B(ii,:),'psi',vars%PSI_P(ii)
+      !write(6,*) 'unitvectors',ii,'B',vars%B(ii,:)*params%cpp%Bo,'psi',vars%PSI_P(ii)* &
+      !   params%cpp%Bo*params%cpp%length**2
 
    end do
 
