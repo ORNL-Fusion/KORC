@@ -4,10 +4,6 @@ env | grep JOB_COUNT
 
 JOB_COUNT=1
 
-pushd ./KORC/build_gpu >/dev/null
-
-ctest -j --output-on-failure
-
 pushd ./bin >/dev/null
 
 for j in "mars_test" "egyro_test"; do
@@ -19,6 +15,9 @@ for j in "mars_test" "egyro_test"; do
   done
 done
 
+pushd ./KORC/build_gpu >/dev/null
+
+ctest --output-on-failure
 
 popd >/dev/null
 popd >/dev/null
