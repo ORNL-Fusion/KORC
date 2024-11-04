@@ -5,6 +5,9 @@ on:
   issue_comment:
     types: [ created ]
 
+  schedule:
+    - cron: '47 18 * * SAT'  # Trigger workflow every Sat at 18:47 UTC
+
 jobs:
 
   job_verify_actor:
