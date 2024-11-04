@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 1.E-7
+  simulation_time = 1.E-8
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-8
+  snapshot_frequency = 1.E-9
     ! Time between snapshots in seconds
   restart_overwrite_frequency = 1.E-1	
     ! Time between overwritting of restart file in seconds

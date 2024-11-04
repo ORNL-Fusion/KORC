@@ -74,6 +74,11 @@ CONTAINS
           DEALLOCATE(spp(ii)%vars%k3)
           DEALLOCATE(spp(ii)%vars%k4)
           DEALLOCATE(spp(ii)%vars%RHS)
+          DEALLOCATE(spp(ii)%vars%gradB)
+          DEALLOCATE(spp(ii)%vars%curlb)
+          DEALLOCATE(spp(ii)%vars%BR)
+          DEALLOCATE(spp(ii)%vars%BPHI)
+          DEALLOCATE(spp(ii)%vars%BZ)
        end if
 
        if (ALLOCATED(spp(ii)%BMC_ra)) DEALLOCATE(spp(ii)%BMC_ra)

@@ -6,7 +6,6 @@ module korc_initialize
   use korc_hpc
   use korc_HDF5
   use korc_fields
-  use korc_rnd_numbers
   use korc_spatial_distribution
   use korc_velocity_distribution
   use korc_coords
@@ -277,8 +276,10 @@ CONTAINS
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
-       params%num_snapshots = params%t_steps/params%output_cadence
-
+       !params%num_snapshots = params%t_steps/params%output_cadence
+       params%num_snapshots = ceiling(params%simulation_time/ &
+            params%snapshot_frequency)
+       
        if (params%t_steps.gt.params%output_cadence) then
 #ifdef __NVCOMPILER
        params%dt=params%snapshot_frequency/real(params%output_cadence)
@@ -306,7 +307,9 @@ CONTAINS
 
        if (params%output_cadence.EQ.0_ip) params%output_cadence = 1_ip
 
-       params%num_snapshots = params%t_steps/params%output_cadence
+       !params%num_snapshots = params%t_steps/params%output_cadence
+       params%num_snapshots = ceiling(params%simulation_time/ &
+            params%snapshot_frequency)
 
        if (params%t_steps.gt.params%output_cadence) then
           if (params%snapshot_frequency.lt.params%dt) then
@@ -318,10 +321,13 @@ CONTAINS
 #else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
 #endif
+
+         params%t_steps = CEILING(params%simulation_time/params%dt,ip)
+
        endif
 
-       params%restart_output_cadence = CEILING(params%restart_overwrite_frequency/ &
-            params%dt,ip)
+       params%restart_output_cadence = &
+            CEILING(params%restart_overwrite_frequency/params%dt,ip)
 
        params%t_skip=min(params%t_steps,params%output_cadence)
        params%t_skip=max(1_ip,params%t_skip)
@@ -351,13 +357,14 @@ CONTAINS
   ! * * * SUBROUTINES FOR INITIALIZING PARTICLES * * * !
   ! * * * * * * * * * * * *  * * * * * * * * * * * * * !
 
-  subroutine initialize_particles(params,F,P,spp)
+  subroutine initialize_particles(params,random,F,P,spp)
     !! @note Subroutine that loads the information of the initial condition
     !! of the different particle species. This subroutine calls
     !! the subroutine that generates the initial energy and pitch angle
     !! distribution functions. @endnote
     TYPE(KORC_PARAMS), INTENT(IN) 				:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(IN) 					:: F
     !! An instance of KORC's derived type FIELDS containing all the information
     !! about the fields used in the simulation. See [[korc_types]]
@@ -596,25 +603,18 @@ CONTAINS
           ALLOCATE( spp(ii)%vars%k4(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k5(spp(ii)%ppp,4) )
           ALLOCATE( spp(ii)%vars%k6(spp(ii)%ppp,4) )
-          if (params%orbit_model(3:5)=='pre'.or. &
-               TRIM(params%field_model)=='M3D_C1'.or. &
-               TRIM(params%field_model)=='NIMROD') then
-             ALLOCATE( spp(ii)%vars%gradB(spp(ii)%ppp,3) )
-             ALLOCATE( spp(ii)%vars%curlb(spp(ii)%ppp,3) )
-
-             spp(ii)%vars%gradB = 0.0_rp
-             spp(ii)%vars%curlb = 0.0_rp
-          else if (params%orbit_model(3:6)=='grad') then
-             ALLOCATE( spp(ii)%vars%BR(spp(ii)%ppp,3) )
-             ALLOCATE( spp(ii)%vars%BPHI(spp(ii)%ppp,3) )
-             ALLOCATE( spp(ii)%vars%BZ(spp(ii)%ppp,3) )
-
-             spp(ii)%vars%BR = 0.0_rp
-             spp(ii)%vars%BPHI = 0.0_rp
-             spp(ii)%vars%BZ = 0.0_rp
-          end if
+          ALLOCATE( spp(ii)%vars%gradB(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%curlb(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%BR(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%BPHI(spp(ii)%ppp,3) )
+          ALLOCATE( spp(ii)%vars%BZ(spp(ii)%ppp,3) )
           ALLOCATE( spp(ii)%vars%RHS(spp(ii)%ppp,5) )
 
+          spp(ii)%vars%gradB = 0.0_rp
+          spp(ii)%vars%curlb = 0.0_rp
+          spp(ii)%vars%BR = 0.0_rp
+          spp(ii)%vars%BPHI = 0.0_rp
+          spp(ii)%vars%BZ = 0.0_rp
           spp(ii)%vars%Y0 = 0.0_rp
           spp(ii)%vars%Y1 = 0.0_rp
           spp(ii)%vars%V0 = 0.0_rp
@@ -634,7 +634,7 @@ CONTAINS
     P%n_REr0=max(sqrt(spp(1)%psi_max*2*spp(1)%sigmaR**2), &
          sqrt(spp(1)%psi_max*2*spp(1)%sigmaZ**2))
 
-    call initial_energy_pitch_dist(params,spp)
+    call initial_energy_pitch_dist(params,random,spp)
 
 
     DEALLOCATE(ppp)
@@ -673,13 +673,14 @@ CONTAINS
   end subroutine initialize_particles
 
 
-  subroutine set_up_particles_ic(params,F,spp,P)
+  subroutine set_up_particles_ic(params,random,F,spp,P)
     !! @note Subroutine with calls to subroutines to load particles'
     !! information if it is a restarting simulation, or to initialize the
     !! spatial and velocity distribution of each species if it is a new
     !! simulation. @endnote
     TYPE(KORC_PARAMS), INTENT(INOUT) 				:: params
     !! Core KORC simulation parameters.
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(FIELDS), INTENT(INOUT) 					:: F
     !! An instance of KORC's derived type FIELDS containing all
     !! the information about the fields used in the simulation.
@@ -714,15 +715,13 @@ CONTAINS
 
        !write(6,*) 'flagRE',spp(1)%vars%flagRE
        !write(6,*) 'pRE',spp(1)%pRE
-
-       call init_random_seed(params)
     else
 
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING SPATIAL DISTRIBUTION * * * *")')
           flush(output_unit_write)
        end if
-       call intitial_spatial_distribution(params,spp,P,F)
+       call intitial_spatial_distribution(params,random,spp,P,F)
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
@@ -730,7 +729,7 @@ CONTAINS
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * INITIALIZING VELOCITY COMPONENTS * * * *")')
        end if
-       call initial_gyro_distribution(params,F,spp)
+       call initial_gyro_distribution(params,random,F,spp)
        if (params%mpi_params%rank .EQ. 0) then
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
        end if
@@ -743,9 +742,5 @@ CONTAINS
 
     TYPE(KORC_PARAMS), INTENT(INOUT)                 :: params
     !! Core KORC simulation parameters.
-
-    if (params%restart.OR.params%proceed.or.params%reinit) then
-       call finalize_random_seed
-    end if
   end subroutine
 end module korc_initialize

@@ -1,9 +1,7 @@
 module korc_types
   !! @note Module containing the definition of KORC derived types and
   !! KORC variables, the building blocks of the code. @endnote
-#ifdef FIO
   USE, INTRINSIC :: iso_c_binding
-#endif
   implicit none
 
   ! * * * * * * * * * * * * * * * * * * * * !
@@ -298,7 +296,7 @@ module korc_types
      INTEGER  :: num_impurity_species
      REAL(rp), DIMENSION(:), ALLOCATABLE        :: Zj
      REAL(rp) :: gam_min
-     LOGICAL(rp) :: recycle_losses
+     LOGICAL :: recycle_losses
   END TYPE KORC_PARAMS
 
 
@@ -625,7 +623,10 @@ module korc_types
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
-     REAL(rp)  :: AORSA_nmode,AORSA_mmode
+     REAL(rp)  :: psir
+     REAL(rp)  :: width 
+     REAL(rp)  :: AORSA_nmode
+     REAL(rp)  :: AORSA_mmode
      !! interpolated E field
      LOGICAL :: Analytic_D3D_IWL
      INTEGER :: ntiles

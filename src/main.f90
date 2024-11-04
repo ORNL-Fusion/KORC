@@ -16,6 +16,7 @@ use korc_initialize
 use korc_finalize
 use korc_profiles
 use korc_input
+use korc_random
 #ifdef FIO
 use korc_fio
 #endif
@@ -25,6 +26,8 @@ implicit none
 TYPE(KORC_PARAMS) :: params
 !! Contains the parameters that control the core of KORC:
 !! time steping, output list, etc.
+CLASS(random_context), POINTER :: randoms => null()
+!!  Contain the context for random uniforms and normal distribuitons.
 TYPE(SPECIES), DIMENSION(:), ALLOCATABLE :: spp
 !! Contains the initial parameters of each species, which
 !! can be different electrons with different
@@ -51,6 +54,10 @@ call initialize_communications(params)
   !!
   !! Subroutine [[initialize_communications]] in [[korc_hpc]] that
   !! initializes MPI and OpenMP communications.
+
+!call initialize_random(params)
+
+randoms => random_context_construct(0, params%mpi_params%rank)
 
 if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
@@ -87,6 +94,11 @@ call initialize_korc_parameters(params)
   !! initializes paths and KORC parameters through [[load_korc_params]]
   !! on MPI processes.
 
+if (params%SameRandSeed) then
+  call randoms%uniform%seed(1, params%mpi_params%rank)
+  call randoms%normal%seed(1, params%mpi_params%rank)
+end if
+
 if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
 end if
@@ -116,7 +128,7 @@ if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
 end if
 
-call initialize_particles(params,F,P,spp) ! Initialize particles
+call initialize_particles(params,randoms,F,P,spp) ! Initialize particles
   !! <h4>5\. Initialize Particle Velocity Phase Space</h4>
   !!
   !! Subroutine [[initialize_particles]] in [[korc_initialize]] that
@@ -272,7 +284,7 @@ if (params%mpi_params%rank .EQ. 0) then
   write(output_unit_write,'("* * * * INITIALIZING INITIAL CONDITIONS * * * *",/)')
   flush(output_unit_write)
 end if
-call set_up_particles_ic(params,F,spp,P)
+call set_up_particles_ic(params,randoms,F,spp,P)
 
 if (params%mpi_params%rank .EQ. 0) then
   write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * * *",/)')
@@ -306,7 +318,9 @@ end if
 if (params%orbit_model(1:2).eq.'FO') then
 
 #ifdef ACC
-  if (params%field_model(1:3).eq.'ANA') then
+  if (params%field_model(1:3).eq.'UNI') then
+    call FO_init_uni_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(1:3).eq.'ANA') then
     call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(10:13).eq.'MARS') then
     call FO_init_mars_ACC(params,F,spp,.true.,.false.)
@@ -324,7 +338,7 @@ else if (params%orbit_model(1:2).eq.'GC') then
 #ifdef ACC
     call GC_init_ACC(params,F,P,spp)
 #else
-    call GC_init(params,F,P,spp)
+    call GC_init(params,randoms,F,P,spp)
 #endif
   else
 
@@ -373,7 +387,11 @@ end if
   if (params%orbit_model(1:2).eq.'FO'.and.((params%field_model(1:3).eq.'ANA') &
     .or.(params%field_model(1:3).eq.'UNI'))) then
 #ifdef ACC
-    call FO_init_eqn_ACC(params,F,spp,.false.,.true.)
+    if (params%field_model(1:3).eq.'ANA') then
+      call FO_init_eqn_ACC(params,F,spp,.false.,.true.)
+    else
+      call FO_init_uni_ACC(params,F,spp,.false.,.true.)
+    endif
 #else
     call FO_init(params,F,spp,.false.,.true.)
     ! Initial half-time particle push
@@ -381,9 +399,13 @@ end if
 
     do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-      call adv_FOeqn_top_ACC(params,F,P,spp)
+      if (params%field_model(1:3).eq.'ANA') then
+        call adv_FOeqn_top_ACC(params,F,P,spp)
+      else
+        call adv_FOuni_top_ACC(params,F,P,spp)
+      endif
 #else
-      call adv_FOeqn_top(params,F,P,spp)
+      call adv_FOeqn_top(params,randoms,F,P,spp)
 #endif
 
       params%time = params%init_time &
@@ -408,7 +430,7 @@ end if
      ! Initial half-time particle push
 
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_FOinterp_top(params,F,P,spp)
+        call adv_FOinterp_top(params,randoms,F,P,spp)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
@@ -508,7 +530,7 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
 #ifdef ACC
     call adv_FOinterp_mars_top_ACC(params,F,P,spp)
 #else
-    call adv_FOinterp_mars_top(params,F,P,spp)
+    call adv_FOinterp_mars_top(params,randoms,F,P,spp)
 #endif ACC
 
     params%time = params%init_time &
@@ -538,8 +560,8 @@ end if
 #ifdef ACC
         call adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
 #else
-        call adv_FOinterp_aorsa_top(params,F,P,spp)
-#endif ACC  
+        call adv_FOinterp_aorsa_top(params,randoms,F,P,spp)
+#endif ACC
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
         params%it = it-1_ip+params%t_skip
@@ -557,7 +579,7 @@ end if
 
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn'.and..not.params%field_model.eq.'M3D_C1') then
      do it=params%ito,params%t_steps,params%t_skip*params%t_it_SC
-        call adv_GCeqn_top(params,F,P,spp)
+        call adv_GCeqn_top(params,randoms,F,P,spp)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt
@@ -581,7 +603,7 @@ end if
        (.not.params%SC_E).and.(.not.F%Dim2x1t).and..not.params%field_model.eq.'M3D_C1') then
 
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_psi_top(params,spp,P,F)
+        call adv_GCinterp_psi_top(params,randoms,spp,P,F)
 
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &
@@ -606,7 +628,7 @@ end if
        (.not.params%SC_E).and.F%Dim2x1t.and.(.not.F%ReInterp_2x1t).and..not.params%field_model.eq.'M3D_C1') then
 
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_psi2x1t_top(params,spp,P,F)
+        call adv_GCinterp_psi2x1t_top(params,randoms,spp,P,F)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
@@ -634,9 +656,9 @@ end if
 
      do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-        call adv_GCinterp_psiwE_top_ACC(params,spp,P,F)
+        call adv_GCinterp_psiwE_top_ACC(params,randoms,spp,P,F)
 #else
-        call adv_GCinterp_psiwE_top(params,spp,P,F)
+        call adv_GCinterp_psiwE_top(params,randoms,spp,P,F)
 #endif
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &
@@ -764,6 +786,7 @@ end if
 
   call deallocate_collisions_params(params)
 
+  DEALLOCATE(randoms)
 
   call finalize_communications(params)
   ! * * * FINALIZING SIMULATION * * *
