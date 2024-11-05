@@ -6,7 +6,7 @@ on:
     types: [ created ]
 
   schedule:
-    - cron: '47 18 * * SAT'  # Trigger workflow every Sat at 18:47 UTC
+    - cron: '50 18 * * SAT'  # Trigger workflow every Sat at 18:50 UTC
 
 jobs:
 
