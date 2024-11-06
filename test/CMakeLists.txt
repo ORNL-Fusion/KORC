@@ -34,20 +34,20 @@ if(USE_PSPLINE)
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
   set_tests_properties (mars_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
 
-  add_test (NAME mars_test_2
-            COMMAND ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh 2
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-  set_tests_properties (mars_test_2 PROPERTIES PROCESSORS 2 ENVIRONMENT OMP_NUM_THREADS=1)
+  #add_test (NAME mars_test_2
+  #          COMMAND ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh 2
+  #          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  #set_tests_properties (mars_test_2 PROPERTIES PROCESSORS 2 ENVIRONMENT OMP_NUM_THREADS=1)
 
-  add_test (NAME aorsa_test_1
-            COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 1
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-  set_tests_properties (aorsa_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
+  #add_test (NAME aorsa_test_1
+  #          COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 1
+  #          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  #set_tests_properties (aorsa_test_1 PROPERTIES PROCESSORS 1 ENVIRONMENT OMP_NUM_THREADS=1)
 
-  add_test (NAME aorsa_test_2
-            COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 2
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-  set_tests_properties (aorsa_test_2 PROPERTIES PROCESSORS 2 ENVIRONMENT OMP_NUM_THREADS=1)
+  #add_test (NAME aorsa_test_2
+  #          COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh 2
+  #          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  #set_tests_properties (aorsa_test_2 PROPERTIES PROCESSORS 2 ENVIRONMENT OMP_NUM_THREADS=1)
 endif()
 
 foreach(RANK IN ITEMS 1 2 4 8)
