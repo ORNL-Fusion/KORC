@@ -2391,8 +2391,6 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
       E_PHI_tmp=E_PHI
       if (.not.params%FokPlan) E_PHI=0._rp
 
-      !$OMP SIMD
-   !       !$OMP& aligned (pm,xi,v,Ppll,Bmag,Pmu)
       do cc=1_idef,pchunk
          Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
          ! Transform p_pll,mu to P,eta
@@ -2404,20 +2402,16 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
          v(cc) = pm(cc)/gam(cc)
          ! normalized speed (v_K=v_P/c)
       end do
-      !$OMP END SIMD
 
-   !       write(output_unit_write,'("ne: "E17.10)') ne
-   !       write(output_unit_write,'("Te: "E17.10)') Te
-   !       write(output_unit_write,'("Bmag: "E17.10)') Bmag
-   !       write(output_unit_write,'("v: ",E17.10)') v
-   !       write(output_unit_write,'("xi: ",E17.10)') xi
+       !   write(output_unit_write,'("ne: "E17.10)') ne
+       !   write(output_unit_write,'("Te: "E17.10)') Te
+       !   write(output_unit_write,'("Bmag: "E17.10)') Bmag
+       !   write(output_unit_write,'("v: ",E17.10)') v
+       !   write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
 
        CALL random%uniform%set(0.0_rp, 1.0_rp)
 
-       !$OMP SIMD
-   !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
-   !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
 
           rnd1(cc,1) = random%uniform%get()
@@ -2470,7 +2464,6 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
    !          write(output_unit_write,'("dxi: ",E17.10)') dxi(cc)
 
        end do
-       !$OMP END SIMD
 
        if (params%FokPlan.and.params%radiation) then
           if(params%GC_rad_model.eq.'SDE') then
