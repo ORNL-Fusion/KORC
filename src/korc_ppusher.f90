@@ -354,6 +354,9 @@ subroutine FO_init(params,F,spp,output,step)
           !write(6,*) 'b_unit',b_unit_X,b_unit_Y,b_unit_Z
 
           v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
+
+          g(cc) = 1._rp/SQRT(1._rp-v(cc)*v(cc))
+
           if (v(cc).GT.korc_zero) then
             ! Parallel and perpendicular components of velocity
             vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
@@ -385,6 +388,11 @@ subroutine FO_init(params,F,spp,output,step)
 
             spp(ii)%vars%eta(pp-1+cc) = eta_tmp 
 
+            !write(6,*) Bmag(cc)
+            
+            !write(output_unit_write,'("Bmag: ",E17.10)') Bmag(cc)
+            !write(output_unit_write,'("vperp: ",E17.10)') vperp(cc)
+            !write(output_unit_write,'("gam: ",E17.10)') g(cc)
 
             ! Magnetic moment
             spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
