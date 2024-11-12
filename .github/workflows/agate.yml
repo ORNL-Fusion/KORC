@@ -86,7 +86,10 @@ jobs:
 
           cd ./KORC
           ./build.sh
-          cd ./build && ctest --output-on-failure
+
+      - name: test korc
+        run: |
+          ./KORC/ci_stub/agate_job_test_cpu.sh
 
       - name: Show Cache
         if: failure()
