@@ -385,6 +385,7 @@ subroutine FO_init(params,F,spp,output,step)
 
             spp(ii)%vars%eta(pp-1+cc) = eta_tmp 
 
+            !write(6,*) Bmag(cc)
 
             ! Magnetic moment
             spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &

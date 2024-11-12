@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd ./KORC/build_gpu >/dev/null
+pushd ./KORC/build >/dev/null
 
 ctest --output-on-failure
 testexit=$?

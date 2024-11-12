@@ -89,7 +89,7 @@ jobs:
 
       - name: test korc
         run: |
-          ./KORC/ci_stub/agate_job_test_cpu.sh
+          ./KORC/ci_stub/agate_job_test.sh
 
       - name: Show Cache
         if: failure()
