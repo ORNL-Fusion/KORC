@@ -89,6 +89,9 @@ jobs:
 
       - name: test korc
         run: |
+          . ./spack/share/spack/setup-env.sh
+          spack load hdf5+fortran+mpi  %gcc@13.2.0
+          
           ./KORC/ci_stub/agate_job_test.sh
 
       - name: Show Cache
