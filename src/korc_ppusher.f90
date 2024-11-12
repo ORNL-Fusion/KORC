@@ -390,9 +390,9 @@ subroutine FO_init(params,F,spp,output,step)
 
             !write(6,*) Bmag(cc)
             
-            write(output_unit_write,'("Bmag: ",E17.10)') Bmag(cc)
-            write(output_unit_write,'("vperp: ",E17.10)') vperp(cc)
-            write(output_unit_write,'("gam: ",E17.10)') g(cc)
+            !write(output_unit_write,'("Bmag: ",E17.10)') Bmag(cc)
+            !write(output_unit_write,'("vperp: ",E17.10)') vperp(cc)
+            !write(output_unit_write,'("gam: ",E17.10)') g(cc)
 
             ! Magnetic moment
             spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &

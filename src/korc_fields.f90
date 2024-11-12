@@ -1338,16 +1338,9 @@ subroutine initialize_fields(params,F)
    end if
 
    !    SELECT CASE (TRIM(params%field_model))
-   if (params%field_model(1:10).eq.'UNIFORM') then
+
       F%Bo=Bo
       F%Eo=Eo
-   else if (params%field_model(1:10).eq.'ANALYTICAL') then
-      !    CASE('ANALYTICAL')
-      ! Load the parameters of the analytical magnetic field
-      !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
-      !     status='OLD',form='formatted')
-      !read(default_unit_open,nml=analytical_fields_params)
-      !close(default_unit_open)
 
       F%AB%Bo = Bo
       F%AB%a = minor_radius
@@ -1385,9 +1378,57 @@ subroutine initialize_fields(params,F)
       F%AB%l_mn = l_mn
       F%AB%sigma_mn = sigma_mn
 
-      !write(output_unit_write,*) E_dyn,E_pulse,E_width
-
       F%res_double=res_double
+
+      F%Bfield = Bfield
+      F%B1field = B1field
+      F%dBfield = dBfield
+      F%Bflux = Bflux
+      F%Bflux3D = Bflux3D
+      F%Efield = Efield
+      F%E1field = E1field
+      F%axisymmetric_fields = axisymmetric_fields
+      F%Dim2x1t = Dim2x1t
+      F%ReInterp_2x1t = ReInterp_2x1t
+      F%t0_2x1t = t0_2x1t
+      F%ind0_2x1t = ind0_2x1t
+      F%psip_conv = psip_conv
+      F%MARS_AMP_Scale = MARS_AMP_Scale
+      F%MARS_phase = MARS_phase
+      F%Analytic_D3D_IWL=Analytic_D3D_IWL
+      F%ntiles=ntiles
+      F%circumradius=circumradius
+      F%AORSA_AMP_Scale=AORSA_AMP_Scale
+      F%AORSA_freq=AORSA_freq
+      F%AORSA_nmode=AORSA_nmode
+      F%AORSA_mmode=AORSA_mmode
+      F%useLCFS = useLCFS
+      F%useDiMES = useDiMES
+      F%DiMESloc = DiMESloc
+      F%DiMESdims = DiMESdims
+
+
+      F%E_2x1t = E_2x1t
+
+      F%E_profile = E_profile
+      F%E_dyn = E_dyn
+      F%E_edge = E_edge
+      F%E_pulse = E_pulse
+      F%E_width = E_width
+      F%AB%a = minor_radius
+      F%AB%Ro = major_radius
+
+      F%PSIp_lim=PSIp_lim
+
+  if (params%field_model(1:10).eq.'ANALYTICAL') then
+      !    CASE('ANALYTICAL')
+      ! Load the parameters of the analytical magnetic field
+      !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
+      !     status='OLD',form='formatted')
+      !read(default_unit_open,nml=analytical_fields_params)
+      !close(default_unit_open)
+
+      !write(output_unit_write,*) E_dyn,E_pulse,E_width
 
       if (params%mpi_params%rank .EQ. 0) then
          write(output_unit_write,'("ANALYTIC")')
@@ -1524,54 +1565,12 @@ subroutine initialize_fields(params,F)
       !read(default_unit_open,nml=externalPlasmaModel)
       !close(default_unit_open)
 
-      F%Bfield = Bfield
-      F%B1field = B1field
-      F%dBfield = dBfield
-      F%Bflux = Bflux
-      F%Bflux3D = Bflux3D
-      F%Efield = Efield
-      F%E1field = E1field
-      F%axisymmetric_fields = axisymmetric_fields
-      F%Dim2x1t = Dim2x1t
-      F%ReInterp_2x1t = ReInterp_2x1t
-      F%t0_2x1t = t0_2x1t
-      F%ind0_2x1t = ind0_2x1t
-      F%psip_conv = psip_conv
-      F%MARS_AMP_Scale = MARS_AMP_Scale
-      F%MARS_phase = MARS_phase
-      F%Analytic_D3D_IWL=Analytic_D3D_IWL
-      F%ntiles=ntiles
-      F%circumradius=circumradius
-      F%AORSA_AMP_Scale=AORSA_AMP_Scale
-      F%AORSA_freq=AORSA_freq
-      F%AORSA_nmode=AORSA_nmode
-      F%AORSA_mmode=AORSA_mmode
-      F%useLCFS = useLCFS
-      F%useDiMES = useDiMES
-      F%DiMESloc = DiMESloc
-      F%DiMESdims = DiMESdims
-
       if (params%proceed.and.F%ReInterp_2x1t) then
          call load_prev_iter(params)
          F%ind_2x1t=params%prev_iter_2x1t
       else
          F%ind_2x1t=F%ind0_2x1t
       end if
-
-
-      F%E_2x1t = E_2x1t
-
-      F%E_profile = E_profile
-      F%E_dyn = E_dyn
-      F%E_edge = E_edge
-      F%E_pulse = E_pulse
-      F%E_width = E_width
-      F%AB%a = minor_radius
-      F%AB%Ro = major_radius
-
-      F%PSIp_lim=PSIp_lim
-
-      F%res_double=res_double
 
       !write(output_unit_write,'("E_dyn: ",E17.10)') E_dyn
       !       write(output_unit_write,'("E_pulse: ",E17.10)') E_pulse
