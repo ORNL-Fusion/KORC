@@ -2426,9 +2426,6 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
        !   write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
 
-          rnd1(cc,1) = random%uniform%get()
-          rnd1(cc,2) = random%uniform%get()
-
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
 
@@ -3141,8 +3138,6 @@ subroutine include_CoulombCollisions_GCfio_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
-          rnd1(cc,1) = random%uniform%get()
-          rnd1(cc,2) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -3340,6 +3335,10 @@ subroutine large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
     neta1=cparams_ss%ngrid1
 
     CALL random%uniform%set(0.0_rp, 1.0_rp)
+    do cc=1_idef,achunk
+      prob0(cc) = random%uniform%get()
+    end do
+
 
     !$OMP SIMD
     do cc=1_idef,achunk
@@ -3348,9 +3347,6 @@ subroutine large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
 
        gam(cc) = sqrt(1+pm(cc)*pm(cc))
        gam0(cc)=gam(cc)
-
-       prob0(cc) = random%uniform%get()
-
     end do
     !$OMP END SIMD
 
