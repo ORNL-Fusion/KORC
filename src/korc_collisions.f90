@@ -586,7 +586,7 @@ contains
              !write(6,*) 'Ec_min',cparams_ms%Ec_min
 
              cparams_ss%avalanche=.TRUE.
-             if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+             if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                 if (abs(F%Eo).lt.cparams_ss%Ec) then
                    cparams_ss%avalanche=.FALSE.
                 end if
@@ -598,7 +598,7 @@ contains
 
              if (cparams_ss%avalanche) then
 
-                if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                    p_crit=1/sqrt(abs(F%Eo)/cparams_ss%Ec-1._rp)
                 else
                    p_crit=1/sqrt(abs(F%Eo)/cparams_ms%Ec_min-1._rp)
@@ -618,7 +618,7 @@ contains
              end if
 
              cparams_ss%avalanche=.TRUE.
-             if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+             if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                 if ((abs(maxEinterp).lt.cparams_ss%Ec).and. &
                      (abs(minEinterp).lt.cparams_ss%Ec)) &
                      cparams_ss%avalanche=.FALSE.
@@ -635,14 +635,14 @@ contains
              if (cparams_ss%avalanche) then
 
                 if (abs(maxEinterp).gt.abs(minEinterp)) then
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       p_crit=1/sqrt(abs(maxEinterp)/cparams_ss%Ec-1._rp)
                    else
 
                       p_crit=1/sqrt(abs(maxEinterp)/cparams_ms%Ec_min-1._rp)
                    end if
                 else
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       p_crit=1/sqrt(abs(minEinterp)/cparams_ss%Ec-1._rp)
                    else
                       p_crit=1/sqrt(abs(minEinterp)/cparams_ms%Ec_min-1._rp)
@@ -702,7 +702,7 @@ contains
                       end if
                    endif
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec*params%cpp%Eo,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
@@ -720,7 +720,7 @@ contains
                       end if
                    end if
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min,'V/m'
@@ -745,7 +745,7 @@ contains
                       end if
                    end if
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec*params%cpp%Eo,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
@@ -763,7 +763,7 @@ contains
                       end if
                    end if
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                          write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min,'V/m'
