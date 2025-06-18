@@ -586,7 +586,7 @@ contains
              !write(6,*) 'Ec_min',cparams_ms%Ec_min
 
              cparams_ss%avalanche=.TRUE.
-             if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+             if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                 if (abs(F%Eo).lt.cparams_ss%Ec) then
                    cparams_ss%avalanche=.FALSE.
                 end if
@@ -598,7 +598,7 @@ contains
 
              if (cparams_ss%avalanche) then
 
-                if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                    p_crit=1/sqrt(abs(F%Eo)/cparams_ss%Ec-1._rp)
                 else
                    p_crit=1/sqrt(abs(F%Eo)/cparams_ms%Ec_min-1._rp)
@@ -618,7 +618,7 @@ contains
              end if
 
              cparams_ss%avalanche=.TRUE.
-             if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+             if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                 if ((abs(maxEinterp).lt.cparams_ss%Ec).and. &
                      (abs(minEinterp).lt.cparams_ss%Ec)) &
                      cparams_ss%avalanche=.FALSE.
@@ -635,14 +635,14 @@ contains
              if (cparams_ss%avalanche) then
 
                 if (abs(maxEinterp).gt.abs(minEinterp)) then
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       p_crit=1/sqrt(abs(maxEinterp)/cparams_ss%Ec-1._rp)
                    else
 
                       p_crit=1/sqrt(abs(maxEinterp)/cparams_ms%Ec_min-1._rp)
                    end if
                 else
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       p_crit=1/sqrt(abs(minEinterp)/cparams_ss%Ec-1._rp)
                    else
                       p_crit=1/sqrt(abs(minEinterp)/cparams_ms%Ec_min-1._rp)
@@ -702,7 +702,7 @@ contains
                       end if
                    endif
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec*params%cpp%Eo,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
@@ -720,7 +720,7 @@ contains
                       end if
                    end if
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min,'V/m'
@@ -745,7 +745,7 @@ contains
                       end if
                    end if
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                       write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec*params%cpp%Eo,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
@@ -763,7 +763,7 @@ contains
                       end if
                    end if
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                   if (TRIM(params%bound_electron_model).eq.'NO_BOUND') then
                          write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec,'V/m'
                    else
                       write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min,'V/m'
@@ -943,7 +943,7 @@ contains
     TYPE(FIELDS), INTENT(IN) :: F
     LOGICAL, INTENT(IN)  :: init
     INTEGER(ip) 			:: iterations
-    REAL(rp) 				:: E,E_min
+    REAL(rp) 				:: E,E_min,KE_min
     REAL(rp) 				:: v
     REAL(rp) 				:: Tau
     REAL(rp), DIMENSION(3) 		:: nu
@@ -957,6 +957,8 @@ contains
        E_min=sqrt((cparams_ss%p_min*cparams_ss%pmin_scale* &
             params%cpp%mass*params%cpp%velocity* &
             C_C)**2+(C_ME*C_C**2)**2)
+
+       KE_min=E_min-C_ME*C_C**2
 
        !write(6,'("E_min (MeV)",E17.10)') E/(10**6*C_E)
        !write(6,'("E_min (MeV)",E17.10)') E_min/(10**6*C_E)
@@ -1032,6 +1034,7 @@ contains
           write(output_unit_write,'("* * * * * * * * * * * SUBCYCLING FOR  &
                COLLISIONS * * * * * * * * * * *")')
 
+         write(output_unit_write,'("Minimum energy for collision: ",E17.10," eV")') KE_min/C_E    
          write(output_unit_write,'("Slowing down freqency (CF): ",E17.10)') &
                nu(1)/params%cpp%time
           write(output_unit_write,'("Pitch angle scattering freqency (CB): ",E17.10)') &
@@ -1987,19 +1990,21 @@ subroutine include_CoulombCollisions_FO_p(tt,params,random,X_X,X_Y,X_Z, &
    !       write(output_unit_write,'("phi: ",E17.10)') phi
 
        CALL random%uniform%set(0.0_rp, 1.0_rp)
+       do cc=1_idef,pchunk
+
+        ! uses C library to generate normal_distribution random variables,
+        ! preserving parallelization where Fortran random number generator
+        ! does not
+        rnd1(cc,1) = random%uniform%get()
+        rnd1(cc,2) = random%uniform%get()
+        rnd1(cc,3) = random%uniform%get()
+       enddo
 
        !$OMP SIMD
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,vm,ne,Te,Zeff,dpm, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,dphi,um,Ub_X,Ub_Y,Ub_Z,U_X,U_Y,U_Z, &
    !       !$OMP& b1_X,b1_Y,b1_Z,b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
        do cc=1_idef,pchunk
-
-          ! uses C library to generate normal_distribution random variables,
-          ! preserving parallelization where Fortran random number generator
-          ! does not
-          rnd1(cc,1) = random%uniform%get()
-          rnd1(cc,2) = random%uniform%get()
-          rnd1(cc,3) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2144,8 +2149,6 @@ subroutine include_CoulombCollisions_FOfio_p(tt,params,random,X_X,X_Y,X_Z, &
 
     pchunk=params%pchunk
 
-    CALL random%uniform%set(0.0_rp,1.0_rp)
-
     if (MODULO(params%it+tt,cparams_ss%subcycling_iterations) .EQ. 0_ip) then
        dt = REAL(cparams_ss%subcycling_iterations,rp)*params%dt
        time=params%init_time+(params%it-1+tt)*params%dt
@@ -2204,18 +2207,22 @@ subroutine include_CoulombCollisions_FOfio_p(tt,params,random,X_X,X_Y,X_Z, &
 
    !       write(output_unit_write,'("phi: ",E17.10)') phi
 
+       CALL random%uniform%set(0.0_rp, 1.0_rp)
+       do cc=1_idef,pchunk
+
+        ! uses C library to generate normal_distribution random variables,
+        ! preserving parallelization where Fortran random number generator
+        ! does not
+        rnd1(cc,1) = random%uniform%get()
+        rnd1(cc,2) = random%uniform%get()
+        rnd1(cc,3) = random%uniform%get()
+       end do
+
        !$OMP SIMD
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,vm,ne,Te,Zeff,nimp,dpm, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,dphi,um,Ub_X,Ub_Y,Ub_Z,U_X,U_Y,U_Z, &
    !       !$OMP& b1_X,b1_Y,b1_Z,b2_X,b2_Y,b2_Z,b3_X,b3_Y,b3_Z)
        do cc=1_idef,pchunk
-
-          ! uses C library to generate normal_distribution random variables,
-          ! preserving parallelization where Fortran random number generator
-          ! does not
-          rnd1(cc,1) = random%uniform%get()
-          rnd1(cc,2) = random%uniform%get()
-          rnd1(cc,3) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2391,8 +2398,16 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
       E_PHI_tmp=E_PHI
       if (.not.params%FokPlan) E_PHI=0._rp
 
+      CALL random%uniform%set(0.0_rp, 1.0_rp)
+
+      do cc=1_idef,pchunk
+
+        rnd1(cc,1) = random%uniform%get()
+        rnd1(cc,2) = random%uniform%get()
+
+      enddo
+
       !$OMP SIMD
-   !       !$OMP& aligned (pm,xi,v,Ppll,Bmag,Pmu)
       do cc=1_idef,pchunk
          Bmag(cc)=sqrt(B_R(cc)*B_R(cc)+B_PHI(cc)*B_PHI(cc)+B_Z(cc)*B_Z(cc))
          ! Transform p_pll,mu to P,eta
@@ -2403,25 +2418,13 @@ subroutine include_CoulombCollisions_GC_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
 
          v(cc) = pm(cc)/gam(cc)
          ! normalized speed (v_K=v_P/c)
-      end do
-      !$OMP END SIMD
 
-   !       write(output_unit_write,'("ne: "E17.10)') ne
-   !       write(output_unit_write,'("Te: "E17.10)') Te
-   !       write(output_unit_write,'("Bmag: "E17.10)') Bmag
-   !       write(output_unit_write,'("v: ",E17.10)') v
-   !       write(output_unit_write,'("xi: ",E17.10)') xi
+       !   write(output_unit_write,'("ne: "E17.10)') ne
+       !   write(output_unit_write,'("Te: "E17.10)') Te
+       !   write(output_unit_write,'("Bmag: "E17.10)') Bmag
+       !   write(output_unit_write,'("v: ",E17.10)') v
+       !   write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
-
-       CALL random%uniform%set(0.0_rp, 1.0_rp)
-
-       !$OMP SIMD
-   !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
-   !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
-       do cc=1_idef,pchunk
-
-          rnd1(cc,1) = random%uniform%get()
-          rnd1(cc,2) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -2674,6 +2677,14 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
    E_PHI_LAC=E_PHI
    if (.not.params%FokPlan) E_PHI=0._rp
 
+   CALL random%uniform%set(0.0_rp, 1.0_rp)
+
+   do cc=1_idef,achunk
+
+      rnd1(cc,1) = random%uniform%get()
+      rnd1(cc,2) = random%uniform%get()
+   enddo
+
    !$OMP SIMD
    !       !$OMP& aligned (pm,xi,v,Ppll,Bmag,Pmu)
    do cc=1_idef,achunk
@@ -2688,8 +2699,6 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
 
       v(cc) = pm(cc)/gam(cc)
       ! normalized speed (v_K=v_P/c)
-   end do
-   !$OMP END SIMD
 
    !       write(output_unit_write,'("ne: "E17.10)') ne
    !       write(output_unit_write,'("Te: "E17.10)') Te
@@ -2697,16 +2706,6 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
    !       write(output_unit_write,'("v: ",E17.10)') v
    !       write(output_unit_write,'("xi: ",E17.10)') xi
    !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
-
-   CALL random%uniform%set(0.0_rp, 1.0_rp)
-
-   !$OMP SIMD
-   !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
-   !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
-   do cc=1_idef,achunk
-
-      rnd1(cc,1) = random%uniform%get()
-      rnd1(cc,2) = random%uniform%get()
 
       dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
       dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -3129,13 +3128,16 @@ subroutine include_CoulombCollisions_GCfio_p(tt,params,random,Y_R,Y_PHI,Y_Z, &
    !       write(output_unit_write,'("xi: ",E17.10)') xi
        !       write(output_unit_write,'("size(E_PHI_GC): ",I16)') size(E_PHI)
 
+       CALL random%uniform%set(0.0_rp, 1.0_rp)
+       do cc=1_idef,pchunk
+        rnd1(cc,1) = random%uniform%get()
+        rnd1(cc,2) = random%uniform%get()
+       end do
 
        !$OMP SIMD
    !       !$OMP& aligned(rnd1,dW,CAL,dCAL,CFL,CBL,v,ne,Te,Zeff,dp, &
    !       !$OMP& flagCon,flagCol,dxi,xi,pm,Ppll,Pmu,Bmag)
        do cc=1_idef,pchunk
-          rnd1(cc,1) = random%uniform%get()
-          rnd1(cc,2) = random%uniform%get()
 
           dW(cc,1) = SQRT(3*dt)*(-1+2*rnd1(cc,1))
           dW(cc,2) = SQRT(3*dt)*(-1+2*rnd1(cc,2))
@@ -3333,6 +3335,10 @@ subroutine large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
     neta1=cparams_ss%ngrid1
 
     CALL random%uniform%set(0.0_rp, 1.0_rp)
+    do cc=1_idef,achunk
+      prob0(cc) = random%uniform%get()
+    end do
+
 
     !$OMP SIMD
     do cc=1_idef,achunk
@@ -3341,9 +3347,6 @@ subroutine large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
 
        gam(cc) = sqrt(1+pm(cc)*pm(cc))
        gam0(cc)=gam(cc)
-
-       prob0(cc) = random%uniform%get()
-
     end do
     !$OMP END SIMD
 

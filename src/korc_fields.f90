@@ -458,7 +458,8 @@ subroutine analytical_fields_GC_init(params,F,Y,E,B,gradB,curlb,flag,PSIp)
    REAL(rp)    ::  rm,theta
 
    !write(output_unit_write,'("Y: ",E17.10)') Y
-
+   !write(6,*) 'Y',Y
+   
    ss = SIZE(Y,1)
 
    !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,rm,Btmp,qprof,dRBR,dRBPHI, &
@@ -1034,6 +1035,8 @@ subroutine get_analytical_fields(params,vars,F)
       if (.not.params%GC_coords) then
 
          call cart_to_cyl(vars%X,vars%Y)
+
+         !write(6,*) vars%X,vars%Y
 
          call cyl_check_if_confined(F,vars%Y,vars%flagCon)
 

@@ -46,7 +46,7 @@ CONTAINS
     if (size(X,1).eq.1) then
        ss = size(X,1)
     else
-       if (X(2,1).eq.0) then
+       if ((X(2,1).eq.0).AND.(X(2,2).eq.0).and.(X(2,3).eq.0)) then
           ss=1_idef
        else
           ss = size(X,1)
