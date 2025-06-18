@@ -394,17 +394,17 @@ subroutine normalize_variables(params,spp,F,P)
 
         if (params%field_model(10:13).eq.'MARS') then
 
-           if (ALLOCATED(F%B1Re_2D%R)) F%B1Re_2D%R = F%B1Re_2D%R/ &
+           if (ALLOCATED(F%B1Re_3D%R)) F%B1Re_3D%R = F%B1Re_3D%R/ &
                 params%cpp%Bo
-           if (ALLOCATED(F%B1Re_2D%PHI)) F%B1Re_2D%PHI = F%B1Re_2D%PHI/ &
+           if (ALLOCATED(F%B1Re_3D%PHI)) F%B1Re_3D%PHI = F%B1Re_3D%PHI/ &
                 params%cpp%Bo
-           if (ALLOCATED(F%B1Re_2D%Z)) F%B1Re_2D%Z = F%B1Re_2D%Z/ &
+           if (ALLOCATED(F%B1Re_3D%Z)) F%B1Re_3D%Z = F%B1Re_3D%Z/ &
                 params%cpp%Bo
-           if (ALLOCATED(F%B1Im_2D%R)) F%B1Im_2D%R = F%B1Im_2D%R/ &
+           if (ALLOCATED(F%B1Im_3D%R)) F%B1Im_3D%R = F%B1Im_3D%R/ &
                 params%cpp%Bo
-           if (ALLOCATED(F%B1Im_2D%PHI)) F%B1Im_2D%PHI = F%B1Im_2D%PHI/ &
+           if (ALLOCATED(F%B1Im_3D%PHI)) F%B1Im_3D%PHI = F%B1Im_3D%PHI/ &
                 params%cpp%Bo
-           if (ALLOCATED(F%B1Im_2D%Z)) F%B1Im_2D%Z = F%B1Im_2D%Z/ &
+           if (ALLOCATED(F%B1Im_3D%Z)) F%B1Im_3D%Z = F%B1Im_3D%Z/ &
                 params%cpp%Bo
 
         else if (params%field_model(10:14).eq.'AORSA') then
