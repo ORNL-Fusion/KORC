@@ -234,8 +234,13 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       !write(6,*) 'T_R ',T_R(cc)*params%cpp%length
 
       Ezeta(cc) = -E0/( 1.0_rp + eta(cc)*cT(cc))
-      Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
 
+      IF (Er0 == 0._rp) THEN
+         Er(cc) = 0._rp
+      ELSE
+         Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
+      END IF
+      
       E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
       E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
       E_Z(cc) = Er(cc)*sT(cc)
