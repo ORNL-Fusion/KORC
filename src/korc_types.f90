@@ -622,6 +622,7 @@ module korc_types
      REAL(rp),DIMENSION(:), ALLOCATABLE  :: GR
      REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_phase
+     REAL(rp)  :: MARS_max
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
      REAL(rp)  :: psir
