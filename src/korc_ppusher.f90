@@ -298,7 +298,7 @@ subroutine FO_init(params,F,spp,output,step)
             E_X,E_Y,E_Z,PSIp,flagCon)
         else if (params%field_model(10:13).eq.'MARS') then
           call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
-            B_X,B_Y,B_Z,PSIp,flagCon)
+            B_X,B_Y,B_Z,PSIp,flagCon,0._rp)
         else if (params%field_model(10:14).eq.'AORSA') then
           call interp_FOfields_aorsa_p(0._rp,params,pchunk,F, &
             Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp,flagCon)
@@ -864,7 +864,7 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
   REAL(rp),DIMENSION(3) :: DiMESloc_cyl
-  REAL(rp) :: time
+  REAL(rp) :: time,MARS_max
 
   !$acc routine (cart_to_cyl_p_ACC) seq
   !$acc routine (interp_FOfields_mars_p_ACC) seq
@@ -880,6 +880,7 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
     gr=F%GR
     nmode=F%X%PHI
     phase=F%MARS_phase
+    MARS_max=F%MARS_max
     Ro=F%Ro
     Bo=F%Bo
 
@@ -944,7 +945,7 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
 
         call interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
           b1Refield_2d_local_2,b1Imfield_2d_local_2,b1Refield_2d_local_3,b1Imfield_2d_local_3, &
-          psip_conv,amp,gr,nmode,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+          psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
 
 #endif PSPLINE
@@ -2692,14 +2693,14 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
   REAL(rp), DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
   REAL(rp), DIMENSION(params%pchunk) :: PSIp
   INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-  REAL(rp) :: a,m_cache,q_cache
+  REAL(rp) :: a,m_cache,q_cache,dt,init_time,time
   INTEGER                                                    :: ii
   !! Species iterator.
   INTEGER                                                    :: pp,pchunk
   !! Particles iterator.
   INTEGER                                                    :: cc
   !! Chunk iterator.
-  INTEGER(ip)                                                    :: tt
+  INTEGER(ip)                                                    :: tt,it
   !! time iterator.
 
   do ii = 1_idef,params%num_species
@@ -2709,13 +2710,17 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
     q_cache=spp(ii)%q
     a = q_cache/abs(q_cache)*params%dt
 
+    it=params%it
+    dt=params%dt
+    init_time=params%init_time
+
     !$OMP PARALLEL DO default(none) &
     !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
-    !$OMP& shared(params,ii,spp,P,F,random) &
+    !$OMP& shared(params,it,dt,init_time,ii,spp,P,F,random) &
     !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
     !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
     !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g, &
-    !$OMP& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp)
+    !$OMP& Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,time)
 
     do pp=1_idef,spp(ii)%ppp,pchunk
 
@@ -2754,8 +2759,10 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
 
         call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
+        time=(init_time+(it-1+tt)*dt)*params%cpp%time
+
         call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
-            B_X,B_Y,B_Z,PSIp,flagCon)
+            B_X,B_Y,B_Z,PSIp,flagCon,time)
 
         call advance_FOinterp_vars(tt,a,q_cache,m_cache,params,random, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
@@ -2888,7 +2895,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   INTEGER(ip) :: tskip,it
   REAL(rp) :: a,m_cache,q_cache,psip_conv,phase
   REAL(rp),DIMENSION(3) :: amp,gr,nmode
-  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,init_time,time
+  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,init_time,time,MARS_max
   INTEGER  :: ii,pp,ss,tt,ppp
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
@@ -2919,6 +2926,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     phase=F%MARS_phase
     Ro=F%Ro
     Bo=F%Bo
+    MARS_max=F%MARS_max
 
     Dim2x1t=F%Dim2x1t
     Analytic_D3D_IWL=F%Analytic_D3D_IWL
@@ -2971,11 +2979,11 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
           Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
-        time=init_time+(it-1+tt)*dt
+        time=(init_time+(it-1+tt)*dt)*params%cpp%time
 
         call interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
           b1Refield_2d_local_2,b1Imfield_2d_local_2,b1Refield_2d_local_3,b1Imfield_2d_local_3, &
-          psip_conv,amp,gr,nmode,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+          psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
         call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &

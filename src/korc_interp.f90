@@ -2650,7 +2650,7 @@ subroutine provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local_1,b1Imfi
 
 end subroutine provide_ezspline_mars_ACC
 
-subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache)
+subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache,time)
   INTEGER, INTENT(IN)  :: pchunk
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
@@ -2667,12 +2667,15 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
-  REAL(rp) :: phase
-  REAL(rp),DIMENSION(3) :: amp
+  REAL(rp) :: phase,MARS_max
+  REAL(rp),DIMENSION(3) :: amp,gr
+  REAL(rp),INTENT(IN)   :: time
 
   psip_conv=F%psip_conv
   amp=F%AMP
+  gr=F%GR
   phase=F%MARS_phase
+  MARS_max=F%MARS_max
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
@@ -2689,18 +2692,69 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
     B0_PHI = -F%Bo*F%Ro/Y_R(cc)
     B0_Z = -psip_conv*A(2)/Y_R(cc)
 
+    !write(6,*) Y_R(cc)
+    !write(6,*) Y_PHI(cc)
+    !write(6,*) Y_Z(cc)
+
+    !write(6,*) B1Re_R
+    !write(6,*) B1Im_R
+    !write(6,*) B1Re_PHI
+    !write(6,*) B1Im_PHI
+    !write(6,*) B1Re_Z
+    !write(6,*) B1Im_Z
+
+    !write(6,*) B0_R
+    !write(6,*) B0_PHI
+    !write(6,*) B0_Z
+
     cP=cos(Y_PHI(cc))
     sP=sin(Y_PHI(cc))
-    cPshift=cos(Y_PHI(cc)-phase)
-    sPshift=sin(Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(1)*Y_PHI(cc)-phase)
+    sPshift=sin(F%X%PHI(1)*Y_PHI(cc)-phase)
 
-    B1_R = amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    !write(6,*) B1_R
+    !write(6,*) B1_PHI
+    !write(6,*) B1_Z
 
     B_R = B0_R+B1_R
     B_PHI = B0_PHI+B1_PHI
     B_Z(cc) = B0_Z+B1_Z
+
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_2%R,b1Refield_2d_2%PHI, &
+      b1Refield_2d_2%Z,b1Imfield_2d_2%R,b1Imfield_2d_2%PHI,b1Imfield_2d_2%Z, &
+      Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
+    call EZspline_error(ezerr)
+
+    cPshift=cos(F%X%PHI(2)*Y_PHI(cc)-phase)
+    sPshift=sin(F%X%PHI(2)*Y_PHI(cc)-phase)
+
+    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    B_R = B_R+B1_R
+    B_PHI = B_PHI+B1_PHI
+    B_Z(cc) = B_Z(cc)+B1_Z
+
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_3%R,b1Refield_2d_3%PHI, &
+      b1Refield_2d_3%Z,b1Imfield_2d_3%R,b1Imfield_2d_3%PHI,b1Imfield_2d_3%Z, &
+      Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
+    call EZspline_error(ezerr)
+
+    cPshift=cos(F%X%PHI(3)*Y_PHI(cc)-phase)
+    sPshift=sin(F%X%PHI(3)*Y_PHI(cc)-phase)
+
+    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    B_R = B_R+B1_R
+    B_PHI = B_PHI+B1_PHI
+    B_Z(cc) = B_Z(cc)+B1_Z
 
     B_X(cc) = B_R*cP - B_PHI*sP
     B_Y(cc) = B_R*sP + B_PHI*cP
@@ -2710,11 +2764,13 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
 
 end subroutine interp_FOfields_mars_p
 
-subroutine interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
-  b1Refield_2d_local_2,b1Imfield_2d_local_2,b1Refield_2d_local_3,b1Imfield_2d_local_3, &
-  psip_conv,amp,gr,nmode,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+subroutine interp_FOfields_mars_p_ACC(time, &
+  bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
+  b1Refield_2d_local_2,b1Imfield_2d_local_2, &
+  b1Refield_2d_local_3,b1Imfield_2d_local_3, &
+  psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
   !$acc routine seq
-  REAL(rp),INTENT(IN)  :: time
+  REAL(rp),INTENT(IN)  :: time,MARS_max
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
   REAL(rp)   :: B_R,B_PHI
@@ -2745,12 +2801,12 @@ subroutine interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,
     Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
 
-  write(6,*) B1Re_R
-  write(6,*) B1Im_R
-  write(6,*) B1Re_PHI
-  write(6,*) B1Im_PHI
-  write(6,*) B1Re_Z
-  write(6,*) B1Im_Z
+  !write(6,*) B1Re_R
+  !write(6,*) B1Im_R
+  !write(6,*) B1Re_PHI
+  !write(6,*) B1Im_PHI
+  !write(6,*) B1Re_Z
+  !write(6,*) B1Im_Z
 
   PSIp=A(1)
 
@@ -2758,21 +2814,21 @@ subroutine interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,
   B0_PHI = -Bo*Ro/Y_R
   B0_Z = -psip_conv*A(2)/Y_R
 
-  write(6,*) A(1)
-  write(6,*) A(2)
-  write(6,*) A(3)
-  write(6,*) B0_R
-  write(6,*) B0_PHI
-  write(6,*) B0_Z
+  !write(6,*) A(1)
+  !write(6,*) A(2)
+  !write(6,*) A(3)
+  !write(6,*) B0_R
+  !write(6,*) B0_PHI
+  !write(6,*) B0_Z
 
   cP=cos(Y_PHI)
   sP=sin(Y_PHI)
   cPshift=cos(nmode(1)*Y_PHI-phase)
   sPshift=sin(nmode(1)*Y_PHI-phase)
 
-  B1_R = exp(time*gr(1))*amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
-  B1_PHI = exp(time*gr(1))*amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-  B1_Z = exp(time*gr(1))*amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+  B1_R = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
+  B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+  B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
   B_R = B0_R+B1_R
   B_PHI = B0_PHI+B1_PHI
@@ -2786,9 +2842,9 @@ subroutine interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,
   cPshift=cos(nmode(2)*Y_PHI-phase)
   sPshift=sin(nmode(2)*Y_PHI-phase)
 
-  B1_R = exp(time*gr(2))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
-  B1_PHI = exp(time*gr(2))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-  B1_Z = exp(time*gr(2))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+  B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
+  B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+  B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
   B_R = B_R+B1_R
   B_PHI = B_PHI+B1_PHI
@@ -2802,9 +2858,9 @@ subroutine interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,
   cPshift=cos(nmode(3)*Y_PHI-phase)
   sPshift=sin(nmode(3)*Y_PHI-phase)
 
-  B1_R = exp(time*gr(3))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
-  B1_PHI = exp(time*gr(3))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-  B1_Z = exp(time*gr(3))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+  B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
+  B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+  B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
   B_R = B_R+B1_R
   B_PHI = B_PHI+B1_PHI
