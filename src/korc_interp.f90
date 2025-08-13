@@ -2692,21 +2692,6 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
     B0_PHI = -F%Bo*F%Ro/Y_R(cc)
     B0_Z = -psip_conv*A(2)/Y_R(cc)
 
-    !write(6,*) Y_R(cc)
-    !write(6,*) Y_PHI(cc)
-    !write(6,*) Y_Z(cc)
-
-    !write(6,*) B1Re_R
-    !write(6,*) B1Im_R
-    !write(6,*) B1Re_PHI
-    !write(6,*) B1Im_PHI
-    !write(6,*) B1Re_Z
-    !write(6,*) B1Im_Z
-
-    !write(6,*) B0_R
-    !write(6,*) B0_PHI
-    !write(6,*) B0_Z
-
     cP=cos(Y_PHI(cc))
     sP=sin(Y_PHI(cc))
     cPshift=cos(F%X%PHI(1)*Y_PHI(cc)-phase)
@@ -2724,6 +2709,35 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
     B_PHI = B0_PHI+B1_PHI
     B_Z(cc) = B0_Z+B1_Z
 
+    !if (time.ge.2.099999e-5) then
+
+    !  write(6,*) 'time:',time
+
+    !  write(6,*) 'R,PHI,Z:',Y_R(cc)
+    !  write(6,*) Y_PHI(cc)
+    !  write(6,*) Y_Z(cc)
+
+    !  write(6,*) 'complex B1:',B1Re_R
+    !  write(6,*) B1Im_R
+    !  write(6,*) B1Re_PHI
+    !  write(6,*) B1Im_PHI
+    !  write(6,*) B1Re_Z
+    !  write(6,*) B1Im_Z
+
+    !  write(6,*) 'toroidal shift',cPshift
+    !  write(6,*) sPshift
+
+    !  write(6,*) 'time evo',MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)
+
+    !  write(6,*) 'real B1:',B1_R
+    !  write(6,*) B1_PHI
+    !  write(6,*) B1_Z
+
+    !  write(6,*) 'B0:',B0_R
+    !  write(6,*) B0_PHI
+    !  write(6,*) B0_Z
+    !endif
+
     call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_2%R,b1Refield_2d_2%PHI, &
       b1Refield_2d_2%Z,b1Imfield_2d_2%R,b1Imfield_2d_2%PHI,b1Imfield_2d_2%Z, &
       Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
@@ -2735,6 +2749,19 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
     B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    !if (time.ge.2.099999e-5) then
+    !  write(6,*) 'complex B2:',B1Re_R
+    !  write(6,*) B1Im_R
+    !  write(6,*) B1Re_PHI
+    !  write(6,*) B1Im_PHI
+    !  write(6,*) B1Re_Z
+    !  write(6,*) B1Im_Z
+
+    !  write(6,*) 'real B2:',B1_R
+    !  write(6,*) B1_PHI
+    !  write(6,*) B1_Z
+    !endif
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
@@ -2751,6 +2778,19 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
     B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    !if (time.ge.2.099999e-5) then
+    !  write(6,*) 'complex B3:',B1Re_R
+    !  write(6,*) B1Im_R
+    !  write(6,*) B1Re_PHI
+    !  write(6,*) B1Im_PHI
+    !  write(6,*) B1Re_Z
+    !  write(6,*) B1Im_Z
+
+    !  write(6,*) 'real B3:',B1_R
+    !  write(6,*) B1_PHI
+    !  write(6,*) B1_Z
+    !endif
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
@@ -2817,9 +2857,6 @@ subroutine interp_FOfields_mars_p_ACC(time, &
   !write(6,*) A(1)
   !write(6,*) A(2)
   !write(6,*) A(3)
-  !write(6,*) B0_R
-  !write(6,*) B0_PHI
-  !write(6,*) B0_Z
 
   cP=cos(Y_PHI)
   sP=sin(Y_PHI)

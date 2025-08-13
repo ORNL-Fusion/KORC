@@ -2895,7 +2895,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   INTEGER(ip) :: tskip,it
   REAL(rp) :: a,m_cache,q_cache,psip_conv,phase
   REAL(rp),DIMENSION(3) :: amp,gr,nmode
-  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,init_time,time,MARS_max
+  REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,init_time,time,MARS_max,t_norm
   INTEGER  :: ii,pp,ss,tt,ppp
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
@@ -2918,6 +2918,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
     ppp=spp(ii)%ppp
     dt=params%dt
     init_time=params%init_time
+    t_norm=params%cpp%time
 
     psip_conv=F%psip_conv
     amp=F%AMP
@@ -2979,7 +2980,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
           Dim2x1t,Analytic_D3D_IWL,circumradius, &
           ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flagCon)
 
-        time=(init_time+(it-1+tt)*dt)*params%cpp%time
+        time=(init_time+(it-1+tt)*dt)*t_norm
 
         call interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
           b1Refield_2d_local_2,b1Imfield_2d_local_2,b1Refield_2d_local_3,b1Imfield_2d_local_3, &
