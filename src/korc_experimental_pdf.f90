@@ -900,9 +900,9 @@ CONTAINS
        end do
 
 
-      !		if (TRIM(h_params%current_direction) .EQ. 'ANTICLOCKWISE') then
-      !			eta_samples = 180.0_rp - eta_samples
-      !		end if
+      if (TRIM(h_params%current_direction) .EQ. 'PARALLEL') then
+        eta_samples = 180.0_rp - eta_samples
+      end if
 
 !       go = SUM(g_samples)/nsamples
 !       etao = SUM(eta_samples)/nsamples
