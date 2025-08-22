@@ -572,13 +572,17 @@ end if
   end if
 #endif
 
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn'.and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip*params%t_it_SC
+  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn' &
+      .and..not.params%field_model.eq.'M3D_C1') then
+     do it=params%ito,params%t_steps,params%t_skip
+#ifdef ACC      
+        call adv_GCeqn_top_ACC(params,randoms,F,P,spp)
+#else
         call adv_GCeqn_top(params,randoms,F,P,spp)
-
+#endif ACC
         params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt
-        params%it = it-1_ip+params%t_skip*params%t_it_SC
+             +REAL(it-1_ip+params%t_skip,rp)*params%dt
+        params%it = it-1_ip+params%t_skip
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
