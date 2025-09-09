@@ -249,7 +249,7 @@ module korc_types
      !! Flag to indicate if collisionsare included (collisions=T) or not
      !! (collisions=F).
      LOGICAL 			:: LargeCollisions
-     CHARACTER(MAX_STRING_LENGTH) :: GC_rad_model
+     LOGICAL :: GC_rad_SDE
      CHARACTER(MAX_STRING_LENGTH) :: collisions_model
      !! String with the name of the collisions model to be used in the
      !! simulation.

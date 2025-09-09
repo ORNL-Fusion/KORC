@@ -144,7 +144,7 @@ CONTAINS
     params%LargeCollisions = LargeCollisions
     params%collisions_model = TRIM(collisions_model)
     params%bound_electron_model = TRIM(bound_electron_model)
-    params%GC_rad_model = TRIM(GC_rad_model)
+    params%GC_rad_SDE = GC_rad_SDE
 
     if (HDF5_error_handling) then
        params%HDF5_error_handling = 1_idef
@@ -218,7 +218,7 @@ CONTAINS
 
        write(output_unit_write,'("Radiation losses included: ",L1)') params%radiation
        if (params%radiation.and.(params%orbit_model(1:2).eq.'GC')) then
-          write(output_unit_write,*) 'Radiation model: ',TRIM(params%GC_rad_model)
+          write(output_unit_write,*) 'Radiation model: ',params%GC_rad_SDE
        end if
        write(output_unit_write,'("Collisions losses included: ",L1)') params%collisions
        if (params%collisions) then
