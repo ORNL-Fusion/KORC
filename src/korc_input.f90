@@ -31,7 +31,7 @@ module korc_input
   REAL(rp) :: minimum_particle_energy = 1.0E5
     ! Minimum energy of simulated particles in eV
   LOGICAL :: radiation = .FALSE.
-  CHARACTER(30) :: GC_rad_model='SDE'
+  LOGICAL :: GC_rad_SDE= .TRUE.
   LOGICAL :: collisions = .FALSE.
   LOGICAL :: LargeCollisions = .FALSE.
   CHARACTER(30) :: collisions_model = 'SINGLE_SPECIES'
@@ -450,7 +450,7 @@ CONTAINS
          simulation_time,snapshot_frequency,dt,num_species,radiation, &
          collisions,collisions_model,outputs_list,minimum_particle_energy, &
          HDF5_error_handling,orbit_model,field_eval,proceed,profile_model, &
-         restart_overwrite_frequency,FokPlan,GC_rad_model,bound_electron_model,&
+         restart_overwrite_frequency,FokPlan,GC_rad_SDE,bound_electron_model,&
          FO_GC_compare,SameRandSeed,SC_E,reinit,SC_E_add,time_slice,rmax, &
          rmin,zmax,zmin,pchunk,magnetic_field_directory,magnetic_field_list,&
          LargeCollisions,load_balance,recycle_losses

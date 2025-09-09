@@ -223,6 +223,19 @@ end subroutine cart_to_cyl_p_ACC
 
   end subroutine cyl_check_if_confined_p
 
+  subroutine cyl_check_if_confined_ACC(a,R0,Xcyl_R,Xcyl_Z,flag)
+    implicit none
+    REAL(rp),DIMENSION(pchunk),  INTENT(IN)      :: Xcyl_R
+    REAL(rp),DIMENSION(pchunk),  INTENT(IN)      :: Xcyl_Z
+    INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag
+    REAL(rp),  INTENT(IN)                            :: a,R0
+    !! Distance to plasma edge as measured from the magnetic axis.
+    INTEGER                                  :: cc
+    
+    if (sqrt((Xcyl_R-R0)**2+Xcyl_Z**2) .gt. a) flag=0_is
+
+  end subroutine cyl_check_if_confined_ACC
+
   subroutine cart_to_tor_check_if_confined(X,F,Xtor,flag)
     !! @note Subroutine that converts the position of simulated particles
     !! from Cartesian \((x,y,z)\) to toroidal \((r,\theta, \zeta)\) coordinates.
