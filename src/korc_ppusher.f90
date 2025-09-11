@@ -9,6 +9,7 @@ module korc_ppusher
   use korc_interp
   use korc_collisions
   use korc_hpc
+  use korc_coords
 
 #ifdef PARALLEL_RANDOM
   use korc_random
@@ -30,10 +31,13 @@ module korc_ppusher
   !! Dimensionless vacuum permittivity \(\epsilon_0 \times (m_{ch}^2
   !! v_{ch}^3/q_{ch}^3 B_{ch})\), see [[korc_units]].
 
+  !$acc declare create (E0)
+
   PRIVATE :: cross,&
        radiation_force_p,&
        GCEoM_p,&
-       GCEoM1_p
+       GCEoM1_p, &
+       GCEoM_ACC
   PUBLIC :: initialize_particle_pusher,&
        GC_init,&
        FO_init,&
@@ -4147,7 +4151,6 @@ subroutine advance_FP3Dinterp_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z,g, &
 
 end subroutine advance_FP3Dinterp_vars
 
-
 subroutine GC_init(params,F,spp)
     !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
     !! @endnote
@@ -4469,6 +4472,60 @@ subroutine GC_init(params,F,spp)
     end do ! loop over particle species
 
 end subroutine GC_init
+
+subroutine GC_init_ACC(params,F,spp)
+    !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
+    !! @endnote
+    !! Comment this section further with evolution equations, numerical
+    !! methods, and descriptions of both.
+    TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+    !! Core KORC simulation parameters.
+    TYPE(FIELDS), INTENT(INOUT)                                   :: F
+    !! An instance of the KORC derived type FIELDS.
+
+    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
+    !! An instance of the derived type SPECIES containing all the parameters
+    !! and simulation variables of the different species in the simulation.
+
+    INTEGER                                                    :: ii
+    !! Species iterator.
+    INTEGER                                                    :: pp
+    !! Particles iterator.
+    REAL(rp)               :: Bmag1,pmag
+
+    do ii = 1_idef,params%num_species
+
+          if ((spp(ii)%spatial_distribution.eq.'TRACER').or. &
+               (spp(ii)%spatial_distribution.eq.'TORUS').or. &
+               (spp(ii)%spatial_distribution.eq.'DISK').or. &
+               (spp(ii)%spatial_distribution.eq. &
+               '2D-GAUSSIAN-ELLIPTIC-TORUS-MH')) &
+               call cart_to_cyl(spp(ii)%vars%X,spp(ii)%vars%Y)
+
+          params%GC_coords=.TRUE.
+
+          call get_fields(params,spp(ii)%vars,F)
+
+          do pp=1_idef,spp(ii)%ppp
+
+             Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
+                  spp(ii)%vars%B(pp,:)))
+
+             pmag=spp(ii)%m*sqrt(spp(ii)%vars%g(pp)**2-1)
+
+             spp(ii)%vars%V(pp,1)=pmag*cos(deg2rad(spp(ii)%vars%eta(pp)))
+
+             spp(ii)%vars%V(pp,2)=(pmag* &
+                  sin(deg2rad(spp(ii)%vars%eta(pp))))**2/ &
+                  (2*spp(ii)%m*Bmag1)
+
+          end do ! loop over particles on an mpi process
+
+       spp(ii)%vars%Yborn=spp(ii)%vars%Y
+
+    end do ! loop over particle species
+
+end subroutine GC_init_ACC
 
 FUNCTION deg2rad(x)
      REAL(rp), INTENT(IN) :: x
@@ -4932,9 +4989,8 @@ subroutine adv_GCeqn_top(params,random,F,P,spp)
 
 end subroutine adv_GCeqn_top
 
-subroutine adv_GCeqn_top_ACC(params,random,F,P,spp)
-
-  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
+  TYPE(KORC_PARAMS_ACC), INTENT(INOUT)                           :: params_ACC
   !! Core KORC simulation parameters.
   CLASS(random_context), POINTER, INTENT(INOUT) :: random
   TYPE(FIELDS), INTENT(INOUT)                                   :: F
@@ -4944,6 +5000,7 @@ subroutine adv_GCeqn_top_ACC(params,random,F,P,spp)
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
+  TYPE(PARTICLES)    :: vars
   REAL(rp)               :: Bmag
   REAL(rp) :: Y_R,Y_PHI,Y_Z
   REAL(rp) :: B_R,B_PHI,B_Z
@@ -4952,29 +5009,47 @@ subroutine adv_GCeqn_top_ACC(params,random,F,P,spp)
   REAL(rp) :: curlb_R,curlb_PHI,curlb_Z
   REAL(rp) :: PSIp,ne,Te
   REAL(rp) :: V_PLL,V_MU
-  REAL(rp) :: B0,EF0,R0,q0,lam,ar,m_cache,q_cache,ne0,Te0,Zeff0
+  REAL(rp) :: m_cache,q_cache,ne0,Te0,Zeff0
   INTEGER(is)  :: flagCon,flagCol,flagRE
   INTEGER           :: ii
   !! Species iterator.
   INTEGER           :: pp
+  INTEGER           :: ppp,pRE
   !! Particles iterator.
   INTEGER(ip)   :: tcol,torb
   !! time iterator.
   REAL(rp),DIMENSION(spp(1)%pRE,4) :: RErand 
   REAL(rp),DIMENSION(4) :: RErand_p
+  REAL(rp)  :: B0,E0,lam,R0,q0,ar
+  LOGICAL :: avalanche_fail = .FALSE.
 
   !$acc routine (advance_GCeqn_vars_ACC) seq
   !$acc routine (include_CoulombCollisions_GC_ACC) seq
   !$acc routine (analytical_fields_Bmag_ACC) seq
 
-  do ii = 1_idef,params%num_species
+  do ii = 1_idef,params_ACC%num_species
+
+    vars=spp(ii)%vars
 
     q_cache=spp(ii)%q
     m_cache=spp(ii)%m
 
+    ppp=spp(ii)%ppp
+
+    ne0=P%neo
+    Te0=P%Teo
+    Zeff0=P%Zeffo
+
+    B0=F%Bo
+    E0=F%Eo
+    lam=F%AB%lambda
+    R0=F%AB%Ro
+    q0=F%AB%qo
+    ar=F%AB%a
+
     CALL random%uniform%set(0.0_rp, 1.0_rp)
 
-    do tcol=1_ip,params%coll_per_dump
+    do tcol=1_ip,params_ACC%coll_per_dump
 
       do pp=1_idef,spp(ii)%pRE
         RErand(pp,1) = random%uniform%get()
@@ -4983,77 +5058,82 @@ subroutine adv_GCeqn_top_ACC(params,random,F,P,spp)
         RErand(pp,4) = random%uniform%get()
       enddo
 
+      pRE=spp(ii)%pRE
+
       !$acc parallel loop 
-      do pp=1_idef,spp(ii)%pRE
+      do pp=1_idef,pRE
 
-        Y_R=spp(ii)%vars%Y(pp,1)
-        Y_PHI=spp(ii)%vars%Y(pp-,2)
-        Y_Z=spp(ii)%vars%Y(pp,3)
+        Y_R=vars%Y(pp,1)
+        Y_PHI=vars%Y(pp,2)
+        Y_Z=vars%Y(pp,3)
 
-        V_PLL=spp(ii)%vars%V(pp,1)
-        V_MU=spp(ii)%vars%V(pp,2)
+        V_PLL=vars%V(pp,1)
+        V_MU=vars%V(pp,2)
 
-        PSIp=spp(ii)%vars%PSI_p(pp)
-        ne=spp(ii)%vars%ne(pp)
+        PSIp=vars%PSI_p(pp)
+        ne=vars%ne(pp)
 
-        flagCon=spp(ii)%vars%flagCon(pp)
-        flagCol=spp(ii)%vars%flagCol(pp)
+        flagCon=vars%flagCon(pp)
+        flagCol=vars%flagCol(pp)
 
-        if (.not.params%FokPlan) then
+        if (.not.params_ACC%FokPlan) then
           !$acc loop seq
-          do torb=1_ip,params%orbits_per_coll
-            call advance_GCeqn_vars_ACC(spp(ii)%vars,pp,tcol,torb,params, &
+          do torb=1_ip,params_ACC%orbits_per_coll
+            call advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC, &
                 Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                B_R,B_PHI,B_Z,F,P,PSIp,E_R,E_PHI,E_Z)
+                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0)
           end do
 
-          spp(ii)%vars%Y(pp,1)=Y_R
-          spp(ii)%vars%Y(pp,2)=Y_PHI
-          spp(ii)%vars%Y(pp,3)=Y_Z
+          vars%Y(pp,1)=Y_R
+          vars%Y(pp,2)=Y_PHI
+          vars%Y(pp,3)=Y_Z
 
-          spp(ii)%vars%B(pp,1) = B_R
-          spp(ii)%vars%B(pp,2) = B_PHI
-          spp(ii)%vars%B(pp,3) = B_Z
+          vars%B(pp,1) = B_R
+          vars%B(pp,2) = B_PHI
+          vars%B(pp,3) = B_Z
 
-          spp(ii)%vars%PSI_P(pp) = PSIp
+          vars%PSI_P(pp) = PSIp
 
-          spp(ii)%vars%E(pp,1) = E_R
-          spp(ii)%vars%E(pp,2) = E_PHI
-          spp(ii)%vars%E(pp,3) = E_Z
+          vars%E(pp,1) = E_R
+          vars%E(pp,2) = E_PHI
+          vars%E(pp,3) = E_Z
 
-          spp(ii)%vars%flagCon(pp)=flagCon
+          vars%flagCon(pp)=flagCon
 
         endif
 
-        if (params%collisions) then
+        if (params_ACC%collisions) then
 
           RErand_p(1)=RErand(pp,1)
           RErand_p(2)=RErand(pp,2)
 
-          call include_CoulombCollisions_GC_ACC(spp(ii), 
-            tcol,params,RErand_p,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
-            flagCon,flagCol,F,P,B_R,B_PHI,B_Z,E_PHI,ne,Te,PSIp)
+          call include_CoulombCollisions_GC_ACC(ppp,pRE,vars, &
+            tcol,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
+            flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,ne0,Te0,Zeff0,PSIp,avalanche_fail)
         endif
 
-        spp(ii)%vars%V(pp,1)=V_PLL
-        spp(ii)%vars%V(pp,2)=V_MU
+        vars%V(pp,1)=V_PLL
+        vars%V(pp,2)=V_MU
 
-        spp(ii)%vars%flagCol(pp)=flagCol
-
-        spp(ii)%vars%ne(pp)=ne
-        spp(ii)%vars%ne(pp)=Te
+        vars%flagCol(pp)=flagCol
 
         Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
 
-        spp(ii)%vars%g(pp)=sqrt(1+(V_PLL/m_cache)**2+ &
+        vars%g(pp)=sqrt(1+(V_PLL/m_cache)**2+ &
           2*V_MU*Bmag/m_cache)
-        spp(ii)%vars%eta(pp) = rad2deg(atan2(sqrt(2*m_cache* &
+        vars%eta(pp) = rad2deg(atan2(sqrt(2*m_cache* &
           Bmag*V_MU),V_PLL)) 
 
       end do !particle iterator
       !$acc end parallel loop
 
+      if (avalanche_fail) call korc_abort(24)
+
+      spp(ii)%pRE=pRE
+
     end do !collision per dump iterator
+
+    spp(ii)%vars=vars
 
   end do !species iterator
 
@@ -5383,24 +5463,25 @@ end subroutine adv_GCeqn_top_ACC
 
 end subroutine advance_GCeqn_vars
 
-subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
-  flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,F,P,PSIp,E_R,E_PHI,E_Z)
+subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
+  flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar, &
+  ne,Te,Zeff)
   !$acc routine seq
   !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
   !! @endnote
   !! Comment this section further with evolution equations, numerical
   !! methods, and descriptions of both.
-  TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
+  TYPE(KORC_PARAMS_ACC), INTENT(INOUT)                              :: params_ACC
   !! Core KORC simulation parameters.
   TYPE(PARTICLES), INTENT(INOUT)     :: vars
-  TYPE(PROFILES), INTENT(IN)                                 :: P
-  TYPE(FIELDS), INTENT(IN)                                 :: F
   !! An instance of the KORC derived type PROFILES.
   REAL(rp)                                      :: dt
   !! Time step used in the leapfrog step (\(\Delta t\)).
   INTEGER(ip),INTENT(IN)                     :: tcol,torb
   !! time iterator.
   INTEGER,INTENT(IN)                                      :: pp
+  REAL(rp),INTENT(INOUT) :: ne,Te,Zeff
+  REAL(rp),INTENT(IN)  :: B0,E0,lam,R0,q0,ar
 
   REAL(rp) :: a1 = 1./5._rp
   REAL(rp) :: a21 = 3./40._rp,a22=9./40._rp
@@ -5421,34 +5502,31 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
   REAL(rp),INTENT(OUT) :: PSIp
   REAL(rp) :: curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z
   REAL(rp),INTENT(INOUT) :: V_PLL,V_MU
-  REAL(rp) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,V0
+  REAL(rp) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,V0
   REAL(rp),INTENT(OUT) :: E_PHI,E_Z,E_R
-  REAL(rp) :: Bmag,ne,Te,Zeff
+  REAL(rp) :: Bmag
   INTEGER(is), intent(inout) :: flagCon,flagCol
-  REAL(rp) :: ar,R0
   REAL(rp),intent(IN) :: q_cache,m_cache
 
   !$acc routine (analytical_fields_GC_ACC) seq
   !$acc routine (GCEoM_ACC) seq
   !$acc routine (cyl_check_if_confined_ACC) seq
 
-  ar=F%AB%a
-  R0=F%AB%Ro
-
-  dt=params%dt
+  dt=params_ACC%dt
 
   Y0_R=Y_R
   Y0_PHI=Y_PHI
   Y0_Z=Y_Z
   V0=V_PLL
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
       Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-      gradB_R,gradB_PHI,gradB_Z,PSIp)
+      gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
-  call GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+  call GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon, &
+    ne,Te,Zeff)
 
   k1_R=dt*RHS_R
   k1_PHI=dt*RHS_PHI
@@ -5460,13 +5538,14 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
   Y_Z=Y0_Z+a1*k1_Z
   V_PLL=V0   +a1*k1_PLL
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
       Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-      gradB_R,gradB_PHI,gradB_Z,PSIp)
+      gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
-  call GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+  call GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon, &
+    ne,Te,Zeff)
 
   k2_R=dt*RHS_R
   k2_PHI=dt*RHS_PHI 
@@ -5478,13 +5557,14 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
   Y_Z=Y0_Z+a21*k1_Z+a22*k2_Z
   V_PLL=V0   +a21*k1_PLL+a22*k2_PLL
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
       Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-      gradB_R,gradB_PHI,gradB_Z,PSIp)
+      gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
-  call GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+  call GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon, &
+    ne,Te,Zeff)
 
   k3_R=dt*RHS_R
   k3_PHI=dt*RHS_PHI
@@ -5497,13 +5577,14 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
   Y_Z=Y0_Z+a31*k1_Z+a32*k2_Z+a33*k3_Z
   V_PLL=V0   +a31*k1_PLL+a32*k2_PLL+a33*k3_PLL
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
       Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-      gradB_R,gradB_PHI,gradB_Z,PSIp)
+      gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
-  call GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+  call GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon, &
+    ne,Te,Zeff)
 
   k4_R=dt*RHS_R
   k4_PHI=dt*RHS_PHI
@@ -5519,13 +5600,14 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
   V_PLL=V0   +a41*k1_PLL+a42*k2_PLL+ &
       a43*k3_PLL+a44*k4_PLL
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
       Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-      gradB_R,gradB_PHI,gradB_Z,PSIp)
+      gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
-  call GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+  call GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon, &
+    ne,Te,Zeff)
 
   k5_R=dt*RHS_R
   k5_PHI=dt*RHS_PHI
@@ -5541,13 +5623,14 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
   V_PLL=V0   +a51*k1_PLL+a52*k2_PLL+ &
     a53*k3_PLL+a54*k4_PLL+a55*k5_PLL
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
     Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,PSIp)
+    gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
-  call GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+  call GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
     B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon)
+    gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flagCon, &
+    ne,Te,Zeff)
 
   k6_R=dt*RHS_R
   k6_PHI=dt*RHS_PHI
@@ -5572,9 +5655,9 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params,Y_R,Y_PHI,Y_Z,V_PLL,V
     V_PLL=V0
   end if
 
-  call analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+  call analytical_fields_GC_ACC(Y_R,Y_PHI, &
     Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-    gradB_R,gradB_PHI,gradB_Z,PSIp)
+    gradB_R,gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
 
 end subroutine advance_GCeqn_vars_ACC
 
@@ -8813,14 +8896,13 @@ subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
 
 end subroutine GCEoM1_p
 
-subroutine GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
+subroutine GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
   B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z, &
-  gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flag_cache)
+  gradB_R,gradB_PHI,gradB_Z,V_PLL,V_MU,Y_R,Y_PHI,Y_Z,q_cache,m_cache,PSIp,flag_cache, &
+  ne,Te,Zeff)
   !$acc routine seq
-  TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
+  TYPE(KORC_PARAMS_ACC), INTENT(IN)  :: params_ACC
   !! Core KORC simulation parameters.
-  TYPE(FIELDS), INTENT(IN)      :: F
-  TYPE(PROFILES), INTENT(IN)                                 :: P
   REAL(rp) :: Bmag,bhat_R,bhat_PHI,bhat_Z,Bst_R,Bst_PHI
   REAL(rp) :: BstdotE,BstdotgradB,EcrossB_R,EcrossB_PHI,bdotBst
   REAL(rp) :: bcrossgradB_R,bcrossgradB_PHI,bcrossgradB_Z,gamgc
@@ -8837,10 +8919,10 @@ subroutine GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
   INTEGER(ip),INTENT(IN)  :: tcol,torb
   INTEGER(is),INTENT(OUT)  :: flag_cache
   REAL(rp)  :: time,re_cache,alpha_cache
-  REAL(rp) 			:: Zeff,Te, ne
+  REAL(rp),INTENT(INOUT)			:: Zeff,Te, ne
   INTEGER             :: thread_num
 
-  !$acc routine (analytical_profiles_ACC) seq
+  !!$acc routine (analytical_profiles_ACC) seq
 
   ne=-1._rp
   Te=-1._rp
@@ -8889,15 +8971,15 @@ subroutine GCEoM_ACC(tcol,torb,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
   RHS_MU=0._rp
 
 
-  if (params%radiation.and.params%GC_rad_SDE) then
+  if (params_ACC%radiation.and.params_ACC%GC_rad_SDE) then
 
-    re_cache=C_RE/params%cpp%length
+    re_cache=C_RE/params_ACC%cpp%length
     alpha_cache=C_a
 
-    time=params%init_time+(params%it-1+torb)*params%dt+ &
-      tcol*params_ss%coll_per_dump_dt
+    !time=params_ACC%init_time+(params_ACC%it-1+torb)*params_ACC%dt+ &
+    !  tcol*params_ACC%coll_per_dump_dt
 
-    call analytical_profiles_ACC(time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
+    !call analytical_profiles_ACC(time,Y_R,Y_Z,P,ne,Te,Zeff,PSIp)
 
     tau_R=6*C_PI*E0/(Bmag*Bmag)
 

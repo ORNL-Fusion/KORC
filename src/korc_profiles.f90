@@ -603,18 +603,16 @@ CONTAINS
     
   end subroutine analytical_profiles_p
 
-subroutine analytical_profiles_ACC(time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
+subroutine analytical_profiles_ACC(time,Y_R,Y_Z,P,ne,Te,Zeff,PSIp)
   !! @note Subroutine that calculates the analytical plasma profiles at
   !! the particles' position. @endnote
   !$acc routine seq
-  TYPE(KORC_PARAMS), INTENT(IN)                           :: params
   REAL(rp), INTENT(IN)  :: Y_R,Y_Z,PSIp
   REAL(rp), INTENT(IN)  :: time
   TYPE(PROFILES), INTENT(IN)                         :: P
   !! An instance of KORC's derived type PROFILES containing all the
   !! information about the plasma profiles used in the simulation.
   !! See [[korc_types]] and [[korc_profiles]].
-  TYPE(FIELDS), INTENT(IN)      :: F
   REAL(rp),INTENT(OUT) :: ne
   !! Background electron density seen by simulated particles.
   REAL(rp),INTENT(OUT) :: Te
@@ -638,7 +636,7 @@ subroutine analytical_profiles_ACC(time,params,Y_R,Y_Z,P,F,ne,Te,Zeff,PSIp)
 
   ne = ne0
   Te = Te0
-  Zeff = P%Zeff0
+  Zeff = Zeff0
     
   end subroutine analytical_profiles_ACC
 

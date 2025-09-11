@@ -229,7 +229,39 @@ CONTAINS
        write(output_unit_write,'("Self-consistent E included: ",L1)') params%SC_E
        write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * *",/)')
     end if
+
   end subroutine load_korc_params
+
+  subroutine initialize_korc_parameters_ACC(params,params_ACC)
+    !! @note Interface for calling initialization subroutines @endnote
+    TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
+    TYPE(KORC_PARAMS_ACC), INTENT(INOUT) 	:: params_ACC
+
+    params_ACC%radiation = params%radiation
+    params_ACC%collisions = params%collisions
+    params_ACC%LargeCollisions = params%LargeCollisions
+    params_ACC%GC_rad_SDE = params%GC_rad_SDE
+    params_ACC%FokPlan=params%FokPlan
+
+    params_ACC%cpp%length=params%cpp%length
+    params_ACC%cpp%energy=params%cpp%energy
+    params_ACC%cpp%temperature=params%cpp%temperature
+    params_ACC%cpp%charge=params%cpp%charge
+    params_ACC%cpp%density=params%cpp%density
+    params_ACC%cpp%Eo=params%cpp%Eo
+    params_ACC%cpp%time=params%cpp%time
+
+    params_ACC%init_time=params%init_time
+    params_ACC%it=params%it
+    params_ACC%dt=params%dt
+    params_ACC%coll_per_dump_dt=params%coll_per_dump_dt
+    params_ACC%coll_per_dump=params%coll_per_dump
+    params_ACC%orbits_per_coll=params%orbits_per_coll
+    params_ACC%num_species=params%num_species
+
+    params_ACC%num_impurity_species=params%num_impurity_species
+
+  end subroutine initialize_korc_parameters_ACC
 
   subroutine initialize_korc_parameters(params)
     !! @note Interface for calling initialization subroutines @endnote
