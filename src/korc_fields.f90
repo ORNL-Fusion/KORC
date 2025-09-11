@@ -899,11 +899,10 @@ subroutine analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
 
 end subroutine analytical_fields_GC_p
 
-subroutine analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
+subroutine analytical_fields_GC_ACC(Y_R,Y_PHI, &
   Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
-  gradB_PHI,gradB_Z,PSIp)
+  gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
   !$acc routine seq
-  TYPE(FIELDS), INTENT(IN)                                   :: F
   REAL(rp),INTENT(IN)  :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT) :: B_R,B_PHI,B_Z
   REAL(rp),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
@@ -912,13 +911,7 @@ subroutine analytical_fields_GC_ACC(F,Y_R,Y_PHI, &
   REAL(rp),INTENT(OUT) :: PSIp
   REAL(rp)  :: dRBR,dRBPHI,dRBZ,dZBR,dZBPHI,dZBZ,Bmag,dRbhatPHI
   REAL(rp)  :: dRbhatZ,dZbhatR,dZbhatPHI,qprof,rm,theta
-  REAL(rp)  :: B0,E0,lam,R0,q0
-
-  B0=F%Bo
-  E0=F%Eo
-  lam=F%AB%lambda
-  R0=F%AB%Ro
-  q0=F%AB%qo
+  REAL(rp),INTENT(IN)  :: B0,E0,lam,R0,q0
 
   rm=sqrt((Y_R-R0)*(Y_R-R0)+Y_Z*Y_Z)
   theta=atan2(Y_Z,(Y_R-R0))

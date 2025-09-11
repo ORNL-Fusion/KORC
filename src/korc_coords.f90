@@ -224,10 +224,11 @@ end subroutine cart_to_cyl_p_ACC
   end subroutine cyl_check_if_confined_p
 
   subroutine cyl_check_if_confined_ACC(a,R0,Xcyl_R,Xcyl_Z,flag)
+    !$acc routine seq
     implicit none
-    REAL(rp),DIMENSION(pchunk),  INTENT(IN)      :: Xcyl_R
-    REAL(rp),DIMENSION(pchunk),  INTENT(IN)      :: Xcyl_Z
-    INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag
+    REAL(rp),  INTENT(IN)      :: Xcyl_R
+    REAL(rp),  INTENT(IN)      :: Xcyl_Z
+    INTEGER(is),INTENT(INOUT)   :: flag
     REAL(rp),  INTENT(IN)                            :: a,R0
     !! Distance to plasma edge as measured from the magnetic axis.
     INTEGER                                  :: cc
