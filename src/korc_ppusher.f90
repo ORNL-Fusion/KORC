@@ -27,6 +27,7 @@ module korc_ppusher
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Refield_2dx_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
 #endif 
+
   REAL(rp), PRIVATE :: E0
   !! Dimensionless vacuum permittivity \(\epsilon_0 \times (m_{ch}^2
   !! v_{ch}^3/q_{ch}^3 B_{ch})\), see [[korc_units]].
@@ -5018,7 +5019,7 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
   !! Particles iterator.
   INTEGER(ip)   :: tcol,torb
   !! time iterator.
-  REAL(rp),DIMENSION(spp(1)%pRE,4) :: RErand 
+  REAL(rp),DIMENSION(spp(1)%ppp,4) :: RErand 
   REAL(rp),DIMENSION(4) :: RErand_p
   REAL(rp)  :: B0,E0,lam,R0,q0,ar
   LOGICAL :: avalanche_fail = .FALSE.
@@ -5060,7 +5061,7 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
 
       pRE=spp(ii)%pRE
 
-      !$acc parallel loop 
+      !$acc parallel loop private(RErand_p)
       do pp=1_idef,pRE
 
         Y_R=vars%Y(pp,1)
@@ -5069,6 +5070,14 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
 
         V_PLL=vars%V(pp,1)
         V_MU=vars%V(pp,2)
+
+        B_R=vars%B(pp,1)
+        B_PHI=vars%B(pp,2)
+        B_Z=vars%B(pp,3)
+
+        E_R=vars%E(pp,1)
+        E_PHI=vars%E(pp,2)
+        E_Z=vars%E(pp,3)
 
         PSIp=vars%PSI_p(pp)
         ne=vars%ne(pp)
@@ -5106,6 +5115,8 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
 
           RErand_p(1)=RErand(pp,1)
           RErand_p(2)=RErand(pp,2)
+          RErand_p(3)=RErand(pp,3)
+          RErand_p(4)=RErand(pp,4)
 
           call include_CoulombCollisions_GC_ACC(ppp,pRE,vars, &
             tcol,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z,V_PLL,V_MU,m_cache, &
