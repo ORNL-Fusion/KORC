@@ -282,7 +282,7 @@ module korc_input
   ! Subcycling time step in collisional time units (Tau)
   REAL(rp) :: p_therm = 1._rp
   LOGICAL :: ConserveLA = .TRUE.
-  CHARACTER(30) :: Clog_model = 'HESSLOW'
+  INTEGER(ip) :: Clog_model = 0
   LOGICAL :: min_secRE_therm = .FALSE.
   LOGICAL :: sample_test  = .FALSE.
   LOGICAL :: always_aval  = .FALSE.
@@ -303,13 +303,13 @@ module korc_input
     ! Background electron temperature in eV
   REAL(rp) :: ne_mult = 4.E20
     ! Background electron density in 1/m^3
-  REAL(rp), DIMENSION(10)  :: Zo_mult = 10.0
+  REAL(rp), DIMENSION(19)  :: Zo_mult = 10.0
     ! Full nuclear charge of each impurity: Z=1 for D, Z=10 for Ne, Z=18 for Ar
-  REAL(rp), DIMENSION(10)  :: Zj_mult = 1.0
+  REAL(rp), DIMENSION(19)  :: Zj_mult = 1.0
     ! Average charge state of each impurity
-  REAL(rp), DIMENSION(10)  :: nz_mult = 4.E20
+  REAL(rp), DIMENSION(19)  :: nz_mult = 4.E20
     ! Impurity densities
-  REAL(rp), DIMENSION(10)  :: IZj_mult = 15.7596
+  REAL(rp), DIMENSION(19)  :: IZj_mult = 15.7596
     ! Ionization energy of impurity in eV
   CHARACTER(20) :: neut_prof = 'UNIFORM'
   REAL(rp)  :: neut_edge_fac

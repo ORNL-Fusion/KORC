@@ -224,7 +224,7 @@ call normalize_collisions_params(params)
   !! (multiple-species) data types.
 
 
-call define_collisions_time_step(params,F,.true.)
+call define_collisions_time_step(params,params_ACC,F,.true.)
   !! <h4>14\. Define Collision Time Step</h4>
   !!
   !! Subroutine [[define_collisions_time_step]] in [[korc_collisions]] that
@@ -585,11 +585,11 @@ end if
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn' &
       .and..not.params%field_model.eq.'M3D_C1') then
      do it=params%ito,params%t_steps,params%t_skip
-#ifdef ACC      
+!#ifdef ACC      
         call adv_GCeqn_top_ACC(params_ACC,randoms,F,P,spp)
-#else
-        call adv_GCeqn_top(params,randoms,F,P,spp)
-#endif ACC
+!#else
+        !call adv_GCeqn_top(params,randoms,F,P,spp)
+!#endif ACC
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
         params%it = it-1_ip+params%t_skip
@@ -690,7 +690,7 @@ end if
 
         if (params%LargeCollisions) then
            call initialize_collision_params(params,spp,P,F,.false.)
-           call define_collisions_time_step(params,F,.false.)
+           call define_collisions_time_step(params,params_ACC,F,.false.)
         end if
 
         call save_restart_variables(params,spp,F)

@@ -23,6 +23,52 @@ module korc_collisions
   CHARACTER(LEN=*), PRIVATE, PARAMETER 	:: MODEL2 = 'MULTIPLE_SPECIES'
   REAL(rp), PRIVATE, PARAMETER 			:: infinity = HUGE(1.0_rp)
 
+  TYPE, PRIVATE :: PARAMS_MS_ACC
+     INTEGER 					:: num_impurity_species
+     REAL(rp) 					:: Te
+     ! Background electron temperature in eV
+     REAL(rp) 					:: ne
+     ! Background electron density in 1/m^3
+     REAL(rp), DIMENSION(19)        :: Zo
+     ! Full nuclear charge of each impurity: Z=1 for D, Z=10 for Ne
+     REAL(rp), DIMENSION(19)        :: Zj
+     ! Atomic number of each impurity: Z=1 for D, Z=10 for Ne
+     REAL(rp), DIMENSION(19)        :: nz
+     ! Impurity densities
+     REAL(rp), DIMENSION(19)        :: IZj,aZj
+     ! Ionization energy of impurity in eV
+     REAL(rp) 					:: Gammac_min
+
+
+     REAL(rp), DIMENSION(2) :: aH=(/274._rp,0._rp/)
+     REAL(rp), DIMENSION(7) :: aC=(/144._rp,118._rp,95._rp,70._rp, &
+          42._rp,39._rp,0._rp/)
+     REAL(rp), DIMENSION(11) :: aNe=(/111._rp,100._rp,90._rp,80._rp, &
+          71._rp,62._rp,52._rp,40._rp,24._rp,23._rp,0._rp/)
+     REAL(rp), DIMENSION(19) :: aAr=(/96._rp,90._rp,84._rp,78._rp,72._rp, &
+          65._rp,59._rp,53._rp,47._rp,44._rp,41._rp,38._rp,25._rp,32._rp, &
+          27._rp,21._rp,13._rp,13._rp,0._rp/)
+
+
+     REAL(rp), DIMENSION(2) :: IH=(/14.9916_rp,huge(1._rp)/)
+     REAL(rp), DIMENSION(7) :: IC=(/65.9_rp,92.6_rp,134.8_rp,214.2_rp, &
+          486.2_rp,539.5_rp,huge(1._rp)/)
+     REAL(rp), DIMENSION(11) :: INe=(/137.2_rp,165.2_rp,196.9_rp,235.2_rp, &
+          282.8_rp,352.6_rp,475.0_rp,696.8_rp,1409.2_rp,1498.4_rp,huge(1._rp)/)
+     REAL(rp), DIMENSION(19) :: IAr=(/188.5_rp,219.4_rp,253.8_rp,293.4_rp, &
+          339.1_rp,394.5_rp,463.4_rp,568.0_rp,728.0_rp,795.9_rp,879.8_rp, &
+          989.9_rp,1138.1_rp,1369.5_rp,1791.2_rp,2497.0_rp,4677.2_rp, &
+          4838.2_rp,huge(1._rp)/)
+
+     REAL(rp)  :: neut_edge_fac
+     REAL(rp) 			:: Ec,Ec_min
+     ! Critical electric field
+     LOGICAL  :: LargeCollisions
+     LOGICAL :: lowKE_REs
+     REAL(rp)  :: lowKE_LAC_not_ionized
+
+  END TYPE PARAMS_MS_ACC
+
   TYPE, PRIVATE :: PARAMS_MS
      INTEGER 					:: num_impurity_species
      REAL(rp) 					:: Te
@@ -85,7 +131,7 @@ module korc_collisions
 
   END TYPE PARAMS_MS
 
-  TYPE, PRIVATE :: PARAMS_SS
+  TYPE, PRIVATE :: PARAMS_SS_ACC
      REAL(rp) 			:: Te
      ! Electron temperature
      REAL(rp) 			:: Ti
@@ -127,7 +173,54 @@ module korc_collisions
      REAL(rp) :: coll_per_dump_dt,Clog_const
      REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
      LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion,always_aval,min_secRE_therm
-     CHARACTER(30) :: Clog_model,LAC_gam_resolution
+     INTEGER(ip) :: Clog_model
+     LOGICAL :: slowing_down
+
+  END TYPE PARAMS_SS_ACC
+
+  TYPE, PRIVATE :: PARAMS_SS
+     REAL(rp) 			:: Te
+     ! Electron temperature
+     REAL(rp) 			:: Ti
+     ! Ion temperature
+     REAL(rp) 			:: ne
+     ! Background electron density
+     REAL(rp) 			:: Zeff
+     ! Effective atomic number of ions
+     REAL(rp) 			:: rD
+     ! Debye radius
+     REAL(rp) 			:: re
+     ! Classical electron radius
+     REAL(rp) 			:: CoulombLogee,CoulombLogei
+     ! Coulomb logarithm
+     REAL(rp) 			:: CLog1, CLog2,CLog0_1, CLog0_2
+     REAL(rp) 			:: VTe
+     ! Thermal velocity of background electrons
+     REAL(rp) 			:: VTeo
+     REAL(rp) 			:: delta
+     ! delta parameter
+     REAL(rp) 			:: deltao
+     REAL(rp) 			:: Gammac
+     ! Collisional Gamma factor
+     REAL(rp) 			:: Gammaco
+     ! Collisional gamma factor normalized for SDE for dp
+     REAL(rp) 			:: Tau
+     ! Collisional time of relativistic particles
+     REAL(rp) 			:: Tauc
+     ! Collisional time of thermal particles
+     REAL(rp) 			:: taur
+     ! radiation timescale
+     REAL(rp) 			:: Ec
+     ! Critical electric field
+     REAL(rp) 			:: ED
+     ! Dreicer electric field
+     REAL(rp) 			:: dTau
+     ! Subcycling time step in collisional time units (Tau)
+     INTEGER(ip)		:: subcycling_iterations,ngrid1,Clog_model
+     REAL(rp) :: coll_per_dump_dt,Clog_const
+     REAL(rp) :: p_min,p_crit,p_therm,gam_min,gam_crit,gam_therm,pmin_scale
+     LOGICAL :: ConserveLA,sample_test,avalanche,energy_diffusion,FP_bremsstrahlung,pitch_diffusion,always_aval,min_secRE_therm
+     CHARACTER(30) :: LAC_gam_resolution
 
      REAL(rp), DIMENSION(3) 	:: x = (/1.0_rp,0.0_rp,0.0_rp/)
      REAL(rp), DIMENSION(3) 	:: y = (/0.0_rp,1.0_rp,0.0_rp/)
@@ -145,9 +238,11 @@ module korc_collisions
 
   TYPE(PARAMS_MS), PRIVATE :: cparams_ms
   TYPE(PARAMS_SS), PRIVATE :: cparams_ss
+  TYPE(PARAMS_MS_ACC), PRIVATE :: cparams_ms_ACC
+  TYPE(PARAMS_SS_ACC), PRIVATE :: cparams_ss_ACC
 
-  !$acc declare create (cparams_ms)
-  !$acc declare create (cparams_ss)
+  !$acc declare create(cparams_ss_ACC)
+  !$acc declare create(cparams_ms_ACC)
 
   PUBLIC :: initialize_collision_params,&
        normalize_collisions_params,&
@@ -230,9 +325,11 @@ contains
 
     if (params%profile_model(10:10).eq.'H') then
        cparams_ms%num_impurity_species = 6
+       cparams_ms_ACC%num_impurity_species = 6
        params%num_impurity_species = 6
     else
        cparams_ms%num_impurity_species = num_impurity_species
+       cparams_ms_ACC%num_impurity_species = num_impurity_species
        params%num_impurity_species = num_impurity_species
     endif
 
@@ -247,6 +344,7 @@ contains
 
     cparams_ms%Te = Te_mult*C_E
     cparams_ms%ne = ne_mult
+    cparams_ms_ACC%ne = ne_mult
     cparams_ms%nH = ne_mult
 
     if  (params%profile_model.eq.'M3D_C1') then
@@ -274,10 +372,29 @@ contains
        cparams_ms%nz(1) = nz_mult(1)
 
        params%Zj=cparams_ms%Zj
+
+       cparams_ms_ACC%Zj(1)=0
+       cparams_ms_ACC%Zo(1)=18
+       cparams_ms_ACC%Zj(2)=1
+       cparams_ms_ACC%Zo(2)=18
+       cparams_ms_ACC%Zj(3)=2
+       cparams_ms_ACC%Zo(3)=18
+       cparams_ms_ACC%Zj(4)=3
+       cparams_ms_ACC%Zo(4)=18
+       cparams_ms_ACC%Zj(5)=0
+       cparams_ms_ACC%Zo(5)=1
+       cparams_ms_ACC%Zj(6)=1
+       cparams_ms_ACC%Zo(6)=1
+
+       cparams_ms_ACC%nz(1) = nz_mult(1)
     else
        cparams_ms%Zj = Zj_mult(1:cparams_ms%num_impurity_species)
        cparams_ms%Zo = Zo_mult(1:cparams_ms%num_impurity_species)
        cparams_ms%nz = nz_mult(1:cparams_ms%num_impurity_species)
+
+       cparams_ms_ACC%Zj = Zj_mult(1:cparams_ms_ACC%num_impurity_species)
+       cparams_ms_ACC%Zo = Zo_mult(1:cparams_ms_ACC%num_impurity_species)
+       cparams_ms_ACC%nz = nz_mult(1:cparams_ms_ACC%num_impurity_species)
     endif
 
     if (.not.(params%profile_model(10:10).eq.'H')) then
@@ -285,15 +402,27 @@ contains
           if (int(cparams_ms%Zo(i)).eq.1) then
              cparams_ms%IZj(i) = C_E*cparams_ms%IH(int(cparams_ms%Zj(i)+1))
              cparams_ms%aZj(i) = cparams_ms%aH(int(cparams_ms%Zj(i)+1))
+
+             cparams_ms_ACC%IZj(i) = C_E*cparams_ms_ACC%IH(int(cparams_ms_ACC%Zj(i)+1))
+             cparams_ms_ACC%aZj(i) = cparams_ms_ACC%aH(int(cparams_ms_ACC%Zj(i)+1))
           else if (int(cparams_ms%Zo(i)).eq.6) then
              cparams_ms%IZj(i) = C_E*cparams_ms%IC(int(cparams_ms%Zj(i)+1))
              cparams_ms%aZj(i) = cparams_ms%aC(int(cparams_ms%Zj(i)+1))
+
+             cparams_ms_ACC%IZj(i) = C_E*cparams_ms_ACC%IC(int(cparams_ms_ACC%Zj(i)+1))
+             cparams_ms_ACC%aZj(i) = cparams_ms_ACC%aC(int(cparams_ms_ACC%Zj(i)+1))
           else if (int(cparams_ms%Zo(i)).eq.10) then
+             cparams_ms_ACC%IZj(i) = C_E*cparams_ms_ACC%INe(int(cparams_ms_ACC%Zj(i)+1))
+             cparams_ms_ACC%aZj(i) = cparams_ms_ACC%aNe(int(cparams_ms_ACC%Zj(i)+1))
+
              cparams_ms%IZj(i) = C_E*cparams_ms%INe(int(cparams_ms%Zj(i)+1))
              cparams_ms%aZj(i) = cparams_ms%aNe(int(cparams_ms%Zj(i)+1))
           else if (int(cparams_ms%Zo(i)).eq.18) then
              cparams_ms%IZj(i) = C_E*cparams_ms%IAr(int(cparams_ms%Zj(i)+1))
              cparams_ms%aZj(i) = cparams_ms%aAr(int(cparams_ms%Zj(i)+1))
+
+             cparams_ms_ACC%IZj(i) = C_E*cparams_ms_ACC%IAr(int(cparams_ms_ACC%Zj(i)+1))
+             cparams_ms_ACC%aZj(i) = cparams_ms_ACC%aAr(int(cparams_ms_ACC%Zj(i)+1))
           else
              if (params%mpi_params%rank .EQ. 0) then
                 write(output_unit_write,'("Atomic number not defined!")')
@@ -314,6 +443,19 @@ contains
        cparams_ms%aZj(5) = cparams_ms%aH(1)
        cparams_ms%IZj(6) = C_E*cparams_ms%IH(2)
        cparams_ms%aZj(6) = cparams_ms%aH(2)
+
+       cparams_ms_ACC%IZj(1) = C_E*cparams_ms_ACC%IAr(1)
+       cparams_ms_ACC%aZj(1) = cparams_ms_ACC%aAr(1)
+       cparams_ms_ACC%IZj(2) = C_E*cparams_ms_ACC%IAr(2)
+       cparams_ms_ACC%aZj(2) = cparams_ms_ACC%aAr(2)
+       cparams_ms_ACC%IZj(3) = C_E*cparams_ms_ACC%IAr(3)
+       cparams_ms_ACC%aZj(3) = cparams_ms_ACC%aAr(3)
+       cparams_ms_ACC%IZj(4) = C_E*cparams_ms_ACC%IAr(4)
+       cparams_ms_ACC%aZj(4) = cparams_ms_ACC%aAr(4)
+       cparams_ms_ACC%IZj(5) = C_E*cparams_ms_ACC%IH(1)
+       cparams_ms_ACC%aZj(5) = cparams_ms_ACC%aH(1)
+       cparams_ms_ACC%IZj(6) = C_E*cparams_ms_ACC%IH(2)
+       cparams_ms_ACC%aZj(6) = cparams_ms_ACC%aH(2)
     endif
 
     cparams_ms%nef = ne_mult + sum(cparams_ms%Zj*cparams_ms%nz)
@@ -326,6 +468,7 @@ contains
     cparams_ms%neut_prof=neut_prof
     cparams_ms%neut_edge_fac=neut_edge_fac
     cparams_ms%lowKE_REs=lowKE_REs
+    cparams_ms_ACC%lowKE_REs=lowKE_REs
     cparams_ms%lowKE_LAC_not_ionized=lowKE_LAC_not_ionized
 
     cparams_ms%Gammac_min = Gammac_wu(params,cparams_ss%P%n_ne,cparams_ss%Te)
@@ -412,27 +555,43 @@ contains
     !close(output_unit_write)
 
     cparams_ss%Te = Te_sing*C_E
+    cparams_ss_ACC%Te = Te_sing*C_E
     cparams_ss%Ti = Ti_sing*C_E
     cparams_ss%ne = ne_sing
     cparams_ss%Zeff = Zeff_sing
     cparams_ss%dTau = dTau_sing
     cparams_ss%p_therm = p_therm
+    cparams_ss_ACC%p_therm = p_therm
     cparams_ss%ConserveLA = ConserveLA
+    cparams_ss_ACC%ConserveLA = ConserveLA
     cparams_ss%sample_test = sample_test
     cparams_ss%always_aval = always_aval
+    cparams_ss_ACC%always_aval = always_aval
     cparams_ss%Clog_model = Clog_model
+    cparams_ss_ACC%Clog_model = Clog_model
     cparams_ss%min_secRE_therm = min_secRE_therm
+    cparams_ss_ACC%min_secRE_therm = min_secRE_therm
     cparams_ss%pmin_scale = pmin_scale
+    cparams_ss_ACC%pmin_scale = pmin_scale
     cparams_ss%energy_diffusion = energy_diffusion
     cparams_ss%pitch_diffusion = pitch_diffusion
+    cparams_ss%slowing_down = slowing_down
+    cparams_ss_ACC%energy_diffusion = energy_diffusion
+    cparams_ss_ACC%pitch_diffusion = pitch_diffusion
+    cparams_ss_ACC%slowing_down = slowing_down
     cparams_ss%LAC_gam_resolution = LAC_gam_resolution
     cparams_ss%FP_bremsstrahlung = FP_bremsstrahlung
+    cparams_ss_ACC%FP_bremsstrahlung = FP_bremsstrahlung
     cparams_ss%ngrid1 = ngrid1
     cparams_ss%Clog_const = Clog_const
+    cparams_ss_ACC%Clog_const = Clog_const
 
     cparams_ss%gam_therm = sqrt(1+p_therm*p_therm)
+    cparams_ss_ACC%gam_therm = sqrt(1+p_therm*p_therm)
     cparams_ss%gam_min = cparams_ss%gam_therm
+    cparams_ss_ACC%gam_min = cparams_ss_ACC%gam_therm
     cparams_ss%p_min = cparams_ss%p_therm
+    cparams_ss_ACC%p_min = cparams_ss%p_therm
 
     cparams_ss%rD = SQRT(C_E0*cparams_ss%Te/(cparams_ss%ne*C_E**2*(1.0_rp + &
          cparams_ss%Te/cparams_ss%Ti)))
@@ -442,8 +601,11 @@ contains
     cparams_ss%CoulombLogei = CLogei_wu(params,cparams_ss%ne,cparams_ss%Te)
 
     cparams_ss%VTe = VTe_wu(cparams_ss%Te)
+    cparams_ss_ACC%VTe = VTe_wu(cparams_ss_ACC%Te)
     cparams_ss%delta = cparams_ss%VTe/C_C
+    cparams_ss_ACC%delta = cparams_ss_ACC%VTe/C_C
     cparams_ss%Gammaco = C_E**4/(4.0_rp*C_PI*C_E0**2)
+    cparams_ss_ACC%Gammaco = C_E**4/(4.0_rp*C_PI*C_E0**2)
     cparams_ss%Gammac = Gammac_wu(params,cparams_ss%ne,cparams_ss%Te)
 
     cparams_ss%Tauc = C_ME**2*cparams_ss%VTe**3/cparams_ss%Gammac
@@ -454,6 +616,7 @@ contains
          (4.0_rp*C_PI*C_E0**2*cparams_ss%Te)
 
     cparams_ss%taur=6*C_PI*C_E0*(C_ME*C_C)**3/(C_E**4*params%cpp%Bo**2)
+    cparams_ss_ACC%taur=6*C_PI*C_E0*(C_ME*C_C)**3/(C_E**4*params%cpp%Bo**2)
 
     !	ALLOCATE(cparams_ss%rnd_num(3,cparams_ss%rnd_dim))
     !	call RANDOM_NUMBER(cparams_ss%rnd_num)
@@ -479,9 +642,6 @@ contains
     cparams_ss%P%Zeffo = Zeffo
     cparams_ss%P%n_Zeff = n_Zeff
     cparams_ss%P%a_Zeff = a_Zeff
-
-    cparams_ss%slowing_down = slowing_down
-
   end subroutine load_params_ss
 
 
@@ -589,13 +749,16 @@ contains
              !write(6,*) 'Ec_min',cparams_ms%Ec_min
 
              cparams_ss%avalanche=.TRUE.
+             cparams_ss_ACC%avalanche=.TRUE.
              if (TRIM(params%collisions_model).eq.'NO_BOUND') then
                 if (abs(F%Eo).lt.cparams_ss%Ec) then
                    cparams_ss%avalanche=.FALSE.
+                   cparams_ss_ACC%avalanche=.FALSE.
                 end if
              else
                 if (abs(F%Eo).lt.cparams_ms%Ec_min) then
                    cparams_ss%avalanche=.FALSE.
+                   cparams_ss_ACC%avalanche=.FALSE.
                 end if
              end if
 
@@ -677,10 +840,12 @@ contains
 
              if(cparams_ss%min_secRE_therm) then
                 cparams_ss%p_min=min(cparams_ss%p_therm,cparams_ss%p_min)
-                cparams_ss%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
+                cparams_ss_ACC%p_min=min(cparams_ss_ACC%p_therm,cparams_ss_ACC%p_min)
              else
                 cparams_ss%p_min=p_crit
+                cparams_ss_ACC%p_min=p_crit
                 cparams_ss%gam_min=gam_crit
+                cparams_ss_ACC%gam_min=gam_crit
              end if
 
              !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm,cparams_ss%p_min,cparams_ss%gam_min
@@ -804,13 +969,16 @@ contains
 
     cparams_ms%Te = cparams_ms%Te/params%cpp%temperature
     cparams_ms%ne = cparams_ms%ne/params%cpp%density
+    cparams_ms_ACC%ne = cparams_ms_ACC%ne/params%cpp%density
     cparams_ms%nH = cparams_ms%nH/params%cpp%density
     cparams_ms%nef = cparams_ms%nef/params%cpp%density
     cparams_ms%neb = cparams_ms%neb/params%cpp%density
     if (ALLOCATED(cparams_ms%nz)) cparams_ms%nz = cparams_ms%nz/ &
          params%cpp%density
+    cparams_ms_ACC%nz = cparams_ms_ACC%nz/params%cpp%density
     if (ALLOCATED(cparams_ms%IZj)) cparams_ms%IZj = cparams_ms%IZj/ &
          params%cpp%energy
+    cparams_ms_ACC%IZj = cparams_ms_ACC%IZj/params%cpp%energy
     cparams_ms%rD = cparams_ms%rD/params%cpp%length
     cparams_ms%re = cparams_ms%re/params%cpp%length
     cparams_ms%Ec = cparams_ms%Ec/params%cpp%Eo
@@ -832,7 +1000,9 @@ contains
     cparams_ss%Gammaco = cparams_ss%Gammaco*params%cpp%density* &
          params%cpp%time/(params%cpp%mass**2*params%cpp%velocity**3)
     cparams_ss%VTeo = SQRT(params%cpp%temperature/C_ME)/params%cpp%velocity
+    cparams_ss_ACC%VTeo = SQRT(params%cpp%temperature/C_ME)/params%cpp%velocity
     cparams_ss%deltao = params%cpp%velocity/C_C
+    cparams_ss_ACC%deltao = params%cpp%velocity/C_C
 
     cparams_ss%Te = cparams_ss%Te/params%cpp%temperature
     cparams_ss%Ti = cparams_ss%Ti/params%cpp%temperature
@@ -853,6 +1023,30 @@ contains
     cparams_ss%P%neo = cparams_ss%P%neo/params%cpp%density
     cparams_ss%P%n_ne = cparams_ss%P%n_ne/params%cpp%density
     cparams_ss%P%Teo = cparams_ss%P%Teo/params%cpp%temperature
+
+    cparams_ss_ACC%Clog1 = -1.15_rp*LOG10(1.0E-6_rp*params%cpp%density)
+    cparams_ss_ACC%Clog2 = 2.3_rp*LOG10(params%cpp%temperature/C_E)
+    cparams_ss_ACC%Clog0_1 = -LOG(1.0E-20_rp*params%cpp%density)/2._rp
+    cparams_ss_ACC%Clog0_2 = LOG(1.0E-3 *params%cpp%temperature/C_E)
+    cparams_ss_ACC%Gammaco = cparams_ss_ACC%Gammaco*params%cpp%density* &
+         params%cpp%time/(params%cpp%mass**2*params%cpp%velocity**3)
+    cparams_ss_ACC%VTeo = SQRT(params%cpp%temperature/C_ME)/params%cpp%velocity
+    cparams_ss_ACC%deltao = params%cpp%velocity/C_C
+
+    cparams_ss_ACC%Te = cparams_ss_ACC%Te/params%cpp%temperature
+    cparams_ss_ACC%Ti = cparams_ss_ACC%Ti/params%cpp%temperature
+    cparams_ss_ACC%ne = cparams_ss_ACC%ne/params%cpp%density
+    cparams_ss_ACC%rD = cparams_ss_ACC%rD/params%cpp%length
+    cparams_ss_ACC%re = cparams_ss_ACC%re/params%cpp%length
+    cparams_ss_ACC%VTe = cparams_ss_ACC%VTe/params%cpp%velocity
+    cparams_ss_ACC%Gammac = cparams_ss_ACC%Gammac*params%cpp%time/ &
+         (params%cpp%mass**2*params%cpp%velocity**3)
+    cparams_ss_ACC%Tau = cparams_ss_ACC%Tau/params%cpp%time
+    cparams_ss_ACC%Tauc = cparams_ss_ACC%Tauc/params%cpp%time
+    cparams_ss_ACC%Ec = cparams_ss_ACC%Ec/params%cpp%Eo
+    cparams_ss_ACC%ED = cparams_ss_ACC%ED/params%cpp%Eo
+
+    cparams_ss_ACC%taur=cparams_ss_ACC%taur/params%cpp%time
   end subroutine normalize_params_ss
 
 
@@ -880,9 +1074,12 @@ contains
        CASE DEFAULT
           write(output_unit_write,'("Default case")')
        END SELECT
+
+      !$acc update device(cparams_ss_ACC)
+      !$acc update device(cparams_ms_ACC)
+
     end if
   end subroutine normalize_collisions_params
-
 
   subroutine collision_force(spp,U,Fcoll)
     !! For multiple-species collisions
@@ -941,8 +1138,9 @@ contains
   end subroutine collision_force
 
 
-  subroutine define_collisions_time_step(params,F,init)
+  subroutine define_collisions_time_step(params,params_ACC,F,init)
     TYPE(KORC_PARAMS), INTENT(INOUT) 	:: params
+    TYPE(KORC_PARAMS_ACC) :: params_ACC
     TYPE(FIELDS), INTENT(IN) :: F
     LOGICAL, INTENT(IN)  :: init
     INTEGER(ip) 			:: iterations
@@ -1010,6 +1208,7 @@ contains
           cparams_ss%coll_per_dump_dt=params%snapshot_frequency/params%coll_per_dump
 
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
+          params_ACC%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
           if (params%coll_per_dump.gt.params%t_skip) then
              write(6,*) 'more collisional iterations than orbit iterations, decrease orbit timestep!'
@@ -1094,7 +1293,7 @@ contains
     REAL(rp), INTENT(IN) 	:: Te
     REAL(rp) 				:: VTe
 
-    VTe = SQRT(2.0_rp*Te)*cparams_ss%VTeo
+    VTe = SQRT(2.0_rp*Te)*cparams_ss_ACC%VTeo
   end function VTe
 
 
@@ -1119,7 +1318,7 @@ contains
 
     !$acc routine (CLogee) seq
 
-    Gammacee = ne*CLogee(v,ne,Te)*cparams_ss%Gammaco
+    Gammacee = ne*CLogee(v,ne,Te)*cparams_ss_ACC%Gammaco
   end function Gammacee
 
   function CLog_wu(ne,Te)
@@ -1154,15 +1353,15 @@ contains
     REAL(rp) 				:: CLogee_wu
     REAL(rp)  :: k=5._rp
 
-    if (cparams_ss%Clog_model.eq.'HESSLOW') then
+    if (cparams_ss%Clog_model.eq.0) then
        CLogee_wu = CLog0_wu(ne,Te)+ &
             log(1+(2*(params%minimum_particle_g-1)/ &
             (VTe_wu(Te)/C_C)**2)**(k/2._rp))/k
 
-    else if (cparams_ss%Clog_model.eq.'CONSTANT') then
+    else if (cparams_ss%Clog_model.eq.1) then
        CLogee_wu = cparams_ss%Clog_const
 
-    else if (cparams_ss%Clog_model.eq.'MCDEVITT') then
+    else if (cparams_ss%Clog_model.eq.2) then
        CLogee_wu = CLog0_wu(ne,Te)+ &
             log(1+(2*(params%minimum_particle_g-1)/ &
             (VTe_wu(Te)/C_C)**2)**(k/2._rp))/k
@@ -1183,7 +1382,7 @@ contains
 
     p=sqrt(params%minimum_particle_g**2-1)
 
-    if (cparams_ss%Clog_model.eq.'CONSTANT') then
+    if (cparams_ss%Clog_model.eq.1) then
        CLogei_wu = cparams_ss%Clog_const
     else
        CLogei_wu = CLog0_wu(ne,Te)+ &
@@ -1197,7 +1396,7 @@ contains
     REAL(rp) 				:: CLog
 
     CLog = 25.3_rp - 1.15_rp*LOG10(ne) + 2.3_rp*LOG10(Te) + &
-         cparams_ss%CLog1 + cparams_ss%CLog2
+         cparams_ss_ACC%CLog1 + cparams_ss_ACC%CLog2
   end function CLog
 
   function CLog0(ne,Te) ! Dimensionless ne and Te
@@ -1207,7 +1406,7 @@ contains
     REAL(rp) 				:: CLog0
 
     CLog0 = 14.9_rp - LOG(ne)/2._rp + LOG(Te) + &
-         cparams_ss%CLog0_1 + cparams_ss%CLog0_2
+         cparams_ss_ACC%CLog0_1 + cparams_ss_ACC%CLog0_2
   end function CLog0
 
   function CLogee(v,ne,Te)
@@ -1225,26 +1424,20 @@ contains
     !$acc routine (VTe) seq
 
     gam=1/sqrt(1-v**2)
-    gam_min=cparams_ss%gam_min
+    gam_min=cparams_ss_ACC%gam_min
 
-  #ifdef ACC
-    CLogee = CLog0(ne,Te)+ &
-      log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k+ &
-      log(sqrt(2*(gam_min-1._rp)/(gam-1._rp)))
-  #else
-    if (cparams_ss%Clog_model.eq.'HESSLOW') then
+    if (cparams_ss_ACC%Clog_model.eq.0) then
        CLogee = CLog0(ne,Te)+ &
             log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k
 
-    else if (cparams_ss%Clog_model.eq.'CONSTANT') then
-       CLogee = cparams_ss%Clog_const
+    else if (cparams_ss_ACC%Clog_model.eq.1) then
+       CLogee = cparams_ss_ACC%Clog_const
 
-    else if (cparams_ss%Clog_model.eq.'MCDEVITT') then
+    else if (cparams_ss_ACC%Clog_model.eq.0) then
        CLogee = CLog0(ne,Te)+ &
             log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k+ &
             log(sqrt(2*(gam_min-1._rp)/(gam-1._rp)))
     end if
-#endif
 
 !    write(output_unit_write,*) gam,CLogee
   end function CLogee
@@ -1265,15 +1458,12 @@ contains
     gam=1/sqrt(1-v**2)
     p=gam*v
 
-#ifdef ACC
-    CLogei = CLog0(ne,Te)+log(1+(2*p/VTe(Te))**k)/k
-#else
-    if (cparams_ss%Clog_model.eq.'CONSTANT') then
-       CLogei = cparams_ss%Clog_const
+    if (cparams_ss_ACC%Clog_model.eq.1) then
+       CLogei = cparams_ss_ACC%Clog_const
     else
        CLogei = CLog0(ne,Te)+log(1+(2*p/VTe(Te))**k)/k
     end if
-#endif
+
 
   end function CLogei
 
@@ -1284,7 +1474,7 @@ contains
 
     !$acc routine (VTe) seq   
 
-    delta = VTe(Te)*cparams_ss%deltao
+    delta = VTe(Te)*cparams_ss_ACC%deltao
   end function delta
 
 
@@ -1320,12 +1510,14 @@ contains
     REAL(rp) 				:: CA_SD
     REAL(rp) 				:: x
 
+    !$acc routine (VTe) seq
     !$acc routine (Gammacee) seq
     !$acc routine (psi) seq
 
  !   write(6,*) ne,Te
 
     x = v/VTe(Te)
+
     CA_SD  = Gammacee(v,ne,Te)*psi(x)/v
 
 !    write(output_unit_write,'("ne, "E17.10)') ne
@@ -1432,7 +1624,6 @@ contains
   end function CF_FIO
 
   function CF_SD(params,v,ne,Te,P,Y_R,Y_Z)
-    !$acc routine seq
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: v
     REAL(rp), INTENT(IN) 	:: ne
@@ -1444,12 +1635,6 @@ contains
     REAL(rp)  :: k=5._rp,ra
     TYPE(PROFILES), INTENT(IN)  :: P
     REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
-
-    !$acc routine (CVTe) seq
-    !$acc routine (Gammacee) seq
-    !$acc routine (psi) seq
-    !$acc routine (CLogee) seq
-    !$acc routine (h_j) seq
 
     x = v/VTe(Te)
     CF_SD  = Gammacee(v,ne,Te)*psi(x)/Te
@@ -1525,7 +1710,7 @@ contains
     REAL(rp)  :: k=5._rp,ra
     REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
 
-    !$acc routine (CVTe) seq
+    !$acc routine (VTe) seq
     !$acc routine (Gammacee) seq
     !$acc routine (psi) seq
     !$acc routine (CLogee) seq
@@ -1536,9 +1721,9 @@ contains
 
     ! have all impurities have same spatial distribution as electron density
     CF_temp=CF_SD_ACC
-    do i=1,cparams_ms%num_impurity_species
-      CF_temp=CF_temp+CF_SD_ACC*cparams_ms%nz(i)/cparams_ms%ne* &
-            (cparams_ms%Zo(i)-cparams_ms%Zj(i))/ &
+    do i=1,cparams_ms_ACC%num_impurity_species
+      CF_temp=CF_temp+CF_SD_ACC*cparams_ms_ACC%nz(i)/cparams_ms_ACC%ne* &
+            (cparams_ms_ACC%Zo(i)-cparams_ms_ACC%Zj(i))/ &
             CLogee(v,ne,Te)*(log(1+h_j(i,v)**k)/k-v**2)
     end do
     CF_SD_ACC=CF_temp
@@ -1711,8 +1896,8 @@ function CB_ei_SD_ACC(params_ACC,v,ne,Te,Zeff,Y_R,Y_Z)
 
   !choose impurities to have same spatial profile as electrons
   CB_ei_temp=CB_ei_SD_ACC
-  do i=1,cparams_ms%num_impurity_species
-      CB_ei_temp=CB_ei_temp+CB_ei_SD_ACC*cparams_ms%nz(i)/(cparams_ms%ne* &
+  do i=1,cparams_ms_ACC%num_impurity_species
+      CB_ei_temp=CB_ei_temp+CB_ei_SD_ACC*cparams_ms_ACC%nz(i)/(cparams_ms_ACC%ne* &
         Zeff*CLogei(v,ne,Te))*g_j(i,v)
   end do
   CB_ei_SD_ACC=CB_ei_temp
@@ -1720,7 +1905,6 @@ function CB_ei_SD_ACC(params_ACC,v,ne,Te,Zeff,Y_R,Y_Z)
 end function CB_ei_SD_ACC
 
 function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
-  !$acc routine seq
   TYPE(KORC_PARAMS), INTENT(IN) 	:: params
   REAL(rp), INTENT(IN) 	:: v
   REAL(rp), INTENT(IN) 	:: ne
@@ -1732,12 +1916,6 @@ function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
   INTEGER :: i
   TYPE(PROFILES), INTENT(IN)  :: P
   REAL(rp), INTENT(IN) 			:: Y_R,Y_Z
-
-  !$acc routine (VTe) seq
-  !$acc routine (Gammacee) seq
-  !$acc routine (CLogei) seq
-  !$acc routine (CLogee) seq
-  !$acc routine (g_j) seq
 
   x = v/VTe(Te)
   CB_ei_SD  = (0.5_rp*Gammacee(v,ne,Te)/v)* &
@@ -1858,7 +2036,7 @@ function h_j(i,v)
    gam=1/sqrt(1-v**2)
    p=v*gam
 
-   h_j=p*sqrt(gam-1)/cparams_ms%IZj(i)
+   h_j=p*sqrt(gam-1)/cparams_ms_ACC%IZj(i)
 
 end function h_j
 
@@ -1873,11 +2051,11 @@ function g_j(i,v)
    gam=1/sqrt(1-v**2)
    p=v*gam
 
-   g_j=2._rp/3._rp*((cparams_ms%Zo(i)**2-cparams_ms%Zj(i)**2)* &
-      log((p*cparams_ms%aZj(i))**(3._rp/2._rp)+1)- &
-      (cparams_ms%Zo(i)-cparams_ms%Zj(i))**2* &
-      (p*cparams_ms%aZj(i))**(3._rp/2._rp)/ &
-      ((p*cparams_ms%aZj(i))**(3._rp/2._rp)+1))
+   g_j=2._rp/3._rp*((cparams_ms_ACC%Zo(i)**2-cparams_ms_ACC%Zj(i)**2)* &
+      log((p*cparams_ms_ACC%aZj(i))**(3._rp/2._rp)+1)- &
+      (cparams_ms_ACC%Zo(i)-cparams_ms_ACC%Zj(i))**2* &
+      (p*cparams_ms_ACC%aZj(i))**(3._rp/2._rp)/ &
+      ((p*cparams_ms_ACC%aZj(i))**(3._rp/2._rp)+1))
 
    !    write(output_unit_write,'("g_j: ",E17.10)') g_j
 
@@ -3194,7 +3372,6 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
    REAL(rp)  			:: nAr0,nAr1,nAr2,nAr3
    REAL(rp)  			:: nD,nD1
    REAL(rp), DIMENSION(2) 			:: dW
-   REAL(rp), DIMENSION(2) 			:: rnd1
    REAL(rp) 					:: dt,time
    REAL(rp)  	:: pm,pm0
    REAL(rp)   	:: dp
@@ -3220,7 +3397,7 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
   !$acc routine (CB_ee_SD) seq
   !$acc routine (CA_ei_SD_ACC) seq
 
-  dt=cparams_ss%coll_per_dump_dt
+  dt=params_ACC%coll_per_dump_dt
   !time=params_ACC%init_time+(params_ACC%it-1)*params_ACC%dt+ &
   !  tcol*cparams_ss%coll_per_dump_dt
 
@@ -3247,10 +3424,9 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
   CBL = (CB_ee_SD(v,ne,Te,Zeff)+ &
     CB_ei_SD_ACC(params_ACC,v,ne,Te,Zeff,Y_R,Y_Z))
 
-
-  if (.not.cparams_ss%slowing_down) CFL=0._rp
-  if (.not.cparams_ss%pitch_diffusion) CBL=0._rp
-  if (.not.cparams_ss%energy_diffusion) THEN
+  if (.not.cparams_ss_ACC%slowing_down) CFL=0._rp
+  if (.not.cparams_ss_ACC%pitch_diffusion) CBL=0._rp
+  if (.not.cparams_ss_ACC%energy_diffusion) THEN
     CAL=0._rp
     dCAL=0._rp
   ENDIF
@@ -3270,16 +3446,16 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
     if (params_ACC%GC_rad_SDE) then
 
       SC_p=-gam*pm*(1-xi*xi)/ &
-          (cparams_ss%taur/Bmag**2)
+          (cparams_ss_ACC%taur/Bmag**2)
       SC_xi=xi*(1-xi*xi)/ &
-          ((cparams_ss%taur/Bmag**2)*gam)
+          ((cparams_ss_ACC%taur/Bmag**2)*gam)
 
       kappa=2._rp*C_PI*C_RE**2._rp*C_ME*C_C**2._rp/ &
           (params_ACC%cpp%length**2._rp*params_ACC%cpp%energy)
       BREM_p=-2._rp*ne*kappa*Zeff*(Zeff+1._rp)* &
           C_a/C_PI*(gam-1._rp)*(log(2._rp*gam)-1._rp/3._rp)
 
-      if (.not.cparams_ss%FP_bremsstrahlung) BREM_p=0._rp
+      if (.not.cparams_ss_ACC%FP_bremsstrahlung) BREM_p=0._rp
 
       dp=dp+(SC_p+BREM_p)*dt* &
         REAL(flagCol)*REAL(flagCon)
@@ -3298,23 +3474,23 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
     xi=-1-mod(xi,-1._rp)
   endif
 
-  if ((pm.lt.min(cparams_ss%p_min*cparams_ss%pmin_scale, &
-    cparams_ss%p_therm)).and.flagCol.eq.1_ip) then
+  if ((pm.lt.min(cparams_ss_ACC%p_min*cparams_ss_ACC%pmin_scale, &
+    cparams_ss_ACC%p_therm)).and.flagCol.eq.1_ip) then
 
     flagCol=0_ip
   end if
 
-  if (cparams_ss%avalanche) then
+  if (cparams_ss_ACC%avalanche) then
 
     ntot=ne
 
-    ntot=ntot+ne*cparams_ms%nz(1)/cparams_ms%ne* &
-      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
+    !ntot=ntot+ne*cparams_ms_ACC%nz(1)/cparams_ms_ACC%ne* &
+    !  (cparams_ms_ACC%Zo(1)-cparams_ms_ACC%Zj(1))
     !add neutrals with same spatial distribution as free electrons
 
-    do ii=2,cparams_ms%num_impurity_species
-      ntot=ntot+ne*cparams_ms%nz(ii)/cparams_ms%ne* &
-          (cparams_ms%Zo(ii)-cparams_ms%Zj(ii))
+    do ii=1,cparams_ms_ACC%num_impurity_species
+      ntot=ntot+ne*cparams_ms_ACC%nz(ii)/cparams_ms_ACC%ne* &
+          (cparams_ms_ACC%Zo(ii)-cparams_ms_ACC%Zj(ii))
     end do
 
     call large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p(3:4),Y_R,Y_PHI,Y_Z, &
@@ -4037,17 +4213,18 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   REAL(rp) :: gam_min,p_min,gammax,dt,gamsecmax,psecmax,ptrial
   REAL(rp) :: gamtrial,cosgam1,xirad,xip,xim,xitrial,sinsq1,cossq1,pitchprob1
   REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c
-  INTEGER :: ngam1=75,neta1=75
+  INTEGER, PARAMETER :: ngam1=50,neta1=51
   INTEGER :: ii,jj,cc,seciter
   REAL(rp), DIMENSION(ngam1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp,intpitchprob
   REAL(rp), DIMENSION(ngam1-1) :: dpm1
   REAL(rp), DIMENSION(neta1) :: eta1,tmpsinsq,tmpcossq
   REAL(rp), DIMENSION(neta1-1) :: deta1
-  REAL(rp), DIMENSION(ngam1,neta1) :: cosgam,sinsq,cossq,tmpcossq1,pitchprob,dsigdgam
-  REAL(rp), DIMENSION(ngam1,neta1) :: secthreshgam,pm11,gam11,eta11,S_LA,pitchrad
+  REAL(rp), DIMENSION(ngam1,neta1) :: cosgam,sinsq,tmpcossq1,pitchprob,dsigdgam
+  REAL(rp), DIMENSION(ngam1,neta1) :: pm11,eta11,S_LA,pitchrad
+  REAL(rp), DIMENSION(ngam1*neta1) :: cumprob
   LOGICAL :: accepted
 
-  dt=cparams_ss%coll_per_dump_dt*params_ACC%cpp%time
+  dt=params_ACC%coll_per_dump_dt*params_ACC%cpp%time
 
   pm0=pm
   xi0=xi
@@ -4057,13 +4234,13 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
   prob0 = RErand_p(1)
 
-  vmin=1/sqrt(1+1/(cparams_ss%p_min*cparams_ss%pmin_scale)**2)
+  vmin=1/sqrt(1+1/(cparams_ss_ACC%p_min*cparams_ss_ACC%pmin_scale)**2)
 
   !! For each primary RE, calculating probability to generate a secondary RE
 
   if ((flagCol.lt.1).or.(flagCon.lt.1)) return
 
-  if (.not.(cparams_ms%lowKE_REs)) then
+  if (.not.(cparams_ms_ACC%lowKE_REs)) then
     E_C=netot/ne*Gammacee(vmin,ne,Te)
   else
     E_C=Gammacee(vmin,ne,Te)
@@ -4077,13 +4254,13 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   !write(6,*) 'Te',Te*params%cpp%temperature
   !write(6,*) 'Clog',CLogee_wu(params,ne*params%cpp%density,Te*params%cpp%temperature)
 
-  if (.not.(cparams_ss%always_aval)) then
+  if (.not.(cparams_ss_ACC%always_aval)) then
     if (E_C.gt.abs(E_PHI)) return
 
-    p_c=cparams_ss%pmin_scale/sqrt(abs(E_PHI)/E_C-1)
+    p_c=cparams_ss_ACC%pmin_scale/sqrt(abs(E_PHI)/E_C-1)
     gam_c=sqrt(1+p_c**2)
 
-    if(cparams_ss%min_secRE_therm) then
+    if(cparams_ss_ACC%min_secRE_therm) then
       gam_min=(gam_c+1)/2
       p_min=sqrt(gam_min**2-1)
     else
@@ -4091,7 +4268,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
       p_min=p_c
     end if
   else
-    p_min=cparams_ss%p_min*cparams_ss%pmin_scale
+    p_min=cparams_ss_ACC%p_min*cparams_ss_ACC%pmin_scale
     gam_min=sqrt(1+p_min**2)
   endif
 
@@ -4137,8 +4314,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   end do
 
   do ii=1,neta1
-    pm11(:,ii)=pm1
-    gam11(:,ii)=gam1
+    pm11(:,ii)=pm1/gam1
   end do
 
   do ii=1,ngam1
@@ -4159,8 +4335,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
   do ii=1,neta1
     cosgam(:,ii)=tmpcosgam
-    dsigdgam(:,ii)=tmpdsigdgam
-    secthreshgam(:,ii)=tmpsecthreshgam
+    dsigdgam(:,ii)=tmpdsigdgam*tmpsecthreshgam
   end do
 
   !if (cc.eq.1) then
@@ -4179,9 +4354,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !write(6,*) sinsq
   !end if
 
-  cossq=(cosgam-tmpcossq1)**2
-
-  pitchrad=sinsq-cossq
+  pitchrad=sinsq-(cosgam-tmpcossq1)**2
   where(pitchrad.lt.0) pitchrad=tiny(0._rp)
 
   !if (cc.eq.1) then
@@ -4199,23 +4372,16 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   !end if
 
   S_LA=netot*params_ACC%cpp%density*C_C/(2*C_PI)* &
-      (pm11/gam11)*(pm/gam)* &
-      pitchprob*dsigdgam*secthreshgam
-
-  !! Saving maximum secondary RE source for use in rejection-acceptance
-  !! sampling algorithm
-  S_LAmax=maxval(S_LA)
-
-  S_LA=S_LA*sin(eta11)
+      pm11*(pm/gam)*pitchprob*dsigdgam
 
   !! Trapezoidal integration of secondary RE source to find probabilty
 
   do ii=1,ngam1
-    probtmp(ii)=S_LA(ii,1)*deta1(1)/2+S_LA(ii,neta1)*deta1(neta1-1)/2
+    probtmp(ii)=S_LA(ii,1)*sin(eta11(ii,1))*deta1(1)/2+S_LA(ii,neta1)*sin(eta11(ii,neta1))*deta1(neta1-1)/2
     !intpitchprob(ii)=pitchprob(ii,1)*sin(eta1(1))*deta1(1)/2+ &
     !     pitchprob(ii,neta1)*sin(eta1(neta1))*deta1(neta1-1)/2
     do jj=2,neta1-1
-        probtmp(ii)=probtmp(ii)+S_LA(ii,jj)*(deta1(jj)+deta1(jj-1))/2
+        probtmp(ii)=probtmp(ii)+S_LA(ii,jj)*sin(eta11(ii,jj))*(deta1(jj)+deta1(jj-1))/2
     !   intpitchprob(ii)=intpitchprob(ii)+ &
     !        pitchprob(ii,jj)*sin(eta1(jj))*(deta1(jj)+deta1(jj-1))/2
     end do
@@ -4260,43 +4426,38 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
   if (prob1.gt.prob0) then
 
-    !! If secondary RE generated, begin acceptance-rejection sampling
+    write(6,*) prob1
+    write(6,*) prob0
+
+    !! If secondary RE generated, begin pseduo-2D inverse CDF sampling
     !! algorithm
 
-    !write(6,*) 'secondary RE from ',prob1,prob0
+    !reshaping 2D LA distribution to 1D array
+    do ii=1,ngam1
+      cumprob(1+(ii-1)*neta1:(ii)*neta1)=S_LA(ii,:)
+    end do
 
+    !calculating cumulative distribution
+    do ii=2,SIZE(cumprob)
+      cumprob(ii)=cumprob(ii)+cumprob(ii-1)
+    end do
 
-    gamsecmax=(gam+1)/2
-    psecmax=sqrt(gamsecmax**2-1)
+    !normalizing the CDF to run from 0 to 1
+    cumprob=cumprob/MAXVAL(cumprob)
 
+    !finding where the normalized CDF is less than a random number
+    cumprob = cumprob-RErand_p(2)
 
-    ptrial=p_min+(psecmax-p_min)
-    gamtrial=sqrt(1+ptrial*ptrial)
+    do ii=2,SIZE(cumprob)
+      if (cumprob(ii)*cumprob(ii-1)<0) then
+        exit
+      endif
+    end do
 
-    cosgam1=sqrt(((gam+1)*(gamtrial-1))/((gam-1)*(gamtrial+1)))
-
-    xitrial=-1+2
-
-    prob0=RErand_p(2)
-
-    sinsq1=(1-xi*xi)*(1-xitrial*xitrial)
-    cossq1=(cosgam1-xi*xitrial)**2
-
-    if ((sinsq1-cossq1).le.0._rp) return
-
-    pitchprob1=1/(C_PI*sqrt(sinsq1-cossq1))
-
-    !if (isnan(pitchprob1)) return
-
-    dsigdgam1=2*C_PI*C_RE**2/(gam**2-1)* &
-        (((gam-1)**2*gam**2)/ &
-        ((gamtrial-1)**2*(gam-gamtrial)**2)- &
-        (2*gam**2+2*gam-1)/ &
-        ((gamtrial-1)*(gam-gamtrial))+1)
-
-    S_LA1=netot*params_ACC%cpp%density*C_C/(2*C_PI)* &
-        (ptrial/gamtrial)*(pm/gam)* &
-        pitchprob1*dsigdgam1
+    !using modulus math to determine xi an pmag according to the inverse CDF
+    !sampling
+    xitrial=COS(eta1(MOD(ii-1,neta1)))
+    ptrial=SQRT(gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)*gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)-1)
 
     !! Write secondary RE degrees of freedom to particle derived type
 
@@ -4361,7 +4522,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     end if
 # endif
 
-    if (cparams_ss%ConserveLA) then
+    if (cparams_ss_ACC%ConserveLA) then
       tmppm=pm
       gamvth=1/sqrt(1-2*Te)
       gam=gam-gamtrial+gamvth
