@@ -5061,7 +5061,7 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
 
       pRE=spp(ii)%pRE
 
-      !$acc parallel loop private(RErand_p)
+      !$acc parallel loop private(RErand_p) copy(vars%flagRE(:),vars%Yborn(:,1:3)) copy(avalanche_fail,pRE)
       do pp=1_idef,pRE
 
         Y_R=vars%Y(pp,1)

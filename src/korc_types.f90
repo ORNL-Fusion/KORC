@@ -8,7 +8,7 @@ module korc_types
   ! * * * Real and integer precisions * * * !
   ! * * * * * * * * * * * * * * * * * * * * !
 
-  INTEGER, PUBLIC, PARAMETER 	:: is = KIND(INT(1,1))
+  INTEGER, PUBLIC, PARAMETER 	:: is = KIND(INT(1,4))
   !! Definition of 1 Byte (8 bits) Fortran KORC integer type.
   INTEGER, PUBLIC, PARAMETER 	:: ip = KIND(INT(1,8))
   !! Definition of 8 Bytes (64 bits) Fortran KORC integer type.
