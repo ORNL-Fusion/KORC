@@ -4410,7 +4410,9 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     write(6,*) E_C*params_ACC%cpp%Eo
     !write(6,*) 'pitchprob',pitchprob
     !write(6,*) 'S_LA',S_LA
+    !$acc atomic write
     avalanche_fail=.TRUE.
+    !$acc end atomic
   end if
          
   if (prob1.gt.1._rp) then
@@ -4418,16 +4420,15 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     write(6,*) gam_min,gammax
     write(6,*) E_PHI*params_ACC%cpp%Eo
     write(6,*) E_C*params_ACC%cpp%Eo
+    !$acc atomic write
     avalanche_fail=.TRUE.
+    !$acc end atomic
   end if
 
   !write(6,*) 'gam',gam,'xi',xi
   !write(6,*) 'prob1',prob1,'prob0',prob0
 
   if (prob1.gt.prob0) then
-
-    write(6,*) prob1
-    write(6,*) prob0
 
     !! If secondary RE generated, begin pseduo-2D inverse CDF sampling
     !! algorithm
@@ -4457,22 +4458,25 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !using modulus math to determine xi an pmag according to the inverse CDF
     !sampling
     xitrial=COS(eta1(MOD(ii-1,neta1)))
-    ptrial=SQRT(gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)*gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)-1)
+    gamtrial=gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)
+    ptrial=SQRT(gamtrial*gamtrial-1)
 
     !! Write secondary RE degrees of freedom to particle derived type
 
     !$acc atomic write
-    pRE=pRE+1
+    pRE=pRE+1_is
+    !$acc end atomic
+
+    !$acc atomic write
+    vars%flagRE(pRE)=1_is
     !$acc end atomic
     !$acc atomic write
-    vars%flagRE(pRE)=1
+    vars%flagCon(pRE)=1_is
     !$acc end atomic
     !$acc atomic write
-    vars%flagCon(pRE)=1
+    vars%flagCol(pRE)=1_is
     !$acc end atomic
-    !$acc atomic write
-    vars%flagCol(pRE)=1
-    !$acc end atomic
+
     !$acc atomic write
     vars%V(pRE,1)=ptrial*xitrial
     !$acc end atomic
@@ -4480,6 +4484,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     vars%V(pRE,2)=ptrial*ptrial*(1-xitrial*xitrial)/ &
       (2*me*Bmag)
     !$acc end atomic
+
     !$acc atomic write
     vars%Y(pRE,1)=Y_R
     !$acc end atomic
@@ -4489,6 +4494,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !$acc atomic write
     vars%Y(pRE,3)=Y_Z
     !$acc end atomic
+
     !$acc atomic write
     vars%Yborn(pRE,1)=Y_R
     !$acc end atomic
@@ -4498,6 +4504,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !$acc atomic write
     vars%Yborn(pRE,3)=Y_Z
     !$acc end atomic
+
     !$acc atomic write
     vars%B(pRE,1)=B_R
     !$acc end atomic
@@ -4508,7 +4515,6 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     vars%B(pRE,3)=B_Z
     !$acc end atomic
 
-
     !! Write changes to primary RE degrees of freedom to temporary
     !! arrays for passing back out to particle derived type
 
@@ -4518,16 +4524,17 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
       write(6,*) ptrial,xitrial
       write(6,*) xim,xip
       write(6,*) p_min,psecmax
+      !$acc atomic write
       avalanche_fail=.TRUE.
+      !$acc end atomic
     end if
 # endif
 
     if (cparams_ss_ACC%ConserveLA) then
-      tmppm=pm
       gamvth=1/sqrt(1-2*Te)
       gam=gam-gamtrial+gamvth
       pm=sqrt(gam*gam-1)
-      xi=(tmppm*xi-ptrial*xitrial)/pm
+      xi=(pm0*xi-ptrial*xitrial)/pm
     end if
 
 #if DBG_CHECK
@@ -4536,7 +4543,9 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
       write(6,*) ptrial,gamtrial,xitrial
       write(6,*) gamvth,Te*params_ACC%cpp%temperature/params_ACC%cpp%charge
       write(6,*) pm,xi
+      !$acc atomic write
       avalanche_fail=.TRUE.
+      !$acc end atomic
     endif
 
 #endif
@@ -4547,7 +4556,9 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
     if (pRE.eq.ppp) then
         write(6,*) pRE,ppp
+        !$acc atomic write
         avalanche_fail=.TRUE.
+        !$acc end atomic
     end if
 
   end if
