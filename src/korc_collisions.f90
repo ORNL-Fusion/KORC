@@ -565,6 +565,7 @@ contains
     cparams_ss%ConserveLA = ConserveLA
     cparams_ss_ACC%ConserveLA = ConserveLA
     cparams_ss%sample_test = sample_test
+    cparams_ss_ACC%sample_test = sample_test
     cparams_ss%always_aval = always_aval
     cparams_ss_ACC%always_aval = always_aval
     cparams_ss%Clog_model = Clog_model
@@ -3465,6 +3466,11 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
     end if
   end if
 
+  if (cparams_ss_ACC%sample_test) then
+    dp=0._rp
+    dxi=0._rp
+  endif
+
   pm=pm+dp
   xi=xi+dxi
 
@@ -4238,8 +4244,6 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
   !! For each primary RE, calculating probability to generate a secondary RE
 
-  if ((flagCol.lt.1).or.(flagCon.lt.1)) return
-
   if (.not.(cparams_ms_ACC%lowKE_REs)) then
     E_C=netot/ne*Gammacee(vmin,ne,Te)
   else
@@ -4372,16 +4376,16 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   !end if
 
   S_LA=netot*params_ACC%cpp%density*C_C/(2*C_PI)* &
-      pm11*(pm/gam)*pitchprob*dsigdgam
+      pm11*(pm/gam)*pitchprob*dsigdgam*sin(eta11)
 
   !! Trapezoidal integration of secondary RE source to find probabilty
 
   do ii=1,ngam1
-    probtmp(ii)=S_LA(ii,1)*sin(eta11(ii,1))*deta1(1)/2+S_LA(ii,neta1)*sin(eta11(ii,neta1))*deta1(neta1-1)/2
+    probtmp(ii)=S_LA(ii,1)*deta1(1)/2+S_LA(ii,neta1)*deta1(neta1-1)/2
     !intpitchprob(ii)=pitchprob(ii,1)*sin(eta1(1))*deta1(1)/2+ &
     !     pitchprob(ii,neta1)*sin(eta1(neta1))*deta1(neta1-1)/2
     do jj=2,neta1-1
-        probtmp(ii)=probtmp(ii)+S_LA(ii,jj)*sin(eta11(ii,jj))*(deta1(jj)+deta1(jj-1))/2
+        probtmp(ii)=probtmp(ii)+S_LA(ii,jj)*(deta1(jj)+deta1(jj-1))/2
     !   intpitchprob(ii)=intpitchprob(ii)+ &
     !        pitchprob(ii,jj)*sin(eta1(jj))*(deta1(jj)+deta1(jj-1))/2
     end do
@@ -4444,7 +4448,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     end do
 
     !normalizing the CDF to run from 0 to 1
-    cumprob=cumprob/MAXVAL(cumprob)
+    cumprob=cumprob/cumprob(ngam1*neta1)
 
     !finding where the normalized CDF is less than a random number
     cumprob = cumprob-RErand_p(2)
@@ -4460,6 +4464,14 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     xitrial=COS(eta1(MOD(ii-1,neta1)))
     gamtrial=gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)
     ptrial=SQRT(gamtrial*gamtrial-1)
+
+    if (cparams_ss_ACC%sample_test) then
+      write(6,*) 0
+      write(6,*) pm,xi
+      write(6,*) gam_min,gammax
+      write(6,*) dt,netot,prob1
+      write(6,*) ptrial,xitrial
+    endif
 
     !! Write secondary RE degrees of freedom to particle derived type
 
