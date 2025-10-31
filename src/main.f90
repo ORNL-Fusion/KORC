@@ -590,9 +590,16 @@ end if
 !#else
         !call adv_GCeqn_top(params,randoms,F,P,spp)
 !#endif ACC
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip,rp)*params%dt
-        params%it = it-1_ip+params%t_skip
+        if (.not.params%LargeCollisions) then
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)*params%dt
+           params%it = it-1_ip+params%t_skip
+        else
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)/REAL(params%t_skip,rp)* &
+                params%snapshot_frequency
+           params%it = it-1_ip+params%t_skip
+        endif
 
         params_ACC%it=params%it
 
