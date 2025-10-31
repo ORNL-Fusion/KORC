@@ -3480,7 +3480,7 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
     flagCol=0_ip
   end if
 
-  if (cparams_ss_ACC%avalanche) then
+  if (cparams_ss_ACC%avalanche.and.(flagCon.eq.1).and.(flagCol.eq.1)) then
 
     ntot=ne
 
