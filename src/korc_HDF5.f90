@@ -2386,7 +2386,7 @@ CONTAINS
           dset = TRIM(gname) // "/time"
           attr = "Simulation time in secs"
           call save_to_hdf5(h5file_id,dset,params%init_time*params%cpp%time &
-               + REAL(params%it,rp)*params%dt*params%cpp%time,attr)
+               + params%time*params%cpp%time,attr)
           
           do ss=1_idef,params%num_species
 
@@ -2730,7 +2730,7 @@ CONTAINS
        dset = "time"
        attr = "Current simulation time in secs"
        call save_to_hdf5(h5file_id,dset,params%init_time*params%cpp%time &
-            + REAL(params%it,rp)*params%dt*params%cpp%time,attr)
+            + params%time*params%cpp%time,attr)
 
        dset = "simulation_time"
        attr = "Total simulation time in secs"
