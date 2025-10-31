@@ -314,7 +314,7 @@ CONTAINS
        
        if (params%t_steps.gt.params%output_cadence) then
 #ifdef __NVCOMPILER
-       params%dt=params%snapshot_frequency/real(params%output_cadence)
+          params%dt=params%snapshot_frequency/real(params%output_cadence)
 #else
           params%dt=params%snapshot_frequency/float(params%output_cadence)
 #endif
