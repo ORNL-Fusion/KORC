@@ -762,6 +762,8 @@ module korc_types
      LOGICAL :: useDiMES
      REAL(rp),DIMENSION(3) :: DiMESloc
      REAL(rp),DIMENSION(2) :: DiMESdims
+     INTEGER :: FlatWall
+     REAL(rp) :: RZwall
 
   END TYPE FIELDS
 

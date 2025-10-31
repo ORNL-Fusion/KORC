@@ -186,6 +186,8 @@ module korc_input
   REAL(rp) :: l_mn = 0.005
   REAL(rp) :: sigma_mn = 0.02
   REAL(rp) :: eps_mn = 2.75E-4
+  INTEGER :: FlatWall = 0 ! 1:HFS, 2:LFS, 3:Top, 4:Bot 
+  REAL(rp) :: RZwall = 1.
 
   !! -----------------------------------------------
   !! externalPlasmaModel
@@ -462,7 +464,7 @@ CONTAINS
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
          E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn,E_edge, &
-         perturb,l_mn,sigma_mn,eps_mn
+         perturb,l_mn,sigma_mn,eps_mn,FlatWall,RZwall
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &

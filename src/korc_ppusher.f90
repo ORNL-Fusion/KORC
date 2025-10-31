@@ -5015,13 +5015,13 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
   INTEGER           :: ii
   !! Species iterator.
   INTEGER           :: pp
-  INTEGER           :: ppp,pRE
+  INTEGER           :: ppp,pRE,FlatWall
   !! Particles iterator.
   INTEGER(ip)   :: tcol,torb
   !! time iterator.
   REAL(rp),DIMENSION(spp(1)%ppp,4) :: RErand 
   REAL(rp),DIMENSION(4) :: RErand_p
-  REAL(rp)  :: B0,E0,lam,R0,q0,ar
+  REAL(rp)  :: B0,E0,lam,R0,q0,ar,RZwall
   LOGICAL :: avalanche_fail = .FALSE.
 
   !$acc routine (advance_GCeqn_vars_ACC) seq
@@ -5047,6 +5047,9 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
     R0=F%AB%Ro
     q0=F%AB%qo
     ar=F%AB%a
+
+    FlatWall=F%FlatWall
+    RZwall=F%RZwall
 
     CALL random%uniform%set(0.0_rp, 1.0_rp)
 
@@ -5090,7 +5093,7 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
           do torb=1_ip,params_ACC%orbits_per_coll
             call advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC, &
                 Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0)
+                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0,FlatWall,RZwall)
           end do
 
           vars%Y(pp,1)=Y_R
@@ -5476,7 +5479,7 @@ end subroutine advance_GCeqn_vars
 
 subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
   flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar, &
-  ne,Te,Zeff)
+  ne,Te,Zeff,FlatWall,RZwall)
   !$acc routine seq
   !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
   !! @endnote
@@ -5518,6 +5521,8 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC,Y_R,Y_PHI,Y_Z,V_P
   REAL(rp) :: Bmag
   INTEGER(is), intent(inout) :: flagCon,flagCol
   REAL(rp),intent(IN) :: q_cache,m_cache
+  INTEGER, intent(INOUT) :: FlatWall
+  REAL(rp) :: RZwall
 
   !$acc routine (analytical_fields_GC_ACC) seq
   !$acc routine (GCEoM_ACC) seq
@@ -5657,7 +5662,7 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC,Y_R,Y_PHI,Y_Z,V_P
   V_PLL=V0+b1*k1_PLL+b2*k2_PLL+ &
     b3*k3_PLL+b4*k4_PLL+b5*k5_PLL+b6*k6_PLL
 
-  call cyl_check_if_confined_ACC(ar,R0,Y_R,Y_Z,flagCon)
+  call cyl_check_if_confined_ACC(ar,R0,Y_R,Y_Z,flagCon,FlatWall,RZwall)
 
   if ((flagCon.eq.0_is).or.(flagCol.eq.0_is)) then
     Y_R=Y0_R
