@@ -1514,6 +1514,9 @@ subroutine initialize_fields(params,F)
 
       F%PSIp_lim=PSIp_lim
 
+      F%FlatWall = FlatWall
+      F%RZwall = RZwall
+
   if (params%field_model(1:10).eq.'ANALYTICAL') then
       !    CASE('ANALYTICAL')
       ! Load the parameters of the analytical magnetic field
