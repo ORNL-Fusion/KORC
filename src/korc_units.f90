@@ -167,7 +167,7 @@ subroutine normalize_variables(params,spp,F,P)
   F%DiMESloc(1)=F%DiMESloc(1)/params%cpp%length
   F%DiMESloc(3)=F%DiMESloc(3)/params%cpp%length
   F%DiMESdims=F%DiMESdims/params%cpp%length
-
+  F%RZwall=F%RZwall/params%cpp%length
 
   P%a = P%a/params%cpp%length
   P%R0 = P%R0/params%cpp%length

@@ -4437,10 +4437,12 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !! If secondary RE generated, begin pseduo-2D inverse CDF sampling
     !! algorithm
 
-    !reshaping 2D LA distribution to 1D array
-    do ii=1,ngam1
-      cumprob(1+(ii-1)*neta1:(ii)*neta1)=S_LA(ii,:)
+    !reshaping 2D LA distribution to 1D array and multiplying by dpm to account for nonuniform spacing of values across distribution
+    cumprob(1:neta1)=S_LA(1,:)*dpm1(1)
+    do ii=2,ngam1-1
+      cumprob(1+(ii-1)*neta1:(ii)*neta1)=S_LA(ii,:)*(dpm1(ii)+dpm1(ii-1))/2
     end do
+    cumprob(1+(ngam1-1)*neta1:ngam1*neta1)=S_LA(ngam1,:)*dpm1(ngam1-1)
 
     !calculating cumulative distribution
     do ii=2,SIZE(cumprob)
@@ -4467,6 +4469,9 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
     if (cparams_ss_ACC%sample_test) then
       write(6,*) 0
+      write(6,*) cparams_ss_ACC%p_min
+      write(6,*) E_PHI*params_ACC%cpp%Eo
+      write(6,*) E_C*params_ACC%cpp%Eo
       write(6,*) pm,xi
       write(6,*) gam_min,gammax
       write(6,*) dt,netot,prob1
