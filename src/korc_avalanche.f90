@@ -381,15 +381,15 @@ CONTAINS
 
     end if
 
-    CALL MPI_SCATTER(p_samples,ppp,MPI_REAL8,p,ppp,MPI_REAL8,0, &
+    CALL MPI_SCATTER(p_samples,ppp,mpi_real_type,p,ppp,mpi_real_type,0, &
          MPI_COMM_WORLD,mpierr)
 
-    CALL MPI_SCATTER(eta_samples,ppp,MPI_REAL8,eta,ppp,MPI_REAL8, &
+    CALL MPI_SCATTER(eta_samples,ppp,mpi_real_type,eta,ppp,mpi_real_type, &
          0,MPI_COMM_WORLD,mpierr)
 
-    CALL MPI_BCAST(go,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(go,1,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
-    CALL MPI_BCAST(etao,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(etao,1,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
     call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
@@ -819,16 +819,16 @@ subroutine Avalanche_4D(params,random,spp,P,F)
   
   end if
 
-  CALL MPI_SCATTER(R_samples*cos(PHI_samples),spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(R_samples*sin(PHI_samples),spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(P_samples,spp%ppp,MPI_REAL8, &
-       mom,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(T_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(R_samples*cos(PHI_samples),spp%ppp,mpi_real_type, &
+       spp%vars%X(:,1),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(R_samples*sin(PHI_samples),spp%ppp,mpi_real_type, &
+       spp%vars%X(:,2),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,3),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(P_samples,spp%ppp,mpi_real_type, &
+       mom,spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(T_samples,spp%ppp,mpi_real_type, &
+       spp%vars%eta,spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
   
   
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
