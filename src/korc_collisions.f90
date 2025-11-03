@@ -4405,7 +4405,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 #else
   if (ISNAN(prob1)) then
 #endif
-    write(6,*) 2
+    write(6,*) 5
     write(6,*) pm,xi
     write(6,*) gam_min,gammax
     write(6,*) E_PHI*params_ACC%cpp%Eo
@@ -4418,7 +4418,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   end if
          
   if (prob1.gt.1._rp) then
-    write(6,*) 3
+    write(6,*) 4
     write(6,*) pm,xi
     write(6,*) gam_min,gammax
     write(6,*) E_PHI*params_ACC%cpp%Eo
@@ -4449,7 +4449,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     end do
 
     !normalizing the CDF to run from 0 to 1
-    cumprob=cumprob/cumprob(ngam1*neta1)
+    cumprob=cumprob/maxval(cumprob)
 
     !finding where the normalized CDF is less than a random number
     cumprob = cumprob-RErand_p(2)
@@ -4536,6 +4536,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
 #if DBG_CHECK
     if (vars%V(pRE,2).lt.0._rp) then
+      write(6,*) 2
       write(6,*) vars%V(pRE,1),vars%V(pRE,2)
       write(6,*) ptrial,xitrial
       write(6,*) xim,xip
@@ -4555,6 +4556,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
 #if DBG_CHECK
     if (abs(pm-pm0).gt.pm0) then
+      write(6,*) 1
       write(6,*) pm0,gam0,xi0
       write(6,*) ptrial,gamtrial,xitrial
       write(6,*) gamvth,Te*params_ACC%cpp%temperature/params_ACC%cpp%charge
@@ -4571,7 +4573,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !$acc end atomic
 
     if (pRE.eq.ppp) then
-        write(6,*) 1
+        write(6,*) 3
         write(6,*) pRE,ppp
         !$acc atomic write
         avalanche_fail=.TRUE.
