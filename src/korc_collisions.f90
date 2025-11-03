@@ -194,7 +194,7 @@ module korc_collisions
      REAL(rp) 			:: CoulombLogee,CoulombLogei
      ! Coulomb logarithm
      REAL(rp) 			:: CLog1, CLog2,CLog0_1, CLog0_2
-     REAL(rp) 			:: VTe
+     REAL(rp) 			:: VTe    
      ! Thermal velocity of background electrons
      REAL(rp) 			:: VTeo
      REAL(rp) 			:: delta
@@ -600,6 +600,8 @@ contains
     cparams_ss%re = C_E**2/(4.0_rp*C_PI*C_E0*C_ME*C_C**2)
     cparams_ss%CoulombLogee = CLogee_wu(params,cparams_ss%ne,cparams_ss%Te)
     cparams_ss%CoulombLogei = CLogei_wu(params,cparams_ss%ne,cparams_ss%Te)
+    cparams_ss_ACC%CoulombLogee = CLogee_wu(params,cparams_ss%ne,cparams_ss%Te)
+    cparams_ss_ACC%CoulombLogei = CLogei_wu(params,cparams_ss%ne,cparams_ss%Te)
 
     cparams_ss%VTe = VTe_wu(cparams_ss%Te)
     cparams_ss_ACC%VTe = VTe_wu(cparams_ss_ACC%Te)
@@ -1363,9 +1365,9 @@ contains
        CLogee_wu = cparams_ss%Clog_const
 
     else if (cparams_ss%Clog_model.eq.2) then
-       CLogee_wu = CLog0_wu(ne,Te)+ &
-            log(1+(2*(params%minimum_particle_g-1)/ &
-            (VTe_wu(Te)/C_C)**2)**(k/2._rp))/k
+        CLogee_wu = CLog0_wu(ne,Te)+ &
+            log(1+(2*(params%minimum_particle_g-1)/VTe_wu(Te)**2)**(k/2._rp))/k+ &
+            log(sqrt(2*(params%minimum_particle_g-1._rp)/(params%minimum_particle_g-1._rp)))
     end if
 
   end function CLogee_wu
@@ -1434,7 +1436,7 @@ contains
     else if (cparams_ss_ACC%Clog_model.eq.1) then
        CLogee = cparams_ss_ACC%Clog_const
 
-    else if (cparams_ss_ACC%Clog_model.eq.0) then
+    else if (cparams_ss_ACC%Clog_model.eq.2) then
        CLogee = CLog0(ne,Te)+ &
             log(1+(2*(gam-1)/VTe(Te)**2)**(k/2._rp))/k+ &
             log(sqrt(2*(gam_min-1._rp)/(gam-1._rp)))
@@ -1774,7 +1776,6 @@ contains
             psi(x) + 0.5_rp*cparams_ss%delta**4*x**2 )
     endif
 
-
   end function CB_ee
 
   function CB_ei(params,v)
@@ -1786,17 +1787,13 @@ contains
     INTEGER :: i
 
     x = v/cparams_ss%VTe
+
     if ((.not.cparams_ms%LargeCollisions).or. &
          (.not.(cparams_ss%P%ne_profile(1:6).eq.'RE-EVO'))) then
-       CB_ei  = (0.5_rp*cparams_ss%Gammac/v)*(cparams_ss%Zeff* &
-            CLogei(v,cparams_ss%ne,cparams_ss%Te)/ &
-            CLogee(v,cparams_ss%ne,cparams_ss%Te))
+       CB_ei  = (0.5_rp*cparams_ss%Gammac/v)*(cparams_ss%Zeff*CLogei(v,cparams_ss%ne,cparams_ss%Te)/cparams_ss%CoulombLogee)
     else
-       CB_ei  = (0.5_rp*cparams_ms%Gammac_min/v)*(cparams_ss%Zeff* &
-            CLogei(v,cparams_ss%P%n_ne,cparams_ss%Te)/ &
-            CLogee(v,cparams_ss%P%n_ne,cparams_ss%Te))
+       CB_ei  = (0.5_rp*cparams_ms%Gammac_min/v)*(cparams_ss%Zeff*CLogei(v,cparams_ss%P%n_ne,cparams_ss%Te)/cparams_ss%CoulombLogee)
     end if
-
 
     if (params%bound_electron_model.eq.'HESSLOW') then
        CB_ei_temp=CB_ei
@@ -4216,12 +4213,12 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   INTEGER(is), INTENT(IN)  :: flagCol,flagCon
   REAL(rp), INTENT(IN)  :: me
   REAL(rp)  :: gam,prob0,prob1,pm0,xi0,gam0
-  REAL(rp) :: gam_min,p_min,gammax,dt,gamsecmax,psecmax,ptrial
-  REAL(rp) :: gamtrial,cosgam1,xirad,xip,xim,xitrial,sinsq1,cossq1,pitchprob1
+  REAL(rp) :: gam_min,p_min,gammax,dt,psecmax,ptrial
+  REAL(rp) :: gamtrial,xip,xim,xitrial
   REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c
-  INTEGER, PARAMETER :: ngam1=50,neta1=51
-  INTEGER :: ii,jj,cc,seciter
-  REAL(rp), DIMENSION(ngam1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp,intpitchprob
+  INTEGER, PARAMETER :: ngam1=45,neta1=45
+  INTEGER :: ii,jj,cc
+  REAL(rp), DIMENSION(ngam1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp
   REAL(rp), DIMENSION(ngam1-1) :: dpm1
   REAL(rp), DIMENSION(neta1) :: eta1,tmpsinsq,tmpcossq
   REAL(rp), DIMENSION(neta1-1) :: deta1
@@ -4408,6 +4405,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 #else
   if (ISNAN(prob1)) then
 #endif
+    write(6,*) 2
     write(6,*) pm,xi
     write(6,*) gam_min,gammax
     write(6,*) E_PHI*params_ACC%cpp%Eo
@@ -4420,6 +4418,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   end if
          
   if (prob1.gt.1._rp) then
+    write(6,*) 3
     write(6,*) pm,xi
     write(6,*) gam_min,gammax
     write(6,*) E_PHI*params_ACC%cpp%Eo
@@ -4572,6 +4571,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
     !$acc end atomic
 
     if (pRE.eq.ppp) then
+        write(6,*) 1
         write(6,*) pRE,ppp
         !$acc atomic write
         avalanche_fail=.TRUE.

@@ -28,11 +28,11 @@ module korc_ppusher
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: e1Imfield_2dx_local
 #endif 
 
-  REAL(rp), PRIVATE :: E0
+  REAL(rp), PRIVATE :: epsilon0
   !! Dimensionless vacuum permittivity \(\epsilon_0 \times (m_{ch}^2
   !! v_{ch}^3/q_{ch}^3 B_{ch})\), see [[korc_units]].
 
-  !$acc declare create (E0)
+  !$acc declare create (epsilon0)
 
   PRIVATE :: cross,&
        radiation_force_p,&
@@ -73,8 +73,10 @@ subroutine initialize_particle_pusher(params)
   TYPE(KORC_PARAMS), INTENT(IN)  :: params
   !! Core KORC simulation parameters.
 
-  E0 = C_E0*(params%cpp%mass**2*params%cpp%velocity**3)/ &
+  epsilon0 = C_E0*(params%cpp%mass**2*params%cpp%velocity**3)/ &
       (params%cpp%charge**3*params%cpp%Bo)
+
+  !$acc update device(epsilon0)
 
 end subroutine initialize_particle_pusher
 
@@ -137,7 +139,7 @@ subroutine radiation_force_p(q_cache,m_cache,U_X,U_Y,U_Z,E_X,E_Y,E_Z, &
     V_Y = U_Y/g
     V_Z = U_Z/g
 
-    tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+    tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
     cross_EB_X=E_Y*B_Z-E_Z*B_Y
     cross_EB_Y=E_Z*B_X-E_X*B_Z
@@ -229,7 +231,7 @@ subroutine FO_init(params,F,spp,output,step)
     if(output) then
 
       !$OMP PARALLEL DO default(none) &
-      !$OMP firstprivate(E0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk) &
+      !$OMP firstprivate(epsilon0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk) &
       !$OMP& shared(params,ii,spp,F) &
       !$OMP& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
       !$OMP& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
@@ -406,7 +408,7 @@ subroutine FO_init(params,F,spp,output,step)
             ! particles)
 
             ! Radiated power
-            tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+            tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
             cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
             cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
@@ -581,7 +583,7 @@ subroutine FO_init_uni_ACC(params,F,spp,output,step)
              ! particles)
    
              ! Radiated power
-             tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+             tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
    
              cross_X = V_Y*B_Z-V_Z*B_Y
              cross_Y = V_Z*B_X-V_X*B_Z
@@ -774,7 +776,7 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
           ! particles)
 
           ! Radiated power
-          tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+          tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
           cross_X = V_Y*B_Z-V_Z*B_Y
           cross_Y = V_Z*B_X-V_X*B_Z
@@ -991,7 +993,7 @@ subroutine FO_init_mars_ACC(params,F,spp,output,step)
           ! particles)
 
           ! Radiated power
-          tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+          tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
           cross_X = V_Y*B_Z-V_Z*B_Y
           cross_Y = V_Z*B_X-V_X*B_Z
@@ -1217,7 +1219,7 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
           ! particles)
 
           ! Radiated power
-          tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+          tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
           cross_X = V_Y*B_Z-V_Z*B_Y
           cross_Y = V_Z*B_X-V_X*B_Z
@@ -1337,7 +1339,7 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
 
 
      !$OMP PARALLEL DO default(none) &
-     !$OMP& FIRSTPRIVATE(E0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
+     !$OMP& FIRSTPRIVATE(epsilon0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
      !$OMP& shared(params,ii,spp,P,F,random) &
      !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
      !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
@@ -1476,7 +1478,7 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
               ! particles)
 
               ! Radiated power
-              tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+              tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
               cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
               cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
@@ -1641,7 +1643,7 @@ subroutine adv_FOuni_top_ACC(params,F,P,spp)
            ! particles)
    
            ! Radiated power
-           tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+           tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
    
            cross_X = V_Y*B_Z-V_Z*B_Y
            cross_Y = V_Z*B_X-V_X*B_Z
@@ -1828,7 +1830,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
         ! particles)
 
         ! Radiated power
-        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+        tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
         cross_X = V_Y*B_Z-V_Z*B_Y
         cross_Y = V_Z*B_X-V_X*B_Z
@@ -2368,7 +2370,7 @@ subroutine adv_FOfio_top(params,F,P,spp)
                 ! particles)
 
                 ! Radiated power
-                tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+                tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
                 cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
                 cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
@@ -2455,7 +2457,7 @@ subroutine adv_FOinterp_top(params,random,F,P,spp)
 
 
        !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
+       !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,epsilon0) &
        !$OMP& shared(params,ii,spp,P,F,random) &
        !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
@@ -2621,7 +2623,7 @@ subroutine adv_FOinterp_top(params,random,F,P,spp)
                 ! particles)
 
                 ! Radiated power
-                tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+                tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
                 cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
                 cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
@@ -2703,7 +2705,7 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
     a = q_cache/abs(q_cache)*params%dt
 
     !$OMP PARALLEL DO default(none) &
-    !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
+    !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,epsilon0) &
     !$OMP& shared(params,ii,spp,P,F,random) &
     !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
     !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
@@ -2815,7 +2817,7 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
             ! particles)
 
             ! Radiated power
-            tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+            tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
             cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
             cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
@@ -3021,7 +3023,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
         ! particles)
 
         ! Radiated power
-        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+        tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
         cross_X = V_Y*B_Z-V_Z*B_Y
         cross_Y = V_Z*B_X-V_X*B_Z
@@ -3104,7 +3106,7 @@ subroutine adv_FOinterp_aorsa_top(params,random,F,P,spp)
 
 
        !$OMP PARALLEL DO default(none) &
-       !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,E0) &
+       !$OMP& FIRSTPRIVATE(a,m_cache,q_cache,pchunk,epsilon0) &
        !$OMP& shared(params,ii,spp,P,F,random) &
        !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
        !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
@@ -3231,7 +3233,7 @@ subroutine adv_FOinterp_aorsa_top(params,random,F,P,spp)
 
 
                 ! Radiated power
-                tmp(cc) = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+                tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
                 cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
                 cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
@@ -3448,7 +3450,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
         ! particles)
 
         ! Radiated power
-        tmp = q_cache**4/(6.0_rp*C_PI*E0*m_cache**2)
+        tmp = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
 
         cross_X = V_Y*B_Z-V_Z*B_Y
         cross_Y = V_Z*B_X-V_X*B_Z
@@ -4596,7 +4598,7 @@ subroutine adv_GCeqn_top(params,random,F,P,spp)
           if(.not.params%LargeCollisions) then
 
              !$OMP PARALLEL DO default(none) &
-             !$OMP& FIRSTPRIVATE(E0,q_cache,m_cache,pchunk) &
+             !$OMP& FIRSTPRIVATE(epsilon0,q_cache,m_cache,pchunk) &
              !$OMP& shared(F,P,params,ii,spp,random) &
              !$OMP& PRIVATE(pp,tt,ttt,Bmag,cc,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
              !$OMP& flagCon,flagCol,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,PSIp,ne, &
@@ -8802,7 +8804,7 @@ subroutine GCEoM1_p(pchunk,tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
        !       !$OMP& aligned(tau_R,Bmag,RHS_PLL,V_PLL,xi,gamgc,RHS_MU,V_MU)
        do cc=1_idef,pchunk
 
-          tau_R(cc)=6*C_PI*E0/(Bmag(cc)*Bmag(cc))
+          tau_R(cc)=6*C_PI*epsilon0/(Bmag(cc)*Bmag(cc))
 
           SR_PLL(cc)=V_PLL(cc)*(1._rp-xi(cc)*xi(cc))/tau_R(cc)* &
                (1._rp/gamgc(cc)-gamgc(cc))
@@ -8940,9 +8942,9 @@ subroutine GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
 
   !!$acc routine (analytical_profiles_ACC) seq
 
-  ne=-1._rp
-  Te=-1._rp
-  Zeff=-1._rp
+  !ne=-1._rp
+  !Te=-1._rp
+  !Zeff=-1._rp
 
   Bmag = SQRT(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
 
@@ -8986,7 +8988,6 @@ subroutine GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
       bdotBst
   RHS_MU=0._rp
 
-
   if (params_ACC%radiation.and.params_ACC%GC_rad_SDE) then
 
     re_cache=C_RE/params_ACC%cpp%length
@@ -8997,7 +8998,7 @@ subroutine GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
 
     !call analytical_profiles_ACC(time,Y_R,Y_Z,P,ne,Te,Zeff,PSIp)
 
-    tau_R=6*C_PI*E0/(Bmag*Bmag)
+    tau_R=6*C_PI*epsilon0/(Bmag*Bmag)
 
     SR_PLL=V_PLL*(1._rp-xi*xi)/tau_R* &
           (1._rp/gamgc-gamgc)
@@ -9137,7 +9138,7 @@ subroutine GCEoM1_fio_p(tt,P,F,params,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
        !       !$OMP& aligned(tau_R,Bmag,RHS_PLL,V_PLL,xi,gamgc,RHS_MU,V_MU)
        do cc=1_idef,pchunk
 
-          tau_R(cc)=6*C_PI*E0/(Bmag(cc)*Bmag(cc))
+          tau_R(cc)=6*C_PI*epsilon0/(Bmag(cc)*Bmag(cc))
 
           SR_PLL(cc)=V_PLL(cc)*(1._rp-xi(cc)*xi(cc))/tau_R(cc)* &
                (1._rp/gamgc(cc)-gamgc(cc))
