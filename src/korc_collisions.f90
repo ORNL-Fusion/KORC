@@ -3493,6 +3493,23 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
     flagCol=0_ip
   end if
 
+
+#ifdef __NVCOMPILER
+  if (IEEE_IS_NAN(xi).or.(abs(xi).gt.1._rp)) then
+#else
+  if (ISNAN(xi).or.(abs(xi).gt.1._rp)) then
+#endif __NVCOMPILER 
+      write(6,*) 100
+      write(6,*) pm0,xi0
+      write(6,*) pm,xi
+      write(6,*) dp,dxi
+      write(6,*) CBL
+      write(6,*) v,ne,Te,Zeff
+      write(6,*) Ppll,Pmu,Bmag
+      avalanche_fail=.TRUE.
+  end if
+
+
   if (cparams_ss_ACC%avalanche.and.(flagCon.eq.1).and.(flagCol.eq.1)) then
 
     ntot=ne
@@ -3510,6 +3527,23 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
         pm,xi,ne,ntot,Te,Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z,avalanche_fail)
 
   end if !applying avalanche source
+
+#if DBG_CHECK
+#ifdef __NVCOMPILER
+  if (IEEE_IS_NAN(xi).or.(abs(xi).gt.1._rp)) then
+#else
+  if (ISNAN(xi).or.(abs(xi).gt.1._rp)) then
+#endif __NVCOMPILER 
+      write(6,*) 101
+      write(6,*) pm0,xi0
+      write(6,*) pm,xi
+      write(6,*) dp,dxi
+      write(6,*) CBL
+      write(6,*) v,ne,Te,Zeff
+      write(6,*) Ppll,Pmu,Bmag
+      avalanche_fail=.TRUE.
+  end if
+#endif
 
   Ppll=pm*xi
   Pmu=(pm*pm-Ppll*Ppll)/(2*me*Bmag)
@@ -4227,7 +4261,7 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
   REAL(rp) :: gamtrial,xip,xim,xitrial
   REAL(rp) :: dsigdgam1,S_LAmax,S_LA1,tmppm,gamvth,vmin,E_C,p_c,gam_c
   INTEGER, PARAMETER :: ngam1=45,neta1=45
-  INTEGER :: ii,jj,cc
+  INTEGER :: ii,jj,cc,ind
   REAL(rp), DIMENSION(ngam1) :: gam1,pm1,tmpgam1,tmpcosgam,tmpdsigdgam,tmpsecthreshgam,probtmp
   REAL(rp), DIMENSION(ngam1-1) :: dpm1
   REAL(rp), DIMENSION(neta1) :: eta1,tmpsinsq,tmpcossq
@@ -4466,14 +4500,19 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
 
     do ii=2,SIZE(cumprob)
       if (cumprob(ii)*cumprob(ii-1)<0) then
+        if (cumprob(ii-1).eq.cumprob(ii-2)) then 
+          ind=ii 
+        else 
+          ind=ii-1
+        endif
         exit
       endif
     end do
 
     !using modulus math to determine xi an pmag according to the inverse CDF
     !sampling
-    xitrial=COS(eta1(MOD(ii-1,neta1)))
-    gamtrial=gam1(FLOOR(REAL(ii-1)/REAL(neta1))+1)
+    xitrial=COS(eta1(MOD(ind,neta1)))
+    gamtrial=gam1(FLOOR(REAL(ind)/REAL(neta1))+1)
     ptrial=SQRT(gamtrial*gamtrial-1)
 
     if (cparams_ss_ACC%sample_test) then
@@ -4564,19 +4603,16 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z
       xi=(pm0*xi-ptrial*xitrial)/pm
     end if
 
-#if DBG_CHECK
-    if (abs(pm-pm0).gt.pm0) then
+    if ((abs(pm-pm0).gt.pm0).or.(abs(xi).gt.1._rp)) then
       write(6,*) 1
       write(6,*) pm0,gam0,xi0
       write(6,*) ptrial,gamtrial,xitrial
-      write(6,*) gamvth,Te*params_ACC%cpp%temperature/params_ACC%cpp%charge
+      write(6,*) gamvth,Te
       write(6,*) pm,xi
       !$acc atomic write
       avalanche_fail=.TRUE.
       !$acc end atomic
-    endif
-
-#endif
+    endif 
 
     !$acc atomic read
     pRE=pRE
