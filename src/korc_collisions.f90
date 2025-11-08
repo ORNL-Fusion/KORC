@@ -1271,6 +1271,16 @@ contains
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * &
                * * * * * * * * * * * * * * *",/)')
        end if
+
+    else if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn' &
+      .and..not.params%field_model.eq.'M3D_C1') then
+
+      params%coll_per_dump=1   
+      params_ACC%coll_per_dump=1 
+
+      params%orbits_per_coll=params%t_skip
+      params_ACC%orbits_per_coll=params%t_skip
+
     end if
   end subroutine define_collisions_time_step
 
