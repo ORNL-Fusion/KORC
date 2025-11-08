@@ -5010,6 +5010,7 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
   REAL(rp) :: E_R,E_PHI,E_Z
   REAL(rp) :: gradB_R,gradB_PHI,gradB_Z
   REAL(rp) :: curlb_R,curlb_PHI,curlb_Z
+  REAL(rp) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
   REAL(rp) :: PSIp,ne,Te
   REAL(rp) :: V_PLL,V_MU
   REAL(rp) :: m_cache,q_cache,ne0,Te0,Zeff0
@@ -5095,7 +5096,7 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
           do torb=1_ip,params_ACC%orbits_per_coll
             call advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC, &
                 Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0,FlatWall,RZwall)
+                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0,FlatWall,RZwall,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU)
           end do
 
           vars%Y(pp,1)=Y_R
@@ -5111,6 +5112,12 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
           vars%E(pp,1) = E_R
           vars%E(pp,2) = E_PHI
           vars%E(pp,3) = E_Z
+
+          vars%RHS(pp,1)=RHS_R
+          vars%RHS(pp,2)=RHS_PHI
+          vars%RHS(pp,3)=RHS_Z
+          vars%RHS(pp,4)=RHS_PLL
+          vars%RHS(pp,5)=RHS_MU
 
           vars%flagCon(pp)=flagCon
 
@@ -5481,7 +5488,7 @@ end subroutine advance_GCeqn_vars
 
 subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
   flagCon,flagCol,q_cache,m_cache,B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar, &
-  ne,Te,Zeff,FlatWall,RZwall)
+  ne,Te,Zeff,FlatWall,RZwall,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU)
   !$acc routine seq
   !! @note Subroutine to advance GC variables \(({\bf X},p_\parallel)\)
   !! @endnote
@@ -5517,8 +5524,8 @@ subroutine advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC,Y_R,Y_PHI,Y_Z,V_P
   REAL(rp),INTENT(OUT) :: B_R,B_PHI,B_Z
   REAL(rp),INTENT(OUT) :: PSIp
   REAL(rp) :: curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z
-  REAL(rp),INTENT(INOUT) :: V_PLL,V_MU
-  REAL(rp) :: RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU,V0
+  REAL(rp),INTENT(INOUT) :: V_PLL,V_MU,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU
+  REAL(rp) :: V0
   REAL(rp),INTENT(OUT) :: E_PHI,E_Z,E_R
   REAL(rp) :: Bmag
   INTEGER(is), intent(inout) :: flagCon,flagCol
@@ -8952,9 +8959,9 @@ subroutine GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
   bhat_PHI = B_PHI/Bmag
   bhat_Z = B_Z/Bmag
 
-  Bst_R=q_cache*(B_R+V_PLL*curlb_R/m_cache)
-  Bst_PHI=q_cache*(B_PHI+V_PLL*curlb_PHI/m_cache)
-  Bst_Z=q_cache*(B_Z+V_PLL*curlb_Z/m_cache)
+  Bst_R=q_cache*B_R+V_PLL*curlb_R*abs(q_cache)/m_cache
+  Bst_PHI=q_cache*B_PHI+V_PLL*curlb_PHI*abs(q_cache)/m_cache
+  Bst_Z=q_cache*B_Z+V_PLL*curlb_Z*abs(q_cache)/m_cache
 
   bdotBst=bhat_R*Bst_R+bhat_PHI*Bst_PHI+ &
     bhat_Z*Bst_Z
@@ -8975,16 +8982,16 @@ subroutine GCEoM_ACC(tcol,torb,params_ACC,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU, &
   pm=m_cache*sqrt(gamgc**2-1)
   xi=V_PLL/pm
 
-  RHS_R=(q_cache*Ecrossb_R+(q_cache*V_MU* &
+  RHS_R=(q_cache*Ecrossb_R+(abs(q_cache)*V_MU* &
       bcrossgradB_R+V_PLL*Bst_R)/(m_cache*gamgc))/ &
       bdotBst
-  RHS_PHI=(q_cache*Ecrossb_PHI+(q_cache*V_MU* &
+  RHS_PHI=(q_cache*Ecrossb_PHI+(abs(q_cache)*V_MU* &
       bcrossgradB_PHI+V_PLL*Bst_PHI)/(m_cache*gamgc))/ &
       (Y_R*bdotBst)
-  RHS_Z=(q_cache*Ecrossb_Z+(q_cache*V_MU* &
+  RHS_Z=(q_cache*Ecrossb_Z+(abs(q_cache)*V_MU* &
       bcrossgradB_Z+V_PLL*Bst_Z)/(m_cache*gamgc))/ &
       bdotBst
-  RHS_PLL=(m_cache*BstdotE-V_MU*BstdotgradB/gamgc)/ &
+  RHS_PLL=(m_cache*q_cache/abs(q_cache)*BstdotE-V_MU*BstdotgradB/gamgc)/ &
       bdotBst
   RHS_MU=0._rp
 
