@@ -844,6 +844,9 @@ contains
              if(cparams_ss%min_secRE_therm) then
                 cparams_ss%p_min=min(cparams_ss%p_therm,cparams_ss%p_min)
                 cparams_ss_ACC%p_min=min(cparams_ss_ACC%p_therm,cparams_ss_ACC%p_min)
+
+                cparams_ss%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
+                cparams_ss_ACC%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
              else
                 cparams_ss%p_min=p_crit
                 cparams_ss_ACC%p_min=p_crit
@@ -852,8 +855,6 @@ contains
              end if
 
              !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm,cparams_ss%p_min,cparams_ss%gam_min
-
-
 
              if (params%mpi_params%rank .EQ. 0) then
                 write(output_unit_write,*) 'Minimum energy of secondary RE is thermal',&
@@ -3488,12 +3489,12 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
   endif
 
   if ((pm.lt.min(cparams_ss_ACC%p_min*cparams_ss_ACC%pmin_scale, &
-    cparams_ss_ACC%p_therm)).and.flagCol.eq.1_ip) then
+    cparams_ss_ACC%p_therm)).and.(flagCol.eq.1_ip)) then
 
     flagCol=0_ip
   end if
 
-
+#ifdef DBG_CHECK
 #ifdef __NVCOMPILER
   if (IEEE_IS_NAN(xi).or.(abs(xi).gt.1._rp)) then
 #else
@@ -3508,6 +3509,7 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
       write(6,*) Ppll,Pmu,Bmag
       avalanche_fail=.TRUE.
   end if
+  #endif
 
 
   if (cparams_ss_ACC%avalanche.and.(flagCon.eq.1).and.(flagCol.eq.1)) then
