@@ -2027,46 +2027,46 @@ CONTAINS
              end if
 
 
-             if (ALLOCATED(F%B1Re_2D%R)) then
+             if (ALLOCATED(F%B1Re_3D%R)) then
                 dset = TRIM(gname) // "/BR1_Re"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Re_2D%R)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_3D%R)
              end if
 
-             if (ALLOCATED(F%B1Re_2D%PHI)) then
+             if (ALLOCATED(F%B1Re_3D%PHI)) then
                 dset = TRIM(gname) // "/BPHI1_Re"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Re_2D%PHI)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_3D%PHI)
              end if
 
-             if (ALLOCATED(F%B1Re_2D%Z)) then
+             if (ALLOCATED(F%B1Re_3D%Z)) then
                 dset = TRIM(gname) // "/BZ1_Re"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Re_2D%Z)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_3D%Z)
              end if
 
-             if (ALLOCATED(F%B1Im_2D%R)) then
+             if (ALLOCATED(F%B1Im_3D%R)) then
                 dset = TRIM(gname) // "/BR1_Im"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Im_2D%R)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_3D%R)
              end if
 
-             if (ALLOCATED(F%B1Im_2D%PHI)) then
+             if (ALLOCATED(F%B1Im_3D%PHI)) then
                 dset = TRIM(gname) // "/BPHI1_Im"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Im_2D%PHI)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_3D%PHI)
              end if
 
-             if (ALLOCATED(F%B1Im_2D%Z)) then
+             if (ALLOCATED(F%B1Im_3D%Z)) then
                 dset = TRIM(gname) // "/BZ1_Im"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Im_2D%Z)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_3D%Z)
              end if
 
              if (ALLOCATED(F%B1Re_2DX%X)) then
@@ -2450,7 +2450,7 @@ CONTAINS
           dset = TRIM(gname) // "/time"
           attr = "Simulation time in secs"
           call save_to_hdf5(h5file_id,dset,params%init_time*params%cpp%time &
-               + REAL(params%it,rp)*params%dt*params%cpp%time,attr)
+               + params%time*params%cpp%time,attr)
           
           do ss=1_idef,params%num_species
 
@@ -2807,7 +2807,7 @@ CONTAINS
        dset = "time"
        attr = "Current simulation time in secs"
        call save_to_hdf5(h5file_id,dset,params%init_time*params%cpp%time &
-            + REAL(params%it,rp)*params%dt*params%cpp%time,attr)
+            + params%time*params%cpp%time,attr)
 
        dset = "simulation_time"
        attr = "Total simulation time in secs"
@@ -2873,8 +2873,8 @@ CONTAINS
           send_buffer_rp = RESHAPE(spp(ss)%vars%Y,(/numel_send/))
        end if
        receive_buffer_rp = 0.0_rp
-       CALL MPI_GATHER(send_buffer_rp,numel_send,MPI_REAL8, &
-            receive_buffer_rp,numel_send,MPI_REAL8,0,MPI_COMM_WORLD, &
+       CALL MPI_GATHER(send_buffer_rp,numel_send,mpi_real_type, &
+            receive_buffer_rp,numel_send,mpi_real_type,0,MPI_COMM_WORLD, &
             mpierr)
        if (params%mpi_params%rank.EQ.0_idef) then
           X = RESHAPE(receive_buffer_rp,(/spp(ss)%ppp* &
@@ -2883,8 +2883,8 @@ CONTAINS
 
        send_buffer_rp = RESHAPE(spp(ss)%vars%V,(/numel_send/))
        receive_buffer_rp = 0.0_rp
-       CALL MPI_GATHER(send_buffer_rp,numel_send,MPI_REAL8, &
-            receive_buffer_rp,numel_send,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_GATHER(send_buffer_rp,numel_send,mpi_real_type, &
+            receive_buffer_rp,numel_send,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        if (params%mpi_params%rank.EQ.0_idef) then
           V = RESHAPE(receive_buffer_rp,(/spp(ss)%ppp* &
                params%mpi_params%nmpi,3/))
@@ -2934,9 +2934,9 @@ CONTAINS
 
        send_buffer_rp = spp(ss)%vars%g
        receive_buffer_rp = 0_rp
-       CALL MPI_GATHER(send_buffer_rp,numel_send,MPI_REAL8, &
+       CALL MPI_GATHER(send_buffer_rp,numel_send,mpi_real_type, &
             receive_buffer_rp,numel_send,&
-            MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+            mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        if (params%mpi_params%rank.EQ.0_idef) then
           g = receive_buffer_rp
        end if
@@ -3037,7 +3037,7 @@ CONTAINS
     !! Name of data set to be read from file.
     INTEGER(HID_T) 						:: h5file_id
     !! HDF5 file identifier.
-    REAL(KIND=8) 						:: real_number
+    REAL(rp) 						:: real_number
     !! A temporary real number.
     CHARACTER(19) 						:: tmp_str
     !! Temporary string used to manipulate various strings.
@@ -3091,13 +3091,13 @@ CONTAINS
 
     CALL MPI_BCAST(params%ito,1,MPI_INTEGER8,0,MPI_COMM_WORLD,mpierr)
 
-    CALL MPI_BCAST(params%dt,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(params%dt,1,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
     CALL MPI_BCAST(params%t_steps,1,MPI_INTEGER8,0,MPI_COMM_WORLD,mpierr)
 
-    CALL MPI_BCAST(params%simulation_time,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(params%simulation_time,1,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
-    CALL MPI_BCAST(params%snapshot_frequency,1,MPI_REAL8,0,MPI_COMM_WORLD, &
+    CALL MPI_BCAST(params%snapshot_frequency,1,mpi_real_type,0,MPI_COMM_WORLD, &
          mpierr)
 
     CALL MPI_BCAST(params%output_cadence,1,MPI_INTEGER8,0,MPI_COMM_WORLD,mpierr)
@@ -3119,7 +3119,7 @@ CONTAINS
     !! Name of data set to be read from file.
     INTEGER(HID_T) 						:: h5file_id
     !! HDF5 file identifier.
-    REAL(KIND=8) 						:: real_number
+    REAL(rp) 						:: real_number
     !! A temporary real number.
     CHARACTER(19) 						:: tmp_str
     !! Temporary string used to manipulate various strings.
@@ -3149,7 +3149,7 @@ CONTAINS
        call h5fclose_f(h5file_id, h5error)
     end if
     
-    CALL MPI_BCAST(params%init_time,1,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(params%init_time,1,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
     
     CALL MPI_BCAST(params%mpi_params%nmpi_prev,1,MPI_INTEGER8,0, &
          MPI_COMM_WORLD,mpierr)
@@ -3173,7 +3173,7 @@ CONTAINS
     !! Name of data set to be read from file.
     INTEGER(HID_T) 						:: h5file_id
     !! HDF5 file identifier.
-    REAL(KIND=8) 						:: real_number
+    REAL(rp) 						:: real_number
     !! A temporary real number.
     CHARACTER(19) 						:: tmp_str
     !! Temporary string used to manipulate various strings.
@@ -3200,7 +3200,7 @@ CONTAINS
        call h5fclose_f(h5file_id, h5error)
     end if
 
-    CALL MPI_BCAST(params%prev_iter_2x1t,1,MPI_INTEGER8,0,MPI_COMM_WORLD,mpierr)
+    CALL MPI_BCAST(params%prev_iter_2x1t,1,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
   end subroutine load_prev_iter
 
@@ -3387,8 +3387,8 @@ CONTAINS
        end if
 
        X_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(X_send_buffer_tmp,3*recieve_num,MPI_REAL8, &
-            X_receive_buffer,3*recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(X_send_buffer_tmp,3*recieve_num,mpi_real_type, &
+            X_receive_buffer,3*recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        if (params%orbit_model(1:2).EQ.'FO') then  
           spp(ss)%vars%X(1:recieve_num,:) = &
                RESHAPE(X_receive_buffer,(/recieve_num,3/))
@@ -3500,8 +3500,8 @@ CONTAINS
        
 
        V_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(V_send_buffer_tmp,3*recieve_num,MPI_REAL8, &
-            V_receive_buffer,3*recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(V_send_buffer_tmp,3*recieve_num,mpi_real_type, &
+            V_receive_buffer,3*recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%V(1:recieve_num,:) = &
             RESHAPE(V_receive_buffer,(/recieve_num,3/))
 
@@ -3543,8 +3543,8 @@ CONTAINS
        end if
        
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
-            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,mpi_real_type, &
+            AUX_receive_buffer,recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%flagCon(1:recieve_num) = INT(AUX_receive_buffer,is)
 
        if (params%mpi_params%rank.EQ.0_idef) then
@@ -3581,8 +3581,8 @@ CONTAINS
        end if
        
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
-            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,mpi_real_type, &
+            AUX_receive_buffer,recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%flagCol(1:recieve_num) = INT(AUX_receive_buffer,is)
 
        if (params%mpi_params%rank.EQ.0_idef) then
@@ -3629,8 +3629,8 @@ CONTAINS
        end if             
        
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
-            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,mpi_real_type, &
+            AUX_receive_buffer,recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%flagRE(1:recieve_num) = INT(AUX_receive_buffer,is)
        
        if (params%mpi_params%rank.EQ.0_idef) then
@@ -3667,8 +3667,8 @@ CONTAINS
        end if
 
        AUX_receive_buffer = 0.0_rp
-       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,MPI_REAL8, &
-            AUX_receive_buffer,recieve_num,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+       CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,mpi_real_type, &
+            AUX_receive_buffer,recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%g(1:recieve_num) = AUX_receive_buffer
 
        if (params%SC_E) then

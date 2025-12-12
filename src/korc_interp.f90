@@ -286,8 +286,12 @@ TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: bfield_2d
 TYPE(KORC_3D_FIELDS_INTERPOLANT)      :: bfield_3d
 !! An instance of KORC_3D_FIELDS_INTERPOLANT for interpolating
 !! the magnetic field.
-TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d
-TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_1
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_1
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_2
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_2
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_3
+TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_3
 TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: b1Refield_2dx
 TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: b1Imfield_2dx
 TYPE(KORC_2DX_FIELDS_INTERPOLANT)     :: e1Refield_2dx
@@ -444,7 +448,9 @@ subroutine initialize_fields_interpolant(params,F)
         call EZspline_setup2(bfield_2d%A, F%PSIp, ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
-        !write(output_unit_write,'("bfield_2d%A: ",E17.10)') bfield_2d%A%fspl(1,:,:)
+        !write(6,*) 'A shape',shape(bfield_2d%A%fspl)
+        !write(6,*)'bfield_2d%A',bfield_2d%A%fspl(1,77,86)
+        !write(6,*)'interp_init:F%PSIp',F%PSIp(77,86)
 
         if (.not.ALLOCATED(fields_domain%FLAG2D)) &
             ALLOCATE(fields_domain%FLAG2D(bfield_2d%NR,bfield_2d%NZ))
@@ -467,104 +473,304 @@ subroutine initialize_fields_interpolant(params,F)
 
         write(output_unit_write,*) '2D n=1 MARS magnetic fields'
 
-        b1Refield_2d%NR = F%dims(1)
-        b1Refield_2d%NZ = F%dims(3)
+        b1Refield_2d_1%NR = F%dims(1)
+        b1Refield_2d_1%NZ = F%dims(3)
 
         ! Initializing BR1Re interpolant
-        call EZspline_init2(b1Refield_2d%R,b1Refield_2d%NR, &
-          b1Refield_2d%NZ,b1Refield_2d%BCSR,b1Refield_2d%BCSZ,ezerr)
+        call EZspline_init2(b1Refield_2d_1%R,b1Refield_2d_1%NR, &
+          b1Refield_2d_1%NZ,b1Refield_2d_1%BCSR,b1Refield_2d_1%BCSZ,ezerr)
 
         call EZspline_error(ezerr)
 
-        b1Refield_2d%R%x1 = F%X%R
-        b1Refield_2d%R%x2 = F%X%Z
+        b1Refield_2d_1%R%x1 = F%X%R
+        b1Refield_2d_1%R%x2 = F%X%Z
 
         !write(output_unit_write,'("R",E17.10)') F%X%R
         !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
-        call EZspline_setup2(b1Refield_2d%R, F%B1Re_2D%R, ezerr, .TRUE.)
+        call EZspline_setup2(b1Refield_2d_1%R, F%B1Re_3D%R(:,1,:), ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
         !write(6,*) 'size',size(F%B1Re_2D%R(:,200))
         !write(6,*) 'B1Re_2D%R',F%B1Re_2D%R(:,200)*params%cpp%Bo
 
         ! Initializing BPHI1Re interpolant
-        call EZspline_init2(b1Refield_2d%PHI,b1Refield_2d%NR, &
-          b1Refield_2d%NZ,b1Refield_2d%BCSR,b1Refield_2d%BCSZ,ezerr)
+        call EZspline_init2(b1Refield_2d_1%PHI,b1Refield_2d_1%NR, &
+          b1Refield_2d_1%NZ,b1Refield_2d_1%BCSR,b1Refield_2d_1%BCSZ,ezerr)
 
         call EZspline_error(ezerr)
 
-        b1Refield_2d%PHI%x1 = F%X%R
-        b1Refield_2d%PHI%x2 = F%X%Z
+        b1Refield_2d_1%PHI%x1 = F%X%R
+        b1Refield_2d_1%PHI%x2 = F%X%Z
 
         !write(output_unit_write,'("R",E17.10)') F%X%R
         !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
-        call EZspline_setup2(b1Refield_2d%PHI, F%B1Re_2D%PHI, ezerr, .TRUE.)
+        call EZspline_setup2(b1Refield_2d_1%PHI, F%B1Re_3D%PHI(:,1,:), ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
         ! Initializing BZ1_Re interpolant
-        call EZspline_init2(b1Refield_2d%Z,b1Refield_2d%NR, &
-          b1Refield_2d%NZ,b1Refield_2d%BCSR,b1Refield_2d%BCSZ,ezerr)
+        call EZspline_init2(b1Refield_2d_1%Z,b1Refield_2d_1%NR, &
+          b1Refield_2d_1%NZ,b1Refield_2d_1%BCSR,b1Refield_2d_1%BCSZ,ezerr)
 
         call EZspline_error(ezerr)
 
-        b1Refield_2d%Z%x1 = F%X%R
-        b1Refield_2d%Z%x2 = F%X%Z
+        b1Refield_2d_1%Z%x1 = F%X%R
+        b1Refield_2d_1%Z%x2 = F%X%Z
 
         !write(output_unit_write,'("R",E17.10)') F%X%R
         !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
-        call EZspline_setup2(b1Refield_2d%Z, F%B1Re_2D%Z, ezerr, .TRUE.)
+        call EZspline_setup2(b1Refield_2d_1%Z, F%B1Re_3D%Z(:,1,:), ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
-        b1Imfield_2d%NR = F%dims(1)
-        b1Imfield_2d%NZ = F%dims(3)
+        b1Imfield_2d_1%NR = F%dims(1)
+        b1Imfield_2d_1%NZ = F%dims(3)
 
         ! Initializing BR1RIm interpolant
-        call EZspline_init2(b1Imfield_2d%R,b1Imfield_2d%NR, &
-          b1Imfield_2d%NZ,b1Imfield_2d%BCSR,b1Imfield_2d%BCSZ,ezerr)
+        call EZspline_init2(b1Imfield_2d_1%R,b1Imfield_2d_1%NR, &
+          b1Imfield_2d_1%NZ,b1Imfield_2d_1%BCSR,b1Imfield_2d_1%BCSZ,ezerr)
 
         call EZspline_error(ezerr)
 
-        b1Imfield_2d%R%x1 = F%X%R
-        b1Imfield_2d%R%x2 = F%X%Z
+        b1Imfield_2d_1%R%x1 = F%X%R
+        b1Imfield_2d_1%R%x2 = F%X%Z
 
         !write(output_unit_write,'("R",E17.10)') F%X%R
         !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
-        call EZspline_setup2(b1Imfield_2d%R, F%B1Im_2D%R, ezerr, .TRUE.)
+        call EZspline_setup2(b1Imfield_2d_1%R, F%B1Im_3D%R(:,1,:), ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
         ! Initializing BPHI1Im interpolant
-        call EZspline_init2(b1Imfield_2d%PHI,b1Imfield_2d%NR, &
-          b1Imfield_2d%NZ,b1Imfield_2d%BCSR,b1Imfield_2d%BCSZ,ezerr)
+        call EZspline_init2(b1Imfield_2d_1%PHI,b1Imfield_2d_1%NR, &
+          b1Imfield_2d_1%NZ,b1Imfield_2d_1%BCSR,b1Imfield_2d_1%BCSZ,ezerr)
 
         call EZspline_error(ezerr)
 
-        b1Imfield_2d%PHI%x1 = F%X%R
-        b1Imfield_2d%PHI%x2 = F%X%Z
+        b1Imfield_2d_1%PHI%x1 = F%X%R
+        b1Imfield_2d_1%PHI%x2 = F%X%Z
 
         !write(output_unit_write,'("R",E17.10)') F%X%R
         !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
-        call EZspline_setup2(b1Imfield_2d%PHI, F%B1Im_2D%PHI, ezerr, .TRUE.)
+        call EZspline_setup2(b1Imfield_2d_1%PHI, F%B1Im_3D%PHI(:,1,:), ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
 
         ! Initializing BZ1_Im interpolant
-        call EZspline_init2(b1Imfield_2d%Z,b1Imfield_2d%NR, &
-          b1Imfield_2d%NZ,b1Imfield_2d%BCSR,b1Imfield_2d%BCSZ,ezerr)
+        call EZspline_init2(b1Imfield_2d_1%Z,b1Imfield_2d_1%NR, &
+          b1Imfield_2d_1%NZ,b1Imfield_2d_1%BCSR,b1Imfield_2d_1%BCSZ,ezerr)
 
         call EZspline_error(ezerr)
 
-        b1Imfield_2d%Z%x1 = F%X%R
-        b1Imfield_2d%Z%x2 = F%X%Z
+        b1Imfield_2d_1%Z%x1 = F%X%R
+        b1Imfield_2d_1%Z%x2 = F%X%Z
 
         !write(output_unit_write,'("R",E17.10)') F%X%R
         !write(output_unit_write,'("Z",E17.10)') F%X%Z
 
-        call EZspline_setup2(b1Imfield_2d%Z, F%B1Im_2D%Z, ezerr, .TRUE.)
+        call EZspline_setup2(b1Imfield_2d_1%Z, F%B1Im_3D%Z(:,1,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_2%NR = F%dims(1)
+        b1Refield_2d_2%NZ = F%dims(3)
+
+        ! Initializing BR1Re interpolant
+        call EZspline_init2(b1Refield_2d_2%R,b1Refield_2d_2%NR, &
+          b1Refield_2d_2%NZ,b1Refield_2d_2%BCSR,b1Refield_2d_2%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_2%R%x1 = F%X%R
+        b1Refield_2d_2%R%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Refield_2d_2%R, F%B1Re_3D%R(:,2,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        !write(6,*) 'size',size(F%B1Re_2D%R(:,200))
+        !write(6,*) 'B1Re_2D%R',F%B1Re_2D%R(:,200)*params%cpp%Bo
+
+        ! Initializing BPHI1Re interpolant
+        call EZspline_init2(b1Refield_2d_2%PHI,b1Refield_2d_2%NR, &
+          b1Refield_2d_2%NZ,b1Refield_2d_2%BCSR,b1Refield_2d_2%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_2%PHI%x1 = F%X%R
+        b1Refield_2d_2%PHI%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Refield_2d_2%PHI, F%B1Re_3D%PHI(:,2,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        ! Initializing BZ1_Re interpolant
+        call EZspline_init2(b1Refield_2d_2%Z,b1Refield_2d_2%NR, &
+          b1Refield_2d_2%NZ,b1Refield_2d_2%BCSR,b1Refield_2d_2%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_2%Z%x1 = F%X%R
+        b1Refield_2d_2%Z%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Refield_2d_2%Z, F%B1Re_3D%Z(:,2,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_2%NR = F%dims(1)
+        b1Imfield_2d_2%NZ = F%dims(3)
+
+        ! Initializing BR1RIm interpolant
+        call EZspline_init2(b1Imfield_2d_2%R,b1Imfield_2d_2%NR, &
+          b1Imfield_2d_2%NZ,b1Imfield_2d_2%BCSR,b1Imfield_2d_2%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_2%R%x1 = F%X%R
+        b1Imfield_2d_2%R%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Imfield_2d_2%R, F%B1Im_3D%R(:,2,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        ! Initializing BPHI1Im interpolant
+        call EZspline_init2(b1Imfield_2d_2%PHI,b1Imfield_2d_2%NR, &
+          b1Imfield_2d_2%NZ,b1Imfield_2d_2%BCSR,b1Imfield_2d_2%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_2%PHI%x1 = F%X%R
+        b1Imfield_2d_2%PHI%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Imfield_2d_2%PHI, F%B1Im_3D%PHI(:,2,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+
+        ! Initializing BZ1_Im interpolant
+        call EZspline_init2(b1Imfield_2d_2%Z,b1Imfield_2d_2%NR, &
+          b1Imfield_2d_2%NZ,b1Imfield_2d_2%BCSR,b1Imfield_2d_2%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_2%Z%x1 = F%X%R
+        b1Imfield_2d_2%Z%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Imfield_2d_2%Z, F%B1Im_3D%Z(:,2,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_3%NR = F%dims(1)
+        b1Refield_2d_3%NZ = F%dims(3)
+
+        ! Initializing BR1Re interpolant
+        call EZspline_init2(b1Refield_2d_3%R,b1Refield_2d_3%NR, &
+          b1Refield_2d_3%NZ,b1Refield_2d_3%BCSR,b1Refield_2d_3%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_3%R%x1 = F%X%R
+        b1Refield_2d_3%R%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Refield_2d_3%R, F%B1Re_3D%R(:,3,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        !write(6,*) 'size',size(F%B1Re_2D%R(:,200))
+        !write(6,*) 'B1Re_2D%R',F%B1Re_2D%R(:,200)*params%cpp%Bo
+
+        ! Initializing BPHI1Re interpolant
+        call EZspline_init2(b1Refield_2d_3%PHI,b1Refield_2d_3%NR, &
+          b1Refield_2d_3%NZ,b1Refield_2d_3%BCSR,b1Refield_2d_3%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_3%PHI%x1 = F%X%R
+        b1Refield_2d_3%PHI%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Refield_2d_3%PHI, F%B1Re_3D%PHI(:,3,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        ! Initializing BZ1_Re interpolant
+        call EZspline_init2(b1Refield_2d_3%Z,b1Refield_2d_3%NR, &
+          b1Refield_2d_3%NZ,b1Refield_2d_3%BCSR,b1Refield_2d_3%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Refield_2d_3%Z%x1 = F%X%R
+        b1Refield_2d_3%Z%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Refield_2d_3%Z, F%B1Re_3D%Z(:,3,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_3%NR = F%dims(1)
+        b1Imfield_2d_3%NZ = F%dims(3)
+
+        ! Initializing BR1RIm interpolant
+        call EZspline_init2(b1Imfield_2d_3%R,b1Imfield_2d_3%NR, &
+          b1Imfield_2d_3%NZ,b1Imfield_2d_3%BCSR,b1Imfield_2d_3%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_3%R%x1 = F%X%R
+        b1Imfield_2d_3%R%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Imfield_2d_3%R, F%B1Im_3D%R(:,3,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+        ! Initializing BPHI1Im interpolant
+        call EZspline_init2(b1Imfield_2d_3%PHI,b1Imfield_2d_3%NR, &
+          b1Imfield_2d_3%NZ,b1Imfield_2d_3%BCSR,b1Imfield_2d_3%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_3%PHI%x1 = F%X%R
+        b1Imfield_2d_3%PHI%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Imfield_2d_3%PHI, F%B1Im_3D%PHI(:,3,:), ezerr, .TRUE.)
+        call EZspline_error(ezerr)
+
+
+        ! Initializing BZ1_Im interpolant
+        call EZspline_init2(b1Imfield_2d_3%Z,b1Imfield_2d_3%NR, &
+          b1Imfield_2d_3%NZ,b1Imfield_2d_3%BCSR,b1Imfield_2d_3%BCSZ,ezerr)
+
+        call EZspline_error(ezerr)
+
+        b1Imfield_2d_3%Z%x1 = F%X%R
+        b1Imfield_2d_3%Z%x2 = F%X%Z
+
+        !write(output_unit_write,'("R",E17.10)') F%X%R
+        !write(output_unit_write,'("Z",E17.10)') F%X%Z
+
+        call EZspline_setup2(b1Imfield_2d_3%Z, F%B1Im_3D%Z(:,3,:), ezerr, .TRUE.)
         call EZspline_error(ezerr)
 
       else if (params%field_model(10:14).eq.'AORSA') then
@@ -2531,7 +2737,8 @@ subroutine interp_FOfields_mars(prtcls, F, params)
   INTEGER                                      :: pp,ss
   !! Particle chunk iterator.
   REAL(rp) :: psip_conv
-  REAL(rp) :: amp,phase,Ro,Bo
+  REAL(rp) :: phase,Ro,Bo
+  REAL(rp),DIMENSION(3) :: amp
 
   if (size(prtcls%Y,1).eq.1) then
     ss = size(prtcls%Y,1)
@@ -2555,8 +2762,8 @@ subroutine interp_FOfields_mars(prtcls, F, params)
     Y_PHI=prtcls%Y(pp,2)
     Y_Z=prtcls%Y(pp,3)
 
-    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
-      b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_1%R,b1Refield_2d_1%PHI, &
+      b1Refield_2d_1%Z,b1Imfield_2d_1%R,b1Imfield_2d_1%PHI,b1Imfield_2d_1%Z, &
       Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z, &
       B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
     call EZspline_error(ezerr)
@@ -2572,9 +2779,9 @@ subroutine interp_FOfields_mars(prtcls, F, params)
     cPshift=cos(Y_PHI-phase)
     sPshift=sin(Y_PHI-phase)
 
-    B1_R = amp*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = amp*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = amp*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B0_R+B1_R
     B_PHI = B0_PHI+B1_PHI
@@ -2588,20 +2795,24 @@ subroutine interp_FOfields_mars(prtcls, F, params)
 
 end subroutine interp_FOfields_mars
 
-subroutine provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local,fields_domain_local)
+subroutine provide_ezspline_mars_ACC(bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1,b1Refield_2d_local_2,b1Imfield_2d_local_2,b1Refield_2d_local_3,b1Imfield_2d_local_3,fields_domain_local)
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Refield_2d_local_1,b1Refield_2d_local_2,b1Refield_2d_local_3
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: b1Imfield_2d_local_1,b1Imfield_2d_local_2,b1Imfield_2d_local_3
   TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT)        :: fields_domain_local
 
   bfield_2d_local=bfield_2d  
-  b1Refield_2d_local=b1Refield_2d
-  b1Imfield_2d_local=b1Imfield_2d
+  b1Refield_2d_local_1=b1Refield_2d_1
+  b1Imfield_2d_local_1=b1Imfield_2d_1
+  b1Refield_2d_local_2=b1Refield_2d_2
+  b1Imfield_2d_local_2=b1Imfield_2d_2
+  b1Refield_2d_local_3=b1Refield_2d_3
+  b1Imfield_2d_local_3=b1Imfield_2d_3
   fields_domain_local=fields_domain
 
 end subroutine provide_ezspline_mars_ACC
 
-subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache)
+subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_cache,time)
   INTEGER, INTENT(IN)  :: pchunk
   TYPE(FIELDS), INTENT(IN)                               :: F
   REAL(rp),DIMENSION(pchunk),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
@@ -2618,18 +2829,22 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
-  REAL(rp) :: amp,phase
+  REAL(rp) :: phase,MARS_max
+  REAL(rp),DIMENSION(3) :: amp,gr
+  REAL(rp),INTENT(IN)   :: time
 
   psip_conv=F%psip_conv
   amp=F%AMP
+  gr=F%GR
   phase=F%MARS_phase
+  MARS_max=F%MARS_max
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
   !$OMP SIMD
   do cc=1_idef,pchunk      
-    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d%R,b1Refield_2d%PHI, &
-          b1Refield_2d%Z,b1Imfield_2d%R,b1Imfield_2d%PHI,b1Imfield_2d%Z, &
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_1%R,b1Refield_2d_1%PHI, &
+          b1Refield_2d_1%Z,b1Imfield_2d_1%R,b1Imfield_2d_1%PHI,b1Imfield_2d_1%Z, &
           Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
     call EZspline_error(ezerr)
 
@@ -2641,16 +2856,107 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
 
     cP=cos(Y_PHI(cc))
     sP=sin(Y_PHI(cc))
-    cPshift=cos(Y_PHI(cc)-phase)
-    sPshift=sin(Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(1)*Y_PHI(cc)-phase)
+    sPshift=sin(F%X%PHI(1)*Y_PHI(cc)-phase)
 
-    B1_R = amp*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = amp*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = amp*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    !write(6,*) B1_R
+    !write(6,*) B1_PHI
+    !write(6,*) B1_Z
 
     B_R = B0_R+B1_R
     B_PHI = B0_PHI+B1_PHI
     B_Z(cc) = B0_Z+B1_Z
+
+    !if (time.ge.2.099999e-5) then
+
+    !  write(6,*) 'time:',time
+
+    !  write(6,*) 'R,PHI,Z:',Y_R(cc)
+    !  write(6,*) Y_PHI(cc)
+    !  write(6,*) Y_Z(cc)
+
+    !  write(6,*) 'complex B1:',B1Re_R
+    !  write(6,*) B1Im_R
+    !  write(6,*) B1Re_PHI
+    !  write(6,*) B1Im_PHI
+    !  write(6,*) B1Re_Z
+    !  write(6,*) B1Im_Z
+
+    !  write(6,*) 'toroidal shift',cPshift
+    !  write(6,*) sPshift
+
+    !  write(6,*) 'time evo',MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)
+
+    !  write(6,*) 'real B1:',B1_R
+    !  write(6,*) B1_PHI
+    !  write(6,*) B1_Z
+
+    !  write(6,*) 'B0:',B0_R
+    !  write(6,*) B0_PHI
+    !  write(6,*) B0_Z
+    !endif
+
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_2%R,b1Refield_2d_2%PHI, &
+      b1Refield_2d_2%Z,b1Imfield_2d_2%R,b1Imfield_2d_2%PHI,b1Imfield_2d_2%Z, &
+      Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
+    call EZspline_error(ezerr)
+
+    cPshift=cos(F%X%PHI(2)*Y_PHI(cc)-phase)
+    sPshift=sin(F%X%PHI(2)*Y_PHI(cc)-phase)
+
+    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    !if (time.ge.2.099999e-5) then
+    !  write(6,*) 'complex B2:',B1Re_R
+    !  write(6,*) B1Im_R
+    !  write(6,*) B1Re_PHI
+    !  write(6,*) B1Im_PHI
+    !  write(6,*) B1Re_Z
+    !  write(6,*) B1Im_Z
+
+    !  write(6,*) 'real B2:',B1_R
+    !  write(6,*) B1_PHI
+    !  write(6,*) B1_Z
+    !endif
+
+    B_R = B_R+B1_R
+    B_PHI = B_PHI+B1_PHI
+    B_Z(cc) = B_Z(cc)+B1_Z
+
+    call EZspline_interp2_FOmars(bfield_2d%A,b1Refield_2d_3%R,b1Refield_2d_3%PHI, &
+      b1Refield_2d_3%Z,b1Imfield_2d_3%R,b1Imfield_2d_3%PHI,b1Imfield_2d_3%Z, &
+      Y_R(cc),Y_Z(cc),A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr)
+    call EZspline_error(ezerr)
+
+    cPshift=cos(F%X%PHI(3)*Y_PHI(cc)-phase)
+    sPshift=sin(F%X%PHI(3)*Y_PHI(cc)-phase)
+
+    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+    !if (time.ge.2.099999e-5) then
+    !  write(6,*) 'complex B3:',B1Re_R
+    !  write(6,*) B1Im_R
+    !  write(6,*) B1Re_PHI
+    !  write(6,*) B1Im_PHI
+    !  write(6,*) B1Re_Z
+    !  write(6,*) B1Im_Z
+
+    !  write(6,*) 'real B3:',B1_R
+    !  write(6,*) B1_PHI
+    !  write(6,*) B1_Z
+    !endif
+
+    B_R = B_R+B1_R
+    B_PHI = B_PHI+B1_PHI
+    B_Z(cc) = B_Z(cc)+B1_Z
 
     B_X(cc) = B_R*cP - B_PHI*sP
     B_Y(cc) = B_R*sP + B_PHI*cP
@@ -2660,9 +2966,13 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
 
 end subroutine interp_FOfields_mars_p
 
-subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfield_2d_local, &
-  psip_conv,amp,phase,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+subroutine interp_FOfields_mars_p_ACC(time, &
+  bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
+  b1Refield_2d_local_2,b1Imfield_2d_local_2, &
+  b1Refield_2d_local_3,b1Imfield_2d_local_3, &
+  psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
   !$acc routine seq
+  REAL(rp),INTENT(IN)  :: time,MARS_max
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
   REAL(rp)   :: B_R,B_PHI
@@ -2676,18 +2986,29 @@ subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfie
   INTEGER :: ezerr_local
   INTEGER                                      :: cc
   !! Particle chunk iterator.
-  REAL(rp), INTENT(IN) :: psip_conv,amp,phase,Bo,Ro
+  REAL(rp), INTENT(IN) :: psip_conv,phase,Bo,Ro
+  REAL(rp),DIMENSION(3),INTENT(IN) :: amp,gr,nmode
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2d_local
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2d_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2d_local_1,b1Refield_2d_local_2,b1Refield_2d_local_3
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2d_local_1,b1Imfield_2d_local_2,b1Imfield_2d_local_3
 
   !$acc routine (EZspline_interp2_FOmars) seq
   !$acc routine (EZspline_error) seq
      
-  call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local%R,b1Refield_2d_local%PHI, &
-    b1Refield_2d_local%Z,b1Imfield_2d_local%R,b1Imfield_2d_local%PHI,b1Imfield_2d_local%Z, &
+  !write(6,*) Y_R
+  !write(6,*) Y_Z
+
+  call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local_1%R,b1Refield_2d_local_1%PHI, &
+    b1Refield_2d_local_1%Z,b1Imfield_2d_local_1%R,b1Imfield_2d_local_1%PHI,b1Imfield_2d_local_1%Z, &
     Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
+
+  !write(6,*) B1Re_R
+  !write(6,*) B1Im_R
+  !write(6,*) B1Re_PHI
+  !write(6,*) B1Im_PHI
+  !write(6,*) B1Re_Z
+  !write(6,*) B1Im_Z
 
   PSIp=A(1)
 
@@ -2695,18 +3016,54 @@ subroutine interp_FOfields_mars_p_ACC(bfield_2d_local,b1Refield_2d_local,b1Imfie
   B0_PHI = -Bo*Ro/Y_R
   B0_Z = -psip_conv*A(2)/Y_R
 
+  !write(6,*) A(1)
+  !write(6,*) A(2)
+  !write(6,*) A(3)
+
   cP=cos(Y_PHI)
   sP=sin(Y_PHI)
-  cPshift=cos(Y_PHI-phase)
-  sPshift=sin(Y_PHI-phase)
+  cPshift=cos(nmode(1)*Y_PHI-phase)
+  sPshift=sin(nmode(1)*Y_PHI-phase)
 
-  B1_R = amp*(B1Re_R*cPshift-B1Im_R*sPshift)
-  B1_PHI = amp*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-  B1_Z = amp*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+  B1_R = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
+  B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+  B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
   B_R = B0_R+B1_R
   B_PHI = B0_PHI+B1_PHI
   B_Z = B0_Z+B1_Z
+
+  call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local_2%R,b1Refield_2d_local_2%PHI, &
+  b1Refield_2d_local_2%Z,b1Imfield_2d_local_2%R,b1Imfield_2d_local_2%PHI,b1Imfield_2d_local_2%Z, &
+  Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr_local)
+  call EZspline_error(ezerr_local)
+
+  cPshift=cos(nmode(2)*Y_PHI-phase)
+  sPshift=sin(nmode(2)*Y_PHI-phase)
+
+  B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
+  B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+  B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+  B_R = B_R+B1_R
+  B_PHI = B_PHI+B1_PHI
+  B_Z = B_Z+B1_Z
+
+  call EZspline_interp2_FOmars(bfield_2d_local%A,b1Refield_2d_local_3%R,b1Refield_2d_local_3%PHI, &
+  b1Refield_2d_local_3%Z,b1Imfield_2d_local_3%R,b1Imfield_2d_local_3%PHI,b1Imfield_2d_local_3%Z, &
+  Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr_local)
+  call EZspline_error(ezerr_local)
+
+  cPshift=cos(nmode(3)*Y_PHI-phase)
+  sPshift=sin(nmode(3)*Y_PHI-phase)
+
+  B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
+  B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+  B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+
+  B_R = B_R+B1_R
+  B_PHI = B_PHI+B1_PHI
+  B_Z = B_Z+B1_Z
 
   B_X = B_R*cP - B_PHI*sP
   B_Y = B_R*sP + B_PHI*cP
@@ -2750,7 +3107,8 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    INTEGER                                      :: pp,ss
    !! Particle chunk iterator.
    REAL(rp) :: psip_conv,psirr,widthh
-   REAL(rp) :: amp,nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
+   REAL(rp) :: nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
+   REAl(rp),DIMENSION(3) :: amp
 
    if (size(prtcls%Y,1).eq.1) then
       ss = size(prtcls%Y,1)
@@ -2808,9 +3166,9 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !B1_Y = amp*(BYavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*snp)
       !B1_Z =-amp*(BZavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
 
-      B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
-      B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
-      B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
+      B1_X = amp(1)*(B1Re_X*cnP-B1Im_X*snP)
+      B1_Y = amp(1)*(B1Re_Y*cnP-B1Im_Y*snP)
+      B1_Z = amp(1)*(B1Re_Z*cnP-B1Im_Z*snP)
 
       !EXavg=76.2/params%cpp%Eo
       !EYavg=57.7/params%cpp%Eo
@@ -2819,9 +3177,9 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !prtcls%E(pp,2)= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EYavg*cnp
       !prtcls%E(pp,3)=-amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EZavg*snp
 
-      prtcls%E(pp,1) = amp*(E1Re_X*cnP-E1Im_X*snP)
-      prtcls%E(pp,2) = amp*(E1Re_Y*cnP-E1Im_Y*snP)
-      prtcls%E(pp,3) = amp*(E1Re_Z*cnP-E1Im_Z*snP)
+      prtcls%E(pp,1) = amp(1)*(E1Re_X*cnP-E1Im_X*snP)
+      prtcls%E(pp,2) = amp(1)*(E1Re_Y*cnP-E1Im_Y*snP)
+      prtcls%E(pp,3) = amp(1)*(E1Re_Z*cnP-E1Im_Z*snP)
 
       B0_X = B0_R*cP - B0_PHI*sP
       B0_Y = B0_R*sP + B0_PHI*cP
@@ -2869,7 +3227,8 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
   REAL(rp)   :: cP,sP,cnP,snP
   REAL(rp), DIMENSION(3)  :: A
   INTEGER :: ezerr_local
-  REAL(rp),INTENT(IN) :: psip_conv,amp,nmode,omega,Bo,Ro
+  REAL(rp),INTENT(IN) :: psip_conv,nmode,omega,Bo,Ro
+  REAL(rp),DIMENSION(3),INTENT(IN) :: amp
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2dx_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2dx_local
@@ -2910,17 +3269,17 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
   cnP=cos(omega*time+nmode*Y_PHI)
   snP=sin(omega*time+nmode*Y_PHI)
 
-  B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
-  B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
-  B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
+  B1_X = amp(1)*(B1Re_X*cnP-B1Im_X*snP)
+  B1_Y = amp(1)*(B1Re_Y*cnP-B1Im_Y*snP)
+  B1_Z = amp(1)*(B1Re_Z*cnP-B1Im_Z*snP)
 
   B_X = B0_X+B1_X
   B_Y = B0_Y+B1_Y
   B_Z = B0_Z+B1_Z
 
-  E_X = amp*(E1Re_X*cnP-E1Im_X*snP)
-  E_Y = amp*(E1Re_Y*cnP-E1Im_Y*snP)
-  E_Z = amp*(E1Re_Z*cnP-E1Im_Z*snP)
+  E_X = amp(1)*(E1Re_X*cnP-E1Im_X*snP)
+  E_Y = amp(1)*(E1Re_Y*cnP-E1Im_Y*snP)
+  E_Z = amp(1)*(E1Re_Z*cnP-E1Im_Z*snP)
 
 
 end subroutine interp_FOfields_aorsa_p_ACC
@@ -2949,7 +3308,8 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
    !! Particle chunk iterator.
    INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
    REAL(rp) :: psip_conv,psirr,widthh
-   REAL(rp) :: amp,nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
+   REAL(rp) :: nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
+   REAL(rp),DIMENSION(3) :: amp
 
    psip_conv=F%psip_conv
    amp=F%AMP
@@ -2993,9 +3353,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
       cnP=cos(omega*time+nmode*Y_PHI(cc))
       snP=sin(omega*time+nmode*Y_PHI(cc))
 
-      B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
-      B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
-      B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
+      B1_X = amp(1)*(B1Re_X*cnP-B1Im_X*snP)
+      B1_Y = amp(1)*(B1Re_Y*cnP-B1Im_Y*snP)
+      B1_Z = amp(1)*(B1Re_Z*cnP-B1Im_Z*snP)
 
       !BXavg=6.95E-07/params%cpp%Bo
       !BYavg=1.184E-06/params%cpp%Bo
@@ -3016,9 +3376,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
       !E_Y(cc) = amp*(EYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp
       !E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp
 
-      E_X(cc) = amp*(E1Re_X*cnP-E1Im_X*snP)
-      E_Y(cc) = amp*(E1Re_Y*cnP-E1Im_Y*snP)
-      E_Z(cc) = amp*(E1Re_Z*cnP-E1Im_Z*snP)
+      E_X(cc) = amp(1)*(E1Re_X*cnP-E1Im_X*snP)
+      E_Y(cc) = amp(1)*(E1Re_Y*cnP-E1Im_Y*snP)
+      E_Z(cc) = amp(1)*(E1Re_Z*cnP-E1Im_Z*snP)
 
 
    end do

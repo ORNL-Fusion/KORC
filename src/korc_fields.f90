@@ -234,8 +234,13 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       !write(6,*) 'T_R ',T_R(cc)*params%cpp%length
 
       Ezeta(cc) = -E0/( 1.0_rp + eta(cc)*cT(cc))
-      Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
 
+      IF (Er0 == 0._rp) THEN
+         Er(cc) = 0._rp
+      ELSE
+         Er(cc) =Er0*(1/cosh((T_R(cc)-rrmn)/sigmaamn))
+      END IF
+      
       E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
       E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
       E_Z(cc) = Er(cc)*sT(cc)
@@ -692,6 +697,33 @@ subroutine analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z,Bmag,E_PHI)
 
 end subroutine analytical_fields_Bmag_p
 
+subroutine analytical_fields_Bmag_ACC(F,Y_R,Y_PHI,Y_Z,Bmag,E_PHI)
+  !$acc routine seq
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  REAL(rp)  :: R0,B0,lam,q0,EF0
+  REAL(rp),INTENT(IN)  :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: B_R,B_PHI,B_Z,rm,qprof
+  REAL(rp),INTENT(OUT) :: Bmag,E_PHI
+
+  B0=F%Bo
+  EF0=F%Eo
+  lam=F%AB%lambda
+  R0=F%AB%Ro
+  q0=F%AB%qo
+
+  rm=sqrt((Y_R-R0)*(Y_R-R0)+Y_Z*Y_Z)
+  qprof = 1.0_rp + (rm*rm/(lam*lam))
+
+  B_R=B0*Y_Z/(q0*qprof*Y_R)
+  B_PHI=-B0*R0/Y_R
+  B_Z=-B0*(Y_R-R0)/(q0*qprof*Y_R)
+
+  Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+
+  E_PHI=EF0*R0/Y_R
+
+end subroutine analytical_fields_Bmag_ACC
+
 subroutine add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
 
    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
@@ -866,6 +898,68 @@ subroutine analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
    !$OMP END SIMD
 
 end subroutine analytical_fields_GC_p
+
+subroutine analytical_fields_GC_ACC(Y_R,Y_PHI, &
+  Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
+  gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
+  !$acc routine seq
+  REAL(rp),INTENT(IN)  :: Y_R,Y_PHI,Y_Z
+  REAL(rp),INTENT(OUT) :: B_R,B_PHI,B_Z
+  REAL(rp),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
+  REAL(rp),INTENT(OUT) :: curlB_R,curlB_PHI,curlB_Z
+  REAL(rp),INTENT(OUT) :: E_R,E_PHI,E_Z
+  REAL(rp),INTENT(OUT) :: PSIp
+  REAL(rp)  :: dRBR,dRBPHI,dRBZ,dZBR,dZBPHI,dZBZ,Bmag,dRbhatPHI
+  REAL(rp)  :: dRbhatZ,dZbhatR,dZbhatPHI,qprof,rm,theta
+  REAL(rp),INTENT(IN)  :: B0,E0,lam,R0,q0
+
+  rm=sqrt((Y_R-R0)*(Y_R-R0)+Y_Z*Y_Z)
+  theta=atan2(Y_Z,(Y_R-R0))
+  qprof = 1.0_rp + (rm*rm/(lam*lam))
+
+  PSIp=Y_R*lam**2*B0/ &
+      (2*q0*(R0+rm*cos(theta)))* &
+      log(1+(rm/lam)**2)
+
+  B_R=B0*Y_Z/(q0*qprof*Y_R)
+  B_PHI=-B0*R0/Y_R
+  B_Z=-B0*(Y_R-R0)/(q0*qprof*Y_R)
+
+  dRBR=-B0*Y_Z/(q0*qprof*Y_R)*(1./Y_R+ &
+      2*(Y_R-R0)/(lam*lam*qprof))
+  dRBPHI=B0*R0/(Y_R*Y_R)
+  dRBZ=B0/(q0*qprof*Y_R)*(-R0/Y_R+2*(Y_R- &
+      R0)*(Y_R-R0)/(lam*lam*qprof))
+  dZBR=B0/(q0*qprof*Y_R)*(1-2*Y_Z*Y_Z/ &
+      (lam*lam*qprof))
+  dZBPHI=0._rp
+  dZBZ=B0*(Y_R-R0)/(q0*Y_R)*2*Y_Z/ &
+      (lam*lam*qprof*qprof)
+
+  Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+
+  gradB_R=(B_R*dRBR+B_PHI*dRBPHI+B_Z*dRBZ)/ &
+      Bmag
+  gradB_PHI=0._rp
+  gradB_Z=(B_R*dZBR+B_PHI*dZBPHI+B_Z*dZBZ)/ &
+      Bmag
+
+  dRbhatPHI=(Bmag*dRBPHI-B_PHI*gradB_R)/ &
+      (Bmag*Bmag)
+  dRbhatZ=(Bmag*dRBZ-B_Z*gradB_R)/(Bmag*Bmag)
+  dZbhatR=(Bmag*dZBR-B_R*gradB_Z)/(Bmag*Bmag)
+  dZbhatPHI=(Bmag*dZBPHI-B_PHI*gradB_Z)/ &
+      (Bmag*Bmag)
+
+  curlb_R=-dZbhatPHI
+  curlb_PHI=dZbhatR-dRbhatZ
+  curlb_Z=B_PHI/(Bmag*Y_R)+dRbhatPHI
+
+  E_R = 0.0_rp
+  E_PHI = E0*R0/Y_R
+  E_Z = 0.0_rp
+
+end subroutine analytical_fields_GC_ACC
 
 subroutine uniform_magnetic_field(F,B)
    !! @note Subroutine that returns the value of a uniform magnetic
@@ -1339,16 +1433,9 @@ subroutine initialize_fields(params,F)
    end if
 
    !    SELECT CASE (TRIM(params%field_model))
-   if (params%field_model(1:10).eq.'UNIFORM') then
+
       F%Bo=Bo
       F%Eo=Eo
-   else if (params%field_model(1:10).eq.'ANALYTICAL') then
-      !    CASE('ANALYTICAL')
-      ! Load the parameters of the analytical magnetic field
-      !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
-      !     status='OLD',form='formatted')
-      !read(default_unit_open,nml=analytical_fields_params)
-      !close(default_unit_open)
 
       F%AB%Bo = Bo
       F%AB%a = minor_radius
@@ -1386,9 +1473,61 @@ subroutine initialize_fields(params,F)
       F%AB%l_mn = l_mn
       F%AB%sigma_mn = sigma_mn
 
-      !write(output_unit_write,*) E_dyn,E_pulse,E_width
-
       F%res_double=res_double
+
+      F%Bfield = Bfield
+      F%B1field = B1field
+      F%dBfield = dBfield
+      F%Bflux = Bflux
+      F%Bflux3D = Bflux3D
+      F%Efield = Efield
+      F%E1field = E1field
+      F%axisymmetric_fields = axisymmetric_fields
+      F%Dim2x1t = Dim2x1t
+      F%ReInterp_2x1t = ReInterp_2x1t
+      F%t0_2x1t = t0_2x1t
+      F%ind0_2x1t = ind0_2x1t
+      F%psip_conv = psip_conv
+      F%MARS_AMP_Scale = MARS_AMP_Scale
+      F%MARS_phase = MARS_phase
+      F%MARS_max = MARS_max
+      F%Analytic_D3D_IWL=Analytic_D3D_IWL
+      F%ntiles=ntiles
+      F%circumradius=circumradius
+      F%AORSA_AMP_Scale=AORSA_AMP_Scale
+      F%AORSA_freq=AORSA_freq
+      F%AORSA_nmode=AORSA_nmode
+      F%AORSA_mmode=AORSA_mmode
+      F%useLCFS = useLCFS
+      F%useDiMES = useDiMES
+      F%DiMESloc = DiMESloc
+      F%DiMESdims = DiMESdims
+
+
+      F%E_2x1t = E_2x1t
+
+      F%E_profile = E_profile
+      F%E_dyn = E_dyn
+      F%E_edge = E_edge
+      F%E_pulse = E_pulse
+      F%E_width = E_width
+      F%AB%a = minor_radius
+      F%AB%Ro = major_radius
+
+      F%PSIp_lim=PSIp_lim
+
+      F%FlatWall = FlatWall
+      F%RZwall = RZwall
+
+  if (params%field_model(1:10).eq.'ANALYTICAL') then
+      !    CASE('ANALYTICAL')
+      ! Load the parameters of the analytical magnetic field
+      !open(unit=default_unit_open,file=TRIM(params%path_to_inputs), &
+      !     status='OLD',form='formatted')
+      !read(default_unit_open,nml=analytical_fields_params)
+      !close(default_unit_open)
+
+      !write(output_unit_write,*) E_dyn,E_pulse,E_width
 
       if (params%mpi_params%rank .EQ. 0) then
          write(output_unit_write,'("ANALYTIC")')
@@ -1462,7 +1601,7 @@ subroutine initialize_fields(params,F)
             F%Bfield=.TRUE.
             F%Efield=.TRUE.
 
-            call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield)
+            call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
 
             do ii=1_idef,F%dims(1)
                F%X%R(ii)=(F%Ro-F%AB%a)+(ii-1)*2*F%AB%a/(F%dims(1)-1)
@@ -1525,54 +1664,12 @@ subroutine initialize_fields(params,F)
       !read(default_unit_open,nml=externalPlasmaModel)
       !close(default_unit_open)
 
-      F%Bfield = Bfield
-      F%B1field = B1field
-      F%dBfield = dBfield
-      F%Bflux = Bflux
-      F%Bflux3D = Bflux3D
-      F%Efield = Efield
-      F%E1field = E1field
-      F%axisymmetric_fields = axisymmetric_fields
-      F%Dim2x1t = Dim2x1t
-      F%ReInterp_2x1t = ReInterp_2x1t
-      F%t0_2x1t = t0_2x1t
-      F%ind0_2x1t = ind0_2x1t
-      F%psip_conv = psip_conv
-      F%MARS_AMP_Scale = MARS_AMP_Scale
-      F%MARS_phase = MARS_phase
-      F%Analytic_D3D_IWL=Analytic_D3D_IWL
-      F%ntiles=ntiles
-      F%circumradius=circumradius
-      F%AORSA_AMP_Scale=AORSA_AMP_Scale
-      F%AORSA_freq=AORSA_freq
-      F%AORSA_nmode=AORSA_nmode
-      F%AORSA_mmode=AORSA_mmode
-      F%useLCFS = useLCFS
-      F%useDiMES = useDiMES
-      F%DiMESloc = DiMESloc
-      F%DiMESdims = DiMESdims
-
       if (params%proceed.and.F%ReInterp_2x1t) then
          call load_prev_iter(params)
          F%ind_2x1t=params%prev_iter_2x1t
       else
          F%ind_2x1t=F%ind0_2x1t
       end if
-
-
-      F%E_2x1t = E_2x1t
-
-      F%E_profile = E_profile
-      F%E_dyn = E_dyn
-      F%E_edge = E_edge
-      F%E_pulse = E_pulse
-      F%E_width = E_width
-      F%AB%a = minor_radius
-      F%AB%Ro = major_radius
-
-      F%PSIp_lim=PSIp_lim
-
-      F%res_double=res_double
 
       !write(output_unit_write,'("E_dyn: ",E17.10)') E_dyn
       !       write(output_unit_write,'("E_pulse: ",E17.10)') E_pulse
@@ -1632,7 +1729,7 @@ subroutine initialize_fields(params,F)
                F%E1field)
 
             call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield, &
-               F%Efield)
+               F%Efield,F%B1field)
 
          else if (params%orbit_model(1:2).eq.'FO') then
 
@@ -1652,8 +1749,10 @@ subroutine initialize_fields(params,F)
          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
             F%Bflux,F%Efield,F%B1field,F%E1field)
 
+          call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
+
       else
-         call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield)
+         call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
 
       end if
 
@@ -1838,7 +1937,7 @@ end subroutine initialize_fields
 
        end if
 
-       if(F%Dim2x1t) then
+       if(F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
 
           dset = "/NPHI"
           call load_from_hdf5(h5file_id,dset,rdatum)
@@ -1961,7 +2060,7 @@ end subroutine initialize_fields
 
 
       if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
-            F%Dim2x1t) then
+            F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
          dset = "/PHI"
          call load_array_from_hdf5(h5file_id,dset,F%X%PHI)
       end if
@@ -2002,9 +2101,12 @@ end subroutine initialize_fields
          call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
          dset = '/AMP'
-         call load_from_hdf5(h5file_id,dset,F%AMP)
+         call load_array_from_hdf5(h5file_id,dset,F%AMP)
 
          F%AMP=F%AMP*F%MARS_AMP_Scale
+
+         dset = '/GR'
+         call load_array_from_hdf5(h5file_id,dset,F%GR)
 
       end if
 
@@ -2065,6 +2167,9 @@ end subroutine initialize_fields
 
             !          F%PSIp=2*C_PI*(F%PSIp-minval(F%PSIp))
 
+         !write(6,*) 'fields_init:PSIp shape',shape(F%PSIp)
+         !write(6,*) 'fields_init:F%PSIp',F%PSIp(77,86)
+
       end if
 
       if (F%Bflux3D) then
@@ -2088,22 +2193,22 @@ end subroutine initialize_fields
          if (params%field_model(10:13).eq.'MARS') then
 
             dset = "/ReBR"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%R)
 
             dset = "/ReBPHI"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%PHI)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%PHI)
 
             dset = "/ReBZ"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%Z)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%Z)
 
             dset = "/ImBR"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%R)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%R)
 
             dset = "/ImBPHI"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%PHI)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%PHI)
 
             dset = "/ImBZ"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%Z)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%Z)
 
          else if (params%field_model(10:14).eq.'AORSA') then
 
@@ -2240,14 +2345,9 @@ end subroutine initialize_fields
        F%PSIp=0._rp
     end if
 
-    if (params%field_model(10:13).eq.'MARS') then
 
-       if (B1field.and.(.not.ALLOCATED(F%B1Re_2D%R))) then
-          call ALLOCATE_V_FIELD_2D(F%B1Re_2D,F%dims)
-          call ALLOCATE_V_FIELD_2D(F%B1Im_2D,F%dims)
-       end if
 
-    else if (params%field_model(10:14).eq.'AORSA') then
+    if (params%field_model(10:14).eq.'AORSA') then
 
        if (B1field.and.(.not.ALLOCATED(F%B1Re_2DX%X))) then
           call ALLOCATE_V_FIELD_2DX(F%B1Re_2DX,F%dims)
@@ -2281,11 +2381,12 @@ end subroutine initialize_fields
   !! @param[in,out] F An instance of the KORC derived type FIELDS. In this variable we keep the loaded data.
   !! @param[in] bfield Logical variable that specifies if the variables that keep the magnetic field data is allocated (bfield=T) or not (bfield=F).
   !! @param[in] efield Logical variable that specifies if the variables that keep the electric field data is allocated (efield=T) or not (efield=F).
-  subroutine ALLOCATE_3D_FIELDS_ARRAYS(params,F,bfield,efield)
+  subroutine ALLOCATE_3D_FIELDS_ARRAYS(params,F,bfield,efield,b1field)
     TYPE (KORC_PARAMS), INTENT(IN) 	:: params
     TYPE(FIELDS), INTENT(INOUT)    :: F
     LOGICAL, INTENT(IN)            :: bfield
     LOGICAL, INTENT(IN)            :: efield
+    LOGICAL, INTENT(IN)            :: b1field
 
     if (bfield) then
        call ALLOCATE_V_FIELD_3D(F%B_3D,F%dims)
@@ -2300,6 +2401,17 @@ end subroutine initialize_fields
     if (F%Bflux3D.and.(.not.ALLOCATED(F%PSIp3D))) then
        ALLOCATE(F%PSIp3D(F%dims(1),F%dims(2),F%dims(3)))
     end if
+
+    if (params%field_model(10:13).eq.'MARS') then
+
+      if (B1field.and.(.not.ALLOCATED(F%B1Re_3D%R))) then
+         call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)
+         call ALLOCATE_V_FIELD_3D(F%B1Im_3D,F%dims)
+
+         ALLOCATE(F%AMP(F%dims(2)))
+         ALLOCATE(F%GR(F%dims(2)))
+      end if
+    endif
 
     if (efield) then
        call ALLOCATE_V_FIELD_3D(F%E_3D,F%dims)

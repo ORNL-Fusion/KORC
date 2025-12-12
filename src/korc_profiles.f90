@@ -868,6 +868,43 @@ CONTAINS
    Zeff = P%Zeffo
 
  end subroutine analytical_profiles_p_ACC_1
+ 
+subroutine analytical_profiles_ACC(time,Y_R,Y_Z,P,ne,Te,Zeff,PSIp)
+  !! @note Subroutine that calculates the analytical plasma profiles at
+  !! the particles' position. @endnote
+  !$acc routine seq
+  REAL(rp), INTENT(IN)  :: Y_R,Y_Z,PSIp
+  REAL(rp), INTENT(IN)  :: time
+  TYPE(PROFILES), INTENT(IN)                         :: P
+  !! An instance of KORC's derived type PROFILES containing all the
+  !! information about the plasma profiles used in the simulation.
+  !! See [[korc_types]] and [[korc_profiles]].
+  REAL(rp),INTENT(OUT) :: ne
+  !! Background electron density seen by simulated particles.
+  REAL(rp),INTENT(OUT) :: Te
+  !! Backgroun temperature density seen by simulated particles.
+  REAL(rp),INTENT(OUT) :: Zeff
+  !! Effective atomic charge seen by simulated particles.
+  INTEGER(ip)                                        :: cc
+  !! Particle iterator.
+  REAL(rp) :: R0,Z0,a,ne0,n_ne,Te0,n_Te,Zeff0,R0a
+  REAL(rp) :: R0_RE,Z0_RE,sigmaR_RE,sigmaZ_RE,psimax_RE
+  REAL(rp) :: n_REr0,n_tauion,n_lamfront,n_lamback,n_lamshelf
+  REAL(rp) :: n_psifront,n_psiback,n_psishelf
+  REAL(rp) :: n_tauin,n_tauout,n_shelfdelay,n_shelf
+  REAL(rp) :: n0t,n_taut
+  REAL(rp) :: PSIp0,PSIp_lim,psiN_0
+  REAL(rp) :: r_a,rm,rm_RE,PSIpN,PSIp_temp
+  
+  ne0=P%neo
+  Te0=P%Teo
+  Zeff0=P%Zeffo
+
+  ne = ne0
+  Te = Te0
+  Zeff = Zeff0
+    
+  end subroutine analytical_profiles_ACC
 
   subroutine get_analytical_profiles(P,Y,ne,Te,Zeff,flag)
     !! @note Subroutine that calculates the analytical plasma profiles at

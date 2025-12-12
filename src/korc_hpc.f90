@@ -13,6 +13,7 @@ module korc_hpc
   !! Variable to be used in timing a parallel section of KORC.
   REAL(rp), PRIVATE :: t2 
   !! Variable to be used in timing a parallel section of KORC.
+  INTEGER :: mpi_real_type
 
   PUBLIC :: korc_abort,&
        initialize_mpi,&
@@ -127,6 +128,12 @@ CONTAINS
     
     
     call MPI_INIT(mpierr)
+
+#ifdef SINGLE_PRECISION
+        mpi_real_type = MPI_REAL4
+#elif DOUBLE_PRECISION
+        mpi_real_type = MPI_REAL8
+#endif
 
     !write(6,*) 'mpi_init error code',mpierr
     

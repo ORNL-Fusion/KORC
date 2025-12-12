@@ -31,7 +31,7 @@ module korc_input
   REAL(rp) :: minimum_particle_energy = 1.0E5
     ! Minimum energy of simulated particles in eV
   LOGICAL :: radiation = .FALSE.
-  CHARACTER(30) :: GC_rad_model='SDE'
+  LOGICAL :: GC_rad_SDE= .TRUE.
   LOGICAL :: collisions = .FALSE.
   LOGICAL :: LargeCollisions = .FALSE.
   CHARACTER(30) :: collisions_model = 'SINGLE_SPECIES'
@@ -186,6 +186,8 @@ module korc_input
   REAL(rp) :: l_mn = 0.005
   REAL(rp) :: sigma_mn = 0.02
   REAL(rp) :: eps_mn = 2.75E-4
+  INTEGER :: FlatWall = 0 ! 1:HFS, 2:LFS, 3:Top, 4:Bot 
+  REAL(rp) :: RZwall = 1.
 
   !! -----------------------------------------------
   !! externalPlasmaModel
@@ -212,6 +214,7 @@ module korc_input
   REAL(rp) :: psip_conv=1.0
   REAL(rp)  :: MARS_AMP_Scale=1.0
   REAL(rp)  :: MARS_phase=0.0
+  REAL(rp)  :: MARS_max=1.0
   REAL(rp)  :: AORSA_AMP_Scale=1.0
   REAL(rp)  :: AORSA_freq=0.0
   REAL(rp)  :: psir=0.0
@@ -282,8 +285,8 @@ module korc_input
   ! Subcycling time step in collisional time units (Tau)
   REAL(rp) :: p_therm = 1._rp
   LOGICAL :: ConserveLA = .TRUE.
-  CHARACTER(30) :: Clog_model = 'HESSLOW'
-  CHARACTER(30) :: min_secRE = 'CRIT'
+  INTEGER(ip) :: Clog_model = 0
+  LOGICAL :: min_secRE_therm = .FALSE.
   LOGICAL :: sample_test  = .FALSE.
   LOGICAL :: always_aval  = .FALSE.
   REAL(rp)  :: pmin_scale = 1._rp
@@ -303,13 +306,13 @@ module korc_input
     ! Background electron temperature in eV
   REAL(rp) :: ne_mult = 4.E20
     ! Background electron density in 1/m^3
-  REAL(rp), DIMENSION(10)  :: Zo_mult = 10.0
+  REAL(rp), DIMENSION(19)  :: Zo_mult = 10.0
     ! Full nuclear charge of each impurity: Z=1 for D, Z=10 for Ne, Z=18 for Ar
-  REAL(rp), DIMENSION(10)  :: Zj_mult = 1.0
+  REAL(rp), DIMENSION(19)  :: Zj_mult = 1.0
     ! Average charge state of each impurity
-  REAL(rp), DIMENSION(10)  :: nz_mult = 4.E20
+  REAL(rp), DIMENSION(19)  :: nz_mult = 4.E20
     ! Impurity densities
-  REAL(rp), DIMENSION(10)  :: IZj_mult = 15.7596
+  REAL(rp), DIMENSION(19)  :: IZj_mult = 15.7596
     ! Ionization energy of impurity in eV
   CHARACTER(20) :: neut_prof = 'UNIFORM'
   REAL(rp)  :: neut_edge_fac
@@ -450,7 +453,7 @@ CONTAINS
          simulation_time,snapshot_frequency,dt,num_species,radiation, &
          collisions,collisions_model,outputs_list,minimum_particle_energy, &
          HDF5_error_handling,orbit_model,field_eval,proceed,profile_model, &
-         restart_overwrite_frequency,FokPlan,GC_rad_model,bound_electron_model,&
+         restart_overwrite_frequency,FokPlan,GC_rad_SDE,bound_electron_model,&
          FO_GC_compare,SameRandSeed,SC_E,reinit,SC_E_add,time_slice,rmax, &
          rmin,zmax,zmin,pchunk,magnetic_field_directory,magnetic_field_list,&
          LargeCollisions,load_balance,recycle_losses
@@ -462,20 +465,20 @@ CONTAINS
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
          E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn,E_edge, &
-         perturb,l_mn,sigma_mn,eps_mn
+         perturb,l_mn,sigma_mn,eps_mn,FlatWall,RZwall
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
          ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_D3D_IWL, &
          ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,AORSA_mmode,width,psir,E1field, &
-         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase
+         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase,MARS_max
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &
          n_lamshelf,n_shelfdelay,n_tauin,n_tauout,n_shelf,psiN_0
     NAMELIST /CollisionParamsSingleSpecies/ Te_sing,Ti_sing,ne_sing, &
          Zeff_sing,dTau_sing,p_therm,ConserveLA,Clog_model,sample_test,&
-         min_secRE,pmin_scale,energy_diffusion,LAC_gam_resolution, &
+         min_secRE_therm,pmin_scale,energy_diffusion,LAC_gam_resolution, &
          FP_bremsstrahlung,pitch_diffusion,ngrid1,Clog_const,always_aval, &
          slowing_down
     NAMELIST /CollisionParamsMultipleSpecies/ num_impurity_species,Te_mult, &
