@@ -26,6 +26,9 @@ implicit none
 TYPE(KORC_PARAMS) :: params
 !! Contains the parameters that control the core of KORC:
 !! time steping, output list, etc.
+TYPE(KORC_PARAMS_ACC) :: params_ACC
+!! Contains the parameters that control the core of KORC:
+!! time steping, output list, etc.
 CLASS(random_context), POINTER :: randoms => null()
 !!  Contain the context for random uniforms and normal distribuitons.
 TYPE(SPECIES), DIMENSION(:), ALLOCATABLE :: spp
@@ -221,7 +224,7 @@ call normalize_collisions_params(params)
   !! (multiple-species) data types.
 
 
-call define_collisions_time_step(params,F,.true.)
+call define_collisions_time_step(params,params_ACC,F,.true.)
   !! <h4>14\. Define Collision Time Step</h4>
   !!
   !! Subroutine [[define_collisions_time_step]] in [[korc_collisions]] that
@@ -291,6 +294,9 @@ if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
 end if
 
+call initialize_korc_parameters_ACC(params,params_ACC)
+ !! copy required params into params_ACC
+
   !write(6,*) 'V',spp(1)%vars%V
 
 !  write(output_unit_write,'("post ic eta: ",E17.10)') spp(1)%vars%eta
@@ -334,7 +340,11 @@ if (params%orbit_model(1:2).eq.'FO') then
 else if (params%orbit_model(1:2).eq.'GC') then
 
   if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
+#ifdef ACC
+    call GC_init_ACC(params,F,spp)
+#else
     call GC_init(params,F,spp)
+#endif
   else
 
     call get_fields(params,spp(1)%vars,F)
@@ -572,13 +582,26 @@ end if
   end if
 #endif
 
-  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn'.and..not.params%field_model.eq.'M3D_C1') then
-     do it=params%ito,params%t_steps,params%t_skip*params%t_it_SC
-        call adv_GCeqn_top(params,randoms,F,P,spp)
+  if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn' &
+      .and..not.params%field_model.eq.'M3D_C1') then
+     do it=params%ito,params%t_steps,params%t_skip
+!#ifdef ACC      
+        call adv_GCeqn_top_ACC(params_ACC,randoms,F,P,spp)
+!#else
+        !call adv_GCeqn_top(params,randoms,F,P,spp)
+!#endif ACC
+        if (.not.params%LargeCollisions) then
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)*params%dt
+           params%it = it-1_ip+params%t_skip
+        else
+           params%time = params%init_time &
+                +REAL(it-1_ip+params%t_skip,rp)/REAL(params%t_skip,rp)* &
+                params%snapshot_frequency
+           params%it = it-1_ip+params%t_skip
+        endif
 
-        params%time = params%init_time &
-             +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt
-        params%it = it-1_ip+params%t_skip*params%t_it_SC
+        params_ACC%it=params%it
 
         call save_simulation_outputs(params,spp,F)
         call save_restart_variables(params,spp,F)
@@ -674,7 +697,7 @@ end if
 
         if (params%LargeCollisions) then
            call initialize_collision_params(params,spp,P,F,.false.)
-           call define_collisions_time_step(params,F,.false.)
+           call define_collisions_time_step(params,params_ACC,F,.false.)
         end if
 
         call save_restart_variables(params,spp,F)

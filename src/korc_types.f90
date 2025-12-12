@@ -8,7 +8,7 @@ module korc_types
   ! * * * Real and integer precisions * * * !
   ! * * * * * * * * * * * * * * * * * * * * !
 
-  INTEGER, PUBLIC, PARAMETER 	:: is = KIND(INT(1,1))
+  INTEGER, PUBLIC, PARAMETER 	:: is = KIND(INT(1,4))
   !! Definition of 1 Byte (8 bits) Fortran KORC integer type.
   INTEGER, PUBLIC, PARAMETER 	:: ip = KIND(INT(1,8))
   !! Definition of 8 Bytes (64 bits) Fortran KORC integer type.
@@ -174,8 +174,7 @@ module korc_types
      !! Characteristic plasma temperature (Joules). This is equal to \(m_e c^2\).
   END TYPE CHARCS_PARAMS
 
-
-  TYPE, PUBLIC :: KORC_PARAMS
+    TYPE, PUBLIC :: KORC_PARAMS
      !! @note Core KORC parameters. @endnote
      !!  This KORC derived type contains the variables that control KORC's
      !! core behavior.
@@ -249,7 +248,7 @@ module korc_types
      !! Flag to indicate if collisionsare included (collisions=T) or not
      !! (collisions=F).
      LOGICAL 			:: LargeCollisions
-     CHARACTER(MAX_STRING_LENGTH) :: GC_rad_model
+     LOGICAL :: GC_rad_SDE
      CHARACTER(MAX_STRING_LENGTH) :: collisions_model
      !! String with the name of the collisions model to be used in the
      !! simulation.
@@ -298,6 +297,65 @@ module korc_types
      REAL(rp) :: gam_min
      LOGICAL :: recycle_losses
   END TYPE KORC_PARAMS
+
+  TYPE, PUBLIC :: KORC_PARAMS_ACC
+     !! @note Core KORC parameters. @endnote
+     !!  This KORC derived type contains the variables that control KORC's
+     !! core behavior.
+     REAL(rp) 			:: dt
+     !! Time step in the simulation as a fraction of the relativistic electron
+     !! gyro-period \(\tau_e = 2\pi\gamma m_e/eB_0\).
+     REAL(rp) 			:: time = 0.0_rp
+     !! Current physical time in the simulation.
+     INTEGER(ip) 			:: ito = 0_ip
+     !! Initial time iteration in the simulation, this is different from zero
+     !! in case is a restarting simulation.
+     INTEGER(ip) 			:: it = 0_ip
+     !! Current time iteration in the simulation, this is different from zero
+     !! in case is a restarting simulation.
+     REAL(rp)  :: init_time = 0.0_rp
+     !! Time at the beginning of a run with proceed=T
+     INTEGER(ip) 			:: t_steps
+     INTEGER(ip) 			:: prev_iter_2x1t
+     !! Number of time steps needed for evolving the electrons up to
+     !! "simulation_time".
+     INTEGER(ip) 			:: t_skip
+     INTEGER(ip) 			:: t_it_SC=1_ip
+     INTEGER(ip) 			:: output_cadence
+     INTEGER(ip) 			:: coll_per_dump
+     INTEGER(ip) 			:: orbits_per_coll
+     REAL(rp) 			:: coll_per_dump_dt
+     !! Time iteration offset used to decide when the outputs are generated.
+     INTEGER(ip) 			:: restart_output_cadence
+     !! Time iteration offset used to decide when the restart files are
+     !! generated.
+     INTEGER(ip) 			:: coll_cadence
+     INTEGER(ip) 			:: num_snapshots
+     !! Number of snapshots in time for generating the output files.
+     INTEGER 			:: num_species
+     !! Number of different populations of simulated relativistic electrons
+     !! in KORC.
+     REAL(rp) 			:: minimum_particle_energy
+     !! Minimum allowed energy of simulated electrons.
+     !! @todo To improve the criterium to decide when an electron will not
+     !! be followed anymore in the simulation.
+     REAL(rp) 			:: minimum_particle_g
+     !! Minimum allowed relativistic factor \(\gamma\) of simulated electrons.
+     LOGICAL 			:: radiation
+     !! Flag to indicate if synchrotron radiation losses are included
+     !! (radiation=T) or not (radiation=F).
+     LOGICAL 			:: collisions
+     !! Flag to indicate if collisionsare included (collisions=T) or not
+     !! (collisions=F).
+     LOGICAL 			:: LargeCollisions
+     LOGICAL :: GC_rad_SDE
+     TYPE(CHARCS_PARAMS) 		:: cpp
+     !! An instance of the CHARCS_PARAMS derived type.
+     LOGICAL :: FokPlan
+     !! Flag to decouple spatial-dependence of evolution
+     LOGICAL :: SameRandSeed
+     INTEGER  :: num_impurity_species
+  END TYPE KORC_PARAMS_ACC
 
 
   TYPE, PUBLIC :: PARTICLES
@@ -704,6 +762,8 @@ module korc_types
      LOGICAL :: useDiMES
      REAL(rp),DIMENSION(3) :: DiMESloc
      REAL(rp),DIMENSION(2) :: DiMESdims
+     INTEGER :: FlatWall
+     REAL(rp) :: RZwall
 
   END TYPE FIELDS
 

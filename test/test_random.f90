@@ -36,7 +36,7 @@ contains
     END IF
 
     uniform => random_U_context_construct(0, rank)
-    CALL uniform%set(-1.0d0, 1.0d0)
+    CALL uniform%set(-1.0_rp, 1.0_rp)
 
     localsize = totalsize/size
     IF (rank .lt. MOD(totalsize, size)) THEN
