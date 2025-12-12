@@ -697,6 +697,33 @@ subroutine analytical_fields_Bmag_p(pchunk,F,Y_R,Y_PHI,Y_Z,Bmag,E_PHI)
 
 end subroutine analytical_fields_Bmag_p
 
+subroutine analytical_fields_Bmag_ACC(F,Y_R,Y_PHI,Y_Z,Bmag,E_PHI)
+  !$acc routine seq
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  REAL(rp)  :: R0,B0,lam,q0,EF0
+  REAL(rp),INTENT(IN)  :: Y_R,Y_PHI,Y_Z
+  REAL(rp) :: B_R,B_PHI,B_Z,rm,qprof
+  REAL(rp),INTENT(OUT) :: Bmag,E_PHI
+
+  B0=F%Bo
+  EF0=F%Eo
+  lam=F%AB%lambda
+  R0=F%AB%Ro
+  q0=F%AB%qo
+
+  rm=sqrt((Y_R-R0)*(Y_R-R0)+Y_Z*Y_Z)
+  qprof = 1.0_rp + (rm*rm/(lam*lam))
+
+  B_R=B0*Y_Z/(q0*qprof*Y_R)
+  B_PHI=-B0*R0/Y_R
+  B_Z=-B0*(Y_R-R0)/(q0*qprof*Y_R)
+
+  Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+
+  E_PHI=EF0*R0/Y_R
+
+end subroutine analytical_fields_Bmag_ACC
+
 subroutine add_analytical_E_p(params,tt,F,E_PHI,Y_R,Y_Z)
 
    TYPE(KORC_PARAMS), INTENT(INOUT)                              :: params
@@ -871,6 +898,68 @@ subroutine analytical_fields_GC_p(pchunk,F,Y_R,Y_PHI, &
    !$OMP END SIMD
 
 end subroutine analytical_fields_GC_p
+
+subroutine analytical_fields_GC_ACC(Y_R,Y_PHI, &
+  Y_Z,B_R,B_PHI,B_Z,E_R,E_PHI,E_Z,curlb_R,curlb_PHI,curlb_Z,gradB_R, &
+  gradB_PHI,gradB_Z,PSIp,B0,E0,lam,R0,q0)
+  !$acc routine seq
+  REAL(rp),INTENT(IN)  :: Y_R,Y_PHI,Y_Z
+  REAL(rp),INTENT(OUT) :: B_R,B_PHI,B_Z
+  REAL(rp),INTENT(OUT) :: gradB_R,gradB_PHI,gradB_Z
+  REAL(rp),INTENT(OUT) :: curlB_R,curlB_PHI,curlB_Z
+  REAL(rp),INTENT(OUT) :: E_R,E_PHI,E_Z
+  REAL(rp),INTENT(OUT) :: PSIp
+  REAL(rp)  :: dRBR,dRBPHI,dRBZ,dZBR,dZBPHI,dZBZ,Bmag,dRbhatPHI
+  REAL(rp)  :: dRbhatZ,dZbhatR,dZbhatPHI,qprof,rm,theta
+  REAL(rp),INTENT(IN)  :: B0,E0,lam,R0,q0
+
+  rm=sqrt((Y_R-R0)*(Y_R-R0)+Y_Z*Y_Z)
+  theta=atan2(Y_Z,(Y_R-R0))
+  qprof = 1.0_rp + (rm*rm/(lam*lam))
+
+  PSIp=Y_R*lam**2*B0/ &
+      (2*q0*(R0+rm*cos(theta)))* &
+      log(1+(rm/lam)**2)
+
+  B_R=B0*Y_Z/(q0*qprof*Y_R)
+  B_PHI=-B0*R0/Y_R
+  B_Z=-B0*(Y_R-R0)/(q0*qprof*Y_R)
+
+  dRBR=-B0*Y_Z/(q0*qprof*Y_R)*(1./Y_R+ &
+      2*(Y_R-R0)/(lam*lam*qprof))
+  dRBPHI=B0*R0/(Y_R*Y_R)
+  dRBZ=B0/(q0*qprof*Y_R)*(-R0/Y_R+2*(Y_R- &
+      R0)*(Y_R-R0)/(lam*lam*qprof))
+  dZBR=B0/(q0*qprof*Y_R)*(1-2*Y_Z*Y_Z/ &
+      (lam*lam*qprof))
+  dZBPHI=0._rp
+  dZBZ=B0*(Y_R-R0)/(q0*Y_R)*2*Y_Z/ &
+      (lam*lam*qprof*qprof)
+
+  Bmag=sqrt(B_R*B_R+B_PHI*B_PHI+B_Z*B_Z)
+
+  gradB_R=(B_R*dRBR+B_PHI*dRBPHI+B_Z*dRBZ)/ &
+      Bmag
+  gradB_PHI=0._rp
+  gradB_Z=(B_R*dZBR+B_PHI*dZBPHI+B_Z*dZBZ)/ &
+      Bmag
+
+  dRbhatPHI=(Bmag*dRBPHI-B_PHI*gradB_R)/ &
+      (Bmag*Bmag)
+  dRbhatZ=(Bmag*dRBZ-B_Z*gradB_R)/(Bmag*Bmag)
+  dZbhatR=(Bmag*dZBR-B_R*gradB_Z)/(Bmag*Bmag)
+  dZbhatPHI=(Bmag*dZBPHI-B_PHI*gradB_Z)/ &
+      (Bmag*Bmag)
+
+  curlb_R=-dZbhatPHI
+  curlb_PHI=dZbhatR-dRbhatZ
+  curlb_Z=B_PHI/(Bmag*Y_R)+dRbhatPHI
+
+  E_R = 0.0_rp
+  E_PHI = E0*R0/Y_R
+  E_Z = 0.0_rp
+
+end subroutine analytical_fields_GC_ACC
 
 subroutine uniform_magnetic_field(F,B)
    !! @note Subroutine that returns the value of a uniform magnetic
@@ -1425,6 +1514,9 @@ subroutine initialize_fields(params,F)
       F%AB%Ro = major_radius
 
       F%PSIp_lim=PSIp_lim
+
+      F%FlatWall = FlatWall
+      F%RZwall = RZwall
 
   if (params%field_model(1:10).eq.'ANALYTICAL') then
       !    CASE('ANALYTICAL')

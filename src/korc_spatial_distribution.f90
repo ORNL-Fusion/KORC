@@ -115,17 +115,19 @@ subroutine torus(params,random,spp)
     CLASS(random_context), POINTER, INTENT(INOUT) :: random
     TYPE(SPECIES), INTENT(INOUT)        :: spp
     REAL(rp), DIMENSION(:), ALLOCATABLE :: r
-    REAL(rp), DIMENSION(:), ALLOCATABLE :: theta
+    REAL(rp) :: theta
     REAL(rp), DIMENSION(:), ALLOCATABLE :: zeta
+    INTEGER :: ii
+    REAL(rp) :: prob
+    LOGICAL :: accepted
 
-    ALLOCATE( theta(spp%ppp) )
-    ALLOCATE( zeta(spp%ppp) )
-    ALLOCATE( r(spp%ppp) )
+    ALLOCATE( zeta(spp%pinit) )
+    ALLOCATE( r(spp%pinit) )
 
     ! Initial condition of uniformly distributed particles on a disk in the xz-plane
     ! A unique velocity direction
     call random%uniform%set(0.0_rp, 2.0_rp*C_PI)
-    call random%uniform%get_array(theta)
+    !call random%uniform%get_array(theta)
     call random%uniform%get_array(zeta)
 
     call random%uniform%set(0.0_rp, 1.0_rp)
@@ -133,13 +135,25 @@ subroutine torus(params,random,spp)
 
     r = SQRT((spp%r_outter**2 - spp%r_inner**2)*r + spp%r_inner**2)
 
-!$OMP PARALLEL WORKSHARE
-    spp%vars%X(:,1) = ( spp%Ro + r*COS(theta) )*SIN(zeta)
-    spp%vars%X(:,2) = ( spp%Ro + r*COS(theta) )*COS(zeta)
-    spp%vars%X(:,3) = spp%Zo + r*SIN(theta)
-!$OMP END PARALLEL WORKSHARE
+    do ii=1,spp%pinit 
+      accepted=.false.
 
-    DEALLOCATE(theta)
+      do while (.not.accepted)
+        call random%uniform%set(0.0_rp, 2.0_rp*C_PI)
+        theta=random%uniform%get()
+        call random%uniform%set(0.0_rp, 1.0_rp)
+        prob=random%uniform%get()
+
+        if (prob.lt.((spp%Ro + r(ii)*COS(theta))/(spp%Ro + r(ii)))) accepted=.true.
+
+      end do
+
+      spp%vars%X(ii,1) = ( spp%Ro + r(ii)*COS(theta) )*SIN(zeta(ii))
+      spp%vars%X(ii,2) = ( spp%Ro + r(ii)*COS(theta) )*COS(zeta(ii))
+      spp%vars%X(ii,3) = spp%Zo + r(ii)*SIN(theta)
+
+    enddo
+
     DEALLOCATE(zeta)
     DEALLOCATE(r)
 end subroutine torus
@@ -866,12 +880,12 @@ subroutine MH_gaussian_elliptic_torus(params,random,spp)
 
   end if
 
-  CALL MPI_SCATTER(R_samples*sin(ZETA_samples),spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(R_samples*cos(ZETA_samples),spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8,spp%vars%X(:,3), &
-       spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(R_samples*sin(ZETA_samples),spp%ppp,mpi_real_type, &
+       spp%vars%X(:,1),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(R_samples*cos(ZETA_samples),spp%ppp,mpi_real_type, &
+       spp%vars%X(:,2),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,mpi_real_type,spp%vars%X(:,3), &
+       spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
 
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
@@ -1235,14 +1249,14 @@ subroutine Spong_3D(params,random,spp)
 
   end if
 
-  CALL MPI_SCATTER(R_samples*cos(PHI_samples),spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(R_samples*sin(PHI_samples),spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-!  CALL MPI_SCATTER(T_samples,spp%ppp,MPI_REAL8, &
-!       spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(R_samples*cos(PHI_samples),spp%ppp,mpi_real_type, &
+       spp%vars%X(:,1),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(R_samples*sin(PHI_samples),spp%ppp,mpi_real_type, &
+       spp%vars%X(:,2),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,3),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+!  CALL MPI_SCATTER(T_samples,spp%ppp,mpi_real_type, &
+!       spp%vars%eta,spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
 
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
@@ -1641,12 +1655,12 @@ subroutine MH_psi(params,random,spp,F)
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
-  CALL MPI_SCATTER(X_samples,spp%pinit,MPI_REAL8, &
-       spp%vars%X(:,1),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Y_samples,spp%pinit,MPI_REAL8, &
-       spp%vars%X(:,2),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%pinit,MPI_REAL8, &
-       spp%vars%X(:,3),spp%pinit,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(X_samples,spp%pinit,mpi_real_type, &
+       spp%vars%X(:,1),spp%pinit,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%pinit,mpi_real_type, &
+       spp%vars%X(:,2),spp%pinit,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%pinit,mpi_real_type, &
+       spp%vars%X(:,3),spp%pinit,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
 
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
@@ -2071,16 +2085,16 @@ subroutine FIO_therm(params,random,spp,F,P)
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
-  CALL MPI_SCATTER(X_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Y_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(G_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%g,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(ETA_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%eta,spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(X_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,1),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,2),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,3),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(G_samples,spp%ppp,mpi_real_type, &
+       spp%vars%g,spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(ETA_samples,spp%ppp,mpi_real_type, &
+       spp%vars%eta,spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
 
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
@@ -2518,12 +2532,12 @@ subroutine BMC_radial(params,random,spp,F,P)
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
 
 
-  CALL MPI_SCATTER(X_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,1),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Y_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,2),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
-  CALL MPI_SCATTER(Z_samples,spp%ppp,MPI_REAL8, &
-       spp%vars%X(:,3),spp%ppp,MPI_REAL8,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(X_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,1),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Y_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,2),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+  CALL MPI_SCATTER(Z_samples,spp%ppp,mpi_real_type, &
+       spp%vars%X(:,3),spp%ppp,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
 
 
   call MPI_BARRIER(MPI_COMM_WORLD,mpierr)
