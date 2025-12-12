@@ -1489,6 +1489,7 @@ subroutine initialize_fields(params,F)
       F%psip_conv = psip_conv
       F%MARS_AMP_Scale = MARS_AMP_Scale
       F%MARS_phase = MARS_phase
+      F%MARS_max = MARS_max
       F%Analytic_D3D_IWL=Analytic_D3D_IWL
       F%ntiles=ntiles
       F%circumradius=circumradius
@@ -1599,7 +1600,7 @@ subroutine initialize_fields(params,F)
             F%Bfield=.TRUE.
             F%Efield=.TRUE.
 
-            call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield)
+            call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
 
             do ii=1_idef,F%dims(1)
                F%X%R(ii)=(F%Ro-F%AB%a)+(ii-1)*2*F%AB%a/(F%dims(1)-1)
@@ -1727,7 +1728,7 @@ subroutine initialize_fields(params,F)
                F%E1field)
 
             call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield, &
-               F%Efield)
+               F%Efield,F%B1field)
 
          else if (params%orbit_model(1:2).eq.'FO') then
 
@@ -1747,8 +1748,10 @@ subroutine initialize_fields(params,F)
          call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
             F%Bflux,F%Efield,F%B1field,F%E1field)
 
+          call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
+
       else
-         call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield)
+         call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
 
       end if
 
@@ -1933,7 +1936,7 @@ end subroutine initialize_fields
 
        end if
 
-       if(F%Dim2x1t) then
+       if(F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
 
           dset = "/NPHI"
           call load_from_hdf5(h5file_id,dset,rdatum)
@@ -2056,7 +2059,7 @@ end subroutine initialize_fields
 
 
       if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
-            F%Dim2x1t) then
+            F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
          dset = "/PHI"
          call load_array_from_hdf5(h5file_id,dset,F%X%PHI)
       end if
@@ -2097,9 +2100,12 @@ end subroutine initialize_fields
          call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
          dset = '/AMP'
-         call load_from_hdf5(h5file_id,dset,F%AMP)
+         call load_array_from_hdf5(h5file_id,dset,F%AMP)
 
          F%AMP=F%AMP*F%MARS_AMP_Scale
+
+         dset = '/GR'
+         call load_array_from_hdf5(h5file_id,dset,F%GR)
 
       end if
 
@@ -2160,6 +2166,9 @@ end subroutine initialize_fields
 
             !          F%PSIp=2*C_PI*(F%PSIp-minval(F%PSIp))
 
+         !write(6,*) 'fields_init:PSIp shape',shape(F%PSIp)
+         !write(6,*) 'fields_init:F%PSIp',F%PSIp(77,86)
+
       end if
 
       if (F%Bflux3D) then
@@ -2183,22 +2192,22 @@ end subroutine initialize_fields
          if (params%field_model(10:13).eq.'MARS') then
 
             dset = "/ReBR"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%R)
 
             dset = "/ReBPHI"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%PHI)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%PHI)
 
             dset = "/ReBZ"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%Z)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%Z)
 
             dset = "/ImBR"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%R)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%R)
 
             dset = "/ImBPHI"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%PHI)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%PHI)
 
             dset = "/ImBZ"
-            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%Z)
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%Z)
 
          else if (params%field_model(10:14).eq.'AORSA') then
 
@@ -2335,14 +2344,9 @@ end subroutine initialize_fields
        F%PSIp=0._rp
     end if
 
-    if (params%field_model(10:13).eq.'MARS') then
 
-       if (B1field.and.(.not.ALLOCATED(F%B1Re_2D%R))) then
-          call ALLOCATE_V_FIELD_2D(F%B1Re_2D,F%dims)
-          call ALLOCATE_V_FIELD_2D(F%B1Im_2D,F%dims)
-       end if
 
-    else if (params%field_model(10:14).eq.'AORSA') then
+    if (params%field_model(10:14).eq.'AORSA') then
 
        if (B1field.and.(.not.ALLOCATED(F%B1Re_2DX%X))) then
           call ALLOCATE_V_FIELD_2DX(F%B1Re_2DX,F%dims)
@@ -2376,11 +2380,12 @@ end subroutine initialize_fields
   !! @param[in,out] F An instance of the KORC derived type FIELDS. In this variable we keep the loaded data.
   !! @param[in] bfield Logical variable that specifies if the variables that keep the magnetic field data is allocated (bfield=T) or not (bfield=F).
   !! @param[in] efield Logical variable that specifies if the variables that keep the electric field data is allocated (efield=T) or not (efield=F).
-  subroutine ALLOCATE_3D_FIELDS_ARRAYS(params,F,bfield,efield)
+  subroutine ALLOCATE_3D_FIELDS_ARRAYS(params,F,bfield,efield,b1field)
     TYPE (KORC_PARAMS), INTENT(IN) 	:: params
     TYPE(FIELDS), INTENT(INOUT)    :: F
     LOGICAL, INTENT(IN)            :: bfield
     LOGICAL, INTENT(IN)            :: efield
+    LOGICAL, INTENT(IN)            :: b1field
 
     if (bfield) then
        call ALLOCATE_V_FIELD_3D(F%B_3D,F%dims)
@@ -2395,6 +2400,17 @@ end subroutine initialize_fields
     if (F%Bflux3D.and.(.not.ALLOCATED(F%PSIp3D))) then
        ALLOCATE(F%PSIp3D(F%dims(1),F%dims(2),F%dims(3)))
     end if
+
+    if (params%field_model(10:13).eq.'MARS') then
+
+      if (B1field.and.(.not.ALLOCATED(F%B1Re_3D%R))) then
+         call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)
+         call ALLOCATE_V_FIELD_3D(F%B1Im_3D,F%dims)
+
+         ALLOCATE(F%AMP(F%dims(2)))
+         ALLOCATE(F%GR(F%dims(2)))
+      end if
+    endif
 
     if (efield) then
        call ALLOCATE_V_FIELD_3D(F%E_3D,F%dims)

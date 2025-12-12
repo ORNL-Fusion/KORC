@@ -214,6 +214,7 @@ module korc_input
   REAL(rp) :: psip_conv=1.0
   REAL(rp)  :: MARS_AMP_Scale=1.0
   REAL(rp)  :: MARS_phase=0.0
+  REAL(rp)  :: MARS_max=1.0
   REAL(rp)  :: AORSA_AMP_Scale=1.0
   REAL(rp)  :: AORSA_freq=0.0
   REAL(rp)  :: psir=0.0
@@ -470,7 +471,7 @@ CONTAINS
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
          ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_D3D_IWL, &
          ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,AORSA_mmode,width,psir,E1field, &
-         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase
+         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase,MARS_max
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &
