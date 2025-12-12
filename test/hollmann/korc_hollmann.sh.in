@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -ex
+
+#define input file
+INPUT_FILE="${CMAKE_SOURCE_DIR}/test/hollmann/input_file_JET_95128_TEST15b.korc"
+#define output directory
+OUT_DIR="hollmann_test/rank_$1"
+
+#check that output directory doesn't exist so bash doesn't complain
+if [ ! -d $OUT_DIR ]; then
+  mkdir -p $OUT_DIR
+fi
+if [ ! -f EFIT_JET_95128_Hratio.h5 ]; then
+  ln -s ${CMAKE_SOURCE_DIR}/test/hollmann/EFIT_JET_95128_Hratio.h5 EFIT_JET_95128_Hratio.h5
+fi
+if [ ! -f Hollmann_PDF_JET_95128_3.h5 ]; then
+  ln -s ${CMAKE_SOURCE_DIR}/test/hollmann/Hollmann_PDF_JET_95128_3.h5 Hollmann_PDF_JET_95128_3.h5
+fi
+
+${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
+
+for i in $(seq 0 $(($1-1)));
+do
+  h5diff -r -p 0.000008 $OUT_DIR/file_$i.h5 ${CMAKE_SOURCE_DIR}/test/hollmann/rank_$1/file_$i.h5
+done

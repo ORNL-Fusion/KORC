@@ -1531,11 +1531,10 @@ subroutine MH_psi(params,random,spp,F)
 
 !        write(output_unit_write,'("sample:",I15)') ii
 
-#if DBG_CHECK
      if (modulo(ii,nsamples/10).eq.0) then
         write(output_unit_write,'("Sample: ",I10)') ii
      end if
-#endif
+
 
         PHI_test = 2.0_rp*C_PI*random%uniform%get()
 
@@ -2573,6 +2572,7 @@ subroutine intitial_spatial_distribution(params,random,spp,P,F)
   INTEGER 						  :: ss
   !! Species iterator.
   INTEGER 				:: mpierr
+  INTEGER,DIMENSION(34) :: seed=(/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/)
 
   do ss=1_idef,params%num_species
      SELECT CASE (TRIM(spp(ss)%spatial_distribution))
@@ -2603,6 +2603,7 @@ subroutine intitial_spatial_distribution(params,random,spp,P,F)
         spp(ss)%vars%X(:,1)=spp(ss)%Xtrace(1)
         spp(ss)%vars%X(:,2)=spp(ss)%Xtrace(2)
         spp(ss)%vars%X(:,3)=spp(ss)%Xtrace(3)
+
      CASE ('SPONG-3D')
         call Spong_3D(params,random,spp(ss))
      CASE ('HOLLMANN-3D')

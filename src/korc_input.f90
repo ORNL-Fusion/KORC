@@ -203,7 +203,7 @@ module korc_input
   LOGICAL :: Dim2x1t =.FALSE.
   LOGICAL :: E_2x1t = .FALSE.
   REAL(rp) :: t0_2x1t = 1.405
-  INTEGER :: ind0_2x1t = 11
+  INTEGER :: ind0_2x1t = 1
   LOGICAL :: ReInterp_2x1t = .FALSE.
   INTEGER :: res_double=0
   INTEGER :: dim_1D=50

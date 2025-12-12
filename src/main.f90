@@ -340,10 +340,11 @@ if (params%orbit_model(1:2).eq.'FO') then
 else if (params%orbit_model(1:2).eq.'GC') then
 
   if (.NOT.(params%restart.OR.params%proceed.or.params%reinit)) then
+
 #ifdef ACC
-    call GC_init_ACC(params,F,spp)
+    call GC_init_ACC(params,F,P,spp)
 #else
-    call GC_init(params,F,spp)
+    call GC_init(params,randoms,F,P,spp)
 #endif
   else
 
@@ -673,8 +674,11 @@ end if
      end if
 
      do it=params%ito,params%t_steps,params%t_skip
+#ifdef ACC
+        call adv_GCinterp_psiwE_top_ACC(params,randoms,spp,P,F)
+#else
         call adv_GCinterp_psiwE_top(params,randoms,spp,P,F)
-
+#endif
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &
                 +REAL(it-1_ip+params%t_skip,rp)*params%dt
@@ -689,11 +693,13 @@ end if
         call save_simulation_outputs(params,spp,F)
 
         F%ind_2x1t=F%ind_2x1t+1_ip
+        P%ind_2x1t=F%ind_2x1t
         if (params%mpi_params%rank .EQ. 0) then
            write(output_unit_write,*) 'KORC time',params%time*params%cpp%time
            write(output_unit_write,*) '2x1t_ind time',F%X%PHI(F%ind_2x1t)*params%cpp%time
         end if
         call initialize_fields_interpolant(params,F)
+        call initialize_profiles_interpolant(params,P)
 
         if (params%LargeCollisions) then
            call initialize_collision_params(params,spp,P,F,.false.)

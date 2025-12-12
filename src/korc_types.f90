@@ -873,14 +873,23 @@ module korc_types
      !! Full path to the HDF5 file containing the pre-computed plasma profiles.
      LOGICAL 					:: axisymmetric
      !! Flag to indicate if the plasma profiles are axisymmetric.
-     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: RHON
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: RHON_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nRE_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr0_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr1_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr2_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr3_2D
+     REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nAr4_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD_2D
      REAL(rp), DIMENSION(:,:), ALLOCATABLE 	:: nD1_2D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: RHON_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr0_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr1_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr2_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr3_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nAr4_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nD_3D
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE 	:: nD1_3D
 
 #ifdef FIO
      INTEGER (C_INT)                         :: FIO_ne
@@ -889,6 +898,9 @@ module korc_types
      INTEGER (C_INT), DIMENSION(:), ALLOCATABLE  :: FIO_nimp
      INTEGER (C_INT)                         :: FIO_zeff
 #endif
+
+      LOGICAL  :: ReInterp_2x1t
+      INTEGER  :: ind_2x1t
   END TYPE PROFILES
 
 end module korc_types

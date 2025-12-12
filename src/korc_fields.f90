@@ -1288,6 +1288,7 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    DEALLOCATE( vars%curlb )
    DEALLOCATE( vars%E )
    DEALLOCATE( vars%flagCon )
+   DEALLOCATE( vars%initLCFS )
 #ifdef FIO
    DEALLOCATE( vars%hint)
 #endif
@@ -2006,7 +2007,7 @@ end subroutine initialize_fields
     gname = "BR"
     call h5lexists_f(h5file_id,TRIM(gname),Bfield,h5error)
 
-    gname = "ER"
+    gname = "EPHI"
     call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
 
     gname = "PSIp"
@@ -2049,7 +2050,7 @@ end subroutine initialize_fields
       INTEGER(HID_T)                         :: group_id
       INTEGER(HID_T)                         :: subgroup_id
       INTEGER                                :: h5error
-      LOGICAL :: Efield
+      LOGICAL :: Efield,Bflux,Bflux3D
 
       filename = TRIM(params%magnetic_field_filename)
       call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
@@ -2156,9 +2157,9 @@ end subroutine initialize_fields
          dset = "/PSIp"
          gname = 'PSIp'
 
-         call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+         call h5lexists_f(h5file_id,TRIM(gname),Bflux,h5error)
 
-         if (Efield) then
+         if (Bflux) then
             call load_array_from_hdf5(h5file_id,dset,F%PSIp)
          else
             F%PSIp = 0.0_rp
@@ -2175,9 +2176,9 @@ end subroutine initialize_fields
          dset = "/PSIp"
          gname = 'PSIp'
 
-         call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+         call h5lexists_f(h5file_id,TRIM(gname),Bflux3D,h5error)
 
-         if (Efield) then
+         if (Bflux3D) then
             call load_array_from_hdf5(h5file_id,dset,F%PSIp3D)
          else
             F%PSIp3D = 0.0_rp

@@ -1547,25 +1547,84 @@ CONTAINS
                 call save_1d_array_to_hdf5(h5file_id,dset, &
                      P%X%Z*params%cpp%length,attr_array)
 
-                dset = TRIM(gname) // "/ne"
-                units = params%cpp%density
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*P%ne_2D)
+                if (.not.(params%profile_model(10:12).eq.'Hdt')) then
+                    dset = TRIM(gname) // "/ne"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%ne_2D)
 
-                dset = TRIM(gname) // "/Te"
-                units = params%cpp%temperature
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*P%Te_2D)
+                    dset = TRIM(gname) // "/Te"
+                    units = params%cpp%temperature
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%Te_2D)
 
-                dset = TRIM(gname) // "/Zeff"
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     P%Zeff_2D)
+                    dset = TRIM(gname) // "/Zeff"
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         P%Zeff_2D)
+                else
+                    dset = TRIM(gname) // "/ne"
+                    units = params%cpp%density
+                    call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                         units*P%ne_3D)
 
-                if (params%profile_model(10:10).eq.'H') then
+                    dset = TRIM(gname) // "/Te"
+                    units = params%cpp%temperature
+                    call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                         units*P%Te_3D)
+
+                    dset = TRIM(gname) // "/Zeff"
+                    call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                         P%Zeff_3D)
+                endif
+
+               if (params%profile_model(10:11).eq.'H0') then
+
+                    dset = TRIM(gname) // "/RHON"
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         P%RHON_2D)
+                    
+                    dset = TRIM(gname) // "/nRE"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nRE_2D)
+
+                    dset = TRIM(gname) // "/nAr0"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nAr0_2D)
+
+                    dset = TRIM(gname) // "/nAr1"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nAr1_2D)
+
+                    dset = TRIM(gname) // "/nAr2"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nAr2_2D)
+
+                    dset = TRIM(gname) // "/nAr3"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nAr3_2D)
+
+                    dset = TRIM(gname) // "/nD"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nD_2D)
+
+                    dset = TRIM(gname) // "/nD1"
+                    units = params%cpp%density
+                    call rsave_2d_array_to_hdf5(h5file_id, dset, &
+                         units*P%nD1_2D)
+               
+               endif
+
+                if (params%profile_model(10:12).eq.'Hdt') then
 
                    dset = TRIM(gname) // "/RHON"
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        P%RHON)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        P%RHON_3D)
                    
                    dset = TRIM(gname) // "/nRE"
                    units = params%cpp%density
@@ -1574,33 +1633,38 @@ CONTAINS
 
                    dset = TRIM(gname) // "/nAr0"
                    units = params%cpp%density
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        units*P%nAr0_2D)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr0_3D)
 
                    dset = TRIM(gname) // "/nAr1"
                    units = params%cpp%density
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        units*P%nAr1_2D)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr1_3D)
 
                    dset = TRIM(gname) // "/nAr2"
                    units = params%cpp%density
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        units*P%nAr2_2D)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr2_3D)
 
                    dset = TRIM(gname) // "/nAr3"
                    units = params%cpp%density
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        units*P%nAr3_2D)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr3_3D)
+
+                   dset = TRIM(gname) // "/nAr4"
+                   units = params%cpp%density
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nAr4_3D)
 
                    dset = TRIM(gname) // "/nD"
                    units = params%cpp%density
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        units*P%nD_2D)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nD_3D)
 
                    dset = TRIM(gname) // "/nD1"
                    units = params%cpp%density
-                   call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                        units*P%nD1_2D)
+                   call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                        units*P%nD1_3D)
                    
                 endif
 
@@ -2707,20 +2771,33 @@ CONTAINS
     !! Iterator for reading all the entried of params::outputs_list.
     INTEGER 							:: mpierr
     !! MPI error status.
-    INTEGER 					:: numel_send, numel_receive
+    INTEGER 					:: numel_send, numel_receive,exei
     !! Variable used by MPI to count the amount of data sent by each MPI
     !! procces.
     !! Variable used by MPI to count the amount of data received by the main
     !! MPI procces.
+    LOGICAL :: exist
 
 
 !    if ( MODULO(params%it,params%restart_output_cadence) .EQ. 0_ip ) then 
     if (params%mpi_params%rank.EQ.0_idef) then
 
-       write(output_unit_write,'("Saving restart: ",I15)') &
-            params%it/(params%t_skip*params%t_it_SC)
+     write(output_unit_write,'("Saving restart: ",I15)') &
+          params%it/(params%t_skip*params%t_it_SC)
 
        filename = TRIM(params%path_to_outputs) // "restart_file.h5"
+
+       inquire(FILE=filename,exist=exist)
+
+       if (exist) then   
+          call execute_command_line("rm " // TRIM(params%path_to_outputs) // "restart_file.h5",exitstat=exei)
+          IF (exei/=0) then
+               write(6,*) 'Error removing restart_file.h5'
+               call korc_abort(28)
+          end if
+       end if
+
+     
        call h5fcreate_f(TRIM(filename), H5F_ACC_TRUNC_F, h5file_id, h5error)
 
        dset = "it"

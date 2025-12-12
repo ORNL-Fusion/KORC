@@ -608,11 +608,11 @@ CONTAINS
     
   END FUNCTION fRE_H_3D
   
-  FUNCTION fRE_H_pitch(params,eta,g,EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nD,nD1)
+  FUNCTION fRE_H_pitch(params,eta,g,EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1)
     TYPE(KORC_PARAMS), INTENT(IN) 	:: params
     REAL(rp), INTENT(IN) 	:: eta ! pitch angle in degrees
     REAL(rp), INTENT(IN) 	:: g ! Relativistic gamma factor
-    REAL(rp), INTENT(IN)  :: EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nD,nD1
+    REAL(rp), INTENT(IN)  :: EPHI,ne,Te,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1
     REAL(rp) 				:: fRE_H_pitch
     REAL(rp) 				:: A
     REAL(rp) 				:: E_G,nf,pdm,Z_brac
@@ -629,9 +629,9 @@ CONTAINS
     !write(6,*) 'VTe',VTe,'pdm',pdm
     !write(6,*) 'CLog0',CLog0,'CLogee',CLogee,'CLogei',CLogei
     
-    nf=nAr0*18+nAr1*17+nAr2*16+nAr3*15+nD
+    nf=nAr0*18+nAr1*17+nAr2*16+nAr3*15+nAr4*14+nD
     
-    Z_brac=((nAr0+nAr1+nAr2+nAr3)*18**2+(nD+nD1))/nf &
+    Z_brac=((nAr0+nAr1+nAr2+nAr3+nAr4)*18**2+(nD+nD1))/nf &
          *(CLogei/CLogee)
     
     E_CH=nf*C_E**3*CLogee/(4*C_PI*C_E0**2*C_ME*C_C**2)
@@ -1986,8 +1986,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
   !! mpi error indicator
   REAL(rp) 						:: dgmin,dgmax,deta
   LOGICAL :: accepted
-  REAL(rp) 	:: EPHI,fRE_out,nAr0,nAr1,nAr2,nAr3,nD,nD1,ne,Te,Zeff,nRE
-  
+  REAL(rp) 	:: EPHI,fRE_out,nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,ne,Te,Zeff,nRE
   
   nsamples = spp%ppp*params%mpi_params%nmpi
 
@@ -2090,7 +2089,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
         !write(6,*) 'G_buffer',G_buffer
 
         call interp_nRE(params,R_buffer,0._rp,Z_buffer,psi0,EPHI,ne,Te,nRE, &
-             nAr0,nAr1,nAr2,nAr3,nD,nD1,G_buffer,fRE_out, &
+             nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,G_buffer,fRE_out, &
              rho1D=h_params%rho_axis(h_params%rho_ind))
         
         !write(6,*) 'after first interp_nRE'
@@ -2101,7 +2100,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
 
         f0=nRE*fRE_out* &
              fRE_H_pitch(params,eta_buffer,G_buffer,EPHI,ne,Te, &
-             nAr0,nAr1,nAr2,nAr3,nD,nD1)
+             nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1)
 
         !write(6,*) 'nRE',nRE*params%cpp%density
         !write(6,*) 'fRE_out',fRE_out
@@ -2114,8 +2113,8 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
      do while (ii .LE. 1000_idef)
 
         !if (modulo(ii,100).eq.0) then
-        !   write(output_unit_write,'("Burn: ",I10)') ii
-        !   write(6,'("Burn: ",I10)') ii
+           !write(output_unit_write,'("Burn: ",I10)') ii
+           !write(6,'("Burn: ",I10)') ii
         !end if
 
         ! Test that pitch angle and momentum are within chosen boundary
@@ -2159,7 +2158,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
         !write(6,*) 'G_test',G_test
         
         call interp_nRE(params,R_test,0._rp,Z_test,psi1,EPHI,ne,Te,nRE, &
-             nAr0,nAr1,nAr2,nAr3,nD,nD1,G_test,fRE_out, &
+             nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,G_test,fRE_out, &
              rho1D=h_params%rho_axis(h_params%rho_ind))
            
         PSIN1=(psi1-PSIP0)/(PSIp_lim-PSIP0)
@@ -2174,7 +2173,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
                 
         f1=nRE*fRE_out* &
              fRE_H_pitch(params,eta_test,G_test,EPHI,ne,Te, &
-             nAr0,nAr1,nAr2,nAr3,nD,nD1)        
+             nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1)        
         !        f1=fRE_H(eta_test,G_test)
 
         !write(6,*) 'nRE',nRE*params%cpp%density
@@ -2240,9 +2239,9 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
 
 !        write(output_unit_write,'("sample:",I15)') ii
         
-       if (modulo(ii,nsamples/100).eq.0) then
+       if (modulo(ii,nsamples/10).eq.0) then
           write(output_unit_write,'("Sample: ",I10)') ii
-          write(6,'("Sample: ",I10)') ii
+          !write(6,'("Sample: ",I10)') ii
        end if
 
         ! Test that pitch angle and momentum are within chosen boundary
@@ -2280,7 +2279,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
 !             spp%sigmaZ,theta_rad)
 
         call interp_nRE(params,R_test,0._rp,Z_test,psi1,EPHI,ne,Te,nRE, &
-             nAr0,nAr1,nAr2,nAr3,nD,nD1,g_test,fRE_out, &
+             nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1,g_test,fRE_out, &
              rho1D=h_params%rho_axis(h_params%rho_ind))
            
         PSIN1=(psi1-PSIP0)/(PSIp_lim-PSIP0)
@@ -2298,7 +2297,7 @@ subroutine sample_Hollmann_distribution_1Dtransport(params,random,spp,F)
         
         f1=nRE*fRE_out* &
              fRE_H_pitch(params,eta_test,G_test,EPHI,ne,Te, &
-             nAr0,nAr1,nAr2,nAr3,nD,nD1)        
+             nAr0,nAr1,nAr2,nAr3,nAr4,nD,nD1)        
 !        f1=fRE_H(eta_test,G_test)
         
 !        ratio = indicator_exp(PSIN,psi_max_buff)* &
