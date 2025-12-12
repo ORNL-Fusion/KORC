@@ -1963,46 +1963,46 @@ CONTAINS
              end if
 
 
-             if (ALLOCATED(F%B1Re_2D%R)) then
+             if (ALLOCATED(F%B1Re_3D%R)) then
                 dset = TRIM(gname) // "/BR1_Re"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Re_2D%R)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_3D%R)
              end if
 
-             if (ALLOCATED(F%B1Re_2D%PHI)) then
+             if (ALLOCATED(F%B1Re_3D%PHI)) then
                 dset = TRIM(gname) // "/BPHI1_Re"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Re_2D%PHI)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_3D%PHI)
              end if
 
-             if (ALLOCATED(F%B1Re_2D%Z)) then
+             if (ALLOCATED(F%B1Re_3D%Z)) then
                 dset = TRIM(gname) // "/BZ1_Re"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Re_2D%Z)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Re_3D%Z)
              end if
 
-             if (ALLOCATED(F%B1Im_2D%R)) then
+             if (ALLOCATED(F%B1Im_3D%R)) then
                 dset = TRIM(gname) // "/BR1_Im"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Im_2D%R)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_3D%R)
              end if
 
-             if (ALLOCATED(F%B1Im_2D%PHI)) then
+             if (ALLOCATED(F%B1Im_3D%PHI)) then
                 dset = TRIM(gname) // "/BPHI1_Im"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Im_2D%PHI)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_3D%PHI)
              end if
 
-             if (ALLOCATED(F%B1Im_2D%Z)) then
+             if (ALLOCATED(F%B1Im_3D%Z)) then
                 dset = TRIM(gname) // "/BZ1_Im"
                 units = params%cpp%Bo
-                call rsave_2d_array_to_hdf5(h5file_id, dset, &
-                     units*F%B1Im_2D%Z)
+                call rsave_3d_array_to_hdf5(h5file_id, dset, &
+                     units*F%B1Im_3D%Z)
              end if
 
              if (ALLOCATED(F%B1Re_2DX%X)) then

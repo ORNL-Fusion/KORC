@@ -422,9 +422,10 @@ CONTAINS
   END SUBROUTINE load_data_from_hdf5
 
 
-  FUNCTION fRE_H(eta,g)
+  FUNCTION fRE_H(eta,g,rho_ind)
     REAL(rp), INTENT(IN) 	:: eta ! pitch angle in degrees
     REAL(rp), INTENT(IN) 	:: g ! Relativistic gamma factor
+    INTEGER, INTENT(IN),optional  :: rho_ind
     REAL(rp) 				:: fRE_H
     REAL(rp) 				:: D
     REAL(rp) 				:: g0
@@ -442,19 +443,36 @@ CONTAINS
 
     ! linear interpolation of Hollmann input gamma range to gamma supplied
     ! to function
-    if (D.GT.0) then
-       f0 = h_params%fRE_E(index-1)
-       g0 = h_params%g(index-1)
 
-       f1 = h_params%fRE_E(index)
-       g1 = h_params%g(index)
+    if(present(rho_ind)) then
+       if (D.GT.0) then
+          f0 = h_params%fRE_E_2D(rho_ind,index-1)
+          g0 = h_params%g(index-1)
+
+          f1 = h_params%fRE_E_2D(rho_ind,index)
+          g1 = h_params%g(index)
+       else
+          f0 = h_params%fRE_E_2D(rho_ind,index)
+          g0 = h_params%g(index)
+
+          f1 = h_params%fRE_E_2D(rho_ind,index+1)
+          g1 = h_params%g(index+1)
+       end if
     else
-       f0 = h_params%fRE_E(index)
-       g0 = h_params%g(index)
+       if (D.GT.0) then
+          f0 = h_params%fRE_E(index-1)
+          g0 = h_params%g(index-1)
 
-       f1 = h_params%fRE_E(index+1)
-       g1 = h_params%g(index+1)
-    end if
+          f1 = h_params%fRE_E(index)
+          g1 = h_params%g(index)
+       else
+          f0 = h_params%fRE_E(index)
+          g0 = h_params%g(index)
+
+          f1 = h_params%fRE_E(index+1)
+          g1 = h_params%g(index+1)
+       end if
+    endif
 
     m = (f1-f0)/(g1-g0)
 
@@ -789,8 +807,8 @@ CONTAINS
              g_test = g_buffer + random%normal%get()
           end do
 
-          ratio = fRE_H(eta_test,g_test)*sin(deg2rad(eta_test))/ &
-               (fRE_H(eta_buffer,g_buffer)* &
+          ratio = fRE_H(eta_test,g_test,h_params%rho_ind)*sin(deg2rad(eta_test))/ &
+               (fRE_H(eta_buffer,g_buffer,h_params%rho_ind)* &
                   sin(deg2rad(eta_buffer)))
           !ratio = fRE_H(eta_test,g_test)/fRE_H(eta_buffer,g_buffer)
           !ratio = fRE_HxPR(eta_test,g_test)/fRE_HxPR(eta_buffer,g_buffer)
@@ -843,8 +861,8 @@ CONTAINS
 !                write(output_unit_write,'("g_test: ",E17.10)') g_test
              end do
 
-             ratio = fRE_H(eta_test,g_test)*sin(deg2rad(eta_test))/ &
-                  (fRE_H(eta_tmp(ii-1),g_tmp(ii-1))* &
+             ratio = fRE_H(eta_test,g_test,h_params%rho_ind)*sin(deg2rad(eta_test))/ &
+                  (fRE_H(eta_tmp(ii-1),g_tmp(ii-1),h_params%rho_ind)* &
                   sin(deg2rad(eta_tmp(ii-1))))
 !             ratio = fRE_H(eta_test,g_test)/fRE_H(eta_tmp(ii-1),g_tmp(ii-1))
              !ratio = fRE_HxPR(eta_test,g_test)/fRE_HxPR(eta_tmp(ii-1),g_tmp(ii-1))
@@ -882,9 +900,9 @@ CONTAINS
        end do
 
 
-      !		if (TRIM(h_params%current_direction) .EQ. 'ANTICLOCKWISE') then
-      !			eta_samples = 180.0_rp - eta_samples
-      !		end if
+      if (TRIM(h_params%current_direction) .EQ. 'PARALLEL') then
+        eta_samples = 180.0_rp - eta_samples
+      end if
 
 !       go = SUM(g_samples)/nsamples
 !       etao = SUM(eta_samples)/nsamples
