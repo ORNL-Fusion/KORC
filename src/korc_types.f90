@@ -677,7 +677,8 @@ module korc_types
      REAL(rp)  :: PSIP_min
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp),DIMENSION(:), ALLOCATABLE  :: AMP
-     REAL(rp),DIMENSION(:), ALLOCATABLE  :: GR
+     REAL(rp),DIMENSION(:), ALLOCATABLE  :: GR,FR
+     REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: MARS_max

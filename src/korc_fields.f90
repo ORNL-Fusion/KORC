@@ -2235,23 +2235,47 @@ end subroutine initialize_fields
 
       if (F%E1field) then
 
-         dset = "/ReEX"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
+        if (params%field_model(10:13).eq.'MARS') then
 
-         dset = "/ReEY"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Y)
+          dset = "/ReER"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%R)
 
-         dset = "/ReEZ"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Z)
+          dset = "/ReEPHI"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%PHI)
 
-         dset = "/ImEX"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%X)
+          dset = "/ReEZ"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%Z)
 
-         dset = "/ImEY"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Y)
+          dset = "/ImER"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%R)
 
-         dset = "/ImEZ"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
+          dset = "/ImEPHI"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%PHI)
+
+          dset = "/ImEZ"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%Z)
+
+        else if (params%field_model(10:14).eq.'AORSA') then
+
+          dset = "/ReEX"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
+
+          dset = "/ReEY"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Y)
+
+          dset = "/ReEZ"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Z)
+
+          dset = "/ImEX"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%X)
+
+          dset = "/ImEY"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Y)
+
+          dset = "/ImEZ"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
+
+        endif
 
       end if
 
@@ -2404,11 +2428,15 @@ end subroutine initialize_fields
     if (params%field_model(10:13).eq.'MARS') then
 
       if (B1field.and.(.not.ALLOCATED(F%B1Re_3D%R))) then
-         call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)
-         call ALLOCATE_V_FIELD_3D(F%B1Im_3D,F%dims)
+        call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)
+        call ALLOCATE_V_FIELD_3D(F%B1Im_3D,F%dims)
 
-         ALLOCATE(F%AMP(F%dims(2)))
-         ALLOCATE(F%GR(F%dims(2)))
+        call ALLOCATE_V_FIELD_3D(F%E1Re_3D,F%dims)
+        call ALLOCATE_V_FIELD_3D(F%E1Im_3D,F%dims)
+
+        ALLOCATE(F%AMP(F%dims(2)))
+        ALLOCATE(F%GR(F%dims(2)))
+        ALLOCATE(F%FR(F%dims(2)))
       end if
     endif
 
