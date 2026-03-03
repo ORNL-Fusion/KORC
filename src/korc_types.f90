@@ -636,6 +636,8 @@ module korc_types
      TYPE(V_FIELD_2D) 				:: B_2D
      TYPE(V_FIELD_3D) 				:: B1Re_3D
      TYPE(V_FIELD_3D) 				:: B1Im_3D
+      TYPE(V_FIELD_3D) 				:: E1Re_3D
+     TYPE(V_FIELD_3D) 				:: E1Im_3D
      TYPE(V_FIELD_2DX) 				:: B1Re_2DX
      TYPE(V_FIELD_2DX) 				:: E1Im_2DX
      TYPE(V_FIELD_2DX) 				:: E1Re_2DX
@@ -678,7 +680,6 @@ module korc_types
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp),DIMENSION(:), ALLOCATABLE  :: AMP
      REAL(rp),DIMENSION(:), ALLOCATABLE  :: GR,FR
-     REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: MARS_max

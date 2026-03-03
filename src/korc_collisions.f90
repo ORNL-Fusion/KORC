@@ -1707,7 +1707,7 @@ contains
        CF_SD=CF_temp
 
     end if
-  #endif ACC
+#endif ACC
 
   end function CF_SD
 
@@ -3509,7 +3509,7 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
       write(6,*) Ppll,Pmu,Bmag
       avalanche_fail=.TRUE.
   end if
-  #endif
+#endif
 
 
   if (cparams_ss_ACC%avalanche.and.(flagCon.eq.1).and.(flagCol.eq.1)) then

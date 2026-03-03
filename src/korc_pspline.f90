@@ -2839,6 +2839,53 @@ subroutine EZspline_interp2_FOmars(spline_oA, spline_oBR, spline_oBPHI, &
 
 end subroutine EZspline_interp2_FOmars
 
+subroutine EZspline_interp2_FOmarsEM(spline_oA, spline_oReBR, spline_oReBPHI, &
+   spline_oReBZ, spline_oImBR, spline_oImBPHI, spline_oImBZ, &
+   spline_oReER, spline_oReEPHI, spline_oReEZ, &
+   spline_oImER, spline_oImEPHI, spline_oImEZ, p1, p2, fA, &
+   fReBR, fReBPHI, fReBZ, fImBR, fImBPHI, fImBZ, &
+   fReER, fReEPHI, fReEZ, fImER, fImEPHI, fImEZ, ier)
+   !$acc routine seq
+   type(EZspline2) spline_oA, spline_oReBR,spline_oReBPHI,spline_oReBZ
+   type(EZspline2) spline_oImBR,spline_oImBPHI,spline_oImBZ
+   type(EZspline2) spline_oReER,spline_oReEPHI,spline_oReEZ
+   type(EZspline2) spline_oImER,spline_oImEPHI,spline_oImEZ
+   real(fp), intent(in) :: p1, p2
+   real(fp), intent(out):: fA(3)
+   real(fp), intent(out):: fReBR, fReBPHI, fReBZ, fImBR, fImBPHI, fImBZ
+   real(fp), intent(out):: fReER, fReEPHI, fReEZ, fImER, fImEPHI, fImEZ
+   integer, intent(out) :: ier
+   integer :: ifail
+   integer:: iwarn = 0
+  
+   !$acc routine (EZspline_allocated2) seq
+   !$acc routine (evbicub_FOmarsEM) seq
+
+   ier = 0
+   ifail = 0
+
+   if( .not.EZspline_allocated2(spline_oReBR) .or. spline_oReBR%isReady /= 1) then
+      ier = 94
+      return
+   endif
+
+   call evbicub_FOmarsEM(p1, p2,  &
+      spline_oReBR%x1(1), spline_oReBR%n1, &
+      spline_oReBR%x2(1), spline_oReBR%n2, &
+      spline_oReBR%ilin1, spline_oReBR%ilin2, &
+      spline_oA%fspl(1,1,1), &
+      spline_oReBR%fspl(1,1,1), spline_oReBPHI%fspl(1,1,1), spline_oReBZ%fspl(1,1,1), &
+      spline_oImBR%fspl(1,1,1), spline_oImBPHI%fspl(1,1,1), spline_oImBZ%fspl(1,1,1), &
+      spline_oReER%fspl(1,1,1), spline_oReEPHI%fspl(1,1,1), spline_oReEZ%fspl(1,1,1), &
+      spline_oImER%fspl(1,1,1), spline_oImEPHI%fspl(1,1,1), spline_oImEZ%fspl(1,1,1), &
+      spline_oReBR%n1, &
+      fA, fReBR, fReBPHI, fReBZ, fImBR, fImBPHI, fImBZ, &
+      fReER, fReEPHI, fReEZ, fImER, fImEPHI, fImEZ, ifail)
+
+   if(ifail /= 0) ier = 97
+
+end subroutine EZspline_interp2_FOmarsEM
+
 subroutine EZspline_interp2_FOaorsa(spline_oA, spline_oReBR, spline_oReBPHI, &
    spline_oReBZ, spline_oImBR, spline_oImBPHI, spline_oImBZ, spline_oReER, &
    spline_oReEPHI, spline_oReEZ, spline_oImER, spline_oImEPHI, spline_oImEZ, &
@@ -2860,7 +2907,7 @@ subroutine EZspline_interp2_FOaorsa(spline_oA, spline_oReBR, spline_oReBPHI, &
    integer:: iwarn = 0
 
    !$acc routine (EZspline_allocated2) seq
-   !$acc routine (evbicub_FOmars) seq
+   !$acc routine (evbicub_FOaorsa) seq
 
    ier = 0
    ifail = 0
@@ -3771,6 +3818,178 @@ subroutine evbicub_FOmars(xget,yget,x,nx,y,ny,ilinx,iliny, &
    !
    return
 end subroutine evbicub_FOmars
+
+subroutine evbicub_FOmarsEM(xget,yget,x,nx,y,ny,ilinx,iliny, &
+   fA,fReBR,fReBPHI,fReBZ,fImBR,fImBPHI,fImBZ,fReER,fReEPHI,fReEZ,fImER,fImEPHI,fImEZ, &
+   inf2,fvalA,fvalReBR,fvalReBPHI,fvalReBZ,fvalImBR,fvalImBPHI,fvalImBZ, &
+   fvalReER,fvalReEPHI,fvalReEZ,fvalImER,fvalImEPHI,fvalImEZ,ier)
+   !$acc routine seq
+   !
+   !  evaluate a 2d cubic Spline interpolant on a rectilinear
+   !  grid -- this is C2 in both directions.
+   !
+   !  this subroutine calls two subroutines:
+   !     herm2xy  -- find cell containing (xget,yget)
+   !     fvbicub  -- evaluate interpolant function and (optionally) derivatives
+   !
+   !  input arguments:
+   !  ================
+   !
+   !============
+   implicit none
+   integer inf2
+   !============
+   integer,intent(in) :: nx,ny                     ! grid sizes
+   real(fp) :: xget,yget                    ! target of this interpolation
+   real(fp) :: x(nx)                        ! ordered x grid
+   real(fp) :: y(ny)                        ! ordered y grid
+   integer ilinx                     ! ilinx=1 => assume x evenly spaced
+   integer iliny                     ! iliny=1 => assume y evenly spaced
+   !
+   real(fp) :: fA(0:3,inf2,ny)               ! function data
+   real(fp) :: fReBR(0:3,inf2,ny)
+   real(fp) :: fReBPHI(0:3,inf2,ny)
+   real(fp) :: fReBZ(0:3,inf2,ny)
+   real(fp) :: fImBR(0:3,inf2,ny)
+   real(fp) :: fImBPHI(0:3,inf2,ny)
+   real(fp) :: fImBZ(0:3,inf2,ny)
+   real(fp) :: fReER(0:3,inf2,ny)
+   real(fp) :: fReEPHI(0:3,inf2,ny)
+   real(fp) :: fReEZ(0:3,inf2,ny)
+   real(fp) :: fImER(0:3,inf2,ny)
+   real(fp) :: fImEPHI(0:3,inf2,ny)
+   real(fp) :: fImEZ(0:3,inf2,ny)
+   !
+   !       f 2nd dimension inf2 must be .ge. nx
+   !       contents of f:
+   !
+   !  f(0,i,j) = f @ x(i),y(j)
+   !  f(1,i,j) = d2f/dx2 @ x(i),y(j)
+   !  f(2,i,j) = d2f/dy2 @ x(i),y(j)
+   !  f(3,i,j) = d4f/dx2dy2 @ x(i),y(j)
+   !
+   !      (these are spline coefficients selected for continuous 2-
+   !      diffentiability, see mkbicub[w].f90)
+   !
+   !
+   !  ict(1)=1 -- return f  (0, don't)
+   !  ict(2)=1 -- return df/dx  (0, don't)
+   !  ict(3)=1 -- return df/dy  (0, don't)
+   !  ict(4)=1 -- return d2f/dx2  (0, don't)
+   !  ict(5)=1 -- return d2f/dy2  (0, don't)
+   !  ict(6)=1 -- return d2f/dxdy (0, don't)
+   !                   the number of non zero values ict(1:6)
+   !                   determines the number of outputs...
+   !
+   !  new dmc December 2005 -- access to higher derivatives (even if not
+   !  continuous-- but can only go up to 3rd derivatives on any one coordinate.
+   !     if ict(1)=3 -- want 3rd derivatives
+   !          ict(2)=1 for d3f/dx3
+   !          ict(3)=1 for d3f/dx2dy
+   !          ict(4)=1 for d3f/dxdy2
+   !          ict(5)=1 for d3f/dy3
+   !               number of non-zero values ict(2:5) gives no. of outputs
+   !     if ict(1)=4 -- want 4th derivatives
+   !          ict(2)=1 for d4f/dx3dy
+   !          ict(3)=1 for d4f/dx2dy2
+   !          ict(4)=1 for d4f/dxdy3
+   !               number of non-zero values ict(2:4) gives no. of outputs
+   !     if ict(1)=5 -- want 5th derivatives
+   !          ict(2)=1 for d5f/dx3dy2
+   !          ict(3)=1 for d5f/dx2dy3
+   !               number of non-zero values ict(2:3) gives no. of outputs
+   !     if ict(1)=6 -- want 6th derivatives
+   !          d6f/dx3dy3 -- one value is returned.
+   !
+   ! output arguments:
+   ! =================
+   !
+   real(fp) :: fvalA(3)                      ! output data
+   real(fp) :: fvalReBR
+   real(fp) :: fvalReBPHI
+   real(fp) :: fvalReBZ
+   real(fp) :: fvalReER
+   real(fp) :: fvalReEPHI
+   real(fp) :: fvalReEZ
+   real(fp) :: fvalImBR
+   real(fp) :: fvalImBPHI
+   real(fp) :: fvalImBZ
+   real(fp) :: fvalImER
+   real(fp) :: fvalImEPHI
+   real(fp) :: fvalImEZ
+
+   integer ier                       ! error code =0 ==> no error
+   !
+   !  fval(1) receives the first output (depends on ict(...) spec)
+   !  fval(2) receives the second output (depends on ict(...) spec)
+   !  fval(3) receives the third output (depends on ict(...) spec)
+   !  fval(4) receives the fourth output (depends on ict(...) spec)
+   !  fval(5) receives the fourth output (depends on ict(...) spec)
+   !  fval(6) receives the fourth output (depends on ict(...) spec)
+   !
+   !  examples:
+   !    on input ict = [1,1,1,0,0,1]
+   !   on output fval= [f,df/dx,df/dy,d2f/dxdy], elements 5 & 6 not referenced.
+   !
+   !    on input ict = [1,0,0,0,0,0]
+   !   on output fval= [f] ... elements 2 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,0,1,1,0]
+   !   on output fval= [d2f/dx2,d2f/dy2] ... elements 3 -- 6 never referenced.
+   !
+   !    on input ict = [0,0,1,0,0,0]
+   !   on output fval= [df/dy] ... elements 2 -- 6 never referenced.
+   !
+   !  ier -- completion code:  0 means OK
+   !-------------------
+   !  local:
+   !
+   integer i,j                      ! cell indices
+   !
+   !  normalized displacement from (x(i),y(j)) corner of cell.
+   !    xparam=0 @x(i)  xparam=1 @x(i+1)
+   !    yparam=0 @y(j)  yparam=1 @y(j+1)
+   !
+   real(fp) :: xparam,yparam
+   !
+   !  cell dimensions and
+   !  inverse cell dimensions hxi = 1/(x(i+1)-x(i)), hyi = 1/(y(j+1)-y(j))
+   !
+   real(fp) :: hx,hy
+   real(fp) :: hxi,hyi
+   !
+   !  0 .le. xparam .le. 1
+   !  0 .le. yparam .le. 1
+   !
+   !  ** the interface is very similar to herm2ev.f90; can use herm2xy **
+   !---------------------------------------------------------------------
+   !$acc routine (herm2xy) seq
+   !$acc routine (fvbicub) seq
+   !$acc routine (fvbicub_grad) seq
+   !
+   i=0
+   j=0
+   call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
+      i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
+   if(ier.ne.0) return
+   !
+   call fvbicub(fvalA(1),i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub_grad(fvalA(2:3),i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
+   call fvbicub(fvalReBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fReBR,inf2,ny)
+   call fvbicub(fvalReBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fReBPHI,inf2,ny)
+   call fvbicub(fvalReBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fReBZ,inf2,ny)
+   call fvbicub(fvalReER,i,j,xparam,yparam,hx,hxi,hy,hyi,fReER,inf2,ny)
+   call fvbicub(fvalReEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fReEPHI,inf2,ny)
+   call fvbicub(fvalReEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fReEZ,inf2,ny)
+   call fvbicub(fvalImBR,i,j,xparam,yparam,hx,hxi,hy,hyi,fImBR,inf2,ny)
+   call fvbicub(fvalImBPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fImBPHI,inf2,ny)
+   call fvbicub(fvalImBZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fImBZ,inf2,ny)
+   call fvbicub(fvalImER,i,j,xparam,yparam,hx,hxi,hy,hyi,fImER,inf2,ny)
+   call fvbicub(fvalImEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fImEPHI,inf2,ny)
+   call fvbicub(fvalImEZ,i,j,xparam,yparam,hx,hxi,hy,hyi,fImEZ,inf2,ny)
+   !
+   return
+end subroutine evbicub_FOmarsEM
 
 subroutine evbicub_FOaorsa(xget,yget,x,nx,y,ny,ilinx,iliny, &
    fA,fReBR,fReBPHI,fReBZ,fImBR,fImBPHI,fImBZ,fReER,fReEPHI,fReEZ,&

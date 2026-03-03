@@ -306,6 +306,9 @@ subroutine FO_init(params,F,spp,output,step)
         else if (params%field_model(10:13).eq.'MARS') then
           call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
             B_X,B_Y,B_Z,PSIp,flagCon,0._rp)
+        else if (params%field_model(10:13).eq.'MARS_EM') then
+          call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+            B_X,B_Y,B_Z,PSIp,flagCon,0._rp)
         else if (params%field_model(10:14).eq.'AORSA') then
           call interp_FOfields_aorsa_p(0._rp,params,pchunk,F, &
             Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp,flagCon)
@@ -2768,8 +2771,13 @@ subroutine adv_FOinterp_mars_top(params,random,F,P,spp)
 
         time=(init_time+(it-1+tt)*dt)*params%cpp%time
 
-        call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+        if (params%field_model(10:16).eq.'MARS_EM') then
+          call interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
+            B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp,flagCon,time)
+        else
+          call interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
             B_X,B_Y,B_Z,PSIp,flagCon,time)
+        endif
 
         call advance_FOinterp_vars(tt,a,q_cache,m_cache,params,random, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
@@ -5128,7 +5136,9 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
           do torb=1_ip,params_ACC%orbits_per_coll
             call advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC, &
                 Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0,FlatWall,RZwall,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU)
+                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar, &
+                ne0,Te0,Zeff0,FlatWall,RZwall, &
+                RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU)
           end do
 
           vars%Y(pp,1)=Y_R
