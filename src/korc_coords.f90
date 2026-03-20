@@ -349,7 +349,7 @@ end subroutine cart_to_cyl_p_ACC
 
   end subroutine cart_to_tor_p
 
-  subroutine cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
+  subroutine cart_to_tor_check_if_confined_p(pchunk,ar,R0,kappa,X_X,X_Y,X_Z, &
        T_R,T_T,T_Z,flag_cache)
     INTEGER, INTENT(IN)  :: pchunk
     REAL(rp),  INTENT(IN)      :: R0,ar
@@ -366,7 +366,7 @@ end subroutine cart_to_cyl_p_ACC
        RR(cc)=SQRT(X_X(cc)*X_X(cc) + X_Y(cc)*X_Y(cc)) - R0
 
 
-       T_R(cc) = SQRT( RR(cc)*RR(cc) + X_Z(cc)*X_Z(cc) )
+       T_R(cc) = SQRT( RR(cc)*RR(cc) + X_Z(cc)*X_Z(cc)/(kappa*kappa) )
        T_T(cc) = ATAN2(X_Z(cc), RR(cc))
        T_T(cc) = MODULO(T_T(cc),2.0_rp*C_PI)
        T_Z(cc) = ATAN2(X_X(cc),X_Y(cc))

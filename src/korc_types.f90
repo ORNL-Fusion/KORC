@@ -571,7 +571,7 @@ module korc_types
      !! the values of \(q_0\) and \(q(r)\)
      !! at the plasma edge \(r=r_{edge}\).
 
-    LOGICAL         :: perturb
+    LOGICAL         :: perturb,turbulence
     REAL(rp)        :: l_mn
     REAL(rp)        :: sigma_mn
     REAL(rp)        :: eps_mn
@@ -603,6 +603,8 @@ module korc_types
      !! mode location rmn
      REAL(rp)			:: sigmamn
      !! mode width sigmamn
+     REAL(rp) :: kappa
+     !! elongation parameter
   END TYPE A_FIELD
 
   TYPE, PRIVATE :: MESH
