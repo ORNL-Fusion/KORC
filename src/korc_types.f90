@@ -683,6 +683,7 @@ module korc_types
      REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: MARS_max
+     REAL(rp)  :: MARS_quas_fac
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
      REAL(rp)  :: psir

@@ -3582,15 +3582,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
   !! Particle chunk iterator.
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
-  REAL(rp) :: phase,MARS_max
-  REAL(rp),DIMENSION(6) :: amp,gr
+  REAL(rp) :: phase,MARS_max,MARS_quas_fac
+  REAL(rp),DIMENSION(6) :: amp,gr,fr
   REAL(rp),INTENT(IN)   :: time
 
   psip_conv=F%psip_conv
   amp=F%AMP
   gr=F%GR
+  fr=F%GF
   phase=F%MARS_phase
   MARS_max=F%MARS_max
+  MARS_quas_fac=F%MARS_quas_fac
 
   call check_if_in_fields_domain_p(pchunk,F,Y_R,Y_PHI,Y_Z,flag_cache)
 
@@ -3614,20 +3616,20 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
 
     cP=cos(Y_PHI(cc))
     sP=sin(Y_PHI(cc))
-    cPshift=cos(F%X%PHI(1)*Y_PHI(cc)-phase)
-    sPshift=sin(F%X%PHI(1)*Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(1)*Y_PHI(cc)-phase-fr(1)*time)
+    sPshift=sin(F%X%PHI(1)*Y_PHI(cc)-phase-fr(1)*time)
 
-    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B0_R+B1_R
     B_PHI = B0_PHI+B1_PHI
     B_Z(cc) = B0_Z+B1_Z
 
-    E1_R = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = MARS_max/(1+MARS_max*exp(-time*gr(1)))*amp(1)*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E1_R
     E_PHI = E1_PHI
@@ -3643,8 +3645,8 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
       E1Re_R,E1Re_PHI,E1Re_Z,E1Im_R,E1Im_PHI,E1Im_Z, ezerr)
     call EZspline_error(ezerr)
 
-    cPshift=cos(F%X%PHI(2)*Y_PHI(cc)-phase)
-    sPshift=sin(F%X%PHI(2)*Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(2)*Y_PHI(cc)-phase-fr(2)*time)
+    sPshift=sin(F%X%PHI(2)*Y_PHI(cc)-phase-fr(2)*time)
 
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
@@ -3672,8 +3674,8 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
       E1Re_R,E1Re_PHI,E1Re_Z,E1Im_R,E1Im_PHI,E1Im_Z, ezerr)
     call EZspline_error(ezerr)
 
-    cPshift=cos(F%X%PHI(3)*Y_PHI(cc)-phase)
-    sPshift=sin(F%X%PHI(3)*Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(3)*Y_PHI(cc)-phase-fr(3)*time)
+    sPshift=sin(F%X%PHI(3)*Y_PHI(cc)-phase-fr(3)*time)
 
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
@@ -3701,8 +3703,8 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
       E1Re_R,E1Re_PHI,E1Re_Z,E1Im_R,E1Im_PHI,E1Im_Z, ezerr)
     call EZspline_error(ezerr)
 
-    cPshift=cos(F%X%PHI(4)*Y_PHI(cc)-phase)
-    sPshift=sin(F%X%PHI(4)*Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(4)*Y_PHI(cc)-phase-fr(4)*time)
+    sPshift=sin(F%X%PHI(4)*Y_PHI(cc)-phase-fr(4)*time)
 
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
@@ -3730,8 +3732,8 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
       E1Re_R,E1Re_PHI,E1Re_Z,E1Im_R,E1Im_PHI,E1Im_Z, ezerr)
     call EZspline_error(ezerr)
 
-    cPshift=cos(F%X%PHI(5)*Y_PHI(cc)-phase)
-    sPshift=sin(F%X%PHI(5)*Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(5)*Y_PHI(cc)-phase-fr(5)*time)
+    sPshift=sin(F%X%PHI(5)*Y_PHI(cc)-phase-fr(5)*time)
 
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
@@ -3759,8 +3761,8 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
       E1Re_R,E1Re_PHI,E1Re_Z,E1Im_R,E1Im_PHI,E1Im_Z, ezerr)
     call EZspline_error(ezerr)
 
-    cPshift=cos(F%X%PHI(6)*Y_PHI(cc)-phase)
-    sPshift=sin(F%X%PHI(6)*Y_PHI(cc)-phase)
+    cPshift=cos(F%X%PHI(6)*Y_PHI(cc)-phase-fr(6)*time)
+    sPshift=sin(F%X%PHI(6)*Y_PHI(cc)-phase-fr(6)*time)
 
     B1_R = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(B1Re_R*cPshift-B1Im_R*sPshift)
     B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
