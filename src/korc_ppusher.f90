@@ -214,7 +214,7 @@ subroutine FO_init(params,F,spp,output,step)
   REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
   REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z
   REAL(rp),DIMENSION(params%pchunk) :: PSIp
-  REAL(rp) :: m_cache,q_cache,B0,EF0,lam,R0,q0,ar,eta_tmp
+  REAL(rp) :: m_cache,q_cache,B0,EF0,lam,R0,q0,ar,eta_tmp,kappa
   TYPE(C_PTR),DIMENSION(params%pchunk) :: hint
   INTEGER(is) ,DIMENSION(params%pchunk) :: flagCon,flagCol
 
@@ -226,6 +226,7 @@ subroutine FO_init(params,F,spp,output,step)
   R0=F%AB%Ro
   q0=F%AB%qo
   ar=F%AB%a
+  kappa=F%AB%kappa
 
   do ii = 1_idef,params%num_species
 
@@ -235,7 +236,8 @@ subroutine FO_init(params,F,spp,output,step)
     if(output) then
 
       !$OMP PARALLEL DO default(none) &
-      !$OMP firstprivate(epsilon0,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk) &
+      !$OMP firstprivate(epsilon0,m_cache,q_cache, &
+      !$OMP& B0,EF0,lam,R0,q0,ar,pchunk,kappa) &
       !$OMP& shared(params,ii,spp,F) &
       !$OMP& PRIVATE(pp,cc,X_X,X_Y,X_Z,B_X,B_Y,B_Z,V_X,V_Y,V_Z, &
       !$OMP& E_X,E_Y,E_Z,Y_R,Y_PHI,Y_Z,flagCon,flagCol,PSIp,hint,Bmag, &
@@ -671,8 +673,9 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
   REAL(rp) :: B_X,B_Y,B_Z
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
-  REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar,cpp_B,cpp_len
+  REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar,cpp_B,cpp_len,kappa
   INTEGER(is) :: flagCon,flagCol
+  LOGICAL :: perturb,turbulence
 
   !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
   !$acc routine (analytical_fields_p_ACC) seq
@@ -688,11 +691,13 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
     R0=F%AB%Ro
     q0=F%AB%qo
     ar=F%AB%a
+    kappa=F%AB%kappa
 
     eps_mn = F%AB%eps_mn
     l_mn = F%AB%l_mn
     sigma_mn = F%AB%sigma_mn
     perturb=F%AB%perturb
+    turbulence=F%AB%turbulence
     cpp_len=params%cpp%length
     cpp_B=params%cpp%Bo
 
@@ -725,13 +730,14 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
 
         flagCon=spp(ii)%vars%flagCon(pp)
 
-        call cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+        call cart_to_tor_check_if_confined_p_ACC(ar,R0,kappa,X_X,X_Y,X_Z, &
           T_R,T_T,T_Z,flagCon)
 
           !write(6,*) T_R*tmp,T_T,T_Z,flagCon
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
-        B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
+          B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,kappa, &
+          eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
 
         spp(ii)%vars%B(pp,1) = B_X
         spp(ii)%vars%B(pp,2) = B_Y
@@ -1782,7 +1788,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
       !$acc loop seq
       do tt=1_ip,tskip
 
-        call cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+        call cart_to_tor_check_if_confined_p_ACC(ar,R0,kappa,X_X,X_Y,X_Z, &
           T_R,T_T,T_Z,flagCon)
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
@@ -5130,7 +5136,8 @@ subroutine adv_GCeqn_top_ACC(params_ACC,random,F,P,spp)
           do torb=1_ip,params_ACC%orbits_per_coll
             call advance_GCeqn_vars_ACC(vars,pp,tcol,torb,params_ACC, &
                 Y_R,Y_PHI,Y_Z,V_PLL,V_MU,flagCon,flagCol,q_cache,m_cache, &
-                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0,Zeff0,FlatWall,RZwall,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU)
+                B_R,B_PHI,B_Z,PSIp,E_R,E_PHI,E_Z,B0,E0,lam,R0,q0,ar,ne0,Te0, &
+                Zeff0,FlatWall,RZwall,RHS_R,RHS_PHI,RHS_Z,RHS_PLL,RHS_MU)
           end do
 
           vars%Y(pp,1)=Y_R
