@@ -181,11 +181,14 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    eps_mn = F%AB%eps_mn
    l_mn = F%AB%l_mn
    sigma_mn = F%AB%sigma_mn
+   kappa=F%AB%kappa
 
    Er0=F%AB%Ero
    rrmn=F%AB%rmn
    sigmaamn=F%AB%sigmamn
    perturb=F%AB%perturb
+   turbulence=F%AB%turbulence
+
    m=2.
    n=1.
    a3 = 100./3. * params%cpp%length**3
@@ -193,7 +196,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    a1 = 3. * params%cpp%length
    a0 = 0.8
 
-   call cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
+   call cart_to_tor_check_if_confined_p(pchunk,ar,R0,kappa,X_X,X_Y,X_Z, &
       T_R,T_T,T_Z,flag_cache)
 
    !$OMP SIMD
@@ -206,22 +209,25 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       sZ(cc)=sin(T_Z(cc))
 
       eta(cc) = T_R(cc)/R0
-      !q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
-      q(cc) = a3*T_R(cc)**3 + a2*T_R(cc)**2 + a1*T_R(cc) + a0
+
+      if (perturb) then
+        q(cc) = a3*T_R(cc)**3 + a2*T_R(cc)**2 + a1*T_R(cc) + a0
+      else
+        q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
+      endif
       !Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
       !changed kappa  YG
+
+      Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+      Br(cc) = 0._rp
       Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
-      Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
-      Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
-
       if (perturb)   then
-        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc))) + Bp_temp/params%cpp%Bo
-        Br(cc) = Br_temp/params%cpp%Bo
+        Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+        Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
 
-      else
-        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
-        Br(cc) = 0._rp
+        Bp(cc) = Bp(cc) + Bp_temp/params%cpp%Bo
+        Br(cc) = Br(cc) + Br_temp/params%cpp%Bo
       end if
 
       B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc) + Br(cc)*cT(cc)*sZ(cc)
@@ -252,10 +258,10 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
 end subroutine analytical_fields_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
-  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,kappa,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
   !$acc routine seq
-  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B
-  LOGICAL,INTENT(IN) :: perturb
+  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,kappa
+  LOGICAL,INTENT(IN) :: perturb,turbulence
   REAL(rp),  INTENT(OUT)     :: B_X,B_Y,B_Z
   REAL(rp),  INTENT(OUT)    :: E_X,E_Y,E_Z
   INTEGER(is),  INTENT(IN)     :: flag_cache
@@ -289,20 +295,23 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   sZ=sin(T_Z)
 
   eta = T_R/R0
-  !q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
-  q = a3*T_R**3 + a2*T_R**2 + a1*T_R + a0
-  !Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+  
+  if (perturb) then
+    q = a3*T_R**3 + a2*T_R**2 + a1*T_R + a0
+  else
+    q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
+  endif
+
+  Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+  Br = 0._rp
   Bzeta = B0/( 1.0_rp + eta*cT)
 
   Br_temp = curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
   Bp_temp = curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
 
   if (perturb)   then
-    Bp = -eta*B0/(q*(1.0_rp + eta*cT)) + Bp_temp/cpp_B
-    Br = Br_temp/cpp_B
-  else
-    Bp = -eta*B0/(q*(1.0_rp + eta*cT))
-    Br = 0._rp
+    Bp = Bp + Bp_temp/cpp_B
+    Br = Br + Br_temp/cpp_B
   end if
 
   B_X = Bzeta*cZ - Bp*sT*sZ + Br*cT*sZ
@@ -1471,6 +1480,8 @@ subroutine initialize_fields(params,F)
       F%AB%eps_mn = eps_mn
       F%AB%l_mn = l_mn
       F%AB%sigma_mn = sigma_mn
+      F%AB%kappa = kappa
+      F%AB%turbulence = turbulence
 
       F%res_double=res_double
 
