@@ -297,7 +297,7 @@ end if
 call initialize_korc_parameters_ACC(params,params_ACC)
  !! copy required params into params_ACC
 
-  !write(6,*) 'V',spp(1)%vars%V
+  
 
 !  write(output_unit_write,'("post ic eta: ",E17.10)') spp(1)%vars%eta
 
@@ -314,6 +314,9 @@ call initialize_korc_parameters_ACC(params,params_ACC)
 
   ! * * * INITIALIZATION STAGE * * *
 
+
+!write(6,*) 'X',spp(1)%vars%X
+!write(6,*) 'V',spp(1)%vars%V
 
 if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
@@ -353,9 +356,8 @@ else if (params%orbit_model(1:2).eq.'GC') then
 
 end if
 
-
-
   !write(6,*) 'V',spp(1)%vars%V
+  !write(6,*) 'X',spp(1)%vars%X
   !write(6,*) 'eta',spp(1)%vars%eta
 
 !  write(6,*) '1Y_R',spp(1)%vars%Y(1:4,1)*params%cpp%length

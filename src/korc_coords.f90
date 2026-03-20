@@ -352,7 +352,7 @@ end subroutine cart_to_cyl_p_ACC
   subroutine cart_to_tor_check_if_confined_p(pchunk,ar,R0,kappa,X_X,X_Y,X_Z, &
        T_R,T_T,T_Z,flag_cache)
     INTEGER, INTENT(IN)  :: pchunk
-    REAL(rp),  INTENT(IN)      :: R0,ar
+    REAL(rp),  INTENT(IN)      :: R0,ar,kappa
     REAL(rp),  INTENT(IN),DIMENSION(pchunk)      :: X_X,X_Y,X_Z
     REAL(rp),  INTENT(OUT),DIMENSION(pchunk)      :: T_R,T_T,T_Z
     INTEGER(is),  INTENT(INOUT),DIMENSION(pchunk)      :: flag_cache
@@ -384,10 +384,10 @@ end subroutine cart_to_cyl_p_ACC
     
   end subroutine cart_to_tor_check_if_confined_p
 
-subroutine cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
+subroutine cart_to_tor_check_if_confined_p_ACC(ar,R0,kappa,X_X,X_Y,X_Z, &
   T_R,T_T,T_Z,flag_cache)
   !$acc routine seq
-  REAL(rp),  INTENT(IN)      :: R0,ar
+  REAL(rp),  INTENT(IN)      :: R0,ar,kappa
   REAL(rp),  INTENT(IN)      :: X_X,X_Y,X_Z
   REAL(rp),  INTENT(OUT)      :: T_R,T_T,T_Z
   INTEGER(is),  INTENT(INOUT)      :: flag_cache
@@ -396,7 +396,7 @@ subroutine cart_to_tor_check_if_confined_p_ACC(ar,R0,X_X,X_Y,X_Z, &
 
   RR=SQRT(X_X*X_X + X_Y*X_Y) - R0
 
-  T_R = SQRT( RR*RR + X_Z*X_Z )
+  T_R = SQRT( RR*RR + X_Z*X_Z/(kappa*kappa) )
   T_T = ATAN2(X_Z, RR)
   T_T = MODULO(T_T,2.0_rp*C_PI)
   T_Z = ATAN2(X_X,X_Y)

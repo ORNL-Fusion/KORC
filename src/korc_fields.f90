@@ -306,10 +306,10 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   Br = 0._rp
   Bzeta = B0/( 1.0_rp + eta*cT)
 
-  Br_temp = curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
-  Bp_temp = curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
-
   if (perturb)   then
+    Br_temp = curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
+    Bp_temp = curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
+
     Bp = Bp + Bp_temp/cpp_B
     Br = Br + Br_temp/cpp_B
   end if
