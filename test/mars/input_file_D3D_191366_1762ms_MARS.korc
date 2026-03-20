@@ -18,7 +18,7 @@
   minimum_particle_energy = 1.0E5 
     ! Minimum energy of simulated particles in eV
   radiation = F
-  GC_rad_model='SDE'
+  GC_rad_SDE= T
   collisions = F
   collisions_model = 'SINGLE_SPECIES' 
     ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
