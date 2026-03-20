@@ -1490,6 +1490,7 @@ subroutine initialize_fields(params,F)
       F%MARS_AMP_Scale = MARS_AMP_Scale
       F%MARS_phase = MARS_phase
       F%MARS_max = MARS_max
+      F%ARS_quas_fac = MARS_quas_fac
       F%Analytic_D3D_IWL=Analytic_D3D_IWL
       F%ntiles=ntiles
       F%circumradius=circumradius
