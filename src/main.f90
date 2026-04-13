@@ -356,8 +356,8 @@ else if (params%orbit_model(1:2).eq.'GC') then
 
 end if
 
-  !write(6,*) 'V',spp(1)%vars%V
-  !write(6,*) 'X',spp(1)%vars%X
+  write(6,*) 'V',spp(1)%vars%V
+  write(6,*) 'X',spp(1)%vars%X
   !write(6,*) 'eta',spp(1)%vars%eta
 
 !  write(6,*) '1Y_R',spp(1)%vars%Y(1:4,1)*params%cpp%length
@@ -372,6 +372,9 @@ call save_collision_params(params)
   !! Subroutines [[save_simulation_parameters]] in [[korc_HDF5]] and
   !! [[save_collision_params]] in [[korc_collisions]] call
   !! subroutines to save simulation and collision parameters.
+
+  !write(6,*) params%cpp
+  !write(output_unit_write,*) params%cpp
 
 
 if (.NOT.(params%restart.OR.params%proceed)) then
