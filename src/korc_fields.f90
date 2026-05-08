@@ -233,9 +233,21 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
         Br(cc) = Br(cc) + Br_temp/params%cpp%Bo
       end if
 
+      if (turbulence) then
+        A    = 1.620386820342208e-06
+        mu   = 0.32309683251166604
+        sigma= 0.017691893772250868
+        
+        g_r = A * np.exp(-0.5 * ((T_R(cc) - mu)/sigma)**2)
+        ballooning = 0.25 * (1.0 + np.cos(T_T(cc)))**2
+        dBr_norm_squared=g_r*ballooning
+
+        Br(cc) = Br(cc) + sqrt(dBr_norm_squared)
+      end if
+
       B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc)/kappa + Br(cc)*cT(cc)*sZ(cc)
       B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc)/kappa + Br(cc)*cT(cc)*cZ(cc)
-      B_Z(cc) = Bp(cc)*cT(cc) + Br(cc)*sT(cc)
+      B_Z(cc) = Bp(cc)*cT(cc) + Br(cc)*sT(cc)/kappa
 
       !write(6,*) 'Ero ',Ero,'Er0 ',Er0
       !write(6,*) 'rmn ',rmn,'rrmn ',rrmn
