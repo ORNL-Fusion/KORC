@@ -367,7 +367,7 @@ end subroutine cart_to_cyl_p_ACC
 
 
        T_R(cc) = SQRT( RR(cc)*RR(cc) + X_Z(cc)*X_Z(cc)/(kappa*kappa) )
-       T_T(cc) = ATAN2(X_Z(cc), RR(cc))
+       T_T(cc) = ATAN2(X_Z(cc)/kappa, RR(cc))
        T_T(cc) = MODULO(T_T(cc),2.0_rp*C_PI)
        T_Z(cc) = ATAN2(X_X(cc),X_Y(cc))
        T_Z(cc) = MODULO(T_Z(cc),2.0_rp*C_PI)

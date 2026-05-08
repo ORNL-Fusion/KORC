@@ -1647,6 +1647,10 @@ CONTAINS
              attr = "Safety factor at the magnetic axis"
              call save_to_hdf5(h5file_id,dset,F%AB%qo,attr)
 
+             dset = TRIM(gname) // "/kappa"
+             attr = "Elongation of the magnetic field"
+             call save_to_hdf5(h5file_id,dset,F%AB%kappa,attr)
+
              dset = TRIM(gname) // "/lambda"
              attr = "Parameter lamda in m"
              call save_to_hdf5(h5file_id,dset,F%AB%lambda* &
@@ -2399,6 +2403,10 @@ CONTAINS
                 CASE ('X')
                    dset = "X"
                    units = params%cpp%length
+
+
+                   !write(6,*) 'X:hdf5',spp(ss)%vars%X*units
+
                    call rsave_2d_array_to_hdf5(subgroup_id, dset, &
                         units*spp(ss)%vars%X)
                 CASE ('Y')
@@ -2464,6 +2472,9 @@ CONTAINS
                    dset = "V"
                    if (params%orbit_model(1:2).eq.'FO') then
                       units = params%cpp%velocity
+
+                      !write(6,*) 'V:hdf5',spp(ss)%vars%v*units
+
                       call rsave_2d_array_to_hdf5(subgroup_id, dset, &
                            units*spp(ss)%vars%V)
                    else if (params%orbit_model(1:2).eq.'GC') then
