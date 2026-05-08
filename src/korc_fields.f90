@@ -170,7 +170,8 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    INTEGER                                      :: cc
    !! Particle chunk iterator.
    REAL(rp) :: Er0,rrmn,sigmaamn,Br_temp,Bp_temp,m,n,a3,a2,a1,a0
-   LOGICAL  :: perturb
+   REAL(rp) :: A,mu,sigma,dBr_norm_squared,g_r,ballooning
+   LOGICAL  :: perturb,turbulence
 
    B0=F%Bo
    E0=F%Eo
