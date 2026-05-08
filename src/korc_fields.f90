@@ -160,7 +160,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    !! changed YG Radial electric field \(E_\r\).
    REAL(rp),DIMENSION(pchunk)                               :: Bzeta
    !! Toroidal magnetic field \(B_\zeta\).
-   REAL(rp),DIMENSION(pchunk)                              :: Bp,Br
+   REAL(rp),DIMENSION(pchunk)                              :: Bp,Br,BMR,BZ
    !! Poloidal magnetic field \(B_\theta(r)\).
    REAL(rp),DIMENSION(pchunk)                               :: eta
    !! Aspect ratio \(\eta\).
@@ -222,16 +222,19 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       Br(cc) = 0._rp
       Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
+
       if (perturb)   then
-        Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
-        Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+        Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0, &
+        eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+        Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0, &
+        eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
 
         Bp(cc) = Bp(cc) + Bp_temp/params%cpp%Bo
         Br(cc) = Br(cc) + Br_temp/params%cpp%Bo
       end if
 
-      B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc) + Br(cc)*cT(cc)*sZ(cc)
-      B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc) + Br(cc)*cT(cc)*cZ(cc)
+      B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc)/kappa + Br(cc)*cT(cc)*sZ(cc)
+      B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc)/kappa + Br(cc)*cT(cc)*cZ(cc)
       B_Z(cc) = Bp(cc)*cT(cc) + Br(cc)*sT(cc)
 
       !write(6,*) 'Ero ',Ero,'Er0 ',Er0
@@ -258,7 +261,8 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
 end subroutine analytical_fields_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
-  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,kappa,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,kappa, &
+  eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
   !$acc routine seq
   REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,kappa
   LOGICAL,INTENT(IN) :: perturb,turbulence
