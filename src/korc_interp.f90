@@ -1968,7 +1968,7 @@ subroutine initialize_fields_interpolant(params,F)
             call EZspline_setup2(e1Imfield_2d_6%Z, F%E1Im_3D%Z(:,6,:), ezerr, .TRUE.)
             call EZspline_error(ezerr)
 
-          else if (params%field_model(10:13).eq.'AORSA') then
+          else if (params%field_model(10:14).eq.'AORSA') then
 
             write(output_unit_write,*) '2D AORSA electric fields'
             flush(output_unit_write)
