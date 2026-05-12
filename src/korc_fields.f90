@@ -1490,7 +1490,7 @@ subroutine initialize_fields(params,F)
       F%MARS_AMP_Scale = MARS_AMP_Scale
       F%MARS_phase = MARS_phase
       F%MARS_max = MARS_max
-      F%ARS_quas_fac = MARS_quas_fac
+      F%MARS_quas_fac = MARS_quas_fac
       F%Analytic_D3D_IWL=Analytic_D3D_IWL
       F%ntiles=ntiles
       F%circumradius=circumradius
@@ -2118,6 +2118,10 @@ end subroutine initialize_fields
          dset = '/PSIPlim'
          call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
+        if (.not.ALLOCATED(F%AMP)) then
+              ALLOCATE(F%AMP(1))
+            end if
+
          F%AMP=F%AORSA_AMP_Scale
 
       end if
@@ -2493,6 +2497,15 @@ end subroutine initialize_fields
     ALLOCATE(F%PHI(dims(1),dims(2),dims(3)))
     ALLOCATE(F%Z(dims(1),dims(2),dims(3)))
   end subroutine ALLOCATE_V_FIELD_3D
+
+  subroutine ALLOCATE_V_FIELD_3DX(F,dims)
+    TYPE(V_FIELD_3D), INTENT(INOUT)    :: F
+    INTEGER, DIMENSION(3), INTENT(IN)  :: dims
+
+    ALLOCATE(F%X(dims(1),dims(2),dims(3)))
+    ALLOCATE(F%Y(dims(1),dims(2),dims(3)))
+    ALLOCATE(F%Z(dims(1),dims(2),dims(3)))
+  end subroutine ALLOCATE_V_FIELD_3DX
 
   !> @brief Subroutine that deallocates all the variables of the electric and magnetic fields.
   !!

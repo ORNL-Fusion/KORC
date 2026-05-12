@@ -3329,7 +3329,7 @@ subroutine interp_FOfields_mars(prtcls, F, params)
   !! Particle chunk iterator.
   REAL(rp) :: psip_conv
   REAL(rp) :: phase,Ro,Bo
-  REAL(rp),DIMENSION(3) :: amp
+  REAL(rp),DIMENSION(:),allocatable :: amp
 
   if (size(prtcls%Y,1).eq.1) then
     ss = size(prtcls%Y,1)
@@ -3424,7 +3424,7 @@ subroutine interp_FOfields_mars_p(pchunk,F,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp,flag_c
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
   REAL(rp) :: phase,MARS_max
-  REAL(rp),DIMENSION(3) :: amp,gr
+  REAL(rp),DIMENSION(:),allocatable :: amp,gr
   REAL(rp),INTENT(IN)   :: time
 
   psip_conv=F%psip_conv
@@ -3583,13 +3583,13 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
   INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
   REAL(rp) :: psip_conv
   REAL(rp) :: phase,MARS_max,MARS_quas_fac
-  REAL(rp),DIMENSION(6) :: amp,gr,fr
+  REAL(rp),DIMENSION(:),allocatable :: amp,gr,fr
   REAL(rp),INTENT(IN)   :: time
 
   psip_conv=F%psip_conv
   amp=F%AMP
   gr=F%GR
-  fr=F%GF
+  fr=F%FR
   phase=F%MARS_phase
   MARS_max=F%MARS_max
   MARS_quas_fac=F%MARS_quas_fac
@@ -3932,7 +3932,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    !! Particle chunk iterator.
    REAL(rp) :: psip_conv,psirr,widthh
    REAL(rp) :: nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
-   REAl(rp),DIMENSION(3) :: amp
+   REAl(rp) :: amp
 
    if (size(prtcls%Y,1).eq.1) then
       ss = size(prtcls%Y,1)
@@ -3945,7 +3945,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
    endif
 
    psip_conv=F%psip_conv
-   amp=F%AMP
+   amp=F%AMP(1)
    mmode=F%AORSA_mmode
    nmode=F%AORSA_nmode
 
@@ -3954,7 +3954,7 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       Y_R=prtcls%Y(pp,1)
       Y_PHI=prtcls%Y(pp,2)
       Y_Z=prtcls%Y(pp,3)
-      theta=atan2(Y_Z,(Y_R-1.7))
+      !theta=atan2(Y_Z,(Y_R-1.7))
 
       call EZspline_interp2_FOaorsa(bfield_2d%A,&
          b1Refield_2dx%X,b1Refield_2dx%Y,b1Refield_2dx%Z, &
@@ -3990,9 +3990,9 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !B1_Y = amp*(BYavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*snp)
       !B1_Z =-amp*(BZavg*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*cnp)
 
-      B1_X = amp(1)*(B1Re_X*cnP-B1Im_X*snP)
-      B1_Y = amp(1)*(B1Re_Y*cnP-B1Im_Y*snP)
-      B1_Z = amp(1)*(B1Re_Z*cnP-B1Im_Z*snP)
+      B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
+      B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
+      B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
 
       !EXavg=76.2/params%cpp%Eo
       !EYavg=57.7/params%cpp%Eo
@@ -4001,9 +4001,9 @@ subroutine interp_FOfields_aorsa(prtcls, F, params)
       !prtcls%E(pp,2)= amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EYavg*cnp
       !prtcls%E(pp,3)=-amp*((1/cosh((prtcls%PSI_P-psirr)/widthh))**2)*EZavg*snp
 
-      prtcls%E(pp,1) = amp(1)*(E1Re_X*cnP-E1Im_X*snP)
-      prtcls%E(pp,2) = amp(1)*(E1Re_Y*cnP-E1Im_Y*snP)
-      prtcls%E(pp,3) = amp(1)*(E1Re_Z*cnP-E1Im_Z*snP)
+      prtcls%E(pp,1) = amp*(E1Re_X*cnP-E1Im_X*snP)
+      prtcls%E(pp,2) = amp*(E1Re_Y*cnP-E1Im_Y*snP)
+      prtcls%E(pp,3) = amp*(E1Re_Z*cnP-E1Im_Z*snP)
 
       B0_X = B0_R*cP - B0_PHI*sP
       B0_Y = B0_R*sP + B0_PHI*cP
@@ -4052,7 +4052,7 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
   REAL(rp), DIMENSION(3)  :: A
   INTEGER :: ezerr_local
   REAL(rp),INTENT(IN) :: psip_conv,nmode,omega,Bo,Ro
-  REAL(rp),DIMENSION(3),INTENT(IN) :: amp
+  REAL(rp),INTENT(IN) :: amp
   TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN)      :: bfield_2d_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Refield_2dx_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT),INTENT(IN)      :: b1Imfield_2dx_local
@@ -4093,17 +4093,17 @@ subroutine interp_FOfields_aorsa_p_ACC(time,bfield_2d_local,b1Refield_2dx_local,
   cnP=cos(omega*time+nmode*Y_PHI)
   snP=sin(omega*time+nmode*Y_PHI)
 
-  B1_X = amp(1)*(B1Re_X*cnP-B1Im_X*snP)
-  B1_Y = amp(1)*(B1Re_Y*cnP-B1Im_Y*snP)
-  B1_Z = amp(1)*(B1Re_Z*cnP-B1Im_Z*snP)
+  B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
+  B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
+  B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
 
   B_X = B0_X+B1_X
   B_Y = B0_Y+B1_Y
   B_Z = B0_Z+B1_Z
 
-  E_X = amp(1)*(E1Re_X*cnP-E1Im_X*snP)
-  E_Y = amp(1)*(E1Re_Y*cnP-E1Im_Y*snP)
-  E_Z = amp(1)*(E1Re_Z*cnP-E1Im_Z*snP)
+  E_X = amp*(E1Re_X*cnP-E1Im_X*snP)
+  E_Y = amp*(E1Re_Y*cnP-E1Im_Y*snP)
+  E_Z = amp*(E1Re_Z*cnP-E1Im_Z*snP)
 
 
 end subroutine interp_FOfields_aorsa_p_ACC
@@ -4133,10 +4133,10 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
    INTEGER(is),DIMENSION(pchunk),INTENT(INOUT)   :: flag_cache
    REAL(rp) :: psip_conv,psirr,widthh
    REAL(rp) :: nmode,omega,BXavg,BYavg,BZavg,EXavg,EYavg,EZavg,mmode
-   REAL(rp),DIMENSION(3) :: amp
+   REAL(rp) :: amp
 
    psip_conv=F%psip_conv
-   amp=F%AMP
+   amp=F%AMP(1)
    nmode=F%AORSA_nmode
    omega=2*C_PI*F%AORSA_freq
    mmode=F%AORSA_mmode
@@ -4177,9 +4177,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
       cnP=cos(omega*time+nmode*Y_PHI(cc))
       snP=sin(omega*time+nmode*Y_PHI(cc))
 
-      B1_X = amp(1)*(B1Re_X*cnP-B1Im_X*snP)
-      B1_Y = amp(1)*(B1Re_Y*cnP-B1Im_Y*snP)
-      B1_Z = amp(1)*(B1Re_Z*cnP-B1Im_Z*snP)
+      B1_X = amp*(B1Re_X*cnP-B1Im_X*snP)
+      B1_Y = amp*(B1Re_Y*cnP-B1Im_Y*snP)
+      B1_Z = amp*(B1Re_Z*cnP-B1Im_Z*snP)
 
       !BXavg=6.95E-07/params%cpp%Bo
       !BYavg=1.184E-06/params%cpp%Bo
@@ -4200,9 +4200,9 @@ subroutine interp_FOfields_aorsa_p(time,params,pchunk,F,Y_R,Y_PHI,Y_Z, &
       !E_Y(cc) = amp*(EYavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*cnp
       !E_Z(cc) = amp*(EZavg*((1/cosh((PSIp(cc)-psirr)/widthh))**2))*snp
 
-      E_X(cc) = amp(1)*(E1Re_X*cnP-E1Im_X*snP)
-      E_Y(cc) = amp(1)*(E1Re_Y*cnP-E1Im_Y*snP)
-      E_Z(cc) = amp(1)*(E1Re_Z*cnP-E1Im_Z*snP)
+      E_X(cc) = amp*(E1Re_X*cnP-E1Im_X*snP)
+      E_Y(cc) = amp*(E1Re_Y*cnP-E1Im_Y*snP)
+      E_Z(cc) = amp*(E1Re_Z*cnP-E1Im_Z*snP)
 
 
    end do
