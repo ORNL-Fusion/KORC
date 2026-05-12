@@ -66,6 +66,8 @@ module korc_types
      !! \(\phi\) component of the vector field variable.
      REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: Z
      !! \(Z\) component of the vector field variable.
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: X
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: Y
   END TYPE V_FIELD_3D
 
   TYPE, PUBLIC :: V_FIELD_2DX

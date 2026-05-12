@@ -1096,7 +1096,7 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
   REAL(rp) :: E_X,E_Y,E_Z
   REAL(rp) :: PSIp
   REAL(rp) :: m_cache,q_cache,psip_conv,phase,Ro,Bo,circumradius,ntiles,nmode,mmode,omega
-  REAL(rp),DIMENSION(3) :: amp
+  REAL(rp) :: amp
   INTEGER(is) :: flagCon,flagCol
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
   REAL(rp),DIMENSION(2) :: DiMESdims
@@ -1112,7 +1112,7 @@ subroutine FO_init_aorsa_ACC(params,F,spp,output,step)
     q_cache=spp(ii)%q
 
     psip_conv=F%psip_conv
-    amp=F%AMP
+    amp=F%AMP(1)
     phase=F%MARS_phase
     nmode=F%AORSA_nmode
     omega=2*C_PI*F%AORSA_freq
@@ -3338,7 +3338,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   INTEGER(is) :: flagCon,flagCol
   INTEGER(ip) :: tskip
   REAL(rp) :: a,m_cache,q_cache,psip_conv,phase,nmode,mmode,omega
-  REAL(rp),DIMENSION(3) :: amp
+  REAL(rp) :: amp
   REAL(rp) :: Ro,Bo,circumradius,ntiles,dt,time,t0,tnorm
   INTEGER  :: ii,pp,ss,tt,ppp
   LOGICAL :: Analytic_D3D_IWL,useDiMES,Dim2x1t
@@ -3365,7 +3365,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   
 
     psip_conv=F%psip_conv
-    amp=F%AMP
+    amp=F%AMP(1)
     phase=F%MARS_phase
     nmode=F%AORSA_nmode
     omega=2*C_PI*F%AORSA_freq
