@@ -1746,10 +1746,10 @@ subroutine initialize_fields(params,F)
       else if ((params%field_model(10:13).eq.'MARS').OR. &
          (params%field_model(10:14).eq.'AORSA')) then
 
-         call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-            F%Bflux,F%Efield,F%B1field,F%E1field)
+        call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
+          F%Bflux,F%Efield,F%B1field,F%E1field)
 
-          call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
+        call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
 
       else
          call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
