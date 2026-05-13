@@ -1907,6 +1907,7 @@ end subroutine initialize_fields
     INTEGER(HSIZE_T), DIMENSION(:), ALLOCATABLE    :: dims
     INTEGER                                        :: h5error
     REAL(rp)                                       :: rdatum
+    LOGICAL :: link_exists
 
     filename = TRIM(params%magnetic_field_filename)
     call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
@@ -1939,9 +1940,15 @@ end subroutine initialize_fields
 
        if(F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
 
-          dset = "/NPHI"
-          call load_from_hdf5(h5file_id,dset,rdatum)
-          F%dims(2) = INT(rdatum)
+        dset = '/NPHI'
+        gname = 'NPHI'
+
+         call h5lexists_f(h5file_id,TRIM(gname),link_exists,h5error)
+
+          if (link_exists) then
+            call load_from_hdf5(h5file_id,dset,rdatum)
+            F%dims(2) = INT(rdatum)
+          endif
 
        end if
 
@@ -2060,7 +2067,7 @@ end subroutine initialize_fields
 
 
       if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
-            F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
+            F%Dim2x1t.OR.((params%field_model(10:13).eq.'MARS').AND.(F%dims(2).gt.0))) then
          dset = "/PHI"
          call load_array_from_hdf5(h5file_id,dset,F%X%PHI)
       end if
@@ -2100,13 +2107,19 @@ end subroutine initialize_fields
          dset = '/PSIPlim'
          call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
+        if (.not.ALLOCATED(F%AMP)) then
+          ALLOCATE(F%AMP(1))
+        end if
+
          dset = '/AMP'
          call load_array_from_hdf5(h5file_id,dset,F%AMP)
 
          F%AMP=F%AMP*F%MARS_AMP_Scale
 
-         dset = '/GR'
-         call load_array_from_hdf5(h5file_id,dset,F%GR)
+        if (F%dims(2).gt.0) then
+          dset = '/GR'
+          call load_array_from_hdf5(h5file_id,dset,F%GR)
+        endif
 
       end if
 
@@ -2120,7 +2133,7 @@ end subroutine initialize_fields
 
         if (.not.ALLOCATED(F%AMP)) then
               ALLOCATE(F%AMP(1))
-            end if
+        end if
 
          F%AMP=F%AORSA_AMP_Scale
 
@@ -2196,6 +2209,8 @@ end subroutine initialize_fields
 
          if (params%field_model(10:13).eq.'MARS') then
 
+          if (F%dims(2).gt.0) then
+
             dset = "/ReBR"
             call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%R)
 
@@ -2213,6 +2228,26 @@ end subroutine initialize_fields
 
             dset = "/ImBZ"
             call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%Z)
+
+          else
+            dset = "/ReBR"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
+
+            dset = "/ReBPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%PHI)
+
+            dset = "/ReBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%Z)
+
+            dset = "/ImBR"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%R)
+
+            dset = "/ImBPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%PHI)
+
+            dset = "/ImBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%Z)
+          endif
 
          else if (params%field_model(10:14).eq.'AORSA') then
 
@@ -2242,23 +2277,27 @@ end subroutine initialize_fields
 
         if (params%field_model(10:13).eq.'MARS') then
 
-          dset = "/ReER"
-          call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%R)
+          if (F%dims(2).gt.0) then
 
-          dset = "/ReEPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%PHI)
+            dset = "/ReER"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%R)
 
-          dset = "/ReEZ"
-          call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%Z)
+            dset = "/ReEPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%PHI)
 
-          dset = "/ImER"
-          call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%R)
+            dset = "/ReEZ"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%Z)
 
-          dset = "/ImEPHI"
-          call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%PHI)
+            dset = "/ImER"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%R)
 
-          dset = "/ImEZ"
-          call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%Z)
+            dset = "/ImEPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%PHI)
+
+            dset = "/ImEZ"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%Z)
+
+          endif
 
         else if (params%field_model(10:14).eq.'AORSA') then
 
@@ -2373,6 +2412,14 @@ end subroutine initialize_fields
        F%PSIp=0._rp
     end if
 
+    if (params%field_model(10:13).eq.'MARS') then
+
+       if (B1field.and.(.not.ALLOCATED(F%B1Re_2D%R))) then
+          call ALLOCATE_V_FIELD_2D(F%B1Re_2D,F%dims)
+          call ALLOCATE_V_FIELD_2D(F%B1Im_2D,F%dims)
+       end if
+
+    endif
 
 
     if (params%field_model(10:14).eq.'AORSA') then
@@ -2430,7 +2477,7 @@ end subroutine initialize_fields
        ALLOCATE(F%PSIp3D(F%dims(1),F%dims(2),F%dims(3)))
     end if
 
-    if (params%field_model(10:13).eq.'MARS') then
+    if (params%field_model(10:14).eq.'MARS_') then
 
       if (B1field.and.(.not.ALLOCATED(F%B1Re_3D%R))) then
         call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)

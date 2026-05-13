@@ -636,6 +636,10 @@ module korc_types
      TYPE(V_FIELD_2D) 				:: E_2D
      !! KORC 2-D vector field of the pre-computed electric field.
      TYPE(V_FIELD_2D) 				:: B_2D
+     TYPE(V_FIELD_2D) 				:: B1Re_2D
+     TYPE(V_FIELD_2D) 				:: B1Im_2D
+     TYPE(V_FIELD_2D) 				:: E1Re_2D
+     TYPE(V_FIELD_2D) 				:: E1Im_2D
      TYPE(V_FIELD_3D) 				:: B1Re_3D
      TYPE(V_FIELD_3D) 				:: B1Im_3D
       TYPE(V_FIELD_3D) 				:: E1Re_3D

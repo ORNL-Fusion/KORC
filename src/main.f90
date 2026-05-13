@@ -328,6 +328,10 @@ if (params%orbit_model(1:2).eq.'FO') then
     call FO_init_uni_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(1:3).eq.'ANA') then
     call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(10:16).eq.'MARS_EM') then
+    call FO_init_marsEM_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(10:16).eq.'MARS_NL') then
+    call FO_init_marsNL_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(10:13).eq.'MARS') then
     call FO_init_mars_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(10:14).eq.'AORSA') then
@@ -524,7 +528,13 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
   params%field_model(10:13).eq.'MARS') then
   if (.NOT.(params%restart.OR.params%proceed)) then
 #ifdef ACC
-    call FO_init_mars_ACC(params,F,spp,.false.,.true.)
+    if (params%field_model(10:16).eq.'MARS_EM') then
+      call FO_init_marsEM_ACC(params,F,spp,.false.,.true.)
+    else if (params%field_model(10:16).eq.'MARS_NL') then
+      call FO_init_marsNL_ACC(params,F,spp,.false.,.true.)
+    else if (params%field_model(10:13).eq.'MARS') then
+      call FO_init_mars_ACC(params,F,spp,.false.,.true.)
+    endif
 #else
     call FO_init(params,F,spp,.false.,.true.)
 #endif ACC
@@ -533,7 +543,13 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
 
   do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-    call adv_FOinterp_mars_top_ACC(params,F,P,spp)
+    if (params%field_model(10:16).eq.'MARS_EM') then
+      call adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
+    elseif (params%field_model(10:16).eq.'MARS_NL') then
+      call adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
+    elseif (params%field_model(10:13).eq.'MARS') then
+      call adv_FOinterp_mars_top_ACC(params,F,P,spp)
+    endif
 #else
     call adv_FOinterp_mars_top(params,randoms,F,P,spp)
 #endif ACC
