@@ -22,10 +22,12 @@ set_property(TARGET xtest PROPERTY LINKER_LANGUAGE Fortran)
 
 configure_file(${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh.in ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh.in ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh)
+configure_file(${CMAKE_SOURCE_DIR}/test/mars/korc_mars_EM.sh.in ${CMAKE_BINARY_DIR}/mars_test_EM/korc_mars_EM.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/aorsa/korc_aorsa.sh.in ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/egyro_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_test)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_EM_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/aorsa_test)
 
 foreach(RANK IN ITEMS 1 2 4 8)
@@ -40,6 +42,11 @@ foreach(RANK IN ITEMS 1 2 4 8)
           COMMAND ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh ${RANK}
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
       set_tests_properties (mars_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
+
+      add_test (NAME mars_EM_test_${RANK}
+          COMMAND ${CMAKE_BINARY_DIR}/mars_EM_test/korc_mars_EM.sh ${RANK}
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+      set_tests_properties (mars_test_EM_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
       add_test (NAME aorsa_test_${RANK}
       COMMAND ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh ${RANK}
