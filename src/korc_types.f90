@@ -66,6 +66,8 @@ module korc_types
      !! \(\phi\) component of the vector field variable.
      REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: Z
      !! \(Z\) component of the vector field variable.
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: X
+     REAL(rp), DIMENSION(:,:,:), ALLOCATABLE :: Y
   END TYPE V_FIELD_3D
 
   TYPE, PUBLIC :: V_FIELD_2DX
@@ -636,8 +638,14 @@ module korc_types
      TYPE(V_FIELD_2D) 				:: E_2D
      !! KORC 2-D vector field of the pre-computed electric field.
      TYPE(V_FIELD_2D) 				:: B_2D
+     TYPE(V_FIELD_2D) 				:: B1Re_2D
+     TYPE(V_FIELD_2D) 				:: B1Im_2D
+     TYPE(V_FIELD_2D) 				:: E1Re_2D
+     TYPE(V_FIELD_2D) 				:: E1Im_2D
      TYPE(V_FIELD_3D) 				:: B1Re_3D
      TYPE(V_FIELD_3D) 				:: B1Im_3D
+      TYPE(V_FIELD_3D) 				:: E1Re_3D
+     TYPE(V_FIELD_3D) 				:: E1Im_3D
      TYPE(V_FIELD_2DX) 				:: B1Re_2DX
      TYPE(V_FIELD_2DX) 				:: E1Im_2DX
      TYPE(V_FIELD_2DX) 				:: E1Re_2DX
@@ -679,10 +687,11 @@ module korc_types
      REAL(rp)  :: PSIP_min
      REAL(rp)  :: PSIp_lim,PSIp_0
      REAL(rp),DIMENSION(:), ALLOCATABLE  :: AMP
-     REAL(rp),DIMENSION(:), ALLOCATABLE  :: GR
+     REAL(rp),DIMENSION(:), ALLOCATABLE  :: GR,FR
      REAL(rp)  :: MARS_AMP_Scale
      REAL(rp)  :: MARS_phase
      REAL(rp)  :: MARS_max
+     REAL(rp)  :: MARS_quas_fac
      REAL(rp)  :: AORSA_AMP_Scale
      REAL(rp)  :: AORSA_freq
      REAL(rp)  :: psir
