@@ -5,22 +5,26 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 0.E-6
+  simulation_time = 0.E-8!4.E-8
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-7
+  snapshot_frequency = 4.E-11 
     ! Time between snapshots in seconds
-  dt = 1.E-2
+  dt = 1.e-2
     ! Time step as fraction of relativistic gyro-period
-  minimum_particle_energy = 1.0E6 
+  num_species = 1
+  minimum_particle_energy = 1.0E5 
     ! Minimum energy of simulated particles in eV
   radiation = F
-  GC_rad_model='SDE'
+  GC_rad_SDE = F
   collisions = F
-  bound_electron_model = 'HESSLOW' 
+  LargeCollisions = F
+  collisions_model = 'SINGLE_SPECIES'
+    ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
+  bound_electron_model = 'NO_BOUND'
     ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
-  field_model = 'EXTERNAL-MARS_EM'	
-  profile_model = 'ANALYTICAL'	
+  field_model = 'ANALYTICAL'
+  profile_model = 'ANALYTICAL'
     ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
     ! For 'ANALYTICAL', the magnetic field is calculated based on
     ! the parameters given in the "analytic_mag_field_params" section.
@@ -28,8 +32,7 @@
     ! specified in "filename".
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
-  magnetic_field_filename = 'ARC_42533M20_MARS.h5'
-  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,PSIp}' 
+  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,flagRE}'
     ! List of outputs
     !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,
     !  curlb,ne,Te,Zeff,PSIp,nimp}'
@@ -37,16 +40,17 @@
     ! 'FO' for full orbit, 'GCpre' for guiding center with pre-computed
     ! auxiliary fields, 'GCgrad' for guiding center with auxiliary
     ! fields computed with PSPLINE.
-  field_eval = 'interp'
+  field_eval = 'eqn'
     ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
     ! where 'eqn' evaluates particle fields at particle positions and
     ! 'interp' interpolates precomputed fields.
+  pchunk = 1
+  SameRandSeed = T
 /
 
 &plasma_species
-  runaway = T
-  ppp = 10000
-    ! Number of particles per process (mpi)
+  ppp = 1000
+  pinit = 1000
   q = -1.0
     ! Electric charge
   m = 1.0
@@ -56,87 +60,39 @@
     ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
     ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
     ! 'AVALANCHE-4D','TRACER','SPONG-3D','HOLLMANN-3D'
-  Ro = 4.68
-  PHIo = 0.
-    ! In degrees
-  Zo = 0.0
-  r_inner = 0.0
-  r_outter = 0.6
-  shear_factor = 0.35
-  sigmaR = 1.e6
-  sigmaZ = 0.2
-  theta_gauss = 0.0
-  psi_max=1.
-    ! goes as R^2 for HOLLMANN-3D, is psiN_max for HOLLMANN-3D-PSI
   energy_distribution = 'MONOENERGETIC'
     ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
     ! 'EXPERIMENTAL', and 'UNIFORM'
   pitch_distribution = 'MONOPITCH'
     ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
-  Eno = 10.0E6
-    ! Initial energy in eV
-  etao = 170.
-    ! Initial pitch angle
-  Eo_lims = 1.0E6,50.0E6
+  Eno = 1.E7
     ! Lower and upper limit of simulated energy range, in eV.
-  etao_lims = 0.0,20.0
+  etao = 10.0
     ! Lower and upper limit of simulated pitch-angle range, in degrees.
-  Xtrace = 1.6,0.0,-0.75
-    ! Initial position of tracer particle for debugging with
-    ! spatial_distribution='TRACER'
+  Ro=1.8
+  Zo=0.1
+  psi_max=0.8
   dth = 3.
-    ! Variance of sampling normal variate for pitch angle
   dgam = 3.
-    ! Variance of sampling normal variate for pitch angle
   dR = 0.1
-    ! Variance of sampling normal variate for R location
   dZ = 0.1
-    ! Variance of sampling normal variate for Z location
+  sigmaR = 1.e6
+  sigmaZ = 0.2
 /
 
-&externalPlasmaModel
-  Bfield = F
-  B1field=T
-  dBfield = F
-  axisymmetric_fields = F
-  Bflux = T
-  Bflux3D = F
-  Efield = F
-  E1field = T
-  Dim2x1t =F
-  E_2x1t = F
-  t0_2x1t = 48.47
-  ind0_2x1t = 1
-  ReInterp_2x1t = F
-  PSIp_lim= -0.8708733797954217
-  PSIp_0= -0.10649133647180808
-  psip_conv=-0.15915494309189535
-    ! sign appended to \nabla\phi\times\nabla\psi_p for definition of
-    ! poloidal magnetic field. +1/(2*pi) for JFIT, -1 for EFIT
-  MARS_AMP_Scale=1.
-  MARS_phase=0.
-  MARS_max=100. !ratio of init to max
-/
-
-&plasmaProfiles
-  axisymmetric = T
-  filename = 'DIII_200236_MARS_CaseA.h5' 
-/
-
-&HollmannPDF
-  filename_Hollmann = 'Hollmann_PDF_DIII_200236.h5'
-  rho_ind = 4
-  max_pitch_angle_Hollmann = 90. 
-    ! In degrees
-  min_pitch_angle_Hollmann = 0. 
-    ! In degrees
-  min_energy_Hollmann = 2.E3 
-    ! In eV
-  max_energy_Hollmann = 3.E7
-    ! For Hollmann_PDF_HR.h5, needs to be less than 80 MeV
-    ! In eV
-  current_direction_Hollmann = 'ANTIPARALLEL'
-  Zeff_Hollmann = 1.
-  E_Hollmann = 1.
-
+&analytical_fields_params
+  Eo = 0e0 
+    ! In V/m
+  current_direction = 'PARALLEL' 
+    ! 'PARALLEL' or 'ANTI-PARALLEL'
+  Bo = 1.6
+    ! In Teslas. ITER: 5.42 DIII-D: 2.19 JET: 3.39
+  major_radius = 1.7 
+    ! Major radius in meters. ITER: 6.5 DIII-D: 1.6 JET:2.6
+  minor_radius = 0.55
+  kappa = 1.5
+  qo = 1.01
+  qa = 4.78
+  perturb = F
+  turbulence = F
 /

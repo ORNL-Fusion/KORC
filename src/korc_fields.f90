@@ -8,6 +8,7 @@ use korc_coords
 use korc_interp
 use korc_HDF5
 use korc_input
+use korc_constants
 
 IMPLICIT NONE
 
@@ -37,7 +38,7 @@ PRIVATE :: get_analytical_fields,&
 
 CONTAINS
 
-subroutine analytical_fields(F,Y,E,B,flag,params)
+subroutine analytical_fields(F,Y,E,B,flag,psip,params)
    !! @note Subroutine that calculates and returns the analytic electric and
    !! magnetic field for each particle in the simulation. @endnote
    !! The analytical magnetic field is given by:
@@ -74,11 +75,12 @@ subroutine analytical_fields(F,Y,E,B,flag,params)
    INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(IN)     :: flag
    !! Flag for each particle to decide whether it is being followed (flag=T)
    !! or not (flag=F).
+   REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)     :: psip
    REAL(rp)                                               :: Ezeta
    !! Toroidal electric field \(E_\zeta\).
    REAL(rp)                                               :: Bzeta
    !! Toroidal magnetic field \(B_\zeta\).
-   REAL(rp)                                               :: Bp,Br
+   REAL(rp)                                               :: Bp,Br,Er
    !! Poloidal magnetic field \(B_\theta(r)\).
    REAL(rp)                                               :: eta
    !! Aspect ratio \(\eta\).
@@ -88,13 +90,27 @@ subroutine analytical_fields(F,Y,E,B,flag,params)
    !! Particle iterator.
    INTEGER(ip)                                            :: ss
    !! Particle species iterator.
-   LOGICAL  :: perturb
+   LOGICAL  :: perturb,turbulence
    REAL(rp)      :: R0,ar,sigma_mn,eps_mn,m,n,Bp_temp,Br_temp,a3,a2,a1,a0
+   REAL(rp) :: A,ballooning,dBr_norm_squared,g_r,mu,sigma
 
-   ss = SIZE(Y,1)
+
+  if (size(Y,1).eq.1) then
+      ss = size(Y,1)
+  else
+      if (Y(2,1).eq.0) then
+        ss=1_idef
+      else
+        ss = size(Y,1)
+      end if
+  endif
+    
+
    perturb=F%AB%perturb
+   turbulence=F%AB%turbulence
    R0=F%AB%Ro
    ar=F%AB%a
+   kappa=F%AB%kappa
    eps_mn = F%AB%eps_mn
    l_mn = F%AB%l_mn
    sigma_mn = F%AB%sigma_mn
@@ -105,41 +121,70 @@ subroutine analytical_fields(F,Y,E,B,flag,params)
    a1 = 3. * params%cpp%length
    a0 = 0.8
 
-   !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,Ezeta,Bp,Bzeta,eta,q) &
-   !$OMP& SHARED(F,Y,E,B,flag)
+   !!$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,Ezeta,Bp,Bzeta,eta,q) &
+   !!$OMP& SHARED(F,Y,E,B,flag)
    do pp=1_idef,ss
       if ( flag(pp) .EQ. 1_is ) then
-         eta = Y(pp,1)/F%Ro
-         !q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
-         q = a3*Y(pp,1)**3 + a2*Y(pp,1)**2 + a1*Y(pp,1) + a0
-         !Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
-         Bp=0._rp
-         Br=0._rp
-         Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
+        eta = Y(pp,1)/F%Ro
 
-         Bp_temp = curl_Amn_p(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)),SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
-         Br_temp = curl_Amn_r(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)),SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+        psip(pp)=C_PI*F%AB%Bo*F%AB%a**2*log(1+(Y(pp,1)/F%AB%a)**2* &
+        (F%AB%qa-F%AB%qo)/F%AB%qo)/(F%AB%qa-F%AB%qo)
 
-         if (perturb)   then
+        if (.not.perturb) then
+          q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
+        else
+          q = a3*Y(pp,1)**3 + a2*Y(pp,1)**2 + a1*Y(pp,1) + a0
+        endif
+
+        Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
+        Br=0._rp
+        Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
+
+        if (perturb) then
+          Bp_temp = curl_Amn_p(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)), &
+          SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+          Br_temp = curl_Amn_r(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)), &
+          SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+
           Bp = Bp + Bp_temp/params%cpp%Bo
           Br = Br + Br_temp/params%cpp%Bo
         end if
 
+        if (turbulence) then
+          A    = 1.620386820342208e-06
+          mu   = 0.32309683251166604
+          sigma= 0.017691893772250868
+          
+          g_r = A * exp(-0.5 * ((Y(pp,1) - mu)/sigma)**2)
+          ballooning = 0.25 * (1.0 + cos(Y(pp,2)))**2
+          dBr_norm_squared=g_r*ballooning
 
-        B(pp,1) =  Bzeta*COS(Y(pp,3)) - Bp*SIN(Y(pp,2))*SIN(Y(pp,3)) + Br*COS(Y(pp,2))*SIN(Y(pp,3))
-        B(pp,2) = -Bzeta*SIN(Y(pp,3)) - Bp*SIN(Y(pp,2))*COS(Y(pp,3)) + Br*COS(Y(pp,2))*COS(Y(pp,3))
-        B(pp,3) = Bp*COS(Y(pp,2)) + Br*SIN(Y(pp,2))
+          Br = Br + sqrt(dBr_norm_squared)
+        end if
 
-         if (abs(F%Eo) > 0) then
-            Ezeta = -F%Eo/( 1.0_rp + eta*COS(Y(pp,2)) )
+        B(pp,1) =  Bzeta*COS(Y(pp,3)) - Bp*SIN(Y(pp,2))*SIN(Y(pp,3))/kappa + Br*COS(Y(pp,2))*SIN(Y(pp,3))
+        B(pp,2) = -Bzeta*SIN(Y(pp,3)) - Bp*SIN(Y(pp,2))*COS(Y(pp,3))/kappa + Br*COS(Y(pp,2))*COS(Y(pp,3))
+        B(pp,3) = Bp*COS(Y(pp,2)) + Br*SIN(Y(pp,2))/kappa
 
-            E(pp,1) = Ezeta*COS(Y(pp,3))
-            E(pp,2) = -Ezeta*SIN(Y(pp,3))
-            E(pp,3) = 0.0_rp
-         end if
+        if (abs(F%Eo) > 0) then
+          Ezeta = -F%Eo/( 1.0_rp + eta*COS(Y(pp,2)) )
+        else
+          Ezeta = 0._rp
+        end if
+
+        IF (F%AB%Ero == 0._rp) THEN
+          Er = 0._rp
+        ELSE
+          Er = F%AB%Ero*(1/cosh((Y(pp,1)-F%AB%rmn)/F%AB%sigmamn))
+        END IF
+
+        E(pp,1) = Ezeta*COS(Y(pp,3))+Er*SIN(Y(pp,3))*COS(Y(pp,2))
+        E(pp,2) = -Ezeta*SIN(Y(pp,3))+Er*COS(Y(pp,3))*COS(Y(pp,2))
+        E(pp,3) = Er*SIN(Y(pp,2))/kappa
+
       end if
    end do
-   !$OMP END PARALLEL DO
+   !!$OMP END PARALLEL DO
 end subroutine analytical_fields
 
 subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
@@ -239,8 +284,8 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
         mu   = 0.32309683251166604
         sigma= 0.017691893772250868
         
-        g_r = A * np.exp(-0.5 * ((T_R(cc) - mu)/sigma)**2)
-        ballooning = 0.25 * (1.0 + np.cos(T_T(cc)))**2
+        g_r = A * exp(-0.5 * ((T_R(cc) - mu)/sigma)**2)
+        ballooning = 0.25 * (1.0 + cos(T_T(cc)))**2
         dBr_norm_squared=g_r*ballooning
 
         Br(cc) = Br(cc) + sqrt(dBr_norm_squared)
@@ -265,7 +310,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       
       E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
       E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
-      E_Z(cc) = Er(cc)*sT(cc)
+      E_Z(cc) = Er(cc)*sT(cc)/kappa
 
       !write(6,*) 'Er ',Er(cc)
    end do
@@ -1140,7 +1185,7 @@ subroutine get_analytical_fields(params,vars,F)
 
       call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
 
-      call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon,params)
+      call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon, vars%PSI_P, params)
 
       !       call cart_to_cyl(vars%X,vars%Y)
 
@@ -1563,6 +1608,9 @@ subroutine initialize_fields(params,F)
          write(output_unit_write,'("Electric field: ",E17.10)') F%Eo
 
       end if
+
+      F%PSIP_min = 0._rp
+      F%PSIp_lim = C_PI*Bo*minor_radius**2*log(1+(qa-qo)/qo)/(qa-qo) 
 
 
       if (params%field_eval.eq.'interp') then

@@ -300,12 +300,12 @@ end subroutine cart_to_cyl_p_ACC
 
 !    write(output_unit_write,'("X c2tor: ",E17.10)') X(1,:)
     
-    !$OMP PARALLEL DO FIRSTPRIVATE(ss,a,Ro) PRIVATE(pp) SHARED(X,Xtor,flag)
+    !!$OMP PARALLEL DO FIRSTPRIVATE(ss,a,Ro) PRIVATE(pp) SHARED(X,Xtor,flag)
     do pp=1_idef,ss
        if ( flag(pp) .EQ. 1_is ) then
           Xtor(pp,1) = SQRT( (SQRT(X(pp,1)**2 + X(pp,2)**2) - Ro)**2 + &
-               X(pp,3)**2 )
-          Xtor(pp,2) = ATAN2(X(pp,3), SQRT(X(pp,1)**2 + X(pp,2)**2) - Ro)
+               (X(pp,3)/F%AB%kappa)**2 )
+          Xtor(pp,2) = ATAN2(X(pp,3)/F%AB%kappa, SQRT(X(pp,1)**2 + X(pp,2)**2) - Ro)
           Xtor(pp,2) = MODULO(Xtor(pp,2),2.0_rp*C_PI)
           Xtor(pp,3) = ATAN2(X(pp,1),X(pp,2))
           Xtor(pp,3) = MODULO(Xtor(pp,3),2.0_rp*C_PI)
@@ -321,7 +321,7 @@ end subroutine cart_to_cyl_p_ACC
           end if
        end if
     end do
-    !$OMP END PARALLEL DO
+    !!$OMP END PARALLEL DO
   end subroutine cart_to_tor_check_if_confined
 
   subroutine cart_to_tor_p(pchunk,R0,X_X,X_Y,X_Z,T_R,T_T,T_Z)

@@ -231,6 +231,11 @@ subroutine normalize_variables(params,spp,F,P)
      F%AB%sigma_mn = F%AB%sigma_mn/params%cpp%length
      F%AB%l_mn = F%AB%l_mn/params%cpp%length
 
+     F%PSIP_min = F%PSIP_min/ &
+             (params%cpp%Bo*params%cpp%length**2)
+      F%PSIp_lim = F%PSIp_lim/ &
+          (params%cpp%Bo*params%cpp%length**2)
+
 
      if (params%field_eval.eq.'interp') then
         if (ALLOCATED(F%B_2D%R)) F%B_2D%R = F%B_2D%R/params%cpp%Bo
@@ -251,12 +256,6 @@ subroutine normalize_variables(params,spp,F,P)
 
         if (ALLOCATED(F%PSIp)) F%PSIp = F%PSIp/ &
              (params%cpp%Bo*params%cpp%length**2)
-        F%PSIP_min = F%PSIP_min/ &
-             (params%cpp%Bo*params%cpp%length**2)
-        if (.not.params%field_model.eq.'M3D_C1') then
-           F%PSIp_lim = F%PSIp_lim/ &
-                (params%cpp%Bo*params%cpp%length**2)
-        end if
 
         F%X%R = F%X%R/params%cpp%length
         ! Nothing to do for the PHI component

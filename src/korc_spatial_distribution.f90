@@ -1338,7 +1338,11 @@ subroutine MH_psi(params,random,spp,F)
 
   nsamples = spp%pinit*params%mpi_params%nmpi
 
-  params%GC_coords=.TRUE.
+  if ((params%field_eval.eq.'eqn').and.(params%orbit_model.eq.'FO')) then
+  else
+    params%GC_coords=.TRUE.
+  endif
+
   PSIp_lim=F%PSIp_lim
   !changed_YG
   if (params%field_model.eq.'M3D_C1') then
@@ -1350,7 +1354,7 @@ subroutine MH_psi(params,random,spp,F)
      PSIp0=F%PSIp_0
      psi_max = spp%psi_max
      psi_max_buff = spp%psi_max
-  else
+  else if (params%field_model.eq.'EXTERNAL') then
      min_R=minval(F%X%R)
      max_R=maxval(F%X%R)
      min_Z=minval(F%X%Z)
@@ -1365,6 +1369,17 @@ subroutine MH_psi(params,random,spp,F)
     ! psi_max=(psi_max-PSIp0)/(PSIp_lim-PSIp0)
     ! PSIp_min=(PSIp_min-PSIp0)/(PSIp_lim-PSIp0)
 !    write(6,*)"psip0",PSIp0,"psi_max",psi_max,"PSIp_min",PSIp_min,"PSIp_lim", PSIp_lim
+  else
+    min_R=0.
+    max_R=10./params%cpp%length
+    min_Z=-10./params%cpp%length
+    max_Z=10./params%cpp%length
+
+    PSIp0=F%PSIP_min
+    
+    psi_max = spp%psi_max
+    psi_min = spp%psi_min
+    psi_max_buff = spp%psi_max*2._rp
   end if
 
   sigma=spp%sigmaR*params%cpp%length
@@ -1399,7 +1414,7 @@ subroutine MH_psi(params,random,spp,F)
         if (modulo(ii,100).eq.0) then
            !write(output_unit_write,'("Burn: ",I10)') ii
         end if
-        !write(6,'("Burn: ",I10)') ii
+        write(6,'("Burn: ",I10)') ii
 
         CALL random%normal%set(0.0_rp,spp%dR)
         R_test = R_buffer + random%normal%get()
@@ -1438,17 +1453,17 @@ subroutine MH_psi(params,random,spp,F)
 
            !write(6,*) 'may have crashed'
 
-           !write(6,*) 'R',R_buffer
-           !write(6,*) 'Z',Z_buffer
+           psi0=spp%vars%PSI_P(1)
+           PSIN0=(psi0-PSIp0)/(PSIp_lim-PSIp0)
+
+          write(6,*) 'R',R_buffer
+           write(6,*) 'Z',Z_buffer
            !write(6,*) 'PSIlim',PSIp_lim
            !write(6,*) 'PSI0',PSIp0
            !write(output_unit_write,*) 'PSI1',psi1
            !write(6,*) 'PSI0',psi0
            !write(output_unit_write,*) 'PSIN1',PSIN1
            !write(6,*) 'PSIN0',PSIN0
-
-           psi0=spp%vars%PSI_P(1)
-           PSIN0=(psi0-PSIp0)/(PSIp_lim-PSIp0)
 
         end if
 
@@ -1480,14 +1495,14 @@ subroutine MH_psi(params,random,spp,F)
 
         PSIN1=(psi1-PSIp0)/(PSIp_lim-PSIp0)
 
-        !write(output_unit_write,*) 'R',R_test
-        !write(output_unit_write,*) 'Z',Z_test
-        !write(output_unit_write,*) 'PSIlim',PSIp_lim
-        !write(output_unit_write,*) 'PSI0',PSIp0
-        !write(output_unit_write,*) 'PSI1',psi1
-        !write(output_unit_write,*) 'PSI0',psi0
-        !write(output_unit_write,*) 'PSIN',PSIN1
-        !write(output_unit_write,*) 'PSIN0',PSIN0
+        write(output_unit_write,*) 'R',R_test
+        write(output_unit_write,*) 'Z',Z_test
+        write(output_unit_write,*) 'PSIlim',PSIp_lim
+        write(output_unit_write,*) 'PSI0',PSIp0
+        write(output_unit_write,*) 'PSI1',psi1
+        write(output_unit_write,*) 'PSI0',psi0
+        write(output_unit_write,*) 'PSIN',PSIN1
+        write(output_unit_write,*) 'PSIN0',PSIN0
 
         ! Calculate acceptance ratio for MH algorithm. fRE function
         ! incorporates p^2 factor of spherical coordinate Jacobian
@@ -2625,10 +2640,10 @@ subroutine intitial_spatial_distribution(params,random,spp,P,F)
         end if
 #endif
 
-        !! Setting dummy values for all particles
-        spp(ss)%vars%X(:,1)=spp(ss)%Ro
-        spp(ss)%vars%X(:,2)=0._rp
-        spp(ss)%vars%X(:,3)=spp(ss)%Zo
+        !! Setting dummy values for initial particle
+        spp(ss)%vars%X(1,1)=spp(ss)%Ro
+        spp(ss)%vars%X(1,2)=0._rp
+        spp(ss)%vars%X(1,3)=spp(ss)%Zo
 
         call MH_psi(params,random,spp(ss),F)
      CASE('FIO_therm')
