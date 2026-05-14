@@ -3,22 +3,22 @@
 set -ex
 
 #define input file
-INPUT_FILE="${CMAKE_SOURCE_DIR}/test/mars/input_file_MARS.korc"
+INPUT_FILE="${CMAKE_SOURCE_DIR}/test/mars_EM/input_file_MARS_EM.korc"
 #define output directory
-OUT_DIR="mars_test/rank_$1"
+OUT_DIR="mars_EM_test/rank_$1"
 
 #check that output directory doesn't exist so bash doesn't complain
 if [ ! -d $OUT_DIR ]; then
   mkdir -p $OUT_DIR
 fi
-if [ ! -f D3D_191366_1762ms_MARS.h5 ]; then
-  ln -s ${CMAKE_SOURCE_DIR}/test/mars/ARC_42533M20_MARS.h5 ARC_42533M20_MARS.h5
+if [ ! -f ARC_42533M20_MARS.h5 ]; then
+  ln -s ${CMAKE_SOURCE_DIR}/test/mars_EM/ARC_42533M20_MARS.h5 ARC_42533M20_MARS.h5
 fi
 
 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
 
 for i in $(seq 0 $(($1-1)));
 do
-  h5diff -r -p 0.000008 $OUT_DIR/file_$i.h5 ${CMAKE_SOURCE_DIR}/test/mars/rank_$1/file_$i.h5
+  h5diff -r -p 0.000008 $OUT_DIR/file_$i.h5 ${CMAKE_SOURCE_DIR}/test/mars_EM/rank_$1/file_$i.h5
 done
 
