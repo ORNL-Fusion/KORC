@@ -1183,7 +1183,11 @@ subroutine get_analytical_fields(params,vars,F)
 
    if (params%orbit_model(1:2).eq.'FO') then
 
-      call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
+      if (.not.params%GC_coords) then
+        call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
+      else
+        call cyl_to_tor_check_if_confined(F,vars%Y,vars%flagCon)
+      endif
 
       call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon, vars%PSI_P, params)
 

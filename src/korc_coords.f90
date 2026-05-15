@@ -324,6 +324,86 @@ end subroutine cart_to_cyl_p_ACC
     !!$OMP END PARALLEL DO
   end subroutine cart_to_tor_check_if_confined
 
+  subroutine cyl_to_tor_check_if_confined(F,X,flag)
+    !! @note Subroutine that converts the position of simulated particles
+    !! from Cartesian \((x,y,z)\) to toroidal \((r,\theta, \zeta)\) coordinates.
+    !! In addition to performing the coordinate transformation, this
+    !! subroutine checks whether a given particle is within the plasma or not.
+    !! A particle is not longer considered to be within the plasma if its
+    !! minor radius \(r > r_{edge}\), where \(r_{edge}\) is the radial
+    !! distance to the plasma edge as measured from the magnetic axis. For
+    !! more details see the analytical model of the magnetic field in
+    !! [[korc_types]] and [[korc_fields]].
+    !!
+    !! The coordinate transformation is given by:
+    !!
+    !! $$r = \sqrt{ \left[\sqrt{x^2 + y^2}-R_0\right]^2 + z^2 },$$
+    !! $$\theta = \arctan{\left( \frac{z}{\sqrt{x^2 + y^2}-Ro} \right)}.$$
+    !! $$\zeta = \arctan{\left( \frac{x}{y} \right)},$$
+    !!
+    !! where \(R_0\) is the radial position of the magnetic axis.
+    REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)      :: X
+    !! Particles' position in Cartesian coordinates. X(1,:) = \(x\), X(2,:)
+    !! = \(y\), X(3,:) = \(z\)
+    TYPE(FIELDS), INTENT(IN)                               :: F
+    !! An instance of the KORC derived type FIELDS.
+    REAL(rp), DIMENSION(3)   :: Xin
+    !! Particles' position in cylindrical coordinates. Xtor(1,:) =
+    !! \(r\), Xtor(2,:) = \(\theta\), Xtor(3,:) = \(\zeta\)
+    INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)  :: flag
+    REAL(rp)                                               :: a
+    !! Distance to plasma edge as measured from the magnetic axis.
+    REAL(rp)                                               :: Ro,Zo
+    !! Radial position of the magnetic axis.
+    INTEGER                                                :: pp
+    !! Iterator.
+    INTEGER                                                :: ss
+    !! Iterator.
+
+    if (size(X,1).eq.1) then
+       ss = size(X,1)
+    else
+       if (X(2,1).eq.0) then
+          ss=1_idef
+       else
+          ss = size(X,1)
+       end if
+    endif
+    
+    a = F%AB%a
+    Ro = F%AB%Ro
+    Zo = F%Zo
+
+!    write(output_unit_write,'("X c2tor: ",E17.10)') X(1,:)
+    
+    !!$OMP PARALLEL DO FIRSTPRIVATE(ss,a,Ro) PRIVATE(pp) SHARED(X,Xtor,flag)
+    do pp=1_idef,ss
+
+      Xin(1)=X(pp,1)
+      Xin(2)=X(pp,2)
+      Xin(3)=X(pp,3)
+
+      if ( flag(pp) .EQ. 1_is ) then
+        X(pp,1) = SQRT( (Xin(1) - Ro)**2 + ((Xin(3)-Zo)/F%AB%kappa)**2 )
+        X(pp,2) = ATAN2((Xin(3)-Zo)/F%AB%kappa, (Xin(1) - Ro))
+        X(pp,2) = MODULO(X(pp,2),2.0_rp*C_PI)
+        X(pp,3) = -Xin(2)+C_PI/2.0_rp
+        X(pp,3) = MODULO(X(pp,3),2.0_rp*C_PI)
+
+!          write(output_unit_write,'("r: ",E17.10)') Xtor(1,1)
+!          write(output_unit_write,'("a: ",E17.10)') a
+!          write(output_unit_write,'("Ro: ",E17.10)') Ro
+        
+        if (X(pp,1) .GT. F%AB%a) then
+          flag(pp) = 0_is
+
+!             stop 'error in dist init'
+        end if
+      end if
+    end do
+    !!$OMP END PARALLEL DO
+  end subroutine cyl_to_tor_check_if_confined
+
   subroutine cart_to_tor_p(pchunk,R0,X_X,X_Y,X_Z,T_R,T_T,T_Z)
     INTEGER, INTENT(IN)  :: pchunk
     REAL(rp),  INTENT(IN)      :: R0
