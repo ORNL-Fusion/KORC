@@ -469,7 +469,7 @@ end if
      ! Initial half-time particle push
 
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_FOfio_top(params,F,P,spp)
+        call adv_FOfio_top(params,F,P,spp,randoms)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
@@ -511,7 +511,7 @@ end if
            flush(output_unit_write)
         end if
 
-        call adv_FOfio_top(params,F,P,spp)
+        call adv_FOfio_top(params,F,P,spp,randoms)
 
         params%it = params%it+params%t_skip
         params%time = params%init_time &
@@ -739,7 +739,7 @@ end if
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_model.eq.'M3D_C1'.and. &
        .not.F%ReInterp_2x1t) then
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_fio_top(params,spp,P,F)
+        call adv_GCinterp_fio_top(params,spp,P,F,randoms)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt
@@ -776,7 +776,7 @@ end if
            flush(output_unit_write)
         end if
 
-        call adv_GCinterp_fio_top(params,spp,P,F)
+        call adv_GCinterp_fio_top(params,spp,P,F,randoms)
 
         params%it = params%it+params%t_skip
         params%time = params%init_time &
