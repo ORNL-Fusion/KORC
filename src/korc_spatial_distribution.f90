@@ -1848,7 +1848,8 @@ subroutine FIO_therm(params,random,spp,F,P)
      do while (ii .LE. 1000_idef)
 
         if (modulo(ii,100).eq.0) then
-           !write(output_unit_write,'("Burn: ",I10)') ii
+          !write(output_unit_write,'("Burn: ",I10)') ii
+          !write(6,'("Burn: ",I10)') ii
         end if
 
         CALL random%normal%set(0.0_rp,spp%dR)
@@ -2008,21 +2009,21 @@ subroutine FIO_therm(params,random,spp,F,P)
 
         psi1=spp%vars%PSI_P(1)
 
-        !write(output_unit_write,*) 'PSIlim',PSIp_lim
-        !write(output_unit_write,*) 'PSI0',PSIp0
-        !write(output_unit_write,*) 'PSI',psi1
+        !write(6,*) 'PSIlim',PSIp_lim
+        !write(6,*) 'PSI0',PSIp0
+        !write(6,*) 'PSI',psi1
 
         PSIN1=(psi1-PSIp0)/(PSIp_lim-PSIp0)
 
 
-        !write(output_unit_write,*) 'R',R_test
-        !write(output_unit_write,*) 'Z',Z_test
-        !write(output_unit_write,*) 'PSIlim',PSIp_lim
-        !write(output_unit_write,*) 'PSI0',PSIp0
-        !write(output_unit_write,*) 'PSI1',psi1
-        !write(output_unit_write,*) 'PSI0',psi0
-        !write(output_unit_write,*) 'PSIN',PSIN1
-        !write(output_unit_write,*) 'PSIN0',PSIN0
+        !write(6,*) 'R',R_test
+        !write(6,*) 'Z',Z_test
+        !write(6,*) 'PSIlim',PSIp_lim
+        !write(6,*) 'PSIaxis',PSIp0
+        !write(6,*) 'PSI1',psi1
+        !write(6,*) 'PSI0',psi0
+        !write(6,*) 'PSIN',PSIN1
+        !write(6,*) 'PSIN0',PSIN0
 
         vth1=sqrt(2*spp%vars%te(1))
 
@@ -2051,8 +2052,8 @@ subroutine FIO_therm(params,random,spp,F,P)
            end if
         end if
 
-!        write(output_unit_write,'("R: ",E17.10)') R_buffer
-!        write(output_unit_write,'("Z: ",E17.10)') Z_buffer
+!        write(6,'("R: ",E17.10)') R_buffer
+!        write(6,'("Z: ",E17.10)') Z_buffer
 
         ! Only accept sample if it is within desired boundary, but
         ! add to MC above if within buffer. This helps make the boundary

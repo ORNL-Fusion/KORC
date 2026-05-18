@@ -20,8 +20,6 @@ list(APPEND fusionio_headers
     ${CMAKE_CURRENT_SOURCE_DIR}/gato_field.h
     ${CMAKE_CURRENT_SOURCE_DIR}/gpec_field.h
     ${CMAKE_CURRENT_SOURCE_DIR}/m3dc1_source.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_source.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_field.h
     ${CMAKE_CURRENT_SOURCE_DIR}/compound_field.h
     ${CMAKE_CURRENT_SOURCE_DIR}/interpolate.h
 )
@@ -47,16 +45,33 @@ list(APPEND fusionio_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/gpec_field.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/m3dc1_source.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fusion_io_fortran.F90
-    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_source.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_field.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/compound_field.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interpolate.cpp
 )
+
+option(USE_NIM "Use NIMROD inputs" OFF)
+
+configure_file(Config.h.in Config.h)
+
+IF(USE_NIM)
+
+  list(APPEND fusionio_headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_source.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_field.h
+  )
+
+  list(APPEND fusionio_sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_source.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/nimrod_field.cpp
+  )
+endif()
 
 add_library(fusionio
     ${fusionio_headers}
     ${fusionio_sources}
 )
+
+target_include_directories(fusionio PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 target_compile_options(fusionio
 PRIVATE
