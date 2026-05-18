@@ -1,3 +1,5 @@
+#include "Config.h"
+
 #include "fusion_io.h"
 #include <iostream>
 
@@ -32,10 +34,12 @@ int fio_open_source(fio_source** src, const int type, const char* filename)
     ierr = (*src)->open(filename);
     break;
 
+#if USE_NIM
   case(FIO_NIMROD_SOURCE):
     *src = new nimrod_source();
     ierr = (*src)->open(filename);
     break;
+#endif
 
   default:
     std::cerr << "Source type " << type << " unsupported." << std::endl;

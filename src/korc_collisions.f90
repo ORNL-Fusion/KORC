@@ -1214,11 +1214,6 @@ contains
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
           params_ACC%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
-          if (params%coll_per_dump.gt.params%t_skip) then
-             write(6,*) 'more collisional iterations than orbit iterations, decrease orbit timestep!'
-             call korc_abort(26)
-          endif
-
           params%orbits_per_coll=ceiling(cparams_ss%coll_per_dump_dt/ &
                params%dt)
 
@@ -1272,6 +1267,15 @@ contains
           write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * &
                * * * * * * * * * * * * * * *",/)')
        end if
+
+        if (params%mpi_params%rank .EQ. 0) then
+          flush(output_unit_write)
+        end if
+
+        if (params%coll_per_dump.gt.params%t_skip) then
+          write(6,*) 'more collisional iterations than orbit iterations, decrease orbit timestep!'
+          call korc_abort(26)
+        endif
 
     else if (params%orbit_model(1:2).eq.'GC'.and.params%field_eval.eq.'eqn' &
       .and..not.params%field_model.eq.'M3D_C1') then

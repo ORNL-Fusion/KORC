@@ -1,3 +1,5 @@
+#include "Config.h"
+
 #ifndef FUSION_IO_H
 #define FUSION_IO_H
 
@@ -16,13 +18,16 @@
 #include "m3dc1_field.h"
 #include "mars_source.h"
 #include "mars_field.h"
-#include "nimrod_source.h"
-#include "nimrod_field.h"
 #include "gpec_source.h"
 #include "gpec_field.h"
 #include "fusion_io_c.h"
 #include "interpolate.h"
 #include "isosurface.h"
+
+#if USE_NIM
+#include "nimrod_source.h"
+#include "nimrod_field.h"
+#endif
 
 #include <string>
 

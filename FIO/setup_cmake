@@ -75,6 +75,7 @@ then
     -DCMAKE_CXX_FLAGS_DEBUG="-g -g3" \
 	  -DCMAKE_HDF5_DIR=/opt/local/bin \
 	  -DHDF5_DIR=/opt/local \
+    -DUSE_NIM=OFF \
 
     make -j VERBOSE=1
     make install
