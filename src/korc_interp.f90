@@ -5347,13 +5347,13 @@ subroutine interp_fields(params,prtcls,F)
       call get_fio_vector_potential(prtcls, F, params)
     end if
 
-    !do pp=1,sizeof(prtcls%flagCon)
-    !  if (prtcls%flagCon(pp)==0.and. &
-    !    (.not.(params%restart.OR.params%proceed))) then
-    !    write(6,*) 'RE initialized outside of computational domain!!!'
-    !    call KORC_ABORT(15)
-    !  end if
-    !end do
+    do pp=1,size(prtcls%flagCon)
+      if (prtcls%flagCon(pp)==0.and. &
+        (.not.(params%restart.OR.params%proceed))) then
+        write(6,*) 'RE initialized outside of computational domain!!!'
+        call KORC_ABORT(15)
+      end if
+    end do
 
   end if
 #endif FIO

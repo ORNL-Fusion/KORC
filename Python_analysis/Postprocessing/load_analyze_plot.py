@@ -35,7 +35,7 @@ dir_num=1
 #run_directory=['D3D_200236_MARS_CaseA_TEST18d1','D3D_200236_MARS_CaseA_TEST18d','D3D_200236_MARS_CaseA_TEST18d3','D3D_200236_MARS_CaseA_TEST18d4']
 #run_directory=['../LOCAL/TEST8/OUT']
 #run_directory=['GCeqn_GPU_TEST20b3c2']
-run_directory=['OUT_gnu']
+run_directory=['../test/fio_m3dc1/tmp']
 
 for kk in range(0,dir_num):
 
@@ -45,27 +45,38 @@ for kk in range(0,dir_num):
         num_snapshots=f['simulation']['num_snapshots'][0]+1  
         nmpi=f['simulation']['nmpi'][0]
         output_cadence=f['simulation']['output_cadence'][0]
+        t_steps_tot=f['simulation']['t_steps'][0]
         ppp=f['species']['ppp'][0]
         orbit_model=[x.decode() for x in f['simulation']['orbit_model']][0]
         field_eval=[x.decode() for x in f['simulation']['field_eval']][0]
+        field_model=[x.decode() for x in f['simulation']['field_model']][0]
         outputs_list=[x.decode() for x in f['simulation']['outputs_list']][:]
         Bnorm=f['scales']['B'][0]
         tnorm=f['scales']['t'][0]
         Lnorm=f['scales']['l'][0]
-        B0=f['fields']['Bo'][0]
-        E0=f['fields']['Eo'][0]
-        R0=f['fields']['Ro'][0]
-        Z0=f['fields']['Zo'][0]
-        ar=f['species']['ro'][0]
-        a=f['fields']['a'][0]
-        lam=f['fields']['lambda'][0]
-        kappa=f['fields']['kappa'][0]
-        q0=f['fields']['qo'][0]
-        if field_eval != 'eqn':
-            Rm=f['fields']['R'][:]
-            Zm=f['fields']['Z'][:]
-            PSIPm=f['fields']['psi_p'][:]
-            #BPHI1_Rem=f['fields']['BPHI1_Re'][:]
+        if field_model != 'M3D_C1':
+            B0=f['fields']['Bo'][0]
+            E0=f['fields']['Eo'][0]
+            R0=f['fields']['Ro'][0]
+            Z0=f['fields']['Zo'][0]
+            if field_eval == 'eqn':
+                ar=f['species']['ro'][0]
+                a=f['fields']['a'][0]
+                lam=f['fields']['lambda'][0]
+                kappa=f['fields']['kappa'][0]
+                q0=f['fields']['qo'][0]
+            if field_eval != 'eqn':
+                Rm=f['fields']['R'][:]
+                Zm=f['fields']['Z'][:]
+                PSIPm=f['fields']['psi_p'][:]
+                #BPHI1_Rem=f['fields']['BPHI1_Re'][:]
+                
+    if field_model == 'M3D_C1':
+        filename=r"../"+run_directory[kk]+"/../m3dc1_outputs/C1.h5"
+        with h5py.File(filename,'r') as f:
+            Z0=f['scalars']['zmag'][0]
+            R0=f['scalars']['xmag'][0]
+
         
     if num_snapshots<1:
         num_snapshots=1
@@ -79,7 +90,14 @@ for kk in range(0,dir_num):
         for ii in range(0,num_snapshots):
             
             if kk==0:
-                t_steps[ii]=output_cadence*ii
+                if ii==0:
+                    t_steps[ii]=output_cadence*ii
+                else:
+                    if t_steps_tot<output_cadence:
+                        t_steps[ii]=t_steps_tot
+                    else:
+                        t_steps[ii]=output_cadence*ii
+                            
             else:
                 t_steps[ii]=output_cadence*(ii+1)
                 
@@ -88,11 +106,11 @@ for kk in range(0,dir_num):
             except:
                 break
             
-    num_snapshots=ii
+    num_snapshots=ii+1
     if num_snapshots<1:
         num_snapshots=1
         
-    num_snapshots=num_snapshots-1    
+    #num_snapshots=num_snapshots-1    
     
     nRE0=ppp*nmpi
     
@@ -130,13 +148,21 @@ for kk in range(0,dir_num):
         with h5py.File(filename,'r') as f:
             for ii in range(0,num_snapshots):
                 if jj==0:
-                    
+                        
                     if kk==0:
-                        t_steps[ii]=output_cadence*ii
+                        if ii==0:
+                            t_steps[ii]=output_cadence*ii
+                        else:
+                            if t_steps_tot<output_cadence:
+                                t_steps[ii]=t_steps_tot
+                            else:
+                                t_steps[ii]=output_cadence*ii
+                                    
                     else:
                         t_steps[ii]=output_cadence*(ii+1)
                     
                     timetmp[ii]=f[str(t_steps[ii])]['time'][0]
+                    
                 xxtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['X'][0][:]
                 yytmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['X'][1][:]
                 Rtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y'][0][:]
@@ -389,12 +415,13 @@ flagTherm[flagCol<1]=1
 Thermal=np.sum(flagTherm,axis=1)
 Energetic=np.sum(flagCol,axis=1)
 
-Total=np.sum(flagRE,axis=1)
-
-flagActive=flagRE*flagCon*flagCol
-flagActive[np.where(np.isnan(R))]=0
-
-Active=np.sum(flagActive,axis=1)
+if 'flagRE' in outputs_list:
+    Total=np.sum(flagRE,axis=1)
+    
+    flagActive=flagRE*flagCon*flagCol
+    flagActive[np.where(np.isnan(R))]=0
+    
+    Active=np.sum(flagActive,axis=1)
 
 K=(g-1)*(me*c**2/qe)
 
@@ -438,20 +465,22 @@ if DiMESdepo==1:
 
 #%% analytic fields
 
-Rm=np.linspace(R0-a,R0+a,100)
-Zm=np.linspace(Z0-a,Z0+a,100)
-RRm, ZZm = np.meshgrid(Rm, Zm)
+if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
 
-qa=q0*(1+(a/lam)**2)
-rm=np.sqrt((RRm-R0)**2+(ZZm-Z0)**2)
-
-rm_elong=np.sqrt((RRm-R0)**2+(ZZm-Z0)**2/kappa**2)
-
-theta=np.atan2((ZZm-Z0),(RRm-R0))
-psi=lam**2*B0/(2*q0)*np.log(1+(rm_elong/lam)**2)
-
-limR=R0+a*np.cos(np.linspace(0,2*np.pi,100))/kappa
-limZ=Z0+a*np.sin(np.linspace(0,2*np.pi,100))
+    Rm=np.linspace(R0-a,R0+a,100)
+    Zm=np.linspace(Z0-a,Z0+a,100)
+    RRm, ZZm = np.meshgrid(Rm, Zm)
+    
+    qa=q0*(1+(a/lam)**2)
+    rm=np.sqrt((RRm-R0)**2+(ZZm-Z0)**2)
+    
+    rm_elong=np.sqrt((RRm-R0)**2+(ZZm-Z0)**2/kappa**2)
+    
+    theta=np.atan2((ZZm-Z0),(RRm-R0))
+    psi=lam**2*B0/(2*q0)*np.log(1+(rm_elong/lam)**2)
+    
+    limR=R0+a*np.cos(np.linspace(0,2*np.pi,100))/kappa
+    limZ=Z0+a*np.sin(np.linspace(0,2*np.pi,100))
 
 
 #%% Save DiMES impacts
@@ -502,7 +531,7 @@ plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
 plot_evo=0
-plot_orbit=0
+plot_orbit=1
 plot_histRZ_analytic=0
 plot_evoCon=0
 plotgrowth=0
@@ -526,10 +555,32 @@ plot_deconsurf=0
 plot_deconhist=0
 plot_inc_ang=0
 tmpplot=0
-plot_psi=1
+plot_psi=0
+plot_histRZ_m3dc1=0
 
-timeind_p=40
+timeind_p=0
 timeind_g=0
+
+if plot_histRZ_m3dc1==1:
+    
+    H, xedges, yedges = np.histogram2d(R[timeind_p,:],zz[timeind_p,:])
+    
+    fig,ax=plt.subplots()
+    
+    cmap = plt.cm.viridis
+    cmap_modified = cmap.with_extremes(under='white')
+    
+    ct=ax.pcolormesh(xedges, yedges, H, cmap=cmap_modified,vmin=1)
+    
+    cb=plt.colorbar(ct)
+    cb.set_label('$N_{RE}$', rotation=90)
+    
+    ax.set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax.grid()
+    plt.gca().set_aspect('equal')
+    
+    plt.savefig("RZhist.png", format="png", bbox_inches="tight")
+    plt.show()
 
 if plot_psi==1:
     fig,ax=plt.subplots()
