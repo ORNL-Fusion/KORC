@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 1.E-8
+  simulation_time = 2.E-8
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-9
+  snapshot_frequency = 1.E-8
     ! Time between snapshots in seconds, not used in FIO
   dt = 1.E-2
     ! Time step as fraction of relativistic gyro-period
@@ -20,7 +20,7 @@
   collisions = F
   collisions_model = 'SINGLE_SPECIES' 
     ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
-  bound_electron_model = 'HESSLOW' 
+  bound_electron_model = 'NO_BOUND' 
     ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
   field_model = 'M3D_C1'
   profile_model = 'M3D_C1'	
@@ -31,8 +31,8 @@
     ! specified in "filename".
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
-  magnetic_field_filename = 'm3dc1_outputs/C1.h5'
-  time_slice=0
+  magnetic_field_filename = 'C1.h5'
+  time_slice=1
   rmax =  2.50
   rmin =  1.0
   zmax =  1.38
@@ -50,7 +50,7 @@
     ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
     ! where 'eqn' evaluates particle fields at particle positions and
     ! 'interp' interpolates precomputed fields.
-  SameRandSeed = F
+  SameRandSeed = T
   pchunk = 1
 /
 
@@ -92,17 +92,18 @@
     ! Variance of sampling normal variate for pitch angle
   dgam = 2.e-2
     ! Variance of sampling normal variate for pitch angle
-  dR = 0.05
+  dR = 0.01
     ! Variance of sampling normal variate for R location
-  dZ = 0.1
+  dZ = 0.01
     ! Variance of sampling normal variate for Z location
 /
 
 &externalPlasmaModel  
   ind0_2x1t = 0
   ReInterp_2x1t = F
-  PSIp_lim=.2146
-  PSIp_0= -6.453026503041055e-02
+  PSIp_lim= 0.0989886
+  PSIp_0 = 0.420856,
+  psip_conv=-1 !RMP regtest has opposite sign of current than what was assumed in fio routines
 /
 
 &CollisionParamsSingleSpecies

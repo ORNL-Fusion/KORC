@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_TYPE=Release
+BUILD_TYPE=Debug
 
 MACHINE_ID=`uname -n`
 

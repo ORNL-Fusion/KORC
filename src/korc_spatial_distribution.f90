@@ -1964,7 +1964,7 @@ subroutine FIO_therm(params,random,spp,F,P)
 !        write(output_unit_write,'("sample:",I15)') ii
 
        if (modulo(ii,nsamples/10).eq.0) then
-           !write(output_unit_write,'("Sample: ",I10)') ii
+           !write(6,'("Sample: ",I10)') ii
         end if
 
         PHI_test = 2.0_rp*C_PI*random%uniform%get()

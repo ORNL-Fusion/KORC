@@ -708,7 +708,7 @@ CONTAINS
 
   SUBROUTINE finalize_fio(params, F, P)
     TYPE(KORC_PARAMS), INTENT(IN)           :: params
-    TYPE(FIELDS), INTENT(IN)                :: F
+    TYPE(FIELDS), INTENT(INOUT)                :: F
     TYPE(PROFILES), INTENT(INOUT)              :: P
     INTEGER                                    :: status
     INTEGER                                    :: ii
@@ -733,7 +733,10 @@ CONTAINS
        end do
     end if
 
-    status=fio_close_source(F%isrc)
+    if (F%isrc /= 0) then
+      status=fio_close_source(F%isrc)
+      F%isrc=0
+    endif
     
   end SUBROUTINE FINALIZE_FIO
 
