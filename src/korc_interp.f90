@@ -6008,7 +6008,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                Atmp(1),prtcls%hint(pp))
 
           if (status .eq. FIO_SUCCESS) then
-             prtcls%PSI_P(pp)=-Atmp(2)*x(1)
+             prtcls%PSI_P(pp)=-Atmp(2)*x(1)*F%psip_conv
           else if (status .eq. FIO_NO_DATA) then
              prtcls%PSI_P(pp) = 100._rp
              prtcls%flagCon(pp) = 0_is
@@ -6053,7 +6053,7 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
                Atmp(1),hint(pp))
 
           if (status .eq. FIO_SUCCESS) then
-             PSIp(pp)=-Atmp(2)*x(1)
+             PSIp(pp)=-Atmp(2)*x(1)*F%psip_conv
           else if (status .eq. FIO_NO_DATA) then
              PSIp(pp) = 100._rp
              flag(pp) = 0_is
