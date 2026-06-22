@@ -25,6 +25,12 @@ module korc_ppusher
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local_2
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local_3
   TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local_3
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local_4
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local_4
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local_5
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local_5
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Refield_2d_local_6
+  TYPE(KORC_2D_FIELDS_INTERPOLANT)      :: b1Imfield_2d_local_6
   TYPE(KORC_INTERPOLANT_DOMAIN)        :: fields_domain_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Refield_2dx_local
   TYPE(KORC_2DX_FIELDS_INTERPOLANT)      :: b1Imfield_2dx_local
@@ -3632,7 +3638,7 @@ subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
     DiMESloc_cyl=F%DiMESloc
     DiMESdims=F%DiMESdims
 
-    !$acc  enter data copyin(bfield_2d_local,
+    !$acc  enter data copyin(bfield_2d_local, &
     !$acc& b1Refield_2d_local_1,b1Imfield_2d_local_1, &
     !$acc& b1Refield_2d_local_2,b1Imfield_2d_local_2, &
     !$acc& b1Refield_2d_local_3,b1Imfield_2d_local_3, &
@@ -3776,7 +3782,7 @@ subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
     end do !particle iterator
     !$acc end parallel loop
 
-    !$acc  exit data delete(bfield_2d_local,
+    !$acc  exit data delete(bfield_2d_local, &
     !$acc& b1Refield_2d_local_1,b1Imfield_2d_local_1, &
     !$acc& b1Refield_2d_local_2,b1Imfield_2d_local_2, &
     !$acc& b1Refield_2d_local_3,b1Imfield_2d_local_3, &
@@ -3862,7 +3868,7 @@ subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
     !$acc& b1Refield_2d_local_4,b1Imfield_2d_local_4, &
     !$acc& b1Refield_2d_local_5,b1Imfield_2d_local_5, &
     !$acc& b1Refield_2d_local_6,b1Imfield_2d_local_6, &
-    !$acc& fields_domain_local
+    !$acc& fields_domain_local)
 
     !$acc parallel loop 
     do pp=1_idef,ppp
@@ -3999,7 +4005,7 @@ subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
     end do !particle iterator
     !$acc end parallel loop
 
-    !$acc  exit data delete(bfield_2d_local,
+    !$acc  exit data delete(bfield_2d_local, &
     !$acc& b1Refield_2d_local_1,b1Imfield_2d_local_1, &
     !$acc& b1Refield_2d_local_2,b1Imfield_2d_local_2, &
     !$acc& b1Refield_2d_local_3,b1Imfield_2d_local_3, &

@@ -3239,7 +3239,7 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
                   ra=sqrt((Y_R(cc)-P%R0)**2+(Y_Z(cc)-P%Z0)**2)/P%a
                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-               if ((cparams_ms%Zj(1).eq.0.0).and. &
+               else if ((cparams_ms%Zj(1).eq.0.0).and. &
                   (neut_prof.eq.1)) then
                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
@@ -3265,7 +3265,7 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
                      -cparams_ms%lowKE_LAC_not_ionized)
-               if ((cparams_ms%Zj(1).eq.0.0).and. &
+               else if ((cparams_ms%Zj(1).eq.0.0).and. &
                   (neut_prof.eq.1)) then
                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
