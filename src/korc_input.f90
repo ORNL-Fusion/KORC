@@ -317,7 +317,8 @@ module korc_input
     ! Impurity densities
   REAL(rp), DIMENSION(19)  :: IZj_mult = 15.7596
     ! Ionization energy of impurity in eV
-  CHARACTER(20) :: neut_prof = 'UNIFORM'
+  INTEGER :: neut_prof = 0
+    ! 0 for uniform, 1 for same as ne, 2 for hollow, 3 for edge
   REAL(rp)  :: neut_edge_fac
   LOGICAL :: lowKE_REs = .FALSE.
   REAL(rp)  :: lowKE_LAC_not_ionized = 0.0

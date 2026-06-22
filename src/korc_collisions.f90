@@ -121,7 +121,7 @@ module korc_collisions
           989.9_rp,1138.1_rp,1369.5_rp,1791.2_rp,2497.0_rp,4677.2_rp, &
           4838.2_rp,huge(1._rp)/)
 
-     CHARACTER(30) :: neut_prof
+     INTEGER :: neut_prof
      REAL(rp)  :: neut_edge_fac
      REAL(rp) 			:: Ec,Ec_min
      ! Critical electric field
@@ -1657,39 +1657,30 @@ contains
     x = v/VTe(Te)
     CF_SD  = Gammacee(v,ne,Te)*psi(x)/Te
 
-#ifdef ACC
-    ! have all impurities have same spatial distribution as electron density
-    CF_temp=CF_SD
-    do i=1,cparams_ms%num_impurity_species
-      CF_temp=CF_temp+CF_SD*cparams_ms%nz(i)/cparams_ms%ne* &
-            (cparams_ms%Zo(i)-cparams_ms%Zj(i))/ &
-            CLogee(v,ne,Te)*(log(1+h_j(i,v)**k)/k-v**2)
-    end do
-    CF_SD=CF_temp
-#else
     if (params%bound_electron_model.eq.'HESSLOW') then
        CF_temp=CF_SD
        if ((cparams_ms%Zj(1).eq.0.0).and. &
-            (neut_prof.eq.'UNIFORM')) then
+            (neut_prof.eq.0)) then
+        !uniform
           CF_temp=CF_temp+CF_SD*cparams_ms%nz(1)/ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
                CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
        else if ((cparams_ms%Zj(1).eq.0.0).and. &
-            (neut_prof.eq.'HOLLOW')) then
+            (neut_prof.eq.2)) then
+              !hollow
           CF_temp=CF_temp+CF_SD*max(cparams_ms%nz(1)-ne,0._rp)/ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
                CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
        else if ((cparams_ms%Zj(1).eq.0.0).and. &
-            (neut_prof.eq.'EDGE')) then
+            (neut_prof.eq.3)) then
+              !edge
           ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
           CF_temp=CF_temp+CF_SD*cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac/ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
                CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
-
-          !write(6,*) 'ra',ra,'nimp',cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
-         !     params%cpp%density
-
-       else
+       else if ((cparams_ms%Zj(1).eq.0.0).and. &
+            (neut_prof.eq.1)) then
+              !same as ne
           CF_temp=CF_temp+CF_SD*cparams_ms%nz(1)/cparams_ms%ne* &
                (cparams_ms%Zo(1)-cparams_ms%Zj(1))/ &
                CLogee(v,ne,Te)*(log(1+h_j(1,v)**k)/k-v**2)
@@ -1711,7 +1702,6 @@ contains
        CF_SD=CF_temp
 
     end if
-#endif ACC
 
   end function CF_SD
 
@@ -1934,51 +1924,43 @@ function CB_ei_SD(params,v,ne,Te,Zeff,P,Y_R,Y_Z)
   CB_ei_SD  = (0.5_rp*Gammacee(v,ne,Te)/v)* &
     (Zeff*CLogei(v,ne,Te)/CLogee(v,ne,Te))
 
-#ifdef ACC
-  !choose impurities to have same spatial profile as electrons
-  CB_ei_temp=CB_ei_SD
-  do i=1,cparams_ms%num_impurity_species
-      CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(i)/(cparams_ms%ne* &
-        Zeff*CLogei(v,ne,Te))*g_j(i,v)
-  end do
-  CB_ei_SD=CB_ei_temp
-#else      
-   if (params%bound_electron_model.eq.'HESSLOW') then
-      CB_ei_temp=CB_ei_SD
-      if ((cparams_ms%Zj(1).eq.0.0).and. &
-         (neut_prof.eq.'UNIFORM')) then
-         CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)/(ne* &
-            Zeff*CLogei(v,ne,Te))*g_j(1,v)
-      else if ((cparams_ms%Zj(1).eq.0.0).and. &
-         (neut_prof.eq.'HOLLOW')) then
-         CB_ei_temp=CB_ei_temp+CB_ei_SD*max(cparams_ms%nz(1)-ne,0._rp)/(ne* &
-            Zeff*CLogei(v,ne,Te))*g_j(1,v)
-      else if ((cparams_ms%Zj(1).eq.0.0).and. &
-         (neut_prof.eq.'EDGE')) then
-         ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
-         CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac/(ne* &
-            Zeff*CLogei(v,ne,Te))*g_j(1,v)
-      else
-         CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)/(cparams_ms%ne* &
-            Zeff*CLogei(v,ne,Te))*g_j(1,v)
-      endif
+   
+  if (params%bound_electron_model.eq.'HESSLOW') then
+    CB_ei_temp=CB_ei_SD
+    if ((cparams_ms%Zj(1).eq.0.0).and. &
+        (neut_prof.eq.0)) then
+        CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)/(ne* &
+          Zeff*CLogei(v,ne,Te))*g_j(1,v)
+    else if ((cparams_ms%Zj(1).eq.0.0).and. &
+        (neut_prof.eq.2)) then
+        CB_ei_temp=CB_ei_temp+CB_ei_SD*max(cparams_ms%nz(1)-ne,0._rp)/(ne* &
+          Zeff*CLogei(v,ne,Te))*g_j(1,v)
+    else if ((cparams_ms%Zj(1).eq.0.0).and. &
+        (neut_prof.eq.3)) then
+        ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
+        CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac/(ne* &
+          Zeff*CLogei(v,ne,Te))*g_j(1,v)
+    else if ((cparams_ms%Zj(1).eq.0.0).and. &
+        (neut_prof.eq.1)) then
+        CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(1)/(cparams_ms%ne* &
+          Zeff*CLogei(v,ne,Te))*g_j(1,v)
+    endif
 
-      do i=2,cparams_ms%num_impurity_species
-         CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(i)/(cparams_ms%ne* &
-            Zeff*CLogei(v,ne,Te))*g_j(i,v)
-      end do
-      CB_ei_SD=CB_ei_temp
+    do i=2,cparams_ms%num_impurity_species
+        CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(i)/(cparams_ms%ne* &
+          Zeff*CLogei(v,ne,Te))*g_j(i,v)
+    end do
+    CB_ei_SD=CB_ei_temp
 
-   else if (params%bound_electron_model.eq.'ROSENBLUTH') then
-      CB_ei_temp=CB_ei_SD
-      do i=1,cparams_ms%num_impurity_species
-         CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(i)/cparams_ms%ne* &
-            (cparams_ms%Zo(i)-cparams_ms%Zj(i))/2._rp
-      end do
-      CB_ei_SD=CB_ei_temp
+  else if (params%bound_electron_model.eq.'ROSENBLUTH') then
+    CB_ei_temp=CB_ei_SD
+    do i=1,cparams_ms%num_impurity_species
+        CB_ei_temp=CB_ei_temp+CB_ei_SD*cparams_ms%nz(i)/cparams_ms%ne* &
+          (cparams_ms%Zo(i)-cparams_ms%Zj(i))/2._rp
+    end do
+    CB_ei_SD=CB_ei_temp
 
-   end if
-#endif ACC
+  end if
 
 end function CB_ei_SD
 
@@ -3245,19 +3227,20 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
             if (.not.cparams_ms%lowKE_REs) then
 
                if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'UNIFORM')) then
+                  (neut_prof.eq.0)) then
                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
                else if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'HOLLOW')) then
+                  (neut_prof.eq.2)) then
                   ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
                else if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'EDGE')) then
+                  (neut_prof.eq.3)) then
                   ra=sqrt((Y_R(cc)-P%R0)**2+(Y_Z(cc)-P%Z0)**2)/P%a
                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
-               else
+               if ((cparams_ms%Zj(1).eq.0.0).and. &
+                  (neut_prof.eq.1)) then
                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1))
                endif
@@ -3268,21 +3251,22 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
                end do
             else
                if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'UNIFORM')) then
+                  (neut_prof.eq.0)) then
                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
                            -cparams_ms%lowKE_LAC_not_ionized)
                else if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'HOLLOW')) then
+                  (neut_prof.eq.2)) then
                   ntot(cc)=ntot(cc)+max(cparams_ms%nz(1)-ne(cc),0._rp)* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
                            -cparams_ms%lowKE_LAC_not_ionized)
                else if ((cparams_ms%Zj(1).eq.0.0).and. &
-                  (neut_prof.eq.'EDGE')) then
+                  (neut_prof.eq.3)) then
                   ntot(cc)=ntot(cc)+cparams_ms%nz(1)*ra**cparams_ms%neut_edge_fac* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
                      -cparams_ms%lowKE_LAC_not_ionized)
-               else
+               if ((cparams_ms%Zj(1).eq.0.0).and. &
+                  (neut_prof.eq.1)) then
                   ntot(cc)=ntot(cc)+ne(cc)*cparams_ms%nz(1)/cparams_ms%ne* &
                      (cparams_ms%Zo(1)-cparams_ms%Zj(1) &
                            -cparams_ms%lowKE_LAC_not_ionized)

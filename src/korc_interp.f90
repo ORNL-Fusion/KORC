@@ -5765,8 +5765,9 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
     else
 
 !       write(output_unit_write,*) 'in cart false'
-       !hint=prtcls%hint
+       hint=prtcls%hint
        !write(output_unit_write,*) 'hint: ',hint
+       write(6,*) 'hint: ',hint
 
        Btmp=0._rp
 

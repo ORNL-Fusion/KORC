@@ -34,8 +34,8 @@ dir_num=1
 
 #run_directory=['D3D_200236_MARS_CaseA_TEST18d1','D3D_200236_MARS_CaseA_TEST18d','D3D_200236_MARS_CaseA_TEST18d3','D3D_200236_MARS_CaseA_TEST18d4']
 #run_directory=['../LOCAL/TEST8/OUT']
-#run_directory=['GCeqn_GPU_TEST20b3c2']
-run_directory=['../test/fio_m3dc1/tmp']
+run_directory=['GCeqn_GPU_TEST20b3c2']
+#run_directory=['../test/fio_m3dc1/tmp']
 
 for kk in range(0,dir_num):
 
@@ -526,12 +526,12 @@ plt.rc('figure', titlesize=SMALL_SIZE)
 
 plot_histrm=0
 plot_LAC_ParamScaling=0
-plot_LAC_Escaling=0
+plot_LAC_Escaling=1
 plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
 plot_evo=0
-plot_orbit=1
+plot_orbit=0
 plot_histRZ_analytic=0
 plot_evoCon=0
 plotgrowth=0
@@ -766,25 +766,38 @@ if plot_LAC_Escaling==1:
     #T20e_gr=np.array([0.0276,0.0796,0.186,0.3036,0.3597]) #using Te=2000eV
     T20e_gr=np.array([0.04086,0.1080,0.2384,0.4959,0.8705,0.9831,1.110]) #using Te=2eV
 
-    ax.plot(E_norm,T20e_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='k',markersize=10)
-    ax.plot(E_norm,T20_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='r',markersize=10)
-    ax.plot(E_norm,T20a_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='b',markersize=10)
-    ax.plot(E_norm,T20b_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='g',markersize=10)
-    ax.plot(E_norm,T20c_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='c',markersize=10)
-    ax.plot(E_norm,T20d_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='m',markersize=10)
+    #ax.plot(E_norm,T20e_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='k',markersize=10)
+    #ax.plot(E_norm,T20_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='r',markersize=10)
+    #ax.plot(E_norm,T20a_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='b',markersize=10)
+    #ax.plot(E_norm,T20b_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='g',markersize=10)
+    #ax.plot(E_norm,T20c_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='c',markersize=10)
+    #ax.plot(E_norm,T20d_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='m',markersize=10)
+    
+    pmax=7
+    
+    #ax.plot(E_norm,T20e_gr*T20_gr,'-o',linewidth=2,color='k',markersize=10)
+    ax.plot(E_norm[0:pmax],T20_gr[0:pmax]/T20_gr[0:pmax],'-o',linewidth=2,color='r',markersize=10)
+    ax.plot(E_norm[0:pmax],T20a_gr[0:pmax]/T20_gr[0:pmax],'-o',linewidth=2,color='b',markersize=10)
+    ax.plot(E_norm[0:pmax],T20b_gr[0:pmax]/T20_gr[0:pmax],'-o',linewidth=2,color='g',markersize=10)
+    ax.plot(E_norm[0:pmax],T20c_gr[0:pmax]/T20_gr[0:pmax],'-o',linewidth=2,color='c',markersize=10)
+    ax.plot(E_norm[0:pmax],T20d_gr[0:pmax]/T20_gr[0:pmax],'-o',linewidth=2,color='m',markersize=10)
+    
     
     #plt.axhline(y=0, color='k', linestyle=':', linewidth=2)
 
-    #ax.set_xscale('log')
+    ax.set_xscale('log')
     #ax.set_yscale('log')
     
-    ax.set(xlabel='$E/E_{\\mathrm{CH}}$', ylabel='$\gamma \\tau_c$')
+    #ax.set(xlabel='$E/E_{\\mathrm{CH}}$', ylabel='$\gamma \\tau_c$')
+    
+    ax.set(xlabel='$E/E_{\\mathrm{CH}}$', ylabel='$\gamma/\gamma_{\\rm no\,wall}$')
     
     #ax.axis([0.e-6,1e-5,10.7,11.2])
     
     ax.grid()
     
-    ax.legend(['FP','No wall','HFS','LFS','Top','Bottom'],loc='upper left',ncol=2)
+    #ax.legend(['FP','No wall','HFS','LFS','Top','Bottom'],loc='upper left',ncol=2)
+    ax.legend(['No wall','HFS','LFS','Top','Bottom'],loc='lower right',ncol=2)
     
     plt.savefig("FP_LAC_Escaling.png", format="png", bbox_inches="tight")
     #plt.savefig("Orbit_"+run_directory[0]+".png", format="png", bbox_inches="tight")
