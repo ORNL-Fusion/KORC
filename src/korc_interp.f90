@@ -4751,15 +4751,23 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
 
    psip_conv=F%psip_conv
 
-   if (size(Y,1).eq.1) then
-      ss = size(Y,1)
-   else
-      if (Y(2,1).eq.0) then
-         ss=1_idef
-      else
-         ss = size(Y,1)
+   !if (size(Y,1).eq.1) then
+   !   ss = size(Y,1)
+   !else
+   !   if (Y(2,1).eq.0) then
+   !      ss=1_idef
+   !   else
+   !      ss = size(Y,1)
+   !   end if
+   !endif
+
+   ss = size(Y,1)
+   do pp=1_idef,size(Y,1)
+      if (Y(pp,1).eq.0) then
+        ss=pp-1
+        exit
       end if
-   endif
+   end do
 
    ALLOCATE(A(ss,3))
    A=0._rp
@@ -4837,7 +4845,6 @@ subroutine calculate_magnetic_field(params,Y,F,B,E,PSI_P,flag)
       !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,ezerr) &
       !$OMP& SHARED(F,Y,A,B,flag,bfield_2d,PSI_P)
       do pp=1_idef,ss
-
 
          !        write(output_unit_write,'("pp: ",I16)') pp
 

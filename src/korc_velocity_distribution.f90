@@ -372,27 +372,27 @@ CONTAINS
     !! Particle iterator.
     TYPE(C_PTR), DIMENSION(:), ALLOCATABLE    :: hint
     
-    ALLOCATE(Vo(spp%ppp))
-    ALLOCATE(V1(spp%ppp))
-    ALLOCATE(V2(spp%ppp))
-    ALLOCATE(V3(spp%ppp))
-    ALLOCATE(b1(spp%ppp,3))
-    ALLOCATE(b_tmp(spp%ppp,3))
-    ALLOCATE(b2(spp%ppp,3))
-    ALLOCATE(b3(spp%ppp,3))
-    ALLOCATE(hint(spp%ppp))
+    ALLOCATE(Vo(spp%pinit))
+    ALLOCATE(V1(spp%pinit))
+    ALLOCATE(V2(spp%pinit))
+    ALLOCATE(V3(spp%pinit))
+    ALLOCATE(b1(spp%pinit,3))
+    ALLOCATE(b_tmp(spp%pinit,3))
+    ALLOCATE(b2(spp%pinit,3))
+    ALLOCATE(b3(spp%pinit,3))
+    ALLOCATE(hint(spp%pinit))
 
     hint=C_NULL_PTR
 #ifdef FIO
     hint=spp%vars%hint
 #endif
     
-    ALLOCATE( theta(spp%ppp) )
+    ALLOCATE( theta(spp%pinit) )
 
     ! * * * * INITIALIZE VELOCITY * * * *
     !if (.not.params%SameRandSeed) then
     CALL random%uniform%set(0.0_rp,1.0_rp)
-    do pp=1_idef,spp%ppp
+    do pp=1_idef,spp%pinit
       theta(pp)=random%uniform%get()
     enddo
     !endif
@@ -410,7 +410,7 @@ CONTAINS
 
     !write(6,*) 'V123',V1,V2,V3
     
-    !do jj=1_idef,spp%ppp
+    !do jj=1_idef,spp%pinit
     !   write(6,*) 'MPI',params%mpi_params%rank,'X', &
     !        spp%vars%X(jj,:)*params%cpp%length
     !end do
@@ -425,7 +425,7 @@ CONTAINS
     !write(6,*) 'b-2',b3
 
     
-    do jj=1_idef,spp%ppp
+    do jj=1_idef,spp%pinit
        if ( spp%vars%flagCon(jj) .EQ. 1_idef ) then    
           spp%vars%V(jj,1) = V1(jj)*b1(jj,1) + V2(jj)*b2(jj,1) + V3(jj)*b3(jj,1)
           spp%vars%V(jj,2) = V1(jj)*b1(jj,2) + V2(jj)*b2(jj,2) + V3(jj)*b3(jj,2)
