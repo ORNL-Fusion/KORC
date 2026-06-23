@@ -1281,7 +1281,7 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
 
    !write(output_unit_write,*) 'in unitVector'
 
-   ppp = SIZE(Xo,1) ! Number of particles
+   ppp = SIZE(b1,1) ! Number of particles
 
    ALLOCATE( vars%X(ppp,3) )
    ALLOCATE( vars%Y(ppp,3) )
@@ -1297,7 +1297,7 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    ALLOCATE( vars%hint(ppp) )
 #endif
 
-   vars%X = Xo
+   vars%X = Xo(1:ppp,:)
 #ifdef FIO
    vars%hint = hint
 #endif
@@ -1309,9 +1309,9 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
 
 ! write(output_unit_write,*) 'before get_fields'
 
-   write(6,*) 'before first get fields'
+   !write(6,*) 'before first get fields'
    call get_fields(params,vars,F)
-   write(6,*) 'before second get fields'
+   !write(6,*) 'before second get fields'
 
    !write(6,'("Bx: ",E17.10)') vars%B(:,1)*params%cpp%Bo
    !write(6,'("By: ",E17.10)') vars%B(:,2)*params%cpp%Bo

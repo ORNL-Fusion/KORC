@@ -1,0 +1,172 @@
+&input_parameters
+  restart = F
+    ! Restart simulation that exited before simulation_time reached
+  proceed = F
+    ! Append simulation results after previous simulation_time reached
+  reinit = F
+    ! Begin a new simulation, reinitializing from restart file stat
+  load_balance = F
+  simulation_time = 1.05e-2
+    ! Total aimed simulation time in seconds   
+    ! Run 10 mu s If transients exist put 5 extra mu s.
+  snapshot_frequency = 5.e-4
+    ! Time between snapshots in seconds
+  dt = 1.e0
+    ! Time step as fraction of relativistic gyro-period
+  minimum_particle_energy = 1.0e5 
+    ! Minimum energy of simulated particles in eV
+  radiation = T
+  GC_rad_SDE= T
+  collisions = T
+  LargeCollisions = T
+  collisions_model = 'SINGLE_SPECIES'
+    ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
+  bound_electron_model = 'HESSLOW'
+    ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
+  field_model = 'EXTERNAL-PSI'
+  profile_model = 'ANALYTICAL'
+    ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
+    ! For 'ANALYTICAL', the magnetic field is calculated based on
+    ! the parameters given in the "analytic_mag_field_params" section.
+    ! For 'EXTERNAL', the magnetic field is loaded from the file
+    ! specified in "filename".
+    ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
+    ! velocity.
+  magnetic_field_filename = 'JFIT_D3D_177031_2x1t_wE.h5'
+  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,flagRE,Y0,Y1,Yborn}'
+    ! List of outputs
+    !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,
+    !  curlb,ne,Te,Zeff,PSIp,nimp}'
+  orbit_model = 'GCpre'
+    ! 'FO' for full orbit,'FOB' for full orbit with B PSPLINE, 'FOpsi'
+    !for full orbit with psip PSPLINE, 'GCpre' for guiding center with
+    ! pre-computed
+    ! auxiliary fields, 'GCgrad' for guiding center with auxiliary
+    ! fields computed with PSPLINE.
+  field_eval = 'interp'
+    ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
+    ! where 'eqn' evaluates particle fields at particle positions and
+    ! 'interp' interpolates precomputed fields.
+  FokPlan = F
+  SameRandSeed = T
+/
+
+&plasma_species
+  runaway = T
+  ppp = 35000
+    ! Number of particles per process (mpi)
+  pinit = 1000
+    ! Number of particles initialized per process (for inclusion of sources)
+  q = -1.0
+    ! Electric charge
+  m = 1.0
+    ! In units of electron mass
+  spatial_distribution = 'MH_psi'
+    ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
+    ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
+    ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
+    ! 'AVALANCHE-4D','TRACER','SPONG-3D','HOLLMANN-3D'
+  Ro=1.5
+  Zo=0.
+  sigmaR = 1.e6
+  sigmaZ = 0.2
+  theta_gauss = 0.0
+  psi_max=1.0
+  dth = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dgam = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dR = 0.1
+    ! Variance of sampling normal variate for R location
+  dZ = 0.1
+    ! Variance of sampling normal variate for Z location
+  energy_distribution = 'MONOENERGETIC'
+    ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
+    ! 'EXPERIMENTAL', and 'UNIFORM'
+  pitch_distribution = 'MONOPITCH'
+    ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
+  Eno = 10.0E6
+    ! Initial energy in eV
+  etao = 10.0
+    ! Initial pitch angle
+  Xtrace = 1.6,0.0,0.0
+    ! Initial position of tracer particle for debugging with
+    ! spatial_distribution='TRACER'
+/
+
+&externalPlasmaModel
+  Bfield = F
+  dBfield = F
+  axisymmetric_fields = T
+  Bflux = F
+  Bflux3D = T
+  Efield = T
+  Dim2x1t =T
+  E_2x1t = T
+  t0_2x1t = 1.594691872596741e+00
+  ind0_2x1t = 30
+  ReInterp_2x1t = T
+  PSIp_lim= 3.164133626575646e+00
+  PSIp_0= 2.963452809829185e+00
+  psip_conv=0.15915
+  Analytic_D3D_IWL=T
+  ntiles=42
+  circumradius=1.016
+/
+
+&plasmaProfiles
+  axisymmetric = T
+  ne_profile = 'FLAT' 
+    ! Options are 'FLAT','POLYNOMIAL','RE-EVO','RE-EVO1','RE-EVO-PSI'
+  neo = 2.25E20 
+  n_ne = 2.5E19 !large angle collision operator has this used for setting smallest collisional time scale
+    ! In m^-3
+  
+  Te_profile = 'FLAT' 
+    ! Options are 'FLAT' and 'POLYNOMIAL'
+  Teo = 1.5 
+    ! In eV
+  
+  Zeff_profile = 'FLAT' 
+    ! Options are 'FLAT' and 'POLYNOMIAL'
+  Zeffo = 1. 
+    ! In m^-3
+/
+
+&CollisionParamsSingleSpecies
+  Te_sing = 1.5e0 
+    ! Background electron temperature in eV
+  Ti_sing = 1.5e0
+    ! Background ion temperature in eV
+  ne_sing = 2.25E20 
+    ! Background electron density in m^-3
+  Zeff_sing = 1.0 
+    ! Effective atomic number
+  dTau_sing = 5.e-2
+    ! Subcycling time step in collisional time units (Tau)
+  p_therm = 1.e0
+  ConserveLA = T
+  Clog_model = 2
+    ! 0 is HESSLOW, 1 is CONSTANT, 2 is MCDEVITT
+  sample_test = F
+  min_secRE_therm = T
+  pmin_scale=0.25
+/
+
+&CollisionParamsMultipleSpecies
+  num_impurity_species = 3
+  Te_mult = 1.5e0 
+    ! Background electron temperature in eV
+  ne_mult = 2.25E20 
+    ! Background electron density in 1/m^3
+  Zo_mult = 18.0,18.0,1.0
+    ! Full nuclear charge of each impurity: Z=1 for D, Z=10 for Ne, Z=18 for Ar
+  Zj_mult = 0.0,1.0,1.0
+    ! Average charge state of each impurity
+  nz_mult = 1.5E20,1.5E20,7.5E19 
+    ! Impurity densities
+  IZj_mult = 15.7596
+    ! Ionization energy of impurity in eV
+  neut_prof = 0
+    ! 0 for uniform, 1 for same as ne, 2 for hollow, 3 for edge
+/

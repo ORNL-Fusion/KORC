@@ -5353,7 +5353,7 @@ subroutine GC_init(params,F,spp)
 
           params%GC_coords=.TRUE.
 
-          do pp=1_idef,spp(ii)%ppp
+          do pp=1_idef,spp(ii)%pinit
              spp(ii)%vars%E(pp,1)=0._rp
              spp(ii)%vars%E(pp,2)=0._rp
              spp(ii)%vars%E(pp,3)=0._rp
@@ -5368,7 +5368,7 @@ subroutine GC_init(params,F,spp)
 
           !$OMP PARALLEL DO SHARED(ii,spp) PRIVATE(pp,Bmag1)
 
-          do pp=1_idef,spp(ii)%ppp
+          do pp=1_idef,spp(ii)%pinit
              !             if ( spp(ii)%vars%flagCon(pp) .EQ. 1_is ) then
 
              !                write(output_unit_write,'("BR: ",E17.10)') spp(ii)%vars%B(pp,1)
@@ -5406,7 +5406,7 @@ subroutine GC_init(params,F,spp)
 
           !$OMP PARALLEL DO shared(F,params,spp) &
           !$OMP& PRIVATE(pp,cc,E_PHI,Y_R) firstprivate(pchunk)
-          do pp=1_idef,spp(ii)%ppp,pchunk
+          do pp=1_idef,spp(ii)%pinit,pchunk
 
              !$OMP SIMD
              do cc=1_idef,pchunk
@@ -5470,7 +5470,7 @@ subroutine GC_init_ACC(params,F,spp)
 
           call get_fields(params,spp(ii)%vars,F)
 
-          do pp=1_idef,spp(ii)%ppp
+          do pp=1_idef,spp(ii)%pinit
 
              Bmag1 = SQRT( DOT_PRODUCT(spp(ii)%vars%B(pp,:), &
                   spp(ii)%vars%B(pp,:)))

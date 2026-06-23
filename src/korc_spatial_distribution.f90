@@ -1351,7 +1351,7 @@ subroutine MH_psi(params,random,spp,F)
      PSIp0=F%PSIp_0
      psi_max = spp%psi_max
      psi_max_buff = spp%psi_max
-  else if (params%field_model.eq.'EXTERNAL') then
+  else if (params%field_model(1:8).eq.'EXTERNAL') then
      min_R=minval(F%X%R)
      max_R=maxval(F%X%R)
      min_Z=minval(F%X%Z)
