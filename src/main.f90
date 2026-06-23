@@ -697,7 +697,11 @@ end if
      end if
 
      do it=params%ito,params%t_steps,params%t_skip
+#ifdef ACC 
+        call adv_GCinterp_psiwE_top_ACC(params_ACC,randoms,spp,P,F)
+#else
         call adv_GCinterp_psiwE_top(params,randoms,spp,P,F)
+#endif ACC
 
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &
@@ -709,6 +713,8 @@ end if
                 params%snapshot_frequency
            params%it = it-1_ip+params%t_skip
         endif
+
+        params_ACC%it=params%it
 
         call save_simulation_outputs(params,spp,F)
 
