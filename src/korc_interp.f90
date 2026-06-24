@@ -5035,8 +5035,8 @@ end subroutine calculate_GCfieldswE_p
 
 subroutine provide_ezspline_JFIT_ACC(bfield_2d_local, &
   efield_2d_local,fields_domain_local)
-  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT)      :: bfield_2d_local,efield_2d_local
-  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT)        :: fields_domain_local
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(OUT) :: bfield_2d_local,efield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(OUT) :: fields_domain_local
 
   bfield_2d_local=bfield_2d  
   efield_2d_local=efield_2d 
@@ -5044,11 +5044,15 @@ subroutine provide_ezspline_JFIT_ACC(bfield_2d_local, &
 
 end subroutine provide_ezspline_JFIT_ACC
 
-subroutine calculate_GCfieldswE_ACC(F,Y_R,Y_PHI,Y_Z, &
+subroutine calculate_GCfieldswE_ACC(Y_R,Y_PHI,Y_Z, &
   B_R,B_PHI,B_Z,E_R,E_PHI,E_Z, &
-  curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z,flag_cache,PSIp)
+  curlb_R,curlb_PHI,curlb_Z,gradB_R,gradB_PHI,gradB_Z, &
+  flagCon,PSIp,E_2x1t,psip_conv,Bo,Ro, &
+  fields_domain_local,bfield_2d_local,efield_2d_local, &
+  Dim2x1t,Analytic_D3D_IWL,circumradius, &
+  ntiles,useDiMES,DiMESloc_cyl,DiMESdims)
+  !$acc routine seq
   REAL(rp), INTENT(IN)     :: Y_R,Y_PHI,Y_Z
-  TYPE(FIELDS), INTENT(IN) :: F
   REAL(rp),  INTENT(OUT)   :: B_R,B_PHI,B_Z
   REAL(rp),  INTENT(OUT)   :: gradB_R,gradB_PHI,gradB_Z
   REAL(rp),  INTENT(OUT)   :: curlb_R,curlb_PHI,curlb_Z
@@ -5056,29 +5060,35 @@ subroutine calculate_GCfieldswE_ACC(F,Y_R,Y_PHI,Y_Z, &
   REAL(rp)   :: Bmag,EPHI
   REAL(rp),INTENT(OUT)  :: PSIp
   REAL(rp), DIMENSION(6)  :: A
-  INTEGER(is),DIMENSION(pchunk),INTENT(INOUT) :: flag_cache
-  REAL(rp) :: psip_conv
+  INTEGER(is),INTENT(INOUT) :: flagCon
+  REAL(rp),intent(IN) :: psip_conv,Ro,Bo
+  LOGICAL,intent(IN)  :: Analytic_D3D_IWL,useDiMES,Dim2x1t,E_2x1t
+  REAL(rp),DIMENSION(2),intent(IN)  :: DiMESdims
+  REAL(rp),DIMENSION(3),intent(IN)  :: DiMESloc_cyl
+  REAL(rp),intent(IN)  :: circumradius,ntiles
+  TYPE(KORC_2D_FIELDS_INTERPOLANT),INTENT(IN) :: bfield_2d_local,efield_2d_local
+  TYPE(KORC_INTERPOLANT_DOMAIN),INTENT(IN) :: fields_domain_local
+  INTEGER :: ezerr_local
 
-  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq,
+  !$acc routine (check_if_in_fields_domain_2D_p_ACC) seq
   !$acc routine (EZspline_interp2_GCvarswE) seq
   !$acc routine (EZspline_error) seq
 
-  psip_conv=F%psip_conv
-
-  call check_if_in_fields_domain_2D_p_ACC(fields_domain_local, &
-    bfield_2d_local, &
+  call check_if_in_fields_domain_2D_p_ACC( &
+    fields_domain_local,bfield_2d_local, &
     Dim2x1t,Analytic_D3D_IWL,circumradius, &
-    ntiles,useDiMES,DiMESloc_cyl,DiMESdims,Y_R,Y_PHI,Y_Z,flag)
+    ntiles,useDiMES,DiMESloc_cyl,DiMESdims, &
+    Y_R,Y_PHI,Y_Z,flagCon)
 
-  call EZspline_interp2_GCvarswE(bfield_2d%A, efield_2d%PHI, Y_R, Y_Z, A, &
-         EPHI, ezerr)
-  call EZspline_error(ezerr)
+  call EZspline_interp2_GCvarswE(bfield_2d_local%A, &
+    efield_2d_local%PHI,Y_R, Y_Z, A, EPHI, ezerr_local)
+  call EZspline_error(ezerr_local)
 
   PSIp=A(1)
 
   B_R = psip_conv*A(3)/Y_R
   ! BR = (dA/dZ)/R
-  B_PHI = -F%Bo*F%Ro/Y_R
+  B_PHI = -Bo*Ro/Y_R
   ! BPHI = Fo*Ro/R
   B_Z = -psip_conv*A(2)/Y_R
   ! BR = -(dA/dR)/R
@@ -5097,7 +5107,7 @@ subroutine calculate_GCfieldswE_ACC(F,Y_R,Y_PHI,Y_Z, &
         (Bmag*Bmag)
   curlb_Z=-B_PHI*gradB_R/(Bmag*Bmag)
 
-  if (F%E_2x1t) then
+  if (E_2x1t) then
       E_R = 0._rp
       E_PHI = EPHI
       E_Z = 0._rp
