@@ -60,6 +60,7 @@ module korc_collisions
           989.9_rp,1138.1_rp,1369.5_rp,1791.2_rp,2497.0_rp,4677.2_rp, &
           4838.2_rp,huge(1._rp)/)
 
+    INTEGER :: neut_prof
      REAL(rp)  :: neut_edge_fac
      REAL(rp) 			:: Ec,Ec_min
      ! Critical electric field
@@ -467,6 +468,8 @@ contains
 
     cparams_ms%neut_prof=neut_prof
     cparams_ms%neut_edge_fac=neut_edge_fac
+    cparams_ms_ACC%neut_prof=neut_prof
+    cparams_ms_ACC%neut_edge_fac=neut_edge_fac
     cparams_ms%lowKE_REs=lowKE_REs
     cparams_ms_ACC%lowKE_REs=lowKE_REs
     cparams_ms%lowKE_LAC_not_ionized=lowKE_LAC_not_ionized
@@ -3346,45 +3349,40 @@ subroutine include_CoulombCollisionsLA_GC_p(spp,achunk,tt,params,random, &
 
 end subroutine include_CoulombCollisionsLA_GC_p
 
-subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_p, &
-   Y_R,Y_PHI,Y_Z,Ppll,Pmu,me,flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI,ne,Te,Zeff,PSIp, &
-   avalanche_fail)
-   !$acc routine seq
-   TYPE(PARTICLES), INTENT(INOUT)    :: vars
-   INTEGER,  INTENT(INOUT) 	:: ppp,pRE
-   LOGICAL, INTENT(INOUT) :: avalanche_fail
-   TYPE(KORC_PARAMS_ACC), INTENT(INOUT) 		:: params_ACC
-   REAL(rp),  INTENT(INOUT),DIMENSION(4) 	:: RErand_p
-   REAL(rp),  INTENT(INOUT) 	:: Ppll
-   REAL(rp),  INTENT(INOUT) 	:: Pmu
-   REAL(rp)  			:: Bmag
-   REAL(rp), INTENT(IN) 	:: B_R,B_PHI,B_Z,E_PHI,PSIp
-   REAL(rp)  :: curlb_R,curlb_PHI,curlb_Z
-   REAL(rp)  :: gradB_R,gradB_PHI,gradB_Z,ntot
-   REAL(rp), INTENT(INOUT) :: ne,Te,Zeff
-   REAL(rp),  INTENT(IN) 			:: Y_R,Y_PHI,Y_Z
-   INTEGER(is),  INTENT(INOUT) 	:: flagCol
-   INTEGER(is),  INTENT(INOUT) 	:: flagCon
-   REAL(rp), INTENT(IN) 			:: me
-   REAL(rp)  			:: nAr0,nAr1,nAr2,nAr3
-   REAL(rp)  			:: nD,nD1
-   REAL(rp), DIMENSION(2) 			:: dW
-   REAL(rp) 					:: dt,time
-   REAL(rp)  	:: pm,pm0
-   REAL(rp)   	:: dp
-   REAL(rp)  	:: xi,xi0
-   REAL(rp)  	:: dxi
-   REAL(rp)  					:: v,gam
-   !! speed of particle
-   REAL(rp) 					:: CAL
-   REAL(rp) 					:: dCAL
-   REAL(rp) 					:: CFL
-   REAL(rp) 					:: CBL
-   REAL(rp) 	:: SC_p,SC_xi,BREM_p
-   REAL(rp) 					:: kappa,ra
-   integer :: ii
-   integer(ip),INTENT(IN) :: tcol
-   REAL(rp), DIMENSION(params_ACC%num_impurity_species) 	:: nimp
+subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars, &
+  tcol,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z,Ppll,Pmu, &
+  me,flagCon,flagCol,B_R,B_PHI,B_Z,E_PHI, &
+  ne,Te,Zeff,PSIp,avalanche_fail)
+  !$acc routine seq
+  TYPE(PARTICLES), INTENT(INOUT)    :: vars
+  INTEGER,  INTENT(INOUT) 	:: ppp,pRE
+  LOGICAL, INTENT(INOUT) :: avalanche_fail
+  TYPE(KORC_PARAMS_ACC), INTENT(INOUT) 		:: params_ACC
+  REAL(rp),  INTENT(INOUT),DIMENSION(4) 	:: RErand_p
+  REAL(rp),  INTENT(INOUT) 	:: Ppll
+  REAL(rp),  INTENT(INOUT) 	:: Pmu
+  REAL(rp)  			:: Bmag
+  REAL(rp), INTENT(IN) 	:: B_R,B_PHI,B_Z,E_PHI,PSIp
+  REAL(rp)  :: curlb_R,curlb_PHI,curlb_Z
+  REAL(rp)  :: gradB_R,gradB_PHI,gradB_Z,ntot
+  REAL(rp), INTENT(INOUT) :: ne,Te,Zeff
+  REAL(rp),  INTENT(IN) 			:: Y_R,Y_PHI,Y_Z
+  INTEGER(is),  INTENT(INOUT) 	:: flagCol
+  INTEGER(is),  INTENT(INOUT) 	:: flagCon
+  REAL(rp), INTENT(IN) 			:: me
+  REAL(rp)  			:: nAr0,nAr1,nAr2,nAr3
+  REAL(rp)  			:: nD,nD1
+  REAL(rp), DIMENSION(2) 			:: dW
+  REAL(rp) 					:: dt,time
+  REAL(rp)  	:: pm,pm0,dp,xi,xi0,dxi
+  REAL(rp)  					:: v,gam
+  !! speed of particle
+  REAL(rp) 					:: CAL,dCAL,CFL,CBL
+  REAL(rp) 	:: SC_p,SC_xi,BREM_p
+  REAL(rp) 					:: kappa,ra
+  integer :: ii
+  integer(ip),INTENT(IN) :: tcol
+  REAL(rp), DIMENSION(params_ACC%num_impurity_species) 	:: nimp
 
   !!$acc routine (analytical_profiles_ACC) seq
   !$acc routine (large_angle_source_ACC) seq
@@ -3429,10 +3427,10 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
   ENDIF
 
   dp=REAL(flagCol)*REAL(flagCon)* &
-      ((-CFL+dCAL)*dt+sqrt(2.0_rp*CAL)*dW(1))
+    ((-CFL+dCAL)*dt+sqrt(2.0_rp*CAL)*dW(1))
 
   dxi=REAL(flagCol)*REAL(flagCon)* &
-      ((-2*xi*CBL/(pm*pm))*dt-sqrt(2.0_rp*CBL*(1-xi*xi))/pm*dW(2))
+    ((-2*xi*CBL/(pm*pm))*dt-sqrt(2.0_rp*CBL*(1-xi*xi))/pm*dW(2))
 
   if (params_ACC%FokPlan) then
     dp=dp+REAL(flagCol)*REAL(flagCon)*(E_PHI*xi)*dt
@@ -3443,14 +3441,14 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
     if (params_ACC%GC_rad_SDE) then
 
       SC_p=-gam*pm*(1-xi*xi)/ &
-          (cparams_ss_ACC%taur/Bmag**2)
+        (cparams_ss_ACC%taur/Bmag**2)
       SC_xi=xi*(1-xi*xi)/ &
-          ((cparams_ss_ACC%taur/Bmag**2)*gam)
+        ((cparams_ss_ACC%taur/Bmag**2)*gam)
 
       kappa=2._rp*C_PI*C_RE**2._rp*C_ME*C_C**2._rp/ &
-          (params_ACC%cpp%length**2._rp*params_ACC%cpp%energy)
+        (params_ACC%cpp%length**2._rp*params_ACC%cpp%energy)
       BREM_p=-2._rp*ne*kappa*Zeff*(Zeff+1._rp)* &
-          C_a/C_PI*(gam-1._rp)*(log(2._rp*gam)-1._rp/3._rp)
+        C_a/C_PI*(gam-1._rp)*(log(2._rp*gam)-1._rp/3._rp)
 
       if (.not.cparams_ss_ACC%FP_bremsstrahlung) BREM_p=0._rp
 
@@ -3488,14 +3486,14 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
 #else
   if (ISNAN(xi).or.(abs(xi).gt.1._rp)) then
 #endif __NVCOMPILER 
-      write(6,*) 100
-      write(6,*) pm0,xi0
-      write(6,*) pm,xi
-      write(6,*) dp,dxi
-      write(6,*) CBL
-      write(6,*) v,ne,Te,Zeff
-      write(6,*) Ppll,Pmu,Bmag
-      avalanche_fail=.TRUE.
+    write(6,*) 100
+    write(6,*) pm0,xi0
+    write(6,*) pm,xi
+    write(6,*) dp,dxi
+    write(6,*) CBL
+    write(6,*) v,ne,Te,Zeff
+    write(6,*) Ppll,Pmu,Bmag
+    avalanche_fail=.TRUE.
   end if
 #endif
 
@@ -3504,17 +3502,30 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars,tcol,params_ACC,RErand_
 
     ntot=ne
 
-    !ntot=ntot+ne*cparams_ms_ACC%nz(1)/cparams_ms_ACC%ne* &
-    !  (cparams_ms_ACC%Zo(1)-cparams_ms_ACC%Zj(1))
-    !add neutrals with same spatial distribution as free electrons
-
     do ii=1,cparams_ms_ACC%num_impurity_species
-      ntot=ntot+ne*cparams_ms_ACC%nz(ii)/cparams_ms_ACC%ne* &
+      if ((cparams_ms_ACC%Zj(ii).eq.0.0).and.(cparams_ms_ACC%neut_prof.eq.0)) then
+        ntot=ntot+cparams_ms_ACC%nz(ii)* &
           (cparams_ms_ACC%Zo(ii)-cparams_ms_ACC%Zj(ii))
+      else if ((cparams_ms_ACC%Zj(ii).eq.0.0).and. (cparams_ms_ACC%neut_prof.eq.2)) then
+        ntot=ntot+max(cparams_ms_ACC%nz(ii)-ne,0._rp)* &
+          (cparams_ms_ACC%Zo(ii)-cparams_ms_ACC%Zj(ii))
+      !else if ((cparams_ms_ACC%Zj(ii).eq.0.0).and.(cparams_ms_ACC%neut_prof.eq.3)) then
+      !  ra=sqrt((Y_R-P%R0)**2+(Y_Z-P%Z0)**2)/P%a
+      !  ntot=ntot+cparams_ms_ACC%nz(ii)*ra**cparams_ms_ACC%neut_edge_fac* &
+      !      (cparams_ms_ACC%Zo(ii)-cparams_ms_ACC%Zj(ii))
+      else if ((cparams_ms_ACC%Zj(ii).eq.0.0).and.(cparams_ms_ACC%neut_prof.eq.1)) then
+        ntot=ntot+ne*cparams_ms_ACC%nz(ii)/cparams_ms_ACC%ne* &
+          (cparams_ms_ACC%Zo(ii)-cparams_ms_ACC%Zj(ii))
+      else
+        ntot=ntot+ne*cparams_ms_ACC%nz(ii)/cparams_ms_ACC%ne* &
+          (cparams_ms_ACC%Zo(ii)-cparams_ms_ACC%Zj(ii))
+      endif
     end do
 
-    call large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p(3:4),Y_R,Y_PHI,Y_Z, &
-        pm,xi,ne,ntot,Te,Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z,avalanche_fail)
+    call large_angle_source_ACC(ppp,pRE,vars,params_ACC, &
+      RErand_p(3:4),Y_R,Y_PHI,Y_Z,pm,xi,ne,ntot,Te, &
+      Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z, &
+      avalanche_fail)
 
   end if !applying avalanche source
 
@@ -4231,8 +4242,9 @@ subroutine large_angle_source(spp,params,random,achunk,F,Y_R,Y_PHI,Y_Z, &
 
   end subroutine large_angle_source
 
-subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC,RErand_p,Y_R,Y_PHI,Y_Z, &
-  pm,xi,ne,netot,Te,Bmag,E_PHI,me,flagCol,flagCon,B_R,B_PHI,B_Z,avalanche_fail)
+subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC, &
+  RErand_p,Y_R,Y_PHI,Y_Z,pm,xi,ne,netot,Te,Bmag,E_PHI, &
+  me,flagCol,flagCon,B_R,B_PHI,B_Z,avalanche_fail)
   !$acc routine seq
   TYPE(PARTICLES), INTENT(INOUT)    :: vars
   TYPE(KORC_PARAMS_ACC), INTENT(IN) 			:: params_ACC
