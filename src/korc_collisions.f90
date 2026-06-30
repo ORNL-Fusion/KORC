@@ -651,154 +651,158 @@ contains
   end subroutine load_params_ss
 
 
-  subroutine initialize_collision_params(params,spp,P,F,init)
-    TYPE(KORC_PARAMS), INTENT(INOUT) :: params
-    TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
-    TYPE(PROFILES), INTENT(INOUT)  :: P
-    TYPE(FIELDS), INTENT(IN)                :: F
-    LOGICAL, INTENT(IN) :: init
-    INTEGER 				                       	:: ii
-    REAL(rp) :: p_crit,gam_crit,maxEinterp,minEinterp
+subroutine initialize_collision_params(params,spp,P,F,init)
+  TYPE(KORC_PARAMS), INTENT(INOUT) :: params
+  TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)       :: spp
+  TYPE(PROFILES), INTENT(INOUT)  :: P
+  TYPE(FIELDS), INTENT(IN)                :: F
+  LOGICAL, INTENT(IN) :: init
+  INTEGER 				                       	:: ii
+  REAL(rp) :: p_crit,gam_crit,maxEinterp,minEinterp
 
-    if (params%collisions.or.((TRIM(params%field_model).eq.'M3D_C1'.or. &
-         TRIM(params%field_model).eq.'NIMROD').and. &
-         params%radiation)) then
+  if (params%collisions.or.((TRIM(params%field_model).eq.'M3D_C1'.or. &
+    TRIM(params%field_model).eq.'NIMROD').and.params%radiation)) then
 
-       if (params%mpi_params%rank .EQ. 0) then
-          write(output_unit_write,'(/,"* * * * * * * INITIALIZING COLLISIONS * * * * * * *")')
-       end if
+      if (params%mpi_params%rank .EQ. 0) then
+        write(output_unit_write,'(/,"* * * * * * * INITIALIZING COLLISIONS * * * * * * *")')
+      end if
 
-       if (init) then
+      if (init) then
 
-          SELECT CASE (TRIM(params%collisions_model))
-          CASE (MODEL1)
-             call load_params_ss(params)
+        SELECT CASE (TRIM(params%collisions_model))
+        CASE (MODEL1)
+          call load_params_ss(params)
 
-             SELECT CASE(TRIM(params%bound_electron_model))
-             CASE ('NO_BOUND')
-                call load_params_ms(params)
+          SELECT CASE(TRIM(params%bound_electron_model))
+          CASE ('NO_BOUND')
+            call load_params_ms(params)
 
-                cparams_ms%Ec=cparams_ss%Ec
-                if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
-                   cparams_ms%Ec_min=cparams_ms%Ec
-                else
-                   cparams_ms%Ec_min=cparams_ms%Ec* &
-                        cparams_ms%Gammac_min/cparams_ss%Gammac
-                endif
+            cparams_ms%Ec=cparams_ss%Ec
+            if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
+              cparams_ms%Ec_min=cparams_ms%Ec
+            else
+              cparams_ms%Ec_min=cparams_ms%Ec* &
+                cparams_ms%Gammac_min/cparams_ss%Gammac
+            endif
 
-             CASE('HESSLOW')
-                call load_params_ms(params)
+          CASE('HESSLOW')
+            call load_params_ms(params)
 
-                cparams_ms%Ec=cparams_ss%Ec
+            cparams_ms%Ec=cparams_ss%Ec
 
-                if (.not.(cparams_ms%lowKE_REs)) then
-                  cparams_ms%Ec=cparams_ms%Ec* &
-                        (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
-                        cparams_ms%nz)/cparams_ss%ne)
-                end if
+            if (.not.(cparams_ms%lowKE_REs)) then
+              cparams_ms%Ec=cparams_ms%Ec* &
+                (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
+                cparams_ms%nz)/cparams_ss%ne)
+            end if
 
-                if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
-                   cparams_ms%Ec_min=cparams_ms%Ec
-                else
-                   cparams_ms%Ec_min=cparams_ms%Ec* &
-                        cparams_ms%Gammac_min/cparams_ss%Gammac
-                end if
+            if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
+              cparams_ms%Ec_min=cparams_ms%Ec
+            else
+              cparams_ms%Ec_min=cparams_ms%Ec* &
+                cparams_ms%Gammac_min/cparams_ss%Gammac
+            end if
 
-             CASE('ROSENBLUTH')
-                call load_params_ms(params)
+          CASE('ROSENBLUTH')
+            call load_params_ms(params)
 
-                cparams_ms%Ec=cparams_ss%Ec* &
-                     (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
-                     cparams_ms%nz)/cparams_ss%ne)
-                if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
-                   cparams_ms%Ec_min=cparams_ms%Ec
-                else
-                   cparams_ms%Ec_min=cparams_ms%Ec* &
-                        cparams_ms%Gammac_min/cparams_ss%Gammac
-                end if
+            cparams_ms%Ec=cparams_ss%Ec* &
+              (1._rp+sum((cparams_ms%Zo-cparams_ms%Zj)* &
+              cparams_ms%nz)/cparams_ss%ne)
+            if (.not.(P%ne_profile(1:6).eq.'RE-EVO')) then
+              cparams_ms%Ec_min=cparams_ms%Ec
+            else
+              cparams_ms%Ec_min=cparams_ms%Ec* &
+                cparams_ms%Gammac_min/cparams_ss%Gammac
+            end if
 
-             CASE DEFAULT
-                write(output_unit_write,'("Default case")')
-             END SELECT
-
-             do ii=1_idef,params%num_species
-                ALLOCATE( spp(ii)%vars%nimp(spp(ii)%ppp, &
-                     cparams_ms%num_impurity_species) )
-                spp(ii)%vars%nimp = 0.0_rp
-             end do
-
-#ifdef FIO
-             if (TRIM(params%field_model) .eq. 'M3D_C1') then
-                call initialize_m3d_c1_imp(params,F,P, &
-                     cparams_ms%num_impurity_species,.true.)
-             endif
-#endif
-
-          CASE (MODEL2)
-             call load_params_ms(params)
           CASE DEFAULT
-             write(output_unit_write,'("Default case")')
+            write(output_unit_write,'("Default case")')
           END SELECT
 
-       end if
+          do ii=1_idef,params%num_species
+            ALLOCATE( spp(ii)%vars%nimp(spp(ii)%ppp, &
+              cparams_ms%num_impurity_species) )
+            spp(ii)%vars%nimp = 0.0_rp
+          end do
 
-       if (params%LargeCollisions) then
+#ifdef FIO
+          if (TRIM(params%field_model) .eq. 'M3D_C1') then
+            call initialize_m3d_c1_imp(params,F,P, &
+              cparams_ms%num_impurity_species,.true.)
+          endif
+#endif
 
-          if (params%mpi_params%rank .EQ. 0) then
-             write(output_unit_write,'(/,"* * * * * * * LARGE ANGLE COLLISIONS * * * * * * *")')
-          end if
+        CASE (MODEL2)
+          call load_params_ms(params)
+        CASE DEFAULT
+          write(output_unit_write,'("Default case")')
+        END SELECT
 
-          if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+      end if
+
+      if (params%LargeCollisions) then
+
+        if (params%mpi_params%rank .EQ. 0) then
+          write(output_unit_write,'(/,"* * * * * * * LARGE ANGLE COLLISIONS * * * * * * *")')
+        end if
+
+        if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
 
              !write(6,*) 'Eo',F%Eo
              !write(6,*) 'Ec',cparams_ss%Ec
              !write(6,*) 'Ec_min',cparams_ms%Ec_min
 
-             cparams_ss%avalanche=.TRUE.
-             cparams_ss_ACC%avalanche=.TRUE.
-             if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                if (abs(F%Eo).lt.cparams_ss%Ec) then
-                   cparams_ss%avalanche=.FALSE.
-                   cparams_ss_ACC%avalanche=.FALSE.
-                end if
-             else
-                if (abs(F%Eo).lt.cparams_ms%Ec_min) then
-                   cparams_ss%avalanche=.FALSE.
-                   cparams_ss_ACC%avalanche=.FALSE.
-                end if
-             end if
+          cparams_ss%avalanche=.TRUE.
+          cparams_ss_ACC%avalanche=.TRUE.
+          if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+            if (abs(F%Eo).lt.cparams_ss%Ec) then
+              cparams_ss%avalanche=.FALSE.
+              cparams_ss_ACC%avalanche=.FALSE.
+            end if
+          else
+            if (abs(F%Eo).lt.cparams_ms%Ec_min) then
+              cparams_ss%avalanche=.FALSE.
+              cparams_ss_ACC%avalanche=.FALSE.
+            end if
+          end if
 
-             if (cparams_ss%avalanche) then
+          if (cparams_ss%avalanche) then
 
-                if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                   p_crit=1/sqrt(abs(F%Eo)/cparams_ss%Ec-1._rp)
-                else
-                   p_crit=1/sqrt(abs(F%Eo)/cparams_ms%Ec_min-1._rp)
-                end if
-             end if
+            if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+              p_crit=1/sqrt(abs(F%Eo)/cparams_ss%Ec-1._rp)
+            else
+              p_crit=1/sqrt(abs(F%Eo)/cparams_ms%Ec_min-1._rp)
+            end if
+          end if
 
-          else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI')) then
-             if (F%ReInterp_2x1t) then
-                maxEinterp=maxval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
-                     F%FLAG3D(:,F%ind_2x1t,:))
+        else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI')) then
+          if (F%ReInterp_2x1t) then
+            maxEinterp=maxval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
+              F%FLAG3D(:,F%ind_2x1t,:))
 
-                minEinterp=minval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
-                     F%FLAG3D(:,F%ind_2x1t,:))
-             else if (F%E_profile.eq.'MST_FSA') then
-                maxEinterp=F%E_dyn
-                minEinterp=0._rp
-             end if
+            minEinterp=minval(F%E_3D%PHI(:,F%ind_2x1t,:)* &
+              F%FLAG3D(:,F%ind_2x1t,:))
+          else if (F%E_profile.eq.'MST_FSA') then
+            maxEinterp=F%E_dyn
+            minEinterp=0._rp
+          end if
 
-             cparams_ss%avalanche=.TRUE.
-             if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                if ((abs(maxEinterp).lt.cparams_ss%Ec).and. &
-                     (abs(minEinterp).lt.cparams_ss%Ec)) &
-                     cparams_ss%avalanche=.FALSE.
-             else
-                if ((abs(maxEinterp).lt.cparams_ms%Ec_min).and. &
-                     (abs(minEinterp).lt.cparams_ms%Ec_min)) &
-                     cparams_ss%avalanche=.FALSE.
-             end if
+          cparams_ss%avalanche=.TRUE.
+          cparams_ss_ACC%avalanche=.TRUE.
+          if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+            if ((abs(maxEinterp).lt.cparams_ss%Ec).and. &
+              (abs(minEinterp).lt.cparams_ss%Ec)) then
+              cparams_ss%avalanche=.FALSE.
+              cparams_ss_ACC%avalanche=.FALSE.
+            endif
+          else
+            if ((abs(maxEinterp).lt.cparams_ms%Ec_min).and. &
+              (abs(minEinterp).lt.cparams_ms%Ec_min)) then
+              cparams_ss%avalanche=.FALSE.
+              cparams_ss_ACC%avalanche=.FALSE.
+            endif
+          end if
 
              !write(6,*) 'maxEinterp',maxEinterp,'minEinterp',minEinterp, &
              !      'E_c',cparams_ms%Ec,'E_c,min',cparams_ms%Ec_min, &
@@ -3497,7 +3501,6 @@ subroutine include_CoulombCollisions_GC_ACC(ppp,pRE,vars, &
   end if
 #endif
 
-
   if (cparams_ss_ACC%avalanche.and.(flagCon.eq.1).and.(flagCol.eq.1)) then
 
     ntot=ne
@@ -4293,8 +4296,9 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC, &
     E_C=Gammacee(vmin,ne,Te)
   end if
 
-  !write(6,*) 'E',E_PHI*params%cpp%Eo
-  !write(6,*) 'E_C',E_C*params%cpp%Eo
+  !write(6,*) 31
+  !write(6,*) E_PHI*params_ACC%cpp%Eo
+  !write(6,*) E_C*params_ACC%cpp%Eo
   !write(6,*) 'E_c,min',cparams_ms%Ec_min*params%cpp%Eo
   !write(6,*) 'ne',ne*params%cpp%density
   !write(6,*) 'netot',netot*params%cpp%density
@@ -4474,10 +4478,15 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC, &
     !$acc end atomic
   end if
 
-  !write(6,*) 'gam',gam,'xi',xi
-  !write(6,*) 'prob1',prob1,'prob0',prob0
+  !write(6,*) 32
+  !write(6,*) gam,xi
+  !write(6,*) prob1,prob0
 
   if (prob1.gt.prob0) then
+
+    !write(6,*) 33
+    !write(6,*) gam,xi
+    !write(6,*) prob1,prob0
 
     !! If secondary RE generated, begin pseduo-2D inverse CDF sampling
     !! algorithm

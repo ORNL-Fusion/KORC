@@ -34,12 +34,16 @@ dir_num=1
 
 #run_directory=['D3D_200236_MARS_CaseA_TEST18d1','D3D_200236_MARS_CaseA_TEST18d','D3D_200236_MARS_CaseA_TEST18d3','D3D_200236_MARS_CaseA_TEST18d4']
 #run_directory=['../LOCAL/TEST8/OUT']
-run_directory=['GCeqn_GPU_TEST20b3c2']
+#run_directory=['GCeqn_GPU_TEST20b3']
+#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
+#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
+run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 
 for kk in range(0,dir_num):
 
-    filename=r"../"+run_directory[kk]+"/simulation_parameters.h5"
+    #filename=r"../"+run_directory[kk]+"/simulation_parameters.h5"
+    filename=run_directory[kk]+"/simulation_parameters.h5"
     
     with h5py.File(filename,'r') as f:
         num_snapshots=f['simulation']['num_snapshots'][0]+1  
@@ -68,7 +72,7 @@ for kk in range(0,dir_num):
             if field_eval != 'eqn':
                 Rm=f['fields']['R'][:]
                 Zm=f['fields']['Z'][:]
-                PSIPm=f['fields']['psi_p'][:]
+                #PSIPm=f['fields']['psi_p'][:]
                 #BPHI1_Rem=f['fields']['BPHI1_Re'][:]
                 
     if field_model == 'M3D_C1':
@@ -81,7 +85,8 @@ for kk in range(0,dir_num):
     if num_snapshots<1:
         num_snapshots=1
     
-    filename=r"../"+run_directory[kk]+"/file_0.h5"
+    #filename=r"../"+run_directory[kk]+"/file_0.h5"
+    filename=run_directory[kk]+"/file_0.h5"
     
     t_steps=np.zeros(num_snapshots,dtype=np.uint32) 
     timetmp=np.zeros((num_snapshots))
@@ -143,10 +148,11 @@ for kk in range(0,dir_num):
     
     for jj in range(0,nmpi):
         
-        filename=r"../"+run_directory[kk]+"/file_"+str(jj)+".h5"
+        #filename=r"../"+run_directory[kk]+"/file_"+str(jj)+".h5"
+        filename=run_directory[kk]+"/file_"+str(jj)+".h5"
     
         with h5py.File(filename,'r') as f:
-            for ii in range(0,num_snapshots):
+            for ii in range(0,num_snapshots-1):
                 if jj==0:
                         
                     if kk==0:
@@ -526,7 +532,7 @@ plt.rc('figure', titlesize=SMALL_SIZE)
 
 plot_histrm=0
 plot_LAC_ParamScaling=0
-plot_LAC_Escaling=1
+plot_LAC_Escaling=0
 plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
@@ -545,7 +551,7 @@ plot_bphi=0
 plot_psip=0
 plot_histRZ_ext=0
 plot_histKeta=0
-plot_histK=0
+plot_histK=1
 plot_histeta=0
 plot_evoCon_DiMES=0
 plot_evo1D=0
@@ -773,7 +779,7 @@ if plot_LAC_Escaling==1:
     #ax.plot(E_norm,T20c_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='c',markersize=10)
     #ax.plot(E_norm,T20d_gr*tau_ckorc/tau_c0,'-o',linewidth=2,color='m',markersize=10)
     
-    pmax=7
+    pmax=5
     
     #ax.plot(E_norm,T20e_gr*T20_gr,'-o',linewidth=2,color='k',markersize=10)
     ax.plot(E_norm[0:pmax],T20_gr[0:pmax]/T20_gr[0:pmax],'-o',linewidth=2,color='r',markersize=10)
@@ -1351,31 +1357,36 @@ if plot_histKeta==1:
     
 if plot_histK==1:
     
-    Kbin10=np.linspace(np.log10(np.min(K)),np.log10(np.max(K)),num=50)
+    Kbin10=np.linspace(np.log10(np.min(K[K>1])),np.log10(np.max(K)),num=50)
     Kbin=10**Kbin10
     
-    fig,ax=plt.subplots()
+    plotden=0
     
-    plotden=1
+    for ii in range(0,np.shape(K)[0]):
+        fig,ax=plt.subplots()
+        if plotden==0:
+           # H,xedges=np.histogram(K[timeind_p],bins=Kbin)
+            H,xedges=np.histogram(K[ii,flagActive[ii,:]>0],bins=Kbin)
+        else:
+            H,xedges=np.histogram(K[timeind_p],bins=Kbin,density=True)
     
-    if plotden==0:
-        H,xedges=np.histogram(K[timeind_p],bins=Kbin)
-    else:
-        H,xedges=np.histogram(K[timeind_p],bins=Kbin,density=True)
-
-    ax.plot(xedges[:-1],H)
+        ax.plot(xedges[:-1],H,'-o')
     
-    ax.plot(EfitVc*10**6,fM[3,:]/fMnorm[3])
-    
-    ax.legend(['Sampled','Target'])
-    
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    
-    ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$f_{\\mathcal K} (1/m^3\\cdot eV)$')
-    ax.grid()
-    
-    plt.savefig("Khist_DIIID.png", format="png", bbox_inches="tight")
+        #ax.plot(EfitVc*10**6,fM[3,:]/fMnorm[3])
+        
+        #ax.legend(['Sampled','Target'])
+        
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        
+        if plotden==0:
+            ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$N_{\\mathrm{RE}}$')
+        else:
+            ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$f_{\\mathcal{K}} (1/m^3\\cdot eV)$')
+        ax.set(title=f't= {time[ii]:4.1e} s')
+        ax.grid()
+        
+        #plt.savefig("Khist_DIIID.png", format="png", bbox_inches="tight")
     plt.show()
     
 if plot_histeta==1:
