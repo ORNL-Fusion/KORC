@@ -53,9 +53,9 @@
 
 &plasma_species
   runaway = T
-  ppp = 35000
+  ppp = 1000
     ! Number of particles per process (mpi)
-  pinit = 1000
+  pinit = 100
     ! Number of particles initialized per process (for inclusion of sources)
   q = -1.0
     ! Electric charge
@@ -103,8 +103,10 @@
   Efield = T
   Dim2x1t =T
   E_2x1t = T
-  t0_2x1t = 1.594691872596741e+00
-  ind0_2x1t = 30
+  !t0_2x1t = 1.594691872596741e+00
+  !ind0_2x1t = 30
+  t0_2x1t = 1.600691914558411 !testing LAC source at its largest
+  ind0_2x1t = 42
   ReInterp_2x1t = T
   PSIp_lim= 3.164133626575646e+00
   PSIp_0= 2.963452809829185e+00

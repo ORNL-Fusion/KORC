@@ -7697,6 +7697,7 @@ subroutine adv_GCinterp_psiwE_top_ACC(params_ACC,random,spp,P,F)
     Zeff0=P%Zeffo
 
     Dim2x1t=F%Dim2x1t
+    E_2x1t=F%E_2x1t
     Analytic_D3D_IWL=F%Analytic_D3D_IWL
     circumradius=F%circumradius
     ntiles=F%ntiles
