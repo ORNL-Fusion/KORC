@@ -716,6 +716,8 @@ end if
 
         params_ACC%it=params%it
 
+        !write(6,*) 'nRE',spp(1)%pRE
+
         call save_simulation_outputs(params,spp,F)
 
         F%ind_2x1t=F%ind_2x1t+1_ip

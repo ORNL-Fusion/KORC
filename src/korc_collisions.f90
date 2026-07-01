@@ -804,90 +804,94 @@ subroutine initialize_collision_params(params,spp,P,F,init)
             endif
           end if
 
-             !write(6,*) 'maxEinterp',maxEinterp,'minEinterp',minEinterp, &
-             !      'E_c',cparams_ms%Ec,'E_c,min',cparams_ms%Ec_min, &
-             !      cparams_ss%avalanche
-
-             if (cparams_ss%avalanche) then
-
-                if (abs(maxEinterp).gt.abs(minEinterp)) then
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      p_crit=1/sqrt(abs(maxEinterp)/cparams_ss%Ec-1._rp)
-                   else
-
-                      p_crit=1/sqrt(abs(maxEinterp)/cparams_ms%Ec_min-1._rp)
-                   end if
-                else
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      p_crit=1/sqrt(abs(minEinterp)/cparams_ss%Ec-1._rp)
-                   else
-                      p_crit=1/sqrt(abs(minEinterp)/cparams_ms%Ec_min-1._rp)
-                   end if
-                end if
-
-             end if
-
-          else
-             write(6,*) 'Need to set p_crit!'
-             call korc_abort(25)
-          end if
-
-          !if (cparams_ss%always_aval) then
-          !   cparams_ss%avalanche=.TRUE.
-          !   p_crit = 1.53073
-          !endif
+          !write(6,*) 'maxEinterp',maxEinterp,'minEinterp',minEinterp, &
+          !      'E_c',cparams_ms%Ec,'E_c,min',cparams_ms%Ec_min, &
+          !      cparams_ss%avalanche
 
           if (cparams_ss%avalanche) then
 
-             cparams_ss%p_crit=p_crit
+            if (abs(maxEinterp).gt.abs(minEinterp)) then
+              if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                p_crit=1/sqrt(abs(maxEinterp)/cparams_ss%Ec-1._rp)
+              else
+                p_crit=1/sqrt(abs(maxEinterp)/cparams_ms%Ec_min-1._rp)
+              end if
+            else
+              if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                p_crit=1/sqrt(abs(minEinterp)/cparams_ss%Ec-1._rp)
+              else
+                p_crit=1/sqrt(abs(minEinterp)/cparams_ms%Ec_min-1._rp)
+              end if
+            end if
 
-             gam_crit=sqrt(1+p_crit*p_crit)
+          end if
 
-             cparams_ss%gam_crit=gam_crit
+        else
+          write(6,*) 'Need to set p_crit!'
+          call korc_abort(25)
+        end if
 
-             cparams_ss%gam_therm=(gam_crit+1._rp)/2._rp
-             cparams_ss%p_therm=sqrt(cparams_ss%gam_therm*cparams_ss%gam_therm-1)
+        !$acc update device(cparams_ss_ACC%avalanche)
 
-             if(cparams_ss%min_secRE_therm) then
-                cparams_ss%p_min=min(cparams_ss%p_therm,cparams_ss%p_min)
-                cparams_ss_ACC%p_min=min(cparams_ss_ACC%p_therm,cparams_ss_ACC%p_min)
+        !if (cparams_ss%always_aval) then
+        !   cparams_ss%avalanche=.TRUE.
+        !   p_crit = 1.53073
+        !endif
 
-                cparams_ss%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
-                cparams_ss_ACC%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
-             else
-                cparams_ss%p_min=p_crit
-                cparams_ss_ACC%p_min=p_crit
-                cparams_ss%gam_min=gam_crit
-                cparams_ss_ACC%gam_min=gam_crit
-             end if
+        if (cparams_ss%avalanche) then
 
-             !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm,cparams_ss%p_min,cparams_ss%gam_min
+          cparams_ss%p_crit=p_crit
 
-             if (params%mpi_params%rank .EQ. 0) then
-                write(output_unit_write,*) 'Minimum energy of secondary RE is thermal',&
-                     cparams_ss%min_secRE_therm
-                write(output_unit_write,*) 'p_crit/(me*c) and gam_crit are: ',p_crit,gam_crit
-                write(output_unit_write,*) 'p_min/(me*c) and gam_min are: ', &
-                     cparams_ss%p_min,cparams_ss%gam_min
-                if(.not.init) then
-                   if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
-                         write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo*params%cpp%Eo,'V/m'
-                   else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
-                        .AND.(F%ReInterp_2x1t)) then
-                      if (abs(maxEinterp).gt.abs(minEinterp)) then
-                         write(output_unit_write,*) 'Maximum E_PHI : ',maxEinterp*params%cpp%Eo,'V/m'
-                      else
-                         write(output_unit_write,*) 'Maximum E_PHI : ',minEinterp*params%cpp%Eo,'V/m'
-                      end if
-                   endif
+          gam_crit=sqrt(1+p_crit*p_crit)
 
-                   if (TRIM(params%collisions_model).eq.'NO_BOUND') then
-                      write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec*params%cpp%Eo,'V/m'
-                   else
-                      write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
-                   end if
-                   write(output_unit_write,*) 'tau_c,rel is: ',cparams_ss%Tau*params%cpp%time,'s'
+          cparams_ss%gam_crit=gam_crit
+
+          cparams_ss%gam_therm=(gam_crit+1._rp)/2._rp
+          cparams_ss%p_therm=sqrt(cparams_ss%gam_therm*cparams_ss%gam_therm-1)
+          cparams_ss_ACC%p_therm=cparams_ss%p_therm
+
+          if(cparams_ss%min_secRE_therm) then
+            cparams_ss%p_min=min(cparams_ss%p_therm,cparams_ss%p_min)
+            cparams_ss_ACC%p_min=min(cparams_ss_ACC%p_therm,cparams_ss_ACC%p_min)
+
+            cparams_ss%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
+            cparams_ss_ACC%gam_min=sqrt(1+cparams_ss%p_min*cparams_ss%p_min)
+          else
+            cparams_ss%p_min=p_crit
+            cparams_ss_ACC%p_min=p_crit
+            cparams_ss%gam_min=gam_crit
+            cparams_ss_ACC%gam_min=gam_crit
+          end if
+
+          !$acc update device(cparams_ss_ACC%p_min,cparams_ss_ACC%gam_min,cparams_ss_ACC%p_therm)
+
+          !write(6,*) p_crit,gam_crit,cparams_ss%p_therm,cparams_ss%gam_therm,cparams_ss%p_min,cparams_ss%gam_min
+
+          if (params%mpi_params%rank .EQ. 0) then
+            write(output_unit_write,*) 'Minimum energy of secondary RE is thermal',&
+              cparams_ss%min_secRE_therm
+            write(output_unit_write,*) 'p_crit/(me*c) and gam_crit are: ',p_crit,gam_crit
+            write(output_unit_write,*) 'p_min/(me*c) and gam_min are: ', &
+              cparams_ss%p_min,cparams_ss%gam_min
+            if(.not.init) then
+              if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+                write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo*params%cpp%Eo,'V/m'
+              else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
+                .AND.(F%ReInterp_2x1t)) then
+                if (abs(maxEinterp).gt.abs(minEinterp)) then
+                  write(output_unit_write,*) 'Maximum E_PHI : ',maxEinterp*params%cpp%Eo,'V/m'
                 else
+                  write(output_unit_write,*) 'Maximum E_PHI : ',minEinterp*params%cpp%Eo,'V/m'
+                end if
+              endif
+
+              if (TRIM(params%collisions_model).eq.'NO_BOUND') then
+                write(output_unit_write,*) 'E_CH is: ',cparams_ss%Ec*params%cpp%Eo,'V/m'
+              else
+                write(output_unit_write,*) 'E_CH is: ',cparams_ms%Ec_min*params%cpp%Eo,'V/m'
+              end if
+              write(output_unit_write,*) 'tau_c,rel is: ',cparams_ss%Tau*params%cpp%time,'s'
+            else
                    if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
                       write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo,'V/m'
                    else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
@@ -1221,6 +1225,8 @@ subroutine initialize_collision_params(params,spp,P,F,init)
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
           params_ACC%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
+          !$acc update device(params_ACC%coll_per_dump_dt)
+
           params%orbits_per_coll=ceiling(cparams_ss%coll_per_dump_dt/ &
                params%dt)
 
@@ -1292,6 +1298,8 @@ subroutine initialize_collision_params(params,spp,P,F,init)
 
       params%orbits_per_coll=params%t_skip
       params_ACC%orbits_per_coll=params%t_skip
+
+      !$acc update device(params_ACC%coll_per_dump,params_ACC%orbits_per_coll)
 
     end if
   end subroutine define_collisions_time_step
@@ -4484,9 +4492,9 @@ subroutine large_angle_source_ACC(ppp,pRE,vars,params_ACC, &
 
   if (prob1.gt.prob0) then
 
-    !write(6,*) 33
+    !write(6,*) 33,prob1,prob0
     !write(6,*) gam,xi
-    !write(6,*) prob1,prob0
+    !write(6,*) 
 
     !! If secondary RE generated, begin pseduo-2D inverse CDF sampling
     !! algorithm

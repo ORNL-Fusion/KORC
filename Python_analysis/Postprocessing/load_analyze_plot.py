@@ -14,7 +14,7 @@ re = qe**2/(4*np.pi*ep0*me*c**2) #% classical electron radius (m)
 
 #%% open Eric's matlab file for DIII-D magnetic field
 
-on_nersc=0
+on_nersc=1
 if on_nersc==0:
     filename='/home/21b/ExperimentalInputs/DIIID/200236/Matts_Bfield_data.mat'
 
@@ -38,7 +38,8 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
-run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
+#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
+run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21']
 
 for kk in range(0,dir_num):
 
@@ -109,13 +110,12 @@ for kk in range(0,dir_num):
             try:
                 timetmp[ii]=f[str(t_steps[ii])]['time'][0]
             except:
+                ii=ii-1
                 break
             
     num_snapshots=ii+1
     if num_snapshots<1:
         num_snapshots=1
-        
-    #num_snapshots=num_snapshots-1    
     
     nRE0=ppp*nmpi
     
@@ -152,7 +152,7 @@ for kk in range(0,dir_num):
         filename=run_directory[kk]+"/file_"+str(jj)+".h5"
     
         with h5py.File(filename,'r') as f:
-            for ii in range(0,num_snapshots-1):
+            for ii in range(0,num_snapshots):
                 if jj==0:
                         
                     if kk==0:
@@ -1361,9 +1361,11 @@ if plot_histK==1:
     Kbin=10**Kbin10
     
     plotden=0
-    
+
+    fig,ax=plt.subplots()
+
     for ii in range(0,np.shape(K)[0]):
-        fig,ax=plt.subplots()
+
         if plotden==0:
            # H,xedges=np.histogram(K[timeind_p],bins=Kbin)
             H,xedges=np.histogram(K[ii,flagActive[ii,:]>0],bins=Kbin)
@@ -1376,18 +1378,24 @@ if plot_histK==1:
         
         #ax.legend(['Sampled','Target'])
         
-        ax.set_xscale('log')
-        ax.set_yscale('log')
+        if ii==0:
+          ax.set_xscale('log')
+          ax.set_yscale('log')
         
-        if plotden==0:
-            ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$N_{\\mathrm{RE}}$')
-        else:
-            ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$f_{\\mathcal{K}} (1/m^3\\cdot eV)$')
-        ax.set(title=f't= {time[ii]:4.1e} s')
-        ax.grid()
+          if plotden==0:
+              ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$N_{\\mathrm{RE}}$')
+          else:
+              ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$f_{\\mathcal{K}} (1/m^3\\cdot eV)$')
+          #ax.set(title=f't= {time[ii]:4.1e} s')
+          ax.grid()
         
         #plt.savefig("Khist_DIIID.png", format="png", bbox_inches="tight")
+    
+    ax.legend([f't= {time[0]:4.1e} s',f't= {time[1]:4.1e} s',f't= {time[2]:4.1e} s',f't= {time[3]:4.1e} s',f't= {time[4]:4.1e} s',f't= {time[5]:4.1e} s',f't= {time[6]:4.1e} s',f't= {time[7]:4.1e} s',f't= {time[8]:4.1e} s',f't= {time[9]:4.1e} s',f't= {time[10]:4.1e} s',f't= {time[11]:4.1e} s',f't= {time[12]:4.1e} s'])
+    
     plt.show()
+
+
     
 if plot_histeta==1:
     
