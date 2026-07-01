@@ -7715,6 +7715,8 @@ subroutine adv_GCinterp_psiwE_top_ACC(params_ACC,random,spp,P,F)
 
     do tt=1_ip,params_ACC%coll_per_dump
 
+      !write(6,*) tt,params_ACC%coll_per_dump,spp(ii)%pRE
+
       pRE=spp(ii)%pRE
 
       do pp=1_idef,pRE
@@ -7818,6 +7820,8 @@ subroutine adv_GCinterp_psiwE_top_ACC(params_ACC,random,spp,P,F)
     end do !timestep iterator
 
     spp(ii)%vars=vars
+
+    !write(6,*) spp(ii)%vars%flagRE(spp(ii)%pRE)
 
   end do !species iterator
 
