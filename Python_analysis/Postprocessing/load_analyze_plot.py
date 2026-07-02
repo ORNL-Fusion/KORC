@@ -437,60 +437,22 @@ flagTherm[flagCol<1]=1
 Thermal=np.sum(flagTherm,axis=1)
 Energetic=np.sum(flagCol,axis=1)
 
-Primary=np.zeros(np.shape(flagRE))
-Primary[flagRE[0,:]>0,:]=1
-
-Secondary=np.zeros(np.shape(flagRE))
-Secondary[flagRE[0,:]<1,:]=1
-Secondary[flagRE[0,:-1]<1,:]=0
-
 if 'flagRE' in outputs_list:
-    Total=np.sum(flagRE,axis=1)
+  Total=np.sum(flagRE,axis=1)
     
-    flagActive=flagRE*flagCon*flagCol
-    flagActive[np.where(np.isnan(R))]=0
+  flagActive=flagRE*flagCon*flagCol
+  flagActive[np.where(np.isnan(R))]=0
     
-    Active=np.sum(flagActive,axis=1)
+  Active=np.sum(flagActive,axis=1)
+
+  Primary=np.zeros(np.shape(flagRE))
+  Primary[:,flagRE[0,:]>0]=1
+
+  Secondary=np.zeros(np.shape(flagRE))
+  Secondary[:,flagRE[0,:]<1]=1
+  Secondary[:,flagRE[-1,:]<1]=0
 
 K=(g-1)*(me*c**2/qe)
-
-DiMESdepo=0
-if DiMESdepo==1:
-
-    theta_geo=np.arctan2(zz-Z0,R-R0)
-    
-    #DiMES impact calculation
-    DiMESloc_cyl=[1.485,np.deg2rad(150),-1.245] #In (R,PHI,Z)
-    
-    theta_DiMES=np.arctan2(DiMESloc_cyl[2]-Z0,DiMESloc_cyl[0]-R0)
-    
-    #DiMESdims=[0.025,0.01] # (radius,height of dome) for semi-spheroid
-    DiMESdims=[0.033,0.01] # (radius,height of dome) for section of sphere
-    
-    DiMESloc_cart=[DiMESloc_cyl[0]*np.cos(DiMESloc_cyl[1]),
-                   DiMESloc_cyl[0]*np.sin(DiMESloc_cyl[1]),DiMESloc_cyl[2]]
-    
-    xD=np.linspace(DiMESloc_cart[0]-DiMESdims[0],DiMESloc_cart[0]+DiMESdims[0],101)
-    yD=np.linspace(DiMESloc_cart[1]-DiMESdims[0],DiMESloc_cart[1]+DiMESdims[0],101)
-    
-    x1D=np.linspace(DiMESloc_cart[0]-DiMESdims[0],DiMESloc_cart[0]+DiMESdims[0],11)
-    y1D=np.linspace(DiMESloc_cart[1]-DiMESdims[0],DiMESloc_cart[1]+DiMESdims[0],11)
-    
-    xxD,yyD=np.meshgrid(xD,yD,indexing='ij')
-    
-    arg1=DiMESdims[0]**2-(xxD-DiMESloc_cart[0])**2-(yyD-DiMESloc_cart[1])**2
-    arg1[arg1<0]=0
-    
-    #zsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(arg1);
-    zsurf=DiMESloc_cart[2]-(DiMESdims[0]-DiMESdims[1])+np.sqrt(arg1)
-    zsurf[zsurf<DiMESloc_cart[2]]=DiMESloc_cart[2]
-    
-    rmscale=1.;
-    DiMESconflag=np.zeros(np.shape(flagCon));
-    DiMESconflag[(xx-DiMESloc_cart[0])**2+(yy-DiMESloc_cart[1])**2+
-                 (zz-(DiMESloc_cart[2]-(DiMESdims[0]-DiMESdims[1])))**2<(DiMESdims[0]*rmscale)**2]=1;
-    
-    DiMESdeconfined=np.sum(DiMESconflag,axis=1)
 
 #%% analytic fields
 
@@ -511,8 +473,47 @@ if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
     limR=R0+a*np.cos(np.linspace(0,2*np.pi,100))/kappa
     limZ=Z0+a*np.sin(np.linspace(0,2*np.pi,100))
 
+#%% Save facetted wall impacts
 
 #%% Save DiMES impacts
+
+DiMESdepo=0
+if DiMESdepo==1:
+
+    theta_geo=np.arctan2(zz-Z0,R-R0)
+    
+    #DiMES impact calculation
+    DiMESloc_cyl=[1.485,np.deg2rad(150),-1.245] #In (R,PHI,Z)
+    
+    theta_DiMES=np.arctan2(DiMESloc_cyl[2]-Z0,DiMESloc_cyl[0]-R0)
+    
+    #DiMESdims=[0.025,0.01] # (radius,height of dome) for semi-spheroid
+    DiMESdims=[0.033,0.01] # (radius,height of dome) for section of sphere
+    
+    DiMESloc_cart=[DiMESloc_cyl[0]*np.cos(DiMESloc_cyl[1]),
+                  DiMESloc_cyl[0]*np.sin(DiMESloc_cyl[1]),DiMESloc_cyl[2]]
+    
+    xD=np.linspace(DiMESloc_cart[0]-DiMESdims[0],DiMESloc_cart[0]+DiMESdims[0],101)
+    yD=np.linspace(DiMESloc_cart[1]-DiMESdims[0],DiMESloc_cart[1]+DiMESdims[0],101)
+    
+    x1D=np.linspace(DiMESloc_cart[0]-DiMESdims[0],DiMESloc_cart[0]+DiMESdims[0],11)
+    y1D=np.linspace(DiMESloc_cart[1]-DiMESdims[0],DiMESloc_cart[1]+DiMESdims[0],11)
+    
+    xxD,yyD=np.meshgrid(xD,yD,indexing='ij')
+    
+    arg1=DiMESdims[0]**2-(xxD-DiMESloc_cart[0])**2-(yyD-DiMESloc_cart[1])**2
+    arg1[arg1<0]=0
+    
+    #zsurf=DiMESloc_cart(3)+(DiMESdims(2)/DiMESdims(1))*sqrt(arg1);
+    zsurf=DiMESloc_cart[2]-(DiMESdims[0]-DiMESdims[1])+np.sqrt(arg1)
+    zsurf[zsurf<DiMESloc_cart[2]]=DiMESloc_cart[2]
+    
+    rmscale=1.;
+    DiMESconflag=np.zeros(np.shape(flagCon));
+    DiMESconflag[(xx-DiMESloc_cart[0])**2+(yy-DiMESloc_cart[1])**2+
+                (zz-(DiMESloc_cart[2]-(DiMESdims[0]-DiMESdims[1])))**2<(DiMESdims[0]*rmscale)**2]=1;
+    
+    DiMESdeconfined=np.sum(DiMESconflag,axis=1)
 
 sav=0
 
@@ -692,7 +693,7 @@ if plot_histrm==1:
     ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='g',linestyle='--')
     
     ax.legend(['$t=0$ No wall','$t=1\,\\mathrm{ms}$','$t=2\,\\mathrm{ms}$',
-               '$t=3\,\\mathrm{ms}$','$t=0$ LFS'],loc='lower left',fontsize=13)
+              '$t=3\,\\mathrm{ms}$','$t=0$ LFS'],loc='lower left',fontsize=13)
     
     #ax.legend([f't= {time[0]:4.1e} s',f't= {time[10]:4.1e} s',f't= {time[20]:4.1e} s',
     #           f't= {time[30]:4.1e} s',f't= {time[40]:4.1e} s'],loc='upper right')
@@ -1008,7 +1009,7 @@ if plot_histRZ_analytic==1:
     #                   zz[timeind_p,flagCol[timeind_p,:]>0],bins=20)
 
     H, xedges, yedges = np.histogram2d(R[timeind_p,flagActive[timeind_p,:]>0], 
-                       zz[timeind_p,flagActive[timeind_p,:]>0],bins=20)
+                      zz[timeind_p,flagActive[timeind_p,:]>0],bins=20)
 
     
     fig,ax=plt.subplots()
@@ -1171,11 +1172,11 @@ if plot_deconhist==1:
     
     if plotden==0:
         H, xedges, yedges = np.histogram2d(xx[timeind_p,DiMESconflag[timeind_p]>0], 
-                                       yy[timeind_p,DiMESconflag[timeind_p]>0], bins=(xbin, ybin))
+                                      yy[timeind_p,DiMESconflag[timeind_p]>0], bins=(xbin, ybin))
     else:
 
         H, xedges, yedges = np.histogram2d(xx[timeind_p,DiMESconflag[timeind_p]>0], 
-                                       yy[timeind_p,DiMESconflag[timeind_p]>0], bins=(xbin, ybin),density=True)
+                                      yy[timeind_p,DiMESconflag[timeind_p]>0], bins=(xbin, ybin),density=True)
 
     fig,ax=plt.subplots()
     
@@ -1210,12 +1211,12 @@ if plot_deconhist==1:
 
     import matplotlib.patches as mpatches    
     arr = mpatches.FancyArrowPatch((-1.255,0.765), (-1.255+0.015*np.cos(DiMESloc_cyl[1]),0.765+0.015*np.sin(DiMESloc_cyl[1])),
-                               arrowstyle='->,head_width=.15', mutation_scale=20)
+                              arrowstyle='->,head_width=.15', mutation_scale=20)
     ax.add_patch(arr)
     ax.annotate("$\\hat{R}$", (.65, .45), xycoords=arr, ha='center', va='bottom')
     
     arr = mpatches.FancyArrowPatch((-1.255,0.765), (-1.255-0.015*np.sin(DiMESloc_cyl[1]),0.765+0.015*np.cos(DiMESloc_cyl[1])),
-                               arrowstyle='->,head_width=.15', mutation_scale=20)
+                              arrowstyle='->,head_width=.15', mutation_scale=20)
     ax.add_patch(arr)
     ax.annotate("$\\hat{\phi}$", (.85, .75), xycoords=arr, ha='center', va='top')
     
@@ -1274,7 +1275,7 @@ if plot_deconsurf==1:
         #ax.scatter(xx[timeind_p,flagCon[timeind_p]<1],yy[timeind_p,flagCon[timeind_p]<1],
         #           zz[timeind_p,flagCon[timeind_p]<1],c='b')
         ax.scatter(xx[timeind_p,DiMESconflag[timeind_p]>0],yy[timeind_p,DiMESconflag[timeind_p]>0],
-                   zz[timeind_p,DiMESconflag[timeind_p]>0],color='r',zorder=4)
+                  zz[timeind_p,DiMESconflag[timeind_p]>0],color='r',zorder=4)
 
     else:
         #ax.scatter(xx[timeind_p,flagCon[timeind_p]<1],yy[timeind_p,flagCon[timeind_p]<1],
@@ -1333,17 +1334,17 @@ if plot_histKeta==1:
     if plotden==0:
         if plotconfined==1:
             H, xedges, yedges = np.histogram2d(K[timeind_p,flagCon[timeind_p]>0], 
-                                               eta[timeind_p,flagCon[timeind_p]>0], bins=(Kbin, etabin))
+                                              eta[timeind_p,flagCon[timeind_p]>0], bins=(Kbin, etabin))
         elif plotdeconfined==1:
             H, xedges, yedges = np.histogram2d(K[timeind_p,flagCon[timeind_p]<1], 
-                                               eta[timeind_p,flagCon[timeind_p]<1], bins=(Kbin, etabin))
+                                              eta[timeind_p,flagCon[timeind_p]<1], bins=(Kbin, etabin))
         else:
             H, xedges, yedges = np.histogram2d(K[timeind_p], eta[timeind_p], bins=(Kbin, etabin))
             
     else:
         if plotconfined==1:
             H, xedges, yedges = np.histogram2d(K[timeind_p,flagCon[timeind_p]>0], 
-                                               eta[timeind_p,flagCon[timeind_p]>0], bins=(Kbin, etabin),density=True)
+                                              eta[timeind_p,flagCon[timeind_p]>0], bins=(Kbin, etabin),density=True)
         else:
             H, xedges, yedges = np.histogram2d(K[timeind_p], eta[timeind_p], bins=(Kbin, etabin),density=True)
     
@@ -1390,7 +1391,7 @@ if plot_histK==1:
     for ii in range(0,np.shape(K)[0]):
 
         if plotden==0:
-           # H,xedges=np.histogram(K[timeind_p],bins=Kbin)
+          # H,xedges=np.histogram(K[timeind_p],bins=Kbin)
             H,xedges=np.histogram(K[ii,flagActive[ii,:]>0],bins=Kbin)
         else:
             H,xedges=np.histogram(K[timeind_p],bins=Kbin,density=True)
@@ -1509,17 +1510,17 @@ if plot_histRZ_ext==1:
     if plotden==0:
         if plotconfined==1:
             H, xedges, yedges = np.histogram2d(R[timeind_p,flagCon[timeind_p,:]>0], 
-                                           zz[timeind_p,flagCon[timeind_p,:]>0], bins=(rbin, zbin))
+                                          zz[timeind_p,flagCon[timeind_p,:]>0], bins=(rbin, zbin))
         else:
             H, xedges, yedges = np.histogram2d(R[timeind_p,flagCon[timeind_p,:]<1], 
-                                           zz[timeind_p,flagCon[timeind_p,:]<1], bins=(rbin, zbin))
+                                          zz[timeind_p,flagCon[timeind_p,:]<1], bins=(rbin, zbin))
     else:
         if plotconfined==1:
             H, xedges, yedges = np.histogram2d(R[timeind_p,flagCon[timeind_p,:]>0], 
-                                           zz[timeind_p,flagCon[timeind_p,:]>0], bins=(rbin, zbin),density=True)
+                                          zz[timeind_p,flagCon[timeind_p,:]>0], bins=(rbin, zbin),density=True)
         else:
             H, xedges, yedges = np.histogram2d(R[timeind_p,flagCon[timeind_p,:]<1], 
-                                           zz[timeind_p,flagCon[timeind_p,:]<1], bins=(rbin, zbin),density=True)
+                                          zz[timeind_p,flagCon[timeind_p,:]<1], bins=(rbin, zbin),density=True)
     
     
     fig,ax=plt.subplots()
@@ -1717,7 +1718,7 @@ if plot_ne==1:
     
     plt.savefig("scatter_ne_JET_95128.pdf", format="pdf", bbox_inches="tight")
     plt.show()  
- 
+
 if plot_Te==1:
     fig,ax=plt.subplots()
     
@@ -1744,7 +1745,7 @@ if plotyorbit==1:
 
 
     ax[0].set(xlabel='t (s)', ylabel='y (m)',
-           title='y orbit')
+          title='y orbit')
     
     ax[0].legend(['KORC','Analytic'])
     
@@ -1754,7 +1755,7 @@ if plotyorbit==1:
 
     
     ax[1].set(xlabel='t (s)', ylabel='z (m)',
-           title='y orbit')
+          title='y orbit')
     
     ax[1].grid()
     
