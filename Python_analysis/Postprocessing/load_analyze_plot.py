@@ -126,6 +126,9 @@ for kk in range(0,dir_num):
     Rtmp=np.zeros((num_snapshots,nRE0))
     PHItmp=np.zeros((num_snapshots,nRE0))
     zztmp=np.zeros((num_snapshots,nRE0))
+    R0tmp=np.zeros((num_snapshots,nRE0))
+    PHI0tmp=np.zeros((num_snapshots,nRE0))
+    zz0tmp=np.zeros((num_snapshots,nRE0))
     vxtmp=np.zeros((num_snapshots,nRE0))
     vytmp=np.zeros((num_snapshots,nRE0))
     vztmp=np.zeros((num_snapshots,nRE0))
@@ -173,6 +176,9 @@ for kk in range(0,dir_num):
                 yytmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['X'][1][:]
                 Rtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y'][0][:]
                 PHItmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y'][1][:]
+                if 'Y0' in outputs_list:
+                    R0tmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y0'][0][:]
+                    PHI0tmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y0'][1][:]
                 bZtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['B'][2][:]
                 if 'PSIp' in outputs_list:
                     psiPtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['PSIp'][:]
@@ -196,6 +202,8 @@ for kk in range(0,dir_num):
                     vztmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['V'][2][:]
                     
                 elif orbit_model=='GC':
+                    if 'Y0' in outputs_list:
+                        zz0tmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y0'][2][:]
                     zztmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['Y'][2][:]
                     bRtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['B'][0][:]
                     bPHItmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['B'][1][:]
@@ -206,6 +214,10 @@ for kk in range(0,dir_num):
         time=timetmp
         xx=xxtmp
         yy=yytmp
+        if 'Y0' in outputs_list:
+            R00=R0tmp
+            PHI00=PHI0tmp
+            Z00=zz0tmp
         R=Rtmp
         PHI=PHItmp
         zz=zztmp
@@ -244,6 +256,10 @@ for kk in range(0,dir_num):
             time=np.concatenate((time,timetmp-time[-1]))
             xx=np.concatenate((xx,xxtmp),axis=0)
             yy=np.concatenate((yy,yytmp),axis=0)
+            if 'Y0' in outputs_list:
+                R00=np.concatenate((R00,R0tmp),axis=0)
+                PHI0=np.concatenate((PHI00,PHI0tmp),axis=0)
+                Z00=np.concatenate((Z00,zz0tmp),axis=0)
             R=np.concatenate((R,Rtmp),axis=0)
             PHI=np.concatenate((PHI,PHItmp),axis=0)
             zz=np.concatenate((zz,zztmp),axis=0)
@@ -420,6 +436,13 @@ flagTherm=np.zeros(np.shape(flagCol))
 flagTherm[flagCol<1]=1
 Thermal=np.sum(flagTherm,axis=1)
 Energetic=np.sum(flagCol,axis=1)
+
+Primary=np.zeros(np.shape(flagRE))
+Primary[flagRE[0,:]>0,:]=1
+
+Secondary=np.zeros(np.shape(flagRE))
+Secondary[flagRE[0,:]<1,:]=1
+Secondary[flagRE[0,:-1]<1,:]=0
 
 if 'flagRE' in outputs_list:
     Total=np.sum(flagRE,axis=1)
