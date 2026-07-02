@@ -1225,10 +1225,6 @@ subroutine initialize_collision_params(params,spp,P,F,init)
           params%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
           params_ACC%coll_per_dump_dt=cparams_ss%coll_per_dump_dt
 
-          if (.not.init) then
-            !$acc update device(params_ACC%coll_per_dump_dt)
-          endif
-
           params%orbits_per_coll=ceiling(cparams_ss%coll_per_dump_dt/ &
                params%dt)
 
@@ -1300,8 +1296,6 @@ subroutine initialize_collision_params(params,spp,P,F,init)
 
       params%orbits_per_coll=params%t_skip
       params_ACC%orbits_per_coll=params%t_skip
-
-      !$acc update device(params_ACC%coll_per_dump,params_ACC%orbits_per_coll)
 
     end if
   end subroutine define_collisions_time_step
