@@ -520,7 +520,7 @@ born_deconfined = is_new_born & (flagDecon[1:, :] == 1)
 mask_13 = standard_loss | born_deconfined
 
 # 2. Expand mask to 14 indices by prepending a row of False for the initial timestep
-mask = np.zeros((14, num_particles), dtype=bool)
+mask = np.zeros((num_snapshots, num_particles), dtype=bool)
 mask[1:, :] = mask_13
 
 # If any elements match the condition, compute the geometric vector slices instantly
@@ -968,7 +968,7 @@ plot_fieldm=0
 plot_deconloc=0
 plot_deconloc1=0
 plot_deconloc2=0
-plot_deconloc3=1
+plot_deconloc3=0
 plot_deconhistphi=0
 plot_deconsurf=0
 plot_deconhist=0
@@ -976,7 +976,7 @@ plot_inc_ang=0
 tmpplot=0
 plot_psi=0
 plot_histRZ_m3dc1=0
-plotallangle_fourplot = 0
+plotallangle_fourplot = 1
 
 timeind_p=0
 timeind_g=0
@@ -1007,7 +1007,7 @@ if plot_deconloc2==1:
     
     plotall=0
     plotpri=0
-    plotsec=1
+    plotsec=0
     
     primask_2d  = np.repeat(primary_mask[:, np.newaxis], nsam_chi, axis=1).ravel()
     secmask_2d  = np.repeat(secondary_mask[:, np.newaxis], nsam_chi, axis=1).ravel()
@@ -1035,131 +1035,107 @@ if plot_deconloc2==1:
 
 if plotallangle_fourplot == 1:
     
-    calchistall = 0
-    calchistcounts = 0
+    calchistall = 1
     
     maxZ = 1.0             # Set to your actual geometric Z-ceiling
     minZ = -1.0            # Set to your actual geometric Z-floor
     max_inc = 1e0          # Limit threshold boundary
-    incbinedges = np.linspace(0, 1, 50)
     
-    # Get the size profile from your 3D chi array: shape is (num_timesteps, num_particles, nsam_chi)
-    num_timesteps, num_particles, nsam_chi = chi.shape
+    incbinedges = np.linspace(0, 1, 50)
+    incbinedges_GC = np.linspace(0, 8, 50)
+    incbinedges_eta = np.linspace(0, 180, 50)
+    incbinedges_chi = np.linspace(0, 360, 50)
+    
     
     if calchistall == 1:
-        # 2. VECTORIZED 3D BROADCAST REPLICATION (Replaces the for ii=1:size(chi,3) loop)
-        # Adding np.newaxis and repeating along the 3rd axis creates identical shapes instantly
-        inc_GC_all     = np.repeat(inc[:, :, np.newaxis], nsam_chi, axis=2)
-        eta_all        = np.repeat(eta[:, :, np.newaxis], nsam_chi, axis=2)
-        conlossind_all = np.repeat(conlossind[:, :, np.newaxis], nsam_chi, axis=2)
-        PFCinter_all   = np.repeat(PFCinter[:, :, np.newaxis], nsam_chi, axis=2)
-        Zint_all       = np.repeat(Zint[:, :, np.newaxis], nsam_chi, axis=2)
-    
-        # Note: If your primary/secondary flags are 2D (num_timesteps, num_particles), stretch them here.
-        # If they are 1D (num_particles,), pass primary[np.newaxis, :, np.newaxis] instead.
-        primary_all    = np.repeat(flagPrimary[:, :, np.newaxis], nsam_chi, axis=2)
-        secondary_all  = np.repeat(flagSecondary[:, :, np.newaxis], nsam_chi, axis=2)
-    
-        # 3. CORE INCIDENT ANGLE PHYSICS MATHEMATICS (Fully Vectorized 3D)
-        eta_all_rad = np.radians(eta_all)  # Equivalent to deg2rad(eta_all)
+        # Replicate your 1D properties into 2D grids (Shape: N_incidents, nsam_chi)
+        chi_2d  = chi[indt_idx, jj_idx, :]
+        inc_2d  = np.repeat(inc[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
+        eta_2d  = np.repeat(eta[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
+        z_2d    = np.repeat(Zint[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
+        p_2d    = np.repeat(flagPrimary[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
+        s_2d    = np.repeat(flagSecondary[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
+        pfc_2d  = np.repeat(PFCinter[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
+        loss_2d = np.repeat(conlossind[indt_idx, jj_idx][:, np.newaxis], nsam_chi, axis=1)
         
-        # Clip inc_GC_all to prevent numerical domain arcsin crashes
-        inc_GC_all_clipped = np.clip(inc_GC_all, -1.0, 1.0)
-    
+        # Flatten them immediately into 1D sequences to free temporary memory space
+        chi_flat  = np.degrees(chi_2d.ravel())
+        inc_flat  = inc_2d.ravel()
+        eta_flat  = eta_2d.ravel()
+        z_flat    = z_2d.ravel()
+        p_flat    = p_2d.ravel()
+        s_flat    = s_2d.ravel()
+        pfc_flat  = pfc_2d.ravel()
+        loss_flat = loss_2d.ravel()
+        
+        # --- 3. STREAMLINED PHYSICS MATH ---
+        eta_rad = np.radians(eta_flat)
+        inc_clipped = np.clip(inc_flat, -1.0, 1.0)
+        
+        # Compute incident_angle_all for ONLY your active 1D vector stream
         incident_angle_all = (
-            -np.cos(np.arcsin(inc_GC_all_clipped)) * np.sin(eta_all_rad) * np.sin(chi)
-            + inc_GC_all * np.abs(np.cos(eta_all_rad))
+            -np.cos(np.arcsin(inc_clipped)) * np.sin(eta_rad) * np.sin(np.radians(chi_flat))
+            + inc_flat * np.abs(np.cos(eta_rad))
+        )
+        
+        # ==========================================================================
+        # 4. STRICT FILTER MASKS (Forcing ALL invalid slots to NaN)
+        # ==========================================================================
+        # Define a definitive mask for what constitutes a valid, physical impact event
+        # A point is ONLY valid if it stays within Z bounds, is a confirmed limiter strike (pfc),
+        # is a tracked transition (loss), and yields a valid geometric forward angle (>0).
+        valid_impact_event = (
+            (z_flat <= maxZ) & (z_flat >= minZ) & 
+            (pfc_flat == 1) & 
+            (loss_flat == 1) & 
+            (incident_angle_all > 0) & 
+            (np.abs(incident_angle_all) <= max_inc)
         )
     
-        # 4. APPLY VECTORIZED FILTER MASKS (Setting rejected points to NaN)
-        # Combines all your structural constraints into a unified boolean filter array
-        rejection_mask = (
-            (Zint_all > maxZ) | (Zint_all < minZ) | 
-            (PFCinter_all < 1) | 
-            (conlossind_all < 1) | 
-            (incident_angle_all < 0) | 
-            (np.abs(incident_angle_all) > max_inc)
-        )
-        incident_angle_all[rejection_mask] = np.nan
+        # Force absolutely everything that fails this condition to NaN
+        incident_angle_all[~valid_impact_event] = np.nan
     
-        # 5. GENERATE PRIMARY AND SECONDARY SUBSETS ACCURATELY
-        # Pre-initialize both tracking arrays with true NaNs everywhere
+        # Generate primary and secondary subsets by ensuring they are valid impacts FIRST
         incident_angle_primary = np.full_like(incident_angle_all, np.nan)
+        is_valid_pri = valid_impact_event & (p_flat == 1)
+        incident_angle_primary[is_valid_pri] = incident_angle_all[is_valid_pri]
+    
         incident_angle_secondary = np.full_like(incident_angle_all, np.nan)
-        
-        # Clean logical filters: Must be a VALID incident event AND match the specific flag
-        # This prevents uninitialized default 0.0 values from slipping through
-        is_valid_primary   = (~rejection_mask) & (primary_all >= 1)
-        is_valid_secondary = (~rejection_mask) & (secondary_all >= 1)
-        
-        # Map only the verified physical values over
-        incident_angle_primary[is_valid_primary]     = incident_angle_all[is_valid_primary]
-        incident_angle_secondary[is_valid_secondary] = incident_angle_all[is_valid_secondary]
+        is_valid_sec = valid_impact_event & (s_flat == 1)
+        incident_angle_secondary[is_valid_sec] = incident_angle_all[is_valid_sec]
     
-        # 6. COMPUTE MAXIMUM BIN COUNTS FOR HISTOGRAM PLOT SCALING
-        maxNRE = 0
+        # ==========================================================================
+        # 5. HIGH-SPEED HISTOGRAM COUNTS (Stripping out NaNs completely)
+        # ==========================================================================
+        # Panel 1: Sin(Theta) counts - Drop all NaNs safely before binning
+        hall, _ = np.histogram(incident_angle_all[~np.isnan(incident_angle_all)], bins=incbinedges)
+        hpri, _ = np.histogram(incident_angle_primary[~np.isnan(incident_angle_primary)], bins=incbinedges)
+        hsec, _ = np.histogram(incident_angle_secondary[~np.isnan(incident_angle_secondary)], bins=incbinedges)
     
-        # np.histogram automatically ignores any NaN elements present in the datasets
-        N_all, _ = np.histogram(incident_angle_all, bins=incbinedges)
-        maxNRE = max(maxNRE, np.max(N_all))
+        # Panel 2: Guiding center angles (PDF) - Apply the identical masks
+        hall_GC, _ = np.histogram(np.degrees(inc_flat[valid_impact_event]), bins=incbinedges_GC, density=True)
+        hpri_GC, _ = np.histogram(np.degrees(inc_flat[is_valid_pri]), bins=incbinedges_GC, density=True)
+        hsec_GC, _ = np.histogram(np.degrees(inc_flat[is_valid_sec]), bins=incbinedges_GC, density=True)
     
-        N_pri, _ = np.histogram(incident_angle_primary, bins=incbinedges)
-        maxNRE = max(maxNRE, np.max(N_pri))
+        # Panel 3: Pitch Angles (PDF)
+        hall_eta, _ = np.histogram(eta_flat[valid_impact_event], bins=incbinedges_eta, density=True)
+        hpri_eta, _ = np.histogram(eta_flat[is_valid_pri], bins=incbinedges_eta, density=True)
+        hsec_eta, _ = np.histogram(eta_flat[is_valid_sec], bins=incbinedges_eta, density=True)
     
-        N_sec, _ = np.histogram(incident_angle_secondary, bins=incbinedges)
-        maxNRE = max(maxNRE, np.max(N_sec))
-    
-    if calchistcounts == 1:
-        incbinedges = np.linspace(0, 1, 50)
-        
-        # Panel 1 Data: Raw counts mapping
-        hall, _ = np.histogram(incident_angle_all, bins=incbinedges)
-        hpri, _ = np.histogram(incident_angle_primary, bins=incbinedges)
-        hsec, _ = np.histogram(incident_angle_secondary, bins=incbinedges)
-        
-        # Define base physical spatial mask used for Panels 2, 3, and 4
-        base_mask = (Zint_all < maxZ) & (Zint_all > minZ) & (PFCinter_all > 0) & (conlossind_all > 0)
-        
-        # Panel 2 Data: GC Incident Angle Profiles (Density normalization)
-        incbinedges_GC = np.linspace(0, 8, 50)
+        # Panel 4: Gyrophases (PDF) - This completely strips out the uninitialized 0.0 values!
+        hall_chi, _ = np.histogram(chi_flat[valid_impact_event], bins=incbinedges_chi, density=True)
+        hpri_chi, _ = np.histogram(chi_flat[is_valid_pri], bins=incbinedges_chi, density=True)
+        hsec_chi, _ = np.histogram(chi_flat[is_valid_sec], bins=incbinedges_chi, density=True)
 
-        # Panel 3 Data: Pitch Angle (eta) Profiles
-        incbinedges_eta = np.linspace(0, 180, 50)
-
-        # Panel 4 Data: Gyrophase (chi) Profiles
-        incbinedges_chi = np.linspace(0, 360, 50)
-
-        # Define strict, mutually exclusive masks for your histograms
-        # This keeps the subsets perfectly clean and in sync with the 'All' curve
-        valid_all   = base_mask
-        valid_pri   = base_mask & (primary_all >= 1)
-        valid_sec   = base_mask & (secondary_all >= 1)
         
-        # Panel 2 Data: GC Incident Angle Profiles
-        hall_GC, _ = np.histogram(np.degrees(inc_GC_all[valid_all]), bins=incbinedges_GC, density=True)
-        hpri_GC, _ = np.histogram(np.degrees(inc_GC_all[valid_pri]), bins=incbinedges_GC, density=True)
-        hsec_GC, _ = np.histogram(np.degrees(inc_GC_all[valid_sec]), bins=incbinedges_GC, density=True)
-        
-        # Panel 3 Data: Pitch Angle (eta) Profiles
-        hall_eta, _ = np.histogram(eta_all[valid_all], bins=incbinedges_eta, density=True)
-        hpri_eta, _ = np.histogram(eta_all[valid_pri], bins=incbinedges_eta, density=True)
-        hsec_eta, _ = np.histogram(eta_all[valid_sec], bins=incbinedges_eta, density=True)
-        
-        # Panel 4 Data: Gyrophase (chi) Profiles
-        hall_chi, _ = np.histogram(np.degrees(chi[valid_all]), bins=incbinedges_chi, density=True)
-        hpri_chi, _ = np.histogram(np.degrees(chi[valid_pri]), bins=incbinedges_chi, density=True)
-        hsec_chi, _ = np.histogram(np.degrees(chi[valid_sec]), bins=incbinedges_chi, density=True)
-        
-        # Vectorized Bin Center Calculations
+        # Compute bin centers uniformly
         incbins     = (incbinedges[:-1] + incbinedges[1:]) / 2
         incbins_GC  = (incbinedges_GC[:-1] + incbinedges_GC[1:]) / 2
         incbins_eta = (incbinedges_eta[:-1] + incbinedges_eta[1:]) / 2
         incbins_chi = (incbinedges_chi[:-1] + incbinedges_chi[1:]) / 2
         
-        # Count global non-zero items
+        # Global normalization scalers
         Nall = np.sum(incident_angle_all > 0)
-        Npri = np.sum(incident_angle_primary > 0)
-        Nsec = np.sum(incident_angle_secondary > 0)
         dbin = incbinedges[1] - incbinedges[0]
 
     # --- 3. MATPLOTLIB FIGURE GRAPH GENERATION ---
