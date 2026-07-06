@@ -2964,7 +2964,9 @@ subroutine EZspline_interp2_GCvarswE(spline_oA, spline_oEPHI, &
       spline_oA%n1, &
       fA, fEPHI, ifail)
 
-   if(ifail /= 0) ier = 97
+   if(ifail /= 0) then
+      ier = 97
+   endif
 
 end subroutine EZspline_interp2_GCvarswE
 
@@ -3501,7 +3503,24 @@ subroutine evbicub_GCvarswE(xget,yget,x,nx,y,ny,ilinx,iliny, &
    j=0
    call herm2xy(xget,yget,x,nx,y,ny,ilinx,iliny, &
       i,j,xparam,yparam,hx,hxi,hy,hyi,ier)
-   if(ier.ne.0) return
+   if (ier.ne.0) then
+      write(6,*) xget
+      write(6,*) yget
+      write(6,*) nx
+      write(6,*) ny
+      write(6,*) ilinx
+      write(6,*) iliny
+      write(6,*) i
+      write(6,*) j
+      write(6,*) xparam
+      write(6,*) yparam
+      write(6,*) hx
+      write(6,*) hxi
+      write(6,*) hy
+      write(6,*) hyi
+      write(6,*) ier
+      return
+   endif
    !
    call fvbicub_laplacian2(fvalA,i,j,xparam,yparam,hx,hxi,hy,hyi,fA,inf2,ny)
    call fvbicub(fvalEPHI,i,j,xparam,yparam,hx,hxi,hy,hyi,fEPHI,inf2,ny)
