@@ -5084,6 +5084,12 @@ subroutine calculate_GCfieldswE_ACC(Y_R,Y_PHI,Y_Z, &
     efield_2d_local%PHI,Y_R, Y_Z, A, EPHI, ezerr_local)
   call EZspline_error(ezerr_local)
 
+  if (ezerr_local.eq.97) then
+    write(6,*) Y_R,Y_Z
+    flagCon=0_is
+    return
+  endif
+
   PSIp=A(1)
 
   B_R = psip_conv*A(3)/Y_R
