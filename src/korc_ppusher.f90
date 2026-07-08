@@ -7754,7 +7754,7 @@ subroutine adv_GCinterp_psiwE_top_ACC(params_ACC,random,spp,P,F)
           call advance_GCinterp_psiwE_vars_ACC(vars, &
             pp,tt,ttt,params_ACC,Y_R,Y_PHI,Y_Z,V_PLL,V_MU, &
             q_cache,m_cache,flagCon,flagCol, &
-            B_R,B_PHI,B_Z,E_PHI,PSIp,ne0,Te0,Zeff0, &
+            B_R,B_PHI,B_Z,curlb_R,curlb_PHI,curlb_Z,E_PHI,PSIp,ne0,Te0,Zeff0, &
             Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1, &
             fields_domain_local,bfield_2d_local, efield_2d_local,&
             Dim2x1t,E_2x1t,psip_conv,Bo,Ro,Analytic_D3D_IWL, &
@@ -7795,6 +7795,10 @@ subroutine adv_GCinterp_psiwE_top_ACC(params_ACC,random,spp,P,F)
         vars%B(pp,1) = B_R
         vars%B(pp,2) = B_PHI
         vars%B(pp,3) = B_Z
+
+	vars%curlb(pp,1) = curlb_R
+	vars%curlb(pp,2) = curlb_PHI
+	vars%curlb(pp,3) = curlb_Z
 
         vars%E(pp,2) = E_PHI
         vars%PSI_P(pp) = PSIp
@@ -9275,7 +9279,8 @@ end subroutine advance_GCinterp_psiwE_vars
 
 subroutine advance_GCinterp_psiwE_vars_ACC(vars,pp,tt,ttt,params_ACC, &
   Y_R,Y_PHI,Y_Z,V_PLL,V_MU,q_cache,m_cache,flagCon,flagCol, &
-  B_R,B_PHI,B_Z,E_PHI,PSIp,ne,Te,Zeff,Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1, &
+  B_R,B_PHI,B_Z,curlb_R,curlb_PHI,curlb_Z,E_PHI,PSIp,ne,Te,Zeff, &
+  Y_R0,Y_PHI0,Y_Z0,Y_R1,Y_PHI1,Y_Z1, &
   fields_domain_local,bfield_2d_local, efield_2d_local,&
   Dim2x1t,E_2x1t,psip_conv,Bo,Ro,Analytic_D3D_IWL,circumradius, &
   ntiles,useDiMES,DiMESloc_cyl,DiMESdims)
@@ -9304,7 +9309,7 @@ subroutine advance_GCinterp_psiwE_vars_ACC(vars,pp,tt,ttt,params_ACC, &
   REAL(rp),INTENT(INOUT) :: Y_R0,Y_PHI0,Y_Z0
   REAL(rp),INTENT(INOUT) :: Y_R1,Y_PHI1,Y_Z1
   REAL(rp),INTENT(OUT) :: B_R,B_PHI,B_Z
-  REAL(rp) :: curlb_R,curlb_PHI,curlb_Z
+  REAL(rp),INTENT(OUT) :: curlb_R,curlb_PHI,curlb_Z
   REAL(rp) :: gradB_R,gradB_PHI,gradB_Z
   REAL(rp) :: E_R,E_Z
   REAL(rp),INTENT(OUT) :: E_PHI,PSIp
