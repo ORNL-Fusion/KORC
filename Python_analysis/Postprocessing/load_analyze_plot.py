@@ -1,9 +1,11 @@
+import os
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 import scipy as sci
 import matplotlib.pyplot as plt
 import h5py
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import MaxNLocator
 
 mu0=4*np.pi*10**(-7)
 c = 2.99792458E8 #% Speed of light (m/s)
@@ -429,9 +431,11 @@ elif orbit_model[0:2]=='GC':
     bY=bR*np.sin(PHI)+bPHI*np.cos(PHI)
     
     bmag=np.sqrt(bR**2+bPHI**2+bZ**2)
+    bpol=np.sqrt(bR**2+bZ**2)
     vmag=c*np.sqrt(1-(1/g)**2)
     pmag=me*c*np.sqrt(g**2-1)
     vperp=vmag*np.sin(np.radians(eta))
+    vpll=vmag*np.cos(np.radians(eta))
 
 rm=np.sqrt((R-R0)**2+(zz-Z0)**2)
 
@@ -458,6 +462,20 @@ if 'flagRE' in outputs_list:
   flagSecondary=np.zeros(np.shape(flagRE))
   flagSecondary[:,flagRE[0,:]<1]=1
   flagSecondary[:,flagRE[-1,:]<1]=0
+
+Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
+Ipart[flagActive==0]=0
+Itot=np.sum(Ipart,axis=1)
+Ipri=np.sum(Ipart*flagPrimary,axis=1)
+Isec=np.sum(Ipart*flagSecondary,axis=1)
+
+IPOLpart=qe*vpll*bpol/(2*np.pi*R*bmag)
+IPOLpart[flagActive==0]=0
+IPOL=np.sum(IPOLpart,axis=1)
+
+
+#KE=me*c**2/qe*np.sum((g-1)*flagActive)
+#KEtot=me*c**2/qe*np.sum((1-1)*flagRE)
 
 K=(g-1)*(me*c**2/qe)
 
@@ -704,38 +722,46 @@ PHIvals = (PHIbinedges[:-1] + PHIbinedges[1:]) / 2
 if N_incidents > 0:
     # Pull the calculated intersection angles for only the incident group
     # Shape: (N_incidents,)
-    phi_incidents = PHIint[indt_idx, jj_idx]
+    phi_incidents_raw = PHIint[indt_idx, jj_idx]
 
-    # Apply the domain folding math
-    if collapse == 0:
-        phi_wrapped = np.mod(phi_incidents, 2 * np.pi)
-    else:
-        # Collapses all segments onto the first tile window
-        #phi_wrapped = np.mod(phi_incidents, 2 * np.pi / nt)
-        phi_wrapped = np.mod(phi_incidents + half_tile, 2 * np.pi / nt) - half_tile
+    half_tile = np.pi / nt
+    dphi_face = 2 * np.pi / nt
+    phi_wrapped = np.mod(phi_incidents_raw + half_tile, dphi_face) - half_tile
 
-    # Compute 0-indexed bin tracking numbers
-    # (Subtracting 1 from MATLAB's 1-based indexing logic)
-    PHIind_incidents = np.floor((phi_wrapped - PHIbinedges[0]) / dPHI).astype(np.int16)
+    Bx_raw = bX[indt_idx, jj_idx]
+    By_raw = bY[indt_idx, jj_idx]
+    Bz_raw = bZ[indt_idx, jj_idx]
 
-    # Optional Safeguard: Clip indices to stay strictly inside the bin array boundaries
-    # (Prevents numerical edge noise from throwing an index error)
-    PHIind_incidents = np.clip(PHIind_incidents, 0, nPHIbins - 1)
+    # Calculate native cylindrical magnetic components (Invariants across all tile faces)
+    cos_raw_1d = np.cos(phi_incidents_raw)
+    sin_raw_1d = np.sin(phi_incidents_raw)
+    Br_field_local   =  Bx_raw * cos_raw_1d + By_raw * sin_raw_1d
+    Bphi_field_local = -Bx_raw * sin_raw_1d + By_raw * cos_raw_1d
+
+    # Project fields into the reference Cartesian frame of Tile 0
+    cos_wrap_1d = np.cos(phi_wrapped)
+    sin_wrap_1d = np.sin(phi_wrapped)
+    Bx_collapsed = Br_field_local * cos_wrap_1d - Bphi_field_local * sin_wrap_1d
+    By_collapsed = Br_field_local * sin_wrap_1d + Bphi_field_local * cos_wrap_1d
 
 
-# --- 3. VECTORIZED PHI BINDING FOR ALL ACTIVE MATRIX COORDINATES ---
-# If you need to bin your raw, non-intersected particle matrix (PHI) 
-# at the exact collision timesteps as shown in your final MATLAB snippet:
-if N_incidents > 0:
-    phi_raw_snapshots = PHI[indt_idx, jj_idx]
+    # --- 3. REPLICATE AND FLATTEN ALL ARRAYS TO MATCH CHI (Shape: N_incidents * nsam_chi) ---
+    # Extract raw parameters
+    vmag_inc_1d = vmag[indt_idx, jj_idx]
+    eta_inc_1d  = eta[indt_idx, jj_idx]
+    chi_inc_flat = chi[indt_idx, jj_idx, :].ravel()  # Master dimension footprint
 
-    if collapse == 0:
-        phi_raw_wrapped = phi_raw_snapshots  # Standard raw tracking
-    else:
-        phi_raw_wrapped = np.mod(phi_raw_snapshots, 2 * np.pi / nt)
+    # Repeat spatial angle profiles
+    phi_raw_flat     = np.repeat(phi_incidents_raw[:, np.newaxis], nsam_chi, axis=1).ravel()
+    phi_wrapped_flat = np.repeat(phi_wrapped[:, np.newaxis], nsam_chi, axis=1).ravel()
 
-    PHIind_raw = np.floor((phi_raw_wrapped - PHIbinedges[0]) / dPHI).astype(np.int16)
-    PHIind_raw = np.clip(PHIind_raw, 0, nPHIbins - 1)
+    # Repeat physical magnitudes and field arrays
+    vmag_inc_flat = np.repeat(vmag_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+    eta_inc_flat  = np.repeat(eta_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+    
+    Bx_raw_flat   = np.repeat(Bx_raw[:, np.newaxis], nsam_chi, axis=1).ravel()
+    By_raw_flat   = np.repeat(By_raw[:, np.newaxis], nsam_chi, axis=1).ravel()
+    Bz_raw_flat   = np.repeat(Bz_raw[:, np.newaxis], nsam_chi, axis=1).ravel()
     
     
 def cylindrical_to_cartesian(r, phi, z):
@@ -748,95 +774,122 @@ def cylindrical_to_cartesian(r, phi, z):
     # Z remains unchanged in cylindrical space
     return x, y, z
 
-def velocity_magnetic_to_cartesian(v, eta, chi, Bx, By, Bz):
+def velocity_magnetic_to_collapsed_cartesian(v, eta, chi, Bx, By, Bz, phi_raw, phi_wrap):
     """
-    Transforms velocity degrees of freedom (v, eta, chi) relative to a local 
-    3D Magnetic Field vector (Bx, By, Bz) into laboratory Cartesian (vx, vy, vz).
-    
-    Accepts 3D array blocks matching your shapes: (num_timesteps, num_particles, nsam_chi)
+    Transforms spherical velocities relative to B directly into a wall-collapsed
+    Cartesian frame using local cylindrical transformations to isolate true transport vectors.
     """
-    # 1. Calculate the local magnetic field magnitude and unit vector components
+    # Reconstruct total magnetic magnitude profile
     B_mag = np.sqrt(Bx**2 + By**2 + Bz**2)
-    # Safeguard against division by zero for uninitialized/vacuum fields
     B_mag_safe = np.where(B_mag == 0, 1e-10, B_mag)
     
+    # Parallel tracking vector unit projections
     bx = Bx / B_mag_safe
     by = By / B_mag_safe
     bz = Bz / B_mag_safe
     
-    # 2. Construct the local perpendicular coordinate basis (e1 and e2)
-    # We choose e1 to be perpendicular to both b and the laboratory Z-axis
-    perpendicular_grid = np.sqrt(bx**2 + by**2)
-    # Safeguard for particles exactly on the poles (parallel to Z-axis)
-    perpendicular_grid_safe = np.where(perpendicular_grid == 0, 1e-10, perpendicular_grid)
+    # Build local radial unit vector at the particle's RAW impact position
+    er_x = np.cos(phi_raw)
+    er_y = np.sin(phi_raw)
+    er_z = np.zeros_like(phi_raw)
     
-    e1_x = -by / perpendicular_grid_safe
-    e1_y =  bx / perpendicular_grid_safe
-    e1_z = np.zeros_like(bx)
+    # Isolate tracking vector 1 perpendicular to the field line using the normal vector
+    dot_b_er = bx * er_x + by * er_y + bz * er_z
+    perp1_x = er_x - dot_b_er * bx
+    perp1_y = er_y - dot_b_er * by
+    perp1_z = er_z - dot_b_er * bz
+    perp1_norm = np.sqrt(perp1_x**2 + perp1_y**2 + perp1_z**2)
+    perp1_norm_safe = np.where(perp1_norm == 0, 1.0, perp1_norm)
     
-    # e2 is the cross product: b x e1
-    e2_x = bz * e1_y - by * e1_z
-    e2_y = bx * e1_z - bz * e1_x
-    e2_z = by * e1_x - bx * e1_y
+    e2_x = perp1_x / perp1_norm_safe
+    e2_y = perp1_y / perp1_norm_safe
+    e2_z = perp1_z / perp1_norm_safe
     
-    # 3. Compute local velocity space projection frames (Radians conversion)
+    # Tracking vector 2 completes the orthogonal coordinate system (b x e2)
+    e3_x = by * e2_z - bz * e2_y
+    e3_y = bz * e2_x - bx * e2_z
+    e3_z = bx * e2_y - by * e2_x
+    
+    # Project local spherical components into the customized coordinate system
     eta_rad = np.radians(eta)
-    chi_rad = np.radians(chi)
-    
     v_parallel = v * np.cos(eta_rad)
-    v_perp1    = v * np.sin(eta_rad) * np.cos(chi_rad)
-    v_perp2    = v * np.sin(eta_rad) * np.sin(chi_rad)
+    v_perp1    = v * np.sin(eta_rad) * np.cos(chi)
+    v_perp2    = v * np.sin(eta_rad) * np.sin(chi)
     
-    # 4. Transform back to global Cartesian via vector basis projection
-    vx = v_parallel * bx + v_perp1 * e1_x + v_perp2 * e2_x
-    vy = v_parallel * by + v_perp1 * e1_y + v_perp2 * e2_y
-    vz = v_parallel * bz + v_perp1 * e1_z + v_perp2 * e2_z
+    # Reconstruct native un-collapsed Cartesian velocities
+    vx_raw = v_parallel * bx + v_perp1 * e2_x + v_perp2 * e3_x
+    vy_raw = v_parallel * by + v_perp1 * e2_y + v_perp2 * e3_y
+    vz_out = v_parallel * bz + v_perp1 * e2_z + v_perp2 * e3_z
     
-    return vx, vy, vz
+    # Convert raw Cartesian velocities to local Cylindrical coordinates (Invariants)
+    cos_raw = np.cos(phi_raw)
+    sin_raw = np.sin(phi_raw)
+    vr_local   =  vx_raw * cos_raw + vy_raw * sin_raw
+    vphi_local = -vx_raw * sin_raw + vy_raw * cos_raw
+    
+    # Project components into the Cartesian coordinates of your reference tile (phi_wrap)
+    cos_wrap = np.cos(phi_wrap)
+    sin_wrap = np.sin(phi_wrap)
+    vx_collapsed = vr_local * cos_wrap - vphi_local * sin_wrap
+    vy_collapsed = vr_local * sin_wrap + vphi_local * cos_wrap
+    
+    return vx_collapsed, vy_collapsed, vz_out
+
+time_inc_1d = time[indt_idx]
+
+inc_inc_1d  = inc[indt_idx, jj_idx]
+
+Rint_inc_1d = Rint[indt_idx,jj_idx]
+PHIint_inc_1d = phi_wrapped
+Zint_inc_1d = Zint[indt_idx,jj_idx]
+
+#bX_inc_1d  = bX[indt_idx, jj_idx]
+#bY_inc_1d  = bY[indt_idx, jj_idx]
+
+bX_inc_1d  = Bx_collapsed
+bY_inc_1d  = By_collapsed
+
+bR_inc_1d  = bR[indt_idx, jj_idx]
+bPHI_inc_1d  = bPHI[indt_idx, jj_idx]
+bZ_inc_1d  = bZ[indt_idx, jj_idx]
+
+# Extract the 2D chi values (Shape: (N_incidents, nsam_chi))
+chi_inc_2d  = chi[indt_idx, jj_idx, :].ravel()
+
+# Replicate all 1D metrics into identical 2D grids (Shape: (N_incidents, nsam_chi))
+time_inc_2d = np.repeat(time_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+
+vmag_inc_2d = np.repeat(vmag_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+eta_inc_2d  = np.repeat(eta_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+inc_inc_2d  = np.repeat(inc_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+
+Rint_inc_2d    = np.repeat(Rint_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+PHIint_inc_2d  = np.repeat(PHIint_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+Zint_inc_2d    = np.repeat(Zint_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+
+bX_inc_2d =  np.repeat(bX_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+bY_inc_2d  = np.repeat(bY_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+bR_inc_2d =  np.repeat(bR_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+bPHI_inc_2d  = np.repeat(bPHI_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+bZ_inc_2d  = np.repeat(bZ_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
+
+xint, yint, zint = cylindrical_to_cartesian(Rint_inc_2d,PHIint_inc_2d,Zint_inc_2d)
+xint_1d, yint_1d, zint_1d = cylindrical_to_cartesian(Rint_inc_1d,PHIint_inc_1d,Zint_inc_1d)
+
+vx, vy, vz = velocity_magnetic_to_collapsed_cartesian(
+        vmag_inc_flat, 
+        eta_inc_flat, 
+        chi_inc_flat+3*np.pi/2, 
+        Bx_raw_flat, 
+        By_raw_flat, 
+        Bz_raw_flat, 
+        phi_raw_flat, 
+        phi_wrapped_flat
+    )
 
 sav=1
 if sav==1:
-    
-    time_inc_1d = time[indt_idx]
-    
-    vmag_inc_1d = vmag[indt_idx, jj_idx]
-    eta_inc_1d  = eta[indt_idx, jj_idx]
-    inc_inc_1d  = inc[indt_idx, jj_idx]
-    
-    Rint_inc_1d = Rint[indt_idx,jj_idx]
-    PHIint_inc_1d = phi_wrapped
-    Zint_inc_1d = Zint[indt_idx,jj_idx]
-    
-    bX_inc_1d  = bX[indt_idx, jj_idx]
-    bY_inc_1d  = bY[indt_idx, jj_idx]
-    bR_inc_1d  = bR[indt_idx, jj_idx]
-    bPHI_inc_1d  = bPHI[indt_idx, jj_idx]
-    bZ_inc_1d  = bZ[indt_idx, jj_idx]
-    
-    # Extract the 2D chi values (Shape: (N_incidents, nsam_chi))
-    chi_inc_2d  = chi[indt_idx, jj_idx, :].ravel()
-    
-    # Replicate all 1D metrics into identical 2D grids (Shape: (N_incidents, nsam_chi))
-    time_inc_2d = np.repeat(time_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    
-    vmag_inc_2d = np.repeat(vmag_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    eta_inc_2d  = np.repeat(eta_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    inc_inc_2d  = np.repeat(inc_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    
-    Rint_inc_2d    = np.repeat(Rint_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    PHIint_inc_2d  = np.repeat(PHIint_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    Zint_inc_2d    = np.repeat(Zint_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    
-    bX_inc_2d =  np.repeat(bX_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    bY_inc_2d  = np.repeat(bY_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    bR_inc_2d =  np.repeat(bR_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    bPHI_inc_2d  = np.repeat(bPHI_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    bZ_inc_2d  = np.repeat(bZ_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
-    
-    xint, yint, zint = cylindrical_to_cartesian(Rint_inc_2d,PHIint_inc_2d,Zint_inc_2d)
-    
-    vx, vy, vz = velocity_magnetic_to_cartesian(vmag_inc_2d, eta_inc_2d, chi_inc_2d, bX_inc_2d, bY_inc_2d, bZ_inc_2d)
-    
+       
     filename='IWL_impacts_TEST21.h5'
 
     with h5py.File(filename, "w") as f:
@@ -967,7 +1020,7 @@ plot_evo1D=0
 plot_fieldm=0
 plot_deconloc=0
 plot_deconloc1=0
-plot_deconloc2=0
+plot_deconloc2=1
 plot_deconloc3=0
 plot_deconhistphi=0
 plot_deconsurf=0
@@ -976,23 +1029,190 @@ plot_inc_ang=0
 tmpplot=0
 plot_psi=0
 plot_histRZ_m3dc1=0
-plotallangle_fourplot = 1
+plotallangle_fourplot = 0
+plot_histtmp = 0
+plot_evo0D = 0
 
 timeind_p=0
 timeind_g=0
+
+need_exp_data=2
+if need_exp_data==1:
+    filename_ip = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21/ip177031.txt'
+
+    # Downsampling option: 1 means keep all rows, 2 means take every second row, etc.
+    downsample_stride = 1  
+    
+    # --- Phase 1: Load and Resample ASCII Signal Data ---
+    if not os.path.exists(filename_ip):
+        raise FileNotFoundError(f"Target data file not found at: {filename_ip}")
+    
+    # Load rows dynamically using native NumPy streaming
+    # Apply stride indexing [::downsample_stride] across rows directly during slice allocation
+    raw_data = np.loadtxt(filename_ip)[::downsample_stride]
+    
+    # Parse columns: Col 1 is time in ms (convert to seconds), Col 2 is Current in Amps
+    Ip_time = raw_data[:, 0] / 1e3  # convert ms -> s
+    Ip = raw_data[:, 1]             # Current in [A]
+    
+
+if need_exp_data==2:
+    folder = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21'
+    h5_filename = os.path.join(folder, 'ipprobesf.h5')
+    
+    # Downsampling option (1 = full data, 2 = every second point, etc.)
+    downsample_stride = 10
+    
+    with h5py.File(h5_filename, 'r') as hf:
+        # Define the deep internal path specified by your diagnostic file
+        hdf5_path = 'DATA/axes_47589961407024/step_1/args'
+            
+        target_node = hf[hdf5_path]
+        
+        # CASE A: If 'args' is a dataset containing a 2D array (e.g., [N x 2])
+        if isinstance(target_node, h5py.Dataset):
+            raw_data = target_node[::downsample_stride]
+            # Adjust indices if your columns are inverted (e.g., Col 0 vs Col 1)
+            Ip_time = raw_data[:, 0] / 1e3  # Assuming ms -> seconds conversion
+            Ip = raw_data[:, 1]
+            
+        # CASE B: If 'args' is a group containing separate datasets (e.g., 'time' and 'current')
+        elif isinstance(target_node, h5py.Group):
+            # Adjust strings inside brackets to match the printed keys if necessary
+            Ip_time = target_node['0'][::downsample_stride] / 1e3  
+            Ip = target_node['1'][::downsample_stride]
+if need_exp_data!=0:
+    t0=1.594691872596741e+00               # Time base offset scalar
+
+    # Replicating MATLAB's find(timeoffset):tmpfld= bR_inc_2d.copy()
+    # We find where target_value > 0. The first match minus 1 maps to index(1) - 1.
+    # Using np.where returns an array of indices matching the criteria.
+    valid_indices = np.where(Ip_time >= t0)[0]
+    
+    if len(valid_indices) > 0:
+        tindex = valid_indices[0] - 1  # Replicating your index(1) - 1 shift
+        
+        # Bound protection to prevent an index of -1 if the first element matched
+        if tindex < 0:
+            tindex = 0
+    else:
+        # Fallback if the target time is completely out of the bounds of the file
+        tindex = len(Ip_time) - 1
+
+if plot_evo0D==1:
+    
+    tmpfld=Itot.copy()
+    tmpfld1=Ipri.copy()
+    tmpfld2=Isec.copy()
+    
+    Irat=Ip[tindex]/-tmpfld[1]
+    
+    fig,ax=plt.subplots()
+    
+    ax.plot(t0+time[1:]-time[1],-Irat*tmpfld[1:],'-o', label=r'All RE')
+    ax.plot(t0+time[1:]-time[1],-Irat*tmpfld1[1:],'-o', label=r'Primary RE')
+    ax.plot(t0+time[1:]-time[1],-Irat*tmpfld2[1:],'-o', label=r'Secondary RE')
+    ax.plot(Ip_time[tindex:],Ip[tindex:], label=r'DIIID 177031')
+    
+    ax.legend(loc='center left', frameon=False, fontsize=12)
+    ax.set_xlim([t0,t0+0.010])
+    ax.set(xlabel='$t (\\mathrm{s})$')
+    ax.grid()
+    
+    #plt.savefig("RZhist.png", format="png", bbox_inches="tight")
+    plt.show()
+
+if plot_histtmp==1:
+    
+    tloss=time[12]
+    
+    #tmpfld= vz.copy()
+    #tmpfld= bX_inc_2d.copy()
+    #tmpfld= bY_inc_2d.copy()
+    #tmpfld= bZ_inc_2d.copy()
+    #tmpfld= bR_inc_2d.copy()
+    #tmpfld= bPHI_inc_2d.copy()
+    #tmpfld= np.cos(np.radians(eta_inc_2d.copy()))
+    #tmpfld= vx.copy()
+    #tmpfld= vy.copy()
+    #tmpfld= vmag_inc_2d.copy()  
+    #tmpfld=xint.copy()
+    #tmpfld= chi_inc_2d.copy()
+    tmpfld=GR[indt_idx,jj_idx]
+    
+    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    
+    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    
+    incbins=np.linspace(mintmp,maxtmp,50)
+    
+    #H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],bins=incbins)\
+    H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],bins=incbins)
+    
+    fig,ax=plt.subplots()
+    
+    ax.plot(xedges[:-1],H,'-o')
+    
+    
+    ax.set(xlabel='$V_x (\\mathrm{m/s})$', ylabel='$N_{RE}$')
+    ax.grid()
+    #plt.gca().set_aspect('equal')
+    
+    #plt.savefig("RZhist.png", format="png", bbox_inches="tight")
+    plt.show()
 
 if plot_deconloc3==1:
     
     fig,ax=plt.subplots()
     
-    sc=ax.scatter(yint,zint,c=np.sqrt(bPHI_inc_2d**2+bR_inc_2d**2+bZ_inc_2d**2))
-    ax.set(title='All REs')
+    #tmpfld= bX_inc_2d.copy()
+    #tmpfld= bY_inc_2d.copy()
+    #tmpfld= bZ_inc_2d.copy()
+    #tmpfld= bR_inc_2d.copy()
+    #tmpfld= bPHI_inc_2d.copy()
+    #tmpfld= vx.copy()
+    #tmpfld= vy.copy()
+    #tmpfld= inc_inc_2d.copy()
+    #tmpfld= np.cos(np.radians(eta_inc_2d.copy()))
+    #tmpfld= vmag_inc_2d.copy() 
+    #tmpfld= chi_inc_2d.copy()
+    #tmpfld=xint.copy()
+    tmpfld=GR[indt_idx,jj_idx]
+    
+    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    
+    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    
+    plot_bwr=0
+    if plot_bwr==1:
+        if maxtmp>np.abs(mintmp):
+            mintmp=-maxtmp
+        else:
+            maxtmp=np.abs(mintmp)
+        
+    ticklabels=np.linspace(mintmp,maxtmp,7)
+    
+    #if plot_bwr==1:
+    #    sc=ax.scatter(yint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],zint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],alpha=0.8,cmap='bwr',vmin=mintmp,vmax=maxtmp)
+    #else:
+    #    sc=ax.scatter(yint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],zint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],alpha=0.8,vmin=mintmp,vmax=maxtmp)
+ 
+    if plot_bwr==1:
+        sc=ax.scatter(yint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],zint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],alpha=0.8,cmap='bwr',vmin=mintmp,vmax=maxtmp)
+    else:
+        sc=ax.scatter(yint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],zint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],alpha=0.8,vmin=mintmp,vmax=maxtmp)
+    
+    
     
     cbar = fig.colorbar(sc, ax=ax)
-    cbar.set_label("$BMAG({\\rm T})$")
+    cbar.set_label("$V_x({\\rm T})$")
 
 
-    ax.set(xlabel='$\\phi ({\\rm rad})$', ylabel='$Z({\\rm m})$')
+    ax.set(xlabel='$Y\,({\\rm m})$', ylabel='$Z\,({\\rm m})$')
     ax.grid()
     #plt.gca().set_aspect('equal')
     ax.axis([-half_tile,half_tile,-1,1])
@@ -1000,8 +1220,6 @@ if plot_deconloc3==1:
     plt.show()
 
 if plot_deconloc2==1:
-    
-    from matplotlib.ticker import MaxNLocator
     
     fig,ax=plt.subplots()
     
@@ -1014,7 +1232,8 @@ if plot_deconloc2==1:
     
     if collapse==1:
         if plotall==1:
-            ax.scatter(yint,xint,c='b')
+            #ax.scatter(yint,xint,c='b')
+            ax.quiver(yint,xint,vy,vx)
             ax.set(title='All REs')
         if plotpri==1:
             ax.scatter(yint[primask_2d],xint[primask_2d],c='b')
@@ -1035,8 +1254,7 @@ if plot_deconloc2==1:
 
 if plotallangle_fourplot == 1:
     
-    calchistall = 1
-    
+    calchistall = 0
     maxZ = 1.0             # Set to your actual geometric Z-ceiling
     minZ = -1.0            # Set to your actual geometric Z-floor
     max_inc = 1e0          # Limit threshold boundary
@@ -1148,9 +1366,9 @@ if plotallangle_fourplot == 1:
     # ------------------ SUBPLOT 1: SIN(THETA) ------------------
     ax = axs[0]
     norm_factor = Nall * dbin if Nall > 0 else 1.0
-    ax.plot(incbins, hall / norm_factor, linewidth=3, color=(0, 0, 1), label=r'$f_{\rm all}$')
-    ax.plot(incbins, hpri / norm_factor, linewidth=3, color=(1, 0, 0), label=r'$f_{\rm init}$')
-    ax.plot(incbins, hsec / norm_factor, linewidth=3, color=(0, 0.5, 0), label=r'$f_{\rm sec}$')
+    ax.plot(incbins, hall / norm_factor, linewidth=3, color=(0, 0, 1))
+    ax.plot(incbins, hpri / norm_factor, linewidth=3, color=(1, 0, 0))
+    ax.plot(incbins, hsec / norm_factor, linewidth=3, color=(0, 0.5, 0))
     ax.set_xlim(0, 1)
     ax.set_ylabel(r'$f_{{\rm RE},*}\times N_*/N_{\rm all}$')
     ax.set_xlabel(r'${\rm sin}\,\Theta$')
@@ -1160,13 +1378,13 @@ if plotallangle_fourplot == 1:
     
     # ------------------ SUBPLOT 2: THETA_GC ------------------
     ax = axs[1]
-    ax.plot(incbins_GC, hall_GC, linewidth=3, color=(0, 0, 1))
-    ax.plot(incbins_GC, hpri_GC, linewidth=3, color=(1, 0, 0))
-    ax.plot(incbins_GC, hsec_GC, linewidth=3, color=(0, 0.5, 0))
+    ax.plot(incbins_GC, hall_GC, linewidth=3, color=(0, 0, 1), label=r'$f_{\rm all}$')
+    ax.plot(incbins_GC, hpri_GC, linewidth=3, color=(1, 0, 0), label=r'$f_{\rm init}$')
+    ax.plot(incbins_GC, hsec_GC, linewidth=3, color=(0, 0.5, 0), label=r'$f_{\rm sec}$')
     ax.set_xlim(0, 8)
     ax.set_ylabel(r'$f_{{\rm RE},*}$')
     ax.set_xlabel(r'$\theta_{\rm GC}\,(^\circ)$')
-    ax.legend(loc='center left', bbox_to_anchor=(0.45, 0.4), frameon=False, fontsize=12)
+    ax.legend(loc='center left', bbox_to_anchor=(0.025, 0.7), frameon=False, fontsize=12)
     ax.set_box_aspect(1)
     
     # ------------------ SUBPLOT 3: ETA PITCH ANGLE ------------------
@@ -1716,12 +1934,12 @@ if plot_evoCon==1:
     ax.legend(['Total','Confined','Energetic'])
 
     #ax.set_xscale('log')
-    ax.set_yscale('log')
+    #ax.set_yscale('log')
     
     ax.set(xlabel='$t\,({\\rm s})$', ylabel='$N_{RE}$')
     ax.grid()
     
-    plt.savefig("NREevo_"+run_directory[0]+".png", format="png", bbox_inches="tight")
+    #plt.savefig("NREevo_"+run_directory[0]+".png", format="png", bbox_inches="tight")
     plt.show()    
 
 if plotgrowth==1:
@@ -2040,7 +2258,7 @@ if plot_histKeta==1:
     
 if plot_histK==1:
     
-    plotallpri=0
+    plotallpri=1
     plotactpri=0
     plotdecpri=0
     plotthepri=0 #no thermalized primaries at t=1.6007s
@@ -2048,7 +2266,7 @@ if plot_histK==1:
     plotallsec=0
     plotactsec=0
     plotdecsec=0
-    plotthesec=1
+    plotthesec=0
     
     if plotallpri==1:
         Kbin10=np.linspace(np.log10(np.min(K[flagPrimary>0])),np.log10(np.max(K[flagPrimary>0])),num=50)
@@ -2101,7 +2319,7 @@ if plot_histK==1:
         
         if ii==1:
           ax.set_xscale('log')
-          ax.set_yscale('log')
+          #ax.set_yscale('log')
         
           ax.set(xlabel='$\\mathcal{K} (\\mathrm{eV})$', ylabel='$N_{\\mathrm{RE}}$')
 
@@ -2135,9 +2353,96 @@ if plot_histK==1:
     
 if plot_histeta==1:
     
+    plotall=0
+    plotact=0
+    plotdec=1
+    plotthe=0
+    
+    plotallpri=0
+    plotactpri=0
+    plotdecpri=0
+    plotthepri=0 #no thermalized primaries at t=1.6007s
+    
+    plotallsec=0
+    plotactsec=0
+    plotdecsec=0
+    plotthesec=0
+    
+    
+    tmpfld=eta.copy()
+    
+    tmpfld=np.where(tmpfld>90,180-tmpfld,tmpfld)
+    
+    etabin=np.linspace(0,90,50)
+
     fig,ax=plt.subplots()
     
-    ax.hist(eta[timeind_p],bins=30)
+    legends=[f't= {1.594691872596741e+00+time[ii]:4.4e} s' for ii in range(0,num_snapshots-1)]
+
+    for ii in range(1,np.shape(K)[0]):
+        if plotall==1:
+            H,xedges=np.histogram(tmpfld[ii],bins=etabin)
+        if plotact==1:
+            H,xedges=np.histogram(tmpfld[ii, (flagActive[ii,:]>0)],bins=etabin)
+        if plotdec==1:
+            H,xedges=np.histogram(tmpfld[ii, (flagDecon[ii,:]>0)],bins=etabin)
+        if plotthe==1:
+            H,xedges=np.histogram(tmpfld[ii, (flagTherm[ii,:]>0)],bins=etabin)
+        
+        if plotallpri==1:
+            H,xedges=np.histogram(tmpfld[ii,flagPrimary[ii,:]>0],bins=etabin)
+        if plotactpri==1:
+            H,xedges=np.histogram(tmpfld[ii,(flagPrimary[ii,:]>0) & (flagActive[ii,:]>0)],bins=etabin)
+        if plotdecpri==1:
+            H,xedges=np.histogram(tmpfld[ii,(flagPrimary[ii,:]>0) & (flagDecon[ii,:]>0)],bins=etabin)
+        if plotthepri==1:
+            H,xedges=np.histogram(tmpfld[ii,(flagPrimary[ii,:]>0) & (flagTherm[ii,:]>0)],bins=etabin)
+            
+        if plotallsec==1:
+            H,xedges=np.histogram(tmpfld[ii,flagSecondary[ii,:]>0],bins=etabin)
+        if plotactsec==1:
+            H,xedges=np.histogram(tmpfld[ii,(flagSecondary[ii,:]>0) & (flagActive[ii,:]>0)],bins=etabin)
+        if plotdecsec==1:
+            H,xedges=np.histogram(tmpfld[ii,(flagSecondary[ii,:]>0) & (flagDecon[ii,:]>0) & ~(flagTherm[ii,:]>0)],bins=etabin)
+        if plotthesec==1:
+            H,xedges=np.histogram(tmpfld[ii,(flagSecondary[ii,:]>0) & (flagTherm[ii,:]>0) & ~(flagDecon[ii,:]>0)],bins=etabin)
+    
+        ax.plot(xedges[:-1],H,'-o')
+    
+        #ax.plot(EfitVc*10**6,fM[3,:]/fMnorm[3])
+        
+        #ax.legend(['Sampled','Target'])
+        
+        if ii==1:
+          #ax.set_xscale('log')
+          #ax.set_yscale('log')
+        
+          ax.set(xlabel='$\\eta (^\\circ)$', ylabel='$N_{\\mathrm{RE}}$')
+          ax.xaxis.set_major_locator(MaxNLocator(nbins=7))
+
+          ax.grid()
+        
+        #plt.savefig("Khist_DIIID.png", format="png", bbox_inches="tight")
+    
+    ax.legend(legends,ncol=2,fontsize=8)
+    
+    if plotallpri==1:
+      ax.set(title='All Primary REs')
+    if plotactpri==1:
+       ax.set(title='Active Primary REs')
+    if plotdecpri==1:
+        ax.set(title='Deconfined Primary REs')
+    if plotthepri==1:
+        ax.set(title='Thermalized Primary REs')
+        
+    if plotallsec==1:
+      ax.set(title='All Secondary REs')
+    if plotactsec==1:
+       ax.set(title='Active Secondary REs')
+    if plotdecsec==1:
+        ax.set(title='Deconfined Secondary REs')
+    if plotthesec==1:
+        ax.set(title='Thermalized Secondary REs')
     
     plt.show()
 
@@ -2346,7 +2651,7 @@ if plot_bz==1:
     plt.gca().set_aspect('equal')
     ax.set(title='$B_Z$')
     
-    plt.savefig("scatter_bz_JET_95128.pdf", format="pdf", bbox_inches="tight")
+    #plt.savefig("scatter_bz_JET_95128.pdf", format="pdf", bbox_inches="tight")
     plt.show()  
 
 if plot_bphi==1:
@@ -2373,7 +2678,7 @@ if plot_bphi==1:
     plt.gca().set_aspect('equal')
     ax.set(title='$B_\\phi$')
     
-    plt.savefig("scatter_bphi_JET_95128.pdf", format="pdf", bbox_inches="tight")
+    #plt.savefig("scatter_bphi_JET_95128.pdf", format="pdf", bbox_inches="tight")
     plt.show()  
 
 if plot_br==1:
@@ -2408,7 +2713,7 @@ if plot_br==1:
     ax.set(title='$B_R$')
     
     
-    plt.savefig("scatter_br_JET_95128.pdf", format="pdf", bbox_inches="tight")
+    #plt.savefig("scatter_br_JET_95128.pdf", format="pdf", bbox_inches="tight")
     plt.show()  
 
 if plot_ne==1:
