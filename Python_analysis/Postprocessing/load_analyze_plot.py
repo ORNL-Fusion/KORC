@@ -39,9 +39,9 @@ dir_num=1
 #run_directory=['GCeqn_GPU_TEST20b3']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
-#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
+run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
-run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
+#run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 
 for kk in range(0,dir_num):
 
@@ -472,10 +472,12 @@ if 'flagRE' in outputs_list:
 
   flagPrimary=np.zeros(np.shape(flagRE))
   flagPrimary[:,flagRE[0,:]>0]=1
+  Primary=np.sum(flagPrimary,axis=1)
 
   flagSecondary=np.zeros(np.shape(flagRE))
   flagSecondary[:,flagRE[0,:]<1]=1
   flagSecondary[:,flagRE[-1,:]<1]=0
+  Secondary=np.sum(flagSecondary,axis=1)
 
 Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
 Ipart[flagActive==0]=0
@@ -998,23 +1000,36 @@ if sav==1:
     
     filename='Jpll_projection_vars.h5'
 
-    NRE_DiMES=int(np.sum(DiMESconflag[-1,:]))
+    timeind=12
 
     with h5py.File(filename, "w") as f:
         dset=f.create_dataset('NRE',(1,),dtype='i')
-        dset[0]=NRE_DiMES
-        dset=f.create_dataset('X',(NRE_DiMES,),dtype='f')
-        dset[:]=xx[-1,DiMESconflag[-1,:]>0]
-        dset=f.create_dataset('Y',(NRE_DiMES,),dtype='f')
-        dset[:]=yy[-1,DiMESconflag[-1,:]>0]
-        dset=f.create_dataset('Z',(NRE_DiMES,),dtype='f')
-        dset[:]=zz[-1,DiMESconflag[-1,:]>0]
-        dset=f.create_dataset('VX',(NRE_DiMES,),dtype='f')
-        dset[:]=vx[-1,DiMESconflag[-1,:]>0]
-        dset=f.create_dataset('VY',(NRE_DiMES,),dtype='f')
-        dset[:]=vy[-1,DiMESconflag[-1,:]>0]
-        dset=f.create_dataset('VZ',(NRE_DiMES,),dtype='f')
-        dset[:]=vz[-1,DiMESconflag[-1,:]>0]
+        dset[0]=Active[timeind]
+        dset=f.create_dataset('R',(Active[timeind],),dtype='f')
+        dset[:]=R[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('PHI',(Active[timeind],),dtype='f')
+        dset[:]=PHI[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('Z',(Active[timeind],),dtype='f')
+        dset[:]=zz[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('Gamma',(Active[timeind],),dtype='f')
+        dset[:]=g[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('PPLL',(Active[timeind],),dtype='f')
+        dset[:]=ppll[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('MU',(Active[timeind],),dtype='f')
+        dset[:]=mu[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('BR',(Active[timeind],),dtype='f')
+        dset[:]=bR[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('BPHI',(Active[timeind],),dtype='f')
+        dset[:]=bPHI[timeind,flagActive[timeind,:]>0]
+        dset=f.create_dataset('BZ',(Active[timeind],),dtype='f')
+        dset[:]=bZ[timeind,flagActive[timeind,:]>0]
+        if 'curlb' in outputs_list:
+            dset=f.create_dataset('curlbR',(Active[timeind],),dtype='f')
+            dset[:]=curlbR[timeind,flagActive[timeind,:]>0]
+            dset=f.create_dataset('curlbPHI',(Active[timeind],),dtype='f')
+            dset[:]=curlbPHI[timeind,flagActive[timeind,:]>0]
+            dset=f.create_dataset('curlbZ',(Active[timeind],),dtype='f')
+            dset[:]=curlbZ[timeind,flagActive[timeind,:]>0]
 
 #%% Plotting
 
@@ -1068,7 +1083,8 @@ plot_psi=0
 plot_histRZ_m3dc1=0
 plotallangle_fourplot = 0
 plot_histtmp = 0
-plot_evo0D = 1
+plot_evoI = 0
+plot_evoRE = 1
 
 timeind_p=0
 timeind_g=0
@@ -1139,7 +1155,30 @@ if need_exp_data!=0:
         # Fallback if the target time is completely out of the bounds of the file
         tindex = len(Ip_time) - 1
 
-if plot_evo0D==1:
+if plot_evoRE==1:
+    
+    #Irat=Ip[tindex]/-tmpfld[1]
+    Irat=1
+    
+    fig,ax=plt.subplots()
+    
+    ax.plot(t0+time,Total,'-o', label=r'Total')
+    ax.plot(t0+time,Active,'-o', label=r'Active')
+    ax.plot(t0+time,np.sum(flagActive*flagPrimary,axis=1),
+            '-o', label=r'Active Primary')
+    ax.plot(t0+time,np.sum(flagActive*flagSecondary,axis=1),
+            '-o', label=r'Active Secondary')
+
+    
+    ax.legend(loc='upper left', frameon=False, fontsize=12)
+    ax.set_xlim([t0,t0+0.0105])
+    ax.set(xlabel='$t (\\mathrm{s})$')
+    ax.grid()
+    
+    #plt.savefig("RZhist.png", format="png", bbox_inches="tight")
+    plt.show()
+
+if plot_evoI==1:
     
     tmpfld=Itot.copy()
     tmpfld1=Ipri.copy()
