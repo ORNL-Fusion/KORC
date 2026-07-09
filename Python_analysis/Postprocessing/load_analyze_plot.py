@@ -906,7 +906,7 @@ if sav==1:
         dset=f.create_dataset('Y',(N_incidents*nsam_chi,),dtype='f')
         dset[:]=yint
         dset=f.create_dataset('Z',(N_incidents*nsam_chi,),dtype='f')
-        dset[:]=Zint_inc_2d
+        dset[:]=zint
         dset=f.create_dataset('VX',(N_incidents*nsam_chi,),dtype='f')
         dset[:]=vx
         dset=f.create_dataset('VY',(N_incidents*nsam_chi,),dtype='f')
@@ -1020,8 +1020,8 @@ plot_evo1D=0
 plot_fieldm=0
 plot_deconloc=0
 plot_deconloc1=0
-plot_deconloc2=1
-plot_deconloc3=0
+plot_deconloc2=0
+plot_deconloc3=1
 plot_deconhistphi=0
 plot_deconsurf=0
 plot_deconhist=0
@@ -1030,11 +1030,13 @@ tmpplot=0
 plot_psi=0
 plot_histRZ_m3dc1=0
 plotallangle_fourplot = 0
-plot_histtmp = 0
+plot_histtmp = 1
 plot_evo0D = 0
 
 timeind_p=0
 timeind_g=0
+
+tloss=time[12]
 
 need_exp_data=2
 if need_exp_data==1:
@@ -1124,8 +1126,6 @@ if plot_evo0D==1:
 
 if plot_histtmp==1:
     
-    tloss=time[12]
-    
     #tmpfld= vz.copy()
     #tmpfld= bX_inc_2d.copy()
     #tmpfld= bY_inc_2d.copy()
@@ -1138,18 +1138,19 @@ if plot_histtmp==1:
     #tmpfld= vmag_inc_2d.copy()  
     #tmpfld=xint.copy()
     #tmpfld= chi_inc_2d.copy()
-    tmpfld=GR[indt_idx,jj_idx]
+    #tmpfld=GR[indt_idx,jj_idx]
+    tmpfld=zint
     
-    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
-    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
     
-    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
-    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
     
-    incbins=np.linspace(mintmp,maxtmp,50)
+    incbins=np.linspace(mintmp,maxtmp,14)
     
-    #H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],bins=incbins)\
-    H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],bins=incbins)
+    H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],bins=incbins)\
+    #H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],bins=incbins)
     
     fig,ax=plt.subplots()
     
@@ -1179,13 +1180,13 @@ if plot_deconloc3==1:
     #tmpfld= vmag_inc_2d.copy() 
     #tmpfld= chi_inc_2d.copy()
     #tmpfld=xint.copy()
-    tmpfld=GR[indt_idx,jj_idx]
+    #tmpfld=GR[indt_idx,jj_idx]
     
-    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
-    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
     
-    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
-    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
+    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
     
     plot_bwr=0
     if plot_bwr==1:
@@ -1196,15 +1197,15 @@ if plot_deconloc3==1:
         
     ticklabels=np.linspace(mintmp,maxtmp,7)
     
-    #if plot_bwr==1:
-    #    sc=ax.scatter(yint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],zint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],alpha=0.8,cmap='bwr',vmin=mintmp,vmax=maxtmp)
-    #else:
-    #    sc=ax.scatter(yint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],zint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],alpha=0.8,vmin=mintmp,vmax=maxtmp)
- 
     if plot_bwr==1:
-        sc=ax.scatter(yint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],zint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],alpha=0.8,cmap='bwr',vmin=mintmp,vmax=maxtmp)
+        sc=ax.scatter(yint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],zint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],alpha=0.8,cmap='bwr',vmin=mintmp,vmax=maxtmp)
     else:
-        sc=ax.scatter(yint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],zint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],alpha=0.8,vmin=mintmp,vmax=maxtmp)
+        sc=ax.scatter(yint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],zint[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],alpha=0.8,vmin=mintmp,vmax=maxtmp)
+ 
+    #if plot_bwr==1:
+    #    sc=ax.scatter(yint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],zint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],alpha=0.8,cmap='bwr',vmin=mintmp,vmax=maxtmp)
+    #else:
+    #    sc=ax.scatter(yint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],zint_1d[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],c=tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],alpha=0.8,vmin=mintmp,vmax=maxtmp)
     
     
     
@@ -1223,17 +1224,22 @@ if plot_deconloc2==1:
     
     fig,ax=plt.subplots()
     
-    plotall=0
+    plotall=1
     plotpri=0
     plotsec=0
     
     primask_2d  = np.repeat(primary_mask[:, np.newaxis], nsam_chi, axis=1).ravel()
     secmask_2d  = np.repeat(secondary_mask[:, np.newaxis], nsam_chi, axis=1).ravel()
     
+    
     if collapse==1:
         if plotall==1:
             #ax.scatter(yint,xint,c='b')
-            ax.quiver(yint,xint,vy,vx)
+            ax.quiver(yint[(~np.isnan(vx)) & np.isclose(time_inc_2d,tloss)],
+                      xint[(~np.isnan(vx)) & np.isclose(time_inc_2d,tloss)],
+                      vy[(~np.isnan(vx)) & np.isclose(time_inc_2d,tloss)],
+                      vx[(~np.isnan(vx)) & np.isclose(time_inc_2d,tloss)],
+                      scale=2e9)
             ax.set(title='All REs')
         if plotpri==1:
             ax.scatter(yint[primask_2d],xint[primask_2d],c='b')
@@ -1244,11 +1250,11 @@ if plot_deconloc2==1:
     else:
         ax.scatter(PHIint[conlossind==1],Zint[conlossind==1],c='b')
 
-    ax.set(xlabel='$X({\\rm m})$', ylabel='$Y({\\rm m})$')
+    ax.set(xlabel='$Y({\\rm m})$', ylabel='$X({\\rm m})$')
     ax.xaxis.set_major_locator(MaxNLocator(nbins=5))
     ax.grid()
     #plt.gca().set_aspect('equal')
-    #ax.axis([-half_tile,half_tile,-1,1])
+    #ax.axis([-0.015,0.015,1.015,1.016])
     
     plt.show()
 
