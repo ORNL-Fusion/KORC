@@ -39,9 +39,9 @@ dir_num=1
 #run_directory=['GCeqn_GPU_TEST20b3']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
-run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
+#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
-#run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21']
+run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 
 for kk in range(0,dir_num):
 
@@ -141,6 +141,9 @@ for kk in range(0,dir_num):
     bXtmp=np.zeros((num_snapshots,nRE0))
     bYtmp=np.zeros((num_snapshots,nRE0))
     bZtmp=np.zeros((num_snapshots,nRE0))
+    curlbRtmp=np.zeros((num_snapshots,nRE0))
+    curlbPHItmp=np.zeros((num_snapshots,nRE0))
+    curlbZtmp=np.zeros((num_snapshots,nRE0))
     psiPtmp=np.zeros((num_snapshots,nRE0))
     eRtmp=np.zeros((num_snapshots,nRE0))
     ePHItmp=np.zeros((num_snapshots,nRE0))
@@ -192,6 +195,10 @@ for kk in range(0,dir_num):
                 etatmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['eta'][:]
                 flagContmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['flagCon'][:]
                 flagColtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['flagCol'][:]
+                if 'curlb' in outputs_list:
+                    curlbRtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['curlb'][0][:]
+                    curlbPHItmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['curlb'][1][:]
+                    curlbZtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['curlb'][2][:]
                 if 'flagRE' in outputs_list:
                     flagREtmp[ii,jj*ppp:(jj+1)*ppp]=f[str(t_steps[ii])]['spp_1']['flagRE'][:]
         
@@ -233,9 +240,12 @@ for kk in range(0,dir_num):
         eta=etatmp
         flagCon=flagContmp
         flagCol=flagColtmp
+        if 'curlb' in outputs_list:
+            curlbR=curlbRtmp
+            curlbPHI=curlbPHItmp
+            curlbZ=curlbZtmp
         if 'flagRE' in outputs_list:
             flagRE=flagREtmp
-        
         if orbit_model=='FO':
             bX=bXtmp
             bY=bYtmp
@@ -275,6 +285,10 @@ for kk in range(0,dir_num):
             eta=np.concatenate((eta,etatmp),axis=0)
             flagCon=np.concatenate((flagCon,flagContmp),axis=0)
             flagCol=np.concatenate((flagCol,flagColtmp),axis=0)
+            if 'curlb' in outputs_list:
+                curlbR=np.concatenate((curlbR,curlbRtmp),axis=0)
+                curlbPHI=np.concatenate((curlbPHI,curlbPHItmp),axis=0)
+                curlbZ=np.concatenate((curlbZ,curlbZtmp),axis=0)
             if 'flagRE' in outputs_list:
                 flagRE=np.concatenate((flagRE,flagREtmp),axis=0)
                 
@@ -887,7 +901,7 @@ vx, vy, vz = velocity_magnetic_to_collapsed_cartesian(
         phi_wrapped_flat
     )
 
-sav=1
+sav=0
 if sav==1:
        
     filename='IWL_impacts_TEST21.h5'
@@ -957,7 +971,6 @@ if DiMESdepo==1:
 sav=0
 if sav==1:
     
-    
     filename='DiMES_impacts_'+run_directory[0]+'.h5'
 
     NRE_DiMES=int(np.sum(DiMESconflag[-1,:]))
@@ -978,6 +991,30 @@ if sav==1:
         dset=f.create_dataset('VZ',(NRE_DiMES,),dtype='f')
         dset[:]=vz[-1,DiMESconflag[-1,:]>0]
 
+#%% Save parallel current projection variables
+
+sav=1
+if sav==1:
+    
+    filename='Jpll_projection_vars.h5'
+
+    NRE_DiMES=int(np.sum(DiMESconflag[-1,:]))
+
+    with h5py.File(filename, "w") as f:
+        dset=f.create_dataset('NRE',(1,),dtype='i')
+        dset[0]=NRE_DiMES
+        dset=f.create_dataset('X',(NRE_DiMES,),dtype='f')
+        dset[:]=xx[-1,DiMESconflag[-1,:]>0]
+        dset=f.create_dataset('Y',(NRE_DiMES,),dtype='f')
+        dset[:]=yy[-1,DiMESconflag[-1,:]>0]
+        dset=f.create_dataset('Z',(NRE_DiMES,),dtype='f')
+        dset[:]=zz[-1,DiMESconflag[-1,:]>0]
+        dset=f.create_dataset('VX',(NRE_DiMES,),dtype='f')
+        dset[:]=vx[-1,DiMESconflag[-1,:]>0]
+        dset=f.create_dataset('VY',(NRE_DiMES,),dtype='f')
+        dset[:]=vy[-1,DiMESconflag[-1,:]>0]
+        dset=f.create_dataset('VZ',(NRE_DiMES,),dtype='f')
+        dset[:]=vz[-1,DiMESconflag[-1,:]>0]
 
 #%% Plotting
 
@@ -1021,7 +1058,7 @@ plot_fieldm=0
 plot_deconloc=0
 plot_deconloc1=0
 plot_deconloc2=0
-plot_deconloc3=1
+plot_deconloc3=0
 plot_deconhistphi=0
 plot_deconsurf=0
 plot_deconhist=0
@@ -1030,15 +1067,16 @@ tmpplot=0
 plot_psi=0
 plot_histRZ_m3dc1=0
 plotallangle_fourplot = 0
-plot_histtmp = 1
-plot_evo0D = 0
+plot_histtmp = 0
+plot_evo0D = 1
 
 timeind_p=0
 timeind_g=0
 
 tloss=time[12]
+t0=1.594691872596741e+00
 
-need_exp_data=2
+need_exp_data=0
 if need_exp_data==1:
     filename_ip = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21/ip177031.txt'
 
@@ -1084,7 +1122,7 @@ if need_exp_data==2:
             Ip_time = target_node['0'][::downsample_stride] / 1e3  
             Ip = target_node['1'][::downsample_stride]
 if need_exp_data!=0:
-    t0=1.594691872596741e+00               # Time base offset scalar
+                   # Time base offset scalar
 
     # Replicating MATLAB's find(timeoffset):tmpfld= bR_inc_2d.copy()
     # We find where target_value > 0. The first match minus 1 maps to index(1) - 1.
@@ -1107,14 +1145,15 @@ if plot_evo0D==1:
     tmpfld1=Ipri.copy()
     tmpfld2=Isec.copy()
     
-    Irat=Ip[tindex]/-tmpfld[1]
+    #Irat=Ip[tindex]/-tmpfld[1]
+    Irat=1
     
     fig,ax=plt.subplots()
     
     ax.plot(t0+time[1:]-time[1],-Irat*tmpfld[1:],'-o', label=r'All RE')
     ax.plot(t0+time[1:]-time[1],-Irat*tmpfld1[1:],'-o', label=r'Primary RE')
     ax.plot(t0+time[1:]-time[1],-Irat*tmpfld2[1:],'-o', label=r'Secondary RE')
-    ax.plot(Ip_time[tindex:],Ip[tindex:], label=r'DIIID 177031')
+    #ax.plot(Ip_time[tindex:],Ip[tindex:], label=r'DIIID 177031')
     
     ax.legend(loc='center left', frameon=False, fontsize=12)
     ax.set_xlim([t0,t0+0.010])
