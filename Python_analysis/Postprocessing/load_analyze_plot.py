@@ -889,6 +889,9 @@ bR_inc_2d =  np.repeat(bR_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
 bPHI_inc_2d  = np.repeat(bPHI_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
 bZ_inc_2d  = np.repeat(bZ_inc_1d[:, np.newaxis], nsam_chi, axis=1).ravel()
 
+secondary_mask_2d  = np.repeat(secondary_mask[:, np.newaxis], nsam_chi, axis=1).ravel()
+primary_mask_2d  = np.repeat(primary_mask[:, np.newaxis], nsam_chi, axis=1).ravel()
+
 xint, yint, zint = cylindrical_to_cartesian(Rint_inc_2d,PHIint_inc_2d,Zint_inc_2d)
 xint_1d, yint_1d, zint_1d = cylindrical_to_cartesian(Rint_inc_1d,PHIint_inc_1d,Zint_inc_1d)
 
@@ -995,7 +998,7 @@ if sav==1:
 
 #%% Save parallel current projection variables
 
-sav=1
+sav=0
 if sav==1:
     
     filename='Jpll_projection_vars.h5'
@@ -1083,8 +1086,8 @@ plot_psi=0
 plot_histRZ_m3dc1=0
 plotallangle_fourplot = 0
 plot_histtmp = 0
-plot_evoI = 0
-plot_evoRE = 1
+plot_evoI = 1
+plot_evoRE = 0
 
 timeind_p=0
 timeind_g=0
@@ -1092,7 +1095,7 @@ timeind_g=0
 tloss=time[12]
 t0=1.594691872596741e+00
 
-need_exp_data=0
+need_exp_data=2
 if need_exp_data==1:
     filename_ip = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21/ip177031.txt'
 
@@ -1184,15 +1187,16 @@ if plot_evoI==1:
     tmpfld1=Ipri.copy()
     tmpfld2=Isec.copy()
     
-    #Irat=Ip[tindex]/-tmpfld[1]
-    Irat=1
+    offset=2    
+    Irat=Ip[tindex]/-tmpfld[offset]
+    #Irat=1
     
     fig,ax=plt.subplots()
     
-    ax.plot(t0+time[1:]-time[1],-Irat*tmpfld[1:],'-o', label=r'All RE')
-    ax.plot(t0+time[1:]-time[1],-Irat*tmpfld1[1:],'-o', label=r'Primary RE')
-    ax.plot(t0+time[1:]-time[1],-Irat*tmpfld2[1:],'-o', label=r'Secondary RE')
-    #ax.plot(Ip_time[tindex:],Ip[tindex:], label=r'DIIID 177031')
+    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld[offset:],'-o', label=r'All RE')
+    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld1[offset:],'-o', label=r'Primary RE')
+    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld2[offset:],'-o', label=r'Secondary RE')
+    ax.plot(Ip_time[tindex:],Ip[tindex:], label=r'DIIID 177031')
     
     ax.legend(loc='center left', frameon=False, fontsize=12)
     ax.set_xlim([t0,t0+0.010])
@@ -1217,17 +1221,24 @@ if plot_histtmp==1:
     #tmpfld=xint.copy()
     #tmpfld= chi_inc_2d.copy()
     #tmpfld=GR[indt_idx,jj_idx]
-    tmpfld=zint
+    #tmpfld=zint
+    tmpfld= np.arcsin(-np.cos(np.arcsin(inc_inc_2d)) * 
+        np.sin(np.radians(eta_inc_2d)) * np.sin(chi_inc_2d) +
+        inc_inc_2d * np.abs(np.cos(np.radians(eta_inc_2d))))
     
-    mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
-    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)])
+    
+    mintmp=np.min(tmpfld[(~np.isnan(tmpfld))])
+    maxtmp=np.max(tmpfld[(~np.isnan(tmpfld))])
     
     #mintmp=np.min(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
     #maxtmp=np.max(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)])
     
-    incbins=np.linspace(mintmp,maxtmp,14)
+    incbins=np.linspace(mintmp,maxtmp,25)
     
-    H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],bins=incbins)\
+    #H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_2d,tloss)],bins=incbins)
+    H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld))],bins=incbins)
     #H, xedges= np.histogram(tmpfld[(~np.isnan(tmpfld)) & np.isclose(time_inc_1d,tloss)],bins=incbins)
     
     fig,ax=plt.subplots()
@@ -1338,7 +1349,7 @@ if plot_deconloc2==1:
 
 if plotallangle_fourplot == 1:
     
-    calchistall = 0
+    calchistall = 1
     maxZ = 1.0             # Set to your actual geometric Z-ceiling
     minZ = -1.0            # Set to your actual geometric Z-floor
     max_inc = 1e0          # Limit threshold boundary
