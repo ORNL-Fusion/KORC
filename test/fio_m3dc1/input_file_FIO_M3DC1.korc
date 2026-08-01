@@ -1,0 +1,137 @@
+&input_parameters
+  restart = F
+    ! Restart simulation that exited before simulation_time reached
+  proceed = F
+    ! Append simulation results after previous simulation_time reached
+  reinit = F
+    ! Begin a new simulation, reinitializing from restart file state
+  simulation_time = 2.E-8
+    ! Total aimed simulation time in seconds   
+    ! Run 10 mu s If transients exist put 5 extra mu s.
+  snapshot_frequency = 1.E-8
+    ! Time between snapshots in seconds, not used in FIO
+  dt = 1.E-2
+    ! Time step as fraction of relativistic gyro-period
+  num_species = 1
+  minimum_particle_energy = 1.0E1 
+    ! Minimum energy of simulated particles in eV
+  radiation = T
+  GC_rad_SDE = F
+  collisions = F
+  collisions_model = 'SINGLE_SPECIES' 
+    ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
+  bound_electron_model = 'NO_BOUND' 
+    ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
+  field_model = 'M3D_C1'
+  profile_model = 'M3D_C1'	
+    ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
+    ! For 'ANALYTICAL', the magnetic field is calculated based on
+    ! the parameters given in the "analytic_mag_field_params" section.
+    ! For 'EXTERNAL', the magnetic field is loaded from the file
+    ! specified in "filename".
+    ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
+    ! velocity.
+  magnetic_field_filename = 'C1.h5'
+  time_slice=1
+  rmax =  2.50
+  rmin =  1.0
+  zmax =  1.38
+  zmin = -1.642
+  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,PSIp}' 
+    ! List of outputs
+    !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,curlb,ne,Te,Zeff,PSIp}'
+  HDF5_error_handling = T
+  FO_GC_compare = F
+  orbit_model = 'FO'
+    ! 'FO' for full orbit, 'GCpre' for guiding center with pre-computed
+    ! auxiliary fields, 'GCgrad' for guiding center with auxiliary
+    ! fields computed with PSPLINE.
+  field_eval = 'interp'
+    ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
+    ! where 'eqn' evaluates particle fields at particle positions and
+    ! 'interp' interpolates precomputed fields.
+  SameRandSeed = T
+  pchunk = 1
+/
+
+&plasma_species
+  runaway = F
+  ppp = 1000
+    ! Number of particles per process (mpi)
+  q = -1.0
+    ! Electric charge
+  m = 1.0
+    ! In units of electron mass
+  spatial_distribution = 'FIO_therm'
+    ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
+    ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
+    ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
+    ! 'AVALANCHE-4D','TRACER','SPONG-3D','HOLLMANN-3D'
+  Ro = 1.7
+  PHIo = 0.0
+    ! In degrees
+  Zo = 0.0
+  sigmaR = 1.e10
+  sigmaZ = 1.e10
+  theta_gauss = 0.0
+  psi_max=0.438
+    ! goes as R^2 for HOLLMANN-3D, is psiN_max for HOLLMANN-3D-PSI
+  energy_distribution = 'FIO_therm'
+    ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
+    ! 'EXPERIMENTAL', and 'UNIFORM'
+  pitch_distribution = 'FIO_therm'
+    ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
+  Eno = 10.0E6
+    ! Initial energy in eV
+  etao = 10.0
+    ! Initial pitch angle
+  Xtrace = 1.6,0.0,0.0
+    ! Initial position of tracer particle for debugging with
+    ! spatial_distribution='TRACER'
+  dth = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dgam = 2.e-2
+    ! Variance of sampling normal variate for pitch angle
+  dR = 0.01
+    ! Variance of sampling normal variate for R location
+  dZ = 0.01
+    ! Variance of sampling normal variate for Z location
+/
+
+&externalPlasmaModel  
+  ind0_2x1t = 0
+  ReInterp_2x1t = F
+  PSIp_lim= 0.0989886
+  PSIp_0 = 0.420856,
+  psip_conv=-1 !RMP regtest has opposite sign of current than what was assumed in fio routines
+/
+
+&CollisionParamsSingleSpecies
+  Te_sing = 1.e3 
+    ! Background electron temperature in eV
+  Ti_sing = 1.e3 
+    ! Background ion temperature in eV
+  ne_sing = 1.E20 
+    ! Background electron density in m^-3
+  Zeff_sing = 1. 
+    ! Effective atomic number
+  dTau_sing = 1.E-2
+    ! Subcycling time step in collisional time units (Tau)
+  p_therm = 1e-1 !6.245369554298899e-03
+/
+
+&CollisionParamsMultipleSpecies
+  num_impurity_species = 0
+  Te_mult = 1.e3 
+    ! Background electron temperature in eV
+  ne_mult = 1.E120 
+    ! Background electron density in 1/m^3
+  Zo_mult = 10.0 
+    ! Full nuclear charge of each impurity: Z=1 for D, Z=10 for Ne, Z=18 for Ar
+  Zj_mult = 0.0,  
+    ! Average charge state of each impurity
+  nz_mult = 1.E19 
+    ! Impurity densities
+  IZj_mult = 15.7596
+    ! Ionization energy of impurity in eV
+/

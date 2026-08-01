@@ -297,7 +297,7 @@ end if
 call initialize_korc_parameters_ACC(params,params_ACC)
  !! copy required params into params_ACC
 
-  !write(6,*) 'V',spp(1)%vars%V
+  
 
 !  write(output_unit_write,'("post ic eta: ",E17.10)') spp(1)%vars%eta
 
@@ -315,6 +315,9 @@ call initialize_korc_parameters_ACC(params,params_ACC)
   ! * * * INITIALIZATION STAGE * * *
 
 
+!write(6,*) 'X',spp(1)%vars%X
+!write(6,*) 'V',spp(1)%vars%V
+
 if (params%mpi_params%rank .EQ. 0) then
   flush(output_unit_write)
 end if
@@ -328,6 +331,10 @@ if (params%orbit_model(1:2).eq.'FO') then
     call FO_init_uni_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(1:3).eq.'ANA') then
     call FO_init_eqn_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(10:16).eq.'MARS_EM') then
+    call FO_init_marsEM_ACC(params,F,spp,.true.,.false.)
+  else if (params%field_model(10:16).eq.'MARS_NL') then
+    call FO_init_marsNL_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(10:13).eq.'MARS') then
     call FO_init_mars_ACC(params,F,spp,.true.,.false.)
   else if (params%field_model(10:14).eq.'AORSA') then
@@ -353,9 +360,8 @@ else if (params%orbit_model(1:2).eq.'GC') then
 
 end if
 
-
-
-  !write(6,*) 'V',spp(1)%vars%V
+  !write(6,*) 'V',spp(1)%vars%V*params%cpp%velocity
+  !write(6,*) 'X',spp(1)%vars%X*params%cpp%length
   !write(6,*) 'eta',spp(1)%vars%eta
 
 !  write(6,*) '1Y_R',spp(1)%vars%Y(1:4,1)*params%cpp%length
@@ -370,6 +376,9 @@ call save_collision_params(params)
   !! Subroutines [[save_simulation_parameters]] in [[korc_HDF5]] and
   !! [[save_collision_params]] in [[korc_collisions]] call
   !! subroutines to save simulation and collision parameters.
+
+  !write(6,*) params%cpp
+  !write(output_unit_write,*) params%cpp
 
 
 if (.NOT.(params%restart.OR.params%proceed)) then
@@ -417,6 +426,9 @@ end if
             +REAL(it-1_ip+params%t_skip,rp)*params%dt
       params%it = it-1_ip+params%t_skip
 
+      !write(6,*) 'V',spp(1)%vars%V*params%cpp%velocity
+      !write(6,*) 'X',spp(1)%vars%X*params%cpp%length
+
       call save_simulation_outputs(params,spp,F)
       call save_restart_variables(params,spp,F)
 
@@ -457,7 +469,7 @@ end if
      ! Initial half-time particle push
 
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_FOfio_top(params,F,P,spp)
+        call adv_FOfio_top(params,F,P,spp,randoms)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip,rp)*params%dt
@@ -499,7 +511,7 @@ end if
            flush(output_unit_write)
         end if
 
-        call adv_FOfio_top(params,F,P,spp)
+        call adv_FOfio_top(params,F,P,spp,randoms)
 
         params%it = params%it+params%t_skip
         params%time = params%init_time &
@@ -524,7 +536,13 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
   params%field_model(10:13).eq.'MARS') then
   if (.NOT.(params%restart.OR.params%proceed)) then
 #ifdef ACC
-    call FO_init_mars_ACC(params,F,spp,.false.,.true.)
+    if (params%field_model(10:16).eq.'MARS_EM') then
+      call FO_init_marsEM_ACC(params,F,spp,.false.,.true.)
+    else if (params%field_model(10:16).eq.'MARS_NL') then
+      call FO_init_marsNL_ACC(params,F,spp,.false.,.true.)
+    else if (params%field_model(10:13).eq.'MARS') then
+      call FO_init_mars_ACC(params,F,spp,.false.,.true.)
+    endif
 #else
     call FO_init(params,F,spp,.false.,.true.)
 #endif ACC
@@ -533,7 +551,13 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
 
   do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-    call adv_FOinterp_mars_top_ACC(params,F,P,spp)
+    if (params%field_model(10:16).eq.'MARS_EM') then
+      call adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
+    elseif (params%field_model(10:16).eq.'MARS_NL') then
+      call adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
+    elseif (params%field_model(10:13).eq.'MARS') then
+      call adv_FOinterp_mars_top_ACC(params,F,P,spp)
+    endif
 #else
     call adv_FOinterp_mars_top(params,randoms,F,P,spp)
 #endif ACC
@@ -673,7 +697,11 @@ end if
      end if
 
      do it=params%ito,params%t_steps,params%t_skip
+#ifdef ACC 
+        call adv_GCinterp_psiwE_top_ACC(params_ACC,randoms,spp,P,F)
+#else
         call adv_GCinterp_psiwE_top(params,randoms,spp,P,F)
+#endif ACC
 
         if (.not.params%LargeCollisions) then
            params%time = params%init_time &
@@ -685,6 +713,10 @@ end if
                 params%snapshot_frequency
            params%it = it-1_ip+params%t_skip
         endif
+
+        params_ACC%it=params%it
+
+        !write(6,*) 'nRE',spp(1)%pRE
 
         call save_simulation_outputs(params,spp,F)
 
@@ -715,7 +747,7 @@ end if
   if (params%orbit_model(1:2).eq.'GC'.and.params%field_model.eq.'M3D_C1'.and. &
        .not.F%ReInterp_2x1t) then
      do it=params%ito,params%t_steps,params%t_skip
-        call adv_GCinterp_fio_top(params,spp,P,F)
+        call adv_GCinterp_fio_top(params,spp,P,F,randoms)
 
         params%time = params%init_time &
              +REAL(it-1_ip+params%t_skip*params%t_it_SC,rp)*params%dt
@@ -752,7 +784,7 @@ end if
            flush(output_unit_write)
         end if
 
-        call adv_GCinterp_fio_top(params,spp,P,F)
+        call adv_GCinterp_fio_top(params,spp,P,F,randoms)
 
         params%it = params%it+params%t_skip
         params%time = params%init_time &

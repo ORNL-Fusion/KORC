@@ -681,8 +681,12 @@ CONTAINS
        
     !write(6,*) size(params%Zj)
     !write(6,*) size(params%Zj(ubound(params%Zj)))
-    Zo=int(params%Zj(ubound(params%Zj)))
-    Zo1=Zo(1)
+    if (num_imp.gt.0) then
+      Zo=int(params%Zj(ubound(params%Zj)))
+      Zo1=Zo(1)
+    else
+      Zo1=0
+    endif
 
     if (Zo1.eq.18) then
        A=40
@@ -708,7 +712,7 @@ CONTAINS
 
   SUBROUTINE finalize_fio(params, F, P)
     TYPE(KORC_PARAMS), INTENT(IN)           :: params
-    TYPE(FIELDS), INTENT(IN)                :: F
+    TYPE(FIELDS), INTENT(INOUT)                :: F
     TYPE(PROFILES), INTENT(INOUT)              :: P
     INTEGER                                    :: status
     INTEGER                                    :: ii
@@ -733,7 +737,10 @@ CONTAINS
        end do
     end if
 
-    status=fio_close_source(F%isrc)
+    if (F%isrc /= 0) then
+      status=fio_close_source(F%isrc)
+      F%isrc=0
+    endif
     
   end SUBROUTINE FINALIZE_FIO
 
