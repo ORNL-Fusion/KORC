@@ -231,6 +231,11 @@ subroutine normalize_variables(params,spp,F,P)
      F%AB%sigma_mn = F%AB%sigma_mn/params%cpp%length
      F%AB%l_mn = F%AB%l_mn/params%cpp%length
 
+     F%PSIP_min = F%PSIP_min/ &
+             (params%cpp%Bo*params%cpp%length**2)
+      F%PSIp_lim = F%PSIp_lim/ &
+          (params%cpp%Bo*params%cpp%length**2)
+
 
      if (params%field_eval.eq.'interp') then
         if (ALLOCATED(F%B_2D%R)) F%B_2D%R = F%B_2D%R/params%cpp%Bo
@@ -251,12 +256,6 @@ subroutine normalize_variables(params,spp,F,P)
 
         if (ALLOCATED(F%PSIp)) F%PSIp = F%PSIp/ &
              (params%cpp%Bo*params%cpp%length**2)
-        F%PSIP_min = F%PSIP_min/ &
-             (params%cpp%Bo*params%cpp%length**2)
-        if (.not.params%field_model.eq.'M3D_C1') then
-           F%PSIp_lim = F%PSIp_lim/ &
-                (params%cpp%Bo*params%cpp%length**2)
-        end if
 
         F%X%R = F%X%R/params%cpp%length
         ! Nothing to do for the PHI component
@@ -394,6 +393,21 @@ subroutine normalize_variables(params,spp,F,P)
      if (F%B1field) then
 
         if (params%field_model(10:13).eq.'MARS') then
+
+           if (ALLOCATED(F%B1Re_2D%R)) F%B1Re_2D%R = F%B1Re_2D%R/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Re_2D%PHI)) F%B1Re_2D%PHI = F%B1Re_2D%PHI/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Re_2D%Z)) F%B1Re_2D%Z = F%B1Re_2D%Z/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2D%R)) F%B1Im_2D%R = F%B1Im_2D%R/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2D%PHI)) F%B1Im_2D%PHI = F%B1Im_2D%PHI/ &
+                params%cpp%Bo
+           if (ALLOCATED(F%B1Im_2D%Z)) F%B1Im_2D%Z = F%B1Im_2D%Z/ &
+                params%cpp%Bo
+        
+        else if (params%field_model(10:14).eq.'MARS_') then
 
            if (ALLOCATED(F%B1Re_3D%R)) F%B1Re_3D%R = F%B1Re_3D%R/ &
                 params%cpp%Bo

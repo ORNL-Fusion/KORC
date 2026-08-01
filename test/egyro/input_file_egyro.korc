@@ -16,7 +16,7 @@
   minimum_particle_energy = 1.0E5 
     ! Minimum energy of simulated particles in eV
   radiation = F
-  GC_rad_model='SDE'
+  GC_rad_SDE= F
   collisions = F
   LargeCollisions = F	
   collisions_model = 'SINGLE_SPECIES' 
@@ -72,7 +72,7 @@
 /
 
 &analytical_fields_params
-  Eo = 0e0 
+  Eo = 0.e0 
     ! In V/m
   current_direction = 'PARALLEL' 
     ! 'PARALLEL' or 'ANTI-PARALLEL'

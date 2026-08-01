@@ -183,11 +183,13 @@ module korc_input
   REAL(rp) :: sigmamn=1.E-2
   ! half width of Er perturbation
   LOGICAL  :: perturb = .FALSE.
+  LOGICAL  :: turbulence = .FALSE.
   REAL(rp) :: l_mn = 0.005
   REAL(rp) :: sigma_mn = 0.02
   REAL(rp) :: eps_mn = 2.75E-4
   INTEGER :: FlatWall = 0 ! 1:HFS, 2:LFS, 3:Top, 4:Bot 
   REAL(rp) :: RZwall = 1.
+  REAL(rp) :: kappa = 1.
 
   !! -----------------------------------------------
   !! externalPlasmaModel
@@ -215,6 +217,7 @@ module korc_input
   REAL(rp)  :: MARS_AMP_Scale=1.0
   REAL(rp)  :: MARS_phase=0.0
   REAL(rp)  :: MARS_max=1.0
+  REAL(rp)  :: MARS_quas_fac=1.0
   REAL(rp)  :: AORSA_AMP_Scale=1.0
   REAL(rp)  :: AORSA_freq=0.0
   REAL(rp)  :: psir=0.0
@@ -314,7 +317,8 @@ module korc_input
     ! Impurity densities
   REAL(rp), DIMENSION(19)  :: IZj_mult = 15.7596
     ! Ionization energy of impurity in eV
-  CHARACTER(20) :: neut_prof = 'UNIFORM'
+  INTEGER :: neut_prof = 0
+    ! 0 for uniform, 1 for same as ne, 2 for hollow, 3 for edge
   REAL(rp)  :: neut_edge_fac
   LOGICAL :: lowKE_REs = .FALSE.
   REAL(rp)  :: lowKE_LAC_not_ionized = 0.0
@@ -465,13 +469,13 @@ CONTAINS
     NAMELIST /analytical_fields_params/ Bo,minor_radius,major_radius,&
          qa,qo,Eo,current_direction,nR,nZ,nPHI,dim_1D,dt_E_SC,Ip_exp, &
          E_dyn,E_pulse,E_width,E_profile,Ero,rmn,sigmamn,E_edge, &
-         perturb,l_mn,sigma_mn,eps_mn,FlatWall,RZwall
+         perturb,l_mn,sigma_mn,eps_mn,FlatWall,RZwall,kappa,turbulence
     NAMELIST /externalPlasmaModel/ Efield, Bfield, Bflux,Bflux3D,dBfield, &
          axisymmetric_fields, Eo,E_dyn,E_pulse,E_width,res_double, &
          dim_1D,dt_E_SC,Ip_exp,PSIp_lim,Dim2x1t,t0_2x1t,E_2x1t,ReInterp_2x1t, &
          ind0_2x1t,PSIp_0,B1field,psip_conv,MARS_AMP_Scale,Analytic_D3D_IWL, &
          ntiles,circumradius,AORSA_AMP_Scale,AORSA_freq,AORSA_nmode,AORSA_mmode,width,psir,E1field, &
-         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase,MARS_max
+         useLCFS,useDiMES,DiMESloc,DiMESdims,MARS_phase,MARS_max,MARS_quas_fac
     NAMELIST /plasmaProfiles/ radius_profile,ne_profile,neo,n_ne,a_ne, &
          Te_profile,Teo,n_Te,a_Te,n_REr0,n_tauion,n_lamfront,n_lamback, &
          Zeff_profile,Zeffo,n_Zeff,a_Zeff,filename,axisymmetric, &

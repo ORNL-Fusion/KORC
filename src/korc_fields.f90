@@ -8,6 +8,7 @@ use korc_coords
 use korc_interp
 use korc_HDF5
 use korc_input
+use korc_constants
 
 IMPLICIT NONE
 
@@ -37,7 +38,7 @@ PRIVATE :: get_analytical_fields,&
 
 CONTAINS
 
-subroutine analytical_fields(F,Y,E,B,flag,params)
+subroutine analytical_fields(F,Y,E,B,flag,psip,params)
    !! @note Subroutine that calculates and returns the analytic electric and
    !! magnetic field for each particle in the simulation. @endnote
    !! The analytical magnetic field is given by:
@@ -74,11 +75,12 @@ subroutine analytical_fields(F,Y,E,B,flag,params)
    INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(IN)     :: flag
    !! Flag for each particle to decide whether it is being followed (flag=T)
    !! or not (flag=F).
+   REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)     :: psip
    REAL(rp)                                               :: Ezeta
    !! Toroidal electric field \(E_\zeta\).
    REAL(rp)                                               :: Bzeta
    !! Toroidal magnetic field \(B_\zeta\).
-   REAL(rp)                                               :: Bp,Br
+   REAL(rp)                                               :: Bp,Br,Er
    !! Poloidal magnetic field \(B_\theta(r)\).
    REAL(rp)                                               :: eta
    !! Aspect ratio \(\eta\).
@@ -88,13 +90,27 @@ subroutine analytical_fields(F,Y,E,B,flag,params)
    !! Particle iterator.
    INTEGER(ip)                                            :: ss
    !! Particle species iterator.
-   LOGICAL  :: perturb
+   LOGICAL  :: perturb,turbulence
    REAL(rp)      :: R0,ar,sigma_mn,eps_mn,m,n,Bp_temp,Br_temp,a3,a2,a1,a0
+   REAL(rp) :: A,ballooning,dBr_norm_squared,g_r,mu,sigma
 
-   ss = SIZE(Y,1)
+
+  if (size(Y,1).eq.1) then
+      ss = size(Y,1)
+  else
+      if (Y(2,1).eq.0) then
+        ss=1_idef
+      else
+        ss = size(Y,1)
+      end if
+  endif
+    
+
    perturb=F%AB%perturb
+   turbulence=F%AB%turbulence
    R0=F%AB%Ro
    ar=F%AB%a
+   kappa=F%AB%kappa
    eps_mn = F%AB%eps_mn
    l_mn = F%AB%l_mn
    sigma_mn = F%AB%sigma_mn
@@ -105,41 +121,70 @@ subroutine analytical_fields(F,Y,E,B,flag,params)
    a1 = 3. * params%cpp%length
    a0 = 0.8
 
-   !$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,Ezeta,Bp,Bzeta,eta,q) &
-   !$OMP& SHARED(F,Y,E,B,flag)
+   !!$OMP PARALLEL DO FIRSTPRIVATE(ss) PRIVATE(pp,Ezeta,Bp,Bzeta,eta,q) &
+   !!$OMP& SHARED(F,Y,E,B,flag)
    do pp=1_idef,ss
       if ( flag(pp) .EQ. 1_is ) then
-         eta = Y(pp,1)/F%Ro
-         !q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
-         q = a3*Y(pp,1)**3 + a2*Y(pp,1)**2 + a1*Y(pp,1) + a0
-         !Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
-         Bp=0._rp
-         Br=0._rp
-         Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
+        eta = Y(pp,1)/F%Ro
 
-         Bp_temp = curl_Amn_p(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)),SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
-         Br_temp = curl_Amn_r(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)),SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+        psip(pp)=C_PI*F%AB%Bo*F%AB%a**2*log(1+(Y(pp,1)/F%AB%a)**2* &
+        (F%AB%qa-F%AB%qo)/F%AB%qo)/(F%AB%qa-F%AB%qo)
 
-         if (perturb)   then
+        if (.not.perturb) then
+          q = F%AB%qo*(1.0_rp + (Y(pp,1)/F%AB%lambda)**2)
+        else
+          q = a3*Y(pp,1)**3 + a2*Y(pp,1)**2 + a1*Y(pp,1) + a0
+        endif
+
+        Bp = -eta*F%AB%Bo/(q*(1.0_rp + eta*COS(Y(pp,2))))
+        Br=0._rp
+        Bzeta = F%AB%Bo/( 1.0_rp + eta*COS(Y(pp,2)) )
+
+        if (perturb) then
+          Bp_temp = curl_Amn_p(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)), &
+          SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+          Br_temp = curl_Amn_r(m,n,Y(pp,1),Y(pp,2),Y(pp,3),COS(Y(pp,2)), &
+          SIN(Y(pp,2)),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+
           Bp = Bp + Bp_temp/params%cpp%Bo
           Br = Br + Br_temp/params%cpp%Bo
         end if
 
+        if (turbulence) then
+          A    = 1.620386820342208e-06
+          mu   = 0.32309683251166604
+          sigma= 0.017691893772250868
+          
+          g_r = A * exp(-0.5 * ((Y(pp,1) - mu)/sigma)**2)
+          ballooning = 0.25 * (1.0 + cos(Y(pp,2)))**2
+          dBr_norm_squared=g_r*ballooning
 
-        B(pp,1) =  Bzeta*COS(Y(pp,3)) - Bp*SIN(Y(pp,2))*SIN(Y(pp,3)) + Br*COS(Y(pp,2))*SIN(Y(pp,3))
-        B(pp,2) = -Bzeta*SIN(Y(pp,3)) - Bp*SIN(Y(pp,2))*COS(Y(pp,3)) + Br*COS(Y(pp,2))*COS(Y(pp,3))
-        B(pp,3) = Bp*COS(Y(pp,2)) + Br*SIN(Y(pp,2))
+          Br = Br + sqrt(dBr_norm_squared)
+        end if
 
-         if (abs(F%Eo) > 0) then
-            Ezeta = -F%Eo/( 1.0_rp + eta*COS(Y(pp,2)) )
+        B(pp,1) =  Bzeta*COS(Y(pp,3)) - Bp*SIN(Y(pp,2))*SIN(Y(pp,3))/kappa + Br*COS(Y(pp,2))*SIN(Y(pp,3))
+        B(pp,2) = -Bzeta*SIN(Y(pp,3)) - Bp*SIN(Y(pp,2))*COS(Y(pp,3))/kappa + Br*COS(Y(pp,2))*COS(Y(pp,3))
+        B(pp,3) = Bp*COS(Y(pp,2)) + Br*SIN(Y(pp,2))/kappa
 
-            E(pp,1) = Ezeta*COS(Y(pp,3))
-            E(pp,2) = -Ezeta*SIN(Y(pp,3))
-            E(pp,3) = 0.0_rp
-         end if
+        if (abs(F%Eo) > 0) then
+          Ezeta = -F%Eo/( 1.0_rp + eta*COS(Y(pp,2)) )
+        else
+          Ezeta = 0._rp
+        end if
+
+        IF (F%AB%Ero == 0._rp) THEN
+          Er = 0._rp
+        ELSE
+          Er = F%AB%Ero*(1/cosh((Y(pp,1)-F%AB%rmn)/F%AB%sigmamn))
+        END IF
+
+        E(pp,1) = Ezeta*COS(Y(pp,3))+Er*SIN(Y(pp,3))*COS(Y(pp,2))
+        E(pp,2) = -Ezeta*SIN(Y(pp,3))+Er*COS(Y(pp,3))*COS(Y(pp,2))
+        E(pp,3) = Er*SIN(Y(pp,2))/kappa
+
       end if
    end do
-   !$OMP END PARALLEL DO
+   !!$OMP END PARALLEL DO
 end subroutine analytical_fields
 
 subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
@@ -160,7 +205,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    !! changed YG Radial electric field \(E_\r\).
    REAL(rp),DIMENSION(pchunk)                               :: Bzeta
    !! Toroidal magnetic field \(B_\zeta\).
-   REAL(rp),DIMENSION(pchunk)                              :: Bp,Br
+   REAL(rp),DIMENSION(pchunk)                              :: Bp,Br,BMR,BZ
    !! Poloidal magnetic field \(B_\theta(r)\).
    REAL(rp),DIMENSION(pchunk)                               :: eta
    !! Aspect ratio \(\eta\).
@@ -170,7 +215,8 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    INTEGER                                      :: cc
    !! Particle chunk iterator.
    REAL(rp) :: Er0,rrmn,sigmaamn,Br_temp,Bp_temp,m,n,a3,a2,a1,a0
-   LOGICAL  :: perturb
+   REAL(rp) :: A,mu,sigma,dBr_norm_squared,g_r,ballooning
+   LOGICAL  :: perturb,turbulence
 
    B0=F%Bo
    E0=F%Eo
@@ -181,11 +227,14 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    eps_mn = F%AB%eps_mn
    l_mn = F%AB%l_mn
    sigma_mn = F%AB%sigma_mn
+   kappa=F%AB%kappa
 
    Er0=F%AB%Ero
    rrmn=F%AB%rmn
    sigmaamn=F%AB%sigmamn
    perturb=F%AB%perturb
+   turbulence=F%AB%turbulence
+
    m=2.
    n=1.
    a3 = 100./3. * params%cpp%length**3
@@ -193,7 +242,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    a1 = 3. * params%cpp%length
    a0 = 0.8
 
-   call cart_to_tor_check_if_confined_p(pchunk,ar,R0,X_X,X_Y,X_Z, &
+   call cart_to_tor_check_if_confined_p(pchunk,ar,R0,kappa,X_X,X_Y,X_Z, &
       T_R,T_T,T_Z,flag_cache)
 
    !$OMP SIMD
@@ -206,27 +255,45 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       sZ(cc)=sin(T_Z(cc))
 
       eta(cc) = T_R(cc)/R0
-      !q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
-      q(cc) = a3*T_R(cc)**3 + a2*T_R(cc)**2 + a1*T_R(cc) + a0
+
+      if (perturb) then
+        q(cc) = a3*T_R(cc)**3 + a2*T_R(cc)**2 + a1*T_R(cc) + a0
+      else
+        q(cc) = q0*(1.0_rp + (T_R(cc)*T_R(cc)/(lam*lam)))
+      endif
       !Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
       !changed kappa  YG
+
+      Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
+      Br(cc) = 0._rp
       Bzeta(cc) = B0/( 1.0_rp + eta(cc)*cT(cc))
 
-      Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
-      Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0,eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
 
       if (perturb)   then
-        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc))) + Bp_temp/params%cpp%Bo
-        Br(cc) = Br_temp/params%cpp%Bo
+        Br_temp = curl_Amn_r(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0, &
+        eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
+        Bp_temp = curl_Amn_p(m,n,T_R(cc),T_T(cc),T_Z(cc),cT(cc),sT(cc),R0, &
+        eps_mn,l_mn,ar,sigma_mn,params%cpp%length)
 
-      else
-        Bp(cc) = -eta(cc)*B0/(q(cc)*(1.0_rp + eta(cc)*cT(cc)))
-        Br(cc) = 0._rp
+        Bp(cc) = Bp(cc) + Bp_temp/params%cpp%Bo
+        Br(cc) = Br(cc) + Br_temp/params%cpp%Bo
       end if
 
-      B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc) + Br(cc)*cT(cc)*sZ(cc)
-      B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc) + Br(cc)*cT(cc)*cZ(cc)
-      B_Z(cc) = Bp(cc)*cT(cc) + Br(cc)*sT(cc)
+      if (turbulence) then
+        A    = 1.620386820342208e-06
+        mu   = 0.32309683251166604
+        sigma= 0.017691893772250868
+        
+        g_r = A * exp(-0.5 * ((T_R(cc) - mu)/sigma)**2)
+        ballooning = 0.25 * (1.0 + cos(T_T(cc)))**2
+        dBr_norm_squared=g_r*ballooning
+
+        Br(cc) = Br(cc) + sqrt(dBr_norm_squared)
+      end if
+
+      B_X(cc) = Bzeta(cc)*cZ(cc) - Bp(cc)*sT(cc)*sZ(cc)/kappa + Br(cc)*cT(cc)*sZ(cc)
+      B_Y(cc) = -Bzeta(cc)*sZ(cc) - Bp(cc)*sT(cc)*cZ(cc)/kappa + Br(cc)*cT(cc)*cZ(cc)
+      B_Z(cc) = Bp(cc)*cT(cc) + Br(cc)*sT(cc)/kappa
 
       !write(6,*) 'Ero ',Ero,'Er0 ',Er0
       !write(6,*) 'rmn ',rmn,'rrmn ',rrmn
@@ -243,7 +310,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       
       E_X(cc) = Ezeta(cc)*cZ(cc)+Er(cc)*cT(cc)*sZ(cc)
       E_Y(cc) = -Ezeta(cc)*sZ(cc)+Er(cc)*cT(cc)*cZ(cc)
-      E_Z(cc) = Er(cc)*sT(cc)
+      E_Z(cc) = Er(cc)*sT(cc)/kappa
 
       !write(6,*) 'Er ',Er(cc)
    end do
@@ -252,10 +319,11 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
 end subroutine analytical_fields_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
-  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb)
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,kappa, &
+  eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
   !$acc routine seq
-  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B
-  LOGICAL,INTENT(IN) :: perturb
+  REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,kappa
+  LOGICAL,INTENT(IN) :: perturb,turbulence
   REAL(rp),  INTENT(OUT)     :: B_X,B_Y,B_Z
   REAL(rp),  INTENT(OUT)    :: E_X,E_Y,E_Z
   INTEGER(is),  INTENT(IN)     :: flag_cache
@@ -289,20 +357,23 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   sZ=sin(T_Z)
 
   eta = T_R/R0
-  !q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
-  q = a3*T_R**3 + a2*T_R**2 + a1*T_R + a0
-  !Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+  
+  if (perturb) then
+    q = a3*T_R**3 + a2*T_R**2 + a1*T_R + a0
+  else
+    q = q0*(1.0_rp + (T_R*T_R/(lam*lam)))
+  endif
+
+  Bp = -eta*B0/(q*(1.0_rp + eta*cT))
+  Br = 0._rp
   Bzeta = B0/( 1.0_rp + eta*cT)
 
-  Br_temp = curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
-  Bp_temp = curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
-
   if (perturb)   then
-    Bp = -eta*B0/(q*(1.0_rp + eta*cT)) + Bp_temp/cpp_B
-    Br = Br_temp/cpp_B
-  else
-    Bp = -eta*B0/(q*(1.0_rp + eta*cT))
-    Br = 0._rp
+    Br_temp = curl_Amn_r(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
+    Bp_temp = curl_Amn_p(m,n,T_R,T_T,T_Z,cT,sT,R0,eps_mn,l_mn,ar,sigma_mn,cpp_len)
+
+    Bp = Bp + Bp_temp/cpp_B
+    Br = Br + Br_temp/cpp_B
   end if
 
   B_X = Bzeta*cZ - Bp*sT*sZ + Br*cT*sZ
@@ -1112,9 +1183,13 @@ subroutine get_analytical_fields(params,vars,F)
 
    if (params%orbit_model(1:2).eq.'FO') then
 
-      call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
+      if (.not.params%GC_coords) then
+        call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
+      else
+        call cyl_to_tor_check_if_confined(F,vars%Y,vars%flagCon)
+      endif
 
-      call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon,params)
+      call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon, vars%PSI_P, params)
 
       !       call cart_to_cyl(vars%X,vars%Y)
 
@@ -1206,7 +1281,7 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
 
    !write(output_unit_write,*) 'in unitVector'
 
-   ppp = SIZE(Xo,1) ! Number of particles
+   ppp = SIZE(b1,1) ! Number of particles
 
    ALLOCATE( vars%X(ppp,3) )
    ALLOCATE( vars%Y(ppp,3) )
@@ -1222,7 +1297,7 @@ subroutine unitVectors(params,Xo,F,b1,b2,b3,flag,cart,hint,Bo)
    ALLOCATE( vars%hint(ppp) )
 #endif
 
-   vars%X = Xo
+   vars%X = Xo(1:ppp,:)
 #ifdef FIO
    vars%hint = hint
 #endif
@@ -1471,6 +1546,8 @@ subroutine initialize_fields(params,F)
       F%AB%eps_mn = eps_mn
       F%AB%l_mn = l_mn
       F%AB%sigma_mn = sigma_mn
+      F%AB%kappa = kappa
+      F%AB%turbulence = turbulence
 
       F%res_double=res_double
 
@@ -1490,6 +1567,7 @@ subroutine initialize_fields(params,F)
       F%MARS_AMP_Scale = MARS_AMP_Scale
       F%MARS_phase = MARS_phase
       F%MARS_max = MARS_max
+      F%MARS_quas_fac = MARS_quas_fac
       F%Analytic_D3D_IWL=Analytic_D3D_IWL
       F%ntiles=ntiles
       F%circumradius=circumradius
@@ -1534,6 +1612,9 @@ subroutine initialize_fields(params,F)
          write(output_unit_write,'("Electric field: ",E17.10)') F%Eo
 
       end if
+
+      F%PSIP_min = 0._rp
+      F%PSIp_lim = C_PI*Bo*minor_radius**2*log(1+(qa-qo)/qo)/(qa-qo) 
 
 
       if (params%field_eval.eq.'interp') then
@@ -1745,10 +1826,10 @@ subroutine initialize_fields(params,F)
       else if ((params%field_model(10:13).eq.'MARS').OR. &
          (params%field_model(10:14).eq.'AORSA')) then
 
-         call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
-            F%Bflux,F%Efield,F%B1field,F%E1field)
+        call ALLOCATE_2D_FIELDS_ARRAYS(params,F,F%Bfield, &
+          F%Bflux,F%Efield,F%B1field,F%E1field)
 
-          call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
+        call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
 
       else
          call ALLOCATE_3D_FIELDS_ARRAYS(params,F,F%Bfield,F%Efield,F%B1field)
@@ -1906,6 +1987,7 @@ end subroutine initialize_fields
     INTEGER(HSIZE_T), DIMENSION(:), ALLOCATABLE    :: dims
     INTEGER                                        :: h5error
     REAL(rp)                                       :: rdatum
+    LOGICAL :: link_exists
 
     filename = TRIM(params%magnetic_field_filename)
     call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
@@ -1938,9 +2020,15 @@ end subroutine initialize_fields
 
        if(F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
 
-          dset = "/NPHI"
-          call load_from_hdf5(h5file_id,dset,rdatum)
-          F%dims(2) = INT(rdatum)
+        dset = '/NPHI'
+        gname = 'NPHI'
+
+         call h5lexists_f(h5file_id,TRIM(gname),link_exists,h5error)
+
+          if (link_exists) then
+            call load_from_hdf5(h5file_id,dset,rdatum)
+            F%dims(2) = INT(rdatum)
+          endif
 
        end if
 
@@ -2059,7 +2147,7 @@ end subroutine initialize_fields
 
 
       if (((.NOT.F%Bflux).AND.(.NOT.F%axisymmetric_fields)).OR. &
-            F%Dim2x1t.OR.(params%field_model(10:13).eq.'MARS')) then
+            F%Dim2x1t.OR.((params%field_model(10:13).eq.'MARS').AND.(F%dims(2).gt.0))) then
          dset = "/PHI"
          call load_array_from_hdf5(h5file_id,dset,F%X%PHI)
       end if
@@ -2099,13 +2187,19 @@ end subroutine initialize_fields
          dset = '/PSIPlim'
          call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
 
+        if (.not.ALLOCATED(F%AMP)) then
+          ALLOCATE(F%AMP(1))
+        end if
+
          dset = '/AMP'
          call load_array_from_hdf5(h5file_id,dset,F%AMP)
 
          F%AMP=F%AMP*F%MARS_AMP_Scale
 
-         dset = '/GR'
-         call load_array_from_hdf5(h5file_id,dset,F%GR)
+        if (F%dims(2).gt.0) then
+          dset = '/GR'
+          call load_array_from_hdf5(h5file_id,dset,F%GR)
+        endif
 
       end if
 
@@ -2116,6 +2210,10 @@ end subroutine initialize_fields
 
          dset = '/PSIPlim'
          call load_from_hdf5(h5file_id,dset,F%PSIp_lim)
+
+        if (.not.ALLOCATED(F%AMP)) then
+              ALLOCATE(F%AMP(1))
+        end if
 
          F%AMP=F%AORSA_AMP_Scale
 
@@ -2191,6 +2289,8 @@ end subroutine initialize_fields
 
          if (params%field_model(10:13).eq.'MARS') then
 
+          if (F%dims(2).gt.0) then
+
             dset = "/ReBR"
             call load_array_from_hdf5(h5file_id,dset,F%B1Re_3D%R)
 
@@ -2208,6 +2308,26 @@ end subroutine initialize_fields
 
             dset = "/ImBZ"
             call load_array_from_hdf5(h5file_id,dset,F%B1Im_3D%Z)
+
+          else
+            dset = "/ReBR"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%R)
+
+            dset = "/ReBPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%PHI)
+
+            dset = "/ReBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Re_2D%Z)
+
+            dset = "/ImBR"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%R)
+
+            dset = "/ImBPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%PHI)
+
+            dset = "/ImBZ"
+            call load_array_from_hdf5(h5file_id,dset,F%B1Im_2D%Z)
+          endif
 
          else if (params%field_model(10:14).eq.'AORSA') then
 
@@ -2235,23 +2355,51 @@ end subroutine initialize_fields
 
       if (F%E1field) then
 
-         dset = "/ReEX"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
+        if (params%field_model(10:13).eq.'MARS') then
 
-         dset = "/ReEY"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Y)
+          if (F%dims(2).gt.0) then
 
-         dset = "/ReEZ"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Z)
+            dset = "/ReER"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%R)
 
-         dset = "/ImEX"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%X)
+            dset = "/ReEPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%PHI)
 
-         dset = "/ImEY"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Y)
+            dset = "/ReEZ"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Re_3D%Z)
 
-         dset = "/ImEZ"
-         call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
+            dset = "/ImER"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%R)
+
+            dset = "/ImEPHI"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%PHI)
+
+            dset = "/ImEZ"
+            call load_array_from_hdf5(h5file_id,dset,F%E1Im_3D%Z)
+
+          endif
+
+        else if (params%field_model(10:14).eq.'AORSA') then
+
+          dset = "/ReEX"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%X)
+
+          dset = "/ReEY"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Y)
+
+          dset = "/ReEZ"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Re_2DX%Z)
+
+          dset = "/ImEX"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%X)
+
+          dset = "/ImEY"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Y)
+
+          dset = "/ImEZ"
+          call load_array_from_hdf5(h5file_id,dset,F%E1Im_2DX%Z)
+
+        endif
 
       end if
 
@@ -2344,6 +2492,14 @@ end subroutine initialize_fields
        F%PSIp=0._rp
     end if
 
+    if (params%field_model(10:13).eq.'MARS') then
+
+       if (B1field.and.(.not.ALLOCATED(F%B1Re_2D%R))) then
+          call ALLOCATE_V_FIELD_2D(F%B1Re_2D,F%dims)
+          call ALLOCATE_V_FIELD_2D(F%B1Im_2D,F%dims)
+       end if
+
+    endif
 
 
     if (params%field_model(10:14).eq.'AORSA') then
@@ -2401,14 +2557,18 @@ end subroutine initialize_fields
        ALLOCATE(F%PSIp3D(F%dims(1),F%dims(2),F%dims(3)))
     end if
 
-    if (params%field_model(10:13).eq.'MARS') then
+    if (params%field_model(10:14).eq.'MARS_') then
 
       if (B1field.and.(.not.ALLOCATED(F%B1Re_3D%R))) then
-         call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)
-         call ALLOCATE_V_FIELD_3D(F%B1Im_3D,F%dims)
+        call ALLOCATE_V_FIELD_3D(F%B1Re_3D,F%dims)
+        call ALLOCATE_V_FIELD_3D(F%B1Im_3D,F%dims)
 
-         ALLOCATE(F%AMP(F%dims(2)))
-         ALLOCATE(F%GR(F%dims(2)))
+        call ALLOCATE_V_FIELD_3D(F%E1Re_3D,F%dims)
+        call ALLOCATE_V_FIELD_3D(F%E1Im_3D,F%dims)
+
+        ALLOCATE(F%AMP(F%dims(2)))
+        ALLOCATE(F%GR(F%dims(2)))
+        ALLOCATE(F%FR(F%dims(2)))
       end if
     endif
 
@@ -2464,6 +2624,15 @@ end subroutine initialize_fields
     ALLOCATE(F%PHI(dims(1),dims(2),dims(3)))
     ALLOCATE(F%Z(dims(1),dims(2),dims(3)))
   end subroutine ALLOCATE_V_FIELD_3D
+
+  subroutine ALLOCATE_V_FIELD_3DX(F,dims)
+    TYPE(V_FIELD_3D), INTENT(INOUT)    :: F
+    INTEGER, DIMENSION(3), INTENT(IN)  :: dims
+
+    ALLOCATE(F%X(dims(1),dims(2),dims(3)))
+    ALLOCATE(F%Y(dims(1),dims(2),dims(3)))
+    ALLOCATE(F%Z(dims(1),dims(2),dims(3)))
+  end subroutine ALLOCATE_V_FIELD_3DX
 
   !> @brief Subroutine that deallocates all the variables of the electric and magnetic fields.
   !!

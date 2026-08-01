@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -ex
+
+#define input file
+INPUT_FILE="${CMAKE_SOURCE_DIR}/test/elong_trans/input_file_elong_trans.korc"
+#define output directory
+OUT_DIR="elong_trans_test/rank_$1"
+
+#check that output directory doesn't exist so bash doesn't complain
+if [ ! -d $OUT_DIR ]; then
+  mkdir -p $OUT_DIR
+fi
+
+${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
+
+for i in $(seq 0 $(($1-1)));
+do
+  h5diff -r -p 0.000008 $OUT_DIR/file_$i.h5 ${CMAKE_SOURCE_DIR}/test/elong_trans/rank_$1/file_$i.h5
+done
+
