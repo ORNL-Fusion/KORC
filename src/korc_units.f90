@@ -154,6 +154,8 @@ subroutine normalize_variables(params,spp,F,P)
   !F%width=F%width/(params%cpp%length) 
   F%AB%rmn=F%AB%rmn/(params%cpp%Bo*params%cpp%length**2)
   F%AB%sigmamn=F%AB%sigmamn/params%cpp%length
+  F%AB%mu_turb=F%AB%mu_turb/params%cpp%length
+  F%AB%sigma_turb=F%AB%sigma_turb/params%cpp%length
   F%Ro = F%Ro/params%cpp%length
   F%Zo = F%Zo/params%cpp%length
   F%E_dyn = F%E_dyn/params%cpp%Eo

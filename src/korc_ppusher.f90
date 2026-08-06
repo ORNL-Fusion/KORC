@@ -689,6 +689,7 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
   REAL(rp) :: m_cache,q_cache,B0,R0,E0,lam,q0,ar,cpp_B,cpp_len,kappa
   INTEGER(is) :: flagCon,flagCol
   LOGICAL :: perturb,turbulence
+  REAL(rp) :: A_turb,mu_turb,sigma_turb
 
   !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
   !$acc routine (analytical_fields_p_ACC) seq
@@ -711,6 +712,9 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
     sigma_mn = F%AB%sigma_mn
     perturb=F%AB%perturb
     turbulence=F%AB%turbulence
+    A_turb=F%AB%A_turb
+    mu_turb=F%AB%mu_turb
+    sigma_turb=F%AB%sigma_turb
     cpp_len=params%cpp%length
     cpp_B=params%cpp%Bo
 
@@ -750,7 +754,8 @@ subroutine FO_init_eqn_ACC(params,F,spp,output,step)
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
           B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,kappa, &
-          eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
+          eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence, &
+          A_turb,mu_turb,sigma_turb)
 
         spp(ii)%vars%B(pp,1) = B_X
         spp(ii)%vars%B(pp,2) = B_Y
@@ -2187,6 +2192,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
   REAL(rp) :: a,m_cache,q_cache,dt
   REAL(rp) :: R0,B0,E0,lam,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,kappa
   LOGICAL :: perturb,turbulence
+  REAL(rp) :: A_turb,mu_turb,sigma_turb
   INTEGER  :: ii,pp,ss,tt,ppp
 
   !$acc routine (advance_FO_vars_ACC) seq
@@ -2216,6 +2222,9 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
     sigma_mn = F%AB%sigma_mn
     perturb=F%AB%perturb
     turbulence=F%AB%turbulence
+    A_turb=F%AB%A_turb
+    mu_turb=F%AB%mu_turb
+    sigma_turb=F%AB%sigma_turb
     cpp_len=params%cpp%length
     cpp_B=params%cpp%Bo
     kappa=F%AB%kappa
@@ -2255,7 +2264,9 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
           T_R,T_T,T_Z,flagCon)
 
         call analytical_fields_p_ACC(T_R,T_T,T_Z, &
-          B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam,E0,q0,ar,kappa,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
+          B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon,R0,B0,lam, &
+          E0,q0,ar,kappa,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B, &
+          perturb,turbulence,A_turb,mu_turb,sigma_turb)
 
         call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &

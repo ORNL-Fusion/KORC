@@ -92,7 +92,7 @@ subroutine analytical_fields(F,Y,E,B,flag,psip,params)
    !! Particle species iterator.
    LOGICAL  :: perturb,turbulence
    REAL(rp)      :: R0,ar,sigma_mn,eps_mn,m,n,Bp_temp,Br_temp,a3,a2,a1,a0
-   REAL(rp) :: A,ballooning,dBr_norm_squared,g_r,mu,sigma
+   REAL(rp) :: A_turb,ballooning,dBr_norm_squared,g_r,mu_turb,sigma_turb
 
 
   if (size(Y,1).eq.1) then
@@ -108,6 +108,9 @@ subroutine analytical_fields(F,Y,E,B,flag,psip,params)
 
    perturb=F%AB%perturb
    turbulence=F%AB%turbulence
+   A_turb=F%AB%A_turb
+   mu_turb=F%AB%mu_turb
+   sigma_turb=F%AB%sigma_turb
    R0=F%AB%Ro
    ar=F%AB%a
    kappa=F%AB%kappa
@@ -151,11 +154,7 @@ subroutine analytical_fields(F,Y,E,B,flag,psip,params)
         end if
 
         if (turbulence) then
-          A    = 1.620386820342208e-06
-          mu   = 0.32309683251166604
-          sigma= 0.017691893772250868
-          
-          g_r = A * exp(-0.5 * ((Y(pp,1) - mu)/sigma)**2)
+          g_r = A_turb * exp(-0.5 * ((Y(pp,1) - mu_turb)/sigma_turb)**2)
           ballooning = 0.25 * (1.0 + cos(Y(pp,2)))**2
           dBr_norm_squared=g_r*ballooning
 
@@ -215,7 +214,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    INTEGER                                      :: cc
    !! Particle chunk iterator.
    REAL(rp) :: Er0,rrmn,sigmaamn,Br_temp,Bp_temp,m,n,a3,a2,a1,a0
-   REAL(rp) :: A,mu,sigma,dBr_norm_squared,g_r,ballooning
+   REAL(rp) :: A_turb,mu_turb,sigma_turb,dBr_norm_squared,g_r,ballooning
    LOGICAL  :: perturb,turbulence
 
    B0=F%Bo
@@ -234,6 +233,9 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    sigmaamn=F%AB%sigmamn
    perturb=F%AB%perturb
    turbulence=F%AB%turbulence
+   A_turb=F%AB%A_turb
+   mu_turb=F%AB%mu_turb
+   sigma_turb=F%AB%sigma_turb
 
    m=2.
    n=1.
@@ -280,11 +282,7 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       end if
 
       if (turbulence) then
-        A    = 1.620386820342208e-06
-        mu   = 0.32309683251166604
-        sigma= 0.017691893772250868
-        
-        g_r = A * exp(-0.5 * ((T_R(cc) - mu)/sigma)**2)
+        g_r = A_turb * exp(-0.5 * ((T_R(cc) - mu_turb)/sigma_turb)**2)
         ballooning = 0.25 * (1.0 + cos(T_T(cc)))**2
         dBr_norm_squared=g_r*ballooning
 
@@ -320,7 +318,7 @@ end subroutine analytical_fields_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,kappa, &
-  eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence)
+  eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,perturb,turbulence,A_turb,mu_turb,sigma_turb)
   !$acc routine seq
   REAL(rp),INTENT(IN)      :: R0,B0,lam,q0,E0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,kappa
   LOGICAL,INTENT(IN) :: perturb,turbulence
@@ -340,6 +338,8 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   !! Safety profile \(q(r)\).
   REAL(rp)                             :: cT,sT,cZ,sZ
   REAL(rp) :: m,n,a0,a1,a2,a3,Br_temp,Bp_temp
+  REAL(rp),INTENT(IN) :: A_turb,mu_turb,sigma_turb
+  REAL(rp) :: dBr_norm_squared,g_r,ballooning
 
   !$acc routine (curl_Amn_r) seq
   !$acc routine (curl_Amn_p) seq
@@ -374,6 +374,14 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
 
     Bp = Bp + Bp_temp/cpp_B
     Br = Br + Br_temp/cpp_B
+  end if
+
+  if (turbulence) then
+    g_r = A_turb * exp(-0.5 * ((T_R - mu_turb)/sigma_turb)**2)
+    ballooning = 0.25 * (1.0 + cos(T_T))**2
+    dBr_norm_squared=g_r*ballooning
+
+    Br = Br + sqrt(dBr_norm_squared)
   end if
 
   B_X = Bzeta*cZ - Bp*sT*sZ + Br*cT*sZ
@@ -1548,6 +1556,9 @@ subroutine initialize_fields(params,F)
       F%AB%sigma_mn = sigma_mn
       F%AB%kappa = kappa
       F%AB%turbulence = turbulence
+      F%AB%A_turb = A_turb
+      F%AB%mu_turb = mu_turb
+      F%AB%sigma_turb = sigma_turb
 
       F%res_double=res_double
 
