@@ -477,7 +477,7 @@ subroutine cart_to_tor_check_if_confined_p_ACC(ar,R0,kappa,X_X,X_Y,X_Z, &
   RR=SQRT(X_X*X_X + X_Y*X_Y) - R0
 
   T_R = SQRT( RR*RR + X_Z*X_Z/(kappa*kappa) )
-  T_T = ATAN2(X_Z, RR)
+  T_T = ATAN2(X_Z/kappa, RR)
   T_T = MODULO(T_T,2.0_rp*C_PI)
   T_Z = ATAN2(X_X,X_Y)
   T_Z = MODULO(T_Z,2.0_rp*C_PI)
