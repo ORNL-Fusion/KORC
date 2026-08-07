@@ -12,6 +12,9 @@ if [ ! -d $OUT_DIR ]; then
   mkdir -p $OUT_DIR
 fi
 
+echo "Running in: $(pwd)"
+echo "Input file: $INPUT_FILE"
+
 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
 
 for i in $(seq 0 $(($1-1)));
