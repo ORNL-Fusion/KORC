@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 0.E-8!4.E-8
+  simulation_time = 4.E-9
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 4.E-11 
+  snapshot_frequency = 4.E-10 
     ! Time between snapshots in seconds
   dt = 1.e-2
     ! Time step as fraction of relativistic gyro-period
@@ -49,8 +49,8 @@
 /
 
 &plasma_species
-  ppp = 1000
-  pinit = 1000
+  ppp = 100
+  pinit = 100
   q = -1.0
     ! Electric charge
   m = 1.0
@@ -65,7 +65,7 @@
     ! 'EXPERIMENTAL', and 'UNIFORM'
   pitch_distribution = 'MONOPITCH'
     ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
-  Eno = 1.E7
+  Eno = 1.E6
     ! Lower and upper limit of simulated energy range, in eV.
   etao = 10.0
     ! Lower and upper limit of simulated pitch-angle range, in degrees.
@@ -94,5 +94,8 @@
   qo = 1.01
   qa = 4.78
   perturb = F
-  turbulence = F
+  turbulence = T
+  A_turb    = 1.620386820342208e-06
+  mu_turb   = 0.32309683251166604
+  sigma_turb= 0.017691893772250868
 /

@@ -605,7 +605,7 @@ module korc_types
      !! mode location rmn
      REAL(rp)			:: sigmamn
      !! mode width sigmamn
-     REAL(rp) :: kappa
+     REAL(rp) :: kappa,A_turb,mu_turb,sigma_turb
      !! elongation parameter
   END TYPE A_FIELD
 
