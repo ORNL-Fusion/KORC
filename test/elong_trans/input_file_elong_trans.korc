@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 4.E-7
+  simulation_time = 4.E-9
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 4.E-9 
+  snapshot_frequency = 4.E-10 
     ! Time between snapshots in seconds
   dt = 1.e-2
     ! Time step as fraction of relativistic gyro-period
@@ -49,8 +49,8 @@
 /
 
 &plasma_species
-  ppp = 1000
-  pinit = 1000
+  ppp = 100
+  pinit = 100
   q = -1.0
     ! Electric charge
   m = 1.0
