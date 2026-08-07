@@ -15,7 +15,7 @@
   minimum_particle_energy = 1.0E6 
     ! Minimum energy of simulated particles in eV
   radiation = F
-  GC_rad_model='SDE'
+  GC_rad_SDE= F
   collisions = F
   bound_electron_model = 'HESSLOW' 
     ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
@@ -45,7 +45,8 @@
 
 &plasma_species
   runaway = T
-  ppp = 10000
+  ppp = 100
+  pinit = 100
     ! Number of particles per process (mpi)
   q = -1.0
     ! Electric charge
@@ -66,7 +67,7 @@
   sigmaR = 1.e6
   sigmaZ = 0.2
   theta_gauss = 0.0
-  psi_max=1.
+  psi_max=0.8
     ! goes as R^2 for HOLLMANN-3D, is psiN_max for HOLLMANN-3D-PSI
   energy_distribution = 'MONOENERGETIC'
     ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
@@ -77,10 +78,6 @@
     ! Initial energy in eV
   etao = 170.
     ! Initial pitch angle
-  Eo_lims = 1.0E6,50.0E6
-    ! Lower and upper limit of simulated energy range, in eV.
-  etao_lims = 0.0,20.0
-    ! Lower and upper limit of simulated pitch-angle range, in degrees.
   Xtrace = 1.6,0.0,-0.75
     ! Initial position of tracer particle for debugging with
     ! spatial_distribution='TRACER'
@@ -116,27 +113,4 @@
   MARS_AMP_Scale=1.
   MARS_phase=0.
   MARS_max=100. !ratio of init to max
-/
-
-&plasmaProfiles
-  axisymmetric = T
-  filename = 'DIII_200236_MARS_CaseA.h5' 
-/
-
-&HollmannPDF
-  filename_Hollmann = 'Hollmann_PDF_DIII_200236.h5'
-  rho_ind = 4
-  max_pitch_angle_Hollmann = 90. 
-    ! In degrees
-  min_pitch_angle_Hollmann = 0. 
-    ! In degrees
-  min_energy_Hollmann = 2.E3 
-    ! In eV
-  max_energy_Hollmann = 3.E7
-    ! For Hollmann_PDF_HR.h5, needs to be less than 80 MeV
-    ! In eV
-  current_direction_Hollmann = 'ANTIPARALLEL'
-  Zeff_Hollmann = 1.
-  E_Hollmann = 1.
-
 /

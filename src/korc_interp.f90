@@ -1707,7 +1707,7 @@ subroutine initialize_fields_interpolant(params,F)
 
        if(F%E1field) then
 
-          if (params%field_model(10:13).eq.'MARS_EM') then
+          if (params%field_model(10:16).eq.'MARS_EM') then
 
             write(output_unit_write,*) '2D MARS NL EM electric fields'
             flush(output_unit_write)

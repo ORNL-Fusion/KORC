@@ -2210,6 +2210,9 @@ end subroutine initialize_fields
         if (F%dims(2).gt.0) then
           dset = '/GR'
           call load_array_from_hdf5(h5file_id,dset,F%GR)
+
+          dset = '/FR'
+          call load_array_from_hdf5(h5file_id,dset,F%FR)
         endif
 
       end if
