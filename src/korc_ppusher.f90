@@ -1426,7 +1426,7 @@ subroutine FO_init_marsEM_ACC(params,F,spp,output,step)
 
         call interp_FOfields_marsNL_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
           b1Refield_2d_local_2,b1Imfield_2d_local_2,b1Refield_2d_local_3,b1Imfield_2d_local_3, &
-          psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+          psip_conv,amp,gr,nmode,phase,MARS_max,MARS_quas_fac,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
 
 #endif PSPLINE

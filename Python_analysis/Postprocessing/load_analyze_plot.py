@@ -342,16 +342,13 @@ for kk in range(0,dir_num):
 
 #%% open KORC field file
 
-useextfield=0
+useextfield=1
 
 if useextfield==1:
 
     #filename=r"/home/21b/KORC_RUNS/LOCAL/TEST2/AORSA_D3D_171089_200MHz_EFITgrid.h5"
-    
-    if on_nersc==0:
-        filename=r"../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
-    else:
-        filename=r"../../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
+    #filename=r"../../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
+    filename=r"/home/21b/KORC/test/mars_EM/ARC_42533M20_MARS.h5"
     
     with h5py.File(filename,'r') as f:
         NR=int(f['NR'][0])           
@@ -389,7 +386,7 @@ if useextfield==1:
     interp_br = RegularGridInterpolator((Rg,Zg), np.transpose(BR_g[:,:]),method='cubic')
     interp_bz = RegularGridInterpolator((Rg,Zg), np.transpose(BZ_g[:,:]),method='cubic')
     
-    Rq=1.7
+    Rq=4.
     Zq=0.
     
     psip_q=interp_psip([Rq,Zq])
@@ -481,17 +478,18 @@ try:
 except: 
     rm=np.sqrt((R-R0)**2+(zz-Z0)**2)
 
-flagDecon=np.zeros(np.shape(flagCon))
-flagDecon[(flagCon<1) & (flagRE>0)]=1
-confined=np.sum(flagCon,axis=1)
-deconfined=np.sum(flagDecon,axis=1)
-
-flagTherm=np.zeros(np.shape(flagCol))
-flagTherm[flagCol<1 & (flagRE>0)]=1
-Thermal=np.sum(flagTherm,axis=1)
-Energetic=np.sum(flagCol,axis=1)
 
 if 'flagRE' in outputs_list:
+  flagDecon=np.zeros(np.shape(flagCon))
+  flagDecon[(flagCon<1) & (flagRE>0)]=1
+  confined=np.sum(flagCon,axis=1)
+  deconfined=np.sum(flagDecon,axis=1)
+
+  flagTherm=np.zeros(np.shape(flagCol))
+  flagTherm[flagCol<1 & (flagRE>0)]=1
+  Thermal=np.sum(flagTherm,axis=1)
+  Energetic=np.sum(flagCol,axis=1) 
+    
   Total=np.sum(flagRE,axis=1)
     
   flagActive=flagRE*flagCon*flagCol
@@ -507,16 +505,15 @@ if 'flagRE' in outputs_list:
   flagSecondary[:,flagRE[-1,:]<1]=0
   Secondary=np.sum(flagSecondary,axis=1)
 
-Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
-Ipart[flagActive==0]=0
-Itot=np.sum(Ipart,axis=1)
-Ipri=np.sum(Ipart*flagPrimary,axis=1)
-Isec=np.sum(Ipart*flagSecondary,axis=1)
-
-IPOLpart=qe*vpll*bpol/(2*np.pi*R*bmag)
-IPOLpart[flagActive==0]=0
-IPOL=np.sum(IPOLpart,axis=1)
-
+  Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
+  Ipart[flagActive==0]=0
+  Itot=np.sum(Ipart,axis=1)
+  Ipri=np.sum(Ipart*flagPrimary,axis=1)
+  Isec=np.sum(Ipart*flagSecondary,axis=1)
+    
+  IPOLpart=qe*vpll*bpol/(2*np.pi*R*bmag)
+  IPOLpart[flagActive==0]=0
+  IPOL=np.sum(IPOLpart,axis=1)
 
 #KE=me*c**2/qe*np.sum((g-1)*flagActive)
 #KEtot=me*c**2/qe*np.sum((1-1)*flagRE)
@@ -1059,7 +1056,7 @@ plt.rc('ytick', labelsize=SMALL_SIZE)
 plt.rc('legend', fontsize=SMALL_SIZE)
 plt.rc('figure', titlesize=SMALL_SIZE)
 
-plot_histrm=1
+plot_histrm=0
 plot_LAC_ParamScaling=0
 plot_LAC_Escaling=0
 plot_GPUscaling=0
@@ -1078,7 +1075,7 @@ plot_br=0
 plot_bz=0
 plot_bphi=0
 plot_psip=0
-plot_histRZ_ext=0
+plot_histRZ_ext=1
 plot_histKeta=0
 plot_histK=0
 plot_histeta=0
@@ -1101,7 +1098,7 @@ plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=100
+timeind_p=0
 timeind_g=0
 
 #tloss=time[12]

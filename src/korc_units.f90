@@ -394,7 +394,7 @@ subroutine normalize_variables(params,spp,F,P)
 
      if (F%B1field) then
 
-        if (params%field_model(10:13).eq.'MARS') then
+        if (params%field_model(10:14).eq.'MARS ') then
 
            if (ALLOCATED(F%B1Re_2D%R)) F%B1Re_2D%R = F%B1Re_2D%R/ &
                 params%cpp%Bo
@@ -458,6 +458,22 @@ subroutine normalize_variables(params,spp,F,P)
              params%cpp%Eo
         if (ALLOCATED(F%E1Im_2DX%Z)) F%E1Im_2DX%Z = F%E1Im_2DX%Z/ &
              params%cpp%Eo
+
+        if (params%field_model(10:16).eq.'MARS_EM') then
+
+           if (ALLOCATED(F%E1Re_3D%R)) F%E1Re_3D%R = F%E1Re_3D%R/ &
+                params%cpp%Eo
+           if (ALLOCATED(F%E1Re_3D%PHI)) F%E1Re_3D%PHI = F%E1Re_3D%PHI/ &
+                params%cpp%Eo
+           if (ALLOCATED(F%E1Re_3D%Z)) F%E1Re_3D%Z = F%E1Re_3D%Z/ &
+                params%cpp%Eo
+           if (ALLOCATED(F%E1Im_3D%R)) F%E1Im_3D%R = F%E1Im_3D%R/ &
+                params%cpp%Eo
+           if (ALLOCATED(F%E1Im_3D%PHI)) F%E1Im_3D%PHI = F%E1Im_3D%PHI/ &
+                params%cpp%Eo
+           if (ALLOCATED(F%E1Im_3D%Z)) F%E1Im_3D%Z = F%E1Im_3D%Z/ &
+                params%cpp%Eo     
+        endif 
 
      end if
 

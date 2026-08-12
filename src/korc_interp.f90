@@ -486,7 +486,7 @@ subroutine initialize_fields_interpolant(params,F)
 
     if(F%B1field) then
 
-      if (params%field_model(10:13).eq.'MARS') then
+      if (params%field_model(10:16).eq.'MARS   ') then
 
         write(output_unit_write,*) '2D n=1 MARS magnetic fields' 
 
@@ -3830,17 +3830,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
     cPshift=cos(F%X%PHI(1)*Y_PHI(cc)-phase-fr(1)*time)
     sPshift=sin(F%X%PHI(1)*Y_PHI(cc)-phase-fr(1)*time)
 
-    B1_R = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(1)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(1)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(1)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B0_R+B1_R
     B_PHI = B0_PHI+B1_PHI
     B_Z(cc) = B0_Z+B1_Z
 
-    E1_R = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = gr(1)*MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(1)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(1)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(1)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(1)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E1_R
     E_PHI = E1_PHI
@@ -3859,17 +3859,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
     cPshift=cos(F%X%PHI(2)*Y_PHI(cc)-phase-fr(2)*time)
     sPshift=sin(F%X%PHI(2)*Y_PHI(cc)-phase-fr(2)*time)
 
-    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(2)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(2)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(2)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(2)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(2)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(2)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
     B_Z(cc) = B_Z(cc)+B1_Z
 
-    E1_R = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = MARS_max/(1+MARS_max*exp(-time*gr(2)))*amp(2)*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(2)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(2)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(2)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(2)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(2)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(2)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E_R+E1_R
     E_PHI = E_PHI+E1_PHI
@@ -3888,17 +3888,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
     cPshift=cos(F%X%PHI(3)*Y_PHI(cc)-phase-fr(3)*time)
     sPshift=sin(F%X%PHI(3)*Y_PHI(cc)-phase-fr(3)*time)
 
-    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(3)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(3)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(3)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(3)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(3)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(3)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
     B_Z(cc) = B_Z(cc)+B1_Z
 
-    E1_R = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = MARS_max/(1+MARS_max*exp(-time*gr(3)))*amp(3)*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(3)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(3)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(3)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(3)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(3)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(3)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E_R+E1_R
     E_PHI = E_PHI+E1_PHI
@@ -3917,17 +3917,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
     cPshift=cos(F%X%PHI(4)*Y_PHI(cc)-phase-fr(4)*time)
     sPshift=sin(F%X%PHI(4)*Y_PHI(cc)-phase-fr(4)*time)
 
-    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(4)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(4)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(4)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(4)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(4)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(4)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
     B_Z(cc) = B_Z(cc)+B1_Z
 
-    E1_R = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = MARS_max/(1+MARS_max*exp(-time*gr(4)))*amp(4)*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(4)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(4)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(4)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(4)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(4)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(4)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E_R+E1_R
     E_PHI = E_PHI+E1_PHI
@@ -3946,17 +3946,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
     cPshift=cos(F%X%PHI(5)*Y_PHI(cc)-phase-fr(5)*time)
     sPshift=sin(F%X%PHI(5)*Y_PHI(cc)-phase-fr(5)*time)
 
-    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(5)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(5)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(5)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(5)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(5)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(5)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
     B_Z(cc) = B_Z(cc)+B1_Z
 
-    E1_R = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = MARS_max/(1+MARS_max*exp(-time*gr(5)))*amp(5)*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(5)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(5)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(5)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(5)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(5)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(5)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E_R+E1_R
     E_PHI = E_PHI+E1_PHI
@@ -3975,17 +3975,17 @@ subroutine interp_FOfields_marsEM_p(pchunk,F,Y_R,Y_PHI,Y_Z, &
     cPshift=cos(F%X%PHI(6)*Y_PHI(cc)-phase-fr(6)*time)
     sPshift=sin(F%X%PHI(6)*Y_PHI(cc)-phase-fr(6)*time)
 
-    B1_R = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(B1Re_R*cPshift-B1Im_R*sPshift)
-    B1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
-    B1_Z = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(B1Re_Z*cPshift-B1Im_Z*sPshift)
+    B1_R = gr(6)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(6)))*(B1Re_R*cPshift-B1Im_R*sPshift)
+    B1_PHI = gr(6)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(6)))*(B1Re_PHI*cPshift-B1Im_PHI*sPshift)
+    B1_Z = gr(6)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(6)))*(B1Re_Z*cPshift-B1Im_Z*sPshift)
 
     B_R = B_R+B1_R
     B_PHI = B_PHI+B1_PHI
     B_Z(cc) = B_Z(cc)+B1_Z
 
-    E1_R = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(E1Re_R*cPshift-E1Im_R*sPshift)
-    E1_PHI = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
-    E1_Z = MARS_max/(1+MARS_max*exp(-time*gr(6)))*amp(6)*(E1Re_Z*cPshift-E1Im_Z*sPshift)
+    E1_R = gr(6)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(6)))*(E1Re_R*cPshift-E1Im_R*sPshift)
+    E1_PHI = gr(6)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(6)))*(E1Re_PHI*cPshift-E1Im_PHI*sPshift)
+    E1_Z = gr(6)/MARS_quas_fac/(1+(MARS_max-1)*exp(-time*gr(6)))*(E1Re_Z*cPshift-E1Im_Z*sPshift)
 
     E_R = E_R+E1_R
     E_PHI = E_PHI+E1_PHI
@@ -4163,9 +4163,9 @@ end subroutine interp_FOfields_marsNL_p_ACC
 
 subroutine interp_FOfields_marsEM_p_ACC(time,bfield_2d_local, &
   b1Refield_2d_local_1,b1Imfield_2d_local_1, &
-  psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
+  psip_conv,amp,gr,nmode,phase,MARS_max,MARS_quas_fac,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
   !$acc routine seq
-  REAL(rp),INTENT(IN)  :: time,MARS_max
+  REAL(rp),INTENT(IN)  :: time,MARS_max,MARS_quas_fac
   REAL(rp),INTENT(IN)   :: Y_R,Y_PHI,Y_Z
   REAL(rp),INTENT(OUT)   :: B_X,B_Y,B_Z
   REAL(rp)   :: B_R,B_PHI
@@ -4196,22 +4196,11 @@ subroutine interp_FOfields_marsEM_p_ACC(time,bfield_2d_local, &
     Y_R,Y_Z,A,B1Re_R,B1Re_PHI,B1Re_Z,B1Im_R,B1Im_PHI,B1Im_Z,ezerr_local)
   call EZspline_error(ezerr_local)
 
-  !write(6,*) B1Re_R
-  !write(6,*) B1Im_R
-  !write(6,*) B1Re_PHI
-  !write(6,*) B1Im_PHI
-  !write(6,*) B1Re_Z
-  !write(6,*) B1Im_Z
-
   PSIp=A(1)
 
   B0_R = psip_conv*A(3)/Y_R
   B0_PHI = -Bo*Ro/Y_R
   B0_Z = -psip_conv*A(2)/Y_R
-
-  !write(6,*) A(1)
-  !write(6,*) A(2)
-  !write(6,*) A(3)
 
   cP=cos(Y_PHI)
   sP=sin(Y_PHI)

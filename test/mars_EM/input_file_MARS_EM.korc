@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 0.E-6
+  simulation_time = 1.E-9
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-7
+  snapshot_frequency = 1.E-9
     ! Time between snapshots in seconds
   dt = 1.E-2
     ! Time step as fraction of relativistic gyro-period
@@ -41,6 +41,7 @@
     ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
     ! where 'eqn' evaluates particle fields at particle positions and
     ! 'interp' interpolates precomputed fields.
+  SameRandSeed = T
 /
 
 &plasma_species
@@ -113,4 +114,5 @@
   MARS_AMP_Scale=1.
   MARS_phase=0.
   MARS_max=100. !ratio of init to max
+  MARS_quas_fac = 1.E8
 /
