@@ -18,7 +18,7 @@ cmake \
   -DCMAKE_Fortran_FLAGS="-acc=gpu -gpu=deepcopy,cc89 -Mfree -fPIC -c++libs -Mpreprocess -DDOUBLE_PRECISION" \
   -DCMAKE_C_FLAGS="-mp -DDOUBLE_PRECISION" \
   -DCMAKE_CXX_FLAGS="-std=c++11 -mp -DDOUBLE_PRECISION" \
-  -DCMAKE_Fortran_FLAGS_DEBUG='-g -gpu=debug -O1 -Minfo=accel' \
+  -DCMAKE_Fortran_FLAGS_DEBUG='-g -gpu=debug -O1' \
   ..
 
 make -j VERBOSE=1
