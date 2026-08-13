@@ -384,9 +384,9 @@ subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
     Br = Br + sqrt(dBr_norm_squared)
   end if
 
-  B_X = Bzeta*cZ - Bp*sT*sZ + Br*cT*sZ
-  B_Y = -Bzeta*sZ - Bp*sT*cZ + Br*cT*cZ
-  B_Z = Bp*cT + Br*sT
+  B_X = Bzeta*cZ - Bp*sT*sZ/kappa + Br*cT*sZ
+  B_Y = -Bzeta*sZ - Bp*sT*cZ/kappa + Br*cT*cZ
+  B_Z = Bp*cT + Br*sT/kappa
 
   Ezeta = -E0/( 1.0_rp + eta*cT)
 

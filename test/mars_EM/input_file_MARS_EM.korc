@@ -53,7 +53,7 @@
     ! Electric charge
   m = 1.0
     ! In units of electron mass
-  spatial_distribution = 'MH_psi'
+  spatial_distribution = 'TRACER'
     ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
     ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
     ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
@@ -79,7 +79,7 @@
     ! Initial energy in eV
   etao = 170.
     ! Initial pitch angle
-  Xtrace = 1.6,0.0,-0.75
+  Xtrace = 5.,0.0,-0.0
     ! Initial position of tracer particle for debugging with
     ! spatial_distribution='TRACER'
   dth = 3.
