@@ -747,7 +747,7 @@ subroutine initialize_collision_params(params,spp,P,F,init)
           write(output_unit_write,'(/,"* * * * * * * LARGE ANGLE COLLISIONS * * * * * * *")')
         end if
 
-        if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+        if (TRIM(params%field_model(1:10)) .eq. 'ANALYTICAL') then
 
              !write(6,*) 'Eo',F%Eo
              !write(6,*) 'Ec',cparams_ss%Ec
@@ -874,7 +874,7 @@ subroutine initialize_collision_params(params,spp,P,F,init)
             write(output_unit_write,*) 'p_min/(me*c) and gam_min are: ', &
               cparams_ss%p_min,cparams_ss%gam_min
             if(.not.init) then
-              if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+              if (TRIM(params%field_model(1:10)) .eq. 'ANALYTICAL') then
                 write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo*params%cpp%Eo,'V/m'
               else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
                 .AND.(F%ReInterp_2x1t)) then
@@ -892,7 +892,7 @@ subroutine initialize_collision_params(params,spp,P,F,init)
               end if
               write(output_unit_write,*) 'tau_c,rel is: ',cparams_ss%Tau*params%cpp%time,'s'
             else
-                   if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+                   if (TRIM(params%field_model(1:10)) .eq. 'ANALYTICAL') then
                       write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo,'V/m'
                    else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
                         .AND.(F%ReInterp_2x1t)) then
@@ -917,7 +917,7 @@ subroutine initialize_collision_params(params,spp,P,F,init)
 
              if (params%mpi_params%rank .EQ. 0) then
                 if(.not.init) then
-                   if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+                   if (TRIM(params%field_model(1:10)) .eq. 'ANALYTICAL') then
                       write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo*params%cpp%Eo,'V/m'
                    else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
                         .AND.(F%ReInterp_2x1t)) then
@@ -935,7 +935,7 @@ subroutine initialize_collision_params(params,spp,P,F,init)
                    end if
 
                 else
-                   if (TRIM(params%field_model) .eq. 'ANALYTICAL') then
+                   if (TRIM(params%field_model(1:10)) .eq. 'ANALYTICAL') then
                       write(output_unit_write,*) 'Maximum E_PHI : ',F%Eo,'V/m'
                    else if ((TRIM(params%field_model) .eq. 'EXTERNAL-PSI') &
                         .AND.(F%ReInterp_2x1t)) then

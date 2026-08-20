@@ -186,6 +186,143 @@ subroutine analytical_fields(F,Y,E,B,flag,psip,params)
    !!$OMP END PARALLEL DO
 end subroutine analytical_fields
 
+subroutine analytical_fields_solovev(F,Y,E,B,flag,psip,params)
+  !! @note 
+  TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+  TYPE(FIELDS), INTENT(IN)                               :: F
+  !! An instance of the KORC derived type FIELDS.
+  REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(IN)      :: Y
+  !! Toroidal coordinates of each particle in the simulation;
+  !! Y(1,:) = \(r\), Y(2,:) = \(\theta\), Y(3,:) = \(\zeta\).
+  REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: B
+  !! Magnetic field components in Cartesian coordinates;
+  !! B(1,:) = \(B_x\), B(2,:) = \(B_y\), B(3,:) = \(B_z\)
+  REAL(rp), DIMENSION(:,:), ALLOCATABLE, INTENT(INOUT)   :: E
+  !! Electric field components in Cartesian coordinates;
+  !! E(1,:) = \(E_x\), E(2,:) = \(E_y\), E(3,:) = \(E_z\)
+  INTEGER(is), DIMENSION(:), ALLOCATABLE, INTENT(IN)     :: flag
+  !! Flag for each particle to decide whether it is being followed (flag=T)
+  !! or not (flag=F).
+  REAL(rp), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)     :: psip
+  REAL(rp)                                               :: Ezeta
+  !! Toroidal electric field \(E_\zeta\).
+  REAL(rp)                                               :: Bzeta
+  !! Toroidal magnetic field \(B_\zeta\).
+  REAL(rp)                                               :: Bp,Br,Er
+  !! Poloidal magnetic field \(B_\theta(r)\).
+  REAL(rp)                                               :: eta
+  !! Aspect ratio \(\eta\).
+  REAL(rp)                                               :: q
+  !! Safety profile \(q(r)\).
+  INTEGER(ip)                                            :: pp ! Iterator(s)
+  !! Particle iterator.
+  INTEGER(ip)                                            :: ss
+  !! Particle species iterator.
+  REAL(rp)      :: R0,ar,B0,E0,psi0,BPHI
+  REAL(rp),DIMENSION(13) :: c
+  REAL(rp) :: R,Z,R2,R3,R4,R5,R6,Z2,Z3,Z4,Z5,Z6,LOGR
+
+
+
+  if (size(Y,1).eq.1) then
+      ss = size(Y,1)
+  else
+      if (Y(2,1).eq.0) then
+        ss=1_idef
+      else
+        ss = size(Y,1)
+      end if
+  endif
+
+  R0=F%AB%Ro
+  B0=F%AB%Bo
+  E0=F%Eo
+
+  psi0=200._rp/(params%cpp%Bo*params%cpp%length**2)
+
+  c=(/2.21808016e-02,  -1.28841781e-01,  -4.17718173e-02, &
+    -6.22680280e-02,   6.20083978e-03,  -1.20524711e-03, &
+    -3.70147050e-05,   0.00000000e+00,   0.00000000e+00, &
+    0.00000000e+00,   0.00000000e+00,   0.00000000e+00, &
+    -0.155/)
+
+  do pp=1_idef,ss
+    if ( flag(pp) .EQ. 1_is ) then
+
+      R=Y(pp,1)/R0
+      Z=Y(pp,3)/R0
+
+      R2=R*R
+      R3=R2*R
+      R4=R3*R
+      R5=R4*R
+      R6=R5*R
+      Z2=Z*Z
+      Z3=Z2*Z
+      Z4=Z3*Z
+      Z5=Z4*Z
+      Z6=Z5*Z
+      LOGR=LOG(R)
+
+      psip(pp)= psi0*( &
+        (1-C(13)) * (R4/8) &
+        + C(13) * (R2*LOGR/2) &
+        + C(1)  * (1) &
+        + C(2)  * (R2) &
+        + C(3)  * (R2*LOGR - Z2) &
+        + C(4)  * (R4 - 4*R2*Z2) &
+        + C(5)  * (3*R4*LOGR - 9*R2*Z2 - 12*R2*LOGR*Z2 + 2*Z4) &
+        + C(6)  * (R6 - 12*R4*Z2 + 8*R2*Z4) &
+        + C(7)  * (8*Z6 - 140*R2*Z4 - 120*R2*LOGR*Z4 + 180*R4*LOGR*Z2 &
+                    + 75*R4*Z2 - 15*R6*LOGR) &
+        + C(8)  * (Z) &
+        + C(9)  * (Z*R2) &
+        + C(10)  * (Z3 - 3*Z*R2*LOGR) &
+        + C(11) * (3*Z*R4 - 4*Z3*R2) &
+        + C(12) * (8*Z5 - 45*Z*R4 - 80*Z3*R2*LOGR + 60*Z*R4*LOGR) )
+
+      BR = -psi0/(R*R0*R0) * &
+        (C(3)  * (-2*Z) &
+        + C(4)  * (-8*R2*Z) &
+        + C(5)  * (-18*R2*Z - 24*R2*LOGR*Z + 8*Z3) &
+        + C(6)  * (-24*R4*Z + 32*R2*Z3) &
+        + C(7)  * (48*Z5 - 560*R2*Z3 - 480*R2*LOGR*Z3 +360*R4*LOGR*Z &
+          + 150*R4*Z) &
+        + C(8)  * (1) &
+        + C(9)  * (R2) &
+        + C(10)  * (3*Z2 - 3*R2*LOGR) &
+        + C(11) * (3*R4 - 12*Z2*R2) &
+        + C(12) * (40*Z4 - 45*R4 - 240*Z2*R2*LOGR + 60*R4*LOGR) )
+
+      BPHI = B0/R
+
+      B(pp,1) = BR*cos(Y(pp,2))-BPHI*sin(Y(pp,2)) 
+      B(pp,2) = BR*sin(Y(pp,2))+BPHI*cos(Y(pp,2))
+
+      B(pp,3) = psi0/(R*R0*R0) * &
+        ((1-C(13)) * (R3/2) &
+        + C(13) * (R/2 + R*LOGR) &
+        + C(2)  * (2*R) &
+        + C(3)  * (2*R*LOGR + R) &
+        + C(4)  * (4*R3 - 8*R*Z2) &
+        + C(5)  * (12*R3*LOGR + 3*R3 - 30*R*Z2 - 24*R*LOGR*Z2) &
+        + C(6)  * (6*R5 - 48*R3*Z2 + 16*R*Z4) &
+        + C(7)  * (-400*R*Z4 -240*R*LOGR*Z4 + 720*R3*LOGR*Z2 + 480*R3*Z2 &
+          -90*R5*LOGR - 15*R5) &
+        + C(9)  * (2*Z*R) &
+        + C(10)  * (-6*Z*R*LOGR - 3*Z*R) &
+        + C(11) * (12*Z*R3 - 8*Z3*R) &
+        + C(12) * (-120*Z*R3-160*Z3*R*LOGR-80*Z3*R+240*Z*R3*LOGR) )
+
+      E(pp,1) = -E0/R*sin(Y(pp,2))
+      E(pp,2) = E0/R*cos(Y(pp,2))
+      E(pp,3) = 0._rp
+
+    end if
+  end do
+
+end subroutine analytical_fields_solovev
+
 subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
       B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache)
    TYPE(KORC_PARAMS), INTENT(IN)                              :: params
@@ -315,6 +452,109 @@ subroutine analytical_fields_p(params,pchunk,F,X_X,X_Y,X_Z, &
    !$OMP END SIMD
 
 end subroutine analytical_fields_p
+
+subroutine analytical_fields_solovev_p(params,pchunk,F,X_X,X_Y,X_Z, &
+  B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+  TYPE(KORC_PARAMS), INTENT(IN)                              :: params
+  !! Core KORC simulation parameters.
+  TYPE(FIELDS), INTENT(IN)                                   :: F
+  INTEGER, INTENT(IN)  :: pchunk
+  REAL(rp),  INTENT(IN),DIMENSION(pchunk)      :: X_X,X_Y,X_Z
+  REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: B_X,B_Y,B_Z
+  REAL(rp),  INTENT(OUT),DIMENSION(pchunk)     :: E_X,E_Y,E_Z,PSIp
+  REAL(rp),DIMENSION(pchunk)     :: Y_R,Y_PHI,Y_Z
+  REAL(rp)     :: BPHI,BR
+  REAL(rp)      :: R0,B0,E0,psi0
+  REAL(rp) :: R,Z,R2,R3,R4,R5,R6,Z2,Z3,Z4,Z5,Z6,LOGR
+  REAL(rp),DIMENSION(13) :: c
+  INTEGER  :: cc
+
+  B0=F%Bo
+  E0=F%Eo
+  R0=F%AB%Ro
+
+  psi0=200._rp/(params%cpp%Bo*params%cpp%length**2)
+
+  c=(/2.21808016e-02,  -1.28841781e-01,  -4.17718173e-02, &
+    -6.22680280e-02,   6.20083978e-03,  -1.20524711e-03, &
+    -3.70147050e-05,   0.00000000e+00,   0.00000000e+00, &
+    0.00000000e+00,   0.00000000e+00,   0.00000000e+00, &
+    -0.155/)
+
+  call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
+
+  do cc=1_idef,pchunk
+    R=Y_R(cc)/R0
+    Z=Y_Z(cc)/R0
+
+    R2=R*R
+    R3=R2*R
+    R4=R3*R
+    R5=R4*R
+    R6=R5*R
+    Z2=Z*Z
+    Z3=Z2*Z
+    Z4=Z3*Z
+    Z5=Z4*Z
+    Z6=Z5*Z
+    LOGR=LOG(R)
+
+    PSIp(cc)= psi0*( &
+      (1-C(13)) * (R4/8) &
+      + C(13) * (R2*LOGR/2) &
+      + C(1)  * (1) &
+      + C(2)  * (R2) &
+      + C(3)  * (R2*LOGR - Z2) &
+      + C(4)  * (R4 - 4*R2*Z2) &
+      + C(5)  * (3*R4*LOGR - 9*R2*Z2 - 12*R2*LOGR*Z2 + 2*Z4) &
+      + C(6)  * (R6 - 12*R4*Z2 + 8*R2*Z4) &
+      + C(7)  * (8*Z6 - 140*R2*Z4 - 120*R2*LOGR*Z4 + 180*R4*LOGR*Z2 &
+                  + 75*R4*Z2 - 15*R6*LOGR) &
+      + C(8)  * (Z) &
+      + C(9)  * (Z*R2) &
+      + C(10)  * (Z3 - 3*Z*R2*LOGR) &
+      + C(11) * (3*Z*R4 - 4*Z3*R2) &
+      + C(12) * (8*Z5 - 45*Z*R4 - 80*Z3*R2*LOGR + 60*Z*R4*LOGR) )
+
+    BR = -psi0/(R*R0*R0) * &
+      (C(3)  * (-2*Z) &
+      + C(4)  * (-8*R2*Z) &
+      + C(5)  * (-18*R2*Z - 24*R2*LOGR*Z + 8*Z3) &
+      + C(6)  * (-24*R4*Z + 32*R2*Z3) &
+      + C(7)  * (48*Z5 - 560*R2*Z3 - 480*R2*LOGR*Z3 +360*R4*LOGR*Z &
+        + 150*R4*Z) &
+      + C(8)  * (1) &
+      + C(9)  * (R2) &
+      + C(10)  * (3*Z2 - 3*R2*LOGR) &
+      + C(11) * (3*R4 - 12*Z2*R2) &
+      + C(12) * (40*Z4 - 45*R4 - 240*Z2*R2*LOGR + 60*R4*LOGR) )
+
+    BPHI = B0/R
+
+    B_X(cc) = BR*cos(Y_PHI(cc))-BPHI*sin(Y_PHI(cc)) 
+    B_Y(cc) = BR*sin(Y_PHI(cc))+BPHI*cos(Y_PHI(cc))
+
+    B_Z(cc) = psi0/(R*R0*R0) * &
+      ((1-C(13)) * (R3/2) &
+      + C(13) * (R/2 + R*LOGR) &
+      + C(2)  * (2*R) &
+      + C(3)  * (2*R*LOGR + R) &
+      + C(4)  * (4*R3 - 8*R*Z2) &
+      + C(5)  * (12*R3*LOGR + 3*R3 - 30*R*Z2 - 24*R*LOGR*Z2) &
+      + C(6)  * (6*R5 - 48*R3*Z2 + 16*R*Z4) &
+      + C(7)  * (-400*R*Z4 -240*R*LOGR*Z4 + 720*R3*LOGR*Z2 + 480*R3*Z2 &
+        -90*R5*LOGR - 15*R5) &
+      + C(9)  * (2*Z*R) &
+      + C(10)  * (-6*Z*R*LOGR - 3*Z*R) &
+      + C(11) * (12*Z*R3 - 8*Z3*R) &
+      + C(12) * (-120*Z*R3-160*Z3*R*LOGR-80*Z3*R+240*Z*R3*LOGR) )
+
+    E_X(cc) = -E0/R*sin(Y_PHI(cc))
+    E_Y(cc) = E0/R*cos(Y_PHI(cc))
+    E_Z(cc) = 0._rp
+  end do
+
+end subroutine analytical_fields_solovev_p
 
 subroutine analytical_fields_p_ACC(T_R,T_T,T_Z, &
   B_X,B_Y,B_Z,E_X,E_Y,E_Z,flag_cache,R0,B0,lam,E0,q0,ar,kappa, &
@@ -1191,6 +1431,15 @@ subroutine get_analytical_fields(params,vars,F)
 
    if (params%orbit_model(1:2).eq.'FO') then
 
+    if (params%field_model(11:18).eq.'-SOLOVEV') THEN
+
+      if (.not.params%GC_coords) then
+        call cart_to_cyl(vars%X,vars%Y)
+      endif
+
+      call analytical_fields_solovev(F,vars%Y, vars%E, vars%B, vars%flagCon, vars%PSI_P, params)
+
+    ELSE
       if (.not.params%GC_coords) then
         call cart_to_tor_check_if_confined(vars%X,F,vars%Y,vars%flagCon)
       else
@@ -1200,6 +1449,7 @@ subroutine get_analytical_fields(params,vars,F)
       call analytical_fields(F,vars%Y, vars%E, vars%B, vars%flagCon, vars%PSI_P, params)
 
       !       call cart_to_cyl(vars%X,vars%Y)
+    ENDIF
 
    elseif (params%orbit_model(1:2).eq.'GC') then
 
@@ -1545,6 +1795,7 @@ subroutine initialize_fields(params,F)
       F%E_width = E_width
 
       F%PSIp_lim=PSIp_lim
+      F%PSIp_0=PSIp_0
 
       F%AB%Ero=Ero
       F%AB%rmn=rmn
@@ -1624,8 +1875,8 @@ subroutine initialize_fields(params,F)
 
       end if
 
-      F%PSIP_min = 0._rp
-      F%PSIp_lim = C_PI*Bo*minor_radius**2*log(1+(qa-qo)/qo)/(qa-qo) 
+      !F%PSIP_min = 0._rp
+      !F%PSIp_lim = C_PI*Bo*minor_radius**2*log(1+(qa-qo)/qo)/(qa-qo) 
 
 
       if (params%field_eval.eq.'interp') then

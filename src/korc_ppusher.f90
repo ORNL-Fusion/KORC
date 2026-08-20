@@ -294,7 +294,10 @@ subroutine FO_init(params,F,spp,output,step)
 
         call cart_to_cyl_p(pchunk,X_X,X_Y,X_Z,Y_R,Y_PHI,Y_Z)
 
-        if (params%field_model(1:3).eq.'ANA') then
+        if (params%field_model(11:18).eq.'-SOLOVEV') THEN
+          call analytical_fields_solovev_p(params,pchunk,F, &
+            X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+        else if (params%field_model(1:3).eq.'ANA') then
           call analytical_fields_p(params,pchunk,F, &
             X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
         else if (params%field_model(1:3).eq.'UNI') then

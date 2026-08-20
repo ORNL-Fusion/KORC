@@ -11,6 +11,7 @@ mu0=4*np.pi*10**(-7)
 c = 2.99792458E8 #% Speed of light (m/s)
 qe = 1.60217662E-19 #% Electron charge (C)
 me = 9.10938356E-31 #% Electron mass (kg)
+mp = 1.6726e-27 #% Proton mass (kg)
 ep0 = 8.854E-12 #% Electric permitivity [C**2/(N*m**2)]
 re = qe**2/(4*np.pi*ep0*me*c**2) #% classical electron radius (m)
 
@@ -42,7 +43,8 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
-run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
+#run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
+run_directory=['/home/21b/KORC/test/solovev/rank_1']
 
 for kk in range(0,dir_num):
 
@@ -1055,7 +1057,7 @@ plt.rc('ytick', labelsize=SMALL_SIZE)
 plt.rc('legend', fontsize=SMALL_SIZE)
 plt.rc('figure', titlesize=SMALL_SIZE)
 
-plot_histrm=1
+plot_histrm=0
 plot_LAC_ParamScaling=0
 plot_LAC_Escaling=0
 plot_GPUscaling=0
@@ -1080,7 +1082,7 @@ plot_histK=0
 plot_histeta=0
 plot_evoCon_DiMES=0
 plot_evo1D=0
-plot_fieldm=0
+plot_fieldm=1
 plot_deconloc=0
 plot_deconloc1=0
 plot_deconloc2=0
@@ -1097,7 +1099,7 @@ plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=100
+timeind_p=0
 timeind_g=0
 
 #tloss=time[12]
@@ -2571,26 +2573,43 @@ if plot_evo1D==1:
     plt.show()   
 
 if plot_fieldm==1:
-    fig,ax=plt.subplots()
+    fig,ax=plt.subplots(1,3,figsize=(18,4))
     
-    tmpfld=PSIPm.copy()
+    #tmpfld=PSIPm.copy()
     
     #nemin=np.min(-tmpfld)
     #nemax=np.max(-tmpfld)
     
     
-    ct=ax.contourf(Rm,Zm,tmpfld)
+    #ct=ax.contourf(Rm,Zm,tmpfld)
     #ax.contour(Rg,Zg,-PSIp[:,timeind_g,:],25,colors='black',linewidths=0.5)
     #ax.contour(Rg,Zg,FLAG[:,timeind_g,:],[.5],colors='black')
     
-    #sc=ax.scatter(R,zz,c=-psiP,s=5,cmap=ct.cmap,vmin=nemin,vmax=nemax,edgecolor='black',linewidth=0.25)
+    sc=ax[0].scatter(R,zz,c=bR,s=5,edgecolor='black',linewidth=0.25)
     
-    plt.colorbar(ct)
-    ax.set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
-    ax.grid()
-    plt.gca().set_aspect('equal')
+    cbar=plt.colorbar(sc,ax=ax[0])
+    cbar.set_label('$B_R$', fontsize=12)
+    ax[0].set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax[0].grid()
+    ax[0].set_aspect('equal')
     
-    plt.savefig("scatter_PSIp_JET_95128.pdf", format="pdf", bbox_inches="tight")
+    sc=ax[1].scatter(R,zz,c=bPHI,s=5,edgecolor='black',linewidth=0.25)
+    
+    cbar=plt.colorbar(sc,ax=ax[1])
+    cbar.set_label('$B_\\phi$', fontsize=12)
+    ax[1].set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax[1].grid()
+    ax[1].set_aspect('equal')
+    
+    sc=ax[2].scatter(R,zz,c=bZ,s=5,edgecolor='black',linewidth=0.25)
+    
+    cbar=plt.colorbar(sc,ax=ax[2])
+    cbar.set_label('$B_Z$', fontsize=12)
+    ax[2].set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax[2].grid()
+    ax[2].set_aspect('equal')
+    
+    plt.savefig("scatter_B0.pdf", format="pdf", bbox_inches="tight")
     plt.show()  
 
 if plot_evoCon_DiMES==1:

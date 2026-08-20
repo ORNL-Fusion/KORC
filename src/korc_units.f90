@@ -233,10 +233,12 @@ subroutine normalize_variables(params,spp,F,P)
      F%AB%sigma_mn = F%AB%sigma_mn/params%cpp%length
      F%AB%l_mn = F%AB%l_mn/params%cpp%length
 
-     F%PSIP_min = F%PSIP_min/ &
-             (params%cpp%Bo*params%cpp%length**2)
-      F%PSIp_lim = F%PSIp_lim/ &
-          (params%cpp%Bo*params%cpp%length**2)
+    F%PSIP_min = F%PSIP_min/ &
+            (params%cpp%Bo*params%cpp%length**2)
+    F%PSIp_0 = F%PSIp_0/ &
+            (params%cpp%Bo*params%cpp%length**2)
+    F%PSIp_lim = F%PSIp_lim/ &
+        (params%cpp%Bo*params%cpp%length**2)
 
 
      if (params%field_eval.eq.'interp') then
