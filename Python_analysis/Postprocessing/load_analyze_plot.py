@@ -44,7 +44,8 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
-run_directory=['/home/21b/KORC/test/solovev/rank_1']
+#run_directory=['/home/21b/KORC/test/solovev/rank_1']
+run_directory=['/home/21b/KORC/test/alpha_gyro/rank_1']
 
 for kk in range(0,dir_num):
 
@@ -57,6 +58,8 @@ for kk in range(0,dir_num):
         output_cadence=f['simulation']['output_cadence'][0]
         t_steps_tot=f['simulation']['t_steps'][0]
         ppp=f['species']['ppp'][0]
+        ms=f['species']['m'][0]
+        qs=f['species']['q'][0]
         orbit_model=[x.decode() for x in f['simulation']['orbit_model']][0]
         field_eval=[x.decode() for x in f['simulation']['field_eval']][0]
         field_model=[x.decode() for x in f['simulation']['field_model']][0]
@@ -67,15 +70,19 @@ for kk in range(0,dir_num):
         if field_model != 'M3D_C1':
             B0=f['fields']['Bo'][0]
             E0=f['fields']['Eo'][0]
-            R0=f['fields']['Ro'][0]
-            Z0=f['fields']['Zo'][0]
+            if field_model != 'UNIFORM':
+                R0=f['fields']['Ro'][0]
+                Z0=f['fields']['Zo'][0]
             if field_eval == 'eqn':
                 ar=f['species']['ro'][0]
-                a=f['fields']['a'][0]
-                lam=f['fields']['lambda'][0]
-                kappa=f['fields']['kappa'][0]
-                q0=f['fields']['qo'][0]
+                if field_model != 'UNIFORM':
+                    a=f['fields']['a'][0]
+                    lam=f['fields']['lambda'][0]
+                    kappa=f['fields']['kappa'][0]
+                    q0=f['fields']['qo'][0]
             if field_eval != 'eqn':
+                R0=f['fields']['Ro'][0]
+                Z0=f['fields']['Zo'][0]
                 Rm=f['fields']['R'][:]
                 Zm=f['fields']['Z'][:]
                 #PSIPm=f['fields']['psi_p'][:]
@@ -399,7 +406,7 @@ if useextfield==1:
     
 #%% analytic fields
 
-if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
+if (field_model != 'M3D_C1') and (field_eval == 'eqn') and (field_model != 'UNIFORM'):
 
     Rm=np.linspace(R0-a,R0+a,100)
     Zm=np.linspace(Z0-a,Z0+a,100)
@@ -465,6 +472,8 @@ if orbit_model=='FO':
     vpll=(vx*bX+vy*bY+vz*bZ)/bmag
     vperp=np.sqrt(vmag**2-vpll**2)
     
+    ppll=ms*g*vpll
+    
 elif orbit_model[0:2]=='GC':
     
     bX=bR*np.cos(PHI)-bPHI*np.sin(PHI)
@@ -473,11 +482,12 @@ elif orbit_model[0:2]=='GC':
     bmag=np.sqrt(bR**2+bPHI**2+bZ**2)
     bpol=np.sqrt(bR**2+bZ**2)
     vmag=c*np.sqrt(1-(1/g)**2)
-    pmag=me*c*np.sqrt(g**2-1)
+    pmag=ms*c*np.sqrt(g**2-1)
     vperp=vmag*np.sin(np.radians(eta))
     vpll=vmag*np.cos(np.radians(eta))
 
-rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
+if (field_model != 'UNIFORM'):
+    rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
 
 flagDecon=np.zeros(np.shape(flagCon))
 flagDecon[(flagCon<1) & (flagRE>0)]=1
@@ -505,13 +515,13 @@ if 'flagRE' in outputs_list:
   flagSecondary[:,flagRE[-1,:]<1]=0
   Secondary=np.sum(flagSecondary,axis=1)
 
-Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
+Ipart=qs*vpll*bPHI/(2*np.pi*R*bmag)
 Ipart[flagActive==0]=0
 Itot=np.sum(Ipart,axis=1)
 Ipri=np.sum(Ipart*flagPrimary,axis=1)
 Isec=np.sum(Ipart*flagSecondary,axis=1)
 
-IPOLpart=qe*vpll*bpol/(2*np.pi*R*bmag)
+IPOLpart=qs*vpll*bpol/(2*np.pi*R*bmag)
 IPOLpart[flagActive==0]=0
 IPOL=np.sum(IPOLpart,axis=1)
 
@@ -519,9 +529,51 @@ IPOL=np.sum(IPOLpart,axis=1)
 #KE=me*c**2/qe*np.sum((g-1)*flagActive)
 #KEtot=me*c**2/qe*np.sum((1-1)*flagRE)
 
-K=(g-1)*(me*c**2/qe)
+K=(g-1)*(ms*c**2/qe)
 
-GR=vperp/(qe*bmag/(me*g))
+GR=vperp/(qs*bmag/(ms*g))
+
+if 'flagRE' in outputs_list:
+    momgcv=ppll*R*bPHI/bmag
+    momgcb=qs*psiP
+    momgc=momgcv+momgcb
+    
+#%%calculate analytical orbit
+
+calcorbit=1
+
+if calcorbit==1:
+    sign=1
+    qsign=-1
+    
+    v=c*np.sqrt(1-1/g[0]**2)
+    
+    omega=qs*B0/(g[0]*ms)
+    xi=2*np.pi
+    
+    rL=v*np.sin(eta)/omega
+    
+    tgyro=2*np.pi/omega
+    
+    x0=0
+    y0=0
+    z0=0
+    
+    vx0=0
+    vy0=-v*np.cos(np.pi/4)
+    vz0=v*np.cos(np.pi/4)
+    #vy0=v
+    #vz0=0
+    
+    tsteps=209
+    #tsteps=14
+    dt=tgyro/100
+    #dt=0.7142857143E-11
+    
+    tt=np.linspace(0,dt*tsteps,tsteps+1)
+    
+    Ayy=sign*(vy0/omega*np.sin(omega*tt)-qsign*vz0/omega*(1-np.cos(omega*tt)))
+    Azz=sign*(vz0/omega*np.sin(omega*tt)+qsign*vy0/omega*(1-np.cos(omega*tt)))
 
 #%% Calculate and save facetted wall impacts
 
@@ -1068,7 +1120,7 @@ plot_orbit=0
 plot_histRZ_analytic=0
 plot_evoCon=0
 plotgrowth=0
-plotyorbit=0   
+plotyorbit=1   
 plot_ne=0
 plot_Te=0
 plot_ephi=0
@@ -1078,11 +1130,11 @@ plot_bphi=0
 plot_psip=0
 plot_histRZ_ext=0
 plot_histKeta=0
-plot_histK=0
-plot_histeta=0
+plot_histK_multi=0
+plot_histeta_multi=0
 plot_evoCon_DiMES=0
 plot_evo1D=0
-plot_fieldm=1
+plot_fieldm=0
 plot_deconloc=0
 plot_deconloc1=0
 plot_deconloc2=0
@@ -1099,7 +1151,7 @@ plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=0
+timeind_p=1
 timeind_g=0
 
 #tloss=time[12]
@@ -2369,7 +2421,7 @@ if plot_histKeta==1:
     plt.savefig("Ketahist_DIIID_"+run_directory[0]+".png", format="png", bbox_inches="tight")
     plt.show()
     
-if plot_histK==1:
+if plot_histK_multi==1:
     
     plotallpri=1
     plotactpri=0
@@ -2464,7 +2516,7 @@ if plot_histK==1:
 
 
     
-if plot_histeta==1:
+if plot_histeta_multi==1:
     
     plotall=0
     plotact=0
@@ -2562,14 +2614,21 @@ if plot_histeta==1:
 if plot_evo1D==1:
     fig,ax=plt.subplots()
     
-    tmp=bR
+    #tmp=g.copy()
+    tmp=momgcb
     
-    ax.plot(time, tmp)
+    #tmp=(tmp-tmp[0,:])/tmp[0,:]
     
-    ax.set(xlabel='$t (\\mathrm{s})$', ylabel='$\phi (\\mathrm{rad})$')
+    ax.plot(time[1:], tmp[1:,:])
+    
+    ax.set_yscale('symlog', linthresh=1e-16)
+    #ax.grid(True, which="both", ls="--", alpha=0.5)
+    ax.axhline(0, color='red', linewidth=1, linestyle=':')
+    
+    ax.set(xlabel='$t (\\mathrm{s})$', ylabel='$\\Delta\\gamma/\\gamma_0$')
     ax.grid()
     
-    plt.savefig("EvoCon_DIIID_AORSA.pdf", format="pdf", bbox_inches="tight")
+    plt.savefig("Evo_gamma.png", format="png", bbox_inches="tight")
     plt.show()   
 
 if plot_fieldm==1:
@@ -2585,7 +2644,7 @@ if plot_fieldm==1:
     #ax.contour(Rg,Zg,-PSIp[:,timeind_g,:],25,colors='black',linewidths=0.5)
     #ax.contour(Rg,Zg,FLAG[:,timeind_g,:],[.5],colors='black')
     
-    sc=ax[0].scatter(R,zz,c=bR,s=5,edgecolor='black',linewidth=0.25)
+    sc=ax[0].scatter(R[timeind_p,:],zz[timeind_p,:],c=bR[timeind_p,:],s=5,edgecolor='black',linewidth=0.25)
     
     cbar=plt.colorbar(sc,ax=ax[0])
     cbar.set_label('$B_R$', fontsize=12)
@@ -2593,7 +2652,7 @@ if plot_fieldm==1:
     ax[0].grid()
     ax[0].set_aspect('equal')
     
-    sc=ax[1].scatter(R,zz,c=bPHI,s=5,edgecolor='black',linewidth=0.25)
+    sc=ax[1].scatter(R[timeind_p,:],zz[timeind_p,:],c=bPHI[timeind_p,:],s=5,edgecolor='black',linewidth=0.25)
     
     cbar=plt.colorbar(sc,ax=ax[1])
     cbar.set_label('$B_\\phi$', fontsize=12)
@@ -2601,7 +2660,7 @@ if plot_fieldm==1:
     ax[1].grid()
     ax[1].set_aspect('equal')
     
-    sc=ax[2].scatter(R,zz,c=bZ,s=5,edgecolor='black',linewidth=0.25)
+    sc=ax[2].scatter(R[timeind_p,:],zz[timeind_p,:],c=bZ[timeind_p,:],s=5,edgecolor='black',linewidth=0.25)
     
     cbar=plt.colorbar(sc,ax=ax[2])
     cbar.set_label('$B_Z$', fontsize=12)
@@ -2887,23 +2946,35 @@ if plot_Te==1:
     plt.show()      
 
 if plotyorbit==1:
-    fig,ax=plt.subplots(2)
-    ax[0].plot(time,yy,color='b')
+    fig,ax=plt.subplots(1,3,figsize=(18,4))
+    ax[0].plot(time,yy,color='b',label='KORC')
+    ax[0].plot(tt,Ayy,color='r',label='Analytic')
 
 
     ax[0].set(xlabel='t (s)', ylabel='y (m)',
           title='y orbit')
     
-    ax[0].legend(['KORC','Analytic'])
+    ax[0].legend()
     
     ax[0].grid()
     
     ax[1].plot(time,zz,color='b')
+    ax[1].plot(tt,Azz,color='r')
 
     
     ax[1].set(xlabel='t (s)', ylabel='z (m)',
-          title='y orbit')
+          title='z orbit')
     
     ax[1].grid()
+    
+    ax[2].plot(yy,zz,color='b')
+    ax[2].plot(Ayy,Azz,color='r')
+
+    
+    ax[2].set(xlabel='y (s)', ylabel='z (m)',
+          title='orbit')
+    ax[2].set_aspect('equal')
+    
+    ax[2].grid()
     
     plt.show()

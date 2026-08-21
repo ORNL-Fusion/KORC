@@ -1793,13 +1793,9 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
   REAL(rp),DIMENSION(params%pchunk) :: B_X,B_Y,B_Z
   REAL(rp),DIMENSION(params%pchunk) :: E_X,E_Y,E_Z,PSIp
   INTEGER(is),DIMENSION(params%pchunk) :: flagCon,flagCol
-
   REAL(rp) :: B0,EF0,R0,q0,lam,ar
   REAL(rp) :: a,m_cache,q_cache
   REAL(rp) :: ne0,Te0,Zeff0
-
-
-
   INTEGER                                                    :: ii
   !! Species iterator.
   INTEGER                                                    :: pp
@@ -1809,199 +1805,212 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
   INTEGER(ip)                                                    :: tt
   !! time iterator.
 
-
   do ii = 1_idef,params%num_species
 
-     pchunk=params%pchunk
-     m_cache=spp(ii)%m
-     q_cache=spp(ii)%q
-     a = q_cache/abs(q_cache)*params%dt
+    pchunk=params%pchunk
+    m_cache=spp(ii)%m
+    q_cache=spp(ii)%q
+    a = q_cache/abs(q_cache)*params%dt
 
-     !write(6,*) 'q,m,dt,a',q_cache,m_cache,params%dt,a
+    !write(6,*) 'q,m,dt,a',q_cache,m_cache,params%dt,a
 
-     B0=F%Bo
-     EF0=F%Eo
-     lam=F%AB%lambda
-     R0=F%AB%Ro
-     q0=F%AB%qo
-     ar=F%AB%a
+    B0=F%Bo
+    EF0=F%Eo
+    lam=F%AB%lambda
+    R0=F%AB%Ro
+    q0=F%AB%qo
+    ar=F%AB%a
 
 
 
-     !$OMP PARALLEL DO default(none) &
-     !$OMP& FIRSTPRIVATE(epsilon0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
-     !$OMP& shared(params,ii,spp,P,F,random) &
-     !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
-     !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
-     !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,flagCon,flagCol,PSIp)
-     do pp=1_idef,spp(ii)%ppp,pchunk
+    !$OMP PARALLEL DO default(none) &
+    !$OMP& FIRSTPRIVATE(epsilon0,a,m_cache,q_cache,B0,EF0,lam,R0,q0,ar,pchunk)&
+    !$OMP& shared(params,ii,spp,P,F,random) &
+    !$OMP& PRIVATE(pp,tt,Bmag,cc,X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z, &
+    !$OMP& E_X,E_Y,E_Z,b_unit_X,b_unit_Y,b_unit_Z,v,vpar,vperp,tmp, &
+    !$OMP& cross_X,cross_Y,cross_Z,vec_X,vec_Y,vec_Z,g,flagCon,flagCol,PSIp)
+    do pp=1_idef,spp(ii)%ppp,pchunk
+
+      !$OMP SIMD
+      do cc=1_idef,pchunk
+        X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
+        X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
+        X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
+
+        V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
+        V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
+        V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
+
+        PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
+
+        g(cc)=spp(ii)%vars%g(pp-1+cc)
+        flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
+        flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+      end do
+      !$OMP END SIMD
+
+      if (.not.params%FokPlan) then
+        do tt=1_ip,params%t_skip
+
+          if (params%field_model(11:18).eq.'-SOLOVEV') THEN
+            call analytical_fields_solovev_p(params,pchunk,F, &
+              X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+          else if (params%field_model(1:3).eq.'ANA') then
+            call analytical_fields_p(params,pchunk,F, &
+              X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+          else if (params%field_model(1:3).eq.'UNI') then
+            call uniform_fields_p(pchunk,F, &
+              B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+          end if
+
+          call advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random, &
+            X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            P,F,g,flagCon,flagCol,PSIp)
+
+          if (params%field_model(11:18).eq.'-SOLOVEV') THEN
+            call analytical_fields_solovev_p(params,pchunk,F, &
+              X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
+          else if (params%field_model(1:3).eq.'ANA') then
+            call analytical_fields_p(params,pchunk,F, &
+              X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
+          else if (params%field_model(1:3).eq.'UNI') then
+            call uniform_fields_p(pchunk,F, &
+              B_X,B_Y,B_Z,E_X,E_Y,E_Z)
+          end if
+
+        end do !timestep iterator
 
         !$OMP SIMD
         do cc=1_idef,pchunk
-           X_X(cc)=spp(ii)%vars%X(pp-1+cc,1)
-           X_Y(cc)=spp(ii)%vars%X(pp-1+cc,2)
-           X_Z(cc)=spp(ii)%vars%X(pp-1+cc,3)
+          spp(ii)%vars%X(pp-1+cc,1)=X_X(cc)
+          spp(ii)%vars%X(pp-1+cc,2)=X_Y(cc)
+          spp(ii)%vars%X(pp-1+cc,3)=X_Z(cc)
 
-           V_X(cc)=spp(ii)%vars%V(pp-1+cc,1)
-           V_Y(cc)=spp(ii)%vars%V(pp-1+cc,2)
-           V_Z(cc)=spp(ii)%vars%V(pp-1+cc,3)
+          spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
+          spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
+          spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
 
-           PSIp(cc)=spp(ii)%vars%PSI_P(pp-1+cc)
+          spp(ii)%vars%g(pp-1+cc) = g(cc)
 
-           g(cc)=spp(ii)%vars%g(pp-1+cc)
-           flagCon(cc)=spp(ii)%vars%flagCon(pp-1+cc)
-           flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+          spp(ii)%vars%flagCon(pp-1+cc) = flagCon(cc)
+          spp(ii)%vars%flagCol(pp-1+cc) = flagCol(cc)
+
+          spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
+          spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
+          spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+
+          spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
+          spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
+          spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
+
+          spp(ii)%vars%PSI_P(pp-1+cc) = PSIp(cc)
         end do
         !$OMP END SIMD
 
-        if (.not.params%FokPlan) then
-           do tt=1_ip,params%t_skip
+      else
 
-              !write(6,*) 'tt',tt
+        !$OMP SIMD
+        do cc=1_idef,pchunk
+          B_X(cc)=spp(ii)%vars%B(pp-1+cc,1)
+          B_Y(cc)=spp(ii)%vars%B(pp-1+cc,2)
+          B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
 
-              if (params%field_model(1:3).eq.'ANA') then
-                 call analytical_fields_p(params,pchunk,F, &
-                      X_X,X_Y,X_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,flagCon)
-              else if (params%field_model(1:3).eq.'UNI') then
-                 call uniform_fields_p(pchunk,F, &
-                      B_X,B_Y,B_Z,E_X,E_Y,E_Z)
-              end if
+          E_X(cc)=spp(ii)%vars%E(pp-1+cc,1)
+          E_Y(cc)=spp(ii)%vars%E(pp-1+cc,2)
+          E_Z(cc)=spp(ii)%vars%E(pp-1+cc,3)
+        end do
+        !$OMP END SIMD
 
-              call advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random, &
-                   X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-                   P,F,g,flagCon,flagCol,PSIp)
-           end do !timestep iterator
+        call advance_FP3Deqn_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
+            g,m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
+            P,F,flagCon,flagCol,PSIp)
 
-           !$OMP SIMD
-           do cc=1_idef,pchunk
-              spp(ii)%vars%X(pp-1+cc,1)=X_X(cc)
-              spp(ii)%vars%X(pp-1+cc,2)=X_Y(cc)
-              spp(ii)%vars%X(pp-1+cc,3)=X_Z(cc)
+        !$OMP SIMD
+        do cc=1_idef,pchunk
 
-              spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
-              spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
-              spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
+          spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
+          spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
+          spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
 
-              spp(ii)%vars%g(pp-1+cc) = g(cc)
+          spp(ii)%vars%g(pp-1+cc) = g(cc)
 
-              spp(ii)%vars%flagCon(pp-1+cc) = flagCon(cc)
-              spp(ii)%vars%flagCol(pp-1+cc) = flagCol(cc)
+          flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
+        end do
+        !$OMP END SIMD
 
-              spp(ii)%vars%B(pp-1+cc,1) = B_X(cc)
-              spp(ii)%vars%B(pp-1+cc,2) = B_Y(cc)
-              spp(ii)%vars%B(pp-1+cc,3) = B_Z(cc)
+      end if
 
-              spp(ii)%vars%E(pp-1+cc,1) = E_X(cc)
-              spp(ii)%vars%E(pp-1+cc,2) = E_Y(cc)
-              spp(ii)%vars%E(pp-1+cc,3) = E_Z(cc)
-           end do
-           !$OMP END SIMD
+      !$OMP SIMD
+      !          !$OMP& aligned(Bmag,B_X,B_Y,B_Z, &
+      !          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,V_X,V_Y,V_Z,vpar, &
+      !          !$OMP& vperp,tmp,cross_X,cross_Y,cross_Z, &
+      !          !$OMP& vec_X,vec_Y,vec_Z,E_X,E_Y,E_Z)
+      do cc=1_idef,pchunk
+        !Derived output data
+        Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
 
+        ! Parallel unit vector
+        b_unit_X(cc) = B_X(cc)/Bmag(cc)
+        b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
+        b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
+
+        v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
+        if (v(cc).GT.korc_zero) then
+          ! Parallel and perpendicular components of velocity
+          vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
+                V_Z(cc)*b_unit_Z(cc))
+
+          vperp(cc) =  v(cc)**2 - vpar(cc)**2
+          if ( vperp(cc) .GE. korc_zero ) then
+              vperp(cc) = SQRT( vperp(cc) )
+          else
+              vperp(cc) = 0.0_rp
+          end if
+
+          ! Pitch angle
+          spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
+                MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
+
+          ! Magnetic moment
+          spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
+                g(cc)**2*vperp(cc)**2/Bmag(cc)
+          ! See Northrop's book (The adiabatic motion of charged
+          ! particles)
+
+          ! Radiated power
+          tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
+
+          cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
+          cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
+          cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
+
+          vec_X(cc) = E_X(cc) + cross_X(cc)
+          vec_Y(cc) = E_Y(cc) + cross_Y(cc)
+          vec_Z(cc) = E_Z(cc) + cross_Z(cc)
+
+          spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
+                ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
+                cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
+                cross_Z(cc)*E_Z(cc) + g(cc)**2* &
+                ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
+                - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
+                vec_Z(cc)*vec_Z(cc)) )
+
+          ! Input power due to electric field
+          spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
+                E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
         else
-
-           !$OMP SIMD
-           do cc=1_idef,pchunk
-              B_X(cc)=spp(ii)%vars%B(pp-1+cc,1)
-              B_Y(cc)=spp(ii)%vars%B(pp-1+cc,2)
-              B_Z(cc)=spp(ii)%vars%B(pp-1+cc,3)
-
-              E_X(cc)=spp(ii)%vars%E(pp-1+cc,1)
-              E_Y(cc)=spp(ii)%vars%E(pp-1+cc,2)
-              E_Z(cc)=spp(ii)%vars%E(pp-1+cc,3)
-           end do
-           !$OMP END SIMD
-
-           call advance_FP3Deqn_vars(params,random,X_X,X_Y,X_Z,V_X,V_Y,V_Z, &
-                g,m_cache,B0,lam,R0,q0,EF0,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-                P,F,flagCon,flagCol,PSIp)
-
-           !$OMP SIMD
-           do cc=1_idef,pchunk
-
-              spp(ii)%vars%V(pp-1+cc,1)=V_X(cc)
-              spp(ii)%vars%V(pp-1+cc,2)=V_Y(cc)
-              spp(ii)%vars%V(pp-1+cc,3)=V_Z(cc)
-
-              spp(ii)%vars%g(pp-1+cc) = g(cc)
-
-              flagCol(cc)=spp(ii)%vars%flagCol(pp-1+cc)
-           end do
-           !$OMP END SIMD
-
+          spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
+          spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
+          spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
+          spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
         end if
 
-        !$OMP SIMD
-        !          !$OMP& aligned(Bmag,B_X,B_Y,B_Z, &
-        !          !$OMP& b_unit_X,b_unit_Y,b_unit_Z,v,V_X,V_Y,V_Z,vpar, &
-        !          !$OMP& vperp,tmp,cross_X,cross_Y,cross_Z, &
-        !          !$OMP& vec_X,vec_Y,vec_Z,E_X,E_Y,E_Z)
-        do cc=1_idef,pchunk
-           !Derived output data
-           Bmag(cc) = SQRT(B_X(cc)*B_X(cc)+B_Y(cc)*B_Y(cc)+B_Z(cc)*B_Z(cc))
+      end do
+      !$OMP END SIMD
 
-           ! Parallel unit vector
-           b_unit_X(cc) = B_X(cc)/Bmag(cc)
-           b_unit_Y(cc) = B_Y(cc)/Bmag(cc)
-           b_unit_Z(cc) = B_Z(cc)/Bmag(cc)
-
-           v(cc) = SQRT(V_X(cc)*V_X(cc)+V_Y(cc)*V_Y(cc)+V_Z(cc)*V_Z(cc))
-           if (v(cc).GT.korc_zero) then
-              ! Parallel and perpendicular components of velocity
-              vpar(cc) = (V_X(cc)*b_unit_X(cc)+V_Y(cc)*b_unit_Y(cc)+ &
-                   V_Z(cc)*b_unit_Z(cc))
-
-              vperp(cc) =  v(cc)**2 - vpar(cc)**2
-              if ( vperp(cc) .GE. korc_zero ) then
-                 vperp(cc) = SQRT( vperp(cc) )
-              else
-                 vperp(cc) = 0.0_rp
-              end if
-
-              ! Pitch angle
-              spp(ii)%vars%eta(pp-1+cc) = 180.0_rp* &
-                   MODULO(ATAN2(vperp(cc),vpar(cc)),2.0_rp*C_PI)/C_PI
-
-              ! Magnetic moment
-              spp(ii)%vars%mu(pp-1+cc) = 0.5_rp*m_cache* &
-                   g(cc)**2*vperp(cc)**2/Bmag(cc)
-              ! See Northrop's book (The adiabatic motion of charged
-              ! particles)
-
-              ! Radiated power
-              tmp(cc) = q_cache**4/(6.0_rp*C_PI*epsilon0*m_cache**2)
-
-              cross_X(cc) = V_Y(cc)*B_Z(cc)-V_Z(cc)*B_Y(cc)
-              cross_Y(cc) = V_Z(cc)*B_X(cc)-V_X(cc)*B_Z(cc)
-              cross_Z(cc) = V_X(cc)*B_Y(cc)-V_Y(cc)*B_X(cc)
-
-              vec_X(cc) = E_X(cc) + cross_X(cc)
-              vec_Y(cc) = E_Y(cc) + cross_Y(cc)
-              vec_Z(cc) = E_Z(cc) + cross_Z(cc)
-
-              spp(ii)%vars%Prad(pp-1+cc) = tmp(cc)* &
-                   ( E_X(cc)*E_X(cc)+E_Y(cc)*E_Y(cc)+E_Z(cc)*E_Z(cc) + &
-                   cross_X(cc)*E_X(cc)+cross_Y(cc)*E_Y(cc)+ &
-                   cross_Z(cc)*E_Z(cc) + g(cc)**2* &
-                   ((E_X(cc)*V_X(cc)+E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))**2 &
-                   - vec_X(cc)*vec_X(cc)-vec_Y(cc)*vec_Y(cc)- &
-                   vec_Z(cc)*vec_Z(cc)) )
-
-              ! Input power due to electric field
-              spp(ii)%vars%Pin(pp-1+cc) = q_cache*(E_X(cc)*V_X(cc)+ &
-                   E_Y(cc)*V_Y(cc)+E_Z(cc)*V_Z(cc))
-           else
-              spp(ii)%vars%eta(pp-1+cc) = 0.0_rp
-              spp(ii)%vars%mu(pp-1+cc) = 0.0_rp
-              spp(ii)%vars%Prad(pp-1+cc) = 0.0_rp
-              spp(ii)%vars%Pin(pp-1+cc) = 0.0_rp
-           end if
-
-        end do
-        !$OMP END SIMD
-
-
-     end do !particle chunk iterator
-     !$OMP END PARALLEL DO
+    end do !particle chunk iterator
+    !$OMP END PARALLEL DO
 
   end do !species iterator
 

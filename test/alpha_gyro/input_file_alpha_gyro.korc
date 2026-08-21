@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 1.E-4
+  simulation_time = 1.E-7
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-6 
+  snapshot_frequency = 1.E-9 
     ! Time between snapshots in seconds
   dt = 1.e-2
     ! for k=3.5MeV alpha, at B0=5.3T, 6.2m radius takes 60 gyro-periods
@@ -24,7 +24,7 @@
     ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
   bound_electron_model = 'NO_BOUND'
     ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
-  field_model = 'UNIFORM'!'ANALYTICAL-SOLOVEV'
+  field_model = 'UNIFORM'
   profile_model = 'ANALYTICAL'
     ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
     ! For 'ANALYTICAL', the magnetic field is calculated based on
@@ -56,7 +56,7 @@
     ! Electric charge
   m = 7344.5
     ! In units of electron mass
-  spatial_distribution = 'TRACER'!'MH_psi'
+  spatial_distribution = 'TRACER'
     ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
     ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
     ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
@@ -70,31 +70,9 @@
     ! Lower and upper limit of simulated energy range, in eV.
   etao = 90.0
     ! Lower and upper limit of simulated pitch-angle range, in degrees.
-  Ro=6.2
-  Zo=0.0
-  psi_max=0.8
-  dth = 3.
-  dgam = 3.
-  dR = 0.5
-  dZ = 0.5
-  sigmaR = 1.e6
-  sigmaZ = 0.2
   Xtrace = 2.,0.,0.
 /
 
 &analytical_fields_params
-  Eo = 0e0 
-    ! In V/m
-  current_direction = 'PARALLEL' 
-    ! 'PARALLEL' or 'ANTI-PARALLEL'
   Bo = 5.3
-    ! In Teslas. ITER: 5.42 DIII-D: 2.19 JET: 3.39
-  major_radius = 6.2 
-    ! Major radius in meters. ITER: 6.5 DIII-D: 1.6 JET:2.6
-  minor_radius = 2.2
-/
-
-&externalPlasmaModel
-  PSIp_lim = 0.6038561345051443
-  PSIP_0 = -5.409010193264551
 /
