@@ -40,12 +40,12 @@ dir_num=1
 #run_directory=['GCeqn_GPU_TEST20b3']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
-#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
+run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
 #run_directory=['/home/21b/KORC/test/solovev/rank_1']
-run_directory=['/home/21b/KORC/test/alpha_gyro/rank_1']
+#run_directory=['/home/21b/KORC/test/alpha_gyro/rank_1']
 
 for kk in range(0,dir_num):
 
@@ -406,7 +406,7 @@ if useextfield==1:
     
 #%% analytic fields
 
-if (field_model != 'M3D_C1') and (field_eval == 'eqn') and (field_model != 'UNIFORM'):
+if (field_model != 'M3D_C1') and (field_eval == 'eqn') and (field_model != 'UNIFORM') and (field_model[11:18] != 'SOLOVEV'):
 
     Rm=np.linspace(R0-a,R0+a,100)
     Zm=np.linspace(Z0-a,Z0+a,100)
@@ -422,6 +422,87 @@ if (field_model != 'M3D_C1') and (field_eval == 'eqn') and (field_model != 'UNIF
     
     limR=R0+a*np.cos(np.linspace(0,2*np.pi,100))
     limZ=Z0+a*np.sin(np.linspace(0,2*np.pi,100))*kappa
+    
+if (field_model[11:18] == 'SOLOVEV'):
+
+    Rm=np.linspace(4,8.5,120)
+    Zm=np.linspace(-4,4,200)
+
+    r, z = np.meshgrid(Rm, Zm)
+    
+    r=r/R0
+    z=z/R0
+    
+    r2=r*r
+    r3=r2*r
+    r4=r3*r
+    r5=r4*r
+    r6=r5*r
+    z2=z*z
+    z3=z2*z
+    z4=z3*z
+    z5=z4*z
+    z6=z5*z
+    logr=np.log(r)
+    
+    psifac=200
+
+    C = np.array([
+             2.21808016e-02,  -1.28841781e-01,  -4.17718173e-02,
+            -6.22680280e-02,   6.20083978e-03,  -1.20524711e-03,
+            -3.70147050e-05,   0.00000000e+00,   0.00000000e+00,
+             0.00000000e+00,   0.00000000e+00,   0.00000000e+00,
+            -0.155])
+    
+    psim = psifac * (
+             (1-C[12]) * (r4/8)
+              + C[12] * (r2*logr/2)
+              + C[0]  * (1)
+              + C[1]  * (r2)
+              + C[2]  * (r2*logr - z2)
+              + C[3]  * (r4 - 4*r2*z2)
+              + C[4]  * (3*r4*logr - 9*r2*z2 - 12*r2*logr*z2 + 2*z4)
+              + C[5]  * (r6 - 12*r4*z2 + 8*r2*z4)
+              + C[6]  * (8*z6 - 140*r2*z4 - 120*r2*logr*z4 + 180*r4*logr*z2
+                         + 75*r4*z2 - 15*r6*logr)
+              + C[7]  * (z)
+              + C[8]  * (z*r2)
+              + C[9]  * (z3 - 3*z*r2*logr)
+              + C[10] * (3*z*r4 - 4*z3*r2)
+              + C[11] * (8*z5 - 45*z*r4 - 80*z3*r2*logr + 60*z*r4*logr) )
+    
+    BR =  -psifac/(r*R0*R0) * (
+        C[2]  * (-2*z)
+        + C[3]  * (-8*r2*z)
+        + C[4]  * (-18*r2*z - 24*r2*logr*z + 8*z3)
+        + C[5]  * (-24*r4*z + 32*r2*z3)
+        + C[6]  * (48*z5 - 560*r2*z3 - 480*r2*logr*z3 +360*r4*logr*z
+                   + 150*r4*z)
+        + C[7]  * (1)
+        + C[8]  * (r2)
+        + C[9]  * (3*z2 - 3*r2*logr)
+        + C[10] * (3*r4 - 12*z2*r2)
+        + C[11] * (40*z4 - 45*r4 - 240*z2*r2*logr + 60*r4*logr) )
+    
+    BPHI=B0/r
+    
+    BZ =  psifac/(r*R0*R0) * (
+        (1-C[12]) * (r3/2)
+        + C[12] * (r/2 + r*logr)
+        + C[1]  * (2*r)
+        + C[2]  * (2*r*logr + r)
+        + C[3]  * (4*r3 - 8*r*z2)
+        + C[4]  * (12*r3*logr + 3*r3 - 30*r*z2 - 24*r*logr*z2)
+        + C[5]  * (6*r5 - 48*r3*z2 + 16*r*z4)
+        + C[6]  * (-400*r*z4 -240*r*logr*z4 + 720*r3*logr*z2 + 480*r3*z2
+                   -90*r5*logr - 15*r5)
+        + C[8]  * (2*z*r)
+        + C[9]  * (-6*z*r*logr - 3*z*r)
+        + C[10] * (12*z*r3 - 8*z3*r)
+        + C[11] * (-120*z*r3-160*z3*r*logr-80*z3*r+240*z*r3*logr))
+
+    psi_lim=np.min(psim[:,0])
+    psi_min=np.min(psim[:])
 
 #%% open Eric's matlab file for RE kinetic distributions
 
@@ -471,6 +552,7 @@ if orbit_model=='FO':
     bmag=np.sqrt(bX**2+bY**2+bZ**2)
     vpll=(vx*bX+vy*bY+vz*bZ)/bmag
     vperp=np.sqrt(vmag**2-vpll**2)
+    vPHI=vy*np.cos(PHI)-vx*np.sin(PHI)
     
     ppll=ms*g*vpll
     
@@ -486,7 +568,7 @@ elif orbit_model[0:2]=='GC':
     vperp=vmag*np.sin(np.radians(eta))
     vpll=vmag*np.cos(np.radians(eta))
 
-if (field_model != 'UNIFORM'):
+if (field_model == 'EXTERNAL'):
     rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
 
 flagDecon=np.zeros(np.shape(flagCon))
@@ -533,14 +615,14 @@ K=(g-1)*(ms*c**2/qe)
 
 GR=vperp/(qs*bmag/(ms*g))
 
-if 'flagRE' in outputs_list:
-    momgcv=ppll*R*bPHI/bmag
+if 'PSIp' in outputs_list:
+    momgcv=R*ms*vPHI
     momgcb=qs*psiP
     momgc=momgcv+momgcb
     
 #%%calculate analytical orbit
 
-calcorbit=1
+calcorbit=0
 
 if calcorbit==1:
     sign=1
@@ -1118,9 +1200,9 @@ plot_3Dloc=0
 plot_evo=0
 plot_orbit=0
 plot_histRZ_analytic=0
-plot_evoCon=0
+plot_evoCon=1
 plotgrowth=0
-plotyorbit=1   
+plotyorbit=0   
 plot_ne=0
 plot_Te=0
 plot_ephi=0
@@ -1154,10 +1236,10 @@ plot_evoRE = 0
 timeind_p=1
 timeind_g=0
 
-#tloss=time[12]
-#t0=1.594691872596741e+00
+tloss=time[13]
+t0=1.594691872596741e+00
 
-need_exp_data=0
+need_exp_data=1
 if need_exp_data==1:
     filename_ip = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21/ip177031.txt'
 
@@ -2017,8 +2099,12 @@ if plot_orbit==1:
     if singleorbit==1:
         ax[1,1].plot(tmp_R[0],tmp_Z[0],'ro')
 
+    ax[1,1].contour(r*R0,z*R0,psim,np.linspace(psi_min,psi_lim,10))
+
     #ax.set_xscale('log')
     #ax.set_yscale('log')
+    
+    ax[1,1].axis([R0-.5,R0+.5,Z0+.5,Z0-.5])
     
     ax[0,0].set(xlabel='$t (\\mathrm{s})$', ylabel='$Z (\\mathrm{m})$')
     ax[0,1].set(xlabel='$t (\\mathrm{s})$', ylabel='$R (\\mathrm{m})$')
@@ -2615,15 +2701,21 @@ if plot_evo1D==1:
     fig,ax=plt.subplots()
     
     #tmp=g.copy()
-    tmp=momgcb
+    #tmp1=momgcb.copy()
+    #tmp2=momgcv.copy()
+    tmp=momgc.copy()
     
-    #tmp=(tmp-tmp[0,:])/tmp[0,:]
+    tmp=(tmp-tmp[0,:])/tmp[0,:]
     
-    ax.plot(time[1:], tmp[1:,:])
+    initind=0
     
-    ax.set_yscale('symlog', linthresh=1e-16)
+    ax.plot(time[initind:], tmp[initind:,:],'k')
+    #ax.plot(time[1:], tmp1[1:,:],'b')
+    #ax.plot(time[1:], tmp2[1:,:],'r')
+    
+    ax.set_yscale('symlog', linthresh=1e-5)
     #ax.grid(True, which="both", ls="--", alpha=0.5)
-    ax.axhline(0, color='red', linewidth=1, linestyle=':')
+    #ax.axhline(0, color='red', linewidth=1, linestyle=':')
     
     ax.set(xlabel='$t (\\mathrm{s})$', ylabel='$\\Delta\\gamma/\\gamma_0$')
     ax.grid()

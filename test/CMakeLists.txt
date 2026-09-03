@@ -46,7 +46,7 @@ foreach(RANK IN ITEMS 1 2 4 8)
     set_tests_properties (egyro_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
     add_test (NAME alpha_gyro_test_${RANK}
-	      COMMAND ${CMAKE_BINARY_DIR}/elong_trans_test/korc_alpha_gyro.sh ${RANK}
+	      COMMAND ${CMAKE_BINARY_DIR}/alpha_gyro_test/korc_alpha_gyro.sh ${RANK}
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     set_tests_properties (alpha_gyro_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
@@ -56,7 +56,7 @@ foreach(RANK IN ITEMS 1 2 4 8)
     set_tests_properties (elong_trans_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
     
     add_test (NAME solovev_test_${RANK}
-	      COMMAND ${CMAKE_BINARY_DIR}/elong_trans_test/korc_solovev.sh ${RANK}
+	      COMMAND ${CMAKE_BINARY_DIR}/solovev_test/korc_solovev.sh ${RANK}
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     set_tests_properties (solovev_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
