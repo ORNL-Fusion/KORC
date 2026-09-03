@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -ex
+
+#define input file
+INPUT_FILE="${CMAKE_SOURCE_DIR}/test/TGLF_DRR/input_file_TGLF_DRR.korc"
+#define output directory
+OUT_DIR="TGLF_DRR_test/rank_$1"
+
+#check that output directory doesn't exist so bash doesn't complain
+if [ ! -d $OUT_DIR ]; then
+  mkdir -p $OUT_DIR
+fi
+
+echo "Running in: $(pwd)"
+echo "Input file: $INPUT_FILE"
+
+${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} $1 ./xkorc $INPUT_FILE $OUT_DIR/
+
+for i in $(seq 0 $(($1-1)));
+do
+  h5diff -r -p 0.000008 $OUT_DIR/file_$i.h5 ${CMAKE_SOURCE_DIR}/test/TGLF_DRR/rank_$1/file_$i.h5
+done
+
