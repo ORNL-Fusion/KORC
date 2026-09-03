@@ -11,6 +11,7 @@ mu0=4*np.pi*10**(-7)
 c = 2.99792458E8 #% Speed of light (m/s)
 qe = 1.60217662E-19 #% Electron charge (C)
 me = 9.10938356E-31 #% Electron mass (kg)
+mp = 1.6726e-27 #% Proton mass (kg)
 ep0 = 8.854E-12 #% Electric permitivity [C**2/(N*m**2)]
 re = qe**2/(4*np.pi*ep0*me*c**2) #% classical electron radius (m)
 
@@ -39,10 +40,12 @@ dir_num=1
 #run_directory=['GCeqn_GPU_TEST20b3']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
-#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
+run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
-run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
+#run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
+#run_directory=['/home/21b/KORC/test/solovev/rank_1']
+#run_directory=['/home/21b/KORC/test/alpha_gyro/rank_1']
 
 for kk in range(0,dir_num):
 
@@ -55,6 +58,8 @@ for kk in range(0,dir_num):
         output_cadence=f['simulation']['output_cadence'][0]
         t_steps_tot=f['simulation']['t_steps'][0]
         ppp=f['species']['ppp'][0]
+        ms=f['species']['m'][0]
+        qs=f['species']['q'][0]
         orbit_model=[x.decode() for x in f['simulation']['orbit_model']][0]
         field_eval=[x.decode() for x in f['simulation']['field_eval']][0]
         field_model=[x.decode() for x in f['simulation']['field_model']][0]
@@ -65,15 +70,19 @@ for kk in range(0,dir_num):
         if field_model != 'M3D_C1':
             B0=f['fields']['Bo'][0]
             E0=f['fields']['Eo'][0]
-            R0=f['fields']['Ro'][0]
-            Z0=f['fields']['Zo'][0]
+            if field_model != 'UNIFORM':
+                R0=f['fields']['Ro'][0]
+                Z0=f['fields']['Zo'][0]
             if field_eval == 'eqn':
                 ar=f['species']['ro'][0]
-                a=f['fields']['a'][0]
-                lam=f['fields']['lambda'][0]
-                kappa=f['fields']['kappa'][0]
-                q0=f['fields']['qo'][0]
+                if field_model != 'UNIFORM':
+                    a=f['fields']['a'][0]
+                    lam=f['fields']['lambda'][0]
+                    kappa=f['fields']['kappa'][0]
+                    q0=f['fields']['qo'][0]
             if field_eval != 'eqn':
+                R0=f['fields']['Ro'][0]
+                Z0=f['fields']['Zo'][0]
                 Rm=f['fields']['R'][:]
                 Zm=f['fields']['Z'][:]
                 #PSIPm=f['fields']['psi_p'][:]
@@ -397,7 +406,7 @@ if useextfield==1:
     
 #%% analytic fields
 
-if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
+if (field_model != 'M3D_C1') and (field_eval == 'eqn') and (field_model != 'UNIFORM') and (field_model[11:18] != 'SOLOVEV'):
 
     Rm=np.linspace(R0-a,R0+a,100)
     Zm=np.linspace(Z0-a,Z0+a,100)
@@ -413,6 +422,87 @@ if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
     
     limR=R0+a*np.cos(np.linspace(0,2*np.pi,100))
     limZ=Z0+a*np.sin(np.linspace(0,2*np.pi,100))*kappa
+    
+if (field_model[11:18] == 'SOLOVEV'):
+
+    Rm=np.linspace(4,8.5,120)
+    Zm=np.linspace(-4,4,200)
+
+    r, z = np.meshgrid(Rm, Zm)
+    
+    r=r/R0
+    z=z/R0
+    
+    r2=r*r
+    r3=r2*r
+    r4=r3*r
+    r5=r4*r
+    r6=r5*r
+    z2=z*z
+    z3=z2*z
+    z4=z3*z
+    z5=z4*z
+    z6=z5*z
+    logr=np.log(r)
+    
+    psifac=200
+
+    C = np.array([
+             2.21808016e-02,  -1.28841781e-01,  -4.17718173e-02,
+            -6.22680280e-02,   6.20083978e-03,  -1.20524711e-03,
+            -3.70147050e-05,   0.00000000e+00,   0.00000000e+00,
+             0.00000000e+00,   0.00000000e+00,   0.00000000e+00,
+            -0.155])
+    
+    psim = psifac * (
+             (1-C[12]) * (r4/8)
+              + C[12] * (r2*logr/2)
+              + C[0]  * (1)
+              + C[1]  * (r2)
+              + C[2]  * (r2*logr - z2)
+              + C[3]  * (r4 - 4*r2*z2)
+              + C[4]  * (3*r4*logr - 9*r2*z2 - 12*r2*logr*z2 + 2*z4)
+              + C[5]  * (r6 - 12*r4*z2 + 8*r2*z4)
+              + C[6]  * (8*z6 - 140*r2*z4 - 120*r2*logr*z4 + 180*r4*logr*z2
+                         + 75*r4*z2 - 15*r6*logr)
+              + C[7]  * (z)
+              + C[8]  * (z*r2)
+              + C[9]  * (z3 - 3*z*r2*logr)
+              + C[10] * (3*z*r4 - 4*z3*r2)
+              + C[11] * (8*z5 - 45*z*r4 - 80*z3*r2*logr + 60*z*r4*logr) )
+    
+    BR =  -psifac/(r*R0*R0) * (
+        C[2]  * (-2*z)
+        + C[3]  * (-8*r2*z)
+        + C[4]  * (-18*r2*z - 24*r2*logr*z + 8*z3)
+        + C[5]  * (-24*r4*z + 32*r2*z3)
+        + C[6]  * (48*z5 - 560*r2*z3 - 480*r2*logr*z3 +360*r4*logr*z
+                   + 150*r4*z)
+        + C[7]  * (1)
+        + C[8]  * (r2)
+        + C[9]  * (3*z2 - 3*r2*logr)
+        + C[10] * (3*r4 - 12*z2*r2)
+        + C[11] * (40*z4 - 45*r4 - 240*z2*r2*logr + 60*r4*logr) )
+    
+    BPHI=B0/r
+    
+    BZ =  psifac/(r*R0*R0) * (
+        (1-C[12]) * (r3/2)
+        + C[12] * (r/2 + r*logr)
+        + C[1]  * (2*r)
+        + C[2]  * (2*r*logr + r)
+        + C[3]  * (4*r3 - 8*r*z2)
+        + C[4]  * (12*r3*logr + 3*r3 - 30*r*z2 - 24*r*logr*z2)
+        + C[5]  * (6*r5 - 48*r3*z2 + 16*r*z4)
+        + C[6]  * (-400*r*z4 -240*r*logr*z4 + 720*r3*logr*z2 + 480*r3*z2
+                   -90*r5*logr - 15*r5)
+        + C[8]  * (2*z*r)
+        + C[9]  * (-6*z*r*logr - 3*z*r)
+        + C[10] * (12*z*r3 - 8*z3*r)
+        + C[11] * (-120*z*r3-160*z3*r*logr-80*z3*r+240*z*r3*logr))
+
+    psi_lim=np.min(psim[:,0])
+    psi_min=np.min(psim[:])
 
 #%% open Eric's matlab file for RE kinetic distributions
 
@@ -462,6 +552,9 @@ if orbit_model=='FO':
     bmag=np.sqrt(bX**2+bY**2+bZ**2)
     vpll=(vx*bX+vy*bY+vz*bZ)/bmag
     vperp=np.sqrt(vmag**2-vpll**2)
+    vPHI=vy*np.cos(PHI)-vx*np.sin(PHI)
+    
+    ppll=ms*g*vpll
     
 elif orbit_model[0:2]=='GC':
     
@@ -471,11 +564,12 @@ elif orbit_model[0:2]=='GC':
     bmag=np.sqrt(bR**2+bPHI**2+bZ**2)
     bpol=np.sqrt(bR**2+bZ**2)
     vmag=c*np.sqrt(1-(1/g)**2)
-    pmag=me*c*np.sqrt(g**2-1)
+    pmag=ms*c*np.sqrt(g**2-1)
     vperp=vmag*np.sin(np.radians(eta))
     vpll=vmag*np.cos(np.radians(eta))
 
-rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
+if (field_model == 'EXTERNAL'):
+    rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
 
 flagDecon=np.zeros(np.shape(flagCon))
 flagDecon[(flagCon<1) & (flagRE>0)]=1
@@ -503,13 +597,13 @@ if 'flagRE' in outputs_list:
   flagSecondary[:,flagRE[-1,:]<1]=0
   Secondary=np.sum(flagSecondary,axis=1)
 
-Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
+Ipart=qs*vpll*bPHI/(2*np.pi*R*bmag)
 Ipart[flagActive==0]=0
 Itot=np.sum(Ipart,axis=1)
 Ipri=np.sum(Ipart*flagPrimary,axis=1)
 Isec=np.sum(Ipart*flagSecondary,axis=1)
 
-IPOLpart=qe*vpll*bpol/(2*np.pi*R*bmag)
+IPOLpart=qs*vpll*bpol/(2*np.pi*R*bmag)
 IPOLpart[flagActive==0]=0
 IPOL=np.sum(IPOLpart,axis=1)
 
@@ -517,9 +611,51 @@ IPOL=np.sum(IPOLpart,axis=1)
 #KE=me*c**2/qe*np.sum((g-1)*flagActive)
 #KEtot=me*c**2/qe*np.sum((1-1)*flagRE)
 
-K=(g-1)*(me*c**2/qe)
+K=(g-1)*(ms*c**2/qe)
 
-GR=vperp/(qe*bmag/(me*g))
+GR=vperp/(qs*bmag/(ms*g))
+
+if 'PSIp' in outputs_list:
+    momgcv=R*ms*vPHI
+    momgcb=qs*psiP
+    momgc=momgcv+momgcb
+    
+#%%calculate analytical orbit
+
+calcorbit=0
+
+if calcorbit==1:
+    sign=1
+    qsign=-1
+    
+    v=c*np.sqrt(1-1/g[0]**2)
+    
+    omega=qs*B0/(g[0]*ms)
+    xi=2*np.pi
+    
+    rL=v*np.sin(eta)/omega
+    
+    tgyro=2*np.pi/omega
+    
+    x0=0
+    y0=0
+    z0=0
+    
+    vx0=0
+    vy0=-v*np.cos(np.pi/4)
+    vz0=v*np.cos(np.pi/4)
+    #vy0=v
+    #vz0=0
+    
+    tsteps=209
+    #tsteps=14
+    dt=tgyro/100
+    #dt=0.7142857143E-11
+    
+    tt=np.linspace(0,dt*tsteps,tsteps+1)
+    
+    Ayy=sign*(vy0/omega*np.sin(omega*tt)-qsign*vz0/omega*(1-np.cos(omega*tt)))
+    Azz=sign*(vz0/omega*np.sin(omega*tt)+qsign*vy0/omega*(1-np.cos(omega*tt)))
 
 #%% Calculate and save facetted wall impacts
 
@@ -1055,7 +1191,7 @@ plt.rc('ytick', labelsize=SMALL_SIZE)
 plt.rc('legend', fontsize=SMALL_SIZE)
 plt.rc('figure', titlesize=SMALL_SIZE)
 
-plot_histrm=1
+plot_histrm=0
 plot_LAC_ParamScaling=0
 plot_LAC_Escaling=0
 plot_GPUscaling=0
@@ -1064,7 +1200,7 @@ plot_3Dloc=0
 plot_evo=0
 plot_orbit=0
 plot_histRZ_analytic=0
-plot_evoCon=0
+plot_evoCon=1
 plotgrowth=0
 plotyorbit=0   
 plot_ne=0
@@ -1076,8 +1212,8 @@ plot_bphi=0
 plot_psip=0
 plot_histRZ_ext=0
 plot_histKeta=0
-plot_histK=0
-plot_histeta=0
+plot_histK_multi=0
+plot_histeta_multi=0
 plot_evoCon_DiMES=0
 plot_evo1D=0
 plot_fieldm=0
@@ -1097,13 +1233,13 @@ plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=100
+timeind_p=1
 timeind_g=0
 
-#tloss=time[12]
-#t0=1.594691872596741e+00
+tloss=time[13]
+t0=1.594691872596741e+00
 
-need_exp_data=0
+need_exp_data=1
 if need_exp_data==1:
     filename_ip = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21/ip177031.txt'
 
@@ -1963,8 +2099,12 @@ if plot_orbit==1:
     if singleorbit==1:
         ax[1,1].plot(tmp_R[0],tmp_Z[0],'ro')
 
+    ax[1,1].contour(r*R0,z*R0,psim,np.linspace(psi_min,psi_lim,10))
+
     #ax.set_xscale('log')
     #ax.set_yscale('log')
+    
+    ax[1,1].axis([R0-.5,R0+.5,Z0+.5,Z0-.5])
     
     ax[0,0].set(xlabel='$t (\\mathrm{s})$', ylabel='$Z (\\mathrm{m})$')
     ax[0,1].set(xlabel='$t (\\mathrm{s})$', ylabel='$R (\\mathrm{m})$')
@@ -2367,7 +2507,7 @@ if plot_histKeta==1:
     plt.savefig("Ketahist_DIIID_"+run_directory[0]+".png", format="png", bbox_inches="tight")
     plt.show()
     
-if plot_histK==1:
+if plot_histK_multi==1:
     
     plotallpri=1
     plotactpri=0
@@ -2462,7 +2602,7 @@ if plot_histK==1:
 
 
     
-if plot_histeta==1:
+if plot_histeta_multi==1:
     
     plotall=0
     plotact=0
@@ -2560,37 +2700,67 @@ if plot_histeta==1:
 if plot_evo1D==1:
     fig,ax=plt.subplots()
     
-    tmp=bR
+    #tmp=g.copy()
+    #tmp1=momgcb.copy()
+    #tmp2=momgcv.copy()
+    tmp=momgc.copy()
     
-    ax.plot(time, tmp)
+    tmp=(tmp-tmp[0,:])/tmp[0,:]
     
-    ax.set(xlabel='$t (\\mathrm{s})$', ylabel='$\phi (\\mathrm{rad})$')
+    initind=0
+    
+    ax.plot(time[initind:], tmp[initind:,:],'k')
+    #ax.plot(time[1:], tmp1[1:,:],'b')
+    #ax.plot(time[1:], tmp2[1:,:],'r')
+    
+    ax.set_yscale('symlog', linthresh=1e-5)
+    #ax.grid(True, which="both", ls="--", alpha=0.5)
+    #ax.axhline(0, color='red', linewidth=1, linestyle=':')
+    
+    ax.set(xlabel='$t (\\mathrm{s})$', ylabel='$\\Delta\\gamma/\\gamma_0$')
     ax.grid()
     
-    plt.savefig("EvoCon_DIIID_AORSA.pdf", format="pdf", bbox_inches="tight")
+    plt.savefig("Evo_gamma.png", format="png", bbox_inches="tight")
     plt.show()   
 
 if plot_fieldm==1:
-    fig,ax=plt.subplots()
+    fig,ax=plt.subplots(1,3,figsize=(18,4))
     
-    tmpfld=PSIPm.copy()
+    #tmpfld=PSIPm.copy()
     
     #nemin=np.min(-tmpfld)
     #nemax=np.max(-tmpfld)
     
     
-    ct=ax.contourf(Rm,Zm,tmpfld)
+    #ct=ax.contourf(Rm,Zm,tmpfld)
     #ax.contour(Rg,Zg,-PSIp[:,timeind_g,:],25,colors='black',linewidths=0.5)
     #ax.contour(Rg,Zg,FLAG[:,timeind_g,:],[.5],colors='black')
     
-    #sc=ax.scatter(R,zz,c=-psiP,s=5,cmap=ct.cmap,vmin=nemin,vmax=nemax,edgecolor='black',linewidth=0.25)
+    sc=ax[0].scatter(R[timeind_p,:],zz[timeind_p,:],c=bR[timeind_p,:],s=5,edgecolor='black',linewidth=0.25)
     
-    plt.colorbar(ct)
-    ax.set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
-    ax.grid()
-    plt.gca().set_aspect('equal')
+    cbar=plt.colorbar(sc,ax=ax[0])
+    cbar.set_label('$B_R$', fontsize=12)
+    ax[0].set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax[0].grid()
+    ax[0].set_aspect('equal')
     
-    plt.savefig("scatter_PSIp_JET_95128.pdf", format="pdf", bbox_inches="tight")
+    sc=ax[1].scatter(R[timeind_p,:],zz[timeind_p,:],c=bPHI[timeind_p,:],s=5,edgecolor='black',linewidth=0.25)
+    
+    cbar=plt.colorbar(sc,ax=ax[1])
+    cbar.set_label('$B_\\phi$', fontsize=12)
+    ax[1].set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax[1].grid()
+    ax[1].set_aspect('equal')
+    
+    sc=ax[2].scatter(R[timeind_p,:],zz[timeind_p,:],c=bZ[timeind_p,:],s=5,edgecolor='black',linewidth=0.25)
+    
+    cbar=plt.colorbar(sc,ax=ax[2])
+    cbar.set_label('$B_Z$', fontsize=12)
+    ax[2].set(xlabel='$R (\\mathrm{m})$', ylabel='$Z (\\mathrm{m})$')
+    ax[2].grid()
+    ax[2].set_aspect('equal')
+    
+    plt.savefig("scatter_B0.pdf", format="pdf", bbox_inches="tight")
     plt.show()  
 
 if plot_evoCon_DiMES==1:
@@ -2868,23 +3038,35 @@ if plot_Te==1:
     plt.show()      
 
 if plotyorbit==1:
-    fig,ax=plt.subplots(2)
-    ax[0].plot(time,yy,color='b')
+    fig,ax=plt.subplots(1,3,figsize=(18,4))
+    ax[0].plot(time,yy,color='b',label='KORC')
+    ax[0].plot(tt,Ayy,color='r',label='Analytic')
 
 
     ax[0].set(xlabel='t (s)', ylabel='y (m)',
           title='y orbit')
     
-    ax[0].legend(['KORC','Analytic'])
+    ax[0].legend()
     
     ax[0].grid()
     
     ax[1].plot(time,zz,color='b')
+    ax[1].plot(tt,Azz,color='r')
 
     
     ax[1].set(xlabel='t (s)', ylabel='z (m)',
-          title='y orbit')
+          title='z orbit')
     
     ax[1].grid()
+    
+    ax[2].plot(yy,zz,color='b')
+    ax[2].plot(Ayy,Azz,color='r')
+
+    
+    ax[2].set(xlabel='y (s)', ylabel='z (m)',
+          title='orbit')
+    ax[2].set_aspect('equal')
+    
+    ax[2].grid()
     
     plt.show()

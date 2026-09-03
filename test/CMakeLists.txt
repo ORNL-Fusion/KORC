@@ -21,14 +21,18 @@ target_link_libraries (xtest
 set_property(TARGET xtest PROPERTY LINKER_LANGUAGE Fortran)
 
 configure_file(${CMAKE_SOURCE_DIR}/test/egyro/korc_egyro.sh.in ${CMAKE_BINARY_DIR}/egyro_test/korc_egyro.sh)
+configure_file(${CMAKE_SOURCE_DIR}/test/alpha_gyro/korc_alpha_gyro.sh.in ${CMAKE_BINARY_DIR}/alpha_gyro_test/korc_alpha_gyro.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/elong_trans/korc_elong_trans.sh.in ${CMAKE_BINARY_DIR}/elong_trans_test/korc_elong_trans.sh)
+configure_file(${CMAKE_SOURCE_DIR}/test/solovev/korc_solovev.sh.in ${CMAKE_BINARY_DIR}/solovev_test/korc_solovev.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/mars/korc_mars.sh.in ${CMAKE_BINARY_DIR}/mars_test/korc_mars.sh)
 #configure_file(${CMAKE_SOURCE_DIR}/test/mars_EM/korc_mars_EM.sh.in ${CMAKE_BINARY_DIR}/mars_EM_test/korc_mars_EM.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/aorsa/korc_aorsa.sh.in ${CMAKE_BINARY_DIR}/aorsa_test/korc_aorsa.sh)
 configure_file(${CMAKE_SOURCE_DIR}/test/fio_m3dc1/korc_fio_m3dc1.sh.in ${CMAKE_BINARY_DIR}/fio_m3dc1_test/korc_fio_m3dc1.sh)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/egyro_test)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/alpha_gyro_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/elong_trans_test)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/solovev_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_test)
 #file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/mars_EM_test)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/aorsa_test)
@@ -41,10 +45,20 @@ foreach(RANK IN ITEMS 1 2 4 8)
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     set_tests_properties (egyro_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
+    add_test (NAME alpha_gyro_test_${RANK}
+	      COMMAND ${CMAKE_BINARY_DIR}/alpha_gyro_test/korc_alpha_gyro.sh ${RANK}
+              WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    set_tests_properties (alpha_gyro_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
+
     add_test (NAME elong_trans_test_${RANK}
 	      COMMAND ${CMAKE_BINARY_DIR}/elong_trans_test/korc_elong_trans.sh ${RANK}
               WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     set_tests_properties (elong_trans_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
+    
+    add_test (NAME solovev_test_${RANK}
+	      COMMAND ${CMAKE_BINARY_DIR}/solovev_test/korc_solovev.sh ${RANK}
+              WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    set_tests_properties (solovev_test_${RANK} PROPERTIES PROCESSORS ${RANK} ENVIRONMENT OMP_NUM_THREADS=1)
 
     if(USE_PSPLINE)
       add_test (NAME mars_test_${RANK}
