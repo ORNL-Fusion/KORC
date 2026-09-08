@@ -139,6 +139,7 @@ CONTAINS
     params%minimum_particle_energy = minimum_particle_energy*C_E
     params%minimum_particle_g = 1.0_rp + params%minimum_particle_energy/ &
          (C_ME*C_C**2) ! Minimum value of relativistic gamma factor
+    params%diffusion = diffusion
     params%radiation = radiation
     params%collisions = collisions
     params%LargeCollisions = LargeCollisions

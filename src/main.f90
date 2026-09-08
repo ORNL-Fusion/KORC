@@ -12,6 +12,7 @@ use korc_fields
 use korc_ppusher
 use korc_interp
 use korc_collisions
+use korc_diffusion
 use korc_initialize
 use korc_finalize
 use korc_profiles
@@ -193,6 +194,8 @@ call initialize_collision_params(params,spp,P,F,.true.)
   !! MS reads in namelist &CollisionParamsMultipleSpecies while SS reads in
   !! namelist &CollisionParamsSingleSpecies.
 
+call initialize_diffusion_params(params,spp,P,F,.true.)
+
 call define_time_step(params,F)
   !! <h4>10\. Define Time Step</h4>
   !!
@@ -230,6 +233,10 @@ call define_collisions_time_step(params,params_ACC,F,.true.)
   !! Subroutine [[define_collisions_time_step]] in [[korc_collisions]] that
   !! sets subcycling iteration number for collisions based off of the collision
   !! frequency model used.
+
+call normalize_diffusion_params(params)
+
+call define_diffusion_time_step(spp,params,params_ACC,F,.true.)
 
   ! *** *** *** *** *** ***   *** *** *** *** *** *** ***
   ! *** BEYOND THIS POINT VARIABLES ARE DIMENSIONLESS ***

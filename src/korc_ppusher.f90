@@ -8,6 +8,7 @@ module korc_ppusher
   use korc_profiles
   use korc_interp
   use korc_collisions
+  use korc_diffusion
   use korc_hpc
   use korc_coords
 
@@ -1794,9 +1795,6 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
   REAL(rp) :: B0,EF0,R0,q0,lam,ar
   REAL(rp) :: a,m_cache,q_cache
   REAL(rp) :: ne0,Te0,Zeff0
-
-
-
   INTEGER                                                    :: ii
   !! Species iterator.
   INTEGER                                                    :: pp
@@ -2580,6 +2578,13 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random,X_X,X_Y,X_Z, &
        X_Z(cc) = X_Z(cc) + dt*V_Z(cc)*REAL(flagCon(cc))*REAL(flagCol(cc))
     end do
     !$OMP END SIMD
+
+    if (params%diffusion) then
+
+       call include_diffusion_p(tt,params,random,X_X,X_Y,X_Z, &
+            U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F)
+
+    end if
 
 end subroutine advance_FOeqn_vars
 
