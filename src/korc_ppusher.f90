@@ -2582,7 +2582,7 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random,X_X,X_Y,X_Z, &
     if (params%diffusion) then
 
        call include_diffusion_p(tt,params,random,X_X,X_Y,X_Z, &
-            U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F)
+            U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F,flagCon)
 
     end if
 
