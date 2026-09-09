@@ -10,6 +10,7 @@ module korc_coords
        cart_to_cyl_p,&
        cart_to_cyl_p_ACC,&
        cart_to_tor_check_if_confined,&
+       cart_to_tor_check_if_confined_p,&
        cart_to_tor_p,&
        cyl_to_cart,&
        cyl_check_if_confined,&

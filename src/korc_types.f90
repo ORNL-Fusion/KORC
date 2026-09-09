@@ -230,7 +230,7 @@ module korc_types
      INTEGER(ip) 			:: orbits_per_diff
      REAL(rp) 			:: coll_per_dump_dt
      REAL(rp) 			:: diff_per_dump_dt
-     REAL(rp) :: diff_subcycling_iterations
+     integer(ip) :: diff_subcycling_iterations
      !! Time iteration offset used to decide when the outputs are generated.
      INTEGER(ip) 			:: restart_output_cadence
      !! Time iteration offset used to decide when the restart files are

@@ -5,16 +5,17 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 4.E-9
+  simulation_time = 1.E-8
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 4.E-10 
+  snapshot_frequency = 1.E-9
     ! Time between snapshots in seconds
   dt = 1.e-2
     ! Time step as fraction of relativistic gyro-period
   num_species = 1
   minimum_particle_energy = 1.0E5 
     ! Minimum energy of simulated particles in eV
+  diffusion = T
   radiation = F
   GC_rad_SDE = F
   collisions = F
@@ -65,7 +66,7 @@
     ! 'EXPERIMENTAL', and 'UNIFORM'
   pitch_distribution = 'MONOPITCH'
     ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
-  Eno = 1.E6
+  Eno = 10.E6
     ! Lower and upper limit of simulated energy range, in eV.
   etao = 10.0
     ! Lower and upper limit of simulated pitch-angle range, in degrees.
@@ -94,7 +95,7 @@
   qo = 1.01
   qa = 4.78
   perturb = F
-  turbulence = T
+  turbulence = F
   A_turb    = 1.620386820342208e-06
   mu_turb   = 0.32309683251166604
   sigma_turb= 0.017691893772250868
