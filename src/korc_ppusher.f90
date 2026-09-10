@@ -2002,7 +2002,8 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
 
 end subroutine adv_FOeqn_top
 
-subroutine adv_FOuni_top_ACC(params,F,P,spp)
+subroutine adv_FOuni_top_ACC(params,random,F,P,spp)
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
      TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
      !! Core KORC simulation parameters.
      TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -2071,9 +2072,9 @@ subroutine adv_FOuni_top_ACC(params,F,P,spp)
          !$acc loop seq
          do tt=1_ip,tskip
    
-           call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+           call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
                X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-               g,flagCon,flagCol,.false.,0.,0.,0.)
+               g,flagCon,flagCol)
          end do !timestep iterator
    
          spp(ii)%vars%X(pp,1)=X_X
@@ -2163,7 +2164,7 @@ subroutine adv_FOuni_top_ACC(params,F,P,spp)
    
    end subroutine adv_FOuni_top_ACC
 
-subroutine adv_FOeqn_top_ACC(params,F,P,spp,random)
+subroutine adv_FOeqn_top_ACC(params,random,F,P,spp)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
   TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -2271,7 +2272,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp,random)
 
         call advance_FO_vars_ACC(random,dt,it+tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-            g,flagCon,flagCol,diffusion,A_turb,mu_turb,sigma_turb)
+            g,flagCon,flagCol)
       end do !timestep iterator
 
       spp(ii)%vars%X(pp,1)=X_X
@@ -3494,7 +3495,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp,random)
 
         call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-            g,flagCon,flagCol,.false.,0.,0.,0.)
+            g,flagCon,flagCol)
       end do !timestep iterator
 
 
@@ -3715,7 +3716,7 @@ subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp,random)
 
         call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-            g,flagCon,flagCol,.false.,0.,0.,0.)
+            g,flagCon,flagCol)
       end do !timestep iterator
 
 
@@ -3939,7 +3940,7 @@ subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp,random)
 
         call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-            g,flagCon,flagCol,.false.,0.,0.,0.)
+            g,flagCon,flagCol)
       end do !timestep iterator
 
 
@@ -4377,7 +4378,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp,random)
 
         call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
-            g,flagCon,flagCol,.false.,0.,0.,0.)
+            g,flagCon,flagCol)
       end do !timestep iterator
 
 
@@ -4694,8 +4695,7 @@ end subroutine advance_FOinterp_vars
 #endif PSPLINE
 
 subroutine advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
-  V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol,diffusion, &
-  A_turb,mu_turb,sigma_turb)
+  V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol)
   !$acc routine seq
   CLASS(random_context), POINTER, INTENT(INOUT) :: random
   INTEGER, INTENT(IN)                                       :: tt
@@ -4748,10 +4748,10 @@ subroutine advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   !! Synchrotron radiation reaction force of each particle.
   REAL(rp) :: ne,Te,Zeff
   INTEGER(is),intent(inout)                   :: flagCon,flagCol
-  LOGICAL,intent(in) :: diffusion
-  REAL(cp),intent(in) :: A_turb,mu_turb,sigma_turb
+  !LOGICAL,intent(in) :: diffusion
+  !REAL(rp),intent(in) :: A_turb,mu_turb,sigma_turb
 
-  !$acc routine (include_diffusion_ACC) seq
+  !!$acc routine (include_diffusion_ACC) seq
 
   g0=g
 
@@ -4864,12 +4864,12 @@ subroutine advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   X_Y = X_Y + dt*V_Y*REAL(flagCon)*REAL(flagCol)
   X_Z = X_Z + dt*V_Z*REAL(flagCon)*REAL(flagCol)
 
-  if (diffusion) then
+  !if (diffusion) then
 
-    call include_diffusion_ACC(tt,random,X_X,X_Y,X_Z, &
-        U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F,flagCon,A_turb,mu_turb,sigma_turb)
+  !  call include_diffusion_ACC(tt,random,X_X,X_Y,X_Z, &
+  !      U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F,flagCon,A_turb,mu_turb,sigma_turb)
 
-  end if
+  !end if
 
 end subroutine advance_FO_vars_ACC
 

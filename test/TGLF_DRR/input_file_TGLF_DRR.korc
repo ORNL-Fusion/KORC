@@ -5,10 +5,10 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 1.E-8
+  simulation_time = 1.E-6
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-9
+  snapshot_frequency = 1.E-8
     ! Time between snapshots in seconds
   dt = 1.e-2
     ! Time step as fraction of relativistic gyro-period
@@ -50,13 +50,13 @@
 /
 
 &plasma_species
-  ppp = 100
-  pinit = 100
+  ppp = 1
+  pinit = 1
   q = -1.0
     ! Electric charge
   m = 1.0
     ! In units of electron mass
-  spatial_distribution = 'MH_psi'
+  spatial_distribution = 'TRACER'
     ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
     ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
     ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
@@ -79,6 +79,7 @@
   dZ = 0.1
   sigmaR = 1.e6
   sigmaZ = 0.2
+  Xtrace = 1.8,0.1,0.
 /
 
 &analytical_fields_params

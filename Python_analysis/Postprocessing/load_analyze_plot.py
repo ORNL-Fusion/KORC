@@ -43,7 +43,7 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
-run_directory=['/home/21b/KORC/test/TGLF_DRR/rank_1']
+run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
 
 for kk in range(0,dir_num):
 
@@ -1063,8 +1063,8 @@ plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
 plot_evo=0
-plot_orbit=0
-plot_histRZ_analytic=1
+plot_orbit=1
+plot_histRZ_analytic=0
 plot_evoCon=0
 plotgrowth=0
 plotyorbit=0   

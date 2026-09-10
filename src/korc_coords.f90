@@ -444,7 +444,7 @@ end subroutine cart_to_cyl_p_ACC
     do cc=1_idef,pchunk
       X_X(cc)=(R0+T_R(cc)*cos(T_T(cc)))*sin(T_Z(cc))
       X_Y(cc)=(R0+T_R(cc)*cos(T_T(cc)))*cos(T_Z(cc))
-      X_X(cc)=kappa*T_R(cc)*sin(T_T(cc))
+      X_Z(cc)=kappa*T_R(cc)*sin(T_T(cc))
     end do
     !$OMP END SIMD
     

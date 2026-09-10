@@ -417,9 +417,9 @@ end if
     do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
       if (params%field_model(1:3).eq.'ANA') then
-        call adv_FOeqn_top_ACC(params,F,P,spp)
+        call adv_FOeqn_top_ACC(params,randoms,F,P,spp)
       else
-        call adv_FOuni_top_ACC(params,F,P,spp)
+        call adv_FOuni_top_ACC(params,randoms,F,P,spp)
       endif
 #else
       call adv_FOeqn_top(params,randoms,F,P,spp)
