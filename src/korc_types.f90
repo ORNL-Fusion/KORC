@@ -225,8 +225,12 @@ module korc_types
      INTEGER(ip) 			:: t_it_SC=1_ip
      INTEGER(ip) 			:: output_cadence
      INTEGER(ip) 			:: coll_per_dump
+     INTEGER(ip) 			:: diff_per_dump
      INTEGER(ip) 			:: orbits_per_coll
+     INTEGER(ip) 			:: orbits_per_diff
      REAL(rp) 			:: coll_per_dump_dt
+     REAL(rp) 			:: diff_per_dump_dt
+     integer(ip) :: diff_subcycling_iterations
      !! Time iteration offset used to decide when the outputs are generated.
      INTEGER(ip) 			:: restart_output_cadence
      !! Time iteration offset used to decide when the restart files are
@@ -243,6 +247,7 @@ module korc_types
      !! be followed anymore in the simulation.
      REAL(rp) 			:: minimum_particle_g
      !! Minimum allowed relativistic factor \(\gamma\) of simulated electrons.
+     LOGICAL :: diffusion
      LOGICAL 			:: radiation
      !! Flag to indicate if synchrotron radiation losses are included
      !! (radiation=T) or not (radiation=F).
@@ -327,6 +332,9 @@ module korc_types
      INTEGER(ip) 			:: coll_per_dump
      INTEGER(ip) 			:: orbits_per_coll
      REAL(rp) 			:: coll_per_dump_dt
+    INTEGER(ip) 			:: diff_per_dump
+     INTEGER(ip) 			:: orbits_per_diff
+     REAL(rp) 			:: diff_per_dump_dt
      !! Time iteration offset used to decide when the outputs are generated.
      INTEGER(ip) 			:: restart_output_cadence
      !! Time iteration offset used to decide when the restart files are

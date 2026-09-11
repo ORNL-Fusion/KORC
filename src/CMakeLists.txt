@@ -5,6 +5,7 @@ target_sources(korc
                PRIVATE
 
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_collisions.f90>
+               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_diffusion.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_fields.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_interp.f90>
                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/korc_spatial_distribution.f90>
