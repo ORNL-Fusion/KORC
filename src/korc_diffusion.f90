@@ -158,20 +158,12 @@ module korc_diffusion
           ((dDRR(cc)+DRR(cc)/T_R(cc))*dt+ &
           sqrt(2.0_rp*DRR(cc))*dW(cc))
 
-        write(6,*) X_X,X_Y,X_Z
-        write(6,*) T_R,dr
-
         T_R(cc)=T_R(cc)+dr(cc)
-
-        write(6,*) T_R
 
       end do
 
       call tor_to_cart_p(pchunk,F%AB%Ro,F%AB%kappa, &
         X_X,X_Y,X_Z,T_R,T_T,T_Z)
-
-      write(6,*) X_X,X_Y,X_Z
-      write(6,*) ''
 
     end if
 
