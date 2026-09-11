@@ -56,7 +56,7 @@
     ! Electric charge
   m = 1.0
     ! In units of electron mass
-  spatial_distribution = 'TRACER'
+  spatial_distribution = 'MH_psi'
     ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
     ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
     ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
