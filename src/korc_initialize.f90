@@ -139,6 +139,7 @@ CONTAINS
     params%minimum_particle_energy = minimum_particle_energy*C_E
     params%minimum_particle_g = 1.0_rp + params%minimum_particle_energy/ &
          (C_ME*C_C**2) ! Minimum value of relativistic gamma factor
+    params%diffusion = diffusion
     params%radiation = radiation
     params%collisions = collisions
     params%LargeCollisions = LargeCollisions
@@ -379,7 +380,6 @@ CONTAINS
        write(output_unit_write,'("Number of time steps: ",I16)') params%t_steps
        write(output_unit_write,'("Starting simulation at time step: ",I16)') params%ito
        write(output_unit_write,'("Output cadence: ",I16)') params%output_cadence
-       write(output_unit_write,'("Restart cadence: ",I16)') params%restart_output_cadence
        write(output_unit_write,'("Number of outputs: ",I16)') params%num_snapshots
        write(output_unit_write,'("* * * * * * * * * * * * * * * * * * * * * * *",/)')
     end if

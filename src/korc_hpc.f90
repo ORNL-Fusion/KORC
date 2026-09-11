@@ -46,6 +46,7 @@ CONTAINS
     !! 25: korc_ppusher:adv_GCinterp_psiwE_top
     !! 26: korc_collisions:define_collisions_time_step
     !! 27: main:initialize_fields_interpolant
+    !! 28: korc_diffusion:define_diffusion_time_step
 
     flush(output_unit_write)
     

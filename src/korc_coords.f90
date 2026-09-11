@@ -10,6 +10,7 @@ module korc_coords
        cart_to_cyl_p,&
        cart_to_cyl_p_ACC,&
        cart_to_tor_check_if_confined,&
+       cart_to_tor_check_if_confined_p,&
        cart_to_tor_p,&
        cyl_to_cart,&
        cyl_check_if_confined,&
@@ -428,6 +429,26 @@ end subroutine cart_to_cyl_p_ACC
     !$OMP END SIMD
 
   end subroutine cart_to_tor_p
+
+  subroutine tor_to_cart_p(pchunk,R0,kappa,X_X,X_Y,X_Z, &
+       T_R,T_T,T_Z)
+    INTEGER, INTENT(IN)  :: pchunk
+    REAL(rp),  INTENT(IN)      :: R0,kappa
+    REAL(rp),  INTENT(OUT),DIMENSION(pchunk)      :: X_X,X_Y,X_Z
+    REAL(rp),  INTENT(IN),DIMENSION(pchunk)      :: T_R,T_T,T_Z
+    INTEGER                                      :: cc
+    !! Particle chunk iterator.
+
+    !$OMP SIMD
+!    !$OMP& aligned(RR,X_X,X_Y,T_R,T_T,T_Z,X_Z)
+    do cc=1_idef,pchunk
+      X_X(cc)=(R0+T_R(cc)*cos(T_T(cc)))*sin(T_Z(cc))
+      X_Y(cc)=(R0+T_R(cc)*cos(T_T(cc)))*cos(T_Z(cc))
+      X_Z(cc)=kappa*T_R(cc)*sin(T_T(cc))
+    end do
+    !$OMP END SIMD
+    
+  end subroutine tor_to_cart_p
 
   subroutine cart_to_tor_check_if_confined_p(pchunk,ar,R0,kappa,X_X,X_Y,X_Z, &
        T_R,T_T,T_Z,flag_cache)

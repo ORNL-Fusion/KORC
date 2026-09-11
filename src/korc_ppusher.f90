@@ -8,6 +8,7 @@ module korc_ppusher
   use korc_profiles
   use korc_interp
   use korc_collisions
+  use korc_diffusion
   use korc_hpc
   use korc_coords
 
@@ -1794,9 +1795,6 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
   REAL(rp) :: B0,EF0,R0,q0,lam,ar
   REAL(rp) :: a,m_cache,q_cache
   REAL(rp) :: ne0,Te0,Zeff0
-
-
-
   INTEGER                                                    :: ii
   !! Species iterator.
   INTEGER                                                    :: pp
@@ -2004,7 +2002,8 @@ subroutine adv_FOeqn_top(params,random,F,P,spp)
 
 end subroutine adv_FOeqn_top
 
-subroutine adv_FOuni_top_ACC(params,F,P,spp)
+subroutine adv_FOuni_top_ACC(params,random,F,P,spp)
+    CLASS(random_context), POINTER, INTENT(INOUT) :: random
      TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
      !! Core KORC simulation parameters.
      TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -2073,7 +2072,7 @@ subroutine adv_FOuni_top_ACC(params,F,P,spp)
          !$acc loop seq
          do tt=1_ip,tskip
    
-           call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+           call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
                X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
                g,flagCon,flagCol)
          end do !timestep iterator
@@ -2165,7 +2164,7 @@ subroutine adv_FOuni_top_ACC(params,F,P,spp)
    
    end subroutine adv_FOuni_top_ACC
 
-subroutine adv_FOeqn_top_ACC(params,F,P,spp)
+subroutine adv_FOeqn_top_ACC(params,random,F,P,spp)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
   TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -2175,6 +2174,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   REAL(rp) :: Bmag
   REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
   REAL(rp) :: v,vpar,vperp
@@ -2191,9 +2191,9 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
   INTEGER(ip) :: tskip
   REAL(rp) :: a,m_cache,q_cache,dt
   REAL(rp) :: R0,B0,E0,lam,q0,ar,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B,kappa
-  LOGICAL :: perturb,turbulence
+  LOGICAL :: perturb,turbulence,diffusion
   REAL(rp) :: A_turb,mu_turb,sigma_turb
-  INTEGER  :: ii,pp,ss,tt,ppp
+  INTEGER  :: ii,pp,ss,tt,ppp,it
 
   !$acc routine (advance_FO_vars_ACC) seq
   !$acc routine (cart_to_tor_check_if_confined_p_ACC) seq
@@ -2209,6 +2209,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
     tskip=params%t_skip
     ppp=spp(ii)%ppp
     dt=params%dt
+    it=params%it
 
     B0=F%Bo
     E0=F%Eo
@@ -2222,6 +2223,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
     sigma_mn = F%AB%sigma_mn
     perturb=F%AB%perturb
     turbulence=F%AB%turbulence
+    diffusion=params%diffusion
     A_turb=F%AB%A_turb
     mu_turb=F%AB%mu_turb
     sigma_turb=F%AB%sigma_turb
@@ -2268,7 +2270,7 @@ subroutine adv_FOeqn_top_ACC(params,F,P,spp)
           E0,q0,ar,kappa,eps_mn,l_mn,sigma_mn,cpp_len,cpp_B, &
           perturb,turbulence,A_turb,mu_turb,sigma_turb)
 
-        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+        call advance_FO_vars_ACC(random,dt,it+tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
             g,flagCon,flagCol)
       end do !timestep iterator
@@ -2580,6 +2582,13 @@ subroutine advance_FOeqn_vars(tt,a,q_cache,m_cache,params,random,X_X,X_Y,X_Z, &
        X_Z(cc) = X_Z(cc) + dt*V_Z(cc)*REAL(flagCon(cc))*REAL(flagCol(cc))
     end do
     !$OMP END SIMD
+
+    if (params%diffusion) then
+
+       call include_diffusion_p(tt,params,random,X_X,X_Y,X_Z, &
+            U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F,flagCon)
+
+    end if
 
 end subroutine advance_FOeqn_vars
 
@@ -3367,7 +3376,7 @@ end subroutine adv_FOinterp_mars_top
 
 #ifdef PSPLINE
 
-subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
+subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp,random)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
   TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -3377,6 +3386,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   REAL(rp) :: Bmag
   REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
   REAL(rp) :: v,vpar,vperp
@@ -3483,7 +3493,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
         call interp_FOfields_mars_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
           psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
-        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+        call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
             g,flagCon,flagCol)
       end do !timestep iterator
@@ -3581,7 +3591,7 @@ subroutine adv_FOinterp_mars_top_ACC(params,F,P,spp)
 
 end subroutine adv_FOinterp_mars_top_ACC
 
-subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
+subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp,random)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
   TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -3591,6 +3601,7 @@ subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   REAL(rp) :: Bmag
   REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
   REAL(rp) :: v,vpar,vperp
@@ -3703,7 +3714,7 @@ subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
           b1Refield_2d_local_3,b1Imfield_2d_local_3, &
           psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
-        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+        call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
             g,flagCon,flagCol)
       end do !timestep iterator
@@ -3804,7 +3815,7 @@ subroutine adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
 
 end subroutine adv_FOinterp_marsNL_top_ACC
 
-subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
+subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp,random)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
   TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -3814,6 +3825,7 @@ subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   REAL(rp) :: Bmag
   REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
   REAL(rp) :: v,vpar,vperp
@@ -3926,7 +3938,7 @@ subroutine adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
         call interp_FOfields_marsEM_p_ACC(time,bfield_2d_local,b1Refield_2d_local_1,b1Imfield_2d_local_1, &
           psip_conv,amp,gr,nmode,phase,MARS_max,Bo,Ro,Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,PSIp)
 
-        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+        call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
             g,flagCon,flagCol)
       end do !timestep iterator
@@ -4244,7 +4256,7 @@ subroutine adv_FOinterp_aorsa_top(params,random,F,P,spp)
 end subroutine adv_FOinterp_aorsa_top
 
 #ifdef PSPLINE
-subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
+subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp,random)
   TYPE(KORC_PARAMS), INTENT(INOUT)                           :: params
   !! Core KORC simulation parameters.
   TYPE(FIELDS), INTENT(IN)                                   :: F
@@ -4254,6 +4266,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
   TYPE(SPECIES), DIMENSION(:), ALLOCATABLE, INTENT(INOUT)    :: spp
   !! An instance of the derived type SPECIES containing all the parameters
   !! and simulation variables of the different species in the simulation.
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   REAL(rp) :: Bmag
   REAL(rp) :: b_unit_X,b_unit_Y,b_unit_Z
   REAL(rp) :: v,vpar,vperp
@@ -4363,7 +4376,7 @@ subroutine adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
           e1Refield_2dx_local,e1Imfield_2dx_local,psip_conv,amp,nmode,omega,Bo,Ro, &
           Y_R,Y_PHI,Y_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,PSIp)
 
-        call advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache, &
+        call advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache, &
             X_X,X_Y,X_Z,V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z, &
             g,flagCon,flagCol)
       end do !timestep iterator
@@ -4681,9 +4694,10 @@ end subroutine advance_FOinterp_vars
 
 #endif PSPLINE
 
-subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
+subroutine advance_FO_vars_ACC(random,dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   V_X,V_Y,V_Z,B_X,B_Y,B_Z,E_X,E_Y,E_Z,g,flagCon,flagCol)
   !$acc routine seq
+  CLASS(random_context), POINTER, INTENT(INOUT) :: random
   INTEGER, INTENT(IN)                                       :: tt
   !! Time step used in the leapfrog step (\(\Delta t\)).
   REAL(rp)                                      :: dt
@@ -4730,14 +4744,14 @@ subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   REAL(rp)                   :: U_os_X,U_os_Y,U_os_Z
   !! This variable is \(\mathbf{u}^{i+1}= \mathbf{p}^{i+1}/m\).
   REAL(rp)                        :: cross_X,cross_Y,cross_Z
-
   REAL(rp)                     :: Frad_X,Frad_Y,Frad_Z
   !! Synchrotron radiation reaction force of each particle.
   REAL(rp) :: ne,Te,Zeff
-  INTEGER                                      :: cc,pchunk
-  !! Chunk iterator.
-
   INTEGER(is),intent(inout)                   :: flagCon,flagCol
+  !LOGICAL,intent(in) :: diffusion
+  !REAL(rp),intent(in) :: A_turb,mu_turb,sigma_turb
+
+  !!$acc routine (include_diffusion_ACC) seq
 
   g0=g
 
@@ -4849,6 +4863,13 @@ subroutine advance_FO_vars_ACC(dt,tt,a,q_cache,m_cache,X_X,X_Y,X_Z, &
   X_X = X_X + dt*V_X*REAL(flagCon)*REAL(flagCol)
   X_Y = X_Y + dt*V_Y*REAL(flagCon)*REAL(flagCol)
   X_Z = X_Z + dt*V_Z*REAL(flagCon)*REAL(flagCol)
+
+  !if (diffusion) then
+
+  !  call include_diffusion_ACC(tt,random,X_X,X_Y,X_Z, &
+  !      U_X,U_Y,U_Z,B_X,B_Y,B_Z,m_cache,F,flagCon,A_turb,mu_turb,sigma_turb)
+
+  !end if
 
 end subroutine advance_FO_vars_ACC
 

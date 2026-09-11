@@ -42,7 +42,9 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
-run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
+#run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
+run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
+#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TGLF_DRR/TEST1']
 
 for kk in range(0,dir_num):
 
@@ -1055,14 +1057,14 @@ plt.rc('ytick', labelsize=SMALL_SIZE)
 plt.rc('legend', fontsize=SMALL_SIZE)
 plt.rc('figure', titlesize=SMALL_SIZE)
 
-plot_histrm=1
+plot_histrm=0
 plot_LAC_ParamScaling=0
 plot_LAC_Escaling=0
 plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
 plot_evo=0
-plot_orbit=0
+plot_orbit=1
 plot_histRZ_analytic=0
 plot_evoCon=0
 plotgrowth=0
@@ -1097,7 +1099,7 @@ plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=100
+timeind_p=9
 timeind_g=0
 
 #tloss=time[12]
@@ -1649,19 +1651,28 @@ if plot_histrm==1:
     fig,ax=plt.subplots()
 
     H,xedges=np.histogram(rm[0,flagActive[0,:]>0],bins=rmbin)
-    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='k')
+    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='k',label=f't= {time[0]:4.1e} s')
     
-    H,xedges=np.histogram(rm[25,flagActive[25,:]>0],bins=rmbin)
-    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='r',)
+    H,xedges=np.histogram(rm[20,flagActive[20,:]>0],bins=rmbin)
+    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='r',label=f't= {time[20]:4.1e} s')
     
-    H,xedges=np.histogram(rm[50,flagActive[50,:]>0],bins=rmbin)
-    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='b')
+    H,xedges=np.histogram(rm[40,flagActive[40,:]>0],bins=rmbin)
+    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='b',label=f't= {time[40]:4.1e} s')
+
+    #H,xedges=np.histogram(rm[0,flagActive[0,:]>0],bins=rmbin)
+    #ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='k')
     
-    H,xedges=np.histogram(rm[75,flagActive[75,:]>0],bins=rmbin)
-    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='g')
+    #H,xedges=np.histogram(rm[25,flagActive[25,:]>0],bins=rmbin)
+    #ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='r',)
     
-    H,xedges=np.histogram(rm[100,flagActive[100,:]>0],bins=rmbin)
-    ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='m')
+    #H,xedges=np.histogram(rm[50,flagActive[50,:]>0],bins=rmbin)
+    #ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='b')
+    
+    #H,xedges=np.histogram(rm[75,flagActive[75,:]>0],bins=rmbin)
+    #ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='g')
+    
+    #H,xedges=np.histogram(rm[100,flagActive[100,:]>0],bins=rmbin)
+    #ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='m')
     
     #H,xedges=np.histogram(rm20b3[0,flagActive20b3[0,:]>0],bins=rmbin)
     #ax.plot(xedges[:-1],H/xedges[1:],linewidth=2,color='k',linestyle='--')
@@ -1678,8 +1689,10 @@ if plot_histrm==1:
     #ax.legend(['$t=0$ No wall','$t=1\,\\mathrm{ms}$','$t=2\,\\mathrm{ms}$',
     #          '$t=3\,\\mathrm{ms}$','$t=0$ LFS'],loc='lower left',fontsize=13)
     
-    ax.legend(['$t=0$','$t=0.1\mu s$','$t=0.2\mu s$',
-              '$t=0.3\mu s$','$t=0.4\mu s$'],loc='lower left',fontsize=13)
+    ax.legend(loc='lower left',fontsize=13)
+    
+    #ax.legend(['$t=0$','$t=0.1\mu s$','$t=0.2\mu s$',
+    #          '$t=0.3\mu s$','$t=0.4\mu s$'],loc='lower left',fontsize=13)
     
     #ax.legend([f't= {time[0]:4.1e} s',f't= {time[10]:4.1e} s',f't= {time[20]:4.1e} s',
     #           f't= {time[30]:4.1e} s',f't= {time[40]:4.1e} s'],loc='upper right')
@@ -1945,7 +1958,7 @@ if plot_orbit==1:
     
     singleorbit=1
     if singleorbit==1:
-        pind=0
+        pind=10000
         
         tmp_R=R[:,pind].copy()
         tmp_PHI=PHI[:,pind].copy()
@@ -1962,6 +1975,9 @@ if plot_orbit==1:
     ax[1,1].plot(tmp_R,tmp_Z,'.-')
     if singleorbit==1:
         ax[1,1].plot(tmp_R[0],tmp_Z[0],'ro')
+        
+    if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
+        ax[1,1].plot(limR,limZ,'k-')
 
     #ax.set_xscale('log')
     #ax.set_yscale('log')

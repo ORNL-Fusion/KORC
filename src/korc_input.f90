@@ -30,6 +30,7 @@ module korc_input
   INTEGER :: num_species = 1
   REAL(rp) :: minimum_particle_energy = 1.0E5
     ! Minimum energy of simulated particles in eV
+  LOGICAL :: diffusion = .FALSE.
   LOGICAL :: radiation = .FALSE.
   LOGICAL :: GC_rad_SDE= .TRUE.
   LOGICAL :: collisions = .FALSE.
@@ -463,7 +464,7 @@ CONTAINS
          restart_overwrite_frequency,FokPlan,GC_rad_SDE,bound_electron_model,&
          FO_GC_compare,SameRandSeed,SC_E,reinit,SC_E_add,time_slice,rmax, &
          rmin,zmax,zmin,pchunk,magnetic_field_directory,magnetic_field_list,&
-         LargeCollisions,load_balance,recycle_losses
+         LargeCollisions,load_balance,recycle_losses,diffusion
     NAMELIST /plasma_species/ ppp,q,m,Eno,etao,Eo_lims,etao_lims,runaway, &
          spatial_distribution,energy_distribution,pitch_distribution,Ro, &
          PHIo,Zo,r_inner,r_outter,falloff_rate,shear_factor,sigmaR,sigmaZ, &

@@ -12,6 +12,7 @@ use korc_fields
 use korc_ppusher
 use korc_interp
 use korc_collisions
+use korc_diffusion
 use korc_initialize
 use korc_finalize
 use korc_profiles
@@ -231,6 +232,8 @@ call define_collisions_time_step(params,params_ACC,F,.true.)
   !! sets subcycling iteration number for collisions based off of the collision
   !! frequency model used.
 
+call define_diffusion_time_step(spp,params,params_ACC,F,.true.)
+
   ! *** *** *** *** *** ***   *** *** *** *** *** *** ***
   ! *** BEYOND THIS POINT VARIABLES ARE DIMENSIONLESS ***
   ! *** *** *** *** *** ***   *** *** *** *** *** *** ***
@@ -414,9 +417,9 @@ end if
     do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
       if (params%field_model(1:3).eq.'ANA') then
-        call adv_FOeqn_top_ACC(params,F,P,spp)
+        call adv_FOeqn_top_ACC(params,randoms,F,P,spp)
       else
-        call adv_FOuni_top_ACC(params,F,P,spp)
+        call adv_FOuni_top_ACC(params,randoms,F,P,spp)
       endif
 #else
       call adv_FOeqn_top(params,randoms,F,P,spp)

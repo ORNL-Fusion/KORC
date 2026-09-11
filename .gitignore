@@ -6,6 +6,8 @@ Makefile
 src/Makefile
 FIO/fusion_io/makefile
 FIO/m3dc1_lib/makefile
+*.cmake
+**/CMakeFiles
 
 # ignore all previous version files
 *~
@@ -30,3 +32,15 @@ FIO/m3dc1_lib/makefile
 *.o
 *.mod
 *.a
+
+#ignore all figures
+*.pdf
+*.png
+
+#ignore spack directories
+/spack
+/korc_gnu
+/korc_nvhpc
+
+#ignore vscode
+/.vscode
