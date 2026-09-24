@@ -5,17 +5,17 @@
     ! Append simulation results after previous simulation_time reached
   reinit = F
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 2.E-8
+  simulation_time = 1.E-5
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-8
+  snapshot_frequency = 1.E-5
     ! Time between snapshots in seconds, not used in FIO
   dt = 1.E-2
     ! Time step as fraction of relativistic gyro-period
   num_species = 1
   minimum_particle_energy = 1.0E1 
     ! Minimum energy of simulated particles in eV
-  radiation = T
+  radiation = F
   GC_rad_SDE = F
   collisions = F
   collisions_model = 'SINGLE_SPECIES' 
@@ -32,7 +32,7 @@
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
   magnetic_field_filename = 'C1.h5'
-  time_slice=1
+  time_slice=0
   rmax =  2.50
   rmin =  1.0
   zmax =  1.38
@@ -56,14 +56,14 @@
 
 &plasma_species
   runaway = F
-  ppp = 1
-  pinit = 1
+  ppp = 100
+  pinit = 100
     ! Number of particles per process (mpi)
   q = 2.0
     ! Electric charge
   m = 7294.0
     ! In units of electron mass
-  spatial_distribution = 'FIO_therm'
+  spatial_distribution = 'MH_psi'
     ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
     ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
     ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
@@ -77,12 +77,12 @@
   theta_gauss = 0.0
   psi_max=0.438
     ! goes as R^2 for HOLLMANN-3D, is psiN_max for HOLLMANN-3D-PSI
-  energy_distribution = 'FIO_therm'
+  energy_distribution = 'MONOENERGETIC'
     ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
     ! 'EXPERIMENTAL', and 'UNIFORM'
-  pitch_distribution = 'FIO_therm'
+  pitch_distribution = 'MONOPITCH'
     ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
-  Eno = 10.0E6
+  Eno = 3.5E6
     ! Initial energy in eV
   etao = 10.0
     ! Initial pitch angle
