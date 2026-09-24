@@ -328,6 +328,7 @@ CONTAINS
 
     write(output_unit_write,*) 'FIO present time index',F%ind_2x1t
     write(output_unit_write,*) 'FIO present time',time0
+    flush(output_unit_write)
 
     if (F%ReInterp_2x1t) then
        status = fio_set_int_option(FIO_TIMESLICE, F%ind_2x1t+1)
