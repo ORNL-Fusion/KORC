@@ -2273,6 +2273,17 @@ end subroutine initialize_fields
             F%PSIp = 0.0_rp
          end if
 
+          dset = "/Zxpt"
+         gname = 'Zxpt'
+
+         call h5lexists_f(h5file_id,TRIM(gname),Efield,h5error)
+
+         if (Efield) then
+            call load_from_hdf5(h5file_id,dset,F%Zxpt)
+         else
+            F%Zxpt = -10.0_rp
+         end if
+
             !          F%PSIp=2*C_PI*(F%PSIp-minval(F%PSIp))
 
          !write(6,*) 'fields_init:PSIp shape',shape(F%PSIp)

@@ -1354,7 +1354,7 @@ subroutine MH_psi(params,random,spp,F)
   else if (params%field_model(1:8).eq.'EXTERNAL') then
      min_R=minval(F%X%R)
      max_R=maxval(F%X%R)
-     min_Z=minval(F%X%Z)
+     min_Z=max(F%Zxpt,minval(F%X%Z))
      max_Z=maxval(F%X%Z)
 
      PSIp0=F%PSIP_min
@@ -1383,8 +1383,6 @@ subroutine MH_psi(params,random,spp,F)
 
   !write(6,*) "sigma",sigma
   !write(output_unit_write,*) min_Z,max_Z
-
-
 
   ALLOCATE(R_samples(nsamples))
   ALLOCATE(X_samples(nsamples))
@@ -1563,6 +1561,8 @@ subroutine MH_psi(params,random,spp,F)
            Z_test = Z_buffer + random%normal%get()
         end do
 
+        if (Z_test.lt.min_Z) write(6,*) 'WTF'
+
         if (accepted) then
            PSIN0=PSIN1
         end if
@@ -1633,7 +1633,8 @@ subroutine MH_psi(params,random,spp,F)
         ! add to MC above if within buffer. This helps make the boundary
         ! more defined.
         IF ((INT(indicator(PSIN1,psi_max)).EQ.1).AND. &
-          (INT(indicator(psi_min,PSIN1)).EQ.1).AND.ACCEPTED) THEN
+          (INT(indicator(psi_min,PSIN1)).EQ.1).AND. &
+          ACCEPTED) THEN
            R_samples(ii) = R_buffer
            Z_samples(ii) = Z_buffer
            PHI_samples(ii) = PHI_buffer

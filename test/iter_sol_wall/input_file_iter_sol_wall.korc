@@ -1,0 +1,110 @@
+&input_parameters
+  restart = F
+    ! Restart simulation that exited before simulation_time reached
+  proceed = F
+    ! Append simulation results after previous simulation_time reached
+  reinit = F
+    ! Begin a new simulation, reinitializing from restart file stat
+  load_balance = F
+  simulation_time = 1.e-5
+    ! Total aimed simulation time in seconds   
+    ! Run 10 mu s If transients exist put 5 extra mu s.
+  snapshot_frequency = 1.e-6
+    ! Time between snapshots in seconds
+  dt = 1.e0
+    ! Time step as fraction of relativistic gyro-period
+  minimum_particle_energy = 1.0e5 
+    ! Minimum energy of simulated particles in eV
+  radiation = F
+  GC_rad_SDE= F
+  collisions = F
+  LargeCollisions = F
+  collisions_model = 'SINGLE_SPECIES'
+    ! Options are: 'NONE','SINGLE_SPECIES' and 'MULTIPLE_SPECIES'
+  bound_electron_model = 'HESSLOW'
+    ! Options are: 'NO_BOUND', 'HESSLOW', and 'ROSENBLUTH'
+  field_model = 'EXTERNAL-PSI'
+  profile_model = 'ANALYTICAL'
+    ! The two options for this parameter are 'ANALYTICAL' or 'EXTERNAL'.
+    ! For 'ANALYTICAL', the magnetic field is calculated based on
+    ! the parameters given in the "analytic_mag_field_params" section.
+    ! For 'EXTERNAL', the magnetic field is loaded from the file
+    ! specified in "filename".
+    ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
+    ! velocity.
+  magnetic_field_filename = 'ITER_IMAS.h5'
+  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,flagRE,Y0,Y1}'
+    ! List of outputs
+    !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,
+    !  curlb,ne,Te,Zeff,PSIp,nimp}'
+  orbit_model = 'GCpre'
+    ! 'FO' for full orbit,'FOB' for full orbit with B PSPLINE, 'FOpsi'
+    !for full orbit with psip PSPLINE, 'GCpre' for guiding center with
+    ! pre-computed
+    ! auxiliary fields, 'GCgrad' for guiding center with auxiliary
+    ! fields computed with PSPLINE.
+  field_eval = 'interp'
+    ! Set for plasma_model='ANALYTICAL'. Can be 'interp' or 'eqn',
+    ! where 'eqn' evaluates particle fields at particle positions and
+    ! 'interp' interpolates precomputed fields.
+  FokPlan = F
+  SameRandSeed = T
+/
+
+&plasma_species
+  runaway = T
+  ppp = 10000
+    ! Number of particles per process (mpi)
+  pinit = 10000
+    ! Number of particles initialized per process (for inclusion of sources)
+  q = 2.0
+    ! Electric charge
+  m = 7294.0
+    ! In units of electron mass
+  spatial_distribution = 'MH_psi'
+    ! Options are: 'UNIFORM', 'DISK', 'TORUS', 'EXPONENTIAL-TORUS',
+    ! 'GAUSSIAN-TORUS', 'ELLIPTIC-TORUS', 'EXPONENTIAL-ELLIPTIC-TORUS',
+    ! 'GAUSSIAN-ELLIPTICAL-TORUS', '2D-GAUSSIAN-ELLIPTIC-TORUS-MH',
+    ! 'AVALANCHE-4D','TRACER','SPONG-3D','HOLLMANN-3D'
+  Ro=6.2
+  Zo=0.
+  sigmaR = 1.e6
+  sigmaZ = 0.2
+  theta_gauss = 0.0
+  psi_max=1.0
+  psi_min=0.98
+  dth = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dgam = 3.
+    ! Variance of sampling normal variate for pitch angle
+  dR = 0.4
+    ! Variance of sampling normal variate for R location
+  dZ = 0.5
+    ! Variance of sampling normal variate for Z location
+  energy_distribution = 'MONOENERGETIC'
+    ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
+    ! 'EXPERIMENTAL', and 'UNIFORM'
+  pitch_distribution = 'MONOPITCH'
+    ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
+  Eno = 3.5E6
+    ! Initial energy in eV
+  etao = 10.0
+    ! Initial pitch angle
+  Xtrace = 1.6,0.0,0.0
+    ! Initial position of tracer particle for debugging with
+    ! spatial_distribution='TRACER'
+/
+
+&externalPlasmaModel
+  Bfield = F
+  dBfield = F
+  axisymmetric_fields = T
+  Bflux = T
+  Bflux3D = F
+  Efield = F
+  Dim2x1t =F
+  E_2x1t = F
+  PSIp_lim= -1.4602518890952116
+  PSIp_0= -10.47515864
+  psip_conv=-1.
+/
