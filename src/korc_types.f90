@@ -785,6 +785,7 @@ module korc_types
      REAL(rp),DIMENSION(2) :: DiMESdims
      INTEGER :: FlatWall
      REAL(rp) :: RZwall
+     REAL(rp) :: Zxpt
 
   END TYPE FIELDS
 

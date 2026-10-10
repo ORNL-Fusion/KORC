@@ -555,11 +555,11 @@ if (params%orbit_model(1:2).eq.'FO'.and. &
   do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
     if (params%field_model(10:16).eq.'MARS_EM') then
-      call adv_FOinterp_marsEM_top_ACC(params,F,P,spp)
+      call adv_FOinterp_marsEM_top_ACC(params,F,P,spp,randoms)
     elseif (params%field_model(10:16).eq.'MARS_NL') then
-      call adv_FOinterp_marsNL_top_ACC(params,F,P,spp)
+      call adv_FOinterp_marsNL_top_ACC(params,F,P,spp,randoms)
     elseif (params%field_model(10:13).eq.'MARS') then
-      call adv_FOinterp_mars_top_ACC(params,F,P,spp)
+      call adv_FOinterp_mars_top_ACC(params,F,P,spp,randoms)
     endif
 #else
     call adv_FOinterp_mars_top(params,randoms,F,P,spp)
@@ -590,7 +590,7 @@ end if
 
      do it=params%ito,params%t_steps,params%t_skip
 #ifdef ACC
-        call adv_FOinterp_aorsa_top_ACC(params,F,P,spp)
+        call adv_FOinterp_aorsa_top_ACC(params,F,P,spp,randoms)
 #else
         call adv_FOinterp_aorsa_top(params,randoms,F,P,spp)
 #endif ACC

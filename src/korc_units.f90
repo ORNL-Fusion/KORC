@@ -171,6 +171,7 @@ subroutine normalize_variables(params,spp,F,P)
   F%DiMESdims=F%DiMESdims/params%cpp%length
   F%MARS_max=F%MARS_max
   F%RZwall=F%RZwall/params%cpp%length
+  F%Zxpt=F%Zxpt/params%cpp%length
 
   P%a = P%a/params%cpp%length
   P%R0 = P%R0/params%cpp%length
