@@ -169,82 +169,82 @@ module korc_diffusion
 
   end subroutine include_diffusion_p
 
-#ifdef ACC  
-  subroutine include_diffusion_ACC(tt,random,X_X,X_Y,X_Z, &
-    U_X,U_Y,U_Z,B_X,B_Y,B_Z,me,F,flagCon)
-    !$acc routine seq
-    TYPE(FIELDS), INTENT(IN)      :: F
-    CLASS(random_context), POINTER, INTENT(INOUT) :: random
-    REAL(rp), INTENT(INOUT) 	:: X_X,X_Y,X_Z
-    REAL(rp) 	:: T_R,T_T,T_Z
-    REAL(rp), INTENT(IN) 	:: U_X,U_Y,U_Z
-    REAL(rp), INTENT(IN)  :: me
-    INTEGER(ip), INTENT(IN) 			:: tt
-    REAL(rp), INTENT(IN) 		:: B_X,B_Y,B_Z
+!#ifdef ACC  
+!  subroutine include_diffusion_ACC(tt,random,X_X,X_Y,X_Z, &
+!    U_X,U_Y,U_Z,B_X,B_Y,B_Z,me,F,flagCon)
+!    !$acc routine seq
+!    TYPE(FIELDS), INTENT(IN)      :: F
+!    CLASS(random_context), POINTER, INTENT(INOUT) :: random
+!    REAL(rp), INTENT(INOUT) 	:: X_X,X_Y,X_Z
+!    REAL(rp) 	:: T_R,T_T,T_Z
+!    REAL(rp), INTENT(IN) 	:: U_X,U_Y,U_Z
+!    REAL(rp), INTENT(IN)  :: me
+!    INTEGER(ip), INTENT(IN) 			:: tt
+!    REAL(rp), INTENT(IN) 		:: B_X,B_Y,B_Z
 
-    REAL(rp) 		:: b_unit_X,b_unit_Y,b_unit_Z
-    REAL(rp) 		:: Bmag
-    REAL(rp) 			:: dW
+!    REAL(rp) 		:: b_unit_X,b_unit_Y,b_unit_Z
+!    REAL(rp) 		:: Bmag
+!    REAL(rp) 			:: dW
     !! 3D Weiner process
-    REAL(rp) 			:: rnd1
-    REAL(rp) 					:: dt
-    REAL(rp) :: um,dr,vm,pm,xi
-    REAL(rp) :: q,Lc,dLc,g_r,ballooning
-    REAL(rp) :: dBr_norm_squared,ddBr_norm_squared
-    REAL(rp) :: DRR,dDRR
-    INTEGER(is), INTENT(INOUT) ::flagCon
+!    REAL(rp) 			:: rnd1
+!    REAL(rp) 					:: dt
+!    REAL(rp) :: um,dr,vm,pm,xi
+!    REAL(rp) :: q,Lc,dLc,g_r,ballooning
+!    REAL(rp) :: dBr_norm_squared,ddBr_norm_squared
+!    REAL(rp) :: DRR,dDRR
+!    INTEGER(is), INTENT(INOUT) ::flagCon
 
-    if (MODULO(tt,diff_subcycling_iterations) .EQ. 0_ip) then
-      dt = REAL(diff_subcycling_iterations,rp)*dtu
+!    if (MODULO(tt,diff_subcycling_iterations) .EQ. 0_ip) then
+!      dt = REAL(diff_subcycling_iterations,rp)*dtu
 
-      call cart_to_tor_check_if_confined_p(pchunk,F%AB%a,F%AB%Ro,F%AB%kappa,X_X,X_Y,X_Z,T_R,T_T,T_Z,flagCon)
+!      call cart_to_tor_check_if_confined_p(pchunk,F%AB%a,F%AB%Ro,F%AB%kappa,X_X,X_Y,X_Z,T_R,T_T,T_Z,flagCon)
 
-      CALL random%uniform%set(0.0_rp, 1.0_rp)
+!      CALL random%uniform%set(0.0_rp, 1.0_rp)
 
-      um = SQRT(U_X*U_X+U_Y*U_Y+U_Z*U_Z)
-      pm=me*um
-      vm = um/SQRT(1.0_rp + um*um)
+!      um = SQRT(U_X*U_X+U_Y*U_Y+U_Z*U_Z)
+!      pm=me*um
+!      vm = um/SQRT(1.0_rp + um*um)
       ! um is gamma times v, this solves for v
 
-      Bmag= SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
+!      Bmag= SQRT(B_X*B_X+B_Y*B_Y+B_Z*B_Z)
 
-      b_unit_X=B_X/Bmag
-      b_unit_Y=B_Y/Bmag
-      b_unit_Z=B_Z/Bmag
+!      b_unit_X=B_X/Bmag
+!      b_unit_Y=B_Y/Bmag
+!      b_unit_Z=B_Z/Bmag
 
-      xi=(U_X*b_unit_X+U_Y*b_unit_Y+ &
-            U_Z*b_unit_Z)/um
+!      xi=(U_X*b_unit_X+U_Y*b_unit_Y+ &
+!            U_Z*b_unit_Z)/um
 
       ! pitch angle in b_unit reference frame
 
-      rnd1 = random%uniform%get()
-      dW = SQRT(3*dt)*(-1+2*rnd1)
+!      rnd1 = random%uniform%get()
+!      dW = SQRT(3*dt)*(-1+2*rnd1)
 
-      q = F%AB%qo*(1+(T_R/F%AB%lambda)**2)
-      Lc = C_PI*F%AB%Ro*q
-      dLc = C_PI*F%AB%Ro*F%AB%qo*2*T_R/F%AB%lambda**2
+!      q = F%AB%qo*(1+(T_R/F%AB%lambda)**2)
+!      Lc = C_PI*F%AB%Ro*q
+!      dLc = C_PI*F%AB%Ro*F%AB%qo*2*T_R/F%AB%lambda**2
 
-      g_r = F%AB%A_turb * exp(-0.5 * ((T_R - F%AB%mu_turb)/F%AB%sigma_turb)**2)
-      ballooning = 0.25 * (1.0 + cos(T_T))**2
-      dBr_norm_squared=g_r*ballooning
-      ddBr_norm_squared=dBr_norm_squared*(-(T_R - F%AB%mu_turb)/F%AB%sigma_turb**2)
+!      g_r = F%AB%A_turb * exp(-0.5 * ((T_R - F%AB%mu_turb)/F%AB%sigma_turb)**2)
+!      ballooning = 0.25 * (1.0 + cos(T_T))**2
+!      dBr_norm_squared=g_r*ballooning
+!      ddBr_norm_squared=dBr_norm_squared*(-(T_R - F%AB%mu_turb)/F%AB%sigma_turb**2)
 
-      DRR=abs(vm*xi)*Lc*dBr_norm_squared
-      dDRR=abs(vm*xi)*(Lc*ddBr_norm_squared + &
-        dLc*dBr_norm_squared)
+!      DRR=abs(vm*xi)*Lc*dBr_norm_squared
+!      dDRR=abs(vm*xi)*(Lc*ddBr_norm_squared + &
+!        dLc*dBr_norm_squared)
 
-      dr=REAL(flagCon)* &
-        ((dDRR+DRR/T_R)*dt+ &
-        sqrt(2.0_rp*DRR)*dW)
+!      dr=REAL(flagCon)* &
+!        ((dDRR+DRR/T_R)*dt+ &
+!        sqrt(2.0_rp*DRR)*dW)
 
-      T_R=T_R+dr
+!      T_R=T_R+dr
 
-      call tor_to_cart_p(pchunk,F%AB%Ro,F%AB%kappa, &
-        X_X,X_Y,X_Z,T_R,T_T,T_Z)
+!      call tor_to_cart_p(pchunk,F%AB%Ro,F%AB%kappa, &
+!        X_X,X_Y,X_Z,T_R,T_T,T_Z)
 
-    end if
+!    end if
 
-  end subroutine include_diffusion_ACC
-#endif
+!  end subroutine include_diffusion_ACC
+!#endif
 
 end module korc_diffusion

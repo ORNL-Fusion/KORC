@@ -43,8 +43,9 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
-run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
+#run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TGLF_DRR/TEST1']
+run_directory=['/home/21b/KORC/test/iter_sol_wall/rank_1']
 
 for kk in range(0,dir_num):
 
@@ -343,16 +344,14 @@ for kk in range(0,dir_num):
 
 #%% open KORC field file
 
-useextfield=0
+useextfield=1
 
 if useextfield==1:
 
     #filename=r"/home/21b/KORC_RUNS/LOCAL/TEST2/AORSA_D3D_171089_200MHz_EFITgrid.h5"
-    
-    if on_nersc==0:
-        filename=r"../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
-    else:
-        filename=r"../../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
+    #filename=r"../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
+    #filename=r"../../"+run_directory[0]+"/DIII_200236_MARS_CaseA.h5"
+    filename='/home/21b/KORC/test/iter_sol_wall/ITER_IMAS.h5'
     
     with h5py.File(filename,'r') as f:
         NR=int(f['NR'][0])           
@@ -387,15 +386,17 @@ if useextfield==1:
     BZ_g=dpsipdr*np.divide(1,RRg)
     BPHI_g=-B0*R0/RRg#np.divide(1,RRg)
     
-    interp_br = RegularGridInterpolator((Rg,Zg), np.transpose(BR_g[:,:]),method='cubic')
-    interp_bz = RegularGridInterpolator((Rg,Zg), np.transpose(BZ_g[:,:]),method='cubic')
-    
-    Rq=1.7
-    Zq=0.
-    
-    psip_q=interp_psip([Rq,Zq])
-    br_q=interp_br([Rq,Zq])
-    bz_q=interp_bz([Rq,Zq])
+    interp_field=0
+    if interp_field==1:
+        interp_br = RegularGridInterpolator((Rg,Zg), np.transpose(BR_g[:,:]),method='cubic')
+        interp_bz = RegularGridInterpolator((Rg,Zg), np.transpose(BZ_g[:,:]),method='cubic')
+        
+        Rq=1.7
+        Zq=0.
+        
+        psip_q=interp_psip([Rq,Zq])
+        br_q=interp_br([Rq,Zq])
+        bz_q=interp_bz([Rq,Zq])
     
 #%% analytic fields
 
@@ -477,7 +478,8 @@ elif orbit_model[0:2]=='GC':
     vperp=vmag*np.sin(np.radians(eta))
     vpll=vmag*np.cos(np.radians(eta))
 
-rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
+if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
+    rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
 
 flagDecon=np.zeros(np.shape(flagCon))
 flagDecon[(flagCon<1) & (flagRE>0)]=1
@@ -1064,9 +1066,9 @@ plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
 plot_evo=0
-plot_orbit=1
+plot_orbit=0
 plot_histRZ_analytic=0
-plot_evoCon=0
+plot_evoCon=1
 plotgrowth=0
 plotyorbit=0   
 plot_ne=0
@@ -1076,7 +1078,7 @@ plot_br=0
 plot_bz=0
 plot_bphi=0
 plot_psip=0
-plot_histRZ_ext=0
+plot_histRZ_ext=1
 plot_histKeta=0
 plot_histK=0
 plot_histeta=0
@@ -1099,7 +1101,7 @@ plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=9
+timeind_p=10
 timeind_g=0
 
 #tloss=time[12]
