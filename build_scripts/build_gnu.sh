@@ -12,7 +12,7 @@ export FC=/usr/bin/gfortran-11
 
 cmake -DCMAKE_BUILD_TYPE:String=$BUILD_TYPE \
       -DUSE_PSPLINE=ON \
-      -DUSE_FIO=OFF \
+      -DUSE_FIO=ON \
       -DKORC_TEST=OFF \
       -DCMAKE_Fortran_FLAGS="-malign-double -fconvert='big-endian'" \
       -DCMAKE_C_FLAGS="-malign-double"  \

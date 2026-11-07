@@ -119,6 +119,7 @@ CONTAINS
     params%restart = restart
     params%proceed = proceed
     params%reinit  = reinit
+    params%external_load = external_load
 
     params%load_balance = load_balance
 
@@ -744,6 +745,10 @@ CONTAINS
                   spp(ii)%BMC_nRE,params)
           end if
        end do
+
+       if (params%external_load) then
+        call initial_gyro_distribution(params,random,F,spp) 
+       endif
 
        !write(6,*) 'flagRE',spp(1)%vars%flagRE
        !write(6,*) 'pRE',spp(1)%pRE

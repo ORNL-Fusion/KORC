@@ -17,6 +17,7 @@ module korc_input
   ! Append simulation results after previous simulation_time reached
   LOGICAL :: load_balance = .FALSE.
   LOGICAL :: reinit = .FALSE.
+  LOGICAL :: external_load = .TRUE.
     ! Begin a new simulation, reinitializing from restart file state
   REAL(rp) :: simulation_time = 1.E-3
     ! Total aimed simulation time in seconds
@@ -464,7 +465,7 @@ CONTAINS
          restart_overwrite_frequency,FokPlan,GC_rad_SDE,bound_electron_model,&
          FO_GC_compare,SameRandSeed,SC_E,reinit,SC_E_add,time_slice,rmax, &
          rmin,zmax,zmin,pchunk,magnetic_field_directory,magnetic_field_list,&
-         LargeCollisions,load_balance,recycle_losses,diffusion
+         LargeCollisions,load_balance,recycle_losses,diffusion,external_load
     NAMELIST /plasma_species/ ppp,q,m,Eno,etao,Eo_lims,etao_lims,runaway, &
          spatial_distribution,energy_distribution,pitch_distribution,Ro, &
          PHIo,Zo,r_inner,r_outter,falloff_rate,shear_factor,sigmaR,sigmaZ, &

@@ -197,6 +197,7 @@ module korc_types
      !! reached.
      LOGICAL 			:: load_balance
      LOGICAL  :: reinit
+     LOGICAL :: external_load
      !! Flag to begin a new simulation, reinitializing from restart file state
      REAL(rp) 			:: simulation_time
      !! Total simulation time in seconds.

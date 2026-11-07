@@ -3605,6 +3605,46 @@ CONTAINS
             AUX_receive_buffer,recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
        spp(ss)%vars%g(1:recieve_num) = AUX_receive_buffer
 
+       if (params%external_load) then
+          if (params%mpi_params%rank.EQ.0_idef) then
+            filename = TRIM(params%path_to_outputs) // "restart_file.h5"
+            call h5fopen_f(filename, H5F_ACC_RDONLY_F, h5file_id, h5error)
+            if (h5error .EQ. -1) then
+              write(output_unit_write,'("KORC ERROR: Something went wrong in: &
+                    &load_particles_ic --> h5fopen_f")')
+              call KORC_ABORT(14)
+            end if
+
+            write(tmp_str,'(I18)') ss
+
+            dset = "/spp_" // TRIM(ADJUSTL(tmp_str)) // "/eta"
+            call load_array_from_hdf5(h5file_id,dset,AUX_send_buffer)
+
+            call h5fclose_f(h5file_id, h5error)
+
+            if (params%load_balance) then
+              do ii=1,params%mpi_params%nmpi_prev*spp(ss)%ppp
+
+                  !write(6,*) 'send index',ii
+                  !write(6,*) 'tmp index',(mod(ii-1,params%mpi_params%nmpi))* &
+                  !     spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1
+
+                  AUX_send_buffer_tmp((mod(ii-1,params%mpi_params%nmpi))* &
+                      spp(ss)%ppp/nmpi_ratio+(ii-1)/params%mpi_params%nmpi+1) = &
+                      AUX_send_buffer(ii)
+              end do
+            else
+              AUX_send_buffer_tmp=AUX_send_buffer
+            end if
+            
+          end if
+
+        AUX_receive_buffer = 0.0_rp
+        CALL MPI_SCATTER(AUX_send_buffer_tmp,recieve_num,mpi_real_type, &
+              AUX_receive_buffer,recieve_num,mpi_real_type,0,MPI_COMM_WORLD,mpierr)
+        spp(ss)%vars%eta(1:recieve_num) = AUX_receive_buffer
+       endif
+
        if (params%SC_E) then
           
           ALLOCATE(JSC0_buffer(F%dim_1D))

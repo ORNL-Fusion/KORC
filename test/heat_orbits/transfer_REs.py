@@ -10,8 +10,8 @@ ep0 = 8.854E-12 #% Electric permitivity [C**2/(N*m**2)]
 re = qe**2/(4*np.pi*ep0*me*c**2) #% classical electron radius (m)
 
 csv_filepath="start_pts (1).csv"
-template_h5_path="restart_file.h5"
-output_h5_path="reinit_restart.h5"
+template_h5_path="restart_file_tmp.h5"
+output_h5_path="restart_file.h5"
 
 
 # 1. Load particle positions from CSV
@@ -32,6 +32,7 @@ X_data = np.vstack((R, Z, PHI))  # Shape: (3, num_particles)
 
 vmag=c*0.6
 g=1/np.sqrt(1-(vmag/c)**2)
+eta=0. #in degrees
 
 # Placeholder velocities/momenta array of shape (3, num_particles)
 V_data = np.zeros((3, num_particles), dtype=np.float64)
@@ -63,6 +64,9 @@ with h5py.File(template_h5_path, "r") as f_templ:
     )
     spp_out.create_dataset(
         "g", data=np.ones(num_particles, dtype=np.float64)*g
+    )
+    spp_out.create_dataset(
+        "eta", data=np.ones(num_particles, dtype=np.float64)*eta
     )
 
 print(
