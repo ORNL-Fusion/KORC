@@ -6,7 +6,7 @@
   reinit = F
     ! Begin a new simulation, reinitializing from restart file stat
   load_balance = F
-  simulation_time = 1.e-5
+  simulation_time = 1.e-4
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
   snapshot_frequency = 1.e-6
@@ -71,7 +71,7 @@
   sigmaR = 1.e6
   sigmaZ = 0.2
   theta_gauss = 0.0
-  psi_max=1.0
+  psi_max=1.2
   psi_min=0.98
   dth = 3.
     ! Variance of sampling normal variate for pitch angle
@@ -84,12 +84,13 @@
   energy_distribution = 'MONOENERGETIC'
     ! Options are: 'MONOENERGETIC', 'THERMAL', 'AVALANCHE', 
     ! 'EXPERIMENTAL', and 'UNIFORM'
-  pitch_distribution = 'MONOPITCH'
+  pitch_distribution = 'UNIFORM'
     ! Options are: 'MONOPITCH', 'AVALANCHE', 'EXPERIMENTAL', and 'UNIFORM'.
-  Eno = 3.5E6
+  Eno = 3.5E5
     ! Initial energy in eV
-  etao = 10.0
+  !etao = 10.0
     ! Initial pitch angle
+  etao_lims = 60,80
   Xtrace = 1.6,0.0,0.0
     ! Initial position of tracer particle for debugging with
     ! spatial_distribution='TRACER'

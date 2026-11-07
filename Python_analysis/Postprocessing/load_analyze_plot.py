@@ -39,13 +39,13 @@ dir_num=1
 #run_directory=['GCeqn_GPU_TEST20b3']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
 #run_directory=['../test/fio_m3dc1/tmp']
-#run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
+run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
 #run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TGLF_DRR/TEST1']
-run_directory=['/home/21b/KORC/test/iter_sol_wall/rank_1']
+#run_directory=['/home/21b/KORC/test/iter_sol_wall/rank_1']
 
 for kk in range(0,dir_num):
 
@@ -373,6 +373,20 @@ if useextfield==1:
         PSIp=np.array(PSIp)
         FLAG=np.array(FLAG)
     
+    wall_file='/home/21b/M3DC1/unstructured/device_data/ITER/first_wall.pts'
+    with open(wall_file, 'r') as f: lines = f.readlines()
+    Npts=int(lines[0].strip())
+
+    wall=np.zeros([Npts,2])
+    Rwall=np.zeros([Npts,1])
+    Zwall=np.zeros([Npts,1])
+    for ii in range(0,Npts):
+        line = lines[ii+1].strip().split()
+        Rwall[ii]=float(line[0])
+        Zwall[ii]=float(line[1])
+        wall[ii,0]=float(line[0])
+        wall[ii,1]=float(line[1])
+    #wall=np.transpose(wall)
     
     ZZg,RRg=np.meshgrid(Zg,Rg,indexing='ij')
     
@@ -477,6 +491,8 @@ elif orbit_model[0:2]=='GC':
     pmag=me*c*np.sqrt(g**2-1)
     vperp=vmag*np.sin(np.radians(eta))
     vpll=vmag*np.cos(np.radians(eta))
+    
+theta_geo=np.atan2(zz,R-R0)
 
 if (field_model != 'M3D_C1') and (field_eval == 'eqn'):
     rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
@@ -508,14 +524,22 @@ if 'flagRE' in outputs_list:
   Secondary=np.sum(flagSecondary,axis=1)
 
 Ipart=qe*vpll*bPHI/(2*np.pi*R*bmag)
+Ipart_decon=Ipart.copy()
 Ipart[flagActive==0]=0
 Itot=np.sum(Ipart,axis=1)
 Ipri=np.sum(Ipart*flagPrimary,axis=1)
 Isec=np.sum(Ipart*flagSecondary,axis=1)
 
+Ipart_decon[flagDecon==0]=0
+Itot_decon=np.sum(Ipart_decon,axis=1)
+
 IPOLpart=qe*vpll*bpol/(2*np.pi*R*bmag)
+IPOLpart_decon=IPOLpart.copy()
 IPOLpart[flagActive==0]=0
-IPOL=np.sum(IPOLpart,axis=1)
+IPOLtot=np.sum(IPOLpart,axis=1)
+
+IPOLpart_decon[flagDecon==0]=0
+IPOLtot_decon=np.sum(IPOLpart_decon,axis=1)
 
 
 #KE=me*c**2/qe*np.sum((g-1)*flagActive)
@@ -527,7 +551,7 @@ GR=vperp/(qe*bmag/(me*g))
 
 #%% Calculate and save facetted wall impacts
 
-calc_impacts=0
+calc_impacts=1
 if calc_impacts==1:
 
     # 1. Base Configuration
@@ -1068,7 +1092,7 @@ plot_3Dloc=0
 plot_evo=0
 plot_orbit=0
 plot_histRZ_analytic=0
-plot_evoCon=1
+plot_evoCon=0
 plotgrowth=0
 plotyorbit=0   
 plot_ne=0
@@ -1078,7 +1102,7 @@ plot_br=0
 plot_bz=0
 plot_bphi=0
 plot_psip=0
-plot_histRZ_ext=1
+plot_histRZ_ext=0
 plot_histKeta=0
 plot_histK=0
 plot_histeta=0
@@ -1098,16 +1122,16 @@ plot_psi=0
 plot_histRZ_m3dc1=0
 plotallangle_fourplot = 0
 plot_histtmp = 0
-plot_evoI = 0
+plot_evoI = 1
 plot_evoRE = 0
 
-timeind_p=10
+timeind_p=0
 timeind_g=0
 
 #tloss=time[12]
-#t0=1.594691872596741e+00
+t0=1.594691872596741e+00
 
-need_exp_data=0
+need_exp_data=2
 if need_exp_data==1:
     filename_ip = '/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21/ip177031.txt'
 
@@ -1132,7 +1156,7 @@ if need_exp_data==2:
     h5_filename = os.path.join(folder, 'ipprobesf.h5')
     
     # Downsampling option (1 = full data, 2 = every second point, etc.)
-    downsample_stride = 10
+    downsample_stride = 1
     
     with h5py.File(h5_filename, 'r') as hf:
         # Define the deep internal path specified by your diagnostic file
@@ -1205,14 +1229,43 @@ if plot_evoI==1:
     
     fig,ax=plt.subplots()
     
-    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld[offset:],'-o', label=r'All RE')
-    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld1[offset:],'-o', label=r'Primary RE')
-    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld2[offset:],'-o', label=r'Secondary RE')
-    ax.plot(Ip_time[tindex:],Ip[tindex:], label=r'DIIID 177031')
+    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld[offset:]/10**3,'-o', label=r'All RE')
+    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld1[offset:]/10**3,'-o', label=r'Primary RE')
+    ax.plot(t0+time[offset:]-time[offset],-Irat*tmpfld2[offset:]/10**3,'-o', label=r'Secondary RE')
+    ax.plot(Ip_time[tindex:],Ip[tindex:]/10**3, label=r'DIIID 177031')
     
     ax.legend(loc='center left', frameon=False, fontsize=12)
     ax.set_xlim([t0,t0+0.010])
     ax.set(xlabel='$t (\\mathrm{s})$')
+    ax.set(ylabel='$I (\\mathrm{kA})$')
+    ax.grid()
+    
+    #plt.savefig("RZhist.png", format="png", bbox_inches="tight")
+    plt.show()
+    
+    tmpfld=np.max(ePHI,axis=1)
+    tmpfld1=np.sum(conlossind,axis=1)
+    tmpfld3=np.sum(conlossind*flagSecondary,axis=1)
+    tmpfld2=np.sum(conlossind*flagPrimary,axis=1)
+    
+    fig,ax=plt.subplots()
+    ax2 = ax.twinx()
+    
+    ax2.plot(t0+time[offset:]-time[offset],tmpfld[offset:],'r-', label=r'$E_\phi$')
+    
+    
+    
+    ax.plot(t0+time[offset:]-time[offset],tmpfld1[offset:],'k-o', label=r'All')
+    ax.plot(t0+time[offset:]-time[offset],tmpfld2[offset:],'b-o', label=r'Primaries')
+    ax.plot(t0+time[offset:]-time[offset],tmpfld3[offset:],'g-o', label=r'Secondaries')
+    ax.plot(np.nan,np.nan,'r-o', label=r'$E_\phi$')
+    
+    
+    ax.legend(loc='center left', frameon=False, fontsize=12)
+    ax.set_xlim([t0,t0+0.010])
+    ax.set(xlabel='$t (\\mathrm{s})$')
+    ax.set(ylabel='$Deconfined\,\,N_{RE}$')
+    ax2.set(ylabel='$max(E_\phi)\,\,(\\mathrm{V/m})$')
     ax.grid()
     
     #plt.savefig("RZhist.png", format="png", bbox_inches="tight")
@@ -2065,10 +2118,10 @@ if plot_evoCon==1:
     #ax.set_xscale('log')
     #ax.set_yscale('log')
     
-    ax.set(xlabel='$t\,({\\rm s})$', ylabel='$N_{RE}$')
+    ax.set(xlabel='$t\,({\\rm s})$', ylabel='$Confined\,\,Alphas$')
     ax.grid()
     
-    #plt.savefig("NREevo_"+run_directory[0]+".png", format="png", bbox_inches="tight")
+    plt.savefig("NREevo.png", format="png", bbox_inches="tight")
     plt.show()    
 
 if plotgrowth==1:
@@ -2261,7 +2314,7 @@ if plot_deconsurf==1:
     clamshell=0
     noinner=1
     
-    DiMESfocus=1
+    DiMESfocus=0
     
     #if DiMESfocus==0:
     #    if clamshell==1:
@@ -2275,7 +2328,7 @@ if plot_deconsurf==1:
         
     ax.plot_surface(xxD, yyD, zsurf,color='g',zorder=1)
     
-    DiMES_decon=1
+    DiMES_decon=0
     
     if DiMES_decon==1:
         #ax.scatter(xx[timeind_p,flagCon[timeind_p]<1],yy[timeind_p,flagCon[timeind_p]<1],
@@ -2304,22 +2357,22 @@ if plot_deconloc==1:
     
     fig,ax=plt.subplots()
     
-    DiMES_decon=1
+    DiMES_decon=0
     
     if DiMES_decon==1:
         ax.scatter(PHI[timeind_p,flagCon[timeind_p]<1],theta_geo[timeind_p,flagCon[timeind_p]<1],c='b')
         ax.scatter(PHI[timeind_p,DiMESconflag[timeind_p]>0],theta_geo[timeind_p,DiMESconflag[timeind_p]>0],c='r')
 
     else:
-        ax.scatter(PHI[timeind_p,flagCon[timeind_p]<1],theta_geo[timeind_p,flagCon[timeind_p]<1],c='b')
+        ax.scatter(PHI[timeind_p,flagCon[timeind_p]<1],theta_geo[timeind_p,flagCon[timeind_p]<1],c='b',marker='.',s=1)
 
     ax.set(xlabel='$\\phi ({\\rm rad})$', ylabel='$\\theta_{\\rm geom} ({\\rm rad})$')
     ax.grid()
     #plt.gca().set_aspect('equal')
     #ax.axis([-np.pi,np.pi,-np.pi,np.pi])
-    ax.axis([-np.pi,np.pi,-1.8,-1.2])
+    #ax.axis([-np.pi,np.pi,-1.8,-1.2])
     
-    plt.savefig("decon_loc_"+run_directory[0]+".png", format="png", bbox_inches="tight")
+    plt.savefig("decon_loc.png", format="png", bbox_inches="tight")
     plt.show()
 
 
@@ -2382,7 +2435,7 @@ if plot_histKeta==1:
     #plt.gca().set_aspect('equal')
     ax.set_xscale('log')
     
-    plt.savefig("Ketahist_DIIID_"+run_directory[0]+".png", format="png", bbox_inches="tight")
+    plt.savefig("Ketahist_DIIID.png", format="png", bbox_inches="tight")
     plt.show()
     
 if plot_histK==1:
@@ -2651,7 +2704,7 @@ if plot_histRZ_ext==1:
     
     
     plotden=0
-    plotconfined=1
+    plotconfined=0
     
     if plotden==0:
         if plotconfined==1:
@@ -2691,7 +2744,7 @@ if plot_histRZ_ext==1:
     cb=plt.colorbar(ct)
     
     if plotden==0:
-        cb.set_label('$N_{RE}$', rotation=90)
+        cb.set_label('$N_{Alpha}$', rotation=90)
     else:
         cb.set_label('$f_{RE}$', rotation=90)
     
