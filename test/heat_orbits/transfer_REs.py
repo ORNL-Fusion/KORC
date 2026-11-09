@@ -42,8 +42,12 @@ with h5py.File(template_h5_path, "r") as f_templ:
   with h5py.File(output_h5_path, "w") as f_out:
     # Copy global simulation datasets
     for key in f_templ.keys():
-      if key != "spp_1":
+      if key != "spp_1" or key != "num_mpi" :
         f_templ.copy(key, f_out)
+
+    f_out.create_dataset(
+        "num_mpi", data = 128, dtype=np.int32
+    )
 
     # Create spp_1 group
     spp_out = f_out.create_group("spp_1")

@@ -32,7 +32,8 @@
     ! specified in "filename".
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
-  magnetic_field_filename = 'C1.h5'
+  !magnetic_field_filename = 'C1.h5'
+  magnetic_field_filename = '/pscratch/sd/r/rdatta/REMC/SPRC-m00-Ne-REMC-3D-10a-1/C1.h5'
   time_slice=0
   rmax =  2.50
   rmin =  1.0
@@ -57,7 +58,7 @@
 
 &plasma_species
   runaway = F
-  ppp = 500
+  ppp = 5
     ! Number of particles per process (mpi)
   q = -1.0
     ! Electric charge

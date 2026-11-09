@@ -1,0 +1,97 @@
+#!/bin/bash
+
+#SBATCH -N 1
+#SBATCH -C cpu
+#SBATCH -J KORC_heat_orbits
+#SBATCH --mail-user=beidlermt@ornl.gov
+#SBATCH --mail-type=ALL
+#SBATCH -L SCRATCH
+#SBATCH -o KORC_PERLMUTTER_%j.out 
+#SBATCH -e KORC_PERLMUTTER_%j.err
+#SBATCH -A m3236
+#SBATCH --qos=debug
+#SBATCH -t 00:30:00
+
+INSTALL_BIN=/global/cfs/cdirs/m3236/build_FIO_6_2026/KORC/build_gnu/bin
+
+#Proceeding from file
+#DUMPIN_FILE_ID='TEST0'
+
+## You might want to change the path of the outouts folder
+FILE_ID='TEST0'
+INPUT_FOLDER='heat_orbits'
+#INPUT_EQUIL_FILE=DIII_200236_MARS_CaseA.h5
+#INPUT_INIT_DIST_FILE=Hollmann_PDF_DIII_200236.h5
+
+export SLURM_CPU_BIND="cores"
+
+#MPI settings:
+MPI_PROCCESSES=100
+
+#OpenMP settings:
+#export OMP_NUM_THREADS=256
+#export OMP_PLACES=cores
+#export OMP_PROC_BIND=spread
+
+SVDIR='KORC/heat_orbits/TEST0sav'
+TESTNUM=0
+
+#################Begin Run#####################
+
+if [ "$1" == "" ] ; then
+
+    cd $SLURM_SUBMIT_DIR
+
+    FOLDER_ID=${INPUT_FOLDER}_${FILE_ID}
+    PATH_TO_SCRATCH=$SCRATCH
+    OUTPUT_FOLDER=${PATH_TO_SCRATCH}/KORC_CPU_RUNS/${FOLDER_ID}
+
+    rm -r ${OUTPUT_FOLDER}
+
+    mkdir ${OUTPUT_FOLDER}
+
+    cp ${INSTALL_BIN}/xkorc ${OUTPUT_FOLDER}
+    cp input_file_${FOLDER_ID}.korc ${OUTPUT_FOLDER}
+    cp restart_file.h5 ${OUTPUT_FOLDER}
+    #cp -r EXAM ${OUTPUT_FOLDER}
+    #cp ${INPUT_EQUIL_FILE} ${OUTPUT_FOLDER}
+    #cp ../M3DC1_INPUT/${INPUT_EQUIL_FILE} ${OUTPUT_FOLDER}
+    #cp ../M3DC1_INPUT/C1.h5 ${OUTPUT_FOLDER}
+    #cp ${INPUT_INIT_DIST_FILE} ${OUTPUT_FOLDER}
+
+    DUMPIN_ID=${INPUT_FOLDER}_${DUMPIN_FILE_ID}
+    DUMPIN_FOLDER=${PATH_TO_SCRATCH}/KORC/${DUMPIN_ID}
+
+    #cp ${DUMPIN_FOLDER}/restart_file.h5 ${OUTPUT_FOLDER}
+
+    cd ${OUTPUT_FOLDER}
+
+    echo -n "Running KORC"
+
+    #run the application:
+    srun -n ${MPI_PROCCESSES} ./xkorc input_file_${INPUT_FOLDER}_${FILE_ID}.korc ./
+
+    echo -n " Ended program at : ";date
+
+fi
+
+###################Backup Files#########################
+
+if [ "$1" == "fin" ]; then
+
+    echo Backing up files
+
+    FOLDER_ID=${INPUT_FOLDER}_${FILE_ID}
+    OUTPUT_FOLDER="$SCRATCH/KORC/$FOLDER_ID"
+
+    cd $OUTPUT_FOLDER
+
+    echo  "In $OUTPUT_FOLDER "
+
+    hsi "mkdir $SVDIR"
+
+    htar -cvf $SVDIR/Output_$TESTNUM.tar  *.h5 *.korc
+
+    exit
+
+fi
