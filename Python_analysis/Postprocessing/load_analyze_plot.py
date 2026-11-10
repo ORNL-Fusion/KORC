@@ -43,8 +43,9 @@ dir_num=1
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
-run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
+#run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TGLF_DRR/TEST1']
+run_directory=['/home/21b/KORC/test/heat_orbits/rank_1']
 
 for kk in range(0,dir_num):
 

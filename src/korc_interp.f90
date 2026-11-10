@@ -5415,7 +5415,8 @@ subroutine interp_fields(params,prtcls,F)
   !! See [[korc_types]] and [[korc_fields]].
   integer :: pp
 
-  if (.not.params%GC_coords) call cart_to_cyl(prtcls%X,prtcls%Y)
+  if ((.not.params%GC_coords).or.(params%external_load)) &
+    call cart_to_cyl(prtcls%X,prtcls%Y)
 
   !  write(output_unit_write,'("BR: ",E17.10)') prtcls%BR(:,1)
   !  write(output_unit_write,'("Y: ",E17.10)') prtcls%X(2,1)
@@ -5881,6 +5882,8 @@ subroutine get_fio_magnetic_fields(prtcls, F, params)
              x(1) = prtcls%Y(pp,1)*params%cpp%length
              x(2) = prtcls%Y(pp,2)
              x(3) = prtcls%Y(pp,3)*params%cpp%length
+
+             !if (pp.EQ. 1) write(6,*) x(:)
 
              !prtcls%hint(pp)=c_null_ptr
 

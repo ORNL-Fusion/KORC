@@ -6,17 +6,17 @@
   reinit = T
   external_load = T
     ! Begin a new simulation, reinitializing from restart file state
-  simulation_time = 2.E-8
+  simulation_time = 1.E-9
     ! Total aimed simulation time in seconds   
     ! Run 10 mu s If transients exist put 5 extra mu s.
-  snapshot_frequency = 1.E-8
+  snapshot_frequency = 1.E-10
     ! Time between snapshots in seconds, not used in FIO
-  dt = 1.E-2
+  dt = 1.E0
     ! Time step as fraction of relativistic gyro-period
   num_species = 1
   minimum_particle_energy = 1.0E1 
     ! Minimum energy of simulated particles in eV
-  radiation = T
+  radiation = F
   GC_rad_SDE = F
   collisions = F
   collisions_model = 'SINGLE_SPECIES' 
@@ -33,12 +33,13 @@
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
   !magnetic_field_filename = 'C1.h5'
-  magnetic_field_filename = '/pscratch/sd/r/rdatta/REMC/SPRC-m00-Ne-REMC-3D-10a-1/C1.h5'
-  time_slice=0
-  rmax =  2.50
+  !magnetic_field_filename = '/pscratch/sd/r/rdatta/REMC/SPRC-m00-Ne-REMC-3D-10a-1/C1.h5'
+  magnetic_field_filename = '/home/21b/M3DC1_RUNS/for_MiRACL/C1.h5'
+  time_slice=65
+  rmax =  2.75
   rmin =  1.0
-  zmax =  1.38
-  zmin = -1.642
+  zmax =  1.5
+  zmin = -1.5
   outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,PSIp}' 
     ! List of outputs
     !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,curlb,ne,Te,Zeff,PSIp}'
@@ -58,7 +59,7 @@
 
 &plasma_species
   runaway = F
-  ppp = 5
+  ppp = 500
     ! Number of particles per process (mpi)
   q = -1.0
     ! Electric charge
@@ -101,39 +102,9 @@
 /
 
 &externalPlasmaModel  
-  ind0_2x1t = 0
+  ind0_2x1t = 65
   ReInterp_2x1t = F
   PSIp_lim= 0.0989886
   PSIp_0 = 0.420856,
   psip_conv=-1 !RMP regtest has opposite sign of current than what was assumed in fio routines
-/
-
-&CollisionParamsSingleSpecies
-  Te_sing = 1.e3 
-    ! Background electron temperature in eV
-  Ti_sing = 1.e3 
-    ! Background ion temperature in eV
-  ne_sing = 1.E20 
-    ! Background electron density in m^-3
-  Zeff_sing = 1. 
-    ! Effective atomic number
-  dTau_sing = 1.E-2
-    ! Subcycling time step in collisional time units (Tau)
-  p_therm = 1e-1 !6.245369554298899e-03
-/
-
-&CollisionParamsMultipleSpecies
-  num_impurity_species = 0
-  Te_mult = 1.e3 
-    ! Background electron temperature in eV
-  ne_mult = 1.E120 
-    ! Background electron density in 1/m^3
-  Zo_mult = 10.0 
-    ! Full nuclear charge of each impurity: Z=1 for D, Z=10 for Ne, Z=18 for Ar
-  Zj_mult = 0.0,  
-    ! Average charge state of each impurity
-  nz_mult = 1.E19 
-    ! Impurity densities
-  IZj_mult = 15.7596
-    ! Ionization energy of impurity in eV
 /

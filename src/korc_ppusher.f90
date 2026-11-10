@@ -7121,7 +7121,13 @@ subroutine adv_GCinterp_fio_top(params,spp,P,F,random)
 
              ne(cc)=spp(ii)%vars%ne(pp-1+cc)
              ni(cc)=spp(ii)%vars%ni(pp-1+cc)
-             nimp(cc,:)=spp(ii)%vars%nimp(pp-1+cc,:)
+            if (params%num_impurity_species.gt.0) then
+              if (allocated(spp(ii)%vars%nimp)) then
+                  nimp(cc,:)=spp(ii)%vars%nimp(pp-1+cc,:)
+              else
+                  nimp(cc,:)=0.0_rp
+              end if
+            end if
              Te(cc)=spp(ii)%vars%Te(pp-1+cc)
           end do
           !$OMP END SIMD
@@ -7176,7 +7182,11 @@ subroutine adv_GCinterp_fio_top(params,spp,P,F,random)
 
              spp(ii)%vars%ne(pp-1+cc) = ne(cc)
              spp(ii)%vars%ni(pp-1+cc) = ni(cc)
-             spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
+            if (params%num_impurity_species.gt.0) then
+              if (allocated(spp(ii)%vars%nimp)) then
+                  spp(ii)%vars%nimp(pp-1+cc,:) = nimp(cc,:)
+              end if
+            end if
              spp(ii)%vars%Te(pp-1+cc) = Te(cc)
              spp(ii)%vars%Zeff(pp-1+cc) = Zeff(cc)
 

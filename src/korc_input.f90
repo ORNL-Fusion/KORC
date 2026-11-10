@@ -49,7 +49,7 @@ module korc_input
     ! specified in "filename".
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons'
     ! velocity.
-  CHARACTER(150) :: magnetic_field_filename = 'C1.h5'
+  CHARACTER(200) :: magnetic_field_filename = 'C1.h5'
   !  magnetic_field_filename = 'JFIT_D3D_164409_1405ms.h5'
   CHARACTER(150) ::  magnetic_field_directory
   CHARACTER(150) ::  magnetic_field_list
@@ -309,7 +309,7 @@ module korc_input
   !! -----------------------------------------------
   !! CollisionParamsMultipleSpecies
   !! -----------------------------------------------
-  INTEGER :: num_impurity_species = 1
+  INTEGER :: num_impurity_species = 0
   REAL(rp) :: Te_mult = 2.0
     ! Background electron temperature in eV
   REAL(rp) :: ne_mult = 4.E20

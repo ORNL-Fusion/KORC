@@ -9,6 +9,7 @@ module korc_HDF5
   use korc_types
   use korc_constants
   use HDF5
+  use korc_coords
 
   IMPLICIT NONE
 
@@ -3341,6 +3342,23 @@ CONTAINS
           end do
           
           spp(ss)%vars%Y(:,2)=modulo(spp(ss)%vars%Y(:,2),2*C_PI)
+
+          !write(6,* ) 'R',spp(ss)%vars%Y(:,1)
+          !write(6,* ) 'PHI',spp(ss)%vars%Y(:,2)
+          !write(6,* ) 'Z',spp(ss)%vars%Y(:,3)
+
+          if (params%external_load) then
+            spp(ss)%vars%Y(:,1)=spp(ss)%vars%Y(:,1)/params%cpp%length
+            spp(ss)%vars%Y(:,3)=spp(ss)%vars%Y(:,3)/params%cpp%length
+
+            call cyl_to_cart(spp(ss)%vars%Y,spp(ss)%vars%X)
+          endif
+
+          !write(6,*) 'X',spp(ss)%vars%X(:,1)*params%cpp%length
+          !write(6,*) 'Y',spp(ss)%vars%X(:,2)*params%cpp%length
+          !write(6,*) 'Z',spp(ss)%vars%X(:,3)*params%cpp%length
+
+
        end if
 
        if (params%mpi_params%rank.EQ.0_idef) then
