@@ -5,6 +5,10 @@ jobs:
   job_one:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Compatible Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: spack cache
         id: spack-cache
         uses: actions/cache@v3
@@ -29,14 +33,9 @@ jobs:
         name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
-
-          # Force Spack to use the official binary mirror for bootstrapping dependencies
-          spack bootstrap disable github-actions-v0.4 || true
           
-          if [ "${{ steps.spack-cache.outputs.cache-hit }}" != "true" ]; then
-            spack config add config:install_tree:padded_length:128
-            spack compiler find
-          fi
+          spack config add config:install_tree:padded_length:128
+          spack compiler find
 
           spack install --no-cache gcc@13.2.0
           spack compiler add $(spack location -i gcc@13.2.0)
