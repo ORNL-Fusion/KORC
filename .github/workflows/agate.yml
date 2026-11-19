@@ -30,9 +30,14 @@ jobs:
         run: |
           . ./spack/share/spack/setup-env.sh
 
-          spack config add config:install_tree:padded_length:128
+          # Force Spack to use the official binary mirror for bootstrapping dependencies
+          spack bootstrap disable github-actions-v0.4 || true
+          
+          if [ "${{ steps.spack-cache.outputs.cache-hit }}" != "true" ]; then
+            spack config add config:install_tree:padded_length:128
+            spack compiler find
+          fi
 
-          spack compiler find
           spack install --no-cache gcc@13.2.0
           spack compiler add $(spack location -i gcc@13.2.0)
 
