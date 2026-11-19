@@ -29,7 +29,7 @@ g=1/np.sqrt(1-(vmag/c)**2)
 eta=0. #in degrees
 
 # Assuming nmpi_prev (number of MPI processes the restart file was saved with)
-nmpi_prev = 1  # Match whatever nmpi was used to generate the restart file
+nmpi_prev = 4  # Match whatever nmpi was used to generate the restart file
 ppp = num_particles // nmpi_prev
 
 if num_particles % nmpi_prev != 0:

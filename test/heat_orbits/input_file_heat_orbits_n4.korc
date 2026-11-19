@@ -32,10 +32,10 @@
     ! specified in "filename".
     ! 'UNIFORM' A uniform magnetic field used to advance only electrons' 
     ! velocity.
-  !magnetic_field_filename = 'C1.h5'
+  magnetic_field_filename = 'C1.h5'
   !magnetic_field_filename = '/pscratch/sd/r/rdatta/REMC/SPRC-m00-Ne-REMC-3D-10a-1/C1.h5'
-  magnetic_field_filename = '/home/21b/M3DC1_RUNS/for_MiRACL/C1.h5'
-  time_slice=65
+  !magnetic_field_filename = '/home/21b/M3DC1_RUNS/for_MiRACL/C1.h5'
+  time_slice=0
   rmax =  2.75
   rmin =  1.0
   zmax =  1.5

@@ -13,6 +13,7 @@ if [ ! -d $OUT_DIR ]; then
 fi
 if [ ! -f C1.h5 ]; then
   ln -s ${CMAKE_SOURCE_DIR}/test/fio_m3dc1/C1.h5 C1.h5
+  ln -s ${CMAKE_SOURCE_DIR}/test/fio_m3dc1/equilibrium.h5 equilibrium.h5
   ln -s ${CMAKE_SOURCE_DIR}/test/fio_m3dc1/time_000.h5 time_000.h5
   ln -s ${CMAKE_SOURCE_DIR}/test/fio_m3dc1/time_001.h5 time_001.h5
 fi
