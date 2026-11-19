@@ -44,8 +44,8 @@ dir_num=1
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
 #run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TGLF_DRR/TEST1']
-#run_directory=['/home/21b/KORC/test/heat_orbits/rank_1']
-run_directory=['/home/21b/KORC/test/fio_m3dc1/rank_8']
+run_directory=['/home/21b/KORC/test/heat_orbits/rank_4']
+#run_directory=['/home/21b/KORC/test/fio_m3dc1/rank_8']
 
 for kk in range(0,dir_num):
 
