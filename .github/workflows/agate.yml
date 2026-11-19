@@ -1,4 +1,4 @@
-name: agate
+name: agate-regression
 on: [ push, workflow_dispatch ]
 
 jobs:
@@ -9,42 +9,46 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: spack cache
         id: spack-cache
         uses: actions/cache@v3
         with:
+          # Static key ensures you hit the exact same historical baseline every run
           key: spack-cache-sandlot-8
           path: |
             ./spack
             ~/.spack
 
-      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
-        name: grab spack
+      - name: grab spack
+        if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
         uses: actions/checkout@v4
         with:
           repository: 'spack/spack'
           ref: 'v0.21.1'
           path: './spack'
-        #
-        #   git clone --depth=1 --single-branch --branch v0.21.1 https://github.com/spack/spack.git
-        #
 
-      - if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
-        name: spack install
+      - name: spack install
         run: |
           . ./spack/share/spack/setup-env.sh
           
-          spack config add config:install_tree:padded_length:128
-          spack compiler find
-          spack config add "packages:all:compiler:[gcc@13.4.0]"
-
-          spack install --no-cache gcc@13.4.0
-          spack compiler add $(spack location -i gcc@13.4.0)
-
-          spack install --no-cache cmake %gcc@13.4.0
-          spack install --no-cache hdf5+fortran+mpi %gcc@13.4.0
-
+          # Initialize configuration settings if we have a fresh cache slot
+          if [ "${{ steps.spack-cache.outputs.cache-hit }}" != "true" ]; then
+            spack config add config:install_tree:padded_length:128
+            spack compiler find
+            
+            # Force Spack to prefer the host's GCC 14 to avoid GCC 15 bootstrap prototype crashes
+            spack config add "packages:all:compiler:[gcc@14.3.0]"
+          fi
+          
+          # Explicit toolchain compilation and installation
+          spack install --no-cache gcc@13.3.0 %gcc@14.3.0
+          spack compiler add $(spack location -i gcc@13.3.0) || true
+          
+          spack install --no-cache cmake %gcc@13.3.0
+          spack install --no-cache hdf5+fortran+mpi %gcc@13.3.0
           spack gc -y
+
 
 
   job_two:
