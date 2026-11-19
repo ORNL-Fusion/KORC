@@ -37,7 +37,7 @@
   rmin =  1.0
   zmax =  1.38
   zmin = -1.642
-  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,PSIp}' 
+  outputs_list = '{X,Y,V,B,E,g,eta,flagCon,flagCol,PSIp,flagRE}' 
     ! List of outputs
     !'{X,Y,V,E,B,g,mu,eta,Prad,Pin,flagCon,flagCol,gradB,curlb,ne,Te,Zeff,PSIp}'
   HDF5_error_handling = T
@@ -56,7 +56,7 @@
 
 &plasma_species
   runaway = F
-  ppp = 1000
+  ppp = 100
     ! Number of particles per process (mpi)
   q = -1.0
     ! Electric charge

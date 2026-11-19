@@ -38,14 +38,14 @@ dir_num=1
 #run_directory=['../LOCAL/TEST8/OUT']
 #run_directory=['GCeqn_GPU_TEST20b3']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b3']
-#run_directory=['../test/fio_m3dc1/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST21']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TEST20b_rr']
 #run_directory=['/pscratch/sd/m/mbeidler/KORC_GPU_RUNS/DIIID_177031_GPU_TEST21a']
 #run_directory=['/home/21b/KORC/test/elong_trans/rank_1']
 #run_directory=['/home/21b/KORC/test/TGLF_DRR/tmp']
 #run_directory=['/home/21b/KORC_RUNS/FROM_PERLMUTTER/TGLF_DRR/TEST1']
-run_directory=['/home/21b/KORC/test/heat_orbits/rank_1']
+#run_directory=['/home/21b/KORC/test/heat_orbits/rank_1']
+run_directory=['/home/21b/KORC/test/fio_m3dc1/rank_8']
 
 for kk in range(0,dir_num):
 
@@ -83,7 +83,8 @@ for kk in range(0,dir_num):
                 #BPHI1_Rem=f['fields']['BPHI1_Re'][:]
                 
     if field_model == 'M3D_C1':
-        filename=r"../"+run_directory[kk]+"/../m3dc1_outputs/C1.h5"
+        #filename=r"../"+run_directory[kk]+"/../m3dc1_outputs/C1.h5"
+        filename=run_directory[kk]+"/../C1.h5"
         with h5py.File(filename,'r') as f:
             Z0=f['scalars']['zmag'][0]
             R0=f['scalars']['xmag'][0]
@@ -478,7 +479,10 @@ elif orbit_model[0:2]=='GC':
     vperp=vmag*np.sin(np.radians(eta))
     vpll=vmag*np.cos(np.radians(eta))
 
-rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
+if (field_eval=='eqn'):
+    rm=np.sqrt((R-R0)**2+((zz-Z0)/kappa)**2)
+else:
+    rm=np.sqrt((R-R0)**2+(zz-Z0)**2)
 
 flagDecon=np.zeros(np.shape(flagCon))
 flagDecon[(flagCon<1) & (flagRE>0)]=1
@@ -1065,7 +1069,7 @@ plot_GPUscaling=0
 plot_LACbench=0
 plot_3Dloc=0
 plot_evo=0
-plot_orbit=1
+plot_orbit=0
 plot_histRZ_analytic=0
 plot_evoCon=0
 plotgrowth=0
@@ -1075,7 +1079,7 @@ plot_Te=0
 plot_ephi=0
 plot_br=0
 plot_bz=0
-plot_bphi=0
+plot_bphi=1
 plot_psip=0
 plot_histRZ_ext=0
 plot_histKeta=0
@@ -1094,13 +1098,13 @@ plot_deconhist=0
 plot_inc_ang=0
 tmpplot=0
 plot_psi=0
-plot_histRZ_m3dc1=0
+plot_histRZ_m3dc1=1
 plotallangle_fourplot = 0
 plot_histtmp = 0
 plot_evoI = 0
 plot_evoRE = 0
 
-timeind_p=9
+timeind_p=0
 timeind_g=0
 
 #tloss=time[12]
@@ -2827,8 +2831,8 @@ if plot_br==1:
     
     
     
-    sc=ax.scatter(R[timeind_p,:],zz[timeind_p,:],c=bR[timeind_p,:],s=5,
-                  cmap=plt.cm.bwr,vmin=nemin,vmax=nemax,edgecolor='black',linewidth=0.5)
+    #sc=ax.scatter(R[timeind_p,:],zz[timeind_p,:],c=bR[timeind_p,:],s=5,
+    #              cmap=plt.cm.bwr,vmin=nemin,vmax=nemax,edgecolor='black',linewidth=0.5)
     
     sc=ax.scatter(R[timeind_p,flagRE[timeind_p,:]>0],zz[timeind_p,flagRE[timeind_p,:]>0],
                   c=bR[timeind_p,flagRE[timeind_p,:]>0],cmap=plt.cm.bwr,

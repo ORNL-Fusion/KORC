@@ -17,7 +17,7 @@ module korc_input
   ! Append simulation results after previous simulation_time reached
   LOGICAL :: load_balance = .FALSE.
   LOGICAL :: reinit = .FALSE.
-  LOGICAL :: external_load = .TRUE.
+  LOGICAL :: external_load = .FALSE.
     ! Begin a new simulation, reinitializing from restart file state
   REAL(rp) :: simulation_time = 1.E-3
     ! Total aimed simulation time in seconds
