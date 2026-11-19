@@ -14,7 +14,7 @@ jobs:
         id: spack-cache
         uses: actions/cache@v3
         with:
-          # Static key ensures you hit the exact same historical baseline every run
+          # Fixed static key acting as your testing baseline
           key: spack-cache-sandlot-8
           path: |
             ./spack
@@ -37,17 +37,15 @@ jobs:
             spack config add config:install_tree:padded_length:128
             spack compiler find
             
-            # Force Spack to prefer the host's GCC 14 to avoid GCC 15 bootstrap prototype crashes
+            # FORCE SPACK TO PREFER THE STABLE PRE-INSTALLED GCC 14.3.0 OVER THE BUGGY GCC 15
             spack config add "packages:all:compiler:[gcc@14.3.0]"
           fi
           
-          # Explicit toolchain compilation and installation
-          spack install --no-cache gcc@13.3.0 %gcc@14.3.0
-          spack compiler add $(spack location -i gcc@13.3.0) || true
-          
-          spack install --no-cache cmake %gcc@13.3.0
-          spack install --no-cache hdf5+fortran+mpi %gcc@13.3.0
+          # Directly build your targets against the discovered gcc@14.3.0 toolchain
+          spack install --no-cache cmake %gcc@14.3.0
+          spack install --no-cache hdf5+fortran+mpi %gcc@14.3.0
           spack gc -y
+
 
 
 
@@ -83,9 +81,9 @@ jobs:
           #spack find -ldf
           spack compilers
 
-          spack load gcc@13.4.0
-          spack load cmake             %gcc@13.4.0
-          spack load hdf5+fortran+mpi  %gcc@13.4.0
+          spack load gcc@14.3.0
+          spack load cmake             %gcc@14.3.0
+          spack load hdf5+fortran+mpi  %gcc@14.3.0
 
           set -x
           which cmake     && cmake     --version
@@ -99,7 +97,7 @@ jobs:
       - name: test korc
         run: |
           . ./spack/share/spack/setup-env.sh
-          spack load hdf5+fortran+mpi  %gcc@13.4.0
+          spack load hdf5+fortran+mpi  %gcc@14.3.0
           
           ./KORC/ci_stub/agate_job_test.sh
 
