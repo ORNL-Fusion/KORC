@@ -81,7 +81,7 @@ jobs:
           #spack find -ldf
           spack compilers
 
-          spack load gcc@14.3.0
+          #spack load gcc@14.3.0
           spack load cmake             %gcc@14.3.0
           spack load hdf5+fortran+mpi  %gcc@14.3.0
 
