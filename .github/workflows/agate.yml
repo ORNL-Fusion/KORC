@@ -29,25 +29,18 @@ jobs:
           path: './spack'
 
       - name: spack install
+        if: ${{ steps.spack-cache.outputs.cache-hit != 'true' }}
         run: |
           . ./spack/share/spack/setup-env.sh
           
-          # Initialize configuration settings if we have a fresh cache slot
-          if [ "${{ steps.spack-cache.outputs.cache-hit }}" != "true" ]; then
-            spack config add config:install_tree:padded_length:128
-            spack compiler find
-            
-            # FORCE SPACK TO PREFER THE STABLE PRE-INSTALLED GCC 14.3.0 OVER THE BUGGY GCC 15
-            spack config add "packages:all:compiler:[gcc@14.3.0]"
-          fi
+          spack config add config:install_tree:padded_length:128
+          spack compiler find
           
-          # Directly build your targets against the discovered gcc@14.3.0 toolchain
+          spack config add "packages:all:compiler:[gcc@14.3.0]"
+          
           spack install --no-cache cmake %gcc@14.3.0
           spack install --no-cache hdf5+fortran+mpi %gcc@14.3.0
           spack gc -y
-
-
-
 
   job_two:
     needs: job_one
